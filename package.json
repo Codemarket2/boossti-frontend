@@ -1,0 +1,56 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "xcode": "open packages/mobile/ios/mobile.xcworkspace",
+    "mobile": "yarn workspace @frontend/mobile run start",
+    "mobile:test": "yarn workspace @frontend/mobile run test",
+    "android": "yarn workspace @frontend/mobile run android",
+    "android:clean": "yarn workspace @frontend/mobile run android:clean",
+    "android:build": "yarn workspace @frontend/mobile run android:build",
+    "ios": "yarn workspace @frontend/mobile run ios",
+    "ios:clean": "yarn workspace @frontend/mobile run ios:clean",
+    "pod:install": "yarn workspace @frontend/mobile run pod:install",
+    "web": "yarn workspace @frontend/web run dev",
+    "web:build": "yarn workspace @frontend/web run build",
+    "web:start": "yarn workspace @frontend/web run start",
+    "web:deploy": "yarn workspace @frontend/web run deploy",
+    "web:test": "yarn workspace @frontend/web run test",
+    "web:storybook": "yarn workspace @frontend/web run storybook",
+    "video-server": "yarn workspace @frontend/video-server start",
+    "lint": "eslint .",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json}\"",
+    "postinstall": "jetify",
+    "jetify": "jetify",
+    "prepare": "husky install"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": []
+  },
+  "dependencies": {
+    "react-native": "*"
+  },
+  "author": "vivekvt",
+  "license": "MIT",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
+    "eslint": "^7.16.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "^7.1.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^3.3.0",
+    "eslint-plugin-react": "^7.21.5",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "jetifier": "^1.6.6",
+    "lerna": "^4.0.0",
+    "prettier": "^2.2.1",
+    "husky": "^6.0.0"
+  }
+}
