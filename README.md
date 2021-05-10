@@ -5,13 +5,13 @@
 Install Dependencies:
 
 ```sh
-$ yarn install
+$ yarn install (if yarn didn't work try npm install)
 ```
 
 Install Pod Dependencies (Only on Mac OS):
 
 ```sh
-$ yarn pod:install
+$ yarn pod:install (if yarn didn't work try npm install pod-install)
 ```
 
 # Next.js Web
