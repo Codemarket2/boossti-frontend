@@ -22,6 +22,22 @@ Run Web Next.js:
 $ yarn web
 ```
 
+# Storybook
+
+To run stories of your storybook open a new termianl and run:
+
+```sh
+$ yarn web:storybook
+```
+
+# Jest unit test cases
+
+To run Jest unit cases for react components:
+
+```sh
+$ yarn web:test
+```
+
 Build Web:
 
 ```sh
