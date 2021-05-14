@@ -14,6 +14,11 @@ import { client } from '@frontend/shared/graphql/index';
 import aws_exports from '@frontend/shared/aws-exports';
 import { setAuthUser, initialAuthUser } from '@frontend/shared/redux/actions/auth';
 import colors from '@frontend/shared/config/colors';
+import {
+  createMuiTheme,
+  makeStyles,
+  ThemeProvider as MUThemeProvider,
+} from '@material-ui/core/styles';
 // import { loadUserType } from '@frontend/shared/redux/actions/user';
 
 // Global CSS
@@ -39,10 +44,17 @@ const stripePromise = loadStripe(
 
 const store = createStore(reducer);
 
+// const theme = createMuiTheme({
+//   // status: {
+//   //   danger: orange[500],
+//   // },
+// });
+
 function App({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
       <ApolloProvider client={client}>
+        {/* <MUThemeProvider theme={theme}> */}
         <ThemeProvider theme={{ colors }}>
           <Elements stripe={stripePromise}>
             <ReduxLoadingBar style={{ color: 'red', zIndex: 9989, position: 'fixed', top: 0 }} />
@@ -50,6 +62,7 @@ function App({ Component, pageProps }: AppProps) {
             <Component {...pageProps} />
           </Elements>
         </ThemeProvider>
+        {/* </MUThemeProvider> */}
       </ApolloProvider>
     </Provider>
   );

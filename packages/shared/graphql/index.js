@@ -8,15 +8,15 @@ const url = appSyncConfig.aws_appsync_graphqlEndpoint;
 const region = appSyncConfig.aws_appsync_region;
 const auth = {
   type: appSyncConfig.aws_appsync_authenticationType,
-  apiKey: appSyncConfig.aws_appsync_apiKey
+  apiKey: appSyncConfig.aws_appsync_apiKey,
 };
 
 const link = ApolloLink.from([
   createAuthLink({ url, region, auth }),
-  createSubscriptionHandshakeLink({ url, region, auth })
+  createSubscriptionHandshakeLink({ url, region, auth }),
 ]);
 
 export const client = new ApolloClient({
   link,
-  cache: new InMemoryCache()
+  cache: new InMemoryCache(),
 });
