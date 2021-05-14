@@ -1,21 +1,17 @@
 import React from 'react';
+import { IProducts } from './FilterProductTable';
 
-class ProductRow extends React.Component {
-  render() {
-    const product = this.props.product;
-    const name = product.stocked ? (
-      product.name
-    ) : (
-      <span style={{ color: 'red' }}>{product.name}</span>
-    );
-
-    return (
-      <tr>
-        <td>{name}</td>
-        <td>{product.price}</td>
-      </tr>
-    );
-  }
+interface IProps {
+  product: IProducts;
 }
 
-export default ProductRow;
+export default function ProductRow({ product }: IProps) {
+  return (
+    <tr>
+      <td>
+        {product.stocked ? product.name : <span style={{ color: 'red' }}>{product.name}</span>}
+      </td>
+      <td>{product.price}</td>
+    </tr>
+  );
+}
