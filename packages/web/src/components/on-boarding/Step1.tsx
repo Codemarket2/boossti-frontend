@@ -20,7 +20,7 @@ export default function Step1({ handleSelectRole }: IProps) {
         <br />
         <Button
           variant="contained"
-          color="primary"
+          color="secondary"
           size="large"
           onClick={() => handleSelectRole('client')}>
           Are you a client?

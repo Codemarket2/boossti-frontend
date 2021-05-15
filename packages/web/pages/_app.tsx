@@ -8,12 +8,13 @@ import { Provider, useDispatch } from 'react-redux';
 import { createStore } from 'redux';
 import Amplify, { Auth } from 'aws-amplify';
 import reducer from '@frontend/shared/redux/reducers';
+import { purple } from '@material-ui/core/colors';
 // import middleware from '@frontend/shared/redux/middleware';
 import { ApolloProvider } from '@apollo/client';
 import { client } from '@frontend/shared/graphql/index';
 import aws_exports from '@frontend/shared/aws-exports';
 import { setAuthUser, initialAuthUser } from '@frontend/shared/redux/actions/auth';
-import colors from '@frontend/shared/config/colors';
+import palette, { mainPalette } from '@frontend/shared/config/colors';
 import {
   createMuiTheme,
   makeStyles,
@@ -44,25 +45,25 @@ const stripePromise = loadStripe(
 
 const store = createStore(reducer);
 
-// const theme = createMuiTheme({
-//   // status: {
-//   //   danger: orange[500],
-//   // },
-// });
+const theme = createMuiTheme({
+  palette: {
+    ...palette,
+  },
+});
 
 function App({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
       <ApolloProvider client={client}>
-        {/* <MUThemeProvider theme={theme}> */}
-        <ThemeProvider theme={{ colors }}>
-          <Elements stripe={stripePromise}>
-            <ReduxLoadingBar style={{ color: 'red', zIndex: 9989, position: 'fixed', top: 0 }} />
-            <GetData />
-            <Component {...pageProps} />
-          </Elements>
-        </ThemeProvider>
-        {/* </MUThemeProvider> */}
+        <MUThemeProvider theme={theme}>
+          <ThemeProvider theme={{ colors: mainPalette }}>
+            <Elements stripe={stripePromise}>
+              <ReduxLoadingBar style={{ color: 'red', zIndex: 9989, position: 'fixed', top: 0 }} />
+              <GetData />
+              <Component {...pageProps} />
+            </Elements>
+          </ThemeProvider>
+        </MUThemeProvider>
       </ApolloProvider>
     </Provider>
   );
