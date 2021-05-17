@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const GET_ALL = gql`
-  query GetAllUsers(
+  query getUsers(
     $limit: Int!
     $page: Int!
     $search: String
@@ -12,7 +12,7 @@ export const GET_ALL = gql`
     $lowerRange: String
     $higherRange: String
   ) {
-    getAllUsersSearch(
+    getUsers(
       limit: $limit
       page: $page
       search: $search
@@ -42,18 +42,28 @@ export const GET_ALL = gql`
 `;
 
 const GET_ONE = gql`
-  query QUERY($username: String!) {
-    getOneUserSub(username: $username) {
+  query QUERY($userId: String!) {
+    getUserByCognitoUserId(userId: $userId) {
+      subscription {
+        _id
+        active
+        amount
+        description
+        expiringOn
+        subscribedOn
+        subscriptionType
+      }
       _id
       active
       confirmed
+      createdAt
+      createdBy
       email
       name
       picture
-      status
-      username
-      bookings
-      listings
+      updatedAt
+      updatedBy
+      userId
     }
   }
 `;

@@ -14,6 +14,7 @@ import { ApolloProvider } from '@apollo/client';
 import { client } from '@frontend/shared/graphql/index';
 import aws_exports from '@frontend/shared/aws-exports';
 import { setAuthUser, initialAuthUser } from '@frontend/shared/redux/actions/auth';
+import { useInitialUser } from '@frontend/shared/hooks/users';
 import palette, { mainPalette } from '@frontend/shared/config/colors';
 import {
   createMuiTheme,
@@ -73,6 +74,7 @@ export default App;
 
 const GetData = () => {
   const dispatch = useDispatch();
+  useInitialUser();
   const getAuthData = async () => {
     try {
       const user = await Auth.currentAuthenticatedUser();

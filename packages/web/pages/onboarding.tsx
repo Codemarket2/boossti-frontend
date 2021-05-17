@@ -1,10 +1,11 @@
 import React from 'react';
-import OnBoarding from '../src/components/on-boarding/OnBoarding';
+import { Container } from '@material-ui/core';
+import OnboardingScreen from '../src/screens/OnboardingScreen';
 
 export default function OnboardingPage() {
   return (
-    <div>
-      <OnBoarding />
-    </div>
+    <Container>
+      <OnboardingScreen />
+    </Container>
   );
 }

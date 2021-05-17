@@ -2,10 +2,6 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Auth } from 'aws-amplify';
 import { setAuthUser } from '../redux/actions/auth';
-// import { useDeleteOldEndpoint } from './users';
-// import awsconfig from '../aws-exports';
-
-// Auth.configure(awsconfig);
 
 export function useSignup() {}
 
