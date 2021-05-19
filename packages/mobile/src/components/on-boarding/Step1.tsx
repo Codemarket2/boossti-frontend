@@ -11,7 +11,11 @@ const StyledView = styled.View`
   margin-bottom: 20px;
 `;
 
-export default function Step1({ handleSelectRole }) {
+interface IProps {
+  handleSelectRole: (role: string) => void;
+}
+
+export default function Step1({ handleSelectRole }: IProps) {
   return (
     <StyledWraper>
       <Button mode="contained" onPress={() => handleSelectRole('coach')}>

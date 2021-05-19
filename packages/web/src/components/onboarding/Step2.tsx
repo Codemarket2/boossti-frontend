@@ -9,16 +9,16 @@ import {
   Button,
 } from '@material-ui/core';
 import ImageIcon from '@material-ui/icons/Image';
+import { onboarding } from '@frontend/shared/config/onboarding';
 
 export default function Step2({ handleContinue }) {
   return (
     <div>
       <Typography variant="h1" align="center" color="primary" className="mb-5">
-        Great, let's get Empowered
+        {onboarding.step2.title}
       </Typography>
-
       <Typography variant="h4" align="center">
-        Discover the different ways you can take your business to the next level.
+        {onboarding.step2.subTitle}
       </Typography>
       <div className="mt-5 justify-content-center align-items-center w-100 text-center">
         <List>

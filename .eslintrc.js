@@ -53,6 +53,7 @@ module.exports = {
         tsx: 'never',
       },
     ],
+    'import/no-extraneous-dependencies': ['error', { ignore: 'styled-components/' }],
   },
   settings: {
     'import/resolver': {

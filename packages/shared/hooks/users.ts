@@ -7,12 +7,18 @@ import { userSubscriptionData } from '../redux/actions/auth';
 
 export function useInitialUser() {
   const dispatch = useDispatch();
-  const { data } = useQuery(USER_QUERY.GET_ONE, { variables: { userId: 'vivekvt' } });
+  const { data, error, loading } = useQuery(USER_QUERY.GET_ONE, {
+    variables: { userId: 'vivekvt' },
+  });
   useEffect(() => {
+    console.log(`error = ${error} \n loading = ${loading}, \n data = ${data}`);
     if (data && data.getUserByCognitoUserId) {
       dispatch(userSubscriptionData(data.getUserByCognitoUserId));
     }
-  }, [data]);
+  }, [data, error, loading]);
+  // useEffect(() => {
+  //   dispatch(userSubscriptionData({ data: 'data.getUserByCognitoUserId' }));
+  // }, []);
 }
 
 export function useGetOneUser(username) {

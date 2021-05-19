@@ -8,28 +8,38 @@
 
 import React from 'react';
 import 'react-native-gesture-handler';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider as PaperProvider } from 'react-native-paper';
-import type { Node } from 'react';
+import { Provider as ReduxProvider } from 'react-redux';
+// import { createStore } from 'redux';
+import { ApolloProvider } from '@apollo/client';
+import { useInitialUser } from '@frontend/shared/hooks/users';
+// @t s-ignore
+import { client } from '@frontend/shared/graphql';
+import { store } from '@frontend/shared/redux';
 import StorybookUI from './storybook';
 import MainStack from './src/navigation/MainStack';
 
-const App: () => Node = () => {
-  // const isDarkMode = useColorScheme() === 'dark';
-
-  // const backgroundStyle = {
-  //   backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  // };
-
+const App = () => {
   return (
-    <NavigationContainer>
-      <PaperProvider>
-        <MainStack />
-      </PaperProvider>
-    </NavigationContainer>
+    <ReduxProvider store={store}>
+      <ApolloProvider client={client}>
+        <NavigationContainer>
+          <PaperProvider>
+            <Data />
+            <MainStack />
+          </PaperProvider>
+        </NavigationContainer>
+      </ApolloProvider>
+    </ReduxProvider>
   );
 };
+
+function Data() {
+  console.log('Data');
+  useInitialUser();
+  return null;
+}
 
 const startStorybook = false;
 

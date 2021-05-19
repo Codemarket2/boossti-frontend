@@ -5,22 +5,15 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import ReduxLoadingBar from 'react-redux-loading';
 import { Provider, useDispatch } from 'react-redux';
-import { createStore } from 'redux';
 import Amplify, { Auth } from 'aws-amplify';
-import reducer from '@frontend/shared/redux/reducers';
-import { purple } from '@material-ui/core/colors';
-// import middleware from '@frontend/shared/redux/middleware';
+import { store } from '@frontend/shared/redux';
 import { ApolloProvider } from '@apollo/client';
-import { client } from '@frontend/shared/graphql/index';
+import { client } from '@frontend/shared/graphql';
 import aws_exports from '@frontend/shared/aws-exports';
 import { setAuthUser, initialAuthUser } from '@frontend/shared/redux/actions/auth';
 import { useInitialUser } from '@frontend/shared/hooks/users';
 import palette, { mainPalette } from '@frontend/shared/config/colors';
-import {
-  createMuiTheme,
-  makeStyles,
-  ThemeProvider as MUThemeProvider,
-} from '@material-ui/core/styles';
+import { createMuiTheme, ThemeProvider as MUThemeProvider } from '@material-ui/core/styles';
 // import { loadUserType } from '@frontend/shared/redux/actions/user';
 
 // Global CSS
@@ -43,8 +36,6 @@ Amplify.configure({
 const stripePromise = loadStripe(
   'pk_test_517LnJnDPrb5EfwdRchW3z9AVO6xddwRZtSHqD311B4HW5j9Ouh9dmzU6UDiwH5Hwgh7jWSaqiQn7phQGitMPS0C500jhmK4yHw',
 );
-
-const store = createStore(reducer);
 
 const theme = createMuiTheme({
   palette: {

@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { Button, Caption, Headline, Subheading, Divider } from 'react-native-paper';
 import styled from 'styled-components/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { onboarding } from '@frontend/shared/config/onboarding';
 
 const StyledWraper = styled.View`
   flex: 1;
@@ -17,13 +18,15 @@ const Gap = styled.View`
   margin: 8px 0;
 `;
 
+interface IProps {
+  handleContinue: (step: number) => void;
+}
+
 export default function Step1({ handleContinue }) {
   return (
     <StyledWraper>
-      <Headline style={{ textAlign: 'center' }}> Great, let's get Empowered</Headline>
-      <Subheading style={{ textAlign: 'center' }}>
-        Discover the different ways you can take your business to the next level.
-      </Subheading>
+      <Headline style={{ textAlign: 'center' }}>{onboarding.step2.title}</Headline>
+      <Subheading style={{ textAlign: 'center' }}>{onboarding.step2.subTitle}</Subheading>
       <Gap />
       <CardComponent
         caption={`Coaching is personal. No matter what your expertise is,${'\n'} this is the place to share it.`}
@@ -44,7 +47,11 @@ export default function Step1({ handleContinue }) {
   );
 }
 
-const CardComponent = ({ caption }) => (
+interface ICardProps {
+  caption: string;
+}
+
+const CardComponent = ({ caption }: ICardProps) => (
   <Card>
     <View>
       <MaterialCommunityIcons name="briefcase-variant" size={40} />

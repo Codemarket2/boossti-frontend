@@ -45,19 +45,23 @@ export const useOnBoarding = () => {
   };
 
   const handleSubscribe = async (subscriptionType) => {
-    const { data } = await updateUserSubcription({
-      variables: {
-        userId: 'vivekvt',
-        updatedBy: 'vivekvt',
-        subscription: {
-          ...subscriptions[subscriptionType],
-          subscribedOn: new Date(),
-          active: true,
+    try {
+      const { data } = await updateUserSubcription({
+        variables: {
+          userId: 'vivekvt',
+          updatedBy: 'vivekvt',
+          subscription: {
+            ...subscriptions[subscriptionType],
+            subscribedOn: new Date(),
+            active: true,
+          },
         },
-      },
-    });
-    if (data && data.updateUser) {
-      dispatch(userSubscriptionData(data.updateUser));
+      });
+      if (data && data.updateUser) {
+        dispatch(userSubscriptionData(data.updateUser));
+      }
+    } catch (error) {
+      console.log('handleSubscribe error', error);
     }
   };
 
