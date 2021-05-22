@@ -45,23 +45,19 @@ export const useOnBoarding = () => {
   };
 
   const handleSubscribe = async (subscriptionType) => {
-    try {
-      const { data } = await updateUserSubcription({
-        variables: {
-          userId: 'vivekvt',
-          updatedBy: 'vivekvt',
-          subscription: {
-            ...subscriptions[subscriptionType],
-            subscribedOn: new Date(),
-            active: true,
-          },
+    const { data } = await updateUserSubcription({
+      variables: {
+        userId: 'vivekvt',
+        updatedBy: 'vivekvt',
+        subscription: {
+          ...subscriptions[subscriptionType],
+          subscribedOn: new Date(),
+          active: true,
         },
-      });
-      if (data && data.updateUser) {
-        dispatch(userSubscriptionData(data.updateUser));
-      }
-    } catch (error) {
-      console.log('handleSubscribe error', error);
+      },
+    });
+    if (data && data.updateUser) {
+      dispatch(userSubscriptionData(data.updateUser));
     }
   };
 
@@ -71,8 +67,10 @@ export const useOnBoarding = () => {
 export const useCancelSubscription = () => {
   const [cancelUserSubcription] = useMutation(USER_MUTATION.CANCEL_USER_SUBCRIPTION);
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
   const handleCancelSubscribe = async () => {
+    setLoading(true);
     const { data } = await cancelUserSubcription({
       variables: {
         userId: 'vivekvt',
@@ -82,7 +80,8 @@ export const useCancelSubscription = () => {
     if (data && data.cancelUserSubscription) {
       dispatch(userSubscriptionData(data.cancelUserSubscription));
     }
+    setLoading(false);
   };
 
-  return { handleCancelSubscribe };
+  return { handleCancelSubscribe, loading };
 };

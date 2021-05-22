@@ -15,6 +15,7 @@ export default function OnboardingScreen() {
 
 const Steps = () => {
   const { state, handleContinue, handleSelectRole, handleSubscribe } = useOnBoarding();
+
   if (state.step === 2) {
     return <Step2 handleContinue={handleContinue} />;
   }

@@ -12,12 +12,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { Provider as ReduxProvider } from 'react-redux';
 // import { createStore } from 'redux';
-import { ApolloProvider } from '@apollo/client';
-import { useInitialUser } from '@frontend/shared/hooks/users';
+import { ApolloProvider } from '@apollo/client/react';
+// import { useInitialUser } from '@frontend/shared/hooks/users';
 // @t s-ignore
 import { client } from '@frontend/shared/graphql';
 import { store } from '@frontend/shared/redux';
-import StorybookUI from './storybook';
+// import StorybookUI from './storybook';
 import MainStack from './src/navigation/MainStack';
 
 const App = () => {
@@ -26,7 +26,6 @@ const App = () => {
       <ApolloProvider client={client}>
         <NavigationContainer>
           <PaperProvider>
-            <Data />
             <MainStack />
           </PaperProvider>
         </NavigationContainer>
@@ -35,12 +34,12 @@ const App = () => {
   );
 };
 
-function Data() {
-  console.log('Data');
-  useInitialUser();
-  return null;
-}
+// function Data() {
+//   console.log('Data');
+//   useInitialUser();
+//   return null;
+// }
 
-const startStorybook = false;
-
-export default startStorybook ? StorybookUI : App;
+// const startStorybook = false;
+// export default startStorybook ? StorybookUI : App;
+export default App;

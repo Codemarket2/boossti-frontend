@@ -7,7 +7,7 @@ import ReduxLoadingBar from 'react-redux-loading';
 import { Provider, useDispatch } from 'react-redux';
 import Amplify, { Auth } from 'aws-amplify';
 import { store } from '@frontend/shared/redux';
-import { ApolloProvider } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client/react';
 import { client } from '@frontend/shared/graphql';
 import aws_exports from '@frontend/shared/aws-exports';
 import { setAuthUser, initialAuthUser } from '@frontend/shared/redux/actions/auth';
