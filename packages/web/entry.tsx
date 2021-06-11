@@ -1,14 +1,14 @@
 import React from 'react';
 import Index from './pages/index';
 import Users from './pages/users';
-import Login from './pages/login';
+import Auth from './pages/auth';
 import Sample from './pages/Sample';
 
 export default function Entry() {
   return (
     <div>
       <Index />
-      <Login />
+      <Auth />
       <Users />
       <Sample />
     </div>

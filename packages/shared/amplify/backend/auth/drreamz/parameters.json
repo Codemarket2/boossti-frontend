@@ -1,8 +1,6 @@
 {
-    "identityPoolName": "frontendstarter_identitypool_4e8d17c4",
-    "allowUnauthenticatedIdentities": true,
-    "resourceNameTruncated": "fronteeb2b0c0f",
-    "userPoolName": "frontend-starter-userpool",
+    "resourceNameTruncated": "drreamfb876df9",
+    "userPoolName": "drreamz_userpool",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -30,11 +28,11 @@
     "userpoolClientReadAttributes": [
         "email"
     ],
-    "userpoolClientLambdaRole": "fronteeb2b0c0f_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "drreamfb876df9_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "eb2b0c0f",
-    "resourceName": "frontendstarter",
-    "authSelections": "identityPoolAndUserPool",
+    "sharedId": "fb876df9",
+    "resourceName": "drreamz",
+    "authSelections": "userPoolOnly",
     "authRoleArn": {
         "Fn::GetAtt": [
             "AuthRole",

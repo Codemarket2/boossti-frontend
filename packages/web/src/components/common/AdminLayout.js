@@ -22,7 +22,7 @@ const AdminLayout = (props) => {
     <AuthRequired redirectPath="/" mustAdmin={true}>
       <div className="admin-layout">
         <Head>
-          <title>Parkyourself Admin</title>
+          <title>Admin</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <ul className={showMenu ? 'admin-menu-ul' : ' '}>

@@ -2,19 +2,23 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { connect } from 'react-redux';
 import projectConfig from '@frontend/shared';
-import LoginRegister from '../src/components/auth/LoginRegister';
+import AuthScreen from '../src/screens/AuthScreen';
 import InitialLoading from '../src/components/common/InitialLoading';
 import Nav from '../src/components/common/Nav';
-import VerifyEmail from '../src/components/auth/VerifyEmail';
 
-function Home({ emailVerified, initial, authenticated }) {
+interface IProps {
+  initial: boolean;
+  authenticated: boolean;
+}
+
+function Home({ initial, authenticated }: IProps) {
   const router = useRouter();
 
-  if (initial && authenticated && emailVerified) {
+  if (initial && authenticated) {
     router.push('/');
   }
 
-  if ((initial && !authenticated) || !emailVerified) {
+  if (initial && !authenticated) {
     return (
       <div>
         <Nav />
@@ -23,7 +27,7 @@ function Home({ emailVerified, initial, authenticated }) {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <div className="container pt-3 pb-3">
-          {authenticated && !emailVerified ? <VerifyEmail /> : <LoginRegister />}
+          <AuthScreen />
         </div>
       </div>
     );
@@ -35,12 +39,10 @@ function Home({ emailVerified, initial, authenticated }) {
   );
 }
 
-const mapStateToProps = ({ auth }) => {
+const mapStateToProps = ({ auth }: any) => {
   return {
     authenticated: auth.authenticated,
     initial: auth.initial,
-    // emailVerified: auth.authenticated ? auth.data.attributes.email_verified : null
-    emailVerified: true,
   };
 };
 

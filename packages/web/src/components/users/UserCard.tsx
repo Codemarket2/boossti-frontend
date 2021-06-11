@@ -1,7 +1,7 @@
 // import Link from 'next/link';
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Button, Spinner } from 'react-bootstrap';
+import LoadingButton from '../common/LoadingButton';
 import { FiStar } from 'react-icons/fi';
 import * as Moment from 'moment';
 import { extendMoment } from 'moment-range';
@@ -72,19 +72,13 @@ export default function UserCard({ user, handleToggle, showTime }: IProps) {
               <FiStar size={18} className="mt-n1 mr-1 text-warning" />
               4.7 (17)
             </p>
-            <Button
+            <LoadingButton
+              type="button"
               data-testid="user-block-button"
-              size="sm"
-              variant={user.active ? 'dark' : 'warning'}
+              loading={disabled}
               onClick={() => handleToggle2(user.username, !user.active)}>
-              {disabled ? (
-                <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
-              ) : user.active ? (
-                'Block'
-              ) : (
-                'Unblock'
-              )}
-            </Button>
+              {user.active ? 'Block' : 'Unblock'}
+            </LoadingButton>
           </div>
         )}
       </div>

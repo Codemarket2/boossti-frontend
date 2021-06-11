@@ -3,7 +3,7 @@ interface IProjectConfig {
 }
 
 const projectConfig: IProjectConfig = {
-  title: 'Frontend Template',
+  title: 'Drreamz',
 };
 
 export default projectConfig;

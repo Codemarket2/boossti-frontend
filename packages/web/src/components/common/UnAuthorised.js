@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Button } from 'react-bootstrap';
+import LoadingButton from './LoadingButton';
 
 const UnAuthorised = () => {
   return (
@@ -8,7 +8,7 @@ const UnAuthorised = () => {
       <h2 className="text-center">Please Login to access this page!</h2>
       <div className="d-flex justify-content-center errorPageContentWrap">
         <Link href="/">
-          <Button>Login</Button>
+          <LoadingButton>Sign In</LoadingButton>
         </Link>
       </div>
     </div>

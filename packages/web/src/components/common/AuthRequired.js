@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Spinner } from 'react-bootstrap';
+import { CircularProgress } from '@material-ui/core';
 import UnAuthorised from './UnAuthorised';
 import NotFound from './NotFound';
 
@@ -23,9 +23,7 @@ const AuthRequired = (props) => {
         )
       ) : (
         <div className="text-center pt-5">
-          <Spinner animation="border" role="status">
-            <span className="sr-only">Loading...</span>
-          </Spinner>
+          <CircularProgress />
         </div>
       )}
     </div>

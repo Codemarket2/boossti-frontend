@@ -1,12 +1,10 @@
 import React from 'react';
-import { Spinner } from 'react-bootstrap';
+import { CircularProgress } from '@material-ui/core';
 
-const InitialLoading = (props) => {
+const InitialLoading = () => {
   return (
-    <div className="text-center pt-5">
-      <Spinner animation="border" role="status">
-        <span className="sr-only">Loading...</span>
-      </Spinner>
+    <div className="text-center pt-5 mt-5">
+      <CircularProgress />
     </div>
   );
 };

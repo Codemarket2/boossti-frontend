@@ -1,179 +1,149 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Auth } from 'aws-amplify';
-import { Form, Button, Spinner } from 'react-bootstrap';
+import { TextField, FormHelperText } from '@material-ui/core';
+import LoadingButton from '../common/LoadingButton';
 
-export default class ForgetPassword extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: '',
-      code: '',
-      password: '',
-      confirmPassword: '',
-      verify: false,
-      disabled: false
-    };
-  }
+export default function ForgetPassword(props) {
+  const [state, setState] = useState({
+    email: '',
+    code: '',
+    password: '',
+    confirmPassword: '',
+    verify: false,
+    disabled: false,
+  });
 
-  forgetPassword = () => {
-    const { email } = this.state;
-    this.setState({ ...this.state, disabled: true });
-    Auth.forgotPassword(email)
-      .then((res) => {
-        this.setState({
-          disabled: false,
-          verify: true
-        });
-      })
-      .catch(({ message }) => {
-        // console.log('err', message);
-        this.setState({ ...this.state, disabled: false });
-        alert(message);
+  const forgetPassword = async () => {
+    try {
+      setState({ ...state, disabled: true });
+      await Auth.forgotPassword(state.email);
+      setState({
+        ...state,
+        disabled: false,
+        verify: true,
       });
+    } catch (error) {
+      setState({ ...state, disabled: false });
+    }
   };
 
-  resetPassword = () => {
-    const { email, code, password, confirmPassword } = this.state;
+  const resetPassword = async () => {
+    const { email, code, password, confirmPassword } = state;
 
     if (password === confirmPassword) {
-      Auth.forgotPasswordSubmit(email, code, password)
-        .then((res) => {
-          this.setState({
-            code: '',
-            email: '',
-            password: '',
-            confirmPassword: '',
-            disabled: false
-          });
-          this.props.changeLogin(true);
-        })
-        .catch((err) => {
-          this.setState({ ...this.state, disabled: false });
-          alert(err.message);
+      try {
+        await Auth.forgotPasswordSubmit(email, code, password);
+        setState({
+          ...state,
+          code: '',
+          email: '',
+          password: '',
+          confirmPassword: '',
+          disabled: false,
         });
+        props.changeLogin(true);
+      } catch (error) {
+        setState({ ...state, disabled: false });
+        alert(err.message);
+      }
     } else {
       alert("Password and Confirm Password doesn't Match!");
     }
   };
 
-  handleSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const { verify } = this.state;
-    this.setState({ ...this.state, disabled: true });
+    const { verify } = state;
+    setState({ ...state, disabled: true });
     if (verify) {
-      this.resetPassword();
+      resetPassword();
     } else {
-      this.forgetPassword();
+      forgetPassword();
     }
     e.target.reset();
   };
 
-  handleChange = (e) => {
-    this.setState({
-      ...this.state,
-      [e.target.name]: e.target.value
+  const handleChange = (e) => {
+    setState({
+      ...state,
+      [e.target.name]: e.target.value,
     });
   };
 
-  render() {
-    const { email, code, password, confirmPassword, disabled, verify } = this.state;
-    if (verify) {
-      return (
-        <form onSubmit={this.handleSubmit}>
-          <div className="single__account">
-            <Form.Group controlId="formBasicEmail">
-              <Form.Label>Verification Code</Form.Label>
-              <Form.Control
-                onChange={this.handleChange}
-                value={code}
-                type="text"
-                name="code"
-                id="code"
-                placeholder="Verification Code"
-                required
-              />
-              <Form.Control.Feedback type="invalid">This field is required</Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group controlId="formBasicEmail">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                onChange={this.handleChange}
-                value={password}
-                type="password"
-                name="password"
-                id="password"
-                placeholder="Password"
-                required
-              />
-              <Form.Control.Feedback type="invalid">This field is required</Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group controlId="formBasicEmail">
-              <Form.Label>Confirm Password</Form.Label>
-              <Form.Control
-                onChange={this.handleChange}
-                value={confirmPassword}
-                type="password"
-                name="confirmPassword"
-                id="confirmPassword"
-                placeholder="Confirm Password"
-                required
-              />
-              <Form.Control.Feedback type="invalid">This field is required</Form.Control.Feedback>
-            </Form.Group>
-            <p
-              style={{ cursor: 'pointer' }}
-              onClick={() => this.props.changeLogin(true)}
-              className="forget__pass">
-              Already have account login?
-            </p>
-            <Button
-              style={{ pointerEvents: disabled ? 'none' : 'auto' }}
-              type="submit"
-              className="account__btn">
-              {disabled ? (
-                <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
-              ) : (
-                'Forget Password'
-              )}
-            </Button>
-          </div>
-        </form>
-      );
-    } else {
-      return (
-        <form onSubmit={this.handleSubmit}>
-          <div className="single__account">
-            <Form.Group controlId="formBasicEmail">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                onChange={this.handleChange}
-                value={email}
-                type="email"
-                name="email"
-                placeholder="Email"
-                required
-              />
-              <Form.Control.Feedback type="invalid">This field is required</Form.Control.Feedback>
-            </Form.Group>
-            <p
-              style={{ cursor: 'pointer' }}
-              onClick={() => this.props.changeLogin(true)}
-              className="forget__pass">
-              Already have account login?
-            </p>
-            <Button
-              style={{ pointerEvents: disabled ? 'none' : 'auto' }}
-              type="submit"
-              className="account__btn">
-              {disabled ? (
-                <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
-              ) : (
-                'Reset Password'
-              )}
-            </Button>
-          </div>
-        </form>
-      );
-    }
+  if (state.verify) {
+    return (
+      <form onSubmit={handleSubmit}>
+        <TextField
+          label="Verification Code"
+          variant="outlined"
+          className="w-100 my-3"
+          onChange={handleChange}
+          value={state.code}
+          type="text"
+          name="code"
+          size="small"
+          required
+        />
+        <TextField
+          label="Password"
+          variant="outlined"
+          className="w-100 my-3"
+          onChange={handleChange}
+          value={state.password}
+          type="password"
+          name="password"
+          size="small"
+          required
+        />
+        <TextField
+          label="Confirm Password"
+          variant="outlined"
+          className="w-100 my-3"
+          onChange={handleChange}
+          value={state.confirmPassword}
+          type="password"
+          name="confirmPassword"
+          size="small"
+          required
+        />
+        <FormHelperText
+          role="button"
+          className="cursor-pointer d-inline-block"
+          onClick={() => props.changeLogin(true)}>
+          Already have account Sign In?
+        </FormHelperText>
+        <br />
+        <LoadingButton type="submit" loading={state.disabled} className="mt-2">
+          Change Password
+        </LoadingButton>
+      </form>
+    );
+  } else {
+    return (
+      <form onSubmit={handleSubmit}>
+        <p className="mb-0">Forget Password</p>
+        <TextField
+          label="Email"
+          variant="outlined"
+          className="w-100 my-3"
+          onChange={handleChange}
+          value={state.email}
+          type="email"
+          name="email"
+          size="small"
+          required
+        />
+        <FormHelperText
+          role="button"
+          className="cursor-pointer d-inline-block"
+          onClick={() => props.changeLogin(true)}>
+          Already have account Sign in?
+        </FormHelperText>
+        <br />
+        <LoadingButton type="submit" loading={state.disabled} className="mt-2">
+          Reset Password
+        </LoadingButton>
+      </form>
+    );
   }
 }

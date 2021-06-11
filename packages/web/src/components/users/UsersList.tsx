@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import { useGetAllUser } from '@frontend/shared/hooks/users';
-import { Button, Form } from 'react-bootstrap';
+import { TextField, FormHelperText } from '@material-ui/core';
 import Loading from '../common/Loading';
 import UserCard from './UserCard';
+import LoadingButton from '../common/LoadingButton';
 
 interface IProps {
   setUserCount?: (n: number) => void;
@@ -39,13 +40,13 @@ function UsersList({
 
   return (
     <div className="mt-2">
-      <div className="mb-2">
-        <Form.Control
-          type="email"
-          placeholder="Search"
-          onChange={(e) => setFilter({ ...filter, search: e.target.value })}
-        />
-      </div>
+      <TextField
+        className="mb-2"
+        id="outlined-basic"
+        label="Search"
+        variant="outlined"
+        onChange={(e) => setFilter({ ...filter, search: e.target.value })}
+      />
       {allData.users.map((u) => (
         <UserCard user={u} handleToggle={toggleUser} showTime={showTime} />
       ))}
@@ -54,9 +55,9 @@ function UsersList({
       ) : (
         allData.count > filter.limit * filter.page && (
           <div className="text-center pt-3">
-            <Button size="sm" onClick={() => setFilter({ ...filter, page: filter.page + 1 })}>
+            <LoadingButton onClick={() => setFilter({ ...filter, page: filter.page + 1 })}>
               Load More
-            </Button>
+            </LoadingButton>
           </div>
         )
       )}
