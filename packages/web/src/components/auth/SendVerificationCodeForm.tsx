@@ -28,7 +28,6 @@ export default function SendVerificationCodeForm({
       />
       {label && (
         <FormHelperText
-          onClick={() => setState({ ...state, verify: false })}
           role="button"
           className="cursor-pointer d-inline-block"
           onClick={onLabelClick}>

@@ -1,27 +1,25 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import { AppProps } from 'next/app';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import ReduxLoadingBar from 'react-redux-loading';
-import { Provider, useDispatch } from 'react-redux';
-import Amplify, { Auth } from 'aws-amplify';
+import { Provider } from 'react-redux';
+import Amplify from 'aws-amplify';
 import { store } from '@frontend/shared/redux';
 import { ApolloProvider } from '@apollo/client/react';
 import { client } from '@frontend/shared/graphql';
 import aws_exports from '@frontend/shared/aws-exports';
-import { setAuthUser, initialAuthUser } from '@frontend/shared/redux/actions/auth';
-import { useInitialUser } from '@frontend/shared/hooks/users';
+import { useCurrentAuthenticatedUser } from '@frontend/shared/hooks/auth';
 import palette, { mainPalette } from '@frontend/shared/config/colors';
+import projectConfig from '@frontend/shared';
 import { createMuiTheme, ThemeProvider as MUThemeProvider } from '@material-ui/core/styles';
-// import { loadUserType } from '@frontend/shared/redux/actions/user';
-
-// Global CSS
-// import '../src/styles/styles.css';
+import LoadingBar from '../src/components/common/LoadingBar';
 
 // CSS from node modules
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
+// Global CSS
+// import '../src/styles/styles.css';
 
 Amplify.configure({
   ...aws_exports,
@@ -33,9 +31,7 @@ Amplify.configure({
   },
 });
 
-const stripePromise = loadStripe(
-  'pk_test_517LnJnDPrb5EfwdRchW3z9AVO6xddwRZtSHqD311B4HW5j9Ouh9dmzU6UDiwH5Hwgh7jWSaqiQn7phQGitMPS0C500jhmK4yHw',
-);
+const stripePromise = loadStripe(projectConfig.stripePublishableKey);
 
 const theme = createMuiTheme({
   palette: {
@@ -43,15 +39,15 @@ const theme = createMuiTheme({
   },
 });
 
-function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
       <ApolloProvider client={client}>
         <MUThemeProvider theme={theme}>
           <ThemeProvider theme={{ colors: mainPalette }}>
             <Elements stripe={stripePromise}>
-              <ReduxLoadingBar style={{ color: 'red', zIndex: 9989, position: 'fixed', top: 0 }} />
-              <GetData />
+              <LoadingBar />
+              <InitialData />
               <Component {...pageProps} />
             </Elements>
           </ThemeProvider>
@@ -61,38 +57,8 @@ function App({ Component, pageProps }: AppProps) {
   );
 }
 
-export default App;
-
-const GetData = () => {
-  const dispatch = useDispatch();
-  useInitialUser();
-  const getAuthData = async () => {
-    try {
-      const user = await Auth.currentAuthenticatedUser();
-      if (user) {
-        const data = {
-          attributes: user.attributes,
-          signInUserSession: user.signInUserSession,
-          admin: user.signInUserSession.accessToken.payload['cognito:groups']
-            ? user.signInUserSession.accessToken.payload['cognito:groups'].indexOf('superadmin') >
-              -1
-            : false,
-        };
-        dispatch(setAuthUser(data));
-        // if (localStorage.getItem('isSpaceOwner')) {
-        //   dispatch(loadUserType(localStorage.getItem('isSpaceOwner') === 'true' ? true : false));
-        // }
-        // dispatch(initialAuthUser());
-      }
-    } catch (error) {
-      dispatch(initialAuthUser());
-      // console.log("Erro", error);
-      // router.push("/");
-    }
-  };
-
-  useEffect(() => {
-    getAuthData();
-  }, []);
+// InitialData - This Component is created because the useCurrentAuthenticatedUser hook need to be call inside redux provider
+const InitialData = () => {
+  useCurrentAuthenticatedUser();
   return null;
 };

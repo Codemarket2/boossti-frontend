@@ -1,69 +1,28 @@
-import React, { useState } from 'react';
-import { Auth } from 'aws-amplify';
+import React from 'react';
 import { TextField, FormHelperText } from '@material-ui/core';
+import { useForgetPassword } from '@frontend/shared/hooks/auth';
 import LoadingButton from '../common/LoadingButton';
 
-export default function ForgetPassword(props) {
-  const [state, setState] = useState({
-    email: '',
-    code: '',
-    password: '',
-    confirmPassword: '',
-    verify: false,
-    disabled: false,
+const onAlert = (title: string, message: string): void => {
+  alert(`${title}, ${message}`);
+};
+
+interface IProps {
+  changeLogin: (a: boolean) => void;
+}
+
+export default function ForgetPasswordForm({ changeLogin }: IProps) {
+  const { state, setState, onSubmit } = useForgetPassword({
+    onAlert,
+    changeLogin,
   });
 
-  const forgetPassword = async () => {
-    try {
-      setState({ ...state, disabled: true });
-      await Auth.forgotPassword(state.email);
-      setState({
-        ...state,
-        disabled: false,
-        verify: true,
-      });
-    } catch (error) {
-      setState({ ...state, disabled: false });
-    }
-  };
-
-  const resetPassword = async () => {
-    const { email, code, password, confirmPassword } = state;
-
-    if (password === confirmPassword) {
-      try {
-        await Auth.forgotPasswordSubmit(email, code, password);
-        setState({
-          ...state,
-          code: '',
-          email: '',
-          password: '',
-          confirmPassword: '',
-          disabled: false,
-        });
-        props.changeLogin(true);
-      } catch (error) {
-        setState({ ...state, disabled: false });
-        alert(err.message);
-      }
-    } else {
-      alert("Password and Confirm Password doesn't Match!");
-    }
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    const { verify } = state;
-    setState({ ...state, disabled: true });
-    if (verify) {
-      resetPassword();
-    } else {
-      forgetPassword();
-    }
-    e.target.reset();
+    await onSubmit();
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setState({
       ...state,
       [e.target.name]: e.target.value,
@@ -109,7 +68,7 @@ export default function ForgetPassword(props) {
         <FormHelperText
           role="button"
           className="cursor-pointer d-inline-block"
-          onClick={() => props.changeLogin(true)}>
+          onClick={() => changeLogin(true)}>
           Already have account Sign In?
         </FormHelperText>
         <br />
@@ -136,7 +95,7 @@ export default function ForgetPassword(props) {
         <FormHelperText
           role="button"
           className="cursor-pointer d-inline-block"
-          onClick={() => props.changeLogin(true)}>
+          onClick={() => changeLogin(true)}>
           Already have account Sign in?
         </FormHelperText>
         <br />

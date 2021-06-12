@@ -36,7 +36,6 @@
     "react-dom": "17.0.1",
     "react-icons": "^4.2.0",
     "react-redux": "7.2.4",
-    "react-redux-loading": "4.6.1",
     "react-scroll": "^1.8.2",
     "react-share": "^4.3.1",
     "react-star-ratings": "^2.3.0",

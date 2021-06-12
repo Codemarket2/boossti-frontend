@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { connect } from 'react-redux';
 import projectConfig from '@frontend/shared';
 import AuthScreen from '../src/screens/AuthScreen';
+// import LinearProgress from '@material-ui/core/LinearProgress';
 import InitialLoading from '../src/components/common/InitialLoading';
 import Nav from '../src/components/common/Nav';
 
@@ -21,6 +22,7 @@ function Home({ initial, authenticated }: IProps) {
   if (initial && !authenticated) {
     return (
       <div>
+        {/* <LinearProgress color="secondary" className="w-100 position-absolute" /> */}
         <Nav />
         <Head>
           <title>{projectConfig.title}</title>

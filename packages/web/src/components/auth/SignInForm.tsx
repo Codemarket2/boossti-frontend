@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Auth } from 'aws-amplify';
 import {
   TextField,
@@ -10,40 +10,54 @@ import {
   Button,
   FormHelperText,
 } from '@material-ui/core';
-import { useSignin } from '@frontend/shared/hooks/auth';
+import { useSignIn } from '@frontend/shared/hooks/auth';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth/lib/types';
 import SendVerificationCodeForm from './SendVerificationCodeForm';
 import LoadingButton from '../common/LoadingButton';
+import ForgetPasswordForm from './ForgetPasswordForm';
 
-const onAlert = (title, message) => {
+const onAlert = (title: string, message: string): void => {
   alert(`${title}, ${message}`);
 };
 
-export default function SignInForm(props) {
-  const { state, setState, onSubmit } = useSignin({ mobile: true, onAlert });
+export default function SignInForm() {
+  const { state, setState, onSubmit } = useSignIn({ onAlert });
 
-  const handleSubmit = async (e) => {
+  const [showLogin, setShowLogin] = useState<boolean>(true);
+
+  const changeLogin = (v: boolean) => {
+    setShowLogin(v);
+  };
+
+  const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    await onSubmit(state);
+    await onSubmit();
   };
 
   const handleClickShowPassword = () => {
     setState({ ...state, showPassword: !state.showPassword });
   };
 
-  const handleMouseDownPassword = (event) => {
+  const handleMouseDownPassword = (event: React.SyntheticEvent) => {
     event.preventDefault();
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setState({
       ...state,
       [e.target.name]: e.target.value,
     });
   };
 
-  if (state.verify) {
+  useEffect(() => {
+    setState({ ...state, email: '', password: '' });
+  }, [state.verify, showLogin]);
+
+  if (!showLogin) {
+    return <ForgetPasswordForm changeLogin={changeLogin} />;
+  } else if (state.verify) {
     return (
       <SendVerificationCodeForm
         handleSubmit={handleSubmit}
@@ -52,7 +66,7 @@ export default function SignInForm(props) {
         code={state.code}
         disabled={state.disabled}
         label="Sign In Again?"
-        onLabelClick={() => props.changeLogin(false)}
+        onLabelClick={() => changeLogin(false)}
       />
     );
   } else {
@@ -95,7 +109,7 @@ export default function SignInForm(props) {
           <FormHelperText
             role="button"
             className="cursor-pointer d-inline-block"
-            onClick={() => props.changeLogin(false)}>
+            onClick={() => changeLogin(false)}>
             Lost your password?
           </FormHelperText>
           <br />
@@ -104,22 +118,28 @@ export default function SignInForm(props) {
           </LoadingButton>
           <br />
           <Button
+            disabled
             type="button"
             variant="contained"
             color="secondary"
             className="w-100 my-2 mt-5"
             size="large"
-            onClick={() => Auth.federatedSignIn({ provider: 'Google' })}>
+            onClick={() =>
+              Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Google })
+            }>
             Sign in with Google
           </Button>
           <br />
           <Button
+            disabled
             type="button"
             variant="contained"
             color="secondary"
             className="w-100 my-2"
             size="large"
-            onClick={() => Auth.federatedSignIn({ provider: 'Facebook' })}>
+            onClick={() =>
+              Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Facebook })
+            }>
             Sign in with Facebook
           </Button>
         </div>

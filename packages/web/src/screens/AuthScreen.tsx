@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Tabs } from '@material-ui/core';
 import Tab from '@material-ui/core/Tab';
-import Signup from '../components/auth/Signup';
-import Login from '../components/auth/Login';
+import SignUpForm from '../components/auth/SignUpForm';
+import SignInForm from '../components/auth/SignInForm';
 
 const AuthScreen = () => {
-  const [value, setValue] = useState('Sign-In');
+  const [value, setValue] = useState<string>('Sign-In');
 
-  const handleChange = (event, newValue) => {
+  const handleChange = (event: any, newValue: string) => {
     setValue(newValue);
   };
 
@@ -22,7 +22,7 @@ const AuthScreen = () => {
         <Tab label="Sign-In" value="Sign-In" />
         <Tab label="Sign-Up" value="Sign-Up" />
       </Tabs>
-      {value === 'Sign-In' ? <Login /> : <Signup />}
+      {value === 'Sign-In' ? <SignInForm /> : <SignUpForm />}
     </div>
   );
 };

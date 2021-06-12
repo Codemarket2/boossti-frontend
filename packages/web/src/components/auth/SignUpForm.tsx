@@ -1,5 +1,4 @@
-import React, { Component, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React from 'react';
 import {
   TextField,
   FormControl,
@@ -8,98 +7,37 @@ import {
   OutlinedInput,
   IconButton,
 } from '@material-ui/core';
-import { showLoading, hideLoading } from 'react-redux-loading';
-import { Auth } from 'aws-amplify';
+import { useSignUp } from '@frontend/shared/hooks/auth';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import LoadingButton from '../common/LoadingButton';
 import SendVerificationCodeForm from './SendVerificationCodeForm';
 
-export default function SignUp() {
-  const [state, setState] = useState({
-    name: '',
-    email: '',
-    password: '',
-    disabled: false,
-    code: '',
-    verify: false,
-    showPassword: false,
-  });
+const onAlert = (title: string, message: string): void => {
+  alert(`${title}, ${message}`);
+};
 
-  const dispatch = useDispatch();
+export default function SignUpForm() {
+  const { state, setState, onSubmit } = useSignUp({ onAlert });
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setState({
       ...state,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleClickShowPassword = () => {
+  const handleClickShowPassword = (): void => {
     setState({ ...state, showPassword: !state.showPassword });
   };
 
-  const handleMouseDownPassword = (event) => {
+  const handleMouseDownPassword = (event: React.SyntheticEvent): void => {
     event.preventDefault();
   };
 
-  const signUp = async () => {
-    try {
-      const { password, email, name } = state;
-      Auth.signUp({
-        username: email,
-        password,
-        attributes: {
-          email,
-          name,
-          picture: 'https://codemarket-common-storage.s3.amazonaws.com/public/default/profile.jpeg',
-        },
-      });
-      setState({
-        ...state,
-        password: '',
-        name: '',
-        verify: true,
-        disabled: false,
-      });
-      dispatch(hideLoading());
-    } catch (error) {
-      setState({ ...state, disabled: false });
-      dispatch(hideLoading());
-      alert(err.message);
-    }
-  };
-
-  const confirmSignUp = async () => {
-    try {
-      const { email, code } = this.state;
-      await Auth.confirmSignUp(email, code);
-      setState({
-        ...state,
-        code: '',
-        email: '',
-        disabled: false,
-        auth: true,
-        verify: false,
-      });
-      dispatch(hideLoading());
-      alert('Account successfully created!');
-    } catch (error) {
-      this.setState({ ...this.state, disabled: false });
-      dispatch(hideLoading());
-      alert(err.message);
-    }
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(showLoading());
-    setState({ ...state, disabled: true });
-    if (state.verify) {
-      confirmSignUp();
-    } else {
-      signUp();
-    }
+    await onSubmit();
   };
 
   if (state.verify) {
