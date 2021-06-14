@@ -5,7 +5,8 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { Provider } from 'react-redux';
 import Amplify from 'aws-amplify';
-import { store } from '@frontend/shared/redux';
+import { wrapper } from '@frontend/shared/redux';
+// import { store } from '@frontend/shared/redux';
 import { ApolloProvider } from '@apollo/client/react';
 import { client } from '@frontend/shared/graphql';
 import aws_exports from '@frontend/shared/aws-exports';
@@ -39,23 +40,26 @@ const theme = createMuiTheme({
   },
 });
 
-export default function App({ Component, pageProps }: AppProps) {
+// export default
+function App({ Component, pageProps }: AppProps) {
   return (
-    <Provider store={store}>
-      <ApolloProvider client={client}>
-        <MUThemeProvider theme={theme}>
-          <ThemeProvider theme={{ colors: mainPalette }}>
-            <Elements stripe={stripePromise}>
-              <LoadingBar />
-              <InitialData />
-              <Component {...pageProps} />
-            </Elements>
-          </ThemeProvider>
-        </MUThemeProvider>
-      </ApolloProvider>
-    </Provider>
+    // <Provider store={store}>
+    <ApolloProvider client={client}>
+      <MUThemeProvider theme={theme}>
+        <ThemeProvider theme={{ colors: mainPalette }}>
+          <Elements stripe={stripePromise}>
+            <LoadingBar />
+            <InitialData />
+            <Component {...pageProps} />
+          </Elements>
+        </ThemeProvider>
+      </MUThemeProvider>
+    </ApolloProvider>
+    // </Provider>
   );
 }
+
+export default wrapper.withRedux(App);
 
 // InitialData - This Component is created because the useCurrentAuthenticatedUser hook need to be call inside redux provider
 const InitialData = () => {

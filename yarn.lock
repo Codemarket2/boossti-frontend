@@ -14207,6 +14207,11 @@ next-images@^1.7.0:
     file-loader "^6.0.0"
     url-loader "^4.0.0"
 
+next-redux-wrapper@^7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/next-redux-wrapper/-/next-redux-wrapper-7.0.1.tgz#63f2a142339b002d4a43d1f2d6ee21939c2777f0"
+  integrity sha512-JY+qnj+RJppCLeK0qwdSoi6bxO2Rc3//dXT70uP0atvjDbMIqoGz7RfWGnQxKn+1GoneRTBY1fwLJwO2Xj+rXg==
+
 next-tick@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"

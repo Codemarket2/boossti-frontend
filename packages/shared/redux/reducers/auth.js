@@ -1,3 +1,5 @@
+import { HYDRATE } from 'next-redux-wrapper';
+
 import {
   SET_AUTHED_USER,
   UNSET_AUTHED_USER,
@@ -15,6 +17,9 @@ const initialState = {
 
 const authUser = (state = initialState, action) => {
   switch (action.type) {
+    case HYDRATE:
+      // Attention! This will overwrite client state! Real apps should use proper reconciliation.
+      return { ...state, ...action.payload };
     case SET_AUTHED_USER: {
       return {
         ...state,
