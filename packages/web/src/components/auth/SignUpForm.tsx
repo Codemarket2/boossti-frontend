@@ -1,107 +1,80 @@
 import React from 'react';
-import {
-  TextField,
-  FormControl,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
-  IconButton,
-} from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 import { useSignUp } from '@frontend/shared/hooks/auth';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import LoadingButton from '../common/LoadingButton';
-import SendVerificationCodeForm from './SendVerificationCodeForm';
-
-const onAlert = (title: string, message: string): void => {
-  alert(`${title}, ${message}`);
-};
+import VerifyEmailForm from './VerifyEmailForm';
+import { onAlert } from '../../utils/alert';
+import SocialSignIn from './SocialSignIn';
+import PasswordInput from '../common/PasswordInput';
 
 export default function SignUpForm() {
-  const { state, setState, onSubmit } = useSignUp({ onAlert });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setState({
-      ...state,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleClickShowPassword = (): void => {
-    setState({ ...state, showPassword: !state.showPassword });
-  };
-
-  const handleMouseDownPassword = (event: React.SyntheticEvent): void => {
-    event.preventDefault();
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    await onSubmit();
-  };
+  const { state, setState, formik } = useSignUp({ onAlert });
 
   if (state.verify) {
     return (
-      <SendVerificationCodeForm
-        handleSubmit={handleSubmit}
-        handleChange={handleChange}
+      <VerifyEmailForm
+        onSuccess={() => {
+          setState({
+            ...state,
+            email: '',
+            verify: false,
+          });
+          onAlert('Email Verified Successfully', 'Please Sign In now with your email and password');
+        }}
         email={state.email}
-        code={state.code}
-        disabled={state.disabled}
         label="Sign Up Again?"
         onLabelClick={() => setState({ ...state, verify: false })}
       />
     );
   } else {
     return (
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={formik.handleSubmit}>
         <TextField
-          label="Name"
+          fullWidth
+          label="Name*"
           variant="outlined"
-          className="w-100 my-3"
-          onChange={handleChange}
-          value={state.name}
+          className="my-3"
           type="text"
           name="name"
           size="small"
-          required
+          disabled={formik.isSubmitting}
+          value={formik.values.name}
+          onChange={formik.handleChange}
+          error={formik.touched.name && Boolean(formik.errors.name)}
+          helperText={formik.touched.name && formik.errors.name}
         />
         <TextField
-          label="Email"
-          variant="outlined"
-          className="w-100 my-3"
-          onChange={handleChange}
-          value={state.email}
-          type="email"
+          fullWidth
+          className="my-3"
+          label="Email*"
           name="email"
+          variant="outlined"
+          type="text"
           size="small"
-          required
+          disabled={formik.isSubmitting}
+          value={formik.values.email}
+          onChange={formik.handleChange}
+          error={formik.touched.email && Boolean(formik.errors.email)}
+          helperText={formik.touched.email && formik.errors.email}
         />
-        <FormControl className="my-3 w-100" variant="outlined" size="small" required>
-          <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-password"
-            type={state.showPassword ? 'text' : 'password'}
-            onChange={handleChange}
-            value={state.password}
-            name="password"
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end">
-                  {state.showPassword ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
-              </InputAdornment>
-            }
-            labelWidth={70}
-          />
-        </FormControl>
-        <LoadingButton type="submit" loading={state.disabled} className="mt-2">
+        <PasswordInput
+          fullWidth
+          className="my-3"
+          label="Password*"
+          name="password"
+          variant="outlined"
+          size="small"
+          disabled={formik.isSubmitting}
+          value={formik.values.password}
+          onChange={formik.handleChange}
+          error={formik.touched.password && Boolean(formik.errors.password)}
+          helperText={formik.touched.password && formik.errors.password}
+          labelWidth={80}
+        />
+        <LoadingButton type="submit" loading={formik.isSubmitting} className="mt-2">
           Sign Up
         </LoadingButton>
+        <SocialSignIn />
       </form>
     );
   }

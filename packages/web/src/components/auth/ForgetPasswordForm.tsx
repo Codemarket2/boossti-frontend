@@ -2,19 +2,16 @@ import React from 'react';
 import { TextField, FormHelperText } from '@material-ui/core';
 import { useForgetPassword } from '@frontend/shared/hooks/auth';
 import LoadingButton from '../common/LoadingButton';
-
-const onAlert = (title: string, message: string): void => {
-  alert(`${title}, ${message}`);
-};
+import { onAlert } from '../../utils/alert';
 
 interface IProps {
-  changeLogin: (a: boolean) => void;
+  handleShowSignInForm: () => void;
 }
 
-export default function ForgetPasswordForm({ changeLogin }: IProps) {
+export default function ForgetPasswordForm({ handleShowSignInForm }: IProps) {
   const { state, setState, onSubmit } = useForgetPassword({
     onAlert,
-    changeLogin,
+    handleShowSignInForm,
   });
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
@@ -68,7 +65,7 @@ export default function ForgetPasswordForm({ changeLogin }: IProps) {
         <FormHelperText
           role="button"
           className="cursor-pointer d-inline-block"
-          onClick={() => changeLogin(true)}>
+          onClick={() => handleShowSignInForm(true)}>
           Already have account Sign In?
         </FormHelperText>
         <br />
@@ -95,7 +92,7 @@ export default function ForgetPasswordForm({ changeLogin }: IProps) {
         <FormHelperText
           role="button"
           className="cursor-pointer d-inline-block"
-          onClick={() => changeLogin(true)}>
+          onClick={() => handleShowSignInForm(true)}>
           Already have account Sign in?
         </FormHelperText>
         <br />
