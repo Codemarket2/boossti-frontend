@@ -9,7 +9,7 @@
     "deploy": "npx serverless",
     "jest": "jest",
     "test": "npx cypress run-ct",
-    "test:open": "npx cypress open-ct",
+    "test:head": "npx cypress open-ct",
     "cypress": "npx cypress open",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"

@@ -41,7 +41,7 @@ $ yarn web:test
 To run Cypress test cases for web react components(head - tests will run in browser)
 
 ```sh
-$ yarn web:test:open
+$ yarn web:test:head
 ```
 
 Build Web:
