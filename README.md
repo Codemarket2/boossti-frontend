@@ -30,12 +30,18 @@ To run stories of your storybook open a new termianl and run:
 $ yarn web:storybook
 ```
 
-# Jest unit test cases
+# Run Test Cases
 
-To run Jest unit cases for react components:
+To run Cypress test cases for web react components(headless - tests will run in terminal without opening the browser)
 
 ```sh
 $ yarn web:test
+```
+
+To run Cypress test cases for web react components(head - tests will run in browser)
+
+```sh
+$ yarn web:test:open
 ```
 
 Build Web:
