@@ -11,6 +11,7 @@ export default function LoadingButton({
   className = '',
   onClick = () => {},
   children,
+  disabled = false,
   ...props
 }) {
   return (
@@ -19,7 +20,7 @@ export default function LoadingButton({
       type={type}
       variant={variant}
       color={color}
-      disabled={loading}
+      disabled={disabled || loading}
       className={className}
       onClick={onClick}>
       {children}

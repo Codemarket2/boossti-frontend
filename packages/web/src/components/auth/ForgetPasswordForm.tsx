@@ -1,6 +1,7 @@
 import React from 'react';
 import { TextField, FormHelperText } from '@material-ui/core';
 import { useForgetPassword } from '@frontend/shared/hooks/auth';
+import PasswordInput from '../common/PasswordInput';
 import LoadingButton from '../common/LoadingButton';
 import { onAlert } from '../../utils/alert';
 
@@ -9,95 +10,114 @@ interface IProps {
 }
 
 export default function ForgetPasswordForm({ handleShowSignInForm }: IProps) {
-  const { state, setState, onSubmit } = useForgetPassword({
+  const { state, formik1, formik2 } = useForgetPassword({
     onAlert,
     handleShowSignInForm,
   });
 
-  const handleSubmit = async (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    await onSubmit();
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setState({
-      ...state,
-      [e.target.name]: e.target.value,
-    });
+  const showSignInForm = () => {
+    formik1.handleReset('');
+    formik2.handleReset('');
+    handleShowSignInForm();
   };
 
   if (state.verify) {
     return (
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={formik2.handleSubmit}>
         <TextField
-          label="Verification Code"
+          fullWidth
+          label="Password Reset Code*"
           variant="outlined"
-          className="w-100 my-3"
-          onChange={handleChange}
-          value={state.code}
+          className="my-3"
           type="text"
           name="code"
           size="small"
-          required
+          disabled={formik2.isSubmitting}
+          value={formik2.values.code}
+          onChange={formik2.handleChange}
+          error={formik2.touched.code && Boolean(formik2.errors.code)}
+          helperText={formik2.touched.code && formik2.errors.code}
         />
-        <TextField
-          label="Password"
+        <PasswordInput
+          fullWidth
+          label="Password*"
           variant="outlined"
-          className="w-100 my-3"
-          onChange={handleChange}
-          value={state.password}
-          type="password"
+          className="my-3"
           name="password"
           size="small"
-          required
+          labelWidth={80}
+          disabled={formik2.isSubmitting}
+          value={formik2.values.password}
+          onChange={formik2.handleChange}
+          error={formik2.touched.password && Boolean(formik2.errors.password)}
+          helperText={formik2.touched.password && formik2.errors.password}
         />
-        <TextField
-          label="Confirm Password"
+        <PasswordInput
+          fullWidth
+          label="Confirm Password*"
           variant="outlined"
-          className="w-100 my-3"
-          onChange={handleChange}
-          value={state.confirmPassword}
-          type="password"
+          className="my-3"
           name="confirmPassword"
           size="small"
-          required
+          labelWidth={140}
+          disabled={formik2.isSubmitting}
+          value={formik2.values.confirmPassword}
+          onChange={formik2.handleChange}
+          error={formik2.touched.confirmPassword && Boolean(formik2.errors.confirmPassword)}
+          helperText={formik2.touched.confirmPassword && formik2.errors.confirmPassword}
         />
         <FormHelperText
           role="button"
           className="cursor-pointer d-inline-block"
-          onClick={() => handleShowSignInForm(true)}>
+          onClick={showSignInForm}>
           Already have account Sign In?
         </FormHelperText>
         <br />
-        <LoadingButton type="submit" loading={state.disabled} className="mt-2">
+        <LoadingButton type="submit" loading={formik2.isSubmitting} className="mt-2">
           Change Password
+        </LoadingButton>
+        <LoadingButton
+          type="button"
+          onClick={showSignInForm}
+          loading={formik1.isSubmitting}
+          className="mt-2 ml-2">
+          Cancel
         </LoadingButton>
       </form>
     );
   } else {
     return (
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={formik1.handleSubmit}>
         <p className="mb-0">Forget Password</p>
         <TextField
-          label="Email"
+          fullWidth
+          label="Email*"
           variant="outlined"
-          className="w-100 my-3"
-          onChange={handleChange}
-          value={state.email}
-          type="email"
+          className="my-3"
           name="email"
           size="small"
-          required
+          disabled={formik1.isSubmitting}
+          value={formik1.values.email}
+          onChange={formik1.handleChange}
+          error={formik1.touched.email && Boolean(formik1.errors.email)}
+          helperText={formik1.touched.email && formik1.errors.email}
         />
         <FormHelperText
           role="button"
           className="cursor-pointer d-inline-block"
-          onClick={() => handleShowSignInForm(true)}>
+          onClick={showSignInForm}>
           Already have account Sign in?
         </FormHelperText>
         <br />
-        <LoadingButton type="submit" loading={state.disabled} className="mt-2">
-          Reset Password
+        <LoadingButton type="submit" loading={formik1.isSubmitting} className="mt-2">
+          Get Password Reset Code
+        </LoadingButton>
+        <LoadingButton
+          type="button"
+          onClick={showSignInForm}
+          disabled={formik1.isSubmitting}
+          className="mt-2 ml-2">
+          Cancel
         </LoadingButton>
       </form>
     );
