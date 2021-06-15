@@ -35,9 +35,8 @@ export default function SignInForm() {
     );
   } else {
     return (
-      <form onSubmit={formik.handleSubmit}>
+      <form onSubmit={formik.handleSubmit} data-testid="signin-form">
         <TextField
-          disabled={formik.isSubmitting}
           fullWidth
           className="my-3"
           label="Email*"
@@ -45,6 +44,7 @@ export default function SignInForm() {
           variant="outlined"
           type="text"
           size="small"
+          disabled={formik.isSubmitting}
           value={formik.values.email}
           onChange={formik.handleChange}
           error={formik.touched.email && Boolean(formik.errors.email)}
@@ -65,13 +65,18 @@ export default function SignInForm() {
           labelWidth={80}
         />
         <FormHelperText
+          data-testid="forget-password-text"
           role="button"
           className="cursor-pointer d-inline-block"
           onClick={() => setState({ ...state, showForgetPasswordForm: true })}>
           Lost your password?
         </FormHelperText>
         <br />
-        <LoadingButton type="submit" loading={formik.isSubmitting} className="mt-2">
+        <LoadingButton
+          data-testid="signin-button"
+          type="submit"
+          loading={formik.isSubmitting}
+          className="mt-2">
           Sign In
         </LoadingButton>
         <br />

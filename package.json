@@ -18,6 +18,8 @@
     "web:start": "yarn workspace @frontend/web run start",
     "web:deploy": "yarn workspace @frontend/web run deploy",
     "web:test": "yarn workspace @frontend/web run test",
+    "web:test:open": "yarn workspace @frontend/web run test:open",
+    "web:cypress": "yarn workspace @frontend/web run cypress",
     "web:storybook": "yarn workspace @frontend/web run storybook",
     "video-server": "yarn workspace @frontend/video-server start",
     "lint": "eslint .",

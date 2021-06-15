@@ -23,7 +23,7 @@ export default function ForgetPasswordForm({ handleShowSignInForm }: IProps) {
 
   if (state.verify) {
     return (
-      <form onSubmit={formik2.handleSubmit}>
+      <form onSubmit={formik2.handleSubmit} data-testid="forget-password-form">
         <TextField
           fullWidth
           label="Password Reset Code*"
@@ -66,12 +66,6 @@ export default function ForgetPasswordForm({ handleShowSignInForm }: IProps) {
           error={formik2.touched.confirmPassword && Boolean(formik2.errors.confirmPassword)}
           helperText={formik2.touched.confirmPassword && formik2.errors.confirmPassword}
         />
-        <FormHelperText
-          role="button"
-          className="cursor-pointer d-inline-block"
-          onClick={showSignInForm}>
-          Already have account Sign In?
-        </FormHelperText>
         <br />
         <LoadingButton type="submit" loading={formik2.isSubmitting} className="mt-2">
           Change Password
@@ -87,7 +81,7 @@ export default function ForgetPasswordForm({ handleShowSignInForm }: IProps) {
     );
   } else {
     return (
-      <form onSubmit={formik1.handleSubmit}>
+      <form onSubmit={formik1.handleSubmit} data-testid="forget-password-form">
         <p className="mb-0">Forget Password</p>
         <TextField
           fullWidth
@@ -102,17 +96,16 @@ export default function ForgetPasswordForm({ handleShowSignInForm }: IProps) {
           error={formik1.touched.email && Boolean(formik1.errors.email)}
           helperText={formik1.touched.email && formik1.errors.email}
         />
-        <FormHelperText
-          role="button"
-          className="cursor-pointer d-inline-block"
-          onClick={showSignInForm}>
-          Already have account Sign in?
-        </FormHelperText>
         <br />
-        <LoadingButton type="submit" loading={formik1.isSubmitting} className="mt-2">
+        <LoadingButton
+          data-testid="reset-code-button"
+          type="submit"
+          loading={formik1.isSubmitting}
+          className="mt-2">
           Get Password Reset Code
         </LoadingButton>
         <LoadingButton
+          data-testid="cancel-button"
           type="button"
           onClick={showSignInForm}
           disabled={formik1.isSubmitting}

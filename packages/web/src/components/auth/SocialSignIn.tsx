@@ -7,6 +7,7 @@ export default function SocialSignIn() {
   return (
     <div className="mt-5">
       <Button
+        data-testid="google-signin-button"
         fullWidth
         disabled
         type="button"
@@ -19,6 +20,7 @@ export default function SocialSignIn() {
       </Button>
       <br />
       <Button
+        data-testid="facebook-signin-button"
         fullWidth
         disabled
         type="button"

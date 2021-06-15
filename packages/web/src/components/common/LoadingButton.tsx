@@ -2,8 +2,18 @@ import React from 'react';
 import { Button } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+interface IProps {
+  type?: 'button' | 'submit';
+  variant?: 'contained' | 'outlined';
+  color?: 'primary' | 'secondary';
+  loading?: boolean;
+  className?: string;
+  onClick?: () => void;
+  children: any;
+  disabled?: boolean;
+}
+
 export default function LoadingButton({
-  label = 'Label',
   type = 'button',
   variant = 'contained',
   color = 'primary',
@@ -13,7 +23,7 @@ export default function LoadingButton({
   children,
   disabled = false,
   ...props
-}) {
+}: IProps) {
   return (
     <Button
       {...props}

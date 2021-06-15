@@ -3,7 +3,7 @@ import { ThemeProvider } from 'styled-components';
 import { AppProps } from 'next/app';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import { Provider } from 'react-redux';
+// import { Provider } from 'react-redux';
 import Amplify from 'aws-amplify';
 import { wrapper } from '../src/store';
 // import { store } from '@frontend/shared/redux';

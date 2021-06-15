@@ -14,7 +14,7 @@ interface IProps {
 export default function VerifyEmailForm({ onSuccess, email, label, onLabelClick }: IProps) {
   const { formik } = useVerifyEmail({ onAlert, email, onSuccess });
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form onSubmit={formik.handleSubmit} data-testid="verify-email-form">
       <p>Verify your email!</p>
       <small>Verification code has been sent to {email}</small>
       <TextField
@@ -32,6 +32,7 @@ export default function VerifyEmailForm({ onSuccess, email, label, onLabelClick 
       />
       {label && (
         <FormHelperText
+          data-testid="caption-text"
           role="button"
           className="cursor-pointer d-inline-block"
           onClick={onLabelClick}>
@@ -39,7 +40,7 @@ export default function VerifyEmailForm({ onSuccess, email, label, onLabelClick 
         </FormHelperText>
       )}
       <br />
-      <LoadingButton type="submit" loading={formik.isSubmitting}>
+      <LoadingButton data-testid="verify-button" type="submit" loading={formik.isSubmitting}>
         Verify
       </LoadingButton>
     </form>

@@ -20,7 +20,7 @@ interface IProps {
   className: string;
   size?: 'small' | 'medium';
   variant?: 'outlined' | 'standard' | 'filled';
-  fullWidth?: boolean;
+  fullWidth: boolean;
   labelWidth: number;
   disabled?: boolean;
 }

@@ -28,7 +28,7 @@ export default function SignUpForm() {
     );
   } else {
     return (
-      <form onSubmit={formik.handleSubmit}>
+      <form onSubmit={formik.handleSubmit} data-testid="signup-form">
         <TextField
           fullWidth
           label="Name*"
@@ -71,7 +71,11 @@ export default function SignUpForm() {
           helperText={formik.touched.password && formik.errors.password}
           labelWidth={80}
         />
-        <LoadingButton type="submit" loading={formik.isSubmitting} className="mt-2">
+        <LoadingButton
+          data-testid="signup-button"
+          type="submit"
+          loading={formik.isSubmitting}
+          className="mt-2">
           Sign Up
         </LoadingButton>
         <SocialSignIn />

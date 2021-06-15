@@ -1,0 +1,7 @@
+{
+  "defaultCommandTimeout": 10000,
+  "component": {
+    "componentFolder": "src",
+    "testFiles": "**/*test.{js,jsx,ts,tsx}"
+  }
+}
