@@ -44,7 +44,7 @@ To run Cypress test cases for web react components(head - tests will run in brow
 ```sh
 $ yarn web:test:head
 ```
-
+![cypress web](https://github.com/Codemarket2/drreamz-frontend2/blob/vivekt/images/cypress_web.jpg?raw=true)
 Build Web:
 
 ```sh
