@@ -15,15 +15,14 @@ export function useCurrentAuthenticatedUser(): null {
     try {
       const user = await Auth.currentAuthenticatedUser();
       if (user) {
-        const data = {
+        const payload = {
           attributes: user.attributes,
-          signInUserSession: user.signInUserSession,
           admin: user.signInUserSession.accessToken.payload['cognito:groups']
             ? user.signInUserSession.accessToken.payload['cognito:groups'].indexOf('superadmin') >
               -1
             : false,
         };
-        dispatch(setAuthUser(data));
+        dispatch(setAuthUser(payload));
       }
     } catch (error) {
       dispatch(initialAuthUser());

@@ -53,21 +53,22 @@ export function useSignIn({ onAlert = () => {} }: ISignInArgs) {
     },
   });
 
-  const onSubmit = async (payload) => {
+  const onSubmit = async (payload: ISignInFormValues) => {
     const { password, email } = payload;
+    console.log('payload', payload);
     try {
       dispatch(showLoading());
       const user = await Auth.signIn(email, password);
-      const data = {
+      const payload = {
         attributes: user.attributes,
-        signInUserSession: user.signInUserSession,
         admin: user.signInUserSession.accessToken.payload['cognito:groups']
           ? user.signInUserSession.accessToken.payload['cognito:groups'].indexOf('superadmin') > -1
           : false,
       };
       formik.handleReset('');
-      dispatch(setAuthUser(data));
+      dispatch(setAuthUser(payload));
       dispatch(hideLoading());
+      return 'true';
     } catch (error) {
       dispatch(hideLoading());
       if (error.code === 'UserNotConfirmedException') {
@@ -75,6 +76,7 @@ export function useSignIn({ onAlert = () => {} }: ISignInArgs) {
       } else {
         onAlert('Error', error.message);
       }
+      return 'false';
     }
   };
 
@@ -83,7 +85,6 @@ export function useSignIn({ onAlert = () => {} }: ISignInArgs) {
     setState({
       ...state,
       email,
-      disabled: false,
       verify: true,
     });
   };

@@ -21,7 +21,7 @@
     "web:test:head": "yarn workspace @frontend/web run test:head",
     "web:cypress": "yarn workspace @frontend/web run cypress",
     "web:storybook": "yarn workspace @frontend/web run storybook",
-    "video-server": "yarn workspace @frontend/video-server start",
+    "shared:test": "yarn workspace @frontend/shared test",
     "lint": "eslint .",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json}\"",
     "postinstall": "jetify",

@@ -3,7 +3,20 @@ export const UNSET_AUTHED_USER = 'UNSET_AUTHED_USER';
 export const INITIAL_AUTHED_USER = 'INITIAL_AUTHED_USER';
 export const USER_SUBSCRIPTION_DATA = 'USER_SUBSCRIPTION_DATA';
 
-export function setAuthUser(user) {
+export interface IAttributes {
+  sub: string;
+  email: string;
+  name: string;
+  picture: string;
+  email_verified?: boolean;
+}
+
+export interface IUserPayload {
+  admin: boolean;
+  attributes: IAttributes;
+}
+
+export function setAuthUser(user: IUserPayload) {
   return {
     type: SET_AUTHED_USER,
     user,
@@ -22,7 +35,7 @@ export function initialAuthUser() {
   };
 }
 
-export function userSubscriptionData(user) {
+export function userSubscriptionData(user: any) {
   return {
     type: USER_SUBSCRIPTION_DATA,
     user,

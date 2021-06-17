@@ -1,45 +1,50 @@
-import { HYDRATE } from 'next-redux-wrapper';
+import { AnyAction } from 'redux';
 
 import {
   SET_AUTHED_USER,
   UNSET_AUTHED_USER,
   INITIAL_AUTHED_USER,
   USER_SUBSCRIPTION_DATA,
+  IUserPayload,
 } from '../actions/auth';
 
-const initialState = {
+interface IAuthState extends IUserPayload {
+  authenticated: boolean;
+  initial: boolean;
+  user?: any;
+}
+
+export const initialState: IAuthState = {
   user: null,
   authenticated: false,
   initial: false,
   admin: false,
-  data: { admin: false, attributes: { sub: 'null' } },
+  attributes: { sub: '', name: '', email: '', picture: '' },
 };
 
-const authUser = (state = initialState, action) => {
+const authUser = (state: IAuthState = initialState, action: AnyAction) => {
   switch (action.type) {
-    case HYDRATE:
-      // Attention! This will overwrite client state! Real apps should use proper reconciliation.
-      return { ...state, ...action.payload };
     case SET_AUTHED_USER: {
       return {
         ...state,
         authenticated: true,
-        data: action.user,
         initial: true,
+        ...action.user,
       };
     }
     case UNSET_AUTHED_USER: {
       return { ...initialState, initial: true };
     }
-    case USER_SUBSCRIPTION_DATA: {
-      return { ...state, user: action.user };
-    }
     case INITIAL_AUTHED_USER: {
       return { ...state, initial: true };
+    }
+    case USER_SUBSCRIPTION_DATA: {
+      return { ...state, user: action.user };
     }
     default: {
       return state;
     }
   }
 };
+
 export default authUser;
