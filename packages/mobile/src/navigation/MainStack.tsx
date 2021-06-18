@@ -1,14 +1,15 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { useInitialUser } from '@frontend/shared/hooks/users';
+import { useSelector } from 'react-redux';
+// import { useInitialUser } from '@frontend/shared/hooks/users';
 import UserStack from './UserStack';
 import AuthStack from './AuthStack';
 
 const Stack = createStackNavigator();
 
 function MainStack() {
-  useInitialUser();
-  const authenticated = true;
+  // useInitialUser();
+  const authenticated = useSelector(({ auth }: any) => auth.authenticated);
   return (
     <Stack.Navigator>
       {authenticated ? (

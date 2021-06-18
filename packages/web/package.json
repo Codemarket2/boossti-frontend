@@ -21,7 +21,6 @@
     "@material-ui/icons": "^4.11.2",
     "@stripe/react-stripe-js": "^1.4.0",
     "@stripe/stripe-js": "^1.14.0",
-    "aws-amplify": "3.4.0",
     "bootstrap": "^4.4.1",
     "browser-image-compression": "^1.0.14",
     "graphql": "15.5.0",

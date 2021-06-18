@@ -12,13 +12,13 @@ const StyledSafeAreaView = styled.SafeAreaView`
   background-color: white;
 `;
 
-export default function Screen({ children, safeArea = false }) {
+export default function Screen({ children, safeArea = false, style = {} }: any) {
   if (safeArea) {
     return (
       <StyledSafeAreaView>
-        <StyledView>{children}</StyledView>
+        <StyledView style={style}>{children}</StyledView>
       </StyledSafeAreaView>
     );
   }
-  return <StyledView>{children}</StyledView>;
+  return <StyledView style={style}>{children}</StyledView>;
 }
