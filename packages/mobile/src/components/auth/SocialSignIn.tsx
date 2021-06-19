@@ -1,11 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Button, Caption } from 'react-native-paper';
-import styled from 'styled-components/native';
-
-const InputGroup = styled.View`
-  margin: 8px 0px;
-`;
+import { Caption } from 'react-native-paper';
+import InputGroup from '../common/InputGroup';
+import Button from '../common/Button';
 
 export default function SignInForm() {
   return (
@@ -13,7 +10,8 @@ export default function SignInForm() {
       <Caption style={{ textAlign: 'center' }}>OR</Caption>
       <InputGroup>
         <Button
-          style={{ paddingVertical: 8, backgroundColor: '#DB4437' }}
+          style={{ backgroundColor: '#DB4437' }}
+          contentStyle={{ paddingVertical: 10 }}
           disabled={false}
           mode="contained"
           icon="google">
@@ -22,7 +20,7 @@ export default function SignInForm() {
       </InputGroup>
       <InputGroup>
         <Button
-          style={{ paddingVertical: 8, backgroundColor: '#4267B2' }}
+          style={{ backgroundColor: '#4267B2' }}
           disabled={false}
           mode="contained"
           icon="facebook">

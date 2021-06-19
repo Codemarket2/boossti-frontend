@@ -20,14 +20,7 @@ export default function SignInForm() {
   } else if (state.verify) {
     return (
       <VerifyEmailForm
-        onSuccess={() => {
-          setState({
-            ...state,
-            email: '',
-            verify: false,
-          });
-          onAlert('Email Verified Successfully', 'Please Sign In now with your email and password');
-        }}
+        onSuccess={formik.handleSubmit}
         email={state.email}
         label="Sign In Again?"
         onLabelClick={() => setState({ ...state, verify: false })}

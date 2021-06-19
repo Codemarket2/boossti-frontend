@@ -9,9 +9,16 @@ interface IProps {
   email: string;
   label: string;
   onLabelClick: () => void;
+  disabled?: boolean;
 }
 
-export default function VerifyEmailForm({ onSuccess, email, label, onLabelClick }: IProps) {
+export default function VerifyEmailForm({
+  onSuccess,
+  email,
+  label,
+  onLabelClick,
+  disabled = false,
+}: IProps) {
   const { formik } = useVerifyEmail({ onAlert, email, onSuccess });
   return (
     <form onSubmit={formik.handleSubmit} data-testid="verify-email-form">
@@ -24,7 +31,7 @@ export default function VerifyEmailForm({ onSuccess, email, label, onLabelClick 
         type="text"
         name="code"
         size="small"
-        disabled={formik.isSubmitting}
+        disabled={disabled || formik.isSubmitting}
         value={formik.values.code}
         onChange={formik.handleChange}
         error={formik.touched.code && Boolean(formik.errors.code)}
@@ -40,7 +47,10 @@ export default function VerifyEmailForm({ onSuccess, email, label, onLabelClick 
         </FormHelperText>
       )}
       <br />
-      <LoadingButton data-testid="verify-button" type="submit" loading={formik.isSubmitting}>
+      <LoadingButton
+        data-testid="verify-button"
+        type="submit"
+        loading={disabled || formik.isSubmitting}>
         Verify
       </LoadingButton>
     </form>

@@ -16,8 +16,10 @@ import config from '@frontend/shared/aws-exports';
 import { ApolloProvider } from '@apollo/client/react';
 import { useCurrentAuthenticatedUser } from '@frontend/shared/hooks/auth';
 import { client } from '@frontend/shared/graphql';
-import { store } from '@frontend/shared/redux';
+import { PersistGate } from 'redux-persist/integration/react';
 import MainStack from './src/navigation/MainStack';
+import { store, persistor } from './src/utils/store';
+
 // import StorybookUI from './storybook';
 
 Amplify.configure(config);
@@ -25,14 +27,16 @@ Amplify.configure(config);
 const App = () => {
   return (
     <ReduxProvider store={store}>
-      <ApolloProvider client={client}>
-        <NavigationContainer>
-          <PaperProvider>
-            <InitialData />
-            <MainStack />
-          </PaperProvider>
-        </NavigationContainer>
-      </ApolloProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <ApolloProvider client={client}>
+          <NavigationContainer>
+            <PaperProvider>
+              <InitialData />
+              <MainStack />
+            </PaperProvider>
+          </NavigationContainer>
+        </ApolloProvider>
+      </PersistGate>
     </ReduxProvider>
   );
 };

@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Auth } from 'aws-amplify';
 import { setAuthUser, initialAuthUser, unsetAuthUser } from '../../redux/actions/auth';
-import { useInitialUser } from '../users';
+// import { useInitialUser } from '../users';
 export { useSignIn } from './signIn';
 export { useSignUp } from './signUp';
 export { useForgetPassword } from './forgetPassword';
@@ -21,7 +21,7 @@ export function useHandleLogout() {
 
 export function useCurrentAuthenticatedUser(): null {
   const dispatch = useDispatch();
-  useInitialUser();
+  // useInitialUser();
   const getUser = async () => {
     try {
       const user = await Auth.currentAuthenticatedUser();

@@ -12,9 +12,6 @@ export default function MainStack() {
   return (
     <Stack.Navigator
       screenOptions={{
-        // animationEnabled: false,
-        // animationTypeForReplace: 'pop',
-        // headerBackTitleVisible: false,
         header: (props) => <AppBar {...props} />,
       }}>
       <Stack.Screen name="AuthScreen" component={AuthScreen} options={{ headerShown: false }} />

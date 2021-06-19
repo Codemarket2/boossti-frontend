@@ -2,6 +2,7 @@ import React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Text } from 'react-native';
+import InboxScreen from '../screens/InboxScreen';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -14,7 +15,7 @@ export default function TabNavigator() {
       barStyle={{ backgroundColor: '#6200EE' }}>
       <Tab.Screen
         name="Inbox"
-        component={SampleComponent}
+        component={InboxScreen}
         options={{
           tabBarLabel: 'Inbox',
           tabBarIcon: ({ color }) => (

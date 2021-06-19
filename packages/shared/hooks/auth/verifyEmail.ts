@@ -35,9 +35,8 @@ export function useVerifyEmail({
   const formik = useFormik({
     initialValues: verifyEmailFormValues,
     validationSchema: verifyEmailValidationSchema,
-    onSubmit: async (values: IVerifyEmailFormValues, { handleReset }: any) => {
+    onSubmit: async (values: IVerifyEmailFormValues) => {
       await onSubmit(values);
-      handleReset();
     },
   });
 
@@ -47,7 +46,7 @@ export function useVerifyEmail({
       const { code } = payload;
       await Auth.confirmSignUp(email, code);
       dispatch(hideLoading());
-      formik.handleReset('');
+      // formik.handleReset('');
       onSuccess();
     } catch (error) {
       onAlert('Error', error.message);
