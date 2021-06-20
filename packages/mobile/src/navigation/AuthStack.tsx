@@ -1,23 +1,20 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
 import SignInScreen from '../screens/auth/SignInScreen';
-import AuthScreen from '../screens/auth/AuthScreen';
 import SignUpScreen from '../screens/auth/SignUpScreen';
-import ForgetPasswordScreen from '../screens/auth/ForgetPasswordScreen';
-import AppBar from '../components/common/AppBar';
 
-const Stack = createStackNavigator();
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
-export default function MainStack() {
+const Tab = createMaterialTopTabNavigator();
+
+export default function MyTabs() {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        header: (props) => <AppBar {...props} />,
+    <Tab.Navigator
+      tabBarOptions={{
+        indicatorStyle: { backgroundColor: '#6200EE' },
+        activeTintColor: '#6200EE',
       }}>
-      <Stack.Screen name="AuthScreen" component={AuthScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="SignInScreen" component={SignInScreen} />
-      <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
-      <Stack.Screen name="ForgetPasswordScreen" component={ForgetPasswordScreen} />
-    </Stack.Navigator>
+      <Tab.Screen name="Sign In" component={SignInScreen} />
+      <Tab.Screen name="Sign Up" component={SignUpScreen} />
+    </Tab.Navigator>
   );
 }

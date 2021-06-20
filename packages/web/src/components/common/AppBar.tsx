@@ -5,14 +5,15 @@ import projectConfig from '@frontend/shared';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import Settings from '@material-ui/icons/Settings';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { useHandleLogout } from '@frontend/shared/hooks/auth';
 
-export default function NavComponent() {
+export default function AppBarComponent() {
   const authenticated = useSelector(({ auth }: any) => auth.authenticated);
   const { handleLogout } = useHandleLogout();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -27,14 +28,9 @@ export default function NavComponent() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="fixed">
       <Toolbar>
-        <Link href="/">
-          <Typography variant="h6" className="w-100" role="button">
-            {projectConfig.title}
-          </Typography>
-        </Link>
-        {authenticated ? (
+        {authenticated && (
           <div>
             <IconButton
               aria-label="account of current user"
@@ -58,15 +54,28 @@ export default function NavComponent() {
               }}
               open={open}
               onClose={handleClose}>
-              <MenuItem onClick={handleClose}>Profile</MenuItem>
+              <MenuItem disabled onClick={handleClose}>
+                Profile
+              </MenuItem>
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
           </div>
-        ) : (
-          <Link href="/auth">
-            <Button color="inherit">SignIn</Button>
-          </Link>
         )}
+        <Link href="/">
+          <Typography
+            variant="h6"
+            className="w-100 text-center"
+            // text-lg-left text-xl-left"
+            role="button">
+            {projectConfig.title}
+          </Typography>
+        </Link>
+        {
+          authenticated ? <Settings /> : null
+          // <Link href="/auth">
+          //   <Button color="inherit">SignIn</Button>
+          // </Link>
+        }
       </Toolbar>
     </AppBar>
   );

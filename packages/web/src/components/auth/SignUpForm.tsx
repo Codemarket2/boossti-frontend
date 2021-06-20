@@ -1,11 +1,12 @@
 import React from 'react';
-import { TextField } from '@material-ui/core';
+import TextField from '@material-ui/core/TextField';
 import { useSignUp } from '@frontend/shared/hooks/auth';
 import LoadingButton from '../common/LoadingButton';
 import VerifyEmailForm from './VerifyEmailForm';
 import { onAlert } from '../../utils/alert';
 import SocialSignIn from './SocialSignIn';
 import PasswordInput from '../common/PasswordInput';
+import InputGroup from '../common/InputGroup';
 
 export default function SignUpForm() {
   const { state, setState, formik } = useSignUp({ onAlert });
@@ -29,56 +30,61 @@ export default function SignUpForm() {
   } else {
     return (
       <form onSubmit={formik.handleSubmit} data-testid="signup-form">
-        <TextField
-          fullWidth
-          label="Name*"
-          variant="outlined"
-          className="my-3"
-          type="text"
-          name="name"
-          size="small"
-          disabled={formik.isSubmitting}
-          value={formik.values.name}
-          onChange={formik.handleChange}
-          error={formik.touched.name && Boolean(formik.errors.name)}
-          helperText={formik.touched.name && formik.errors.name}
-        />
-        <TextField
-          fullWidth
-          className="my-3"
-          label="Email*"
-          name="email"
-          variant="outlined"
-          type="text"
-          size="small"
-          disabled={formik.isSubmitting}
-          value={formik.values.email}
-          onChange={formik.handleChange}
-          error={formik.touched.email && Boolean(formik.errors.email)}
-          helperText={formik.touched.email && formik.errors.email}
-        />
-        <PasswordInput
-          fullWidth
-          className="my-3"
-          label="Password*"
-          name="password"
-          variant="outlined"
-          size="small"
-          disabled={formik.isSubmitting}
-          value={formik.values.password}
-          onChange={formik.handleChange}
-          error={formik.touched.password && Boolean(formik.errors.password)}
-          helperText={formik.touched.password && formik.errors.password}
-          labelWidth={80}
-        />
-        <LoadingButton
-          data-testid="signup-button"
-          type="submit"
-          loading={formik.isSubmitting}
-          className="mt-2">
-          Sign Up
-        </LoadingButton>
-        <SocialSignIn />
+        <InputGroup>
+          <TextField
+            fullWidth
+            label="Name*"
+            variant="outlined"
+            type="text"
+            name="name"
+            size="small"
+            disabled={formik.isSubmitting}
+            value={formik.values.name}
+            onChange={formik.handleChange}
+            error={formik.touched.name && Boolean(formik.errors.name)}
+            helperText={formik.touched.name && formik.errors.name}
+          />
+        </InputGroup>
+        <InputGroup>
+          <TextField
+            fullWidth
+            label="Email*"
+            name="email"
+            variant="outlined"
+            type="text"
+            size="small"
+            disabled={formik.isSubmitting}
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            error={formik.touched.email && Boolean(formik.errors.email)}
+            helperText={formik.touched.email && formik.errors.email}
+          />
+        </InputGroup>
+        <InputGroup>
+          <PasswordInput
+            fullWidth
+            label="Password*"
+            name="password"
+            variant="outlined"
+            size="small"
+            disabled={formik.isSubmitting}
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            helperText={formik.touched.password && formik.errors.password}
+            labelWidth={80}
+          />
+        </InputGroup>
+        <InputGroup>
+          <LoadingButton
+            fullWidth
+            data-testid="signup-button"
+            type="submit"
+            loading={formik.isSubmitting}>
+            Sign Up
+          </LoadingButton>
+        </InputGroup>
+        <SocialSignIn signIn={false} />
       </form>
     );
   }

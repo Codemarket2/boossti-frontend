@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 interface IProps {
@@ -11,6 +11,7 @@ interface IProps {
   onClick?: () => void;
   children: any;
   disabled?: boolean;
+  fullWidth?: boolean;
 }
 
 export default function LoadingButton({

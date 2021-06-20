@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import UserStack from './UserStack';
 import AuthStack from './AuthStack';
 import LoadingScreen from '../screens/LoadingScreen';
+import AppBar from '../components/common/AppBar';
 
 const Stack = createStackNavigator();
 
@@ -15,7 +16,10 @@ function MainStack() {
     initial: auth.initial,
   }));
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        header: (props) => <AppBar {...props} authenticated={authenticated} />,
+      }}>
       {!initial ? (
         <Stack.Screen
           name="LoadingScreen"
@@ -23,9 +27,9 @@ function MainStack() {
           options={{ headerShown: false }}
         />
       ) : authenticated ? (
-        <Stack.Screen name="UserStack" component={UserStack} options={{ headerShown: false }} />
+        <Stack.Screen name="UserStack" component={UserStack} />
       ) : (
-        <Stack.Screen name="AuthStack" component={AuthStack} options={{ headerShown: false }} />
+        <Stack.Screen name="AuthStack" component={AuthStack} />
       )}
     </Stack.Navigator>
   );

@@ -1,7 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { Caption, Headline } from 'react-native-paper';
+import { Caption, Title } from 'react-native-paper';
 import { useForgetPassword } from '@frontend/shared/hooks/auth';
 import InputGroup from '../common/InputGroup';
 import Input from '../common/Input';
@@ -9,20 +8,23 @@ import { onAlert } from '../../utils/alert';
 import PasswordInput from '../common/PasswordInput';
 import Button from '../../components/common/Button';
 
-export default function ForgetPasswordForm() {
-  const navigation = useNavigation();
+interface IProps {
+  handleShowSignInForm: () => void;
+}
+
+export default function ForgetPasswordForm({ handleShowSignInForm }: IProps) {
   const { state, formik1, formik2 } = useForgetPassword({
     onAlert,
     handleShowSignInForm: () => {
       onAlert('Password reset successful', 'Now Sign In with your email and new password');
-      navigation.navigate('SignInScreen');
+      handleShowSignInForm();
     },
   });
 
   if (state.verify) {
     return (
       <View>
-        <Headline>Forget Password</Headline>
+        <Title>Forget Password</Title>
         <Caption>Verification Code has been sent to {state.email}</Caption>
         <InputGroup>
           <Input
@@ -70,13 +72,18 @@ export default function ForgetPasswordForm() {
             Reset Password
           </Button>
         </InputGroup>
+        <InputGroup>
+          <Button mode="outlined" disabled={formik2.isSubmitting} onPress={handleShowSignInForm}>
+            Cancel
+          </Button>
+        </InputGroup>
       </View>
     );
   }
 
   return (
     <View>
-      <Headline>Forget Password</Headline>
+      <Title>Forget Password</Title>
       <InputGroup>
         <Input
           autoCapitalize="none"
@@ -99,6 +106,11 @@ export default function ForgetPasswordForm() {
           mode="contained"
           onPress={formik1.handleSubmit}>
           Get Password Reset Code
+        </Button>
+      </InputGroup>
+      <InputGroup>
+        <Button mode="outlined" disabled={formik1.isSubmitting} onPress={handleShowSignInForm}>
+          Cancel
         </Button>
       </InputGroup>
     </View>

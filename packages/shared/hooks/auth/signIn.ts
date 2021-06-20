@@ -55,7 +55,6 @@ export function useSignIn({ onAlert = () => {} }: ISignInArgs) {
 
   const onSubmit = async (payload: ISignInFormValues) => {
     const { password, email } = payload;
-    console.log('payload', payload);
     try {
       dispatch(showLoading());
       const user = await Auth.signIn(email, password);

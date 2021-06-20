@@ -1,21 +1,38 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Caption } from 'react-native-paper';
+import styled from 'styled-components/native';
 import InputGroup from '../common/InputGroup';
 import Button from '../common/Button';
 
-export default function SignInForm() {
+const StyledCaptionWrapper = styled.View`
+  border-top-width: 1px;
+  border-top-color: grey;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+`;
+
+const StyledCaption = styled(Caption)`
+  text-align: center;
+  background-color: white;
+  min-width: 30px;
+  margin-top: -10px;
+`;
+
+export default function SignInForm({ signIn = true }: { signIn?: boolean }) {
   return (
     <View>
-      <Caption style={{ textAlign: 'center' }}>OR</Caption>
+      <StyledCaptionWrapper>
+        <StyledCaption>OR</StyledCaption>
+      </StyledCaptionWrapper>
       <InputGroup>
         <Button
           style={{ backgroundColor: '#DB4437' }}
-          contentStyle={{ paddingVertical: 10 }}
           disabled={false}
           mode="contained"
           icon="google">
-          Sign in with Google
+          Sign {signIn ? 'in' : 'up'} with Google
         </Button>
       </InputGroup>
       <InputGroup>
@@ -24,7 +41,7 @@ export default function SignInForm() {
           disabled={false}
           mode="contained"
           icon="facebook">
-          Sign in with Facebook
+          Sign {signIn ? 'in' : 'up'} with Facebook
         </Button>
       </InputGroup>
     </View>

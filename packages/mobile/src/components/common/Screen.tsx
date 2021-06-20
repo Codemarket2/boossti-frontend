@@ -1,8 +1,8 @@
 import React from 'react';
-import styled from 'styled-components/native';
 import { ViewStyle, StatusBar } from 'react-native';
 import { ProgressBar } from 'react-native-paper';
 import { useSelector } from 'react-redux';
+import styled from 'styled-components/native';
 
 const StyledView = styled.View`
   padding: 10px;

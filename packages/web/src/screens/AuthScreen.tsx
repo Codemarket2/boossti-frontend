@@ -14,6 +14,7 @@ const AuthScreen = () => {
   return (
     <div>
       <Tabs
+        variant="fullWidth"
         value={value}
         onChange={handleChange}
         indicatorColor="primary"

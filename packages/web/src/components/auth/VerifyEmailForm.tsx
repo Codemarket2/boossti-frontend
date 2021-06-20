@@ -1,13 +1,15 @@
 import React from 'react';
-import { TextField, FormHelperText } from '@material-ui/core';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 import { useVerifyEmail } from '@frontend/shared/hooks/auth';
 import LoadingButton from '../common/LoadingButton';
 import { onAlert } from '../../utils/alert';
+import InputGroup from '../common/InputGroup';
 
 interface IProps {
   onSuccess: () => void;
   email: string;
-  label: string;
+  label?: string;
   onLabelClick: () => void;
   disabled?: boolean;
 }
@@ -22,37 +24,45 @@ export default function VerifyEmailForm({
   const { formik } = useVerifyEmail({ onAlert, email, onSuccess });
   return (
     <form onSubmit={formik.handleSubmit} data-testid="verify-email-form">
-      <p>Verify your email!</p>
-      <small>Verification code has been sent to {email}</small>
-      <TextField
-        label="Verification Code"
-        variant="outlined"
-        className="w-100 my-2"
-        type="text"
-        name="code"
-        size="small"
-        disabled={disabled || formik.isSubmitting}
-        value={formik.values.code}
-        onChange={formik.handleChange}
-        error={formik.touched.code && Boolean(formik.errors.code)}
-        helperText={formik.touched.code && formik.errors.code}
-      />
-      {label && (
-        <FormHelperText
-          data-testid="caption-text"
-          role="button"
-          className="cursor-pointer d-inline-block"
+      <InputGroup>
+        <Typography>Verify your email!</Typography>
+        <Typography variant="caption">Verification code has been sent to {email}</Typography>
+      </InputGroup>
+      <InputGroup>
+        <TextField
+          fullWidth
+          label="Verification Code"
+          variant="outlined"
+          type="text"
+          name="code"
+          size="small"
+          disabled={disabled || formik.isSubmitting}
+          value={formik.values.code}
+          onChange={formik.handleChange}
+          error={formik.touched.code && Boolean(formik.errors.code)}
+          helperText={formik.touched.code && formik.errors.code}
+        />
+      </InputGroup>
+      <InputGroup>
+        <LoadingButton
+          fullWidth
+          data-testid="verify-button"
+          type="submit"
+          loading={disabled || formik.isSubmitting}>
+          Verify
+        </LoadingButton>
+      </InputGroup>
+      <InputGroup>
+        <LoadingButton
+          fullWidth
+          data-testid="cancel-button"
+          variant="outlined"
+          type="button"
+          disabled={disabled || formik.isSubmitting}
           onClick={onLabelClick}>
-          {label}
-        </FormHelperText>
-      )}
-      <br />
-      <LoadingButton
-        data-testid="verify-button"
-        type="submit"
-        loading={disabled || formik.isSubmitting}>
-        Verify
-      </LoadingButton>
+          Cancel
+        </LoadingButton>
+      </InputGroup>
     </form>
   );
 }

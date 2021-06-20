@@ -3,10 +3,8 @@ import { ThemeProvider } from 'styled-components';
 import { AppProps } from 'next/app';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-// import { Provider } from 'react-redux';
 import Amplify from 'aws-amplify';
 import { wrapper } from '../src/store';
-// import { store } from '@frontend/shared/redux';
 import { ApolloProvider } from '@apollo/client/react';
 import { client } from '@frontend/shared/graphql';
 import aws_exports from '@frontend/shared/aws-exports';
@@ -18,7 +16,6 @@ import LoadingBar from '../src/components/common/LoadingBar';
 
 // CSS from node modules
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'react-toastify/dist/ReactToastify.css';
 // Global CSS
 // import '../src/styles/styles.css';
 
@@ -43,7 +40,6 @@ const theme = createMuiTheme({
 // export default
 function App({ Component, pageProps }: AppProps) {
   return (
-    // <Provider store={store}>
     <ApolloProvider client={client}>
       <MUThemeProvider theme={theme}>
         <ThemeProvider theme={{ colors: mainPalette }}>
@@ -55,7 +51,6 @@ function App({ Component, pageProps }: AppProps) {
         </ThemeProvider>
       </MUThemeProvider>
     </ApolloProvider>
-    // </Provider>
   );
 }
 

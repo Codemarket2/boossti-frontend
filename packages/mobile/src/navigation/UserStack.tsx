@@ -13,7 +13,7 @@ const Stack = createStackNavigator();
 function MainStack() {
   const user = useSelector(({ auth }: any) => auth.user);
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       {/* {user && user.subscription && user.subscription.active ? (
         <Stack.Screen
           // options={{ headerShown: false }}
@@ -27,25 +27,7 @@ function MainStack() {
           component={OnboardingScreen}
         />
       )} */}
-      <Stack.Screen
-        name="Tabs"
-        component={TabNavigator}
-        options={{
-          header: (props) => <AppBar {...props} authenticated={true} />,
-          // headerTitle: 'Drreamz',
-          // headerRight: () => (
-          //   <MaterialIcons name="settings" color="black" size={29} style={{ marginRight: 10 }} />
-          // ),
-          // headerLeft: () => (
-          //   <MaterialCommunityIcons
-          //     name="account-circle"
-          //     color="black"
-          //     size={30}
-          //     style={{ marginLeft: 10 }}
-          //   />
-          // ),
-        }}
-      />
+      <Stack.Screen name="Tabs" component={TabNavigator} />
     </Stack.Navigator>
   );
 }

@@ -1,11 +1,11 @@
 import React from 'react';
-import OnboardingScreen from '../src/screens/OnboardingScreen';
 import UserLayout from '../src/components/common/UserLayout';
+import Typography from '@material-ui/core/Typography';
 
-export default function OnboardingPage() {
+export default function Page() {
   return (
     <UserLayout authRequired>
-      <OnboardingScreen />
+      <Typography variant="h4">Clients</Typography>
     </UserLayout>
   );
 }

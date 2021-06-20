@@ -11,19 +11,19 @@ interface IProps {
   icon?: string;
   contentStyle?: object;
   style?: object;
-  onPress: () => void;
+  onPress?: () => void;
 }
 
 export default function Button({
   children,
   dense = false,
   mode = 'contained',
-  contentStyle,
+  contentStyle = {},
   ...props
 }: IProps) {
   return (
     <PaperButton
-      contentStyle={{ paddingVertical: dense ? 0 : 8, ...contentStyle }}
+      contentStyle={{ paddingVertical: dense ? 0 : 7, ...contentStyle }}
       mode={mode}
       {...props}>
       {children}

@@ -9,6 +9,6 @@ describe('SignIn Form', () => {
       cy.get('input[name="password"]').should('exist');
     });
     cy.get('[data-testid=signin-button]').should('contain', 'Sign In');
-    cy.get('[data-testid=forget-password-text]').should('contain', 'Lost your password?');
+    cy.get('[data-testid=forget-password-text]').should('contain', 'Forgot Password?');
   });
 });

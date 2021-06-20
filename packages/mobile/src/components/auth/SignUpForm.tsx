@@ -1,6 +1,5 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Headline } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { useSignUp } from '@frontend/shared/hooks/auth';
 import SocialSignIn from './SocialSignIn';
@@ -27,12 +26,13 @@ export default function SignInForm() {
           onAlert('Email Verified Successfully', 'Please Sign In now with your email and password');
           navigation.navigate('SignInScreen');
         }}
+        label="Sign Up Again"
+        handleLabelClick={() => setState({ ...state, verify: false })}
       />
     );
   }
   return (
     <View>
-      <Headline>Sign Up</Headline>
       <InputGroup>
         <Input
           label="Name"
@@ -81,7 +81,7 @@ export default function SignInForm() {
           Sign Up
         </Button>
       </InputGroup>
-      <SocialSignIn />
+      <SocialSignIn signIn={false} />
     </View>
   );
 }

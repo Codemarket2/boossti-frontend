@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import {
-  FormControl,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
-  IconButton,
-  FormHelperText,
-} from '@material-ui/core';
+import FormControl from '@material-ui/core/FormControl';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import InputLabel from '@material-ui/core/InputLabel';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import IconButton from '@material-ui/core/IconButton';
+import FormHelperText from '@material-ui/core/FormHelperText';
 
 interface IProps {
   error: boolean;
@@ -17,7 +15,7 @@ interface IProps {
   helperText: string;
   name: string;
   label: string;
-  className: string;
+  className?: string;
   size?: 'small' | 'medium';
   variant?: 'outlined' | 'standard' | 'filled';
   fullWidth: boolean;

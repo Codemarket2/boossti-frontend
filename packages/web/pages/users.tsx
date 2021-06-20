@@ -4,7 +4,7 @@ import UserLayout from '../src/components/common/UserLayout';
 
 export default function users() {
   return (
-    <UserLayout>
+    <UserLayout authRequired>
       <UsersTabs />
     </UserLayout>
   );
