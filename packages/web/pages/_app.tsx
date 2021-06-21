@@ -11,7 +11,7 @@ import aws_exports from '@frontend/shared/aws-exports';
 import { useCurrentAuthenticatedUser } from '@frontend/shared/hooks/auth';
 import palette, { mainPalette } from '@frontend/shared/config/colors';
 import projectConfig from '@frontend/shared';
-import { createMuiTheme, ThemeProvider as MUThemeProvider } from '@material-ui/core/styles';
+import { createMuiTheme, ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
 import LoadingBar from '../src/components/common/LoadingBar';
 
 // CSS from node modules
@@ -37,11 +37,10 @@ const theme = createMuiTheme({
   },
 });
 
-// export default
 function App({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={client}>
-      <MUThemeProvider theme={theme}>
+      <MuiThemeProvider theme={theme}>
         <ThemeProvider theme={{ colors: mainPalette }}>
           <Elements stripe={stripePromise}>
             <LoadingBar />
@@ -49,7 +48,7 @@ function App({ Component, pageProps }: AppProps) {
             <Component {...pageProps} />
           </Elements>
         </ThemeProvider>
-      </MUThemeProvider>
+      </MuiThemeProvider>
     </ApolloProvider>
   );
 }

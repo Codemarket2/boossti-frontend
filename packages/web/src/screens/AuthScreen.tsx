@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Tabs } from '@material-ui/core';
+import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import SignUpForm from '../components/auth/SignUpForm';
 import SignInForm from '../components/auth/SignInForm';

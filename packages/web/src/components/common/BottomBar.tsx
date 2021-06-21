@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
@@ -10,7 +10,7 @@ import Group from '@material-ui/icons/Group';
 
 export default function SimpleBottomNavigation() {
   const router = useRouter();
-  const [value, setValue] = React.useState('/');
+  const [value, setValue] = useState('/');
 
   useEffect(() => {
     if (value !== router.pathname) {

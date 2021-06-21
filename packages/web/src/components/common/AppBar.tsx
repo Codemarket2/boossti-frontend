@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import projectConfig from '@frontend/shared';
@@ -16,7 +16,7 @@ import { useHandleLogout } from '@frontend/shared/hooks/auth';
 export default function AppBarComponent() {
   const authenticated = useSelector(({ auth }: any) => auth.authenticated);
   const { handleLogout } = useHandleLogout();
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
   const handleMenu = (event) => {

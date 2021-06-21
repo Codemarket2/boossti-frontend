@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Appbar, Menu } from 'react-native-paper';
 import { useHandleLogout } from '@frontend/shared/hooks/auth';
 
@@ -10,7 +10,7 @@ import { useHandleLogout } from '@frontend/shared/hooks/auth';
 
 export default function AppBar({ navigation, previous, authenticated = false }: any) {
   const { handleLogout } = useHandleLogout();
-  const [visible, setVisible] = React.useState(false);
+  const [visible, setVisible] = useState(false);
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
 
@@ -26,7 +26,7 @@ export default function AppBar({ navigation, previous, authenticated = false }: 
           <Menu.Item onPress={handleLogout} title="Logout" />
         </Menu>
       ) : null}
-      <Appbar.Content title="Drreamz" />
+      <Appbar.Content title="Drreamz" style={{ alignItems: 'center' }} />
       {authenticated && <Appbar.Action icon="cog" onPress={() => {}} />}
     </Appbar.Header>
   );

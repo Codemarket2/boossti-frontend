@@ -6,7 +6,7 @@
     "android": "react-native run-android",
     "android:clean": "cd android &&./gradlew clean",
     "android:build": "cd android &&./gradlew assembleRelease",
-    "ios": "react-native run-ios --simulator \"iPhone 12 Mini\"",
+    "ios": "react-native run-ios --simulator \"iPhone 12 Pro Max\"",
     "ios:clean": "cd ios && xcodebuild clean",
     "pod:install": "cd ios && npx pod-install",
     "start": "react-native start",

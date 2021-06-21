@@ -63,6 +63,7 @@ export default function Input({
   return (
     <>
       <TextInput
+        dense
         {...props}
         mode={mode}
         label={label}

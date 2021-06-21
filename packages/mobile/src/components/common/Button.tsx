@@ -23,7 +23,7 @@ export default function Button({
 }: IProps) {
   return (
     <PaperButton
-      contentStyle={{ paddingVertical: dense ? 0 : 7, ...contentStyle }}
+      contentStyle={{ paddingVertical: dense ? 0 : 0, ...contentStyle }}
       mode={mode}
       {...props}>
       {children}
