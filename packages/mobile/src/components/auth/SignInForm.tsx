@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, TextInput } from 'react-native';
 import { Subheading } from 'react-native-paper';
 import { useSignIn } from '@frontend/shared/hooks/auth';
 import SocialSignIn from './SocialSignIn';
@@ -11,11 +11,7 @@ import InputGroup from '../common/InputGroup';
 import Button from '../../components/common/Button';
 import ForgetPasswordForm from './ForgetPasswordForm';
 
-interface IProps {
-  handleForgetPassword: () => void;
-}
-
-export default function SignInForm({ handleForgetPassword }: IProps) {
+export default function SignInForm() {
   const { state, setState, formik } = useSignIn({ onAlert });
 
   if (state.showForgetPasswordForm) {
@@ -72,7 +68,7 @@ export default function SignInForm({ handleForgetPassword }: IProps) {
             disabled={formik.isSubmitting}
             mode="contained"
             onPress={formik.handleSubmit}>
-            Sign in
+            Sign In
           </Button>
         </InputGroup>
         <InputGroup>
