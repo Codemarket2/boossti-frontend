@@ -1,10 +1,7 @@
 const palette = {
-  primary: { main: '#6E00EE', light: '#BB86FC', dark: '#3700B3', contrastText: '#FFFFFF' },
-  secondary: { main: '#03DAC5', light: '#03DAC5', dark: '#018786', contrastText: '#000000' },
-  error: { main: '#B00020', light: '#ce3551', dark: '#90031d' },
-  // warning: { main: '', light: '', dark: '' },
-  // info: { main: '', light: '', dark: '' },
-  // success: { main: '', light: '', dark: '' },
+  primary: { main: '#6E00EE' },
+  secondary: { main: '#03DAC5' },
+  error: { main: '#B00020' },
 };
 
 export const mainPalette = {

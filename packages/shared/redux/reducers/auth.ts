@@ -6,12 +6,14 @@ import {
   INITIAL_AUTHED_USER,
   USER_SUBSCRIPTION_DATA,
   IUserPayload,
+  TOGGLE_DARK_MODE,
 } from '../actions/auth';
 
 interface IAuthState extends IUserPayload {
   authenticated: boolean;
   initial: boolean;
   user?: any;
+  darkMode: boolean;
 }
 
 export const initialState: IAuthState = {
@@ -20,6 +22,7 @@ export const initialState: IAuthState = {
   initial: false,
   admin: false,
   attributes: { sub: '', name: '', email: '', picture: '' },
+  darkMode: false,
 };
 
 const authUser = (state: IAuthState = initialState, action: AnyAction) => {
@@ -33,13 +36,16 @@ const authUser = (state: IAuthState = initialState, action: AnyAction) => {
       };
     }
     case UNSET_AUTHED_USER: {
-      return { ...initialState, initial: true };
+      return { ...initialState, initial: true, darkMode: state.darkMode };
     }
     case INITIAL_AUTHED_USER: {
       return { ...state, initial: true };
     }
     case USER_SUBSCRIPTION_DATA: {
       return { ...state, user: action.user };
+    }
+    case TOGGLE_DARK_MODE: {
+      return { ...state, darkMode: !state.darkMode };
     }
     default: {
       return state;

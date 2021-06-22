@@ -1,5 +1,10 @@
 import auth, { initialState } from '../auth';
-import { SET_AUTHED_USER, UNSET_AUTHED_USER, INITIAL_AUTHED_USER } from '../../actions/auth';
+import {
+  SET_AUTHED_USER,
+  UNSET_AUTHED_USER,
+  INITIAL_AUTHED_USER,
+  TOGGLE_DARK_MODE,
+} from '../../actions/auth';
 
 const tempUser = {
   attributes: {
@@ -19,6 +24,7 @@ describe('auth reducer', () => {
       initial: false,
       admin: false,
       attributes: { sub: '', name: '', email: '', picture: '' },
+      darkMode: false,
     });
   });
 
@@ -33,6 +39,7 @@ describe('auth reducer', () => {
       authenticated: true,
       initial: true,
       user: null,
+      darkMode: false,
     });
   });
 
@@ -55,6 +62,17 @@ describe('auth reducer', () => {
     ).toEqual({
       ...initialState,
       initial: true,
+    });
+  });
+
+  it('should handle TOGGLE_DARK_MODE', () => {
+    expect(
+      auth(initialState, {
+        type: TOGGLE_DARK_MODE,
+      }),
+    ).toEqual({
+      ...initialState,
+      darkMode: true,
     });
   });
 });

@@ -1,17 +1,19 @@
 import React from 'react';
-import { ThemeProvider } from 'styled-components';
+import { ThemeProvider as StyledProvider } from 'styled-components';
 import { AppProps } from 'next/app';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import Amplify from 'aws-amplify';
+import { useSelector } from 'react-redux';
 import { wrapper } from '../src/store';
 import { ApolloProvider } from '@apollo/client/react';
 import { client } from '@frontend/shared/graphql';
 import aws_exports from '@frontend/shared/aws-exports';
 import { useCurrentAuthenticatedUser } from '@frontend/shared/hooks/auth';
-import palette, { mainPalette } from '@frontend/shared/config/colors';
+import palette from '@frontend/shared/config/colors';
 import projectConfig from '@frontend/shared';
 import { createMuiTheme, ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import LoadingBar from '../src/components/common/LoadingBar';
 
 // CSS from node modules
@@ -31,32 +33,30 @@ Amplify.configure({
 
 const stripePromise = loadStripe(projectConfig.stripePublishableKey);
 
-const theme = createMuiTheme({
-  palette: {
-    ...palette,
-  },
-});
-
 function App({ Component, pageProps }: AppProps) {
+  useCurrentAuthenticatedUser();
+  const darkMode = useSelector(({ auth }: any) => auth.darkMode);
+
+  const theme = createMuiTheme({
+    palette: {
+      ...palette,
+      type: darkMode ? 'dark' : 'light',
+    },
+  });
+
   return (
     <ApolloProvider client={client}>
       <MuiThemeProvider theme={theme}>
-        <ThemeProvider theme={{ colors: mainPalette }}>
+        <StyledProvider theme={theme}>
           <Elements stripe={stripePromise}>
             <LoadingBar />
-            <InitialData />
+            <CssBaseline />
             <Component {...pageProps} />
           </Elements>
-        </ThemeProvider>
+        </StyledProvider>
       </MuiThemeProvider>
     </ApolloProvider>
   );
 }
 
 export default wrapper.withRedux(App);
-
-// InitialData - This Component is created because the useCurrentAuthenticatedUser hook need to be call inside redux provider
-const InitialData = () => {
-  useCurrentAuthenticatedUser();
-  return null;
-};

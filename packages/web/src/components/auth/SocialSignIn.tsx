@@ -17,8 +17,8 @@ const StyledCaptionWrapper = styled.div`
 `;
 
 const StyledCaption = styled(Typography)`
-  margin-top: -12px;
-  background-color: white;
+  margin-top: -12px !important;
+  background-color: ${(props) => props.theme.palette.background.default};
   min-width: 40px;
   text-align: center;
 `;
@@ -54,7 +54,6 @@ export default function SocialSignIn({ signIn = true }: { signIn?: boolean }) {
           onClick={() =>
             Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Facebook })
           }>
-          {/* <Facebook className="mr-2" />  */}
           Sign {signIn ? 'in' : 'up'} with Facebook
         </Button>
       </InputGroup>
