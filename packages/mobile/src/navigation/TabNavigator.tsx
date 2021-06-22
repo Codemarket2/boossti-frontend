@@ -1,20 +1,15 @@
 import React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Text } from 'react-native';
 import InboxScreen from '../screens/InboxScreen';
 
 const Tab = createMaterialBottomTabNavigator();
 
 export default function TabNavigator() {
   return (
-    <Tab.Navigator
-      shifting={false}
-      initialRouteName="Feed"
-      activeColor="#ffffff"
-      barStyle={{ backgroundColor: '#6200EE' }}>
+    <Tab.Navigator shifting={false}>
       <Tab.Screen
-        name="Inbox"
+        name="InboxScreen"
         component={InboxScreen}
         options={{
           tabBarLabel: 'Inbox',
@@ -25,7 +20,7 @@ export default function TabNavigator() {
       />
       <Tab.Screen
         name="Calendar"
-        component={SampleComponent}
+        component={InboxScreen}
         options={{
           tabBarBadge: 10,
           tabBarLabel: 'Calendar',
@@ -36,7 +31,7 @@ export default function TabNavigator() {
       />
       <Tab.Screen
         name="Offering"
-        component={SampleComponent}
+        component={InboxScreen}
         options={{
           tabBarLabel: 'Offering',
           tabBarIcon: ({ color }) => (
@@ -46,7 +41,7 @@ export default function TabNavigator() {
       />
       <Tab.Screen
         name="Sessions"
-        component={SampleComponent}
+        component={InboxScreen}
         options={{
           tabBarLabel: 'Sessions',
           tabBarIcon: ({ color }) => (
@@ -56,7 +51,7 @@ export default function TabNavigator() {
       />
       <Tab.Screen
         name="Clients"
-        component={SampleComponent}
+        component={InboxScreen}
         options={{
           tabBarLabel: 'Clients',
           tabBarIcon: ({ color }) => (
@@ -66,8 +61,4 @@ export default function TabNavigator() {
       />
     </Tab.Navigator>
   );
-}
-
-function SampleComponent() {
-  return <Text>SampleComponent</Text>;
 }

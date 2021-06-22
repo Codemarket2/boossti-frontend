@@ -27,7 +27,7 @@ function MainStack() {
           options={{ headerShown: false }}
         />
       ) : authenticated ? (
-        <Stack.Screen name="UserStack" component={UserStack} />
+        <Stack.Screen name="UserStack" component={UserStack} options={{ headerShown: false }} />
       ) : (
         <Stack.Screen name="AuthStack" component={AuthStack} />
       )}

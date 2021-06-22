@@ -1,11 +1,11 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { Title } from 'react-native-paper';
 import Screen from '../components/common/Screen';
 
 export default function InboxScreen() {
   return (
     <Screen>
-      <Text>InboxScreen</Text>
+      <Title>InboxScreen</Title>
     </Screen>
   );
 }

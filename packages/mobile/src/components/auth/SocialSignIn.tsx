@@ -15,7 +15,7 @@ const StyledCaptionWrapper = styled.View`
 
 const StyledCaption = styled(Caption)`
   text-align: center;
-  background-color: white;
+  background-color: ${(props) => props.theme.colors.surface};
   min-width: 30px;
   margin-top: -10px;
 `;

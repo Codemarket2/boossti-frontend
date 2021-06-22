@@ -1,19 +1,19 @@
 import React from 'react';
 import { ViewStyle, StatusBar } from 'react-native';
-import { ProgressBar } from 'react-native-paper';
+import { ProgressBar, useTheme } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components/native';
 
 const StyledView = styled.View`
   padding: 10px;
   flex: 1;
-  background-color: white;
+  background-color: ${(props) => props.theme.colors.surface};
   padding-top: 0px;
 `;
 
 const StyledSafeAreaView = styled.SafeAreaView`
   flex: 1;
-  background-color: white;
+  background-color: ${(props) => props.theme.colors.surface};
 `;
 
 interface IProps {
@@ -31,7 +31,14 @@ export default function Screen({
   barStyle,
   barBackgroundColor,
 }: IProps) {
-  const loading = useSelector(({ loading }: { loading: boolean }) => loading);
+  const { loading, darkMode } = useSelector(
+    ({ loading, auth }: { loading: boolean; auth: any }) => ({
+      loading,
+      darkMode: auth.darkMode,
+    }),
+  );
+  const theme = useTheme();
+  const defaultColor = darkMode ? theme.colors.background : theme.colors.primary;
   if (safeArea) {
     return (
       <StyledSafeAreaView>
@@ -39,7 +46,7 @@ export default function Screen({
           loading={loading}
           style={style}
           barStyle={barStyle}
-          barBackgroundColor={barBackgroundColor}>
+          barBackgroundColor={barBackgroundColor || defaultColor}>
           {children}
         </LoadingBarView>
       </StyledSafeAreaView>
@@ -66,7 +73,7 @@ interface ILoadingBarViewProps {
 
 const LoadingBarWrapper = styled.View`
   min-height: 10px;
-  background-color: white;
+  background-color: ${(props) => props.theme.colors.surface};
 `;
 
 const LoadingBarView = ({
@@ -74,7 +81,7 @@ const LoadingBarView = ({
   children,
   loading,
   barStyle = 'light-content',
-  barBackgroundColor = '#6200EE',
+  barBackgroundColor,
 }: ILoadingBarViewProps) => {
   return (
     <>
