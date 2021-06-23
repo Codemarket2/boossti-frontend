@@ -30,7 +30,6 @@ export default function AppBarComponent() {
   const [openDrawer, setOpenDrawer] = useState(false);
 
   const dispatch = useDispatch();
-  // const [darkMode, setDarkMode] = useState(false);
   const open = Boolean(anchorEl);
 
   const handleMenu = (event) => {
@@ -41,8 +40,7 @@ export default function AppBarComponent() {
     setAnchorEl(null);
   };
 
-  const handleToggleDarkMode = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // setDarkMode(event.target.checked);
+  const handleToggleDarkMode = () => {
     localStorage.setItem('darkMode', JSON.stringify(!darkMode));
     dispatch(toggleDarkMode());
   };
