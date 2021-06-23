@@ -21,12 +21,24 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 // Global CSS
 // import '../src/styles/styles.css';
 
+const customUrl =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:3000/'
+    : 'https://d27wezwiuran4j.cloudfront.net/';
+
 Amplify.configure({
   ...aws_exports,
   ssr: true,
+  oauth: {
+    ...aws_exports.oauth,
+    redirectSignIn: customUrl,
+    redirectSignOut: customUrl,
+  },
 });
 
 const stripePromise = loadStripe(projectConfig.stripePublishableKey);
+
+console.log('process.env.envirnoment', process.env.NODE_ENV);
 
 function App({ Component, pageProps }: AppProps) {
   useCurrentAuthenticatedUser();
