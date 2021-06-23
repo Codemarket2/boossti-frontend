@@ -24,11 +24,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 Amplify.configure({
   ...aws_exports,
   ssr: true,
-  oauth: {
-    ...aws_exports.oauth,
-    redirectSignIn: true ? 'https://d3fmot6d29rs7w.cloudfront.net/' : 'http://localhost:3000/',
-    redirectSignOut: true ? 'https://d3fmot6d29rs7w.cloudfront.net/' : 'http://localhost:3000/',
-  },
 });
 
 const stripePromise = loadStripe(projectConfig.stripePublishableKey);

@@ -7,6 +7,7 @@ import Google from '@material-ui/icons/GTranslate';
 import styled from 'styled-components';
 import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth/lib/types';
 import InputGroup from '../common/InputGroup';
+// import FBButton from './FBButton';
 
 const StyledCaptionWrapper = styled.div`
   border-top: 1px solid grey;
@@ -33,7 +34,7 @@ export default function SocialSignIn({ signIn = true }: { signIn?: boolean }) {
           startIcon={<Google />}
           data-testid="google-signin-button"
           fullWidth
-          style={{ backgroundColor: '#DB4437', color: 'white', pointerEvents: 'none' }}
+          style={{ backgroundColor: '#DB4437', color: 'white' }}
           type="button"
           variant="contained"
           onClick={() =>
@@ -47,15 +48,17 @@ export default function SocialSignIn({ signIn = true }: { signIn?: boolean }) {
           startIcon={<Facebook />}
           data-testid="facebook-signin-button"
           fullWidth
-          style={{ backgroundColor: '#4267B2', color: 'white', pointerEvents: 'none' }}
+          style={{ backgroundColor: '#4267B2', color: 'white' }}
           type="button"
           variant="contained"
+          // onClick={handleSignIn}
           onClick={() =>
             Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Facebook })
           }>
           Sign {signIn ? 'in' : 'up'} with Facebook
         </Button>
       </InputGroup>
+      {/* <FBButton /> */}
     </div>
   );
 }

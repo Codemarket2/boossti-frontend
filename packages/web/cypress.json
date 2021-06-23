@@ -1,5 +1,6 @@
 {
   "defaultCommandTimeout": 10000,
+  "video": false,
   "component": {
     "componentFolder": "src",
     "testFiles": "**/*test.{js,jsx,ts,tsx}"
