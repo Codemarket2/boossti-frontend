@@ -24,7 +24,7 @@ export function useHandleLogout() {
   return { handleLogout };
 }
 
-export function useCurrentAuthenticatedUser(): null {
+export function useCurrentAuthenticatedUser() {
   const dispatch = useDispatch();
   // useInitialUser();
 
@@ -49,5 +49,5 @@ export function useCurrentAuthenticatedUser(): null {
   useEffect(() => {
     getUser();
   }, []);
-  return null;
+  return { getUser };
 }

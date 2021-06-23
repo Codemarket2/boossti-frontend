@@ -1,11 +1,11 @@
 import React from 'react';
 import { Auth } from 'aws-amplify';
+import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth/lib/types';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Facebook from '@material-ui/icons/Facebook';
 import Google from '@material-ui/icons/GTranslate';
 import styled from 'styled-components';
-import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth/lib/types';
 import InputGroup from '../common/InputGroup';
 // import FBButton from './FBButton';
 

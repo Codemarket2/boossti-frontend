@@ -10,6 +10,15 @@
 		<string>MaterialIcons.ttf</string>
 		<string>MaterialCommunityIcons.ttf</string>
 	</array>
+	<key>CFBundleURLTypes</key>
+    <array>
+		<dict>
+        	<key>CFBundleURLSchemes</key>
+            <array>
+            	<string>drreamz</string>
+        	</array>
+    	</dict>
+    </array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>

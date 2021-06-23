@@ -3,6 +3,7 @@ export const UNSET_AUTHED_USER = 'UNSET_AUTHED_USER';
 export const INITIAL_AUTHED_USER = 'INITIAL_AUTHED_USER';
 export const USER_SUBSCRIPTION_DATA = 'USER_SUBSCRIPTION_DATA';
 export const TOGGLE_DARK_MODE = 'TOGGLE_DARK_MODE';
+export const TOGGLE_AUTH_LOADING = 'TOGGLE_AUTH_LOADING';
 
 export interface IAttributes {
   sub: string;
@@ -46,5 +47,11 @@ export function userSubscriptionData(user: any) {
 export function toggleDarkMode() {
   return {
     type: TOGGLE_DARK_MODE,
+  };
+}
+export function toggleAuthLoading(authLoading: boolean) {
+  return {
+    type: TOGGLE_AUTH_LOADING,
+    authLoading,
   };
 }
