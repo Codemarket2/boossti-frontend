@@ -31,8 +31,8 @@ interface ISignInFormValues {
 }
 
 const signInValues: ISignInFormValues = {
-  email: 'contactvivekvt@gmail.com',
-  password: 'contactvivekvt@gmail.com',
+  email: '',
+  password: '',
 };
 
 export function useSignIn({ onAlert = () => {} }: ISignInArgs) {
