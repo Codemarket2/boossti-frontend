@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { TextInput, Caption } from 'react-native-paper';
 import styled from 'styled-components/native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface IProps {
   mode?: 'outlined' | 'flat';
@@ -16,7 +15,7 @@ interface IProps {
 }
 
 const StyledCaption = styled(Caption)`
-  color: red;
+  color: ${(props) => props.theme.colors.error};
 `;
 
 export default function PasswordInput({
@@ -49,9 +48,7 @@ export default function PasswordInput({
         right={
           <TextInput.Icon
             onPress={() => setShowPassword(!showPassword)}
-            name={() => (
-              <MaterialCommunityIcons name={!showPassword ? 'eye' : 'eye-off'} size={20} />
-            )}
+            name={!showPassword ? 'eye' : 'eye-off'}
           />
         }
       />

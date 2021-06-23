@@ -12,14 +12,13 @@ const StyledCaptionWrapper = styled.div`
   border-top: 1px solid grey;
   justify-content: center;
   display: flex;
-  margin-top: 40px;
-  margin-bottom: 20px;
+  margin-top: ${(props) => props.theme.spacing(3)}px;
 `;
 
 const StyledCaption = styled(Typography)`
   margin-top: -12px !important;
   background-color: ${(props) => props.theme.palette.background.default};
-  min-width: 40px;
+  min-width: ${(props) => props.theme.spacing(4)}px;
   text-align: center;
 `;
 

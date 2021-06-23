@@ -7,29 +7,72 @@ import CalendarToday from '@material-ui/icons/CalendarToday';
 import Event from '@material-ui/icons/Event';
 import Videocam from '@material-ui/icons/Videocam';
 import Group from '@material-ui/icons/Group';
+import styled from 'styled-components';
+import { routes } from '../../utils/routes';
+
+const setActiveRouteColor = (activeRoute, linkRoute) => {
+  return { color: activeRoute === linkRoute ? '#fff' : 'rgba(255, 255, 255, 0.5)' };
+};
+
+const StyledBottomNavigation = styled(BottomNavigation)`
+  background-color: ${(props) =>
+    props.theme.palette.type === 'dark'
+      ? props.theme.palette.grey[900]
+      : props.theme.palette.primary.main} !important;
+  position: fixed;
+  width: 100%;
+  bottom: 0px;
+  display: none !important;
+  ${(props) => props.theme.breakpoints.down('xs')} {
+    display: flex !important;
+  }
+`;
 
 export default function SimpleBottomNavigation() {
   const router = useRouter();
-  const [value, setValue] = useState('/');
+  const [activeRoute, setActiveRoute] = useState('/');
 
   useEffect(() => {
-    if (value !== router.pathname) {
-      setValue(router.pathname);
+    if (activeRoute !== router.pathname) {
+      setActiveRoute(router.pathname);
     }
   }, []);
 
   return (
-    <BottomNavigation
-      value={value}
+    <StyledBottomNavigation
+      value={activeRoute}
       onChange={(event, newValue) => router.push(newValue)}
-      showLabels
-      className="position-fixed"
-      style={{ width: '100vw', bottom: 0 }}>
-      <BottomNavigationAction value="/" label="Inbox" icon={<ChatBubble />} />
-      <BottomNavigationAction value="/calendar" label="Calendar" icon={<CalendarToday />} />
-      <BottomNavigationAction value="/offerings" label="Offerings" icon={<Event />} />
-      <BottomNavigationAction value="/sessions" label="Sessions" icon={<Videocam />} />
-      <BottomNavigationAction value="/clients" label="Clients" icon={<Group />} />
-    </BottomNavigation>
+      showLabels>
+      <BottomNavigationAction
+        value={routes.inbox}
+        style={setActiveRouteColor(activeRoute, routes.inbox)}
+        label="Inbox"
+        icon={<ChatBubble />}
+      />
+      <BottomNavigationAction
+        style={setActiveRouteColor(activeRoute, routes.calendar)}
+        value={routes.calendar}
+        label="Calendar"
+        icon={<CalendarToday />}
+      />
+      <BottomNavigationAction
+        style={setActiveRouteColor(activeRoute, routes.offerings)}
+        value={routes.offerings}
+        label="Offerings"
+        icon={<Event />}
+      />
+      <BottomNavigationAction
+        style={setActiveRouteColor(activeRoute, routes.sessions)}
+        value={routes.sessions}
+        label="Sessions"
+        icon={<Videocam />}
+      />
+      <BottomNavigationAction
+        style={setActiveRouteColor(activeRoute, routes.clients)}
+        value={routes.clients}
+        label="Clients"
+        icon={<Group />}
+      />
+    </StyledBottomNavigation>
   );
 }
