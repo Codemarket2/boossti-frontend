@@ -24,7 +24,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const customUrl =
   process.env.NODE_ENV === 'development'
     ? 'http://localhost:3000/'
-    : 'https://d27wezwiuran4j.cloudfront.net/';
+    : 'https://d27wezwiuran4j.cloudfront.net/auth/';
 
 Amplify.configure({
   ...aws_exports,
@@ -37,8 +37,6 @@ Amplify.configure({
 });
 
 const stripePromise = loadStripe(projectConfig.stripePublishableKey);
-
-console.log('process.env.envirnoment', process.env.NODE_ENV);
 
 function App({ Component, pageProps }: AppProps) {
   useCurrentAuthenticatedUser();
