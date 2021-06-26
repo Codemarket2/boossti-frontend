@@ -19,8 +19,11 @@ import {
   DarkTheme as PaperDarkTheme,
   DefaultTheme as PaperDefaultTheme,
 } from 'react-native-paper';
+
+// vivek
 import { Provider as ReduxProvider, useSelector, useDispatch } from 'react-redux';
-import Amplify, { Hub } from 'aws-amplify';
+import Amplify, { Hub, Auth } from 'aws-amplify';
+import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth/lib/types';
 import awsconfig from '@frontend/shared/aws-exports';
 import { ApolloProvider } from '@apollo/client/react';
 import { useCurrentAuthenticatedUser } from '@frontend/shared/hooks/auth';
@@ -37,25 +40,29 @@ import AuthLoadingModal from './src/components/auth/AuthLoadingModal';
 // Amplify.configure(config);
 
 async function urlOpener(url: any, redirectUrl: any) {
-  await InAppBrowser.isAvailable();
-  const { type, url: newUrl } = await InAppBrowser.openAuth(url, redirectUrl, {
-    showTitle: false,
-    enableUrlBarHiding: true,
-    enableDefaultShare: false,
-    ephemeralWebSession: false,
-  });
+  try {
+    await InAppBrowser.isAvailable();
+    const { type, url: newUrl } = await InAppBrowser.openAuth(url, redirectUrl, {
+      showTitle: false,
+      enableUrlBarHiding: true,
+      enableDefaultShare: false,
+      ephemeralWebSession: false,
+    });
 
-  // let splitUrl = newUrl;
-  // if (splitUrl && splitUrl.includes('?code')) {
-  //   splitUrl = `drreamz://?${newUrl.split('#_=_')[0].split('?')[1] || ''}`;
-  // }
+    // let splitUrl = newUrl;
+    // if (splitUrl && splitUrl.includes('?code')) {
+    //   splitUrl = `drreamz://?${newUrl.split('#_=_')[0].split('?')[1] || ''}`;
+    // }
 
-  // if (type === 'success') {
-  //   Linking.openURL(splitUrl);
-  // }
+    // if (type === 'success') {
+    //   Linking.openURL(splitUrl);
+    // }
 
-  if (type === 'success') {
-    Linking.openURL(newUrl);
+    if (type === 'success') {
+      Linking.openURL(newUrl);
+    }
+  } catch (error) {
+    console.log('error urlOpener==', error);
   }
 }
 
@@ -108,37 +115,43 @@ const Wrapper = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useDispatch();
   let theme = darkMode ? CombinedDarkTheme : CombinedDefaultTheme;
 
-  const handleOpenURL = (event) => {
-    if (event.url && event.url.includes('?code')) {
+  const handleOpenURL = (event: any) => {
+    if (event.url && event.url.includes('GOOGLE_ACCOUNT_LINKED')) {
+      Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Google });
+    } else if (event.url && event.url.includes('FACEBOOK_ACCOUNT_LINKED')) {
+      Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Facebook });
+    } else if (event.url && event.url.includes('?code')) {
       dispatch(toggleAuthLoading(true));
+      getUser();
     }
   };
 
   useEffect(() => {
-    if (Platform.OS === 'android') {
-      Linking.getInitialURL().then((url2) => {
-        handleOpenURL({ url: url2 });
-      });
-    } else {
-      Linking.addEventListener('url', handleOpenURL);
-    }
-    Hub.listen('auth', ({ payload: { event, data } }) => {
-      switch (event) {
-        case 'signIn':
-        case 'cognitoHostedUI':
-          // console.log('cognitoHostedUI', data);
-          getUser();
-          break;
-        case 'signOut':
-          console.log('signOut');
-          break;
-        case 'signIn_failure':
-        case 'cognitoHostedUI_failure':
-          Alert.alert('Error', 'Sign in failed please try again');
-          // console.log('Sign in failure', data);
-          break;
-      }
-    });
+    // if (Platform.OS === 'android') {
+    //   Linking.getInitialURL().then((url2) => {
+    //     handleOpenURL({ url: url2 });
+    //   });
+    // } else {
+    //   Linking.addEventListener('url', handleOpenURL);
+    // }
+    Linking.addEventListener('url', handleOpenURL);
+
+    // Hub.listen('auth', ({ payload: { event, data } }) => {
+    //   switch (event) {
+    //     case 'signIn':
+    //     case 'cognitoHostedUI':
+    //       // console.log('cognitoHostedUI', event, data);
+    //       // getUser();
+    //       break;
+    //     case 'signOut':
+    //     case 'signIn_failure':
+    //     case 'cognitoHostedUI_failure':
+    //       // console.log('cognitoHostedUI_failure', event, data);
+    //       // Alert.alert('Error', 'Sign in failed please try again');
+    //       // console.log('Sign in failure', data);
+    //       break;
+    //   }
+    // });
     return () => Linking.removeEventListener('url', handleOpenURL);
   }, []);
 

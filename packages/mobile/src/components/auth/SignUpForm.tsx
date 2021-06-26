@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useSignUp } from '@frontend/shared/hooks/auth';
+import { useSignUp, useSignIn } from '@frontend/shared/hooks/auth';
 import SocialSignIn from './SocialSignIn';
 import { onAlert } from '../../utils/alert';
 import VerifyEmailForm from './VerifyEmailForm';
@@ -12,19 +12,27 @@ import Button from '../../components/common/Button';
 
 export default function SignInForm() {
   const { state, setState, formik } = useSignUp({ onAlert });
+  const { onSubmit } = useSignIn({ onAlert });
   const navigation = useNavigation();
   if (state.verify) {
     return (
       <VerifyEmailForm
         email={state.email}
-        onSuccess={() => {
-          setState({
-            ...state,
-            email: '',
-            verify: false,
-          });
-          onAlert('Email Verified Successfully', 'Please Sign In now with your email and password');
-          navigation.navigate('SignInScreen');
+        onSuccess={async () => {
+          try {
+            await onSubmit({ email: formik.values.email, password: formik.values.password });
+          } catch (error) {
+            formik.handleReset('');
+            setState({
+              ...state,
+              email: '',
+              verify: false,
+            });
+            onAlert(
+              'Email Verified Successfully',
+              'Please Sign In now with your email and password',
+            );
+          }
         }}
         label="Sign Up Again"
         handleLabelClick={() => setState({ ...state, verify: false })}
