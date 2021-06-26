@@ -64,7 +64,7 @@ export function useSignUp({ onAlert = () => {} }: ISignUpArgs) {
           picture: 'https://codemarket-common-storage.s3.amazonaws.com/public/default/profile.jpeg',
         },
       });
-      formik.handleReset('');
+      // formik.handleReset('');
       setState({
         ...state,
         email,

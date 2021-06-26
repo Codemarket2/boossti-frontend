@@ -47,7 +47,7 @@ export function useVerifyEmail({
       await Auth.confirmSignUp(email, code);
       dispatch(hideLoading());
       // formik.handleReset('');
-      onSuccess();
+      await onSuccess();
     } catch (error) {
       onAlert('Error', error.message);
     }

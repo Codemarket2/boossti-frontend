@@ -1,6 +1,6 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import { useSignUp } from '@frontend/shared/hooks/auth';
+import { useSignUp, useSignIn } from '@frontend/shared/hooks/auth';
 import LoadingButton from '../common/LoadingButton';
 import VerifyEmailForm from './VerifyEmailForm';
 import { onAlert } from '../../utils/alert';
@@ -10,17 +10,26 @@ import InputGroup from '../common/InputGroup';
 
 export default function SignUpForm() {
   const { state, setState, formik } = useSignUp({ onAlert });
+  const { onSubmit } = useSignIn({ onAlert });
 
   if (state.verify) {
     return (
       <VerifyEmailForm
-        onSuccess={() => {
-          setState({
-            ...state,
-            email: '',
-            verify: false,
-          });
-          onAlert('Email Verified Successfully', 'Please Sign In now with your email and password');
+        onSuccess={async () => {
+          try {
+            await onSubmit({ email: formik.values.email, password: formik.values.password });
+          } catch (error) {
+            formik.handleReset('');
+            setState({
+              ...state,
+              email: '',
+              verify: false,
+            });
+            onAlert(
+              'Email Verified Successfully',
+              'Please Sign In now with your email and password',
+            );
+          }
         }}
         email={state.email}
         label="Sign Up Again?"
