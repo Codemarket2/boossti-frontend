@@ -24,7 +24,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const customUrl =
   process.env.NODE_ENV === 'development'
     ? 'http://localhost:3000/'
-    : 'https://d27wezwiuran4j.cloudfront.net/auth/';
+    : 'https://d27wezwiuran4j.cloudfront.net/';
 
 Amplify.configure({
   ...aws_exports,
