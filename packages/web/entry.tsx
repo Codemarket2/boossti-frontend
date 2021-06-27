@@ -1,6 +1,6 @@
 import React from 'react';
 import Index from './pages/index';
-import Users from './pages/users';
+// import Users from './pages/users';
 // import Auth from './pages/';
 
 export default function Entry() {
@@ -8,7 +8,7 @@ export default function Entry() {
     <div>
       <Index />
       {/* <Auth /> */}
-      <Users />
+      {/* <Users /> */}
     </div>
   );
 }

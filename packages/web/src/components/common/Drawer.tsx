@@ -9,20 +9,18 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IOSSwitch from './IOSSwitch';
 import Settings from '@material-ui/icons/Settings';
 import Brightness4 from '@material-ui/icons/Brightness4';
+import SupervisorAccount from '@material-ui/icons/SupervisorAccount';
+import Link from 'next/link';
+import DarkModeToggle from './DarkModeToggle';
 
 interface IProps {
   openDrawer: boolean;
   setOpenDrawer: (arg: boolean) => void;
-  handleToggleDarkMode: () => void;
   darkMode: boolean;
+  admin: boolean;
 }
 
-export default function DrawerContent({
-  openDrawer,
-  setOpenDrawer,
-  handleToggleDarkMode,
-  darkMode,
-}: IProps) {
+export default function DrawerContent({ openDrawer, setOpenDrawer, darkMode, admin }: IProps) {
   return (
     <Drawer anchor="left" open={openDrawer} onClose={() => setOpenDrawer(false)}>
       <List style={{ minWidth: 300 }}>
@@ -33,15 +31,18 @@ export default function DrawerContent({
           <ListItemText primary="Settings" />
         </ListItem>
         <Divider />
-        <ListItem button onClick={handleToggleDarkMode}>
-          <ListItemIcon>
-            <Brightness4 />
-          </ListItemIcon>
-          <ListItemText primary="Dark Mode" />
-          <ListItemSecondaryAction>
-            <IOSSwitch onChange={handleToggleDarkMode} checked={darkMode} name="darkMode" />
-          </ListItemSecondaryAction>
-        </ListItem>
+        <DarkModeToggle darkMode={darkMode} />
+        <Divider />
+        {admin && (
+          <Link href="/admin">
+            <ListItem button>
+              <ListItemIcon>
+                <SupervisorAccount />
+              </ListItemIcon>
+              <ListItemText primary="Admin" />
+            </ListItem>
+          </Link>
+        )}
         <Divider />
       </List>
     </Drawer>

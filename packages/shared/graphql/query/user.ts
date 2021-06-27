@@ -9,8 +9,8 @@ export const GET_ALL = gql`
     $bookings: Int
     $listings: Int
     $active: Boolean
-    $lowerRange: String
-    $higherRange: String
+    $lowerRange: AWSDateTime
+    $higherRange: AWSDateTime
   ) {
     getUsers(
       limit: $limit
@@ -31,10 +31,7 @@ export const GET_ALL = gql`
         email
         name
         picture
-        status
-        username
-        bookings
-        listings
+        userId
         createdAt
       }
     }

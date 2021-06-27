@@ -1,14 +1,11 @@
 import React, { useEffect } from 'react';
-import Head from 'next/head';
 import { Auth } from 'aws-amplify';
 import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth/lib/types';
 import { useRouter } from 'next/router';
 import { connect } from 'react-redux';
-import projectConfig from '@frontend/shared';
 import AuthScreen from '../src/screens/AuthScreen';
 import InitialLoading from '../src/components/common/InitialLoading';
-import AppBar from '../src/components/common/AppBar';
-import Container from '../src/components/common/Container';
+import UserLayout from '../src/components/common/UserLayout';
 
 interface IProps {
   initial: boolean;
@@ -42,16 +39,9 @@ function AuthPage({ initial, authenticated }: IProps) {
     !(error_description && error_description.includes('_ACCOUNT_LINKED'))
   ) {
     return (
-      <div>
-        <AppBar />
-        <Head>
-          <title>{projectConfig.title}</title>
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-        <Container>
-          <AuthScreen />
-        </Container>
-      </div>
+      <UserLayout>
+        <AuthScreen />
+      </UserLayout>
     );
   }
   return <InitialLoading />;

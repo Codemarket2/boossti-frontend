@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ThemeProvider as StyledProvider } from 'styled-components';
 import { AppProps } from 'next/app';
 import { Elements } from '@stripe/react-stripe-js';
@@ -48,6 +48,11 @@ function App({ Component, pageProps }: AppProps) {
       type: darkMode ? 'dark' : 'light',
     },
   });
+
+  useEffect(() => {
+    const jssStyles = document.querySelector('#jss-server-side');
+    if (jssStyles && jssStyles.parentNode) jssStyles.parentNode.removeChild(jssStyles);
+  }, []);
 
   return (
     <ApolloProvider client={client}>

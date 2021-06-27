@@ -4,6 +4,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 interface IProps {
   type?: 'button' | 'submit';
+  size?: 'small' | 'medium' | 'large';
   variant?: 'contained' | 'outlined';
   color?: 'primary' | 'secondary';
   loading?: boolean;

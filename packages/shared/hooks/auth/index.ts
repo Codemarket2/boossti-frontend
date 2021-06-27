@@ -1,12 +1,8 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Auth } from 'aws-amplify';
-import {
-  setAuthUser,
-  initialAuthUser,
-  unsetAuthUser,
-  toggleDarkMode,
-} from '../../redux/actions/auth';
+import { client } from '../../graphql';
+import { setAuthUser, initialAuthUser, unsetAuthUser } from '../../redux/actions/auth';
 // import { useInitialUser } from '../users';
 export { useSignIn } from './signIn';
 export { useSignUp } from './signUp';
@@ -17,7 +13,7 @@ export function useHandleLogout() {
   const dispatch = useDispatch();
   const handleLogout = () => {
     Auth.signOut().then(() => {
-      // client.resetStore();
+      client.resetStore();
       dispatch(unsetAuthUser());
     });
   };

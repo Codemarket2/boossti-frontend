@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import projectConfig from '@frontend/shared';
-import { toggleDarkMode } from '@frontend/shared/redux/actions/auth';
 import { useHandleLogout } from '@frontend/shared/hooks/auth';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -44,11 +43,10 @@ const MenuWrapper = styled.div`
 `;
 
 export default function AppBarComponent() {
-  const { authenticated, darkMode } = useSelector(({ auth }: any) => auth);
+  const { authenticated, darkMode, admin } = useSelector(({ auth }: any) => auth);
   const { handleLogout } = useHandleLogout();
   const [anchorEl, setAnchorEl] = useState(null);
   const [openDrawer, setOpenDrawer] = useState(false);
-  const dispatch = useDispatch();
   const router = useRouter();
   const [activeRoute, setActiveRoute] = useState<String>('/');
   const open = Boolean(anchorEl);
@@ -63,21 +61,6 @@ export default function AppBarComponent() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  const handleToggleDarkMode = () => {
-    localStorage.setItem('darkMode', JSON.stringify(!darkMode));
-    dispatch(toggleDarkMode());
-  };
-
-  useEffect(() => {
-    const getDarkMode = async () => {
-      const darkModePersisted = await localStorage.getItem('darkMode');
-      if (Boolean(JSON.parse(darkModePersisted)) !== darkMode) {
-        dispatch(toggleDarkMode());
-      }
-    };
-    getDarkMode();
-  }, []);
 
   useEffect(() => {
     if (activeRoute !== router.pathname) {
@@ -97,10 +80,10 @@ export default function AppBarComponent() {
               </IconButton>
             </Tooltip>
             <Drawer
-              handleToggleDarkMode={handleToggleDarkMode}
               setOpenDrawer={setOpenDrawer}
               openDrawer={openDrawer}
               darkMode={darkMode}
+              admin={admin}
             />
           </>
         ) : null}
