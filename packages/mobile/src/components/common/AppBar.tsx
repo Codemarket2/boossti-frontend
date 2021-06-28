@@ -8,7 +8,12 @@ import { useHandleLogout } from '@frontend/shared/hooks/auth';
 //   authenticated?: boolean;
 // }
 
-export default function AppBar({ navigation, previous, authenticated = false }: any) {
+export default function AppBar({
+  navigation,
+  previous,
+  authenticated = false,
+  title = 'Drreamz',
+}: any) {
   const { handleLogout } = useHandleLogout();
   const [visible, setVisible] = useState(false);
   const openMenu = () => setVisible(true);
@@ -21,7 +26,7 @@ export default function AppBar({ navigation, previous, authenticated = false }: 
       ) : (
         authenticated && <Appbar.Action icon="menu" onPress={() => navigation.openDrawer()} />
       )}
-      <Appbar.Content title="Drreamz" style={{ alignItems: 'center' }} />
+      <Appbar.Content title={title} style={{ alignItems: 'center' }} />
       {authenticated && !previous ? (
         <Menu
           visible={visible}

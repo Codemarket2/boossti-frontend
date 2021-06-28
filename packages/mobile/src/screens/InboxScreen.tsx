@@ -5,7 +5,7 @@ import Screen from '../components/common/Screen';
 export default function InboxScreen() {
   return (
     <Screen>
-      <Title>InboxScreen</Title>
+      <Title>Inbox Screen</Title>
     </Screen>
   );
 }

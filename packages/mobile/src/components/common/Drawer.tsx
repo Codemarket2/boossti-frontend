@@ -1,11 +1,11 @@
 import React from 'react';
-import { Divider, List, Switch } from 'react-native-paper';
+import { Divider, List, Switch, TouchableRipple } from 'react-native-paper';
 import { toggleDarkMode } from '@frontend/shared/redux/actions/auth';
 import { useSelector, useDispatch } from 'react-redux';
 import Screen from './Screen';
 
 export default function Drawer({ navigation }: any) {
-  const darkMode = useSelector(({ auth }: any) => auth.darkMode);
+  const { darkMode, admin } = useSelector(({ auth }: any) => auth);
   const dispatch = useDispatch();
   return (
     <Screen safeArea>
@@ -19,6 +19,17 @@ export default function Drawer({ navigation }: any) {
         )}
       />
       <Divider />
+      {admin && (
+        <>
+          <TouchableRipple onPress={() => navigation.navigate('AdminStack')}>
+            <List.Item
+              title="Admin"
+              left={(props) => <List.Icon {...props} icon="account-supervisor" />}
+            />
+          </TouchableRipple>
+          <Divider />
+        </>
+      )}
     </Screen>
   );
 }

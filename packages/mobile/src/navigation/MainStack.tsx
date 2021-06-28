@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { useSelector } from 'react-redux';
 // import { useInitialUser } from '@frontend/shared/hooks/users';
 import UserStack from './UserStack';
+import AdminStack from './AdminStack';
 import AuthScreen from '../screens/auth/AuthScreen';
 import LoadingScreen from '../screens/LoadingScreen';
 import AppBar from '../components/common/AppBar';
@@ -11,25 +12,25 @@ const Stack = createStackNavigator();
 
 function MainStack() {
   // useInitialUser();
-  const { authenticated, initial } = useSelector(({ auth }: any) => ({
-    authenticated: auth.authenticated,
-    initial: auth.initial,
-  }));
+  const { authenticated, initial, admin } = useSelector(({ auth }: any) => auth);
   return (
-    <Stack.Navigator
-      screenOptions={{
-        header: (props) => <AppBar {...props} authenticated={authenticated} />,
-      }}>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       {!initial ? (
-        <Stack.Screen
-          name="LoadingScreen"
-          component={LoadingScreen}
-          options={{ headerShown: false }}
-        />
+        <Stack.Screen name="LoadingScreen" component={LoadingScreen} />
       ) : authenticated ? (
-        <Stack.Screen name="UserStack" component={UserStack} options={{ headerShown: false }} />
+        <>
+          <Stack.Screen name="UserStack" component={UserStack} />
+          {admin && <Stack.Screen name="AdminStack" component={AdminStack} />}
+        </>
       ) : (
-        <Stack.Screen name="AuthScreen" component={AuthScreen} />
+        <Stack.Screen
+          name="AuthScreen"
+          component={AuthScreen}
+          options={{
+            header: (props) => <AppBar {...props} />,
+            headerShown: true,
+          }}
+        />
       )}
     </Stack.Navigator>
   );
