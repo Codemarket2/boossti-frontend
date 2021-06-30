@@ -47,7 +47,7 @@ export function useGetAllUser() {
     fetchPolicy: 'network-only', // 'cache-and-network' //'network-only'
   });
 
-  // console.log('Error', data, error);
+  console.log('Error', data, error);
 
   const [allData, setAllData] = useState({
     count: 0,
