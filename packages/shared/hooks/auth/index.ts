@@ -12,7 +12,7 @@ export { useVerifyEmail } from './verifyEmail';
 export function useHandleLogout() {
   const dispatch = useDispatch();
   const handleLogout = () => {
-    Auth.signOut().then(() => {
+    Auth.signOut().then(async () => {
       client.resetStore();
       dispatch(unsetAuthUser());
     });
@@ -36,6 +36,7 @@ export function useCurrentAuthenticatedUser() {
             : false,
         };
         dispatch(setAuthUser(payload));
+        return user.attributes;
       }
     } catch (error) {
       dispatch(initialAuthUser());

@@ -22,7 +22,7 @@ import {
 
 // vivek
 import { Provider as ReduxProvider, useSelector, useDispatch } from 'react-redux';
-import Amplify, { Hub, Auth } from 'aws-amplify';
+import Amplify, { Auth } from 'aws-amplify';
 import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth/lib/types';
 import awsconfig from '@frontend/shared/aws-exports';
 import { ApolloProvider } from '@apollo/client/react';
@@ -35,6 +35,7 @@ import InAppBrowser from 'react-native-inappbrowser-reborn';
 import MainStack from './src/navigation/MainStack';
 import { store, persistor } from './src/utils/store';
 import AuthLoadingModal from './src/components/auth/AuthLoadingModal';
+import { useOneSignal } from './src/utils/onesignal';
 // import StorybookUI from './storybook';
 
 // Amplify.configure(config);
@@ -111,18 +112,20 @@ const App = () => {
 // InitialData - This Component is created because the useCurrentAuthenticatedUser hook need to be call inside redux provider
 const Wrapper = ({ children }: { children: React.ReactNode }) => {
   const { getUser } = useCurrentAuthenticatedUser();
+  useOneSignal();
   const darkMode = useSelector(({ auth }: any) => auth.darkMode);
   const dispatch = useDispatch();
   let theme = darkMode ? CombinedDarkTheme : CombinedDefaultTheme;
 
-  const handleOpenURL = (event: any) => {
+  const handleOpenURL = async (event: any) => {
     if (event.url && event.url.includes('GOOGLE_ACCOUNT_LINKED')) {
       Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Google });
     } else if (event.url && event.url.includes('FACEBOOK_ACCOUNT_LINKED')) {
       Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Facebook });
     } else if (event.url && event.url.includes('?code')) {
       dispatch(toggleAuthLoading(true));
-      getUser();
+      const userId = await getUser();
+      await onSignIn(userId);
     }
   };
 

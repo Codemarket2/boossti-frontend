@@ -1,10 +1,11 @@
 import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { Auth } from 'aws-amplify';
+import awsexports from '../aws-exports';
 
 const DEVELOPMENT_MODE = false;
 
-const productionUri = 'https://jy2h0lqya4.execute-api.us-east-1.amazonaws.com/dev/graphql';
+const productionUri = awsexports.graphqlEndpoint;
 const developmentUri = 'http://localhost:3030/dev/graphql';
 
 const graphqlUri = DEVELOPMENT_MODE ? developmentUri : productionUri;

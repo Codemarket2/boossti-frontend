@@ -15,10 +15,7 @@ const awsmobile = {
     responseType: 'code',
   },
   federationTarget: 'COGNITO_USER_POOLS',
-  aws_appsync_region: 'us-east-1',
-  aws_appsync_graphqlEndpoint:
-    'https://5pylmfbtc5d5pgaccxtl2gap6y.appsync-api.us-east-1.amazonaws.com/graphql',
-  aws_appsync_apiKey: 'da2-2ya7b3odafdvxk7y3yn6rcwhmm',
+  graphqlEndpoint: 'https://jy2h0lqya4.execute-api.us-east-1.amazonaws.com/dev/graphql',
 };
 
 export default awsmobile;
