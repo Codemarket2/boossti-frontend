@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Appbar, Menu } from 'react-native-paper';
 import { useHandleLogout } from '@frontend/shared/hooks/auth';
+import projectConfig from '@frontend/shared';
 
 // interface IProps {
 //   navigation: any;
@@ -12,7 +13,7 @@ export default function AppBar({
   navigation,
   previous,
   authenticated = false,
-  title = 'Drreamz',
+  title = projectConfig.title,
 }: any) {
   const { handleLogout } = useHandleLogout();
   const [visible, setVisible] = useState(false);
@@ -26,7 +27,10 @@ export default function AppBar({
       ) : (
         authenticated && <Appbar.Action icon="menu" onPress={() => navigation.openDrawer()} />
       )}
-      <Appbar.Content title={title} style={{ alignItems: 'center' }} />
+      <Appbar.Content
+        title={title}
+        style={{ alignItems: 'center', marginRight: previous ? 50 : 0 }}
+      />
       {authenticated && !previous ? (
         <Menu
           visible={visible}

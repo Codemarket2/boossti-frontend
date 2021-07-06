@@ -6,6 +6,7 @@ import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth/lib/types';
 import styled from 'styled-components/native';
 import InputGroup from '../common/InputGroup';
 import Button from '../common/Button';
+// import FBButton from './FBButton';
 
 const StyledCaptionWrapper = styled.View`
   border-top-width: 1px;
@@ -52,6 +53,7 @@ export default function SignInForm({ signIn = true }: { signIn?: boolean }) {
           Sign {signIn ? 'in' : 'up'} with Facebook
         </Button>
       </InputGroup>
+      {/* <FBButton /> */}
     </View>
   );
 }
