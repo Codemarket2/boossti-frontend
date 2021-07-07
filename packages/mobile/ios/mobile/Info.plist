@@ -26,8 +26,21 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>drreamz</string>
+				 <string>fb1048069449347975</string>
 			</array>
 		</dict>
+	</array>
+	<key>FacebookAppID</key>
+	<string>1048069449347975</string>
+	<key>FacebookDisplayName</key>
+	<string>Vijaa</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fbauth</string>
+		<string>fb-messenger-share-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>

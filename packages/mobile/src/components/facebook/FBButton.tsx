@@ -30,7 +30,6 @@ export default function FBButton({ fbConnect, setFbConnect, getCurrentSession }:
             try {
               const result = await LoginManager.logInWithPermissions([
                 'public_profile',
-                'public_profile',
                 'pages_show_list',
                 'publish_to_groups',
                 'groups_access_member_info',

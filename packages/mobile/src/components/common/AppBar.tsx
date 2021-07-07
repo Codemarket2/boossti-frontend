@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Appbar, Menu } from 'react-native-paper';
+import { Platform } from 'react-native';
 import { useHandleLogout } from '@frontend/shared/hooks/auth';
 import projectConfig from '@frontend/shared';
 
@@ -29,7 +30,10 @@ export default function AppBar({
       )}
       <Appbar.Content
         title={title}
-        style={{ alignItems: 'center', marginRight: previous ? 50 : 0 }}
+        style={{
+          alignItems: 'center',
+          marginRight: previous && Platform.OS === 'android' ? 50 : 0,
+        }}
       />
       {authenticated && !previous ? (
         <Menu

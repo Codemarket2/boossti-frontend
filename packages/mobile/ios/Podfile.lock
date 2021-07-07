@@ -287,6 +287,8 @@ PODS:
   - react-native-onesignal (4.1.1):
     - OneSignalXCFramework (= 3.4.4)
     - React (< 1.0.0, >= 0.13.0)
+  - react-native-pager-view (5.2.1):
+    - React-Core
   - react-native-safe-area-context (3.2.0):
     - React-Core
   - React-perflogger (0.64.1)
@@ -441,6 +443,7 @@ DEPENDENCIES:
   - react-native-fbsdk-next (from `../../../node_modules/react-native-fbsdk-next`)
   - "react-native-netinfo (from `../../../node_modules/@react-native-community/netinfo`)"
   - react-native-onesignal (from `../../../node_modules/react-native-onesignal`)
+  - react-native-pager-view (from `../../../node_modules/react-native-pager-view`)
   - react-native-safe-area-context (from `../../../node_modules/react-native-safe-area-context`)
   - React-perflogger (from `../../../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../../../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -521,6 +524,8 @@ EXTERNAL SOURCES:
     :path: "../../../node_modules/@react-native-community/netinfo"
   react-native-onesignal:
     :path: "../../../node_modules/react-native-onesignal"
+  react-native-pager-view:
+    :path: "../../../node_modules/react-native-pager-view"
   react-native-safe-area-context:
     :path: "../../../node_modules/react-native-safe-area-context"
   React-perflogger:
@@ -601,6 +606,7 @@ SPEC CHECKSUMS:
   react-native-fbsdk-next: 19e974b071047b7ed1dad86a9dc3fe77dff76b8c
   react-native-netinfo: e849fc21ca2f4128a5726c801a82fc6f4a6db50d
   react-native-onesignal: 2a7c3a5f2aa1c599d94cda6cc583205e1548828d
+  react-native-pager-view: 2864530d861ab2970beb2cd0b4cf2292cd30cd84
   react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
   React-perflogger: aad6d4b4a267936b3667260d1f649b6f6069a675
   React-RCTActionSheet: fc376be462c9c8d6ad82c0905442fd77f82a9d2a
