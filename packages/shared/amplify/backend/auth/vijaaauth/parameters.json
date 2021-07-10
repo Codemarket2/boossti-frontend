@@ -1,8 +1,6 @@
 {
-    "identityPoolName": "drreamz_identitypool_b624117a",
-    "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "drreamfb876df9",
-    "userPoolName": "drreamz_userpool",
+    "resourceNameTruncated": "vijaae22bd327",
+    "userPoolName": "vijaa_userpool",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -30,11 +28,11 @@
     "userpoolClientReadAttributes": [
         "email"
     ],
-    "userpoolClientLambdaRole": "drreamfb876df9_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "vijaaae22bd327_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "fb876df9",
-    "resourceName": "drreamz",
-    "authSelections": "identityPoolAndUserPool",
+    "sharedId": "e22bd327",
+    "resourceName": "vijaaauth",
+    "authSelections": "userPoolOnly",
     "authRoleArn": {
         "Fn::GetAtt": [
             "AuthRole",
@@ -55,20 +53,21 @@
     "adminQueries": false,
     "triggers": "{}",
     "hostedUI": true,
+    "hostedUIDomainName": "vijaa-app-auth",
+    "authProvidersUserPool": [
+        "Facebook",
+        "Google"
+    ],
+    "hostedUIProviderMeta": "[{\"ProviderName\":\"Facebook\",\"authorize_scopes\":\"email,public_profile\",\"AttributeMapping\":{\"email\":\"email\",\"name\":\"name\",\"picture\":\"picture\",\"username\":\"id\"}},{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid email profile\",\"AttributeMapping\":{\"email\":\"email\",\"name\":\"name\",\"picture\":\"picture\",\"username\":\"sub\"}}]",
     "userPoolGroupList": [],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,
     "parentStack": {
         "Ref": "AWS::StackId"
     },
+    "breakCircularDependency": true,
     "permissions": [],
     "dependsOn": [],
-    "hostedUIDomainName": "drreamz-auth",
-    "authProvidersUserPool": [
-        "Facebook",
-        "Google"
-    ],
-    "hostedUIProviderMeta": "[{\"ProviderName\":\"Facebook\",\"authorize_scopes\":\"email,public_profile\",\"AttributeMapping\":{\"email\":\"email\",\"name\":\"name\",\"picture\":\"picture\",\"username\":\"id\"}},{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid email profile\",\"AttributeMapping\":{\"email\":\"email\",\"name\":\"name\",\"picture\":\"picture\",\"username\":\"sub\"}}]",
     "authProviders": [],
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"http://localhost:3000/\",\"drreamz://\",\"https://d27wezwiuran4j.cloudfront.net/\"],\"LogoutURLs\":[\"http://localhost:3000/\",\"drreamz://\",\"https://d27wezwiuran4j.cloudfront.net/\"]}"
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"http://localhost:3000/\",\"vijaa://\",\"https://vijaa.com/\"],\"LogoutURLs\":[\"http://localhost:3000/auth/\",\"vijaa://\",\"https://vijaa.com/auth/\"]}"
 }

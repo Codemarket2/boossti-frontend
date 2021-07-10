@@ -3,17 +3,16 @@ import { LoginManager } from 'react-native-fbsdk-next';
 import InputGroup from '../common/InputGroup';
 import Button from '../common/Button';
 
-export default function FBButton({ fbConnect, setFbConnect, getCurrentSession }: any) {
+export default function FBButton({ state, handleLogout, getCurrentSession }: any) {
   return (
     <InputGroup>
-      {fbConnect ? (
+      {state.access ? (
         <Button
           style={{ backgroundColor: '#4267B2' }}
-          // disabled={false}
           onPress={async () => {
             try {
               await LoginManager.logOut();
-              setFbConnect(null);
+              handleLogout();
             } catch (error) {
               console.log(error);
             }
@@ -25,7 +24,6 @@ export default function FBButton({ fbConnect, setFbConnect, getCurrentSession }:
       ) : (
         <Button
           style={{ backgroundColor: '#4267B2' }}
-          // disabled={false}
           onPress={async () => {
             try {
               const result = await LoginManager.logInWithPermissions([

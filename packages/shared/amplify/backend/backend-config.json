@@ -1,6 +1,6 @@
 {
   "auth": {
-    "drreamz": {
+    "vijaaauth": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],

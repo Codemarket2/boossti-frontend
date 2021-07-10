@@ -5,19 +5,39 @@ import Screen from '../common/Screen';
 import FBButton from './FBButton';
 
 export default function FacebookScreen({ navigation }: any) {
-  const [fbConnect, setFbConnect] = useState<any>(null);
+  const [state, setState] = useState<any>({ access: null, profile: null });
   useEffect(() => {
     getCurrentSession();
   }, []);
 
   const getCurrentSession = async () => {
     const currentAccessToken = await AccessToken.getCurrentAccessToken();
-    setFbConnect(currentAccessToken);
+    setState({ ...state, access: currentAccessToken });
   };
 
+  // const getProfile = async () => {
+  //   const profile = await Profile.getCurrentProfile();
+  //   console.log('get profile', profile);
+  //   setState({ ...state, profile: profile });
+  // };
+
+  // useEffect(() => {
+  //   if (state.access && !state.profile) {
+  //     getProfile();
+  //   }
+  // }, [state.access]);
+
+  // console.log('profile', state);
   return (
     <Screen safeArea style={{ paddingBottom: 100 }}>
-      {fbConnect && (
+      {/* {state.access && state.profile && (
+        <List.Item
+          title={state.profile.name}
+          left={(props) => <Avatar.Image {...props} source={{ uri: state.profile.imageURL }} />}
+        />
+      )}
+      <Divider /> */}
+      {state.access && (
         <>
           <List.Item
             title="Pages"
@@ -36,12 +56,12 @@ export default function FacebookScreen({ navigation }: any) {
         </>
       )}
       <FBButton
-        fbConnect={fbConnect}
-        setFbConnect={setFbConnect}
+        state={state}
+        handleLogout={() => setState({ ...state, access: null, profile: null })}
         getCurrentSession={getCurrentSession}
       />
 
-      {!fbConnect && (
+      {!state.access && (
         <Subheading style={{ textAlign: 'center' }}>
           Connect your facebook account in order to manage your pages and group from our app
         </Subheading>

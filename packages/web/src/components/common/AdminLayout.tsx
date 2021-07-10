@@ -18,6 +18,7 @@ import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/sty
 import Link from 'next/link';
 import DarkModeToggle from './DarkModeToggle';
 import AuthRequired from './AuthRequired';
+import projectConfig from '@frontend/shared';
 
 const drawerWidth = 240;
 
@@ -122,7 +123,7 @@ export default function ResponsiveDrawer({ window, children }: Props) {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap>
-              Drreamz Admin
+              {projectConfig.title} Admin
             </Typography>
           </Toolbar>
         </AppBar>

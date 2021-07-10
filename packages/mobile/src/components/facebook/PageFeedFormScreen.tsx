@@ -9,7 +9,7 @@ import {
   TouchableRipple,
 } from 'react-native-paper';
 import { GraphRequestManager, GraphRequest } from 'react-native-fbsdk-next';
-import { Alert, Keyboard, View, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { Alert, View, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 // import EmojiBoard from 'react-native-emoji-board';
 import {
   // customEmojis,
@@ -92,7 +92,7 @@ export default function PostFormScreen({ route }: any) {
           <List.Item
             title={page.name}
             description={page.category}
-            left={(props) => <Avatar.Text {...props} label={page.name[0]} />}
+            left={(props) => <Avatar.Image {...props} source={{ uri: page.picture.data.url }} />}
           />
           <Divider />
           <InputGroup>

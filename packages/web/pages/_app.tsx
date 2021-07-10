@@ -3,7 +3,7 @@ import { ThemeProvider as StyledProvider } from 'styled-components';
 import { AppProps } from 'next/app';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import Amplify from 'aws-amplify';
+import Amplify, { Hub } from 'aws-amplify';
 import { useSelector } from 'react-redux';
 import { wrapper } from '../src/store';
 import { ApolloProvider } from '@apollo/client/react';
@@ -21,25 +21,29 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 // Global CSS
 // import '../src/styles/styles.css';
 
-const customUrl =
+const customsSignInUrl =
   process.env.NODE_ENV === 'development'
     ? 'http://localhost:3000/'
     : 'https://d27wezwiuran4j.cloudfront.net/';
+const customsSignOutUrl =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:3000/auth/'
+    : 'https://d27wezwiuran4j.cloudfront.net/auth/';
 
 Amplify.configure({
   ...aws_exports,
   ssr: true,
   oauth: {
     ...aws_exports.oauth,
-    redirectSignIn: customUrl,
-    redirectSignOut: customUrl,
+    redirectSignIn: customsSignInUrl,
+    redirectSignOut: customsSignOutUrl,
   },
 });
 
 const stripePromise = loadStripe(projectConfig.stripePublishableKey);
 
 function App({ Component, pageProps }: AppProps) {
-  useCurrentAuthenticatedUser();
+  const { getUser } = useCurrentAuthenticatedUser();
   const darkMode = useSelector(({ auth }: any) => auth.darkMode);
 
   const theme = createMuiTheme({
@@ -50,6 +54,21 @@ function App({ Component, pageProps }: AppProps) {
   });
 
   useEffect(() => {
+    Hub.listen('auth', ({ payload: { event, data } }) => {
+      switch (event) {
+        case 'signIn':
+        case 'cognitoHostedUI':
+          getUser();
+          break;
+        case 'signOut':
+        //   setUser(null);
+        //   break;
+        case 'signIn_failure':
+        case 'cognitoHostedUI_failure':
+          console.log('Sign in failure', data);
+          break;
+      }
+    });
     const jssStyles = document.querySelector('#jss-server-side');
     if (jssStyles && jssStyles.parentNode) jssStyles.parentNode.removeChild(jssStyles);
   }, []);

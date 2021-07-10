@@ -12,6 +12,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import Button from '@material-ui/core/Button';
 import ChatBubble from '@material-ui/icons/ChatBubble';
 import CalendarToday from '@material-ui/icons/CalendarToday';
 import Event from '@material-ui/icons/Event';
@@ -92,7 +93,7 @@ export default function AppBarComponent() {
             {projectConfig.title}
           </StyledTitle>
         </Link>
-        {authenticated && (
+        {authenticated ? (
           <>
             <MenuWrapper>
               <Tooltip title="Inbox">
@@ -153,6 +154,10 @@ export default function AppBarComponent() {
               </Menu>
             </div>
           </>
+        ) : (
+          <Link href="/auth">
+            <Button color="inherit">SignIn</Button>
+          </Link>
         )}
       </Toolbar>
     </AppBar>

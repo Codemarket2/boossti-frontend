@@ -7,7 +7,6 @@ import Facebook from '@material-ui/icons/Facebook';
 import Google from '@material-ui/icons/GTranslate';
 import styled from 'styled-components';
 import InputGroup from '../common/InputGroup';
-// import FBButton from './FBButton';
 
 const StyledCaptionWrapper = styled.div`
   border-top: 1px solid grey;
@@ -58,7 +57,6 @@ export default function SocialSignIn({ signIn = true }: { signIn?: boolean }) {
           Sign {signIn ? 'in' : 'up'} with Facebook
         </Button>
       </InputGroup>
-      {/* <FBButton /> */}
     </div>
   );
 }

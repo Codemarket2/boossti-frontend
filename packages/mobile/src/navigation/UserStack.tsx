@@ -6,9 +6,11 @@ import AppBar from '../components/common/AppBar';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import DrawerContent from '../components/common/Drawer';
 import FacebookScreen from '../components/facebook/FacebookScreen';
-import PostFormScreen from '../components/facebook/PostFormScreen';
+import PageFeedFormScreen from '../components/facebook/PageFeedFormScreen';
 import GroupsScreen from '../components/facebook/GroupsScreen';
 import PagesScreen from '../components/facebook/PagesScreen';
+import PageFeedsScreen from '../components/facebook/PageFeedsScreen';
+import GroupFeedsScreen from '../components/facebook/GroupFeedsScreen';
 
 const Stack = createStackNavigator();
 
@@ -19,11 +21,13 @@ function MainStack() {
         header: (props) => <AppBar {...props} authenticated={true} />,
       }}>
       <Stack.Screen name="FacebookScreen" component={FacebookScreen} />
-      <Stack.Screen name="PostFormScreen" component={PostFormScreen} />
+      <Stack.Screen name="PageFeedFormScreen" component={PageFeedFormScreen} />
       <Stack.Screen name="PagesScreen" component={PagesScreen} />
       <Stack.Screen name="GroupsScreen" component={GroupsScreen} />
       <Stack.Screen name="Home" component={TabNavigator} />
       <Stack.Screen name="SampleScreen" component={SampleScreen} />
+      <Stack.Screen name="PageFeedsScreen" component={PageFeedsScreen} />
+      <Stack.Screen name="GroupFeedsScreen" component={GroupFeedsScreen} />
     </Stack.Navigator>
   );
 }

@@ -2,20 +2,14 @@ import React, { useEffect } from 'react';
 import { Auth } from 'aws-amplify';
 import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth/lib/types';
 import { useRouter } from 'next/router';
-import { connect } from 'react-redux';
-import AuthScreen from '../src/screens/AuthScreen';
-import InitialLoading from '../src/components/common/InitialLoading';
 import UserLayout from '../src/components/common/UserLayout';
+import Typography from '@material-ui/core/Typography';
+import InitialLoading from '../src/components/common/InitialLoading';
 
-interface IProps {
-  initial: boolean;
-  authenticated: boolean;
-}
-
-function AuthPage({ initial, authenticated }: IProps) {
+export default function Page() {
   const router = useRouter();
 
-  const { error_description } = router.query;
+  const { error_description, code } = router.query;
 
   useEffect(() => {
     if (error_description) {
@@ -29,29 +23,12 @@ function AuthPage({ initial, authenticated }: IProps) {
     }
   }, [error_description]);
 
-  if (initial && authenticated) {
-    router.push('/inbox');
+  if (error_description && error_description.includes('_ACCOUNT_LINKED')) {
+    return <InitialLoading />;
   }
-
-  if (
-    initial &&
-    !authenticated &&
-    !(error_description && error_description.includes('_ACCOUNT_LINKED'))
-  ) {
-    return (
-      <UserLayout>
-        <AuthScreen />
-      </UserLayout>
-    );
-  }
-  return <InitialLoading />;
+  return (
+    <UserLayout>
+      <Typography variant="h4">Vijaa Home Page</Typography>
+    </UserLayout>
+  );
 }
-
-const mapStateToProps = ({ auth }: any) => {
-  return {
-    authenticated: auth.authenticated,
-    initial: auth.initial,
-  };
-};
-
-export default connect(mapStateToProps)(AuthPage);
