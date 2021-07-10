@@ -15,8 +15,8 @@ const awsmobile = {
             "profile",
             "aws.cognito.signin.user.admin"
         ],
-        "redirectSignIn": "http://localhost:3000/,vijaa://,https://vijaa.com/",
-        "redirectSignOut": "http://localhost:3000/auth/,vijaa://,https://vijaa.com/auth/",
+        "redirectSignIn": "http://localhost:3000/,vijaa://,https://vijaa.com/,https://www.vijaa.com/",
+        "redirectSignOut": "http://localhost:3000/auth/,vijaa://,https://vijaa.com/auth/,https://www.vijaa.com/auth/",
         "responseType": "code"
     },
     "federationTarget": "COGNITO_USER_POOLS"

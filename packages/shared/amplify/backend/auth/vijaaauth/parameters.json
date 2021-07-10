@@ -69,5 +69,5 @@
     "permissions": [],
     "dependsOn": [],
     "authProviders": [],
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"http://localhost:3000/\",\"vijaa://\",\"https://vijaa.com/\"],\"LogoutURLs\":[\"http://localhost:3000/auth/\",\"vijaa://\",\"https://vijaa.com/auth/\"]}"
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"http://localhost:3000/\",\"vijaa://\",\"https://vijaa.com/\",\"https://www.vijaa.com/\"],\"LogoutURLs\":[\"http://localhost:3000/auth/\",\"vijaa://\",\"https://vijaa.com/auth/\",\"https://www.vijaa.com/auth/\"]}"
 }

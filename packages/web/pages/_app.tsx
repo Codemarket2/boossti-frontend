@@ -22,13 +22,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 // import '../src/styles/styles.css';
 
 const customsSignInUrl =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:3000/'
-    : 'https://d27wezwiuran4j.cloudfront.net/';
+  process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : 'https://www.vijaa.com/';
 const customsSignOutUrl =
   process.env.NODE_ENV === 'development'
     ? 'http://localhost:3000/auth/'
-    : 'https://d27wezwiuran4j.cloudfront.net/auth/';
+    : 'https://www.vijaa.com/auth/';
 
 Amplify.configure({
   ...aws_exports,
