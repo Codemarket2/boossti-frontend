@@ -7,7 +7,6 @@ phases:
       - yarn install
   pre_build:
     commands:
-      - echo "==> CODEBUILD_GIT_BRANCH = $CODEBUILD_GIT_BRANCH "
       - aws s3 sync s3://soozzi-cicd-bucket/vijaa/$BRANCH_NAME/.serverless packages/web/.serverless --delete
       - yarn web:build
       - echo Build completed on `date`

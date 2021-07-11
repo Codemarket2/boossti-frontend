@@ -82,24 +82,3 @@ export function useGetAllUser() {
 
   return { filter, setFilter, allData, loading, handleUpdateUserStatus };
 }
-
-export function useAddUserEndpoint() {
-  const [addUserEndpointMutation] = useMutation(USER_MUTATION.ADD_USER_ENPOINT);
-  return async ({ username, endpoint }) => {
-    await addUserEndpointMutation({ variables: { username, endpoint } });
-  };
-}
-
-export function useRemoveUserEndpoint() {
-  const [removeUserEndpointMutation] = useMutation(USER_MUTATION.REMOVE_USER_ENPOINT);
-  return async ({ username, endpoint }) => {
-    await removeUserEndpointMutation({ variables: { username, endpoint } });
-  };
-}
-
-export function useDeleteOldEndpoint() {
-  const [deleteOldEndpointMutation] = useMutation(USER_MUTATION.DELETE_OLD_ENDPOINT);
-  return async ({ userId }) => {
-    await deleteOldEndpointMutation({ variables: { userId } });
-  };
-}

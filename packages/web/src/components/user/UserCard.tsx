@@ -35,7 +35,7 @@ export default function UserCard({ user, handleUpdateUserStatus }: IProps) {
         </ListItemAvatar>
         <ListItemText primary={user.name} secondary={user.email} />
         <ListItemSecondaryAction>
-          <LoadingButton variant="outlined" size="small" loading={loading} onClick={updateUser}>
+          <LoadingButton variant="contained" size="small" loading={loading} onClick={updateUser}>
             {user.active ? 'Block' : 'Unblock'}
           </LoadingButton>
         </ListItemSecondaryAction>
