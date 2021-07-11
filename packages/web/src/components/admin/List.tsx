@@ -27,7 +27,7 @@ import ListForm from './ListForm';
 import styled from 'styled-components';
 
 interface IProps {
-  _id: string;
+  _id: any;
 }
 
 const StyledBackdrop = styled(Backdrop)`
