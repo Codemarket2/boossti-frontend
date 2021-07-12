@@ -6,7 +6,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
 import projectConfig from '@frontend/shared';
 import AuthRequired from '../common/AuthRequired';

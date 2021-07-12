@@ -6,6 +6,7 @@ import ChatBubble from '@material-ui/icons/ChatBubble';
 import CalendarToday from '@material-ui/icons/CalendarToday';
 import Event from '@material-ui/icons/Event';
 import Videocam from '@material-ui/icons/Videocam';
+import HomeIcon from '@material-ui/icons/Home';
 import Group from '@material-ui/icons/Group';
 import styled from 'styled-components';
 import { routes } from '../../utils/routes';
@@ -44,16 +45,16 @@ export default function SimpleBottomNavigation() {
       onChange={(event, newValue) => router.push(newValue)}
       showLabels>
       <BottomNavigationAction
+        style={setActiveRouteColor(activeRoute, routes.home)}
+        value={routes.home}
+        label="Home"
+        icon={<HomeIcon />}
+      />
+      <BottomNavigationAction
         value={routes.inbox}
         style={setActiveRouteColor(activeRoute, routes.inbox)}
         label="Inbox"
         icon={<ChatBubble />}
-      />
-      <BottomNavigationAction
-        style={setActiveRouteColor(activeRoute, routes.calendar)}
-        value={routes.calendar}
-        label="Calendar"
-        icon={<CalendarToday />}
       />
       <BottomNavigationAction
         style={setActiveRouteColor(activeRoute, routes.offerings)}
@@ -67,12 +68,12 @@ export default function SimpleBottomNavigation() {
         label="Sessions"
         icon={<Videocam />}
       />
-      <BottomNavigationAction
+      {/* <BottomNavigationAction
         style={setActiveRouteColor(activeRoute, routes.clients)}
         value={routes.clients}
         label="Clients"
         icon={<Group />}
-      />
+      /> */}
     </StyledBottomNavigation>
   );
 }

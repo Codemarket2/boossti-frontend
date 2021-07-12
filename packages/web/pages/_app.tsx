@@ -15,11 +15,10 @@ import projectConfig from '@frontend/shared';
 import { createMuiTheme, ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import LoadingBar from '../src/components/common/LoadingBar';
+import Head from 'next/head';
 
 // CSS from node modules
 import 'bootstrap/dist/css/bootstrap.min.css';
-// Global CSS
-// import '../src/styles/styles.css';
 
 const customsSignInUrl =
   process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : 'https://www.vijaa.com/';
@@ -76,6 +75,10 @@ function App({ Component, pageProps }: AppProps) {
       <MuiThemeProvider theme={theme}>
         <StyledProvider theme={theme}>
           <Elements stripe={stripePromise}>
+            <Head>
+              <title>{projectConfig.title}</title>
+              <link rel="icon" href="/favicon.ico" />
+            </Head>
             <LoadingBar />
             <CssBaseline />
             <Component {...pageProps} />

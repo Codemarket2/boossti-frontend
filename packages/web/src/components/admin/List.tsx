@@ -85,56 +85,57 @@ export default function ListPage({ _id }: IProps) {
         formik={itemFormik}
         edit={state.editItem}
       />
-      <Paper className="p-1 pl-3 d-flex justify-content-between align-items-center">
-        <Typography variant="h5">List of {list.name}</Typography>
-        <div>
-          <Tooltip title="Add New Item">
-            <IconButton
-              onClick={() => {
-                itemFormik.handleReset('');
-                setState({ ...state, showItemForm: true, editItem: false });
-              }}>
-              <AddIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Update List Name">
-            <IconButton
-              onClick={() => {
-                listFormik.setFieldValue('name', list.name, false);
-                setState({ ...state, showListForm: true });
-              }}>
-              <EditIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Delete List">
-            <IconButton disabled={state.listdeleteLoading} onClick={handleDeleteList}>
-              {state.listdeleteLoading ? <CircularProgress size={23} /> : <DeleteIcon />}
-            </IconButton>
-          </Tooltip>
+      <Paper>
+        <div className="pt-2 pl-3 d-flex justify-content-between align-items-center">
+          <Typography variant="h5">List of {list.name}</Typography>
+          <div>
+            <Tooltip title="Add New Item">
+              <IconButton
+                onClick={() => {
+                  itemFormik.handleReset('');
+                  setState({ ...state, showItemForm: true, editItem: false });
+                }}>
+                <AddIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Update List Name">
+              <IconButton
+                onClick={() => {
+                  listFormik.setFieldValue('name', list.name, false);
+                  setState({ ...state, showListForm: true });
+                }}>
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Delete List">
+              <IconButton disabled={state.listdeleteLoading} onClick={handleDeleteList}>
+                {state.listdeleteLoading ? <CircularProgress size={23} /> : <DeleteIcon />}
+              </IconButton>
+            </Tooltip>
+          </div>
         </div>
-      </Paper>
-      <Divider />
-      {/* <Divider /> */}
-      <Paper className="mt-0">
         <List component="div">
           {list.items.map((item, index) => (
-            <ListItem key={item._id}>
-              <ListItemText
-                primary={`${index + 1} ${item.title}`}
-                secondary={item.description || null}
-              />
-              <ListItemSecondaryAction>
-                <Tooltip title="Update or Delete">
-                  <IconButton
-                    edge="end"
-                    onClick={(event) =>
-                      setState2({ ...state2, showMenu: event.currentTarget, selectedItem: item })
-                    }>
-                    <MoreHorizIcon />
-                  </IconButton>
-                </Tooltip>
-              </ListItemSecondaryAction>
-            </ListItem>
+            <>
+              <Divider />
+              <ListItem>
+                <ListItemText
+                  primary={`${index + 1} ${item.title}`}
+                  secondary={item.description || null}
+                />
+                <ListItemSecondaryAction>
+                  <Tooltip title="Update or Delete">
+                    <IconButton
+                      edge="end"
+                      onClick={(event) =>
+                        setState2({ ...state2, showMenu: event.currentTarget, selectedItem: item })
+                      }>
+                      <MoreHorizIcon />
+                    </IconButton>
+                  </Tooltip>
+                </ListItemSecondaryAction>
+              </ListItem>
+            </>
           ))}
         </List>
         <Menu

@@ -17,6 +17,7 @@ import ChatBubble from '@material-ui/icons/ChatBubble';
 import CalendarToday from '@material-ui/icons/CalendarToday';
 import Event from '@material-ui/icons/Event';
 import Videocam from '@material-ui/icons/Videocam';
+import HomeIcon from '@material-ui/icons/Home';
 import Group from '@material-ui/icons/Group';
 import Tooltip from '@material-ui/core/Tooltip';
 import Drawer from './Drawer';
@@ -76,8 +77,8 @@ export default function AppBarComponent() {
         {authenticated ? (
           <>
             <Tooltip title="Menu">
-              <IconButton color="inherit">
-                <MenuIcon onClick={() => setOpenDrawer(true)} role="button" className="mr-0" />
+              <IconButton onClick={() => setOpenDrawer(true)} color="inherit">
+                <MenuIcon role="button" className="mr-0" />
               </IconButton>
             </Tooltip>
             <Drawer
@@ -96,31 +97,39 @@ export default function AppBarComponent() {
         {authenticated ? (
           <>
             <MenuWrapper>
-              <Tooltip title="Inbox">
-                <IconButton color={setActiveRouteColor(activeRoute, routes.inbox)}>
-                  <ChatBubble onClick={() => router.push(routes.inbox)} />
+              <Tooltip title="Home">
+                <IconButton
+                  onClick={() => router.push(routes.home)}
+                  color={setActiveRouteColor(activeRoute, routes.home)}>
+                  <HomeIcon />
                 </IconButton>
               </Tooltip>
-              <Tooltip title="Calendar">
-                <IconButton color={setActiveRouteColor(activeRoute, routes.calendar)}>
-                  <CalendarToday onClick={() => router.push(routes.calendar)} />
+              <Tooltip title="Inbox">
+                <IconButton
+                  onClick={() => router.push(routes.inbox)}
+                  color={setActiveRouteColor(activeRoute, routes.inbox)}>
+                  <ChatBubble />
                 </IconButton>
               </Tooltip>
               <Tooltip title="Offerings">
                 <IconButton color={setActiveRouteColor(activeRoute, routes.offerings)}>
-                  <Event onClick={() => router.push(routes.calendar)} />
+                  <Event onClick={() => router.push(routes.offerings)} />
                 </IconButton>
               </Tooltip>
               <Tooltip title="Sessions">
-                <IconButton color={setActiveRouteColor(activeRoute, routes.sessions)}>
-                  <Videocam onClick={() => router.push(routes.sessions)} />
+                <IconButton
+                  onClick={() => router.push(routes.sessions)}
+                  color={setActiveRouteColor(activeRoute, routes.sessions)}>
+                  <Videocam />
                 </IconButton>
               </Tooltip>
-              <Tooltip title="Clients">
-                <IconButton color={setActiveRouteColor(activeRoute, routes.clients)}>
-                  <Group onClick={() => router.push(routes.clients)} />
+              {/* <Tooltip title="Clients">
+                <IconButton
+                  onClick={() => router.push(routes.clients)}
+                  color={setActiveRouteColor(activeRoute, routes.clients)}>
+                  <AccountCircle />
                 </IconButton>
-              </Tooltip>
+              </Tooltip> */}
             </MenuWrapper>
             <div>
               <Tooltip title="Profile">
