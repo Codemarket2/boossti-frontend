@@ -16,9 +16,15 @@ import { createMuiTheme, ThemeProvider as MuiThemeProvider } from '@material-ui/
 import CssBaseline from '@material-ui/core/CssBaseline';
 import LoadingBar from '../src/components/common/LoadingBar';
 import Head from 'next/head';
+import { light, dark } from '@frontend/template/src/theme/palette';
 
 // CSS from node modules
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-lazy-load-image-component/src/effects/opacity.css';
+import 'leaflet/dist/leaflet.css';
+import '@frontend/template/src/assets/css/index.css';
+import 'swiper/css/swiper.min.css';
+import 'aos/dist/aos.css';
 
 const customsSignInUrl =
   process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : 'https://www.vijaa.com/';
@@ -44,10 +50,11 @@ function App({ Component, pageProps }: AppProps) {
   const darkMode = useSelector(({ auth }: any) => auth.darkMode);
 
   const theme = createMuiTheme({
-    palette: {
-      ...palette,
-      type: darkMode ? 'dark' : 'light',
-    },
+    palette: darkMode ? dark : light,
+    // palette: {
+    //   ...palette,
+    //   type: darkMode ? 'dark' : 'light',
+    // },
   });
 
   useEffect(() => {

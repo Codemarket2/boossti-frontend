@@ -32,6 +32,7 @@ const setActiveRouteColor = (activeRoute, linkRoute) => {
 
 const StyledTitle = styled(Typography)`
   width: 100%;
+  cursor: pointer;
   ${(props) => props.theme.breakpoints.down('xs')} {
     text-align: center !important;
   }
@@ -90,9 +91,7 @@ export default function AppBarComponent() {
           </>
         ) : null}
         <Link href="/">
-          <StyledTitle variant="h6" role="button">
-            {projectConfig.title}
-          </StyledTitle>
+          <StyledTitle variant="h6">{projectConfig.title}</StyledTitle>
         </Link>
         {authenticated ? (
           <>

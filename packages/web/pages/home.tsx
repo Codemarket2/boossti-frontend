@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import { Auth } from 'aws-amplify';
 import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth/lib/types';
 import { useRouter } from 'next/router';
-import HomeScreen from '../src/screens/HomeScreen';
+import UserLayout from '../src/components/common/UserLayout';
+import Typography from '@material-ui/core/Typography';
 import InitialLoading from '../src/components/common/InitialLoading';
 
 export default function Page() {
@@ -25,5 +26,9 @@ export default function Page() {
   if (error_description && error_description.includes('_ACCOUNT_LINKED')) {
     return <InitialLoading />;
   }
-  return <HomeScreen />;
+  return (
+    <UserLayout>
+      <Typography variant="h4">Vijaa Home Page</Typography>
+    </UserLayout>
+  );
 }
