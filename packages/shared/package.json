@@ -6,7 +6,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@apollo/client": "3.3.18",
+    "@apollo/client": "3.3.21",
     "aws-amplify": "4.1.1",
     "aws-appsync-auth-link": "3.0.4",
     "aws-appsync-subscription-link": "3.0.6",

@@ -17,7 +17,7 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
-    "@apollo/client": "3.3.18",
+    "@apollo/client": "3.3.21",
     "@frontend/shared": "1.0.0",
     "@react-native-async-storage/async-storage": "1.15.4",
     "@react-native-community/masked-view": "0.1.11",
