@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { Paper, CircularProgress } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core/styles';
-import { Paper } from '@material-ui/core';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import getTheme from './theme';
+// import CssBaseline from '@material-ui/core/CssBaseline';
 
 import AOS from 'aos';
 
@@ -11,7 +11,8 @@ export const useDarkMode = () => {
   const [mountedComponent, setMountedComponent] = useState(false);
 
   const setMode = (mode) => {
-    window.localStorage.setItem('themeMode', mode);
+    // window.localStorage.setItem('themeMode', mode);
+    localStorage.setItem('darkMode', JSON.stringify(mode === 'dark'));
     setTheme(mode);
   };
 
@@ -20,8 +21,10 @@ export const useDarkMode = () => {
   };
 
   useEffect(() => {
-    const localTheme = window.localStorage.getItem('themeMode');
-    localTheme ? setTheme(localTheme) : setMode('light');
+    const localTheme = window.localStorage.getItem('darkMode');
+    Boolean(JSON.parse(localTheme)) ? setTheme('dark') : setMode('light');
+    // const localTheme = window.localStorage.getItem('themeMode');
+    // localTheme ? setTheme(localTheme) : setMode('light');
     setMountedComponent(true);
     AOS.refresh();
   }, []);
@@ -47,10 +50,10 @@ export default function WithLayout({
 }: Props): JSX.Element {
   React.useEffect(() => {
     // Remove the server-side injected CSS.
-    const jssStyles = document.querySelector('#jss-server-side');
-    if (jssStyles) {
-      jssStyles.parentElement.removeChild(jssStyles);
-    }
+    // const jssStyles = document.querySelector('#jss-server-side');
+    // if (jssStyles) {
+    //   jssStyles.parentElement.removeChild(jssStyles);
+    // }
 
     AOS.init({
       once: true,
@@ -65,15 +68,18 @@ export default function WithLayout({
     AOS.refresh();
   }, [mountedComponent]);
 
-  return (
-    <ThemeProvider theme={getTheme(themeMode)}>
-      {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-      <CssBaseline />
-      <Paper elevation={0}>
-        <Layout themeMode={themeMode} themeToggler={themeToggler}>
-          <Component themeMode={themeMode} {...rest} />
-        </Layout>
-      </Paper>
-    </ThemeProvider>
-  );
+  if (mountedComponent) {
+    return (
+      <ThemeProvider theme={getTheme(themeMode)}>
+        {/*  CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+        {/*  <CssBaseline /> */}
+        <Paper elevation={0}>
+          <Layout themeMode={themeMode} themeToggler={themeToggler}>
+            <Component themeMode={themeMode} {...rest} />
+          </Layout>
+        </Paper>
+      </ThemeProvider>
+    );
+  }
+  return <CircularProgress />;
 }

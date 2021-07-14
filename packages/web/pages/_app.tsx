@@ -51,6 +51,16 @@ function App({ Component, pageProps }: AppProps) {
 
   const theme = createMuiTheme({
     palette: darkMode ? dark : light,
+    layout: {
+      contentWidth: 1236,
+    },
+    typography: {
+      fontFamily: 'Lato',
+    },
+    zIndex: {
+      appBar: 1200,
+      drawer: 1100,
+    },
     // palette: {
     //   ...palette,
     //   type: darkMode ? 'dark' : 'light',
@@ -58,6 +68,10 @@ function App({ Component, pageProps }: AppProps) {
   });
 
   useEffect(() => {
+    const jssStyles = document.querySelector('#jss-server-side');
+    if (jssStyles && jssStyles.parentNode) {
+      jssStyles.parentNode.removeChild(jssStyles);
+    }
     Hub.listen('auth', ({ payload: { event, data } }) => {
       switch (event) {
         case 'signIn':
@@ -73,8 +87,6 @@ function App({ Component, pageProps }: AppProps) {
           break;
       }
     });
-    const jssStyles = document.querySelector('#jss-server-side');
-    if (jssStyles && jssStyles.parentNode) jssStyles.parentNode.removeChild(jssStyles);
   }, []);
 
   return (
