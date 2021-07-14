@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { useDispatch } from 'react-redux';
-import { GET_LISTS } from '../../graphql/query/list';
+import { GET_LISTS, GET_INUSE_LISTS } from '../../graphql/query/list';
 import { CREATE_LIST } from '../../graphql/mutation/list';
 import { loadListsAction, addListAction } from '../../redux/actions/list';
 import * as yup from 'yup';
@@ -13,6 +13,13 @@ const addListValidationSchema = yup.object({
 
 interface IAddListFormValues {
   name: string;
+}
+
+export function useGetInUseLists() {
+  const res = useQuery(GET_INUSE_LISTS, {
+    variables: { limit: 100, page: 1 },
+  });
+  return res;
 }
 
 export function useGetLists() {

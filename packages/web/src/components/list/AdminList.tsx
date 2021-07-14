@@ -1,6 +1,5 @@
 import { useListCRUD } from '@frontend/shared/hooks/list';
-import InitialLoading from '../common/InitialLoading';
-import ShowError from '../common/ShowError';
+import ErrorLoading from '../common/ErrorLoading';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
@@ -23,7 +22,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import ItemForm from './ItemForm';
 import ListForm from './ListForm';
-// import { onAlert } from '../../utils/alert';
+import { onAlert } from '../../utils/alert';
 import styled from 'styled-components';
 
 interface IProps {
@@ -60,12 +59,11 @@ export default function ListPage({ _id }: IProps) {
     _id,
     onListDelete,
     onItemDelete,
+    onAlert,
   });
 
-  if (error) {
-    return <ShowError error={error} />;
-  } else if (loading || !list) {
-    return <InitialLoading />;
+  if (error || loading || !list) {
+    return <ErrorLoading error={error} loading={loading} />;
   }
 
   return (

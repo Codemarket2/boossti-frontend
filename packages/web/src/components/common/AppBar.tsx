@@ -27,7 +27,7 @@ import { useTheme } from '@material-ui/core/styles';
 import { routes } from '../../utils/routes';
 
 const setActiveRouteColor = (activeRoute, linkRoute) => {
-  return activeRoute === linkRoute ? 'secondary' : 'inherit';
+  return activeRoute === linkRoute ? 'primary' : 'default';
 };
 
 const StyledTitle = styled(Typography)`
@@ -73,7 +73,11 @@ export default function AppBarComponent() {
   }, []);
 
   return (
-    <AppBar position={matches ? 'sticky' : 'static'} color={darkMode ? 'default' : 'primary'}>
+    <AppBar
+      elevation={1}
+      position={matches ? 'sticky' : 'static'}
+      // color={darkMode ? 'default' : 'primary'}
+      color="inherit">
       <Toolbar>
         {authenticated ? (
           <>
@@ -91,7 +95,10 @@ export default function AppBarComponent() {
           </>
         ) : null}
         <Link href="/">
-          <StyledTitle variant="h6">{projectConfig.title}</StyledTitle>
+          {/* <StyledTitle variant="h6">{projectConfig.title}</StyledTitle> */}
+          <Typography variant="h5" className="font-weight-bold w-100" color="textPrimary">
+            {projectConfig.title}
+          </Typography>
         </Link>
         {authenticated ? (
           <>
@@ -137,7 +144,8 @@ export default function AppBarComponent() {
                   aria-controls="menu-appbar"
                   aria-haspopup="true"
                   onClick={handleMenu}
-                  color="inherit">
+                  // color="inherit"
+                >
                   <AccountCircle />
                 </IconButton>
               </Tooltip>

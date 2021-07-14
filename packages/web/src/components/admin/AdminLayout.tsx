@@ -41,6 +41,12 @@ const useStyles = makeStyles((theme: Theme) =>
     content: {
       flexGrow: 1,
       padding: theme.spacing(3),
+      // backgroundColor:
+      //   theme['type'] === 'dark'
+      //     ? theme.palette.background.level1
+      //     : theme.palette.background.level2,
+      // backgroundColor: theme.palette.background.level2,
+      // color: theme.palette.primary.dark,
     },
     toolbar: theme.mixins.toolbar,
   }),
@@ -73,9 +79,12 @@ export default function ResponsiveDrawer({ window, children }: Props) {
       </Head>
       <div className={classes.root}>
         <AppBar
+          elevation={1}
           position="fixed"
           className={classes.appBar}
-          color={darkMode ? 'default' : 'primary'}>
+          color="inherit"
+          // color={darkMode ? 'default' : 'primary'}
+        >
           <Toolbar>
             <IconButton
               color="inherit"
@@ -85,7 +94,7 @@ export default function ResponsiveDrawer({ window, children }: Props) {
               className={classes.menuButton}>
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" noWrap>
+            <Typography className="font-weight-bold" color="textPrimary" variant="h5" noWrap>
               {projectConfig.title} Admin
             </Typography>
           </Toolbar>

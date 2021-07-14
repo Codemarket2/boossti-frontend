@@ -6,6 +6,7 @@ import AuthRequired from './AuthRequired';
 import AppBar from './AppBar';
 import BottomBar from './BottomBar';
 import Container from './Container';
+// import Paper from '@material-ui/core/Paper';
 
 interface IProps {
   title?: string;
@@ -28,6 +29,7 @@ const UserLayout = ({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AppBar />
+      {/* <Paper elevation={0} style={{ minHeight: '100vh' }}> */}
       <Container>
         {authRequired ? (
           <AuthRequired redirectPath={redirectPath}>{children}</AuthRequired>
@@ -35,6 +37,7 @@ const UserLayout = ({
           children
         )}
       </Container>
+      {/* </Paper> */}
       {authenticated && <BottomBar />}
     </div>
   );

@@ -34,6 +34,7 @@ interface IProps {
   _id: string;
   onListDelete: () => void;
   onItemDelete: () => void;
+  onAlert: (a: string, b: string) => void;
 }
 
 const updateListFormValidationSchema = yup.object({
@@ -44,7 +45,7 @@ interface IUpdateListFormValues {
   name: string;
 }
 
-export function useListCRUD({ _id, onListDelete, onItemDelete }: IProps) {
+export function useListCRUD({ _id, onListDelete, onItemDelete, onAlert }: IProps) {
   const { data, error, loading } = useQuery(GET_LIST, {
     variables: { _id },
     fetchPolicy: 'network-only',
@@ -91,82 +92,106 @@ export function useListCRUD({ _id, onListDelete, onItemDelete }: IProps) {
   });
 
   const handleAddItem = async (payload) => {
-    const { data: addListItemData } = await addListItemMutation({
-      variables: {
-        ...payload,
-        listId: _id,
-      },
-    });
-    itemFormik.handleReset('');
-    setState({
-      ...state,
-      showItemForm: false,
-      list: { ...state.list, items: addListItemData.addListItem.items },
-    });
+    try {
+      const { data: addListItemData } = await addListItemMutation({
+        variables: {
+          ...payload,
+          listId: _id,
+        },
+      });
+      itemFormik.handleReset('');
+      setState({
+        ...state,
+        showItemForm: false,
+        list: { ...state.list, items: addListItemData.addListItem.items },
+      });
+    } catch (error) {
+      return onAlert('Error', error.message);
+    }
   };
   const handleUpdateItem = async (payload) => {
-    const { data: updateListItemData } = await updateListItemMutation({
-      variables: {
-        ...payload,
-        listId: _id,
-      },
-    });
-    itemFormik.handleReset('');
-    setState({
-      ...state,
-      showItemForm: false,
-      list: { ...state.list, items: updateListItemData.updateListItem.items },
-    });
+    try {
+      const { data: updateListItemData } = await updateListItemMutation({
+        variables: {
+          ...payload,
+          listId: _id,
+        },
+      });
+      itemFormik.handleReset('');
+      setState({
+        ...state,
+        showItemForm: false,
+        list: { ...state.list, items: updateListItemData.updateListItem.items },
+      });
+    } catch (error) {
+      return onAlert('Error', error.message);
+    }
   };
   const handleDeleteItem = async (deleteID: string) => {
-    setState({
-      ...state,
-      itemdeleteLoading: true,
-    });
-    await deleteListItemMutation({
-      variables: {
-        listId: _id,
-        _id: deleteID,
-      },
-    });
-    onItemDelete();
-    setState({
-      ...state,
-      itemdeleteLoading: false,
-      list: { ...state.list, items: state.list.items.filter((i) => i._id !== deleteID) },
-    });
+    try {
+      setState({
+        ...state,
+        itemdeleteLoading: true,
+      });
+      await deleteListItemMutation({
+        variables: {
+          listId: _id,
+          _id: deleteID,
+        },
+      });
+      onItemDelete();
+      setState({
+        ...state,
+        itemdeleteLoading: false,
+        list: { ...state.list, items: state.list.items.filter((i) => i._id !== deleteID) },
+      });
+    } catch (error) {
+      return onAlert('Error', error.message);
+    }
   };
 
   const onSubmitList = async (payload) => {
-    const { data: updateData } = await updateListMutation({
-      variables: {
-        ...payload,
-        _id,
-      },
-    });
-    if (updateData && updateData.updateList) {
-      dispatch(updateListAction(updateData.updateList));
+    try {
+      const { data: updateData } = await updateListMutation({
+        variables: {
+          ...payload,
+          _id,
+        },
+      });
+      if (updateData && updateData.updateList) {
+        dispatch(updateListAction(updateData.updateList));
+      }
+      listFormik.handleReset('');
+      setState({
+        ...state,
+        showListForm: false,
+        list: { ...state.list, name: updateData.updateList.name },
+      });
+    } catch (error) {
+      return onAlert('Error', error.message);
     }
-    listFormik.handleReset('');
-    setState({
-      ...state,
-      showListForm: false,
-      list: { ...state.list, name: updateData.updateList.name },
-    });
   };
 
   const handleDeleteList = async () => {
-    setState({
-      ...state,
-      listdeleteLoading: true,
-    });
-    await deleteListMutation({
-      variables: {
-        _id,
-      },
-    });
-    dispatch(removeListAction(_id));
-    onListDelete();
+    try {
+      if (!state.list || state.list.inUse) {
+        throw { message: 'This list is currently been use in frontend' };
+      } else {
+        setState({
+          ...state,
+          listdeleteLoading: true,
+        });
+        await deleteListMutation({
+          variables: {
+            _id,
+          },
+        });
+        dispatch(removeListAction(_id));
+        onListDelete();
+      }
+    } catch (error) {
+      return onAlert('Error', error.message);
+    }
   };
 
   return {

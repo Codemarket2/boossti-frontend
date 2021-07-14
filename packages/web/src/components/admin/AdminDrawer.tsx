@@ -19,7 +19,7 @@ import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import DarkModeToggle from '../common/DarkModeToggle';
 import { useGetLists } from '@frontend/shared/hooks/list';
-import ListForm from './ListForm';
+import ListForm from '../list/ListForm';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

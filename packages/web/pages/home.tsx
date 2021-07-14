@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import UserLayout from '../src/components/common/UserLayout';
 import Typography from '@material-ui/core/Typography';
 import InitialLoading from '../src/components/common/InitialLoading';
+import PostScreen from '../src/screens/PostScreen';
 
 export default function Page() {
   const router = useRouter();
@@ -28,7 +29,8 @@ export default function Page() {
   }
   return (
     <UserLayout>
-      <Typography variant="h4">Vijaa Home Page</Typography>
+      <Typography variant="h4">Create Post</Typography>
+      <PostScreen />
     </UserLayout>
   );
 }
