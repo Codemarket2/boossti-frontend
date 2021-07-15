@@ -310,26 +310,27 @@ const Topbar = ({
           <ListItem className={clsx(classes.listItem, 'menu-item--no-dropdown')}>
             <DarkModeToggler themeMode={themeMode} onClick={() => themeToggler()} />
           </ListItem>
-
-          {authenticated ? (
-            <ListItem className={clsx(classes.listItem, 'menu-item--no-dropdown')}>
-              <Link href="/home">
-                <IconButton>
-                  <HomeIcon />
-                </IconButton>
-              </Link>
-            </ListItem>
-          ) : (
-            <ListItem className={clsx(classes.listItem, 'menu-item--no-dropdown')}>
-              <Link href="/auth">
-                <Button variant="contained" color="primary" className={classes.listItemButton}>
-                  Sign In
-                </Button>
-              </Link>
-            </ListItem>
-          )}
         </List>
       </Hidden>
+      <List disablePadding>
+        {authenticated ? (
+          <ListItem className={clsx(classes.listItem, 'menu-item--no-dropdown')}>
+            <Link href="/home">
+              <IconButton>
+                <HomeIcon />
+              </IconButton>
+            </Link>
+          </ListItem>
+        ) : (
+          <ListItem className={clsx(classes.listItem, 'menu-item--no-dropdown')}>
+            <Link href="/auth">
+              <Button variant="contained" color="primary" className={classes.listItemButton}>
+                Sign In
+              </Button>
+            </Link>
+          </ListItem>
+        )}
+      </List>
       <Hidden mdUp>
         <DarkModeToggler themeMode={themeMode} onClick={() => themeToggler()} />
         <IconButton

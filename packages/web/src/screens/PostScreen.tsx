@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { MentionsInput, Mention } from 'react-mentions';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -17,19 +17,9 @@ import CardContent from '@material-ui/core/CardContent';
 import { useGetInUseLists } from '@frontend/shared/hooks/list';
 import SelectTag from '../components/post/SelectTag';
 import ErrorLoading from '../components/common/ErrorLoading';
+import classNames from '../components/post/mention.module.css';
 
-const users = [
-  {
-    id: 'sumi',
-    display: 'Sumi',
-  },
-  {
-    id: 'vivekvt',
-    display: 'Vivek Thakur',
-  },
-];
-
-// value: "Hi @@@__vivekvt^^__Vivek Thakur@@@^^^ , \n\nlet's add New person ",
+// value: "Hi @@@__drjohn^^__Dr John@@@^^^ , \n\nlet's add New person ",
 export default function PostScreen() {
   const { data, loading, error } = useGetInUseLists();
   const [state, setState] = useState({
@@ -38,24 +28,21 @@ export default function PostScreen() {
     showMenu: null,
     selectedTag: null,
     showTagModel: false,
-    selectedList: {},
+    selectedList: { items: [] },
+    showSubList: false,
   });
 
   const onSave = () => {
-    // console.log('State', state.value);
     let newComment = state.value;
     newComment = newComment.split('@@@__').join('<a href="/user/');
     newComment = newComment.split('^^__').join('">');
     newComment = newComment.split('@@@^^^').join('</a>');
-    // console.log('newComment', newComment);
     setState({ ...state, output: newComment });
   };
 
   if (error || loading || !data) {
     return <ErrorLoading error={error} loading={loading} />;
   }
-
-  // console.log('Data', data.getLists.data);
 
   const handleOpenTagModel = (list) => {
     setState({ ...state, showTagModel: true, selectedList: list });
@@ -69,6 +56,31 @@ export default function PostScreen() {
     });
   };
 
+  const handleChange = ({ target }: any) => {
+    target.value = target.value.split('@@@^^^@@@__').join('@@@^^^ @@@__');
+    return setState({ ...state, value: target.value, showSubList: false });
+  };
+
+  const onAdd = (id, display, startPos, endPos) => {
+    if (!state.showSubList) {
+      let textBeforeCursorPosition = state.value.substring(0, startPos);
+      let textAfterCursorPosition = state.value.substring(startPos, endPos - 1);
+      let newString =
+        textBeforeCursorPosition + `@@@__${id}^^__${display}@@@^^^@` + textAfterCursorPosition;
+      const selectedList = data.getLists.data.filter((list) => list._id === id)[0];
+      setState({
+        ...state,
+        value: newString,
+        selectedList,
+        showSubList: true,
+      });
+    }
+  };
+
+  const suggestions = state.showSubList
+    ? state.selectedList.items.map((item) => ({ id: item._id, display: item.title }))
+    : data.getLists.data.map((list) => ({ id: list._id, display: list.name }));
+
   return (
     <div>
       <SelectTag
@@ -79,15 +91,20 @@ export default function PostScreen() {
       />
       <InputGroup>
         <MentionsInput
-          rows="10"
+          allowSuggestionsAboveCursor
           style={{ minHeight: 100 }}
           value={state.value}
-          onChange={(event) => setState({ ...state, value: event.target.value })}>
+          onChange={handleChange}
+          // inputRef={textArea}
+          // a11ySuggestionsListLabel="ivje4vi"
+          classNames={classNames}>
           <Mention
             trigger="@"
-            data={users}
+            data={suggestions}
             markup="@@@____id__^^____display__@@@^^^"
-            // renderSuggestion={renderUserSuggestion}
+            appendSpaceOnAdd
+            onAdd={onAdd}
+            className={classNames.mentions__mention}
           />
         </MentionsInput>
       </InputGroup>
@@ -122,18 +139,16 @@ export default function PostScreen() {
           />
         </MenuItem>
         <Divider />
-        <Tooltip title="Save Tag">
-          <MenuItem
-            onClick={() => {
-              alert('Tag Saved');
-              setState({ ...state, showMenu: null, selectedTag: null });
-            }}>
-            <ListItemIcon className="mr-n4">
-              <BookmarkIcon fontSize="small" />
-            </ListItemIcon>
-            <ListItemText primary="Save Tag" />
-          </MenuItem>
-        </Tooltip>
+        <MenuItem
+          onClick={() => {
+            alert('Tag Saved');
+            setState({ ...state, showMenu: null, selectedTag: null });
+          }}>
+          <ListItemIcon className="mr-n4">
+            <BookmarkIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary="Save Tag" />
+        </MenuItem>
       </Menu>
       {state.output && (
         <Card>
@@ -158,7 +173,6 @@ export default function PostScreen() {
                           label={node.data}
                         />
                       </Tooltip>
-                      //   </Link>
                     );
                   }
                 },
