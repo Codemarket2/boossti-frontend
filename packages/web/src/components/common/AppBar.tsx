@@ -163,9 +163,9 @@ export default function AppBarComponent() {
                 }}
                 open={open}
                 onClose={handleClose}>
-                <MenuItem disabled onClick={handleClose}>
-                  Profile
-                </MenuItem>
+                <Link href="/profile">
+                  <MenuItem>Profile</MenuItem>
+                </Link>
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
             </div>

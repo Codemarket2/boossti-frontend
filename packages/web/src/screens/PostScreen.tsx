@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { MentionsInput, Mention } from 'react-mentions';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -14,72 +13,32 @@ import BookmarkIcon from '@material-ui/icons/Bookmark';
 import Chip from '@material-ui/core/Chip';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import { useGetInUseLists } from '@frontend/shared/hooks/list';
+import { useCreatePost } from '@frontend/shared/hooks/post';
 import SelectTag from '../components/post/SelectTag';
 import ErrorLoading from '../components/common/ErrorLoading';
+import LoadingButton from '../components/common/LoadingButton';
 import classNames from '../components/post/mention.module.css';
+import { onAlert } from '../utils/alert';
 
 // value: "Hi @@@__drjohn^^__Dr John@@@^^^ , \n\nlet's add New person ",
 export default function PostScreen() {
-  const { data, loading, error } = useGetInUseLists();
-  const [state, setState] = useState({
-    value: '',
-    output: '',
-    showMenu: null,
-    selectedTag: null,
-    showTagModel: false,
-    selectedList: { items: [] },
-    showSubList: false,
-  });
-
-  const onSave = () => {
-    let newComment = state.value;
-    newComment = newComment.split('@@@__').join('<a href="/user/');
-    newComment = newComment.split('^^__').join('">');
-    newComment = newComment.split('@@@^^^').join('</a>');
-    setState({ ...state, output: newComment });
-  };
+  const {
+    state,
+    setState,
+    data,
+    loading,
+    error,
+    suggestions,
+    onAdd,
+    handleChange,
+    handleSelectTag,
+    handleOpenTagModel,
+    onSave,
+  } = useCreatePost({ onAlert });
 
   if (error || loading || !data) {
     return <ErrorLoading error={error} loading={loading} />;
   }
-
-  const handleOpenTagModel = (list) => {
-    setState({ ...state, showTagModel: true, selectedList: list });
-  };
-
-  const handleSelectTag = (_id, name) => {
-    setState({
-      ...state,
-      value: state.value + ` @@@__${_id}^^__${name}@@@^^^`,
-      showTagModel: false,
-    });
-  };
-
-  const handleChange = ({ target }: any) => {
-    target.value = target.value.split('@@@^^^@@@__').join('@@@^^^ @@@__');
-    return setState({ ...state, value: target.value, showSubList: false });
-  };
-
-  const onAdd = (id, display, startPos, endPos) => {
-    if (!state.showSubList) {
-      let textBeforeCursorPosition = state.value.substring(0, startPos);
-      let textAfterCursorPosition = state.value.substring(startPos, endPos - 1);
-      let newString =
-        textBeforeCursorPosition + `@@@__${id}^^__${display}@@@^^^@` + textAfterCursorPosition;
-      const selectedList = data.getLists.data.filter((list) => list._id === id)[0];
-      setState({
-        ...state,
-        value: newString,
-        selectedList,
-        showSubList: true,
-      });
-    }
-  };
-
-  const suggestions = state.showSubList
-    ? state.selectedList.items.map((item) => ({ id: item._id, display: item.title }))
-    : data.getLists.data.map((list) => ({ id: list._id, display: list.name }));
 
   return (
     <div>
@@ -121,9 +80,15 @@ export default function PostScreen() {
         ))}
       </InputGroup>
       <InputGroup>
-        <Button onClick={onSave} type="button" variant="contained" color="primary" fullWidth>
+        <LoadingButton
+          loading={state.createPostLoading}
+          onClick={onSave}
+          type="button"
+          variant="contained"
+          color="primary"
+          fullWidth>
           POST
-        </Button>
+        </LoadingButton>
       </InputGroup>
       <Menu
         anchorEl={state.showMenu}

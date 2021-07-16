@@ -28,7 +28,7 @@ export default function Page() {
     return <InitialLoading />;
   }
   return (
-    <UserLayout>
+    <UserLayout authRequired>
       <Typography variant="h4">Create Post</Typography>
       <PostScreen />
     </UserLayout>
