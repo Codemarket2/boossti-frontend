@@ -16,7 +16,7 @@ import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ModeCommentIcon from '@material-ui/icons/ModeComment';
-import * as moment from 'moment';
+import moment from 'moment';
 import Chip from '@material-ui/core/Chip';
 import Tooltip from '@material-ui/core/Tooltip';
 
@@ -59,9 +59,12 @@ export default function RecipeReviewCard({ post }: any) {
     <Card className="my-3">
       <CardHeader
         avatar={
-          <Avatar aria-label="recipe" className={classes.avatar}>
-            R
-          </Avatar>
+          <Avatar
+            aria-label="author"
+            className={classes.avatar}
+            alt={post.createdBy.name}
+            src={post.createdBy.picture}
+          />
         }
         action={
           <IconButton aria-label="settings">

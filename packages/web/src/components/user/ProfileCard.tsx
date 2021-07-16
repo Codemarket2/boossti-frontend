@@ -24,7 +24,7 @@ export default function ProfileCard() {
       <Divider />
       <Tabs
         value={value}
-        onChange={(event: React.ChangeEvent<{}>, newValue: number) => setValue(newValue)}
+        onChange={(event: React.ChangeEvent<{}>, newValue: string) => setValue(newValue)}
         indicatorColor="primary"
         textColor="primary"
         centered>
