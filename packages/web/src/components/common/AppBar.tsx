@@ -166,6 +166,9 @@ export default function AppBarComponent() {
                 <Link href="/profile">
                   <MenuItem>Profile</MenuItem>
                 </Link>
+                <Link href="/create-post">
+                  <MenuItem>Create Post</MenuItem>
+                </Link>
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
             </div>

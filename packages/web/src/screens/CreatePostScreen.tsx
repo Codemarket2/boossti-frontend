@@ -1,7 +1,7 @@
 import { MentionsInput, Mention } from 'react-mentions';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import parse from 'html-react-parser';
+import { useRouter } from 'next/router';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Divider from '@material-ui/core/Divider';
@@ -22,6 +22,12 @@ import { onAlert } from '../utils/alert';
 
 // value: "Hi @@@__drjohn^^__Dr John@@@^^^ , \n\nlet's add New person ",
 export default function PostScreen() {
+  const router = useRouter();
+
+  const onSuccess = () => {
+    router.push('/profile');
+  };
+
   const {
     state,
     setState,
@@ -34,7 +40,7 @@ export default function PostScreen() {
     handleSelectTag,
     handleOpenTagModel,
     onSave,
-  } = useCreatePost({ onAlert });
+  } = useCreatePost({ onAlert, onSuccess });
 
   if (error || loading || !data) {
     return <ErrorLoading error={error} loading={loading} />;

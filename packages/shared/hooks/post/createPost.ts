@@ -5,9 +5,10 @@ import { useGetInUseLists } from '../list';
 
 interface IProps {
   onAlert: (arg1: string, arg2: string) => {};
+  onSuccess: () => {};
 }
 
-export function useCreatePost({ onAlert }) {
+export function useCreatePost({ onAlert, onSuccess }) {
   const { data, loading, error } = useGetInUseLists();
   const [state, setState] = useState({
     value: '',
@@ -35,12 +36,13 @@ export function useCreatePost({ onAlert }) {
           body: state.value,
         },
       });
-      setState({
-        ...state,
-        value: '',
-        createPostLoading: false,
-      });
-      onAlert('Success', 'Post created successfully');
+      // setState({
+      //   ...state,
+      //   value: '',
+      //   createPostLoading: false,
+      // });
+      // onAlert('Success', 'Post created successfully');
+      onSuccess();
     } catch (error) {
       onAlert('Error', error.message);
       setState({

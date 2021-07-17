@@ -13,26 +13,20 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import IconButton from '@material-ui/core/IconButton';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Tooltip from '@material-ui/core/Tooltip';
-import Backdrop from '@material-ui/core/Backdrop';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import ItemForm from './ItemForm';
 import ListForm from './ListForm';
+import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
-import styled from 'styled-components';
 
 interface IProps {
   _id: any;
 }
-
-const StyledBackdrop = styled(Backdrop)`
-  z-index: ${(props) => props.theme.zIndex.drawer + 1};
-  color: '#fff';
-`;
 
 export default function ListPage({ _id }: IProps) {
   const router = useRouter();
@@ -68,9 +62,7 @@ export default function ListPage({ _id }: IProps) {
 
   return (
     <>
-      <StyledBackdrop open={state.itemdeleteLoading}>
-        <CircularProgress color="inherit" />
-      </StyledBackdrop>
+      <Backdrop open={state.itemdeleteLoading} />
       <ListForm
         open={state.showListForm}
         onClose={() => setState({ ...state, showListForm: false })}

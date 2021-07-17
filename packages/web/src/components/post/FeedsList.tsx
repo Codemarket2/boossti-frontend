@@ -1,4 +1,4 @@
-import { useGetMyPosts } from '@frontend/shared/hooks/post';
+import { useGetMyFeeds } from '@frontend/shared/hooks/post';
 import { useCreateBookmark } from '@frontend/shared/hooks/boomark';
 import Button from '@material-ui/core/Button';
 import Link from 'next/link';
@@ -21,13 +21,13 @@ import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
 import PostCard from './PostCard';
 
-export default function MyPostsList() {
+export default function FeedsList() {
   const { handleBookmark, state: bookmarkState, setState: bookmarkSetState } = useCreateBookmark({
     onAlert,
   });
-  const { data, error, loading, state: postsState, setState: postsSetState } = useGetMyPosts();
+  const { data, error, loading, state: postsState, setState: postsSetState } = useGetMyFeeds();
 
-  if (error || !data || !data.getMyPosts) {
+  if (error || !data || !data.getPosts) {
     return <ErrorLoading error={error} loading={loading} />;
   }
   return (
@@ -66,7 +66,7 @@ export default function MyPostsList() {
         </Link>
       </div>
       {loading && <Loading />}
-      {data.getMyPosts.data.map((post) => (
+      {data.getPosts.data.map((post) => (
         <PostCard
           key={post._id}
           post={post}

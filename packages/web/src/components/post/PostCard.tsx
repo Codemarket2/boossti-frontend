@@ -45,13 +45,13 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export default function RecipeReviewCard({ post }: any) {
+export default function RecipeReviewCard({ post, onClickTag }: any) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
 
   let newBody = post.body;
 
-  newBody = newBody.split('@@@__').join('<a href="/user/');
+  newBody = newBody.split('@@@__').join('<a href="');
   newBody = newBody.split('^^__').join('">');
   newBody = newBody.split('@@@^^^').join('</a>');
 
@@ -72,7 +72,13 @@ export default function RecipeReviewCard({ post }: any) {
           </IconButton>
         }
         title={post.createdBy.name}
-        subheader={moment(post.createdAt).format('LLL')}
+        subheader={
+          moment(post.createdAt) > moment().subtract(1, 'days')
+            ? moment(post.createdAt).fromNow()
+            : moment(post.createdAt).format('LLL')
+        }
+        // subheader={moment(post.createdAt).fromNow()}
+        // subheader={moment(post.createdAt).format('LLL')}
       />
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
@@ -80,16 +86,14 @@ export default function RecipeReviewCard({ post }: any) {
             replace: (domNode: any) => {
               if (domNode.name === 'a') {
                 const node = domNode.children[0];
+                const tag = {
+                  _id: domNode.attribs.href,
+                  text: node.data,
+                };
                 return (
                   <Tooltip title="Save Tag">
                     <Chip
-                      // onClick={(event) =>
-                      //   setState({
-                      //     ...state,
-                      //     showMenu: event.currentTarget,
-                      //     selectedTag: node.data,
-                      //   })
-                      // }
+                      onClick={(event) => onClickTag(event.currentTarget, tag)}
                       role="button"
                       color="primary"
                       label={node.data}

@@ -79,11 +79,11 @@ function App({ Component, pageProps }: AppProps) {
           getUser();
           break;
         case 'signOut':
-        //   setUser(null);
-        //   break;
+          //   setUser(null);
+          break;
         case 'signIn_failure':
         case 'cognitoHostedUI_failure':
-          console.log('Sign in failure', data);
+          // console.log('Sign in failure', data);
           break;
       }
     });
