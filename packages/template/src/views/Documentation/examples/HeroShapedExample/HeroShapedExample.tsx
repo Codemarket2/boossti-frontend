@@ -45,7 +45,7 @@ export default function Example() {
       <HeroShaped
         leftSide={(
           <SectionHeader
-            title="Coworking made easy"
+            title="Cancer Patients 12 Step Program"
             subtitle="For entrepreneurs, startups and freelancers. Discover coworking spaces designed to inspire and to connect you to a community of motivated people."
             ctaGroup={[
               <Button variant="contained" color="primary">Book</Button>,
@@ -84,7 +84,7 @@ const HeroShapedExample = ({ ...rest }: any): JSX.Element => (
           <HeroShaped
             leftSide={
               <SectionHeader
-                title="Coworking made easy"
+                title="Cancer Survival 12-step program"
                 subtitle="For entrepreneurs, startups and freelancers. Discover coworking spaces designed to inspire and to connect you to a community of motivated people."
                 ctaGroup={[
                   <Button variant="contained" color="primary">

@@ -28,16 +28,16 @@ const Hero = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
           <SectionHeader
             title={
               <span>
-                Coworking made{' '}
+                12-Step Program to{' '}
                 <Typography component="span" variant="inherit" color="primary">
-                  easy
+                  Survive Cancer
                 </Typography>
               </span>
             }
-            subtitle="For entrepreneurs, startups and freelancers. Discover coworking spaces designed to inspire and to connect you to a community of motivated people."
+            subtitle="Learn from other cancer patients and cancer surviors."
             ctaGroup={[
               <Button variant="contained" color="primary" size={isMd ? 'large' : 'medium'}>
-                Book
+                JOIN
               </Button>,
               <Button variant="outlined" color="primary" size={isMd ? 'large' : 'medium'}>
                 Browse
