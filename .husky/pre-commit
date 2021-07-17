@@ -3,3 +3,4 @@
 
 yarn web:test
 yarn shared:test
+yarn web:build

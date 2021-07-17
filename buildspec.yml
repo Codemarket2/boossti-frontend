@@ -7,7 +7,8 @@ phases:
       - yarn install
   pre_build:
     commands:
-      - aws s3 sync s3://soozzi-cicd-bucket/vijaa-frontend2/$SERVICE_NAME/.serverless packages/web/.serverless --delete
+      - yarn web:test
+      - aws s3 sync s3://soozzi-cicd-bucket/vijaa/$BRANCH_NAME/.serverless packages/web/.serverless --delete
       - yarn web:build
       - echo Build completed on `date`
   build:
@@ -16,5 +17,5 @@ phases:
 
   post_build:
     commands:
-      - aws s3 sync packages/web/.serverless s3://soozzi-cicd-bucket/vijaa-frontend/$SERVICE_NAME/.serverless --delete
+      - aws s3 sync packages/web/.serverless s3://soozzi-cicd-bucket/vijaa/$BRANCH_NAME/.serverless --delete
       - echo Deploy completed on `date`

@@ -46,7 +46,8 @@ export default function Screen({
           loading={loading}
           style={style}
           barStyle={barStyle}
-          barBackgroundColor={barBackgroundColor || defaultColor}>
+          barBackgroundColor={barBackgroundColor || defaultColor}
+          loadingColor={theme.colors.accent}>
           {children}
         </LoadingBarView>
       </StyledSafeAreaView>
@@ -57,7 +58,8 @@ export default function Screen({
       loading={loading}
       style={style}
       barStyle={barStyle}
-      barBackgroundColor={barBackgroundColor}>
+      barBackgroundColor={barBackgroundColor}
+      loadingColor={theme.colors.accent}>
       {children}
     </LoadingBarView>
   );
@@ -69,6 +71,7 @@ interface ILoadingBarViewProps {
   style?: ViewStyle;
   barStyle?: 'light-content' | 'dark-content';
   barBackgroundColor?: string;
+  loadingColor?: string;
 }
 
 const LoadingBarWrapper = styled.View`
@@ -82,11 +85,12 @@ const LoadingBarView = ({
   loading,
   barStyle = 'light-content',
   barBackgroundColor,
+  loadingColor = 'red',
 }: ILoadingBarViewProps) => {
   return (
     <>
       <LoadingBarWrapper>
-        <ProgressBar indeterminate={true} color="red" visible={loading} />
+        <ProgressBar indeterminate={true} color={loadingColor} visible={loading} />
       </LoadingBarWrapper>
       <StatusBar barStyle={barStyle} backgroundColor={barBackgroundColor} />
       <StyledView style={style}>{children}</StyledView>

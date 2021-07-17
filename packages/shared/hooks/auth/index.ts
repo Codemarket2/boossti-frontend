@@ -1,12 +1,8 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Auth } from 'aws-amplify';
-import {
-  setAuthUser,
-  initialAuthUser,
-  unsetAuthUser,
-  toggleDarkMode,
-} from '../../redux/actions/auth';
+import { client } from '../../graphql';
+import { setAuthUser, initialAuthUser, unsetAuthUser } from '../../redux/actions/auth';
 // import { useInitialUser } from '../users';
 export { useSignIn } from './signIn';
 export { useSignUp } from './signUp';
@@ -16,15 +12,15 @@ export { useVerifyEmail } from './verifyEmail';
 export function useHandleLogout() {
   const dispatch = useDispatch();
   const handleLogout = () => {
-    Auth.signOut().then(() => {
-      // client.resetStore();
+    Auth.signOut().then(async () => {
+      client.resetStore();
       dispatch(unsetAuthUser());
     });
   };
   return { handleLogout };
 }
 
-export function useCurrentAuthenticatedUser(): null {
+export function useCurrentAuthenticatedUser() {
   const dispatch = useDispatch();
   // useInitialUser();
 
@@ -40,6 +36,7 @@ export function useCurrentAuthenticatedUser(): null {
             : false,
         };
         dispatch(setAuthUser(payload));
+        return user.attributes;
       }
     } catch (error) {
       dispatch(initialAuthUser());
@@ -49,5 +46,5 @@ export function useCurrentAuthenticatedUser(): null {
   useEffect(() => {
     getUser();
   }, []);
-  return null;
+  return { getUser };
 }

@@ -60,10 +60,11 @@ const ADD_USER_ENPOINT = gql`
   }
 `;
 
-const UPDATE_ONE = gql`
-  mutation ToggleOneUserStatus($username: String!, $updatedBy: String!, $status: Boolean!) {
-    toggleOneUserStatus(username: $username, updatedBy: $updatedBy, status: $status) {
+const UPDATE_STATUS = gql`
+  mutation UpdateUserStatus($userId: String!, $updatedBy: String!, $status: Boolean!) {
+    updateUserStatus(userId: $userId, updatedBy: $updatedBy, status: $status) {
       _id
+      active
     }
   }
 `;
@@ -81,7 +82,7 @@ const DELETE_OLD_ENDPOINT = gql`
 
 export default {
   ADD_USER_ENPOINT,
-  UPDATE_ONE,
+  UPDATE_STATUS,
   REMOVE_USER_ENPOINT,
   DELETE_OLD_ENDPOINT,
   UPDATE_USER_SUBCRIPTION,

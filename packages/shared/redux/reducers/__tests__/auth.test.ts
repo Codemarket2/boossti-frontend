@@ -19,12 +19,7 @@ const tempUser = {
 describe('auth reducer', () => {
   it('should return the initial state', () => {
     expect(auth(undefined, {})).toEqual({
-      user: null,
-      authenticated: false,
-      initial: false,
-      admin: false,
-      attributes: { sub: '', name: '', email: '', picture: '' },
-      darkMode: false,
+      ...initialState,
     });
   });
 
@@ -35,11 +30,10 @@ describe('auth reducer', () => {
         user: tempUser,
       }),
     ).toEqual({
+      ...initialState,
       ...tempUser,
       authenticated: true,
       initial: true,
-      user: null,
-      darkMode: false,
     });
   });
 

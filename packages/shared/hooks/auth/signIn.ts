@@ -5,6 +5,7 @@ import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { setAuthUser } from '../../redux/actions/auth';
 import { showLoading, hideLoading } from '../../redux/actions/loading';
+import { client } from '../../graphql';
 
 interface ISignInArgs {
   onAlert: (a: string, b: string) => void;
@@ -65,6 +66,7 @@ export function useSignIn({ onAlert = () => {} }: ISignInArgs) {
           : false,
       };
       formik.handleReset('');
+      client.resetStore();
       dispatch(setAuthUser(payload));
       dispatch(hideLoading());
       return 'true';

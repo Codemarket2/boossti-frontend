@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const InputGroup = styled.div`
-  margin: 20px 0px;
+  margin: ${(props) => props.theme.spacing(2)}px 0px;
 `;
 
 export default InputGroup;

@@ -13,15 +13,11 @@ interface IProps {
 export default function AuthRequired({ children, mustAdmin = false, redirectPath }: IProps) {
   const { initial, authenticated, admin } = useSelector(({ auth }: any) => auth);
   return (
-    <div>
+    <>
       {initial ? (
         authenticated ? (
-          mustAdmin ? (
-            admin ? (
-              children
-            ) : (
-              <NotFound />
-            )
+          mustAdmin && !admin ? (
+            <NotFound />
           ) : (
             children
           )
@@ -31,6 +27,6 @@ export default function AuthRequired({ children, mustAdmin = false, redirectPath
       ) : (
         <InitialLoading />
       )}
-    </div>
+    </>
   );
 }

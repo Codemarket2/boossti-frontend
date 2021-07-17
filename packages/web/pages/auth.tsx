@@ -1,43 +1,47 @@
-import Head from 'next/head';
+// import { Auth } from 'aws-amplify';
+// import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth/lib/types';
 import { useRouter } from 'next/router';
 import { connect } from 'react-redux';
-import projectConfig from '@frontend/shared';
 import AuthScreen from '../src/screens/AuthScreen';
 import InitialLoading from '../src/components/common/InitialLoading';
-import AppBar from '../src/components/common/AppBar';
-import Container from '../src/components/common/Container';
+import UserLayout from '../src/components/common/UserLayout';
 
 interface IProps {
   initial: boolean;
   authenticated: boolean;
 }
 
-function Auth({ initial, authenticated }: IProps) {
+function AuthPage({ initial, authenticated }: IProps) {
   const router = useRouter();
+
+  // const { error_description } = router.query;
+
+  // useEffect(() => {
+  //   if (error_description) {
+  //     if (error_description.includes('GOOGLE_ACCOUNT_LINKED')) {
+  //       console.log('Google Login');
+  //       Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Google });
+  //     } else if (error_description.includes('FACEBOOK_ACCOUNT_LINKED')) {
+  //       console.log('Facebook Login');
+  //       Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Facebook });
+  //     }
+  //   }
+  // }, [error_description]);
 
   if (initial && authenticated) {
     router.push('/');
   }
 
+  // !(error_description && error_description.includes('_ACCOUNT_LINKED'))
+
   if (initial && !authenticated) {
     return (
-      <div>
-        <AppBar />
-        <Head>
-          <title>{projectConfig.title}</title>
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-        <Container>
-          <AuthScreen />
-        </Container>
-      </div>
+      <UserLayout>
+        <AuthScreen />
+      </UserLayout>
     );
   }
-  return (
-    <div>
-      <InitialLoading />
-    </div>
-  );
+  return <InitialLoading />;
 }
 
 const mapStateToProps = ({ auth }: any) => {
@@ -47,4 +51,4 @@ const mapStateToProps = ({ auth }: any) => {
   };
 };
 
-export default connect(mapStateToProps)(Auth);
+export default connect(mapStateToProps)(AuthPage);

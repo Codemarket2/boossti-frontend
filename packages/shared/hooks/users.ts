@@ -23,8 +23,9 @@ export function useGetOneUser(username) {
   return data;
 }
 
-export function useGetAllUser({ driver, spaceOwner, lowerRange, higherRange, active }) {
-  const [toggleOneUserStatus] = useMutation(USER_MUTATION.UPDATE_ONE);
+export function useGetAllUser() {
+  // { lowerRange, higherRange, active }
+  const [updateUserStatusMutation] = useMutation(USER_MUTATION.UPDATE_STATUS);
   const [filter, setFilter] = useState({
     active: null,
     block: false,
@@ -34,73 +35,50 @@ export function useGetAllUser({ driver, spaceOwner, lowerRange, higherRange, act
     sortBy: '-createdAt',
     lowerRange: null,
     higherRange: null,
-    bookings: driver ? 1 : 0,
-    listings: spaceOwner ? 1 : 0,
   });
 
   const { loading, data, error } = useQuery(USER_QUERY.GET_ALL, {
     variables: {
       ...filter,
-      lowerRange,
-      higherRange,
-      active,
+      // lowerRange,
+      // higherRange,
+      // active,
     },
     fetchPolicy: 'network-only', // 'cache-and-network' //'network-only'
   });
+
+  // console.log('Error', data, error);
 
   const [allData, setAllData] = useState({
     count: 0,
     users: [],
   });
 
-  const userId = useSelector(({ auth }: any) =>
-    auth.authenticated ? auth.data.attributes.sub : null,
-  );
+  const adminId = useSelector(({ auth }: any) => (auth.authenticated ? auth.attributes.sub : null));
 
   useEffect(() => {
-    if (data && data.getAllUsersSearch) {
+    if (data && data.getUsers) {
       if (filter.page > 1) {
-        setAllData({ ...allData, users: [...allData.users, ...data.getAllUsersSearch.users] });
+        setAllData({ ...allData, users: [...allData.users, ...data.getUsers.users] });
       } else {
-        setAllData(data.getAllUsersSearch);
+        setAllData(data.getUsers);
       }
     }
   }, [data]);
 
-  const toggleUser = async (username, status) => {
-    await toggleOneUserStatus({
+  const handleUpdateUserStatus = async (userId: string, status: boolean) => {
+    await updateUserStatusMutation({
       variables: {
-        username,
+        userId,
         status,
-        updatedBy: userId,
+        updatedBy: adminId,
       },
     });
     setAllData({
       ...allData,
-      users: allData.users.map((u) => (u.username === username ? { ...u, active: status } : u)),
+      users: allData.users.map((u) => (u.userId === userId ? { ...u, active: status } : u)),
     });
   };
 
-  return { filter, setFilter, allData, loading, toggleUser, userId };
-}
-
-export function useAddUserEndpoint() {
-  const [addUserEndpointMutation] = useMutation(USER_MUTATION.ADD_USER_ENPOINT);
-  return async ({ username, endpoint }) => {
-    await addUserEndpointMutation({ variables: { username, endpoint } });
-  };
-}
-
-export function useRemoveUserEndpoint() {
-  const [removeUserEndpointMutation] = useMutation(USER_MUTATION.REMOVE_USER_ENPOINT);
-  return async ({ username, endpoint }) => {
-    await removeUserEndpointMutation({ variables: { username, endpoint } });
-  };
-}
-
-export function useDeleteOldEndpoint() {
-  const [deleteOldEndpointMutation] = useMutation(USER_MUTATION.DELETE_OLD_ENDPOINT);
-  return async ({ userId }) => {
-    await deleteOldEndpointMutation({ variables: { userId } });
-  };
+  return { filter, setFilter, allData, loading, handleUpdateUserStatus };
 }

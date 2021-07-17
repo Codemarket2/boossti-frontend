@@ -45,7 +45,7 @@ interface IProps {
 }
 
 const StyledCaption = styled(Caption)`
-  color: red;
+  color: ${(props) => props.theme.colors.error};
 `;
 
 export default function Input({

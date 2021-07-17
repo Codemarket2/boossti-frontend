@@ -1,20 +1,29 @@
-import React from 'react';
-import UserLayout from '../src/components/common/UserLayout';
+import React, { useEffect } from 'react';
+import { Auth } from 'aws-amplify';
+import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth/lib/types';
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
-import Typography from '@material-ui/core/Typography';
+import HomeScreen from '../src/screens/HomeScreen';
+import InitialLoading from '../src/components/common/InitialLoading';
 
-export default function HomePage() {
+export default function Page() {
   const router = useRouter();
-  const { initial, authenticated } = useSelector(({ auth }: any) => auth);
 
-  if (initial && !authenticated) {
-    router.push('/auth');
+  const { error_description, code } = router.query;
+
+  useEffect(() => {
+    if (error_description) {
+      if (error_description.includes('GOOGLE_ACCOUNT_LINKED')) {
+        console.log('Google Login');
+        Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Google });
+      } else if (error_description.includes('FACEBOOK_ACCOUNT_LINKED')) {
+        console.log('Facebook Login');
+        Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Facebook });
+      }
+    }
+  }, [error_description]);
+
+  if (error_description && error_description.includes('_ACCOUNT_LINKED')) {
+    return <InitialLoading />;
   }
-
-  return (
-    <UserLayout authRequired>
-      <Typography variant="h4">Inbox</Typography>
-    </UserLayout>
-  );
+  return <HomeScreen />;
 }

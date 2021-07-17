@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ThemeProvider as StyledProvider } from 'styled-components';
 import { AppProps } from 'next/app';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import Amplify from 'aws-amplify';
+import Amplify, { Hub } from 'aws-amplify';
 import { useSelector } from 'react-redux';
 import { wrapper } from '../src/store';
 import { ApolloProvider } from '@apollo/client/react';
@@ -15,40 +15,89 @@ import projectConfig from '@frontend/shared';
 import { createMuiTheme, ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import LoadingBar from '../src/components/common/LoadingBar';
+import Head from 'next/head';
+import { light, dark } from '@frontend/template/src/theme/palette';
 
 // CSS from node modules
 import 'bootstrap/dist/css/bootstrap.min.css';
-// Global CSS
-// import '../src/styles/styles.css';
+import 'react-lazy-load-image-component/src/effects/opacity.css';
+import 'leaflet/dist/leaflet.css';
+import '@frontend/template/src/assets/css/index.css';
+import 'swiper/css/swiper.min.css';
+import 'aos/dist/aos.css';
+
+const customsSignInUrl =
+  process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : 'https://www.vijaa.com/';
+const customsSignOutUrl =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:3000/auth/'
+    : 'https://www.vijaa.com/auth/';
 
 Amplify.configure({
   ...aws_exports,
   ssr: true,
   oauth: {
     ...aws_exports.oauth,
-    redirectSignIn: true ? 'https://d3fmot6d29rs7w.cloudfront.net/' : 'http://localhost:3000/',
-    redirectSignOut: true ? 'https://d3fmot6d29rs7w.cloudfront.net/' : 'http://localhost:3000/',
+    redirectSignIn: customsSignInUrl,
+    redirectSignOut: customsSignOutUrl,
   },
 });
 
 const stripePromise = loadStripe(projectConfig.stripePublishableKey);
 
 function App({ Component, pageProps }: AppProps) {
-  useCurrentAuthenticatedUser();
+  const { getUser } = useCurrentAuthenticatedUser();
   const darkMode = useSelector(({ auth }: any) => auth.darkMode);
 
   const theme = createMuiTheme({
-    palette: {
-      ...palette,
-      type: darkMode ? 'dark' : 'light',
+    palette: darkMode ? dark : light,
+    layout: {
+      contentWidth: 1236,
     },
+    typography: {
+      fontFamily: 'Lato',
+    },
+    zIndex: {
+      appBar: 1200,
+      drawer: 1100,
+    },
+    // palette: {
+    //   ...palette,
+    //   type: darkMode ? 'dark' : 'light',
+    // },
   });
+
+  useEffect(() => {
+    const jssStyles = document.querySelector('#jss-server-side');
+    if (jssStyles && jssStyles.parentNode) {
+      jssStyles.parentNode.removeChild(jssStyles);
+    }
+    Hub.listen('auth', ({ payload: { event, data } }) => {
+      switch (event) {
+        case 'signIn':
+        case 'cognitoHostedUI':
+          getUser();
+          break;
+        case 'signOut':
+        //   setUser(null);
+        //   break;
+        case 'signIn_failure':
+        case 'cognitoHostedUI_failure':
+          console.log('Sign in failure', data);
+          break;
+      }
+    });
+  }, []);
 
   return (
     <ApolloProvider client={client}>
       <MuiThemeProvider theme={theme}>
         <StyledProvider theme={theme}>
           <Elements stripe={stripePromise}>
+            <Head>
+              <title>{projectConfig.title}</title>
+              <link rel="icon" href="/favicon.ico" />
+            </Head>
             <LoadingBar />
             <CssBaseline />
             <Component {...pageProps} />

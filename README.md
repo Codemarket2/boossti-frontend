@@ -1,4 +1,4 @@
-# drreamz Frontend Monorepo
+# Vijaa Frontend Monorepo
 
 # Next.js + React Native
 
@@ -37,6 +37,7 @@ To run Cypress test cases for web react components(headless - tests will run in 
 ```sh
 $ yarn web:test
 ```
+
 ![cypress headless](https://github.com/Codemarket2/drreamz-frontend2/blob/vivekt/images/cypress_headless.jpg?raw=true)
 
 To run Cypress test cases for web react components(head - tests will run in browser)
@@ -44,6 +45,7 @@ To run Cypress test cases for web react components(head - tests will run in brow
 ```sh
 $ yarn web:test:head
 ```
+
 ![cypress web](https://github.com/Codemarket2/drreamz-frontend2/blob/vivekt/images/cypress_web.jpg?raw=true)
 Build Web:
 

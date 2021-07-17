@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Appbar, Menu, TouchableRipple, Switch } from 'react-native-paper';
+import { Appbar, Menu } from 'react-native-paper';
+import { Platform } from 'react-native';
 import { useHandleLogout } from '@frontend/shared/hooks/auth';
+import projectConfig from '@frontend/shared';
 
 // interface IProps {
 //   navigation: any;
@@ -8,7 +10,12 @@ import { useHandleLogout } from '@frontend/shared/hooks/auth';
 //   authenticated?: boolean;
 // }
 
-export default function AppBar({ navigation, previous, authenticated = false }: any) {
+export default function AppBar({
+  navigation,
+  previous,
+  authenticated = false,
+  title = projectConfig.title,
+}: any) {
   const { handleLogout } = useHandleLogout();
   const [visible, setVisible] = useState(false);
   const openMenu = () => setVisible(true);
@@ -16,18 +23,18 @@ export default function AppBar({ navigation, previous, authenticated = false }: 
 
   return (
     <Appbar.Header>
-      {previous ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
-      {/* <TouchableRipple onPress={() => {}}>
-        <Switch
-          // style={[{ backgroundColor: theme.colors.accent }]}
-          color={'red'}
-          value={true}
-        />
-      </TouchableRipple> */}
-      {authenticated && !previous && (
-        <Appbar.Action icon="menu" onPress={() => navigation.openDrawer()} />
+      {previous ? (
+        <Appbar.BackAction onPress={navigation.goBack} />
+      ) : (
+        authenticated && <Appbar.Action icon="menu" onPress={() => navigation.openDrawer()} />
       )}
-      <Appbar.Content title="Drreamz" style={{ alignItems: 'center' }} />
+      <Appbar.Content
+        title={title}
+        style={{
+          alignItems: 'center',
+          marginRight: previous && Platform.OS === 'android' ? 50 : 0,
+        }}
+      />
       {authenticated && !previous ? (
         <Menu
           visible={visible}
