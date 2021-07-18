@@ -27,9 +27,6 @@ export default function FeedsList() {
   });
   const { data, error, loading, state: postsState, setState: postsSetState } = useGetMyFeeds();
 
-  if (error || !data || !data.getPosts) {
-    return <ErrorLoading error={error} loading={loading} />;
-  }
   return (
     <div>
       <Paper className="my-2">
@@ -65,16 +62,22 @@ export default function FeedsList() {
           </Button>
         </Link>
       </div>
-      {loading && <Loading />}
-      {data.getPosts.data.map((post) => (
-        <PostCard
-          key={post._id}
-          post={post}
-          onClickTag={(target: any, tag: any) =>
-            bookmarkSetState({ ...bookmarkState, showMenu: target, selectedTag: tag })
-          }
-        />
-      ))}
+      {error || !data || !data.getPosts ? (
+        <ErrorLoading error={error} />
+      ) : (
+        <>
+          {loading && <Loading />}
+          {data.getPosts.data.map((post) => (
+            <PostCard
+              key={post._id}
+              post={post}
+              onClickTag={(target: any, tag: any) =>
+                bookmarkSetState({ ...bookmarkState, showMenu: target, selectedTag: tag })
+              }
+            />
+          ))}
+        </>
+      )}
       <Menu
         anchorEl={bookmarkState.showMenu}
         keepMounted

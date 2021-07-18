@@ -10,3 +10,9 @@ export const CREATE_BOOKMARK = gql`
     }
   }
 `;
+
+export const DELETE_BOOKMARK = gql`
+  mutation MyMutation($_id: ID!) {
+    deleteBookmark(_id: $_id)
+  }
+`;

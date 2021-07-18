@@ -1,23 +1,21 @@
-import React from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import parse from 'html-react-parser';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
+// import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import Collapse from '@material-ui/core/Collapse';
+// import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+// import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ModeCommentIcon from '@material-ui/icons/ModeComment';
 import moment from 'moment';
-import Chip from '@material-ui/core/Chip';
 import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -45,9 +43,9 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export default function RecipeReviewCard({ post, onClickTag }: any) {
+export default function RecipeReviewCard({ post, onClickTag, onClickMore = () => {} }: any) {
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
+  // const [expanded, setExpanded] = React.useState(false);
 
   let newBody = post.body;
 
@@ -67,21 +65,23 @@ export default function RecipeReviewCard({ post, onClickTag }: any) {
           />
         }
         action={
-          <IconButton aria-label="settings">
+          <IconButton
+            aria-label="settings"
+            onClick={(event) => onClickMore(event.currentTarget, post)}>
             <MoreVertIcon />
           </IconButton>
         }
         title={post.createdBy.name}
         subheader={
-          moment(post.createdAt) > moment().subtract(1, 'days')
+          moment(post.createdAt) > moment().subtract(7, 'days')
             ? moment(post.createdAt).fromNow()
-            : moment(post.createdAt).format('LLL')
+            : moment(post.createdAt).format('LL')
         }
         // subheader={moment(post.createdAt).fromNow()}
         // subheader={moment(post.createdAt).format('LLL')}
       />
       <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
+        <Typography variant="body2" component="p">
           {parse(newBody, {
             replace: (domNode: any) => {
               if (domNode.name === 'a') {
@@ -92,12 +92,15 @@ export default function RecipeReviewCard({ post, onClickTag }: any) {
                 };
                 return (
                   <Tooltip title="Save Tag">
-                    <Chip
-                      onClick={(event) => onClickTag(event.currentTarget, tag)}
+                    <Typography
                       role="button"
+                      className="mx-1 font-weight-bold"
+                      onClick={(event) => onClickTag(event.currentTarget, tag)}
                       color="primary"
-                      label={node.data}
-                    />
+                      variant="body2"
+                      component="span">
+                      <u>{node.data}</u>
+                    </Typography>
                   </Tooltip>
                 );
               }

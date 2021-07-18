@@ -14,11 +14,14 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import Button from '@material-ui/core/Button';
 import ChatBubble from '@material-ui/icons/ChatBubble';
-import CalendarToday from '@material-ui/icons/CalendarToday';
+import AddIcon from '@material-ui/icons/Add';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Event from '@material-ui/icons/Event';
 import Videocam from '@material-ui/icons/Videocam';
 import HomeIcon from '@material-ui/icons/Home';
-import Group from '@material-ui/icons/Group';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Tooltip from '@material-ui/core/Tooltip';
 import Drawer from './Drawer';
 import styled from 'styled-components';
@@ -164,12 +167,27 @@ export default function AppBarComponent() {
                 open={open}
                 onClose={handleClose}>
                 <Link href="/profile">
-                  <MenuItem>Profile</MenuItem>
+                  <MenuItem>
+                    <ListItemIcon className="mr-n4">
+                      <AccountCircleIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText primary="Profile" />
+                  </MenuItem>
                 </Link>
                 <Link href="/create-post">
-                  <MenuItem>Create Post</MenuItem>
+                  <MenuItem>
+                    <ListItemIcon className="mr-n4">
+                      <AddIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText primary="Create Post" />
+                  </MenuItem>
                 </Link>
-                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                <MenuItem onClick={handleLogout}>
+                  <ListItemIcon className="mr-n4">
+                    <ExitToAppIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText primary="Logout" />
+                </MenuItem>
               </Menu>
             </div>
           </>

@@ -8,6 +8,8 @@ import Divider from '@material-ui/core/Divider';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import Chip from '@material-ui/core/Chip';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
@@ -20,18 +22,34 @@ import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
 import PostCard from './PostCard';
+import PostEditForm from './PostEditForm';
 
 export default function MyPostsList() {
   const { handleBookmark, state: bookmarkState, setState: bookmarkSetState } = useCreateBookmark({
     onAlert,
   });
-  const { data, error, loading, state: postsState, setState: postsSetState } = useGetMyPosts();
+  const {
+    data,
+    error,
+    loading,
+    state: postsState,
+    setState: postsSetState,
+    handleDeletePost,
+    deletePostLoading,
+  } = useGetMyPosts({
+    onAlert,
+  });
 
-  if (error || !data || !data.getMyPosts) {
-    return <ErrorLoading error={error} loading={loading} />;
-  }
   return (
     <div>
+      <PostEditForm
+        open={postsState.showEditModal}
+        onClose={() =>
+          postsSetState({ ...postsState, showEditModal: false, selectedPost: null, showMenu: null })
+        }
+        post={postsState.selectedPost}
+      />
+      <Backdrop open={bookmarkState.saveTagLoading || deletePostLoading} />
       <Paper className="my-2">
         <TextField
           fullWidth
@@ -57,7 +75,7 @@ export default function MyPostsList() {
           onChange={({ target: { value } }) => postsSetState({ ...postsState, search: value })}
         />
       </Paper>
-      <Backdrop open={bookmarkState.saveTagLoading} />
+
       <div className="text-right">
         <Link href="/create-post">
           <Button variant="contained" color="primary">
@@ -65,16 +83,47 @@ export default function MyPostsList() {
           </Button>
         </Link>
       </div>
-      {loading && <Loading />}
-      {data.getMyPosts.data.map((post) => (
-        <PostCard
-          key={post._id}
-          post={post}
-          onClickTag={(target: any, tag: any) =>
-            bookmarkSetState({ ...bookmarkState, showMenu: target, selectedTag: tag })
-          }
-        />
-      ))}
+      {error || !data || !data.getMyPosts ? (
+        <ErrorLoading error={error} />
+      ) : (
+        <>
+          {loading && <Loading />}
+          {data.getMyPosts.data.map((post) => (
+            <PostCard
+              key={post._id}
+              post={post}
+              onClickTag={(target: any, tag: any) =>
+                bookmarkSetState({ ...bookmarkState, showMenu: target, selectedTag: tag })
+              }
+              onClickMore={(target: any, post: any) =>
+                postsSetState({ ...postsState, showMenu: target, selectedPost: post })
+              }
+            />
+          ))}
+        </>
+      )}
+      <Menu
+        anchorEl={postsState.showMenu}
+        keepMounted
+        open={Boolean(postsState.showMenu)}
+        onClose={() => postsSetState({ ...postsState, showMenu: null, selectedPost: null })}>
+        <MenuItem onClick={() => postsSetState({ ...postsState, showEditModal: true })}>
+          <ListItemIcon className="mr-n4">
+            <EditIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary="Edit" />
+        </MenuItem>
+        <MenuItem
+          onClick={async () => {
+            await handleDeletePost();
+            alert('Post deleted!');
+          }}>
+          <ListItemIcon className="mr-n4">
+            <DeleteIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary="Delete" />
+        </MenuItem>
+      </Menu>
       <Menu
         anchorEl={bookmarkState.showMenu}
         keepMounted

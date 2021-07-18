@@ -1,16 +1,26 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/client';
-import { CREATE_POST } from '../../graphql/mutation/post';
+import { CREATE_POST, UPDATE_POST } from '../../graphql/mutation/post';
 import { useGetInUseLists } from '../list';
+import { GET_MY_POSTS } from '../../graphql/query/post';
 
 interface IProps {
-  onAlert: (arg1: string, arg2: string) => {};
-  onSuccess: () => {};
+  onAlert: (arg1: string, arg2: string) => void;
+  onSuccess: () => void;
+  edit?: boolean;
+  post?: any;
 }
 
-export function useCreatePost({ onAlert, onSuccess }) {
+const defaultPost = {
+  _id: '',
+  edit: false,
+  body: false,
+};
+
+export function useCreatePost({ onAlert, onSuccess, edit = false, post = defaultPost }: IProps) {
   const { data, loading, error } = useGetInUseLists();
   const [state, setState] = useState({
+    _id: '',
     value: '',
     output: '',
     showMenu: null,
@@ -18,37 +28,64 @@ export function useCreatePost({ onAlert, onSuccess }) {
     showTagModel: false,
     selectedList: { items: [] },
     showSubList: false,
-    createPostLoading: false,
+    edit,
+    ...post,
   });
-  const [createPostMutation] = useMutation(CREATE_POST);
+  const [createPostMutation, { loading: createPostLoading }] = useMutation(CREATE_POST);
+  const [updatePostMutation, { loading: updatePostLoading }] = useMutation(UPDATE_POST);
+
+  useEffect(() => {
+    if (edit) {
+      setState({
+        ...state,
+        edit,
+        ...post,
+      });
+    }
+  }, [edit]);
+
+  const updateCache = (client) => {
+    const { getMyPosts } = client.readQuery({
+      query: GET_MY_POSTS,
+      variables: { limit: 20, page: 1, search: '' },
+    });
+    const newData = {
+      getMyPosts: {
+        ...getMyPosts,
+        data: getMyPosts.data.map((p) => (p._id === state._id ? { ...p, body: state.value } : p)),
+      },
+    };
+    client.writeQuery({
+      query: GET_MY_POSTS,
+      variables: { limit: 20, page: 1, search: '' },
+      data: newData,
+    });
+  };
 
   const onSave = async () => {
     if (state.value === '') {
       return onAlert('Error', 'Enter some text');
     }
     try {
-      setState({
-        ...state,
-        createPostLoading: true,
-      });
-      await createPostMutation({
-        variables: {
-          body: state.value,
-        },
-      });
-      // setState({
-      //   ...state,
-      //   value: '',
-      //   createPostLoading: false,
-      // });
-      // onAlert('Success', 'Post created successfully');
+      if (edit) {
+        await updatePostMutation({
+          variables: {
+            _id: state._id,
+            body: state.value,
+          },
+          update: updateCache,
+        });
+      } else {
+        await createPostMutation({
+          variables: {
+            body: state.value,
+          },
+        });
+      }
+
       onSuccess();
     } catch (error) {
       onAlert('Error', error.message);
-      setState({
-        ...state,
-        createPostLoading: false,
-      });
     }
   };
 
@@ -103,5 +140,6 @@ export function useCreatePost({ onAlert, onSuccess }) {
     handleSelectTag,
     handleOpenTagModel,
     onSave,
+    saveLoading: createPostLoading || updatePostLoading,
   };
 }

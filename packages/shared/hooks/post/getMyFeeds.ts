@@ -6,7 +6,7 @@ export function useGetMyFeeds() {
   const [state, setState] = useState({ search: '' });
   const res = useQuery(GET_POSTS, {
     variables: { limit: 20, page: 1, search: state.search },
-    fetchPolicy: 'network-only',
+    fetchPolicy: 'cache-and-network',
   });
   return { ...res, state, setState };
 }

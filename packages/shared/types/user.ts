@@ -7,7 +7,5 @@ export interface IUser {
   picture: string;
   status: string;
   username: string;
-  bookings: number;
-  listings: number;
   createdAt: Date;
 }
