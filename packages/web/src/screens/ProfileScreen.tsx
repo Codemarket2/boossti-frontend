@@ -5,9 +5,10 @@ import Divider from '@material-ui/core/Divider';
 import ProfileCard from '../components/user/ProfileCard';
 import MyPostsList from '../components/post/MyPostsList';
 import BookmarkList from '../components/bookmark/BookmarkList';
+import FBSettings from '../components/facebook/FBSettings';
 
 export default function ProfileScreen() {
-  const [value, setValue] = useState('posts');
+  const [value, setValue] = useState('facebookPostSetting');
   return (
     <div>
       <ProfileCard />
@@ -19,10 +20,12 @@ export default function ProfileScreen() {
         textColor="primary"
         centered>
         <Tab label="Posts" value="posts" />
-        <Tab label="Bookmarks" value="bookmarks" />
+        <Tab label="Saved Tags" value="bookmarks" />
+        <Tab label="Facebook Post Setting" value="facebookPostSetting" />
       </Tabs>
       {value === 'posts' && <MyPostsList />}
       {value === 'bookmarks' && <BookmarkList />}
+      {value === 'facebookPostSetting' && <FBSettings />}
     </div>
   );
 }
