@@ -43,6 +43,10 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
+// const StyledText = styled(Typography)`
+//   cursor: pointer !important;
+// `;
+
 export default function RecipeReviewCard({ post, onClickTag, onClickMore = () => {} }: any) {
   const classes = useStyles();
   // const [expanded, setExpanded] = React.useState(false);
@@ -93,13 +97,12 @@ export default function RecipeReviewCard({ post, onClickTag, onClickMore = () =>
                 return (
                   <Tooltip title="Save Tag">
                     <Typography
-                      role="button"
                       className="mx-1 font-weight-bold"
                       onClick={(event) => onClickTag(event.currentTarget, tag)}
                       color="primary"
                       variant="body2"
                       component="span">
-                      <u>{node.data}</u>
+                      <u style={{ cursor: 'pointer' }}>{node.data}</u>
                     </Typography>
                   </Tooltip>
                 );

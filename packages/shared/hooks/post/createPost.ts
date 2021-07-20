@@ -30,6 +30,7 @@ export function useCreatePost({ onAlert, onSuccess, edit = false, post = default
     showSubList: false,
     edit,
     ...post,
+    submitLoading: false,
   });
   const [createPostMutation, { loading: createPostLoading }] = useMutation(CREATE_POST);
   const [updatePostMutation, { loading: updatePostLoading }] = useMutation(UPDATE_POST);
@@ -63,10 +64,11 @@ export function useCreatePost({ onAlert, onSuccess, edit = false, post = default
   };
 
   const onSave = async () => {
-    if (state.value === '') {
-      return onAlert('Error', 'Enter some text');
-    }
     try {
+      if (state.value === '') {
+        return onAlert('Error', 'Enter some text');
+      }
+      setState({ ...state, submitLoading: true });
       if (edit) {
         await updatePostMutation({
           variables: {
@@ -82,9 +84,10 @@ export function useCreatePost({ onAlert, onSuccess, edit = false, post = default
           },
         });
       }
-
+      setState({ ...state, submitLoading: false });
       onSuccess();
     } catch (error) {
+      setState({ ...state, submitLoading: false });
       onAlert('Error', error.message);
     }
   };

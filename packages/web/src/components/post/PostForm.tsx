@@ -37,6 +37,51 @@ export default function PostScreen({ edit = false, post, onClose }: any) {
     saveLoading,
   } = useCreatePost({ onAlert, onSuccess, edit, post });
 
+  const postToGroup = (groupId: string, message) => {
+    return new Promise((resolve, reject) => {
+      window.FB.api(`/${groupId}/feed`, 'post', { message: message }, (response) => {
+        if (!response || response.error) {
+          reject(response.error);
+        } else {
+          resolve(response);
+        }
+      });
+    });
+  };
+
+  const handleSubmit = async () => {
+    try {
+      if (state.value === '') {
+        return alert('Enter some text');
+      }
+      if (!edit) {
+        const selectedGroups: any = JSON.parse(localStorage.getItem('selectedGroups'));
+        if (selectedGroups && selectedGroups.length > 0) {
+          let message = state.value;
+          message = message.split('@@@^^^').join('');
+          message = message.split('^^__');
+          console.log('Message', message);
+          let newMessage = '';
+          message.forEach((m) => {
+            m = m.split('@@@__')[0];
+            newMessage += m;
+          });
+          newMessage += '\n\nThis post was created by Vijaa www.vijaa.com';
+          selectedGroups.forEach(async (groupId) => {
+            try {
+              await postToGroup(groupId, newMessage);
+            } catch (error) {
+              alert(`Error while posting to facebook ${error.message}`);
+            }
+          });
+        }
+      }
+      await onSave();
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
   if (error || loading || !data) {
     return <ErrorLoading error={error} loading={loading} />;
   }
@@ -55,6 +100,7 @@ export default function PostScreen({ edit = false, post, onClose }: any) {
           style={{ minHeight: 100 }}
           value={state.value}
           onChange={handleChange}
+          placeholder="What's on your mind ?"
           // inputRef={textArea}
           // a11ySuggestionsListLabel="ivje4vi"
           classNames={classNames}>
@@ -82,13 +128,13 @@ export default function PostScreen({ edit = false, post, onClose }: any) {
       </InputGroup>
       <InputGroup>
         <LoadingButton
-          loading={saveLoading}
-          onClick={onSave}
+          loading={state.submitLoading}
+          onClick={handleSubmit}
           type="button"
           variant="contained"
           color="primary"
           fullWidth>
-          POST
+          SUBMIT
         </LoadingButton>
       </InputGroup>
     </div>

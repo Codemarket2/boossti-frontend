@@ -8,7 +8,7 @@ import BookmarkList from '../components/bookmark/BookmarkList';
 import FBSettings from '../components/facebook/FBSettings';
 
 export default function ProfileScreen() {
-  const [value, setValue] = useState('facebookPostSetting');
+  const [value, setValue] = useState('posts');
   return (
     <div>
       <ProfileCard />
@@ -25,7 +25,7 @@ export default function ProfileScreen() {
       </Tabs>
       {value === 'posts' && <MyPostsList />}
       {value === 'bookmarks' && <BookmarkList />}
-      {value === 'facebookPostSetting' && <FBSettings />}
+      {value === 'facebookPostSetting' && <FBSettings showUser={true} />}
     </div>
   );
 }
