@@ -6,7 +6,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import SearchIcon from '@material-ui/icons/Search';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ClearIcon from '@material-ui/icons/Clear';
-import { useGetAllUser } from '@frontend/shared/hooks/users';
+import { useGetAllUser } from '@frontend/shared/hooks/user';
 import Loading from '../common/Loading';
 import UserCard from './UserCard';
 

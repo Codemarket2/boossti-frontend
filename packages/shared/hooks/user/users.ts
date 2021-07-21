@@ -1,22 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import USER_MUTATION from '../../graphql/mutation/user';
 import { GET_USER, GET_USERS } from '../../graphql/query/user';
-import { userSubscriptionData } from '../../redux/actions/auth';
-
-export function useInitialUser() {
-  const dispatch = useDispatch();
-  const { data } = useQuery(USER_QUERY.GET_ONE, {
-    variables: { userId: 'vivekvt' },
-  });
-
-  useEffect(() => {
-    if (data && data.getUserByCognitoUserId) {
-      dispatch(userSubscriptionData(data.getUserByCognitoUserId));
-    }
-  }, [data]);
-}
 
 export function useGetOneUser({ _id }: any) {
   const data = useQuery(GET_USER, { variables: { _id: _id } });

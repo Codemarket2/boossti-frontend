@@ -1,1 +1,1 @@
-export { useGetAllUser, useGetOneUser, useInitialUser } from './users';
+export { useGetAllUser, useGetOneUser } from './users';
