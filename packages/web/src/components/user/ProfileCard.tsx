@@ -1,10 +1,15 @@
-import { useSelector } from 'react-redux';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 
-export default function ProfileCard() {
-  const attributes = useSelector(({ auth }: any) => auth.attributes);
+interface IProps {
+  attributes: {
+    picture: string;
+    name: string;
+    email?: string;
+  };
+}
 
+export default function ProfileCard({ attributes }: IProps) {
   return (
     <>
       <div className="text-center mb-2">
@@ -15,7 +20,7 @@ export default function ProfileCard() {
           src={attributes.picture}
         />
         <Typography>{attributes.name}</Typography>
-        <Typography>{attributes.email}</Typography>
+        {attributes.email && <Typography>{attributes.email}</Typography>}
       </div>
     </>
   );

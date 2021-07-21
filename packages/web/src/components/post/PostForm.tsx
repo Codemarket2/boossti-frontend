@@ -9,7 +9,8 @@ import ErrorLoading from '../common/ErrorLoading';
 import LoadingButton from '../common/LoadingButton';
 import classNames from '../post/mention.module.css';
 import { onAlert } from '../../utils/alert';
-import FBSettings from '../facebook/FBSettings';
+import Skeleton from '@material-ui/lab/Skeleton';
+// import FBSettings from '../facebook/FBSettings';
 
 // value: "Hi @@@__drjohn^^__Dr John@@@^^^ , \n\nlet's add New person ",
 export default function PostScreen({ edit = false, post, onClose }: any) {
@@ -19,7 +20,7 @@ export default function PostScreen({ edit = false, post, onClose }: any) {
     if (edit) {
       onClose();
     } else {
-      router.push('/profile');
+      // router.push('/profile');
     }
   };
 
@@ -84,7 +85,16 @@ export default function PostScreen({ edit = false, post, onClose }: any) {
   };
 
   if (error || loading || !data) {
-    return <ErrorLoading error={error} loading={loading} />;
+    return (
+      <ErrorLoading error={error}>
+        <Skeleton variant="rect" height={100} className="my-2" />
+        <div className="my-2 d-flex">
+          <Skeleton variant="rect" width={100} height={30} className="mr-2" />
+          <Skeleton variant="rect" width={100} height={30} />
+        </div>
+        <Skeleton variant="rect" height={30} />
+      </ErrorLoading>
+    );
   }
 
   return (
@@ -135,10 +145,10 @@ export default function PostScreen({ edit = false, post, onClose }: any) {
           variant="contained"
           color="primary"
           fullWidth>
-          SUBMIT
+          {state.edit ? 'EDIT' : 'CREATE'} POST
         </LoadingButton>
       </InputGroup>
-      <FBSettings />
+      {/* <FBSettings /> */}
     </div>
   );
 }

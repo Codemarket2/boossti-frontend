@@ -119,18 +119,6 @@ const SignInWithFacebook = ({ showUser = false }: IProps) => {
     });
   };
 
-  // const postToGroup = (groupId: string, message) => {
-  //   return new Promise((resolve, reject) => {
-  //     window.FB.api(`/${groupId}/feed`, 'post', { message: message }, (response) => {
-  //       if (!response || response.error) {
-  //         reject(response.error);
-  //       } else {
-  //         resolve(response);
-  //       }
-  //     });
-  //   });
-  // };
-
   const getData = async () => {
     const user = await getUser();
     const groups: any = await getGroups();
@@ -244,23 +232,6 @@ const SignInWithFacebook = ({ showUser = false }: IProps) => {
             }>
             Disconnect Facebook Account
           </Button>
-          {/* <Button
-            startIcon={<Facebook />}
-            data-testid="facebook-signin-button"
-            fullWidth
-            style={{ backgroundColor: '#4267B2', color: 'white' }}
-            type="button"
-            variant="contained"
-            onClick={async () => {
-              try {
-                const res = await postToGroup(state.selectedGroups[0], 'Hello Guys from API');
-                console.log('postToGroup', res);
-              } catch (error) {
-                console.log('postToGroup error', error);
-              }
-            }}>
-            Create Post 
-          </Button>*/}
         </>
       )}
     </div>

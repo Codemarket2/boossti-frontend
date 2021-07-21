@@ -1,31 +1,12 @@
-import { useState } from 'react';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Divider from '@material-ui/core/Divider';
-import ProfileCard from '../components/user/ProfileCard';
-import MyPostsList from '../components/post/MyPostsList';
-import BookmarkList from '../components/bookmark/BookmarkList';
-import FBSettings from '../components/facebook/FBSettings';
+import UserLayout from '../components/common/UserLayout';
+// import UserProfile from '../components/user/UserProfile';
+import GuestProfile from '../components/user/GuestProfile';
 
-export default function ProfileScreen() {
-  const [value, setValue] = useState('posts');
+export default function Page({ _id }: any) {
   return (
-    <div>
-      <ProfileCard />
-      <Divider />
-      <Tabs
-        value={value}
-        onChange={(event: React.ChangeEvent<{}>, newValue: string) => setValue(newValue)}
-        indicatorColor="primary"
-        textColor="primary"
-        centered>
-        <Tab label="Posts" value="posts" />
-        <Tab label="Saved Tags" value="bookmarks" />
-        <Tab label="Facebook Post Setting" value="facebookPostSetting" />
-      </Tabs>
-      {value === 'posts' && <MyPostsList />}
-      {value === 'bookmarks' && <BookmarkList />}
-      {value === 'facebookPostSetting' && <FBSettings showUser={true} />}
-    </div>
+    <UserLayout authRequired>
+      {/* <UserProfile /> */}
+      {_id && <GuestProfile _id={_id} />}
+    </UserLayout>
   );
 }

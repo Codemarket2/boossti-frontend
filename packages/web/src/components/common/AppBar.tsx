@@ -23,10 +23,10 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Tooltip from '@material-ui/core/Tooltip';
-import Drawer from './Drawer';
 import styled from 'styled-components';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
+import Drawer from './Drawer';
 import { routes } from '../../utils/routes';
 
 const setActiveRouteColor = (activeRoute, linkRoute) => {

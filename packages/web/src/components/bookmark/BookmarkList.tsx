@@ -13,6 +13,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ClearIcon from '@material-ui/icons/Clear';
@@ -42,9 +43,12 @@ export default function BookmarkList() {
           label="Search"
           InputProps={{
             endAdornment: (
-              <InputAdornment position="end" role="button">
+              <InputAdornment
+                onClick={() => bookmarkSetState({ ...bookmarkState, search: '' })}
+                position="end"
+                role="button">
                 {bookmarkState.search ? (
-                  <ClearIcon onClick={() => bookmarkSetState({ ...bookmarkState, search: '' })} />
+                  <ClearIcon />
                 ) : (
                   <>
                     {bookmarkState.search && loading && (
@@ -76,15 +80,16 @@ export default function BookmarkList() {
                 <Typography>{moment(bookmark.createdAt).fromNow()}</Typography>
               </CardContent>
               <CardContent>
-                <MoreVertIcon
+                <IconButton
                   onClick={(event) =>
                     bookmarkSetState({
                       ...bookmarkState,
                       showMenu: event.currentTarget,
                       selectedBookmark: bookmark,
                     })
-                  }
-                />
+                  }>
+                  <MoreVertIcon />
+                </IconButton>
               </CardContent>
             </Card>
           ))}

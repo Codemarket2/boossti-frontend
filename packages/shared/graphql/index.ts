@@ -5,20 +5,21 @@ import { AUTH_TYPE, createAuthLink, AuthOptions } from 'aws-appsync-auth-link';
 import { createSubscriptionHandshakeLink } from 'aws-appsync-subscription-link';
 import projectConfig from '../index';
 
+const USE_DEBUG = process.env.NEXT_PUBLIC_USE_DEBUG_ENDPOINT === 'true';
+
+const url = USE_DEBUG
+  ? process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT
+  : projectConfig.appsyncGraphqlEndpoint;
+const region = USE_DEBUG ? process.env.NEXT_PUBLIC_GRAPHQL_APIKEY : projectConfig.appsyncRegion;
+
 const httpLink = new HttpLink({
-  uri: projectConfig.appsyncGraphqlEndpoint,
+  uri: url,
 });
-
-const url = projectConfig.appsyncGraphqlEndpoint;
-const region = projectConfig.appsyncRegion;
-
-// let jwtToken = null;
 
 const jwtToken = async () => {
   try {
     return (await Auth.currentSession()).getIdToken().getJwtToken();
   } catch (e) {
-    // alert('Unauth');
     return null;
   }
 };
@@ -58,7 +59,7 @@ export const client = new ApolloClient({
         {
           auth: auth,
           region: region,
-          url: region,
+          url: url,
         },
         httpLink,
       ),

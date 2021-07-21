@@ -78,13 +78,14 @@ export function useCreatePost({ onAlert, onSuccess, edit = false, post = default
           update: updateCache,
         });
       } else {
-        await createPostMutation({
+        const res = await createPostMutation({
           variables: {
             body: state.value,
           },
         });
+        console.log('createPostMutation res', res);
       }
-      setState({ ...state, submitLoading: false });
+      setState({ ...state, value: '', submitLoading: false });
       onSuccess();
     } catch (error) {
       setState({ ...state, submitLoading: false });

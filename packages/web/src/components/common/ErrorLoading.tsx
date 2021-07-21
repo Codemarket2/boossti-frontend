@@ -1,9 +1,9 @@
 import InitialLoading from './InitialLoading';
 import ShowError from './ShowError';
 
-export default function ErrorLoading({ error, loading = true }: any) {
+export default function ErrorLoading({ error, loading = true, children }: any) {
   if (error) {
     return <ShowError error={error} />;
   }
-  return <InitialLoading />;
+  return children ? children : <InitialLoading />;
 }

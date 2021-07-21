@@ -1,4 +1,4 @@
-import { useGetMyFeeds } from '@frontend/shared/hooks/post';
+import { useUserFeeds } from '@frontend/shared/hooks/post';
 import { useCreateBookmark } from '@frontend/shared/hooks/boomark';
 // import Button from '@material-ui/core/Button';
 // import Link from 'next/link';
@@ -24,11 +24,14 @@ import PostCard from './PostCard';
 import PostForm from './PostForm';
 import PostCardSkeleton from './PostCardSkeleton';
 
-export default function FeedsList() {
+export default function FeedsList({ userId }) {
   const { handleBookmark, state: bookmarkState, setState: bookmarkSetState } = useCreateBookmark({
     onAlert,
   });
-  const { data, error, loading, state: postsState, setState: postsSetState } = useGetMyFeeds();
+
+  const { data, error, loading, state: postsState, setState: postsSetState } = useUserFeeds({
+    userId,
+  });
 
   return (
     <div>
@@ -67,19 +70,7 @@ export default function FeedsList() {
         )}
       </Paper>
       <Backdrop open={bookmarkState.saveTagLoading} />
-      {!postsState.search && (
-        <Paper className="px-2 py-1">
-          <PostForm />
-        </Paper>
-      )}
-      {/* <div className="text-right">
-        <Link href="/create-post">
-          <Button variant="contained" color="primary">
-            Create Post
-          </Button>
-        </Link>
-      </div> */}
-      {error || !data || !data.getPosts ? (
+      {error || !data || !data.getPostsByUserId ? (
         <ErrorLoading error={error}>
           <PostCardSkeleton />
           <PostCardSkeleton />
@@ -88,13 +79,13 @@ export default function FeedsList() {
       ) : (
         <>
           {loading && <Loading />}
-          {data.getPosts.data.map((post) => (
+          {data.getPostsByUserId.data.map((post) => (
             <PostCard
               key={post._id}
               post={post}
-              onClickTag={(target: any, tag: any) =>
-                bookmarkSetState({ ...bookmarkState, showMenu: target, selectedTag: tag })
-              }
+              onClickTag={(target: any, tag: any) => {
+                // bookmarkSetState({ ...bookmarkState, showMenu: target, selectedTag: tag });
+              }}
             />
           ))}
         </>

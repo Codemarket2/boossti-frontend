@@ -23,6 +23,7 @@ import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
 import PostCard from './PostCard';
 import PostEditForm from './PostEditForm';
+import PostCardSkeleton from './PostCardSkeleton';
 
 export default function MyPostsList() {
   const { handleBookmark, state: bookmarkState, setState: bookmarkSetState } = useCreateBookmark({
@@ -57,9 +58,12 @@ export default function MyPostsList() {
           label="Search"
           InputProps={{
             endAdornment: (
-              <InputAdornment position="end" role="button">
+              <InputAdornment
+                onClick={() => postsSetState({ ...postsState, search: '' })}
+                position="end"
+                role="button">
                 {postsState.search ? (
-                  <ClearIcon onClick={() => postsSetState({ ...postsState, search: '' })} />
+                  <ClearIcon />
                 ) : (
                   <>
                     {postsState.search && loading && (
@@ -84,7 +88,11 @@ export default function MyPostsList() {
         </Link>
       </div>
       {error || !data || !data.getMyPosts ? (
-        <ErrorLoading error={error} />
+        <ErrorLoading error={error}>
+          <PostCardSkeleton />
+          <PostCardSkeleton />
+          <PostCardSkeleton />
+        </ErrorLoading>
       ) : (
         <>
           {loading && <Loading />}
