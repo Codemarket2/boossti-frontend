@@ -9,6 +9,7 @@ import ErrorLoading from '../common/ErrorLoading';
 import LoadingButton from '../common/LoadingButton';
 import classNames from '../post/mention.module.css';
 import { onAlert } from '../../utils/alert';
+import FBSettings from '../facebook/FBSettings';
 
 // value: "Hi @@@__drjohn^^__Dr John@@@^^^ , \n\nlet's add New person ",
 export default function PostScreen({ edit = false, post, onClose }: any) {
@@ -137,6 +138,7 @@ export default function PostScreen({ edit = false, post, onClose }: any) {
           SUBMIT
         </LoadingButton>
       </InputGroup>
+      <FBSettings />
     </div>
   );
 }
