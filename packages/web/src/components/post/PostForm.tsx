@@ -13,15 +13,16 @@ import Skeleton from '@material-ui/lab/Skeleton';
 // import FBSettings from '../facebook/FBSettings';
 
 // value: "Hi @@@__drjohn^^__Dr John@@@^^^ , \n\nlet's add New person ",
-export default function PostScreen({ edit = false, post, onClose }: any) {
+export default function PostScreen({ edit = false, post, onClose = () => {} }: any) {
   const router = useRouter();
 
   const onSuccess = () => {
-    if (edit) {
-      onClose();
-    } else {
-      // router.push('/profile');
-    }
+    onClose();
+    // if (edit) {
+    //   onClose();
+    // } else {
+    //   // router.push('/profile');
+    // }
   };
 
   const {

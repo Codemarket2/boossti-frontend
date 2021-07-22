@@ -15,7 +15,7 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import SearchIcon from '@material-ui/icons/Search';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import IconButton from '@material-ui/core/IconButton';
 import ClearIcon from '@material-ui/icons/Clear';
 import Loading from '../common/Loading';
 import ErrorLoading from '../common/ErrorLoading';
@@ -29,6 +29,7 @@ export default function MyPostsList() {
   const { handleBookmark, state: bookmarkState, setState: bookmarkSetState } = useCreateBookmark({
     onAlert,
   });
+
   const {
     data,
     error,
@@ -51,42 +52,42 @@ export default function MyPostsList() {
         post={postsState.selectedPost}
       />
       <Backdrop open={bookmarkState.saveTagLoading || deletePostLoading} />
-      <Paper className="my-2">
-        <TextField
-          fullWidth
-          variant="outlined"
-          label="Search"
-          InputProps={{
-            endAdornment: (
-              <InputAdornment
-                onClick={() => postsSetState({ ...postsState, search: '' })}
-                position="end"
-                role="button">
-                {postsState.search ? (
-                  <ClearIcon />
-                ) : (
-                  <>
-                    {postsState.search && loading && (
-                      <CircularProgress size={25} className="mr-3" />
-                    )}
-                    <SearchIcon />
-                  </>
-                )}
-              </InputAdornment>
-            ),
-          }}
-          value={postsState.search}
-          onChange={({ target: { value } }) => postsSetState({ ...postsState, search: value })}
-        />
-      </Paper>
-
-      <div className="text-right">
+      <Paper
+        className="my-2 d-flex justify-content-between align-items-center"
+        style={{ minHeight: 55 }}>
         <Link href="/create-post">
-          <Button variant="contained" color="primary">
+          <Button className="mx-3" variant="contained" color="primary">
             Create Post
           </Button>
         </Link>
-      </div>
+        {postsState.showSearch ? (
+          <TextField
+            size="small"
+            className="w-75"
+            // fullWidth
+            variant="outlined"
+            label="Search"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end" role="button">
+                  <IconButton
+                    className="mr-n3"
+                    onClick={() => postsSetState({ ...postsState, search: '', showSearch: false })}>
+                    <ClearIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            value={postsState.search}
+            onChange={({ target: { value } }) => postsSetState({ ...postsState, search: value })}
+          />
+        ) : (
+          <IconButton
+            onClick={() => postsSetState({ ...postsState, search: '', showSearch: true })}>
+            <SearchIcon />
+          </IconButton>
+        )}
+      </Paper>
       {error || !data || !data.getMyPosts ? (
         <ErrorLoading error={error}>
           <PostCardSkeleton />

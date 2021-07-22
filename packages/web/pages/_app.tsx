@@ -10,7 +10,7 @@ import { ApolloProvider } from '@apollo/client/react';
 import { client } from '@frontend/shared/graphql';
 import aws_exports from '@frontend/shared/aws-exports';
 import { useCurrentAuthenticatedUser } from '@frontend/shared/hooks/auth';
-import palette from '@frontend/shared/config/colors';
+// import palette from '@frontend/shared/config/colors';
 import projectConfig from '@frontend/shared';
 import { createMuiTheme, ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';

@@ -12,6 +12,7 @@ export function useGetMyPosts({ onAlert }: IHooksProps) {
     showMenu: null,
     selectedPost: null,
     showEditModal: false,
+    showSearch: false,
   });
   const res = useQuery(GET_MY_POSTS, {
     variables: { limit: state.limit, page: state.page, search: state.search },

@@ -3,11 +3,23 @@ import { useQuery, useMutation } from '@apollo/client';
 import { useSelector } from 'react-redux';
 import USER_MUTATION from '../../graphql/mutation/user';
 import { GET_USER, GET_USERS } from '../../graphql/query/user';
+import { guestClient } from '../../graphql';
 
 export function useGetOneUser({ _id }: any) {
-  const data = useQuery(GET_USER, { variables: { _id: _id } });
-  console.log('useGetOneUser', data.data, data.error);
-  return data;
+  const [state, setState] = useState({ data: null, loading: false, error: null });
+  useEffect(() => {
+    setState({ ...state, loading: true });
+    guestClient
+      .query({
+        query: GET_USER,
+        variables: {
+          _id: _id,
+        },
+      })
+      .then(({ data }) => setState({ ...state, data, loading: false }))
+      .catch((error) => setState({ ...state, error, loading: false }));
+  }, []);
+  return state;
 }
 
 export function useGetAllUser() {

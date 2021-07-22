@@ -13,7 +13,7 @@ export default function ProfileScreen() {
   const attributes = useSelector(({ auth }: any) => auth.attributes);
   return (
     <div>
-      <ProfileCard attributes={attributes} />
+      <ProfileCard user={attributes} />
       <Divider />
       <Tabs
         value={value}

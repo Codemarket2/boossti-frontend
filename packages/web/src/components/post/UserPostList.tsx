@@ -1,7 +1,6 @@
+import { useSelector } from 'react-redux';
 import { useUserFeeds } from '@frontend/shared/hooks/post';
 import { useCreateBookmark } from '@frontend/shared/hooks/boomark';
-// import Button from '@material-ui/core/Button';
-// import Link from 'next/link';
 import Backdrop from '../common/Backdrop';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 import Chip from '@material-ui/core/Chip';
@@ -15,13 +14,11 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import SearchIcon from '@material-ui/icons/Search';
-import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import ErrorLoading from '../common/ErrorLoading';
 import Loading from '../common/Loading';
 import { onAlert } from '../../utils/alert';
 import PostCard from './PostCard';
-import PostForm from './PostForm';
 import PostCardSkeleton from './PostCardSkeleton';
 
 export default function FeedsList({ userId }) {
@@ -33,19 +30,17 @@ export default function FeedsList({ userId }) {
     userId,
   });
 
+  const authenticated = useSelector(({ auth }: any) => auth.authenticated);
+
   return (
     <div>
       <Paper
-        className="my-2 d-flex justify-content-between align-items-center px-2 py-0 bg-dangerr"
+        className="my-2 d-flex justify-content-end align-items-center"
         style={{ minHeight: 55 }}>
-        <Typography variant="h4" className="mr-2">
-          Feeds
-        </Typography>
         {postsState.showSearch ? (
           <TextField
             size="small"
-            className="w-75"
-            // fullWidth
+            fullWidth
             variant="outlined"
             label="Search"
             InputProps={{
@@ -84,7 +79,7 @@ export default function FeedsList({ userId }) {
               key={post._id}
               post={post}
               onClickTag={(target: any, tag: any) => {
-                // bookmarkSetState({ ...bookmarkState, showMenu: target, selectedTag: tag });
+                bookmarkSetState({ ...bookmarkState, showMenu: target, selectedTag: tag });
               }}
             />
           ))}
@@ -105,8 +100,12 @@ export default function FeedsList({ userId }) {
         <Divider />
         <MenuItem
           onClick={async () => {
-            await handleBookmark();
-            alert('tag saved');
+            if (authenticated) {
+              await handleBookmark();
+              alert('tag saved');
+            } else {
+              alert('You must be signed in to save the tag');
+            }
           }}>
           <ListItemIcon className="mr-n4">
             <BookmarkIcon fontSize="small" />

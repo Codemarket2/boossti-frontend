@@ -33,16 +33,15 @@ export default function FeedsList() {
   return (
     <div>
       <Paper
-        className="my-2 d-flex justify-content-between align-items-center px-2 py-0 bg-dangerr"
+        className="my-2 d-flex justify-content-between align-items-center"
         style={{ minHeight: 55 }}>
-        <Typography variant="h4" className="mr-2">
+        <Typography variant="h4" className="mx-3">
           Feeds
         </Typography>
         {postsState.showSearch ? (
           <TextField
             size="small"
-            className="w-75"
-            // fullWidth
+            fullWidth
             variant="outlined"
             label="Search"
             InputProps={{

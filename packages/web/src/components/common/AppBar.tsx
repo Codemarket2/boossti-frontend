@@ -49,7 +49,7 @@ const MenuWrapper = styled.div`
 `;
 
 export default function AppBarComponent() {
-  const { authenticated, darkMode, admin } = useSelector(({ auth }: any) => auth);
+  const { authenticated, darkMode, admin, attributes } = useSelector(({ auth }: any) => auth);
   const { handleLogout } = useHandleLogout();
   const [anchorEl, setAnchorEl] = useState(null);
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -166,7 +166,7 @@ export default function AppBarComponent() {
                 }}
                 open={open}
                 onClose={handleClose}>
-                <Link href="/profile">
+                <Link href={`/user/${attributes['custom:_id']}`}>
                   <MenuItem>
                     <ListItemIcon className="mr-n4">
                       <AccountCircleIcon fontSize="small" />

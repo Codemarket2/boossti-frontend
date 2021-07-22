@@ -5863,13 +5863,6 @@
   dependencies:
     tslib "^2.1.0"
 
-"@wry/equality@^0.1.2":
-  version "0.1.11"
-  resolved "https://registry.yarnpkg.com/@wry/equality/-/equality-0.1.11.tgz#35cb156e4a96695aa81a9ecc4d03787bc17f1790"
-  integrity sha512-mwEVBDUVODlsQQ5dfuLUS5/Tf7jqUKyhKYHmVi4fPB6bDMOfWvUPJmKgS1Z7Za/sOI3vzWt4+O7yCiL/70MogA==
-  dependencies:
-    tslib "^1.9.3"
-
 "@wry/equality@^0.5.0":
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/@wry/equality/-/equality-0.5.1.tgz#b22e4e1674d7bf1439f8ccdccfd6a785f6de68b0"
@@ -6181,16 +6174,6 @@ aos@2.3.4:
     classlist-polyfill "^1.0.3"
     lodash.debounce "^4.0.6"
     lodash.throttle "^4.0.1"
-
-apollo-utilities@^1.3.4:
-  version "1.3.4"
-  resolved "https://registry.yarnpkg.com/apollo-utilities/-/apollo-utilities-1.3.4.tgz#6129e438e8be201b6c55b0f13ce49d2c7175c9cf"
-  integrity sha512-pk2hiWrCXMAy2fRPwEyhvka+mqwzeP60Jr1tRYi5xru+3ko94HI9o6lK0CT33/w4RDlxWchmdhDCrvdr+pHCig==
-  dependencies:
-    "@wry/equality" "^0.1.2"
-    fast-json-stable-stringify "^2.0.0"
-    ts-invariant "^0.4.0"
-    tslib "^1.10.0"
 
 app-root-dir@^1.0.2:
   version "1.0.2"
@@ -6518,15 +6501,7 @@ aws-amplify@4.1.1:
     "@aws-amplify/ui" "2.0.3"
     "@aws-amplify/xr" "3.0.3"
 
-aws-appsync-auth-link@3.0.4:
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/aws-appsync-auth-link/-/aws-appsync-auth-link-3.0.4.tgz#acc709b5bd80831589a9417a7c2ef04cb78733c4"
-  integrity sha512-5zuD5JUaHdHTEOerMY4GFS9RyGquTNq3oIDAh8Ld+U74Qeo9UODT1QEfSSf6M9c+etDIghDcgQKxRQmkJwUEzA==
-  dependencies:
-    aws-sdk "^2.814.0"
-    debug "2.6.9"
-
-aws-appsync-auth-link@^3.0.4:
+aws-appsync-auth-link@^3.0.5:
   version "3.0.5"
   resolved "https://registry.yarnpkg.com/aws-appsync-auth-link/-/aws-appsync-auth-link-3.0.5.tgz#8a3e262e9053eee516489c8d92a41f743eca5f8b"
   integrity sha512-dmF6NeInjinFUtwZxPu6Mj2+QHw61GjXzNa9e/akG2EuSkDFVcUW3bhXcqbcoh6QwgYD73e0Cd0jSPuBPNYtUQ==
@@ -6534,20 +6509,19 @@ aws-appsync-auth-link@^3.0.4:
     aws-sdk "^2.814.0"
     debug "2.6.9"
 
-aws-appsync-subscription-link@3.0.6:
-  version "3.0.6"
-  resolved "https://registry.yarnpkg.com/aws-appsync-subscription-link/-/aws-appsync-subscription-link-3.0.6.tgz#d3fcf9465bbdc9702c46a645544e1e0d29f42f80"
-  integrity sha512-8iXJt+b6q7r8GCN75JVwYMN8H0+3hrUHQ/sgdikmb/pE+lBjqFOyFg2Pfu8OYqsyxwVKkxywHRKYeV1+61opXw==
+aws-appsync-subscription-link@^3.0.7:
+  version "3.0.7"
+  resolved "https://registry.yarnpkg.com/aws-appsync-subscription-link/-/aws-appsync-subscription-link-3.0.7.tgz#868fa6ff3f576c2eded7ec2ea6ec41573df97710"
+  integrity sha512-Fp7SHrqoldjuhAz9c/gqLiNqWpCQnLcRVL7MMQLoIGwZvjInej50gw5JoE6ZBHZRikN0qglT+kj7DVVTrJDMQg==
   dependencies:
-    apollo-utilities "^1.3.4"
-    aws-appsync-auth-link "^3.0.4"
+    aws-appsync-auth-link "^3.0.5"
     debug "2.6.9"
     url "^0.11.0"
 
 aws-sdk@^2.814.0:
-  version "2.944.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.944.0.tgz#5cf062b76bb42eee1a5c31dea82bec1e241488d5"
-  integrity sha512-QHKDbs/og1kUhOZsE6A8KN/Rw3LHkfEWBqziRaWDNoijDZzY9XlbLHnLmpkluCe4HNKY1KOOyBajhf2CkJahcQ==
+  version "2.951.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.951.0.tgz#3cd8c0a4610407623ae8f1724f431fd328441033"
+  integrity sha512-YPqhdESUzd4+pSuGJcfMnG1qNVbmZjnmsa85Z9jofR1ilIpuV31onIiFHv8iubM59ETok/+zy3QOmxRSLYzFmQ==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -18512,13 +18486,6 @@ ts-essentials@^2.0.3:
   version "2.0.12"
   resolved "https://registry.yarnpkg.com/ts-essentials/-/ts-essentials-2.0.12.tgz#c9303f3d74f75fa7528c3d49b80e089ab09d8745"
   integrity sha512-3IVX4nI6B5cc31/GFFE+i8ey/N2eA0CZDbo6n0yrz0zDX8ZJ8djmU1p+XRz7G3is0F3bB3pu2pAroFdAWQKU3w==
-
-ts-invariant@^0.4.0:
-  version "0.4.4"
-  resolved "https://registry.yarnpkg.com/ts-invariant/-/ts-invariant-0.4.4.tgz#97a523518688f93aafad01b0e80eb803eb2abd86"
-  integrity sha512-uEtWkFM/sdZvRNNDL3Ehu4WVpwaulhwQszV8mrtcdeE8nN00BV9mAmQ88RkrBhFgl9gMgvjJLAQcZbnPXI9mlA==
-  dependencies:
-    tslib "^1.9.3"
 
 ts-invariant@^0.8.0:
   version "0.8.2"
