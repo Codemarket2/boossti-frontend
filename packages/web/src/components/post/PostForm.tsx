@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { MentionsInput, Mention } from 'react-mentions';
 import { useRouter } from 'next/router';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -14,15 +15,10 @@ import Skeleton from '@material-ui/lab/Skeleton';
 
 // value: "Hi @@@__drjohn^^__Dr John@@@^^^ , \n\nlet's add New person ",
 export default function PostScreen({ edit = false, post, onClose = () => {} }: any) {
-  const router = useRouter();
-
+  // const router = useRouter();
+  const [fbsdk, setFbsdk] = useState({ loading: true, connected: false });
   const onSuccess = () => {
     onClose();
-    // if (edit) {
-    //   onClose();
-    // } else {
-    //   // router.push('/profile');
-    // }
   };
 
   const {
@@ -39,6 +35,34 @@ export default function PostScreen({ edit = false, post, onClose = () => {} }: a
     onSave,
     saveLoading,
   } = useCreatePost({ onAlert, onSuccess, edit, post });
+
+  useEffect(() => {
+    window.fbAsyncInit = function () {
+      window.FB.init({
+        appId: '496030015019232',
+        xfbml: true,
+        version: 'v11.0',
+      });
+      window.FB.getLoginStatus(({ authResponse }) => {
+        if (authResponse) {
+          setFbsdk({ ...fbsdk, loading: false, connected: true });
+        } else {
+          setFbsdk({ ...fbsdk, loading: false, connected: false });
+        }
+      });
+    };
+    (function (d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {
+        return;
+      }
+      js = d.createElement(s);
+      js.id = id;
+      js.src = 'https://connect.facebook.net/en_US/sdk.js';
+      fjs.parentNode.insertBefore(js, fjs);
+    })(document, 'script', 'facebook-jssdk');
+  });
 
   const postToGroup = (groupId: string, message) => {
     return new Promise((resolve, reject) => {
@@ -57,7 +81,7 @@ export default function PostScreen({ edit = false, post, onClose = () => {} }: a
       if (state.value === '') {
         return alert('Enter some text');
       }
-      if (!edit) {
+      if (!edit && fbsdk.connected) {
         const selectedGroups: any = JSON.parse(localStorage.getItem('selectedGroups'));
         if (selectedGroups && selectedGroups.length > 0) {
           let message = state.value;
@@ -85,7 +109,7 @@ export default function PostScreen({ edit = false, post, onClose = () => {} }: a
     }
   };
 
-  if (error || loading || !data) {
+  if (fbsdk.loading || error || loading || !data) {
     return (
       <ErrorLoading error={error}>
         <Skeleton variant="rect" height={100} className="my-2" />
@@ -100,6 +124,7 @@ export default function PostScreen({ edit = false, post, onClose = () => {} }: a
 
   return (
     <div>
+      <p>{fbsdk.connected.toString()}</p>
       <SelectTag
         open={state.showTagModel}
         onClose={() => setState({ ...state, showTagModel: false })}
