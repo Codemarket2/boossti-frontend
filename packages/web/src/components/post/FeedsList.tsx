@@ -34,6 +34,7 @@ export default function FeedsList() {
     <div>
       <Paper
         className="my-2 d-flex justify-content-between align-items-center"
+        variant="outlined"
         style={{ minHeight: 55 }}>
         <Typography variant="h4" className="mx-3">
           Feeds
@@ -67,7 +68,7 @@ export default function FeedsList() {
       </Paper>
       <Backdrop open={bookmarkState.saveTagLoading} />
       {!postsState.search && (
-        <Paper className="px-2 py-1">
+        <Paper className="px-2 py-1" variant="outlined">
           <PostForm />
         </Paper>
       )}

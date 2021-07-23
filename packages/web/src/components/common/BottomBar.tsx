@@ -3,22 +3,13 @@ import { useRouter } from 'next/router';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import ChatBubble from '@material-ui/icons/ChatBubble';
-// import CalendarToday from '@material-ui/icons/CalendarToday';
 import Event from '@material-ui/icons/Event';
 import Videocam from '@material-ui/icons/Videocam';
 import HomeIcon from '@material-ui/icons/Home';
-// import Group from '@material-ui/icons/Group';
 import styled from 'styled-components';
 import { routes } from '../../utils/routes';
 
-// const setActiveRouteColor = (activeRoute, linkRoute) => {
-//   // return { color: activeRoute === linkRoute ? '#fff' : 'rgba(255, 255, 255, 0.5)' };
-//   {
-//   }
-// };
-
 const StyledBottomNavigation = styled(BottomNavigation)`
-  /* background-color: ${(props) => props.theme.palette.background.paper} !important; */
   position: fixed;
   width: 100%;
   bottom: 0px;
@@ -43,36 +34,10 @@ export default function SimpleBottomNavigation() {
       value={activeRoute}
       onChange={(event, newValue) => router.push(newValue)}
       showLabels>
-      <BottomNavigationAction
-        // style={setActiveRouteColor(activeRoute, routes.home)}
-        value={routes.home}
-        label="Home"
-        icon={<HomeIcon />}
-      />
-      <BottomNavigationAction
-        value={routes.inbox}
-        // style={setActiveRouteColor(activeRoute, routes.inbox)}
-        label="Inbox"
-        icon={<ChatBubble />}
-      />
-      <BottomNavigationAction
-        // style={setActiveRouteColor(activeRoute, routes.offerings)}
-        value={routes.offerings}
-        label="Offerings"
-        icon={<Event />}
-      />
-      <BottomNavigationAction
-        // style={setActiveRouteColor(activeRoute, routes.sessions)}
-        value={routes.sessions}
-        label="Sessions"
-        icon={<Videocam />}
-      />
-      {/* <BottomNavigationAction
-        style={setActiveRouteColor(activeRoute, routes.clients)}
-        value={routes.clients}
-        label="Clients"
-        icon={<Group />}
-      /> */}
+      <BottomNavigationAction value={routes.home} label="Home" icon={<HomeIcon />} />
+      <BottomNavigationAction value={routes.inbox} label="Inbox" icon={<ChatBubble />} />
+      <BottomNavigationAction value={routes.offerings} label="Offerings" icon={<Event />} />
+      <BottomNavigationAction value={routes.sessions} label="Sessions" icon={<Videocam />} />
     </StyledBottomNavigation>
   );
 }

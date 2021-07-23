@@ -53,7 +53,8 @@ export default function MyPostsList() {
       />
       <Backdrop open={bookmarkState.saveTagLoading || deletePostLoading} />
       <Paper
-        className="my-2 d-flex justify-content-between align-items-center"
+        variant="outlined"
+        className="my-2 pr-1 d-flex justify-content-between align-items-center"
         style={{ minHeight: 55 }}>
         <Link href="/create-post">
           <Button className="mx-3" variant="contained" color="primary">

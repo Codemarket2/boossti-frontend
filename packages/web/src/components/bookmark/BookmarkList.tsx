@@ -15,7 +15,6 @@ import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import ClearIcon from '@material-ui/icons/Clear';
 import ErrorLoading from '../common/ErrorLoading';
 import Loading from '../common/Loading';
@@ -36,35 +35,40 @@ export default function BookmarkList() {
   return (
     <div>
       <Backdrop open={deleteBookmarkLoading} />
-      <Paper className="my-2">
-        <TextField
-          fullWidth
-          variant="outlined"
-          label="Search"
-          InputProps={{
-            endAdornment: (
-              <InputAdornment
-                onClick={() => bookmarkSetState({ ...bookmarkState, search: '' })}
-                position="end"
-                role="button">
-                {bookmarkState.search ? (
-                  <ClearIcon />
-                ) : (
-                  <>
-                    {bookmarkState.search && loading && (
-                      <CircularProgress size={25} className="mr-3" />
-                    )}
-                    <SearchIcon />
-                  </>
-                )}
-              </InputAdornment>
-            ),
-          }}
-          value={bookmarkState.search}
-          onChange={({ target: { value } }) =>
-            bookmarkSetState({ ...bookmarkState, search: value })
-          }
-        />
+      <Paper
+        className="my-2 py-1 d-flex justify-content-end align-items-center"
+        variant="outlined"
+        style={{ minHeight: 55 }}>
+        {bookmarkState.showSearch ? (
+          <TextField
+            size="small"
+            fullWidth
+            variant="outlined"
+            label="Search"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end" role="button">
+                  <IconButton
+                    className="mr-n3"
+                    onClick={() =>
+                      bookmarkSetState({ ...bookmarkState, search: '', showSearch: false })
+                    }>
+                    <ClearIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            value={bookmarkState.search}
+            onChange={({ target: { value } }) =>
+              bookmarkSetState({ ...bookmarkState, search: value })
+            }
+          />
+        ) : (
+          <IconButton
+            onClick={() => bookmarkSetState({ ...bookmarkState, search: '', showSearch: true })}>
+            <SearchIcon />
+          </IconButton>
+        )}
       </Paper>
       {error || !data || !data.getMyBookmarks ? (
         <ErrorLoading error={error} />
@@ -73,6 +77,7 @@ export default function BookmarkList() {
           {loading && <Loading />}
           {data.getMyBookmarks.data.map((bookmark) => (
             <Card
+              variant="outlined"
               key={bookmark._id}
               className="my-2 d-flex justify-content-between align-content-center">
               <CardContent>

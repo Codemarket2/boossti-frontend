@@ -36,6 +36,7 @@ const setActiveRouteColor = (activeRoute, linkRoute) => {
 const StyledTitle = styled(Typography)`
   width: 100%;
   cursor: pointer;
+  font-weight: bold !important;
   ${(props) => props.theme.breakpoints.down('xs')} {
     text-align: center !important;
   }
@@ -98,10 +99,9 @@ export default function AppBarComponent() {
           </>
         ) : null}
         <Link href="/">
-          {/* <StyledTitle variant="h6">{projectConfig.title}</StyledTitle> */}
-          <Typography variant="h5" className="font-weight-bold w-100" color="textPrimary">
+          <StyledTitle variant="h5" color="textPrimary">
             {projectConfig.title}
-          </Typography>
+          </StyledTitle>
         </Link>
         {authenticated ? (
           <>
@@ -132,13 +132,6 @@ export default function AppBarComponent() {
                   <Videocam />
                 </IconButton>
               </Tooltip>
-              {/* <Tooltip title="Clients">
-                <IconButton
-                  onClick={() => router.push(routes.clients)}
-                  color={setActiveRouteColor(activeRoute, routes.clients)}>
-                  <AccountCircle />
-                </IconButton>
-              </Tooltip> */}
             </MenuWrapper>
             <div>
               <Tooltip title="Profile">

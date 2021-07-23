@@ -20,8 +20,7 @@ interface IProps {
 export default function ProfileCard({ user }: IProps) {
   return (
     <>
-      <div className="text-center mb-2">
-        {/* <Typography variant="h3">Profile</Typography> */}
+      <div className="text-center mb-2 pt-2">
         <StyledAvatar alt="Remy Sharp" src={user.picture} />
         <Typography variant="h4">{user.name}</Typography>
         {user.email && <Typography>{user.email}</Typography>}

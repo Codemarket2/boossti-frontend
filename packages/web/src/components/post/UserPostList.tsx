@@ -36,6 +36,7 @@ export default function FeedsList({ userId }) {
     <div>
       <Paper
         className="my-2 d-flex justify-content-end align-items-center"
+        variant="outlined"
         style={{ minHeight: 55 }}>
         {postsState.showSearch ? (
           <TextField

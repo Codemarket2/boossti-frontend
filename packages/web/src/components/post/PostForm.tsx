@@ -10,7 +10,6 @@ import classNames from '../post/mention.module.css';
 import { onAlert } from '../../utils/alert';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { useFacebookSDK } from '../facebook/fbsdk';
-// import FBSettings from '../facebook/FBSettings';
 
 export default function PostScreen({ edit = false, post, onClose = () => {} }: any) {
   const {
@@ -109,8 +108,6 @@ export default function PostScreen({ edit = false, post, onClose = () => {} }: a
           value={state.value}
           onChange={handleChange}
           placeholder="What's on your mind ?"
-          // inputRef={textArea}
-          // a11ySuggestionsListLabel="ivje4vi"
           classNames={classNames}>
           <Mention
             trigger="@"
@@ -129,7 +126,8 @@ export default function PostScreen({ edit = false, post, onClose = () => {} }: a
               onClick={() => handleOpenTagModel(list)}
               color="secondary"
               label={list.name}
-              className="mr-2"
+              className="mr-1 mb-1"
+              style={{ backgroundColor: '#f5f5f5' }}
             />
           </Tooltip>
         ))}
@@ -145,7 +143,6 @@ export default function PostScreen({ edit = false, post, onClose = () => {} }: a
           {state.edit ? 'EDIT' : 'CREATE'} POST
         </LoadingButton>
       </InputGroup>
-      {/* <FBSettings /> */}
     </div>
   );
 }

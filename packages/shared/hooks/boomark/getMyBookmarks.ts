@@ -14,6 +14,7 @@ export function useGetMyBookmarks({ onAlert }: IProps) {
     search: '',
     showMenu: null,
     selectedBookmark: null,
+    showSearch: false,
   });
   const res = useQuery(GET_MY_BOOKMARKS, {
     variables: { limit: state.limit, page: state.page, search: state.search },

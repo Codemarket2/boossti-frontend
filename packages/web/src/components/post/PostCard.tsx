@@ -26,7 +26,7 @@ export default function RecipeReviewCard({ post, onClickTag, onClickMore = () =>
   newBody = newBody.split('@@@^^^').join('</a>');
 
   return (
-    <Card className="my-3">
+    <Card className="my-3" variant="outlined">
       <CardHeader
         avatar={
           <Avatar aria-label="author" alt={post.createdBy.name} src={post.createdBy.picture} />
