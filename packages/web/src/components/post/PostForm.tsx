@@ -15,7 +15,6 @@ import { useFacebookSDK } from '../facebook/fbsdk';
 export default function PostScreen({ edit = false, post, onClose = () => {} }: any) {
   const {
     fbsdk: { fbsdkLoading, fbsdkConnected },
-    setFbsdk,
   } = useFacebookSDK();
 
   const onSuccess = () => {
