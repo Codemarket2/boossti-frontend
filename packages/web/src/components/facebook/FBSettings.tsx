@@ -14,6 +14,7 @@ import Switch from '@material-ui/core/Switch';
 import GroupIcon from '@material-ui/icons/Group';
 import Avatar from '@material-ui/core/Avatar';
 import Loading from '../common/Loading';
+import { useFacebookSDK } from '../facebook/fbsdk';
 
 declare global {
   interface Window {
@@ -27,75 +28,25 @@ interface IProps {
 }
 
 const SignInWithFacebook = ({ showUser = false }: IProps) => {
-  const [state, setState] = useState({
-    initial: false,
-    connected: false,
-    user: null,
-    groups: [],
-    selectedGroups: [],
-  });
+  const {
+    fbsdk: { fbsdkLoading, fbsdkConnected },
+    handleLogin,
+    handleLogout,
+  } = useFacebookSDK();
+  const [state, setState] = useState({ user: null, groups: [], selectedGroups: [] });
 
   useEffect(() => {
-    window.fbAsyncInit = function () {
-      window.FB.init({
-        appId: '496030015019232',
-        xfbml: true,
-        version: 'v11.0',
-      });
-      window.FB.getLoginStatus(({ authResponse }) => {
-        if (authResponse) {
-          // console.log('authResponse', authResponse);
-          setState({ ...state, initial: true, connected: true });
-        } else {
-          setState({ ...state, initial: true, connected: false });
-        }
-      });
-    };
-
-    (function (d, s, id) {
-      var js,
-        fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) {
-        return;
-      }
-      js = d.createElement(s);
-      js.id = id;
-      js.src = 'https://connect.facebook.net/en_US/sdk.js';
-      fjs.parentNode.insertBefore(js, fjs);
-    })(document, 'script', 'facebook-jssdk');
-  }, []);
-
-  useEffect(() => {
-    if (state.connected) {
+    if (fbsdkConnected) {
       getData();
+    } else {
+      setState({
+        ...state,
+        user: null,
+        groups: [],
+        selectedGroups: [],
+      });
     }
-  }, [state.connected]);
-
-  const handleSignIn = () => {
-    // const fb = window.FB;
-    window.FB.getLoginStatus((response) => {
-      if (response.status === 'connected') {
-        getUser();
-      } else {
-        window.FB.login(
-          (response) => {
-            if (!response || !response.authResponse) {
-              return;
-            }
-            setState({ ...state, initial: true, connected: true });
-            // getUser();
-          },
-          {
-            // the authorized scopes
-            // scope: 'public_profile,email',
-            scope:
-              'public_profile,email,user_managed_groups,publish_to_groups,groups_access_member_info',
-            return_scopes: true,
-          },
-        );
-      }
-    });
-  };
+  }, [fbsdkConnected]);
 
   const getUser = () => {
     return new Promise((resolve) => {
@@ -144,13 +95,13 @@ const SignInWithFacebook = ({ showUser = false }: IProps) => {
     localStorage.setItem('selectedGroups', JSON.stringify(tempSelectedGroups));
   };
 
-  if (!state.initial) {
+  if (fbsdkLoading && !fbsdkConnected) {
     return <Loading />;
   }
 
   return (
     <div className="my-3">
-      {!state.connected && (
+      {!fbsdkConnected && (
         <>
           <Button
             startIcon={<Facebook />}
@@ -159,7 +110,7 @@ const SignInWithFacebook = ({ showUser = false }: IProps) => {
             style={{ backgroundColor: '#4267B2', color: 'white' }}
             type="button"
             variant="contained"
-            onClick={handleSignIn}>
+            onClick={handleLogin}>
             Connect Facebook Account
           </Button>
           <Typography className="text-center mt-2">
@@ -167,7 +118,7 @@ const SignInWithFacebook = ({ showUser = false }: IProps) => {
           </Typography>
         </>
       )}
-      {state.connected && (
+      {fbsdkConnected && (
         <>
           <List>
             {showUser && state.user && (
@@ -191,25 +142,29 @@ const SignInWithFacebook = ({ showUser = false }: IProps) => {
               />
             </ListItem>
             <Divider />
-            {state.groups.map((group) => (
-              <ListItem key={group.id} button>
-                <ListItemAvatar>
-                  <Avatar alt={group.name} src={group.picture.data.url} />
-                </ListItemAvatar>
-                <ListItemText primary={group.name} />
-                <ListItemSecondaryAction>
-                  <Tooltip title="Turn on/off autopost">
-                    <Switch
-                      edge="end"
-                      onChange={handleOnChange}
-                      checked={state.selectedGroups.indexOf(group.id) > -1}
-                      value={group.id}
-                      color="primary"
-                    />
-                  </Tooltip>
-                </ListItemSecondaryAction>
-              </ListItem>
-            ))}
+            {state.groups && state.groups.length > 0 ? (
+              state.groups.map((group) => (
+                <ListItem key={group.id} button>
+                  <ListItemAvatar>
+                    <Avatar alt={group.name} src={group.picture.data.url} />
+                  </ListItemAvatar>
+                  <ListItemText primary={group.name} />
+                  <ListItemSecondaryAction>
+                    <Tooltip title="Turn on/off autopost">
+                      <Switch
+                        edge="end"
+                        onChange={handleOnChange}
+                        checked={state.selectedGroups.indexOf(group.id) > -1}
+                        value={group.id}
+                        color="primary"
+                      />
+                    </Tooltip>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              ))
+            ) : (
+              <ListItemText primary="No groups Found" />
+            )}
           </List>
           <Button
             startIcon={<Facebook />}
@@ -218,18 +173,7 @@ const SignInWithFacebook = ({ showUser = false }: IProps) => {
             style={{ backgroundColor: '#4267B2', color: 'white' }}
             type="button"
             variant="contained"
-            onClick={() =>
-              window.FB.logout(function (response) {
-                setState({
-                  ...state,
-                  connected: false,
-                  user: null,
-                  groups: [],
-                  selectedGroups: [],
-                });
-                localStorage.removeItem('selectedGroups');
-              })
-            }>
+            onClick={handleLogout}>
             Disconnect Facebook Account
           </Button>
         </>

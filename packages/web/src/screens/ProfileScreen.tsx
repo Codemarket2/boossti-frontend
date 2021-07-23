@@ -13,5 +13,6 @@ export default function Page({ _id }: any) {
       <UserLayout>{isCurrentUser ? <UserProfile /> : _id && <GuestProfile _id={_id} />}</UserLayout>
     );
   }
+
   return null;
 }
