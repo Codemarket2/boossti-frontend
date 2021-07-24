@@ -3,6 +3,7 @@ import { useMutation } from '@apollo/client';
 import { CREATE_POST, UPDATE_POST } from '../../graphql/mutation/post';
 import { useGetInUseLists } from '../list';
 import { GET_MY_POSTS } from '../../graphql/query/post';
+import { fileUpload } from '../../utils/fileUpload';
 
 interface IProps {
   onAlert: (arg1: string, arg2: string) => void;
@@ -13,27 +14,31 @@ interface IProps {
 
 const defaultPost = {
   _id: '',
+  body: '',
+  images: [],
   edit: false,
-  body: false,
 };
 
 export function useCreatePost({ onAlert, onSuccess, edit = false, post = defaultPost }: IProps) {
   const { data, loading, error } = useGetInUseLists();
   const [state, setState] = useState({
     _id: '',
-    value: '',
+    body: '',
+    images: [],
     output: '',
     showMenu: null,
     selectedTag: null,
     showTagModel: false,
     selectedList: { items: [] },
     showSubList: false,
-    edit,
-    ...post,
     submitLoading: false,
+    tempImages: [],
+    tempImagesURL: [],
+    ...post,
+    edit,
   });
-  const [createPostMutation, { loading: createPostLoading }] = useMutation(CREATE_POST);
-  const [updatePostMutation, { loading: updatePostLoading }] = useMutation(UPDATE_POST);
+  const [createPostMutation] = useMutation(CREATE_POST);
+  const [updatePostMutation] = useMutation(UPDATE_POST);
 
   useEffect(() => {
     if (edit) {
@@ -53,7 +58,7 @@ export function useCreatePost({ onAlert, onSuccess, edit = false, post = default
     const newData = {
       getMyPosts: {
         ...getMyPosts,
-        data: getMyPosts.data.map((p) => (p._id === state._id ? { ...p, body: state.value } : p)),
+        data: getMyPosts.data.map((p) => (p._id === state._id ? { ...p, body: state.body } : p)),
       },
     };
     client.writeQuery({
@@ -65,27 +70,39 @@ export function useCreatePost({ onAlert, onSuccess, edit = false, post = default
 
   const onSave = async () => {
     try {
-      if (state.value === '') {
+      if (state.body === '') {
         return onAlert('Error', 'Enter some text');
       }
-      setState({ ...state, submitLoading: true });
+      let newImages = [];
+      if (state.tempImages.length > 0) {
+        newImages = await fileUpload(state.tempImages, '/posts');
+      }
+      let images = [...state.images, ...newImages];
       if (edit) {
         await updatePostMutation({
           variables: {
             _id: state._id,
-            body: state.value,
+            body: state.body,
+            images,
           },
           update: updateCache,
         });
       } else {
         const res = await createPostMutation({
           variables: {
-            body: state.value,
+            body: state.body,
+            images,
           },
         });
-        console.log('createPostMutation res', res);
       }
-      setState({ ...state, value: '', submitLoading: false });
+      setState({
+        ...state,
+        submitLoading: false,
+        body: '',
+        tempImages: [],
+        tempImagesURL: [],
+        images: [],
+      });
       onSuccess();
     } catch (error) {
       setState({ ...state, submitLoading: false });
@@ -100,30 +117,56 @@ export function useCreatePost({ onAlert, onSuccess, edit = false, post = default
   const handleSelectTag = (_id, name) => {
     setState({
       ...state,
-      value: state.value + ` @@@__${_id}^^__${name}@@@^^^`,
+      body: state.body + ` @@@__${_id}^^__${name}@@@^^^`,
       showTagModel: false,
     });
   };
 
   const handleChange = ({ target }: any) => {
     target.value = target.value.split('@@@^^^@@@__').join('@@@^^^ @@@__');
-    return setState({ ...state, value: target.value, showSubList: false });
+    return setState({ ...state, body: target.value, showSubList: false });
   };
 
   const onAdd = (id, display, startPos, endPos) => {
     if (!state.showSubList) {
-      let textBeforeCursorPosition = state.value.substring(0, startPos);
-      let textAfterCursorPosition = state.value.substring(startPos, endPos - 1);
+      let textBeforeCursorPosition = state.body.substring(0, startPos);
+      let textAfterCursorPosition = state.body.substring(startPos, endPos - 1);
       let newString =
         textBeforeCursorPosition + `@@@__${id}^^__${display}@@@^^^@` + textAfterCursorPosition;
       const selectedList = data.getLists.data.filter((list) => list._id === id)[0];
       setState({
         ...state,
-        value: newString,
+        body: newString,
         selectedList,
         showSubList: true,
       });
     }
+  };
+
+  const handleFileChange = (event) => {
+    let newArray = [...state.tempImagesURL];
+    for (let i = 0; i < event.target.files.length; i++) {
+      newArray.push(URL.createObjectURL(event.target.files[i]));
+    }
+    setState({
+      ...state,
+      tempImages: [...state.tempImages, ...event.target.files],
+      tempImagesURL: newArray,
+    });
+  };
+
+  const handleRemoveImage = (index: number) => {
+    let urlArray = [...state.images];
+    urlArray.splice(index, 1);
+    setState({ ...state, images: urlArray });
+  };
+
+  const handleRemoveTempImage = (index: number) => {
+    let fileArray = [...state.tempImages];
+    let urlArray = [...state.tempImagesURL];
+    fileArray.splice(index, 1);
+    urlArray.splice(index, 1);
+    setState({ ...state, tempImagesURL: urlArray, tempImages: fileArray });
   };
 
   const suggestions = state.showSubList
@@ -144,6 +187,8 @@ export function useCreatePost({ onAlert, onSuccess, edit = false, post = default
     handleSelectTag,
     handleOpenTagModel,
     onSave,
-    saveLoading: createPostLoading || updatePostLoading,
+    handleFileChange,
+    handleRemoveTempImage,
+    handleRemoveImage,
   };
 }

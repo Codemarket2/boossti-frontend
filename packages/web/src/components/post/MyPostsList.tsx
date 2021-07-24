@@ -97,7 +97,7 @@ export default function MyPostsList() {
         </ErrorLoading>
       ) : (
         <>
-          {loading && <Loading />}
+          {/* {loading && <Loading />} */}
           {data.getMyPosts.data.map((post) => (
             <PostCard
               key={post._id}

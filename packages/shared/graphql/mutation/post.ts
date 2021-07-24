@@ -1,10 +1,11 @@
 import { gql } from '@apollo/client';
 
 export const CREATE_POST = gql`
-  mutation MyMutation($body: String!) {
-    createPost(body: $body) {
+  mutation MyMutation($body: String!, $images: [String]) {
+    createPost(body: $body, images: $images) {
       _id
       body
+      images
       createdAt
       createdBy {
         _id
@@ -16,10 +17,11 @@ export const CREATE_POST = gql`
 `;
 
 export const UPDATE_POST = gql`
-  mutation MyMutation($_id: ID!, $body: String) {
-    updatePost(_id: $_id, body: $body) {
+  mutation MyMutation($_id: ID!, $body: String, $images: [String]) {
+    updatePost(_id: $_id, body: $body, images: $images) {
       _id
       body
+      images
       createdAt
       createdBy {
         _id

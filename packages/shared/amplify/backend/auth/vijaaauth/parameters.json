@@ -1,6 +1,8 @@
 {
-    "resourceNameTruncated": "vijaae22bd327",
-    "userPoolName": "vijaa_userpool",
+    "identityPoolName": "vijaaauth_identitypool_bf72b865",
+    "allowUnauthenticatedIdentities": true,
+    "resourceNameTruncated": "vijaa994a2861",
+    "userPoolName": "vijaa-auth",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -28,11 +30,11 @@
     "userpoolClientReadAttributes": [
         "email"
     ],
-    "userpoolClientLambdaRole": "vijaaae22bd327_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "vijaaa994a2861_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "e22bd327",
+    "sharedId": "994a2861",
     "resourceName": "vijaaauth",
-    "authSelections": "userPoolOnly",
+    "authSelections": "identityPoolAndUserPool",
     "authRoleArn": {
         "Fn::GetAtt": [
             "AuthRole",
@@ -53,12 +55,13 @@
     "adminQueries": false,
     "triggers": "{}",
     "hostedUI": true,
-    "hostedUIDomainName": "vijaa-app-auth",
+    "hostedUIDomainName": "vijaaauth",
     "authProvidersUserPool": [
         "Facebook",
         "Google"
     ],
     "hostedUIProviderMeta": "[{\"ProviderName\":\"Facebook\",\"authorize_scopes\":\"email,public_profile\",\"AttributeMapping\":{\"email\":\"email\",\"name\":\"name\",\"picture\":\"picture\",\"username\":\"id\"}},{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid email profile\",\"AttributeMapping\":{\"email\":\"email\",\"name\":\"name\",\"picture\":\"picture\",\"username\":\"sub\"}}]",
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"http://localhost:3000/\",\"https://www.vijaa.com/\"],\"LogoutURLs\":[\"http://localhost:3000/auth/\",\"https://www.vijaa.com/auth/\"]}",
     "userPoolGroupList": [],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,
@@ -67,7 +70,5 @@
     },
     "breakCircularDependency": true,
     "permissions": [],
-    "dependsOn": [],
-    "authProviders": [],
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"http://localhost:3000/\",\"vijaa://\",\"https://vijaa.com/\",\"https://www.vijaa.com/\"],\"LogoutURLs\":[\"http://localhost:3000/auth/\",\"vijaa://\",\"https://vijaa.com/auth/\",\"https://www.vijaa.com/auth/\"]}"
+    "dependsOn": []
 }

@@ -7,6 +7,7 @@ export const GET_MY_POSTS = gql`
       data {
         _id
         body
+        images
         createdAt
         createdBy {
           _id
@@ -25,6 +26,7 @@ export const GET_USER_POSTS = gql`
       data {
         _id
         body
+        images
         createdAt
         createdBy {
           _id
@@ -43,6 +45,7 @@ export const GET_POSTS = gql`
       data {
         _id
         body
+        images
         createdAt
         createdBy {
           _id

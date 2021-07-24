@@ -3,11 +3,12 @@
 
 const awsmobile = {
     "aws_project_region": "us-east-1",
+    "aws_cognito_identity_pool_id": "us-east-1:b792f75c-2482-401e-9dd7-e745414e2511",
     "aws_cognito_region": "us-east-1",
-    "aws_user_pools_id": "us-east-1_Xrw5CUFhD",
-    "aws_user_pools_web_client_id": "4dgk4luqo02rpe8ahlrj6puoij",
+    "aws_user_pools_id": "us-east-1_eBnsz43bl",
+    "aws_user_pools_web_client_id": "7ncppq11s2gffap4dbkifv8qmd",
     "oauth": {
-        "domain": "vijaa-app-auth-dev.auth.us-east-1.amazoncognito.com",
+        "domain": "vijaaauth-dev.auth.us-east-1.amazoncognito.com",
         "scope": [
             "phone",
             "email",
@@ -15,11 +16,13 @@ const awsmobile = {
             "profile",
             "aws.cognito.signin.user.admin"
         ],
-        "redirectSignIn": "http://localhost:3000/,vijaa://,https://vijaa.com/,https://www.vijaa.com/",
-        "redirectSignOut": "http://localhost:3000/auth/,vijaa://,https://vijaa.com/auth/,https://www.vijaa.com/auth/",
+        "redirectSignIn": "http://localhost:3000/,https://www.vijaa.com/",
+        "redirectSignOut": "http://localhost:3000/auth/,https://www.vijaa.com/auth/",
         "responseType": "code"
     },
-    "federationTarget": "COGNITO_USER_POOLS"
+    "federationTarget": "COGNITO_USER_POOLS",
+    "aws_user_files_s3_bucket": "vijaa-content-bucket202938-dev",
+    "aws_user_files_s3_bucket_region": "us-east-1"
 };
 
 

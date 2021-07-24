@@ -5,6 +5,7 @@ export const ADDED_POST = gql`
     addedPost {
       _id
       body
+      images
       createdAt
       createdBy {
         _id

@@ -10,11 +10,6 @@ export function useGetMyFeeds() {
     variables: { limit: 20, page: 1, search: state.search },
     fetchPolicy: 'cache-and-network',
   });
-  // const {
-  //   data: subscriptionData,
-  //   loading: subscriptionLoading,
-  //   error: subscriptionError,
-  // } = useSubscription(ADDED_POST);
 
   useEffect(() => {
     subscribeToMore({
@@ -32,15 +27,6 @@ export function useGetMyFeeds() {
       },
     });
   }, []);
-
-  // useEffect(() => {
-  //   console.log(
-  //     'subscriptionData, subscriptionLoading, subscriptionError',
-  //     subscriptionData,
-  //     subscriptionLoading,
-  //     subscriptionError,
-  //   );
-  // }, [subscriptionData, subscriptionLoading, subscriptionError]);
 
   return { data, loading, error, state, setState };
 }

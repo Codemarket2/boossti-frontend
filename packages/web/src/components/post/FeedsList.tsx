@@ -72,13 +72,6 @@ export default function FeedsList() {
           <PostForm />
         </Paper>
       )}
-      {/* <div className="text-right">
-        <Link href="/create-post">
-          <Button variant="contained" color="primary">
-            Create Post
-          </Button>
-        </Link>
-      </div> */}
       {error || !data || !data.getPosts ? (
         <ErrorLoading error={error}>
           <PostCardSkeleton />
@@ -87,7 +80,7 @@ export default function FeedsList() {
         </ErrorLoading>
       ) : (
         <>
-          {loading && <Loading />}
+          {/* {loading && <Loading />} */}
           {data.getPosts.data.map((post) => (
             <PostCard
               key={post._id}

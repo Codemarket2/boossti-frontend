@@ -6,5 +6,11 @@
       "dependsOn": [],
       "customAuth": false
     }
+  },
+  "storage": {
+    "vijaastorage": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation"
+    }
   }
 }

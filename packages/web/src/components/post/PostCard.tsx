@@ -13,10 +13,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ModeCommentIcon from '@material-ui/icons/ModeComment';
 import moment from 'moment';
 import Tooltip from '@material-ui/core/Tooltip';
-
-// const StyledText = styled(Typography)`
-//   cursor: pointer !important;
-// `;
+import ImageList from './ImageList';
 
 export default function RecipeReviewCard({ post, onClickTag, onClickMore = () => {} }: any) {
   let newBody = post.body;
@@ -48,7 +45,7 @@ export default function RecipeReviewCard({ post, onClickTag, onClickMore = () =>
         // subheader={moment(post.createdAt).format('LLL')}
       />
       <CardContent>
-        <Typography variant="body2" component="p">
+        <Typography variant="body2" component="p" className="mb-1">
           {parse(newBody, {
             replace: (domNode: any) => {
               if (domNode.name === 'a') {
@@ -73,6 +70,7 @@ export default function RecipeReviewCard({ post, onClickTag, onClickMore = () =>
             },
           })}
         </Typography>
+        <ImageList images={post.images} />
       </CardContent>
       <CardActions disableSpacing>
         <IconButton aria-label="like">

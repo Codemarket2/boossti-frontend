@@ -2,6 +2,8 @@ import { MentionsInput, Mention } from 'react-mentions';
 import Tooltip from '@material-ui/core/Tooltip';
 import { useCreatePost } from '@frontend/shared/hooks/post';
 import Chip from '@material-ui/core/Chip';
+import Button from '@material-ui/core/Button';
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import InputGroup from '../common/InputGroup';
 import SelectTag from '../post/SelectTag';
 import ErrorLoading from '../common/ErrorLoading';
@@ -10,6 +12,7 @@ import classNames from '../post/mention.module.css';
 import { onAlert } from '../../utils/alert';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { useFacebookSDK } from '../facebook/fbsdk';
+import ImageList from './ImageList';
 
 export default function PostScreen({ edit = false, post, onClose = () => {} }: any) {
   const {
@@ -32,7 +35,9 @@ export default function PostScreen({ edit = false, post, onClose = () => {} }: a
     handleSelectTag,
     handleOpenTagModel,
     onSave,
-    saveLoading,
+    handleFileChange,
+    handleRemoveTempImage,
+    handleRemoveImage,
   } = useCreatePost({ onAlert, onSuccess, edit, post });
 
   const postToGroup = (groupId: string, message) => {
@@ -48,36 +53,33 @@ export default function PostScreen({ edit = false, post, onClose = () => {} }: a
   };
 
   const handleSubmit = async () => {
-    try {
-      if (state.value === '') {
-        return alert('Enter some text');
-      }
-      if (!edit && fbsdkConnected) {
-        const selectedGroups: any = JSON.parse(localStorage.getItem('selectedGroups'));
-        if (selectedGroups && selectedGroups.length > 0) {
-          let message = state.value;
-          message = message.split('@@@^^^').join('');
-          message = message.split('^^__');
-          console.log('Message', message);
-          let newMessage = '';
-          message.forEach((m) => {
-            m = m.split('@@@__')[0];
-            newMessage += m;
-          });
-          newMessage += '\n\nThis post was created by Vijaa www.vijaa.com';
-          selectedGroups.forEach(async (groupId) => {
-            try {
-              await postToGroup(groupId, newMessage);
-            } catch (error) {
-              alert(`Error while posting to facebook ${error.message}`);
-            }
-          });
-        }
-      }
-      await onSave();
-    } catch (error) {
-      alert(error.message);
+    if (state.body === '') {
+      return alert('Enter some text');
     }
+    setState({ ...state, submitLoading: true });
+    if (!edit && fbsdkConnected) {
+      const selectedGroups: any = JSON.parse(localStorage.getItem('selectedGroups'));
+      if (selectedGroups && selectedGroups.length > 0) {
+        let message = state.body;
+        message = message.split('@@@^^^').join('');
+        message = message.split('^^__');
+        console.log('Message', message);
+        let newMessage = '';
+        message.forEach((m) => {
+          m = m.split('@@@__')[0];
+          newMessage += m;
+        });
+        newMessage += '\n\nThis post was created by Vijaa www.vijaa.com';
+        selectedGroups.forEach(async (groupId) => {
+          try {
+            await postToGroup(groupId, newMessage);
+          } catch (error) {
+            alert(`Error while posting to facebook ${error.message}`);
+          }
+        });
+      }
+    }
+    await onSave();
   };
 
   if (fbsdkLoading || error || loading || !data) {
@@ -105,7 +107,7 @@ export default function PostScreen({ edit = false, post, onClose = () => {} }: a
         <MentionsInput
           allowSuggestionsAboveCursor
           style={{ minHeight: 100 }}
-          value={state.value}
+          value={state.body}
           onChange={handleChange}
           placeholder="What's on your mind ?"
           classNames={classNames}>
@@ -118,6 +120,34 @@ export default function PostScreen({ edit = false, post, onClose = () => {} }: a
             className={classNames.mentions__mention}
           />
         </MentionsInput>
+      </InputGroup>
+      <InputGroup>
+        <input
+          id="contained-button-file"
+          type="file"
+          multiple
+          accept="image/*"
+          hidden
+          onChange={handleFileChange}
+        />
+        <label htmlFor="contained-button-file">
+          <Button
+            size="small"
+            variant="outlined"
+            component="span"
+            color="primary"
+            startIcon={<PhotoCamera />}>
+            Select Image
+            <input type="file" multiple accept="image/*" hidden onChange={handleFileChange} />
+          </Button>
+        </label>
+        <ImageList
+          showIcon={true}
+          images={state.images}
+          tempImages={state.tempImagesURL}
+          removeTempImage={handleRemoveTempImage}
+          removeImage={handleRemoveImage}
+        />
       </InputGroup>
       <InputGroup>
         {data.getLists.data.map((list) => (

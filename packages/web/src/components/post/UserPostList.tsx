@@ -74,7 +74,7 @@ export default function FeedsList({ userId }) {
         </ErrorLoading>
       ) : (
         <>
-          {loading && <Loading />}
+          {/* {loading && <Loading />} */}
           {data.getPostsByUserId.data.map((post) => (
             <PostCard
               key={post._id}
