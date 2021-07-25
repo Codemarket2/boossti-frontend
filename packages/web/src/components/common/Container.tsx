@@ -9,6 +9,10 @@ const StyledContainer = styled(Container)`
     padding-bottom: 60px;
     /* padding-top: 4px; */
   }
+  video {
+    width: 100% !important;
+    height: auto !important;
+  }
 `;
 
 export default StyledContainer;

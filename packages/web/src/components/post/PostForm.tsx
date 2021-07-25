@@ -126,7 +126,8 @@ export default function PostScreen({ edit = false, post, onClose = () => {} }: a
           id="contained-button-file"
           type="file"
           multiple
-          accept="image/*"
+          accept="image/*, video/*"
+          // accept="image/*, video/mp4, video/webm, video/ogg"
           hidden
           onChange={handleFileChange}
         />
@@ -137,13 +138,20 @@ export default function PostScreen({ edit = false, post, onClose = () => {} }: a
             component="span"
             color="primary"
             startIcon={<PhotoCamera />}>
-            Select Image
-            <input type="file" multiple accept="image/*" hidden onChange={handleFileChange} />
+            Select Image / Video
           </Button>
         </label>
+        <br />
+        {/* {state.tempImagesURL[0] && (
+          <video width="400" controls>
+            <source src={state.tempImagesURL[0]} type="video/webm" />
+            Your browser does not support HTML5 video.
+          </video>
+        )} */}
         <ImageList
           showIcon={true}
           images={state.images}
+          // tempImages={state.tempImages}
           tempImages={state.tempImagesURL}
           removeTempImage={handleRemoveTempImage}
           removeImage={handleRemoveImage}

@@ -41,6 +41,7 @@
     "react-dom": "17.0.1",
     "react-icons": "4.2.0",
     "react-mentions": "^4.3.0",
+    "react-player": "^2.9.0",
     "react-redux": "7.2.4",
     "react-share": "4.3.1",
     "redux": "4.1.0",

@@ -5,6 +5,8 @@ import { useGetInUseLists } from '../list';
 import { GET_MY_POSTS } from '../../graphql/query/post';
 import { fileUpload } from '../../utils/fileUpload';
 
+export const videoFormats = ['video/mp4', 'video/webm', 'video/ogg'];
+
 interface IProps {
   onAlert: (arg1: string, arg2: string) => void;
   onSuccess: () => void;
@@ -144,15 +146,21 @@ export function useCreatePost({ onAlert, onSuccess, edit = false, post = default
   };
 
   const handleFileChange = (event) => {
-    let newArray = [...state.tempImagesURL];
-    for (let i = 0; i < event.target.files.length; i++) {
-      newArray.push(URL.createObjectURL(event.target.files[i]));
+    if (event.target.files.length > 0) {
+      let newArray = [...state.tempImagesURL];
+      for (let i = 0; i < event.target.files.length; i++) {
+        let item = {
+          url: URL.createObjectURL(event.target.files[i]),
+          type: event.target.files[i].type,
+        };
+        newArray.push(item);
+      }
+      setState({
+        ...state,
+        tempImages: [...state.tempImages, ...event.target.files],
+        tempImagesURL: newArray,
+      });
     }
-    setState({
-      ...state,
-      tempImages: [...state.tempImages, ...event.target.files],
-      tempImagesURL: newArray,
-    });
   };
 
   const handleRemoveImage = (index: number) => {

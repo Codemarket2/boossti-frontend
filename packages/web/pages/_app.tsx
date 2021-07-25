@@ -5,7 +5,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import Amplify, { Hub } from 'aws-amplify';
 import { useSelector } from 'react-redux';
-import { wrapper } from '../src/store';
+import { wrapper } from '../src/utils/store';
 import { ApolloProvider } from '@apollo/client/react';
 import { client } from '@frontend/shared/graphql';
 import aws_exports from '@frontend/shared/aws-exports';
