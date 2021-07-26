@@ -3,7 +3,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { useCreatePost } from '@frontend/shared/hooks/post';
 import Chip from '@material-ui/core/Chip';
 import Button from '@material-ui/core/Button';
-import PhotoCamera from '@material-ui/icons/PhotoCamera';
+import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary';
 import InputGroup from '../common/InputGroup';
 import SelectTag from '../post/SelectTag';
 import ErrorLoading from '../common/ErrorLoading';
@@ -127,7 +127,6 @@ export default function PostScreen({ edit = false, post, onClose = () => {} }: a
           type="file"
           multiple
           accept="image/*, video/*"
-          // accept="image/*, video/mp4, video/webm, video/ogg"
           hidden
           onChange={handleFileChange}
         />
@@ -137,21 +136,13 @@ export default function PostScreen({ edit = false, post, onClose = () => {} }: a
             variant="outlined"
             component="span"
             color="primary"
-            startIcon={<PhotoCamera />}>
-            Select Image / Video
+            startIcon={<PhotoLibraryIcon />}>
+            Select Image/Video
           </Button>
         </label>
-        <br />
-        {/* {state.tempImagesURL[0] && (
-          <video width="400" controls>
-            <source src={state.tempImagesURL[0]} type="video/webm" />
-            Your browser does not support HTML5 video.
-          </video>
-        )} */}
         <ImageList
           showIcon={true}
           images={state.images}
-          // tempImages={state.tempImages}
           tempImages={state.tempImagesURL}
           removeTempImage={handleRemoveTempImage}
           removeImage={handleRemoveImage}

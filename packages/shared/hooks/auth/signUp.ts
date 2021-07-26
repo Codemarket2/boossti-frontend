@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Auth } from 'aws-amplify';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
+import projectConfig from '../../index';
 import { showLoading, hideLoading } from '../../redux/actions/loading';
 export { useSignIn } from './signIn';
 
@@ -61,7 +62,7 @@ export function useSignUp({ onAlert = () => {} }: ISignUpArgs) {
         attributes: {
           email,
           name,
-          picture: 'https://codemarket-common-storage.s3.amazonaws.com/public/default/profile.jpeg',
+          picture: projectConfig.defaultProfile,
         },
       });
       // formik.handleReset('');

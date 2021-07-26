@@ -1,7 +1,6 @@
 import IconButton from '@material-ui/core/IconButton';
 import Grid from '@material-ui/core/Grid';
 import HighlightOff from '@material-ui/icons/HighlightOff';
-import { videoFormats } from '@frontend/shared/hooks/post/createPost';
 
 interface IProps {
   images: [];
@@ -25,7 +24,7 @@ export default function ImageList({
           <Media
             key={i}
             url={media}
-            isVideo={videoFormats.indexOf(`video/${media.split('.').pop().toLowerCase()}`) > -1}
+            isVideo={media.toLowerCase().indexOf(`video`) > -1}
             showIcon={showIcon}
             onClick={() => removeImage(i)}
             type={`video/${media.split('.').pop().toLowerCase()}`}
@@ -36,7 +35,7 @@ export default function ImageList({
           <Media
             key={i}
             url={media.url}
-            isVideo={videoFormats.indexOf(media.type) > -1}
+            isVideo={media.type.toLowerCase().indexOf('video') > -1}
             showIcon={showIcon}
             onClick={() => removeTempImage(i)}
             type={media.type}
@@ -63,13 +62,14 @@ const Media = ({ url, type, isVideo = false, showIcon = false, onClick }: IMedia
             zIndex: 3,
           }}
           onClick={onClick}
-          className="position-absolute">
-          <HighlightOff color="error" fontSize="large" />
+          className="position-absolute p-0 bg-danger ml-2 mt-2"
+          edge="end">
+          <HighlightOff className="text-light" fontSize="large" />
         </IconButton>
       )}
       {isVideo ? (
-        <video key={url} controls style={{ width: '100% !important', height: 'auto !important' }}>
-          <source src={url} type={type} />
+        <video key={url} controls src={url}>
+          {/* <source src={url} type={type} /> */}
           Your browser does not support HTML5 video.
         </video>
       ) : (

@@ -5,8 +5,6 @@ import { useGetInUseLists } from '../list';
 import { GET_MY_POSTS } from '../../graphql/query/post';
 import { fileUpload } from '../../utils/fileUpload';
 
-export const videoFormats = ['video/mp4', 'video/webm', 'video/ogg'];
-
 interface IProps {
   onAlert: (arg1: string, arg2: string) => void;
   onSuccess: () => void;
