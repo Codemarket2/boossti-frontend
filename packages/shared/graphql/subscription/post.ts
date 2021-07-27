@@ -5,7 +5,10 @@ export const ADDED_POST = gql`
     addedPost {
       _id
       body
-      images
+      media {
+        url
+        caption
+      }
       createdAt
       createdBy {
         _id
