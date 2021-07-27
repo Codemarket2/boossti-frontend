@@ -14,7 +14,7 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import { useFacebookSDK } from '../facebook/fbsdk';
 import ImageList from './ImageList';
 
-export default function PostScreen({ edit = false, post, onClose = () => {} }: any) {
+export default function PostScreen({ post, onClose = () => {} }: any) {
   const {
     fbsdk: { fbsdkLoading, fbsdkConnected },
   } = useFacebookSDK();
@@ -36,9 +36,11 @@ export default function PostScreen({ edit = false, post, onClose = () => {} }: a
     handleOpenTagModel,
     onSave,
     handleFileChange,
-    handleRemoveTempImage,
-    handleRemoveImage,
-  } = useCreatePost({ onAlert, onSuccess, edit, post });
+    handleRemoveTempMedia,
+    handleRemoveMedia,
+    onTempCaptionChange,
+    onCaptionChange,
+  } = useCreatePost({ onAlert, onSuccess, post });
 
   const postToGroup = (groupId: string, message) => {
     return new Promise((resolve, reject) => {
@@ -57,7 +59,7 @@ export default function PostScreen({ edit = false, post, onClose = () => {} }: a
       return alert('Enter some text');
     }
     setState({ ...state, submitLoading: true });
-    if (!edit && fbsdkConnected) {
+    if (!state.edit && fbsdkConnected) {
       const selectedGroups: any = JSON.parse(localStorage.getItem('selectedGroups'));
       if (selectedGroups && selectedGroups.length > 0) {
         let message = state.body;
@@ -94,6 +96,8 @@ export default function PostScreen({ edit = false, post, onClose = () => {} }: a
       </ErrorLoading>
     );
   }
+
+  // console.log('state.tempImagesURL', state.tempMedia);
 
   return (
     <div>
@@ -142,10 +146,12 @@ export default function PostScreen({ edit = false, post, onClose = () => {} }: a
         </label>
         <ImageList
           showIcon={true}
-          images={state.images}
-          tempImages={state.tempImagesURL}
-          removeTempImage={handleRemoveTempImage}
-          removeImage={handleRemoveImage}
+          media={state.media}
+          tempMedia={state.tempMedia}
+          removeTempMedia={handleRemoveTempMedia}
+          removeMedia={handleRemoveMedia}
+          onTempCaptionChange={onTempCaptionChange}
+          onCaptionChange={onCaptionChange}
         />
       </InputGroup>
       <InputGroup>

@@ -70,7 +70,7 @@ export default function RecipeReviewCard({ post, onClickTag, onClickMore = () =>
             },
           })}
         </Typography>
-        <ImageList images={post.images} />
+        <ImageList media={post.media} />
       </CardContent>
       <CardActions disableSpacing>
         <IconButton aria-label="like">

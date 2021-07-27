@@ -53,9 +53,7 @@ export default function PostEditForm({ open = false, onClose, post }: IProps) {
       </AppBar>
       <Container>
         {/* <p>{post.body}</p> */}
-        {post && (
-          <PostForm onClose={onClose} edit={true} post={post ? { ...post, edit: true } : {}} />
-        )}
+        {post && <PostForm onClose={onClose} post={post ? { ...post, edit: true } : {}} />}
       </Container>
     </Dialog>
   );

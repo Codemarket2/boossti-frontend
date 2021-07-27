@@ -4,27 +4,30 @@ import { CREATE_POST, UPDATE_POST } from '../../graphql/mutation/post';
 import { useGetInUseLists } from '../list';
 import { GET_MY_POSTS } from '../../graphql/query/post';
 import { fileUpload } from '../../utils/fileUpload';
+import { omitTypename } from '../../utils/omitTypename';
 
 interface IProps {
   onAlert: (arg1: string, arg2: string) => void;
   onSuccess: () => void;
-  edit?: boolean;
   post?: any;
 }
 
 const defaultPost = {
   _id: '',
   body: '',
-  images: [],
+  media: [],
   edit: false,
 };
 
-export function useCreatePost({ onAlert, onSuccess, edit = false, post = defaultPost }: IProps) {
+export function useCreatePost({ onAlert, onSuccess, post = defaultPost }: IProps) {
   const { data, loading, error } = useGetInUseLists();
   const [state, setState] = useState({
+    edit: false,
     _id: '',
     body: '',
-    images: [],
+    media: [],
+    tempMediaFiles: [],
+    tempMedia: [],
     output: '',
     showMenu: null,
     selectedTag: null,
@@ -32,23 +35,19 @@ export function useCreatePost({ onAlert, onSuccess, edit = false, post = default
     selectedList: { items: [] },
     showSubList: false,
     submitLoading: false,
-    tempImages: [],
-    tempImagesURL: [],
     ...post,
-    edit,
   });
   const [createPostMutation] = useMutation(CREATE_POST);
   const [updatePostMutation] = useMutation(UPDATE_POST);
 
   useEffect(() => {
-    if (edit) {
+    if (post.edit || post.body) {
       setState({
         ...state,
-        edit,
         ...post,
       });
     }
-  }, [edit]);
+  }, [post]);
 
   const updateCache = (client) => {
     const { getMyPosts } = client.readQuery({
@@ -73,17 +72,19 @@ export function useCreatePost({ onAlert, onSuccess, edit = false, post = default
       if (state.body === '') {
         return onAlert('Error', 'Enter some text');
       }
-      let newImages = [];
-      if (state.tempImages.length > 0) {
-        newImages = await fileUpload(state.tempImages, '/posts');
+      let newMedia = [];
+      if (state.tempMediaFiles.length > 0) {
+        newMedia = await fileUpload(state.tempMediaFiles, '/posts');
       }
-      let images = [...state.images, ...newImages];
-      if (edit) {
+      newMedia = newMedia.map((n, i) => ({ url: n, caption: state.tempMedia[i].caption }));
+      let media = [...state.media, ...newMedia];
+      media = media.map((m) => JSON.parse(JSON.stringify(m), omitTypename));
+      if (state.edit) {
         await updatePostMutation({
           variables: {
             _id: state._id,
             body: state.body,
-            images,
+            media,
           },
           update: updateCache,
         });
@@ -91,7 +92,7 @@ export function useCreatePost({ onAlert, onSuccess, edit = false, post = default
         const res = await createPostMutation({
           variables: {
             body: state.body,
-            images,
+            media,
           },
         });
       }
@@ -99,9 +100,9 @@ export function useCreatePost({ onAlert, onSuccess, edit = false, post = default
         ...state,
         submitLoading: false,
         body: '',
-        tempImages: [],
-        tempImagesURL: [],
-        images: [],
+        tempMediaFiles: [],
+        tempMedia: [],
+        media: [],
       });
       onSuccess();
     } catch (error) {
@@ -145,34 +146,48 @@ export function useCreatePost({ onAlert, onSuccess, edit = false, post = default
 
   const handleFileChange = (event) => {
     if (event.target.files.length > 0) {
-      let newArray = [...state.tempImagesURL];
+      let newArray = [...state.tempMedia];
       for (let i = 0; i < event.target.files.length; i++) {
         let item = {
           url: URL.createObjectURL(event.target.files[i]),
           type: event.target.files[i].type,
+          caption: '',
         };
         newArray.push(item);
       }
       setState({
         ...state,
-        tempImages: [...state.tempImages, ...event.target.files],
-        tempImagesURL: newArray,
+        tempMediaFiles: [...state.tempMediaFiles, ...event.target.files],
+        tempMedia: newArray,
       });
     }
   };
 
-  const handleRemoveImage = (index: number) => {
-    let urlArray = [...state.images];
-    urlArray.splice(index, 1);
-    setState({ ...state, images: urlArray });
+  const onTempCaptionChange = (value: string, index: number) => {
+    setState({
+      ...state,
+      tempMedia: state.tempMedia.map((t, i) => (i === index ? { ...t, caption: value } : t)),
+    });
+  };
+  const onCaptionChange = (value: string, index: number) => {
+    setState({
+      ...state,
+      media: state.media.map((t, i) => (i === index ? { ...t, caption: value } : t)),
+    });
   };
 
-  const handleRemoveTempImage = (index: number) => {
-    let fileArray = [...state.tempImages];
-    let urlArray = [...state.tempImagesURL];
+  const handleRemoveMedia = (index: number) => {
+    let urlArray = [...state.media];
+    urlArray.splice(index, 1);
+    setState({ ...state, media: urlArray });
+  };
+
+  const handleRemoveTempMedia = (index: number) => {
+    let fileArray = [...state.tempMediaFiles];
+    let urlArray = [...state.tempMedia];
     fileArray.splice(index, 1);
     urlArray.splice(index, 1);
-    setState({ ...state, tempImagesURL: urlArray, tempImages: fileArray });
+    setState({ ...state, tempMedia: urlArray, tempMediaFiles: fileArray });
   };
 
   const suggestions = state.showSubList
@@ -194,7 +209,9 @@ export function useCreatePost({ onAlert, onSuccess, edit = false, post = default
     handleOpenTagModel,
     onSave,
     handleFileChange,
-    handleRemoveTempImage,
-    handleRemoveImage,
+    handleRemoveTempMedia,
+    handleRemoveMedia,
+    onTempCaptionChange,
+    onCaptionChange,
   };
 }
