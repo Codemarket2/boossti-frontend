@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useQuery, useSubscription } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { GET_POSTS, GET_USER_POSTS } from '../../graphql/query/post';
 import { ADDED_POST } from '../../graphql/subscription/post';
 import { guestClient } from '../../graphql';

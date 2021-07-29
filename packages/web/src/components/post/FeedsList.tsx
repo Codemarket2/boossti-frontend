@@ -1,16 +1,5 @@
 import { useGetMyFeeds } from '@frontend/shared/hooks/post';
-import { useCreateBookmark } from '@frontend/shared/hooks/boomark';
-// import Button from '@material-ui/core/Button';
-// import Link from 'next/link';
-import Backdrop from '../common/Backdrop';
-import BookmarkIcon from '@material-ui/icons/Bookmark';
-import Chip from '@material-ui/core/Chip';
 import ClearIcon from '@material-ui/icons/Clear';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Divider from '@material-ui/core/Divider';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -18,16 +7,11 @@ import SearchIcon from '@material-ui/icons/Search';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import ErrorLoading from '../common/ErrorLoading';
-import Loading from '../common/Loading';
-import { onAlert } from '../../utils/alert';
 import PostCard from './PostCard';
 import PostForm from './PostForm';
 import PostCardSkeleton from './PostCardSkeleton';
 
 export default function FeedsList() {
-  const { handleBookmark, state: bookmarkState, setState: bookmarkSetState } = useCreateBookmark({
-    onAlert,
-  });
   const { data, error, loading, state: postsState, setState: postsSetState } = useGetMyFeeds();
 
   return (
@@ -66,7 +50,6 @@ export default function FeedsList() {
           </IconButton>
         )}
       </Paper>
-      <Backdrop open={bookmarkState.saveTagLoading} />
       {!postsState.search && (
         <Paper className="px-2 py-1" variant="outlined">
           <PostForm />
@@ -79,43 +62,8 @@ export default function FeedsList() {
           <PostCardSkeleton />
         </ErrorLoading>
       ) : (
-        <>
-          {/* {loading && <Loading />} */}
-          {data.getPosts.data.map((post) => (
-            <PostCard
-              key={post._id}
-              post={post}
-              onClickTag={(target: any, tag: any) =>
-                bookmarkSetState({ ...bookmarkState, showMenu: target, selectedTag: tag })
-              }
-            />
-          ))}
-        </>
+        data.getPosts.data.map((post) => <PostCard key={post._id} post={post} />)
       )}
-      <Menu
-        anchorEl={bookmarkState.showMenu}
-        keepMounted
-        open={Boolean(bookmarkState.showMenu)}
-        onClose={() => bookmarkSetState({ ...bookmarkState, showMenu: null, selectedTag: null })}>
-        <MenuItem>
-          <Chip
-            role="button"
-            color="primary"
-            label={(bookmarkState.selectedTag && bookmarkState.selectedTag.text) || ''}
-          />
-        </MenuItem>
-        <Divider />
-        <MenuItem
-          onClick={async () => {
-            await handleBookmark();
-            alert('tag saved');
-          }}>
-          <ListItemIcon className="mr-n4">
-            <BookmarkIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Save Tag" />
-        </MenuItem>
-      </Menu>
     </div>
   );
 }

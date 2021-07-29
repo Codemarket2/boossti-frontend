@@ -16,10 +16,21 @@ interface IAddListFormValues {
 }
 
 export function useGetInUseLists() {
-  const res = useQuery(GET_INUSE_LISTS, {
+  const { data, error, loading } = useQuery(GET_INUSE_LISTS, {
     variables: { limit: 100, page: 1 },
   });
-  return res;
+
+  const [state, setState] = useState({
+    selectedList: { items: [] },
+    showSubList: false,
+  });
+
+  const suggestions = state.showSubList
+    ? state.selectedList.items.map((item) => ({ id: item._id, display: item.title }))
+    : data && data.getLists
+    ? data.getLists.data.map((list) => ({ id: list._id, display: list.name }))
+    : [];
+  return { data, error, loading, suggestions, state, setState };
 }
 
 export function useGetLists() {

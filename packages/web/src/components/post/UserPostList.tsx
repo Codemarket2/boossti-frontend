@@ -1,31 +1,16 @@
-import { useSelector } from 'react-redux';
-import { useUserFeeds } from '@frontend/shared/hooks/post';
-import { useCreateBookmark } from '@frontend/shared/hooks/boomark';
-import Backdrop from '../common/Backdrop';
-import BookmarkIcon from '@material-ui/icons/Bookmark';
-import Chip from '@material-ui/core/Chip';
 import ClearIcon from '@material-ui/icons/Clear';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Divider from '@material-ui/core/Divider';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
+import { useUserFeeds } from '@frontend/shared/hooks/post';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
 import ErrorLoading from '../common/ErrorLoading';
-import Loading from '../common/Loading';
-import { onAlert } from '../../utils/alert';
 import PostCard from './PostCard';
 import PostCardSkeleton from './PostCardSkeleton';
+import { useSelector } from 'react-redux';
 
 export default function FeedsList({ userId }) {
-  const { handleBookmark, state: bookmarkState, setState: bookmarkSetState } = useCreateBookmark({
-    onAlert,
-  });
-
   const { data, error, loading, state: postsState, setState: postsSetState } = useUserFeeds({
     userId,
   });
@@ -65,7 +50,6 @@ export default function FeedsList({ userId }) {
           </IconButton>
         )}
       </Paper>
-      <Backdrop open={bookmarkState.saveTagLoading} />
       {error || !data || !data.getPostsByUserId ? (
         <ErrorLoading error={error}>
           <PostCardSkeleton />
@@ -73,47 +57,10 @@ export default function FeedsList({ userId }) {
           <PostCardSkeleton />
         </ErrorLoading>
       ) : (
-        <>
-          {/* {loading && <Loading />} */}
-          {data.getPostsByUserId.data.map((post) => (
-            <PostCard
-              key={post._id}
-              post={post}
-              onClickTag={(target: any, tag: any) => {
-                bookmarkSetState({ ...bookmarkState, showMenu: target, selectedTag: tag });
-              }}
-            />
-          ))}
-        </>
+        data.getPostsByUserId.data.map((post) => (
+          <PostCard key={post._id} post={post} authenticated={false} />
+        ))
       )}
-      <Menu
-        anchorEl={bookmarkState.showMenu}
-        keepMounted
-        open={Boolean(bookmarkState.showMenu)}
-        onClose={() => bookmarkSetState({ ...bookmarkState, showMenu: null, selectedTag: null })}>
-        <MenuItem>
-          <Chip
-            role="button"
-            color="primary"
-            label={(bookmarkState.selectedTag && bookmarkState.selectedTag.text) || ''}
-          />
-        </MenuItem>
-        <Divider />
-        <MenuItem
-          onClick={async () => {
-            if (authenticated) {
-              await handleBookmark();
-              alert('tag saved');
-            } else {
-              alert('You must be signed in to save the tag');
-            }
-          }}>
-          <ListItemIcon className="mr-n4">
-            <BookmarkIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Save Tag" />
-        </MenuItem>
-      </Menu>
     </div>
   );
 }

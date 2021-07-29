@@ -1,4 +1,3 @@
-import { MentionsInput, Mention } from 'react-mentions';
 import Tooltip from '@material-ui/core/Tooltip';
 import { useCreatePost } from '@frontend/shared/hooks/post';
 import Chip from '@material-ui/core/Chip';
@@ -8,11 +7,11 @@ import InputGroup from '../common/InputGroup';
 import SelectTag from '../post/SelectTag';
 import ErrorLoading from '../common/ErrorLoading';
 import LoadingButton from '../common/LoadingButton';
-import classNames from '../post/mention.module.css';
 import { onAlert } from '../../utils/alert';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { useFacebookSDK } from '../facebook/fbsdk';
 import ImageList from './ImageList';
+import MentionInput from '../common/MentionInput';
 
 export default function PostScreen({ post, onClose = () => {} }: any) {
   const {
@@ -29,8 +28,8 @@ export default function PostScreen({ post, onClose = () => {} }: any) {
     data,
     loading,
     error,
-    suggestions,
-    onAdd,
+    // suggestions,
+    // onAdd,
     handleChange,
     handleSelectTag,
     handleOpenTagModel,
@@ -97,8 +96,6 @@ export default function PostScreen({ post, onClose = () => {} }: any) {
     );
   }
 
-  // console.log('state.tempImagesURL', state.tempMedia);
-
   return (
     <div>
       <SelectTag
@@ -108,22 +105,12 @@ export default function PostScreen({ post, onClose = () => {} }: any) {
         onSelect={handleSelectTag}
       />
       <InputGroup>
-        <MentionsInput
-          allowSuggestionsAboveCursor
-          style={{ minHeight: 100 }}
-          value={state.body}
+        <MentionInput
           onChange={handleChange}
+          value={state.body}
+          minHeight={100}
           placeholder="What's on your mind ?"
-          classNames={classNames}>
-          <Mention
-            trigger="@"
-            data={suggestions}
-            markup="@@@____id__^^____display__@@@^^^"
-            appendSpaceOnAdd
-            onAdd={onAdd}
-            className={classNames.mentions__mention}
-          />
-        </MentionsInput>
+        />
       </InputGroup>
       <InputGroup>
         <input

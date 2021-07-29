@@ -123,25 +123,8 @@ export function useCreatePost({ onAlert, onSuccess, post = defaultPost }: IProps
     });
   };
 
-  const handleChange = ({ target }: any) => {
-    target.value = target.value.split('@@@^^^@@@__').join('@@@^^^ @@@__');
-    return setState({ ...state, body: target.value, showSubList: false });
-  };
-
-  const onAdd = (id, display, startPos, endPos) => {
-    if (!state.showSubList) {
-      let textBeforeCursorPosition = state.body.substring(0, startPos);
-      let textAfterCursorPosition = state.body.substring(startPos, endPos - 1);
-      let newString =
-        textBeforeCursorPosition + `@@@__${id}^^__${display}@@@^^^@` + textAfterCursorPosition;
-      const selectedList = data.getLists.data.filter((list) => list._id === id)[0];
-      setState({
-        ...state,
-        body: newString,
-        selectedList,
-        showSubList: true,
-      });
-    }
+  const handleChange = (value: string) => {
+    return setState({ ...state, body: value });
   };
 
   const handleFileChange = (event) => {
@@ -190,20 +173,12 @@ export function useCreatePost({ onAlert, onSuccess, post = defaultPost }: IProps
     setState({ ...state, tempMedia: urlArray, tempMediaFiles: fileArray });
   };
 
-  const suggestions = state.showSubList
-    ? state.selectedList.items.map((item) => ({ id: item._id, display: item.title }))
-    : data && data.getLists
-    ? data.getLists.data.map((list) => ({ id: list._id, display: list.name }))
-    : [];
-
   return {
     state,
     setState,
     data,
     loading,
     error,
-    suggestions,
-    onAdd,
     handleChange,
     handleSelectTag,
     handleOpenTagModel,

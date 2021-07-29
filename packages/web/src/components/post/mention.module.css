@@ -1,7 +1,3 @@
-.mentions {
-  margin: 1em 0;
-}
-
 .mentions--singleLine .mentions__control {
   display: inline-block;
   width: 130px;
@@ -22,7 +18,7 @@
 .mentions--multiLine .mentions__highlighter {
   border: 1px solid transparent;
   padding: 9px;
-  min-height: 63px;
+  /* min-height: 63px; */
 }
 .mentions--multiLine .mentions__input {
   border: 1px solid silver;

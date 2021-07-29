@@ -1,4 +1,3 @@
-import parse from 'html-react-parser';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import Link from 'next/link';
@@ -6,22 +5,21 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ModeCommentIcon from '@material-ui/icons/ModeComment';
 import moment from 'moment';
-import Tooltip from '@material-ui/core/Tooltip';
 import ImageList from './ImageList';
+import MentionParser from '../common/MentionParser';
 
-export default function RecipeReviewCard({ post, onClickTag, onClickMore = () => {} }: any) {
-  let newBody = post.body;
+interface IProps {
+  post: any;
+  onClickMore?: (arg1: any, arg2: any) => void;
+  authenticated?: boolean;
+}
 
-  newBody = newBody.split('@@@__').join('<a href="');
-  newBody = newBody.split('^^__').join('">');
-  newBody = newBody.split('@@@^^^').join('</a>');
-
+export default function PostCard({ post, onClickMore = () => {}, authenticated = true }: IProps) {
   return (
     <Card className="my-3" variant="outlined">
       <CardHeader
@@ -45,32 +43,8 @@ export default function RecipeReviewCard({ post, onClickTag, onClickMore = () =>
         // subheader={moment(post.createdAt).format('LLL')}
       />
       <CardContent>
-        <Typography variant="body2" component="p" className="mb-1">
-          {parse(newBody, {
-            replace: (domNode: any) => {
-              if (domNode.name === 'a') {
-                const node = domNode.children[0];
-                const tag = {
-                  _id: domNode.attribs.href,
-                  text: node.data,
-                };
-                return (
-                  <Tooltip title="Save Tag">
-                    <Typography
-                      className="mx-1 font-weight-bold"
-                      onClick={(event) => onClickTag(event.currentTarget, tag)}
-                      color="primary"
-                      variant="body2"
-                      component="span">
-                      <u style={{ cursor: 'pointer' }}>{node.data}</u>
-                    </Typography>
-                  </Tooltip>
-                );
-              }
-            },
-          })}
-        </Typography>
-        <ImageList media={post.media} />
+        <MentionParser value={post.body} className="mb-1" authenticated={authenticated} />
+        <ImageList media={post.media} authenticated={authenticated} />
       </CardContent>
       <CardActions disableSpacing>
         <IconButton aria-label="like">

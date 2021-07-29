@@ -1,9 +1,9 @@
 import IconButton from '@material-ui/core/IconButton';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
 import HighlightOff from '@material-ui/icons/HighlightOff';
+import MentionInput from '../common/MentionInput';
+import MentionParser from '../common/MentionParser';
 
 interface IProps {
   media: [];
@@ -13,6 +13,7 @@ interface IProps {
   onCaptionChange?: (arg: string, arg2: number) => void;
   onTempCaptionChange?: (arg: string, arg2: number) => void;
   showIcon?: boolean;
+  authenticated?: boolean;
 }
 
 export default function MediaList({
@@ -23,6 +24,7 @@ export default function MediaList({
   showIcon = false,
   onCaptionChange,
   onTempCaptionChange,
+  authenticated,
 }: IProps) {
   return (
     <Grid container spacing={1}>
@@ -36,6 +38,7 @@ export default function MediaList({
             showIcon={showIcon}
             onClick={() => removeMedia(i)}
             onCaptionChange={(value) => onCaptionChange(value, i)}
+            authenticated={authenticated}
           />
         ))}
       {tempMedia.length > 0 &&
@@ -48,6 +51,7 @@ export default function MediaList({
             showIcon={showIcon}
             onClick={() => removeTempMedia(i)}
             onCaptionChange={(value) => onTempCaptionChange(value, i)}
+            authenticated={authenticated}
           />
         ))}
     </Grid>
@@ -60,6 +64,7 @@ interface IMediaProps {
   // type?: string;
   isVideo?: boolean;
   showIcon?: boolean;
+  authenticated?: boolean;
   onClick: () => void;
   onCaptionChange: (arg: string) => void;
 }
@@ -71,6 +76,7 @@ const Media = ({
   showIcon = false,
   onClick,
   onCaptionChange,
+  authenticated,
 }: IMediaProps) => {
   return (
     <Grid xs={12} sm={6} item>
@@ -87,7 +93,7 @@ const Media = ({
           </IconButton>
         )}
         {isVideo ? (
-          <video key={url} controls src={url}>
+          <video key={url} controls src={url + '#t=0.9'}>
             Your browser does not support HTML5 video.
           </video>
         ) : (
@@ -95,16 +101,9 @@ const Media = ({
         )}
         <div className="p-1">
           {showIcon ? (
-            <TextField
-              label="Caption"
-              fullWidth
-              className="text-center"
-              multiline
-              value={caption}
-              onChange={({ target: { value } }) => onCaptionChange(value)}
-            />
+            <MentionInput onChange={onCaptionChange} value={caption} placeholder="Caption" />
           ) : (
-            <Typography className="text-center">{caption}</Typography>
+            <MentionParser value={caption} className="text-center" authenticated={authenticated} />
           )}
         </div>
       </Paper>
