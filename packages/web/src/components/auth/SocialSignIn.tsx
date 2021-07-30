@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { Auth } from 'aws-amplify';
 import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth/lib/types';
 import Button from '@material-ui/core/Button';
@@ -23,6 +23,16 @@ const StyledCaption = styled(Typography)`
 `;
 
 export default function SocialSignIn({ signIn = true }: { signIn?: boolean }) {
+  const [disableSocial, setDisableSocial] = useState(true);
+
+  useEffect(() => {
+    console.log('window.location.hostname', window.location.host);
+    console.log('window.location.hostname', window.location.hostname);
+    if (window.location.hostname === 'localhost' || window.location.host.split('.')[0] === 'www') {
+      setDisableSocial(false);
+    }
+  }, []);
+
   return (
     <div>
       <StyledCaptionWrapper>
@@ -36,9 +46,13 @@ export default function SocialSignIn({ signIn = true }: { signIn?: boolean }) {
           style={{ backgroundColor: '#DB4437', color: 'white' }}
           type="button"
           variant="contained"
-          onClick={() =>
-            Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Google })
-          }>
+          onClick={() => {
+            if (disableSocial) {
+              alert('Go to www.vijaa.com to test social signin');
+            } else {
+              Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Google });
+            }
+          }}>
           Sign {signIn ? 'in' : 'up'} with Google
         </Button>
       </InputGroup>
@@ -50,10 +64,13 @@ export default function SocialSignIn({ signIn = true }: { signIn?: boolean }) {
           style={{ backgroundColor: '#4267B2', color: 'white' }}
           type="button"
           variant="contained"
-          // onClick={handleSignIn}
-          onClick={() =>
-            Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Facebook })
-          }>
+          onClick={() => {
+            if (disableSocial) {
+              alert('Go to www.vijaa.com to test social signin');
+            } else {
+              Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Facebook });
+            }
+          }}>
           Sign {signIn ? 'in' : 'up'} with Facebook
         </Button>
       </InputGroup>
