@@ -5,12 +5,31 @@ import { AUTH_TYPE, createAuthLink, AuthOptions } from 'aws-appsync-auth-link';
 import { createSubscriptionHandshakeLink } from 'aws-appsync-subscription-link';
 import projectConfig from '../index';
 
-const USE_DEBUG = process.env.NEXT_PUBLIC_USE_DEBUG_ENDPOINT === 'true';
+let url = projectConfig.appsyncGraphqlEndpoint;
+let region = projectConfig.appsyncRegion;
+// const url = USE_DEBUG
+//   ? process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT
+//   : projectConfig.appsyncGraphqlEndpoint;
+// const region = USE_DEBUG ? process.env.NEXT_PUBLIC_GRAPHQL_APIKEY : projectConfig.appsyncRegion;
 
-const url = USE_DEBUG
-  ? process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT
-  : projectConfig.appsyncGraphqlEndpoint;
-const region = USE_DEBUG ? process.env.NEXT_PUBLIC_GRAPHQL_APIKEY : projectConfig.appsyncRegion;
+if (
+  process.env.NODE_ENV === 'development' &&
+  process.env.NEXT_PUBLIC_USE_DEBUG_ENDPOINT === 'true' &&
+  process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT &&
+  process.env.NEXT_PUBLIC_GRAPHQL_APIKEY
+) {
+  console.log('Use debug endpoint');
+  url = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT;
+  region = process.env.NEXT_PUBLIC_GRAPHQL_APIKEY;
+} else if (
+  process.env.NODE_ENV === 'production' &&
+  process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT &&
+  process.env.NEXT_PUBLIC_GRAPHQL_APIKEY
+) {
+  console.log('Use prod endpoint');
+  url = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT;
+  region = process.env.NEXT_PUBLIC_GRAPHQL_APIKEY;
+}
 
 const cognitoAuth: AuthOptions = {
   type: AUTH_TYPE.AMAZON_COGNITO_USER_POOLS,

@@ -8,7 +8,8 @@ phases:
   pre_build:
     commands:
       - yarn web:test
-      - aws s3 sync s3://soozzi-cicd-bucket/vijaa/$BRANCH_NAME/.serverless packages/web/.serverless --delete
+      - aws s3 sync s3://soozzi-cicd-bucket/vijaa/$STAGE/.serverless packages/web/.serverless --delete
+      - echo "STAGE=$STAGE\nNEXT_PUBLIC_GRAPHQL_ENDPOINT=$GRAPHQL_ENDPOINT\nNEXT_PUBLIC_GRAPHQL_APIKEY=$GRAPHQL_APIKEY" > ./packages/web/.env.production
       - yarn web:build
       - echo Build completed on `date`
   build:
@@ -17,5 +18,5 @@ phases:
 
   post_build:
     commands:
-      - aws s3 sync packages/web/.serverless s3://soozzi-cicd-bucket/vijaa/$BRANCH_NAME/.serverless --delete
+      - aws s3 sync packages/web/.serverless s3://soozzi-cicd-bucket/vijaa/$STAGE/.serverless --delete
       - echo Deploy completed on `date`
