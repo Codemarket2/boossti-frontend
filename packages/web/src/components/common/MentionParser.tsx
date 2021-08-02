@@ -37,7 +37,11 @@ export default function MentionParser({
   return (
     <>
       <Backdrop open={bookmarkState.saveTagLoading} />
-      <Typography variant={variant} component={component} className={className}>
+      <Typography
+        data-testid="mention-parser"
+        variant={variant}
+        component={component}
+        className={className}>
         {parse(newValue, {
           replace: (domNode: any) => {
             if (domNode.name === 'a') {

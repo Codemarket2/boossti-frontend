@@ -49,6 +49,12 @@ $ yarn web:test:head
 ![cypress web](https://github.com/Codemarket2/drreamz-frontend2/blob/vivekt/images/cypress_web.jpg?raw=true)
 Build Web:
 
+If you only want to run a single test then you can use this command
+
+```sh
+$ yarn workspace @frontend/web run cypress run-ct --spec ./src/components/<path-to-your-test-file>
+```
+
 ```sh
 $ yarn web:build
 ```

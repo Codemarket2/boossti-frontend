@@ -61,7 +61,6 @@ export default function MediaList({
 interface IMediaProps {
   url: string;
   caption: string;
-  // type?: string;
   isVideo?: boolean;
   showIcon?: boolean;
   authenticated?: boolean;
@@ -69,7 +68,7 @@ interface IMediaProps {
   onCaptionChange: (arg: string) => void;
 }
 
-const Media = ({
+export const Media = ({
   url,
   caption,
   isVideo = false,
@@ -79,7 +78,7 @@ const Media = ({
   authenticated,
 }: IMediaProps) => {
   return (
-    <Grid xs={12} sm={6} item>
+    <Grid data-testid="media" xs={12} sm={6} item>
       <Paper variant="outlined">
         {showIcon && (
           <IconButton

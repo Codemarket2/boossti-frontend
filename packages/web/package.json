@@ -11,7 +11,7 @@
     "jest": "jest",
     "test": "npx cypress run-ct",
     "test:head": "npx cypress open-ct",
-    "cypress": "npx cypress open",
+    "cypress1": "npx cypress open",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },

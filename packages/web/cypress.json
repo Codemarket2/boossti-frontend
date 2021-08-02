@@ -1,6 +1,7 @@
 {
   "defaultCommandTimeout": 10000,
   "video": false,
+  "screenshotOnRunFailure": false,
   "component": {
     "componentFolder": "src",
     "testFiles": "**/*test.{js,jsx,ts,tsx}"

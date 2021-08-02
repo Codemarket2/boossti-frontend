@@ -7,18 +7,14 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import Paper from '@material-ui/core/Paper';
-import TextField from '@material-ui/core/TextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import SearchIcon from '@material-ui/icons/Search';
-import IconButton from '@material-ui/core/IconButton';
-import ClearIcon from '@material-ui/icons/Clear';
+import AddIcon from '@material-ui/icons/Add';
 import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
 import PostCard from './PostCard';
 import PostEditForm from './PostEditForm';
 import PostCardSkeleton from './PostCardSkeleton';
+import ListHeader from './ListHeader';
 
 export default function MyPostsList() {
   const {
@@ -43,43 +39,18 @@ export default function MyPostsList() {
         post={postsState.selectedPost}
       />
       <Backdrop open={deletePostLoading} />
-      <Paper
-        variant="outlined"
-        className="my-2 pr-1 d-flex justify-content-between align-items-center"
-        style={{ minHeight: 55 }}>
+      <ListHeader
+        search={postsState.search}
+        showSearch={postsState.showSearch}
+        onHide={() => postsSetState({ ...postsState, search: '', showSearch: false })}
+        onShow={() => postsSetState({ ...postsState, search: '', showSearch: true })}
+        onChange={(value) => postsSetState({ ...postsState, search: value })}>
         <Link href="/create-post">
-          <Button className="mx-3" variant="contained" color="primary">
+          <Button size="small" startIcon={<AddIcon />} variant="contained" color="primary">
             Create Post
           </Button>
         </Link>
-        {postsState.showSearch ? (
-          <TextField
-            size="small"
-            className="w-75"
-            // fullWidth
-            variant="outlined"
-            label="Search"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end" role="button">
-                  <IconButton
-                    className="mr-n3"
-                    onClick={() => postsSetState({ ...postsState, search: '', showSearch: false })}>
-                    <ClearIcon />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            value={postsState.search}
-            onChange={({ target: { value } }) => postsSetState({ ...postsState, search: value })}
-          />
-        ) : (
-          <IconButton
-            onClick={() => postsSetState({ ...postsState, search: '', showSearch: true })}>
-            <SearchIcon />
-          </IconButton>
-        )}
-      </Paper>
+      </ListHeader>
       {error || !data || !data.getMyPosts ? (
         <ErrorLoading error={error}>
           <PostCardSkeleton />

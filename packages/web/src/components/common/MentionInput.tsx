@@ -1,5 +1,5 @@
 import { MentionsInput, Mention } from 'react-mentions';
-import classNames from '../post/mention.module.css';
+import classNames from '../../utils/mention.module.css';
 import { useGetInUseLists } from '@frontend/shared/hooks/list';
 
 interface IProps {

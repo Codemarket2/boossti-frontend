@@ -22,9 +22,15 @@ interface IProps {
 export default function PostCard({ post, onClickMore = () => {}, authenticated = true }: IProps) {
   return (
     <Card className="my-3" variant="outlined">
+      <p data-testid="sample-p">{post.body}</p>
       <CardHeader
         avatar={
-          <Avatar aria-label="author" alt={post.createdBy.name} src={post.createdBy.picture} />
+          <Avatar
+            aria-label="author"
+            data-testid="author-picture"
+            alt={post.createdBy.name}
+            src={post.createdBy.picture}
+          />
         }
         action={
           <IconButton
@@ -33,17 +39,25 @@ export default function PostCard({ post, onClickMore = () => {}, authenticated =
             <MoreVertIcon />
           </IconButton>
         }
-        title={<Link href={`/user/${post.createdBy._id}`}>{post.createdBy.name}</Link>}
+        title={
+          <Link href={`/user/${post.createdBy._id}`}>
+            <a data-testid="author-name">{post.createdBy.name}</a>
+          </Link>
+        }
         subheader={
-          moment(post.createdAt) > moment().subtract(7, 'days')
-            ? moment(post.createdAt).fromNow()
-            : moment(post.createdAt).format('LL')
+          <span data-testid="post-timestamp">
+            {moment(post.createdAt) > moment().subtract(7, 'days')
+              ? moment(post.createdAt).fromNow()
+              : moment(post.createdAt).format('LL')}
+          </span>
         }
         // subheader={moment(post.createdAt).fromNow()}
         // subheader={moment(post.createdAt).format('LLL')}
       />
       <CardContent>
-        <MentionParser value={post.body} className="mb-1" authenticated={authenticated} />
+        <div data-testid="post-body">
+          <MentionParser value={post.body} className="mb-1" authenticated={authenticated} />
+        </div>
         <ImageList media={post.media} authenticated={authenticated} />
       </CardContent>
       <CardActions disableSpacing>

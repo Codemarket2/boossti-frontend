@@ -28,8 +28,6 @@ export default function PostScreen({ post, onClose = () => {} }: any) {
     data,
     loading,
     error,
-    // suggestions,
-    // onAdd,
     handleChange,
     handleSelectTag,
     handleOpenTagModel,
