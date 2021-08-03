@@ -22,7 +22,6 @@ interface IProps {
 export default function PostCard({ post, onClickMore = () => {}, authenticated = true }: IProps) {
   return (
     <Card className="my-3" variant="outlined">
-      <p data-testid="sample-p">{post.body}</p>
       <CardHeader
         avatar={
           <Avatar
