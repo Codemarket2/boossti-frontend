@@ -1,8 +1,6 @@
 import Tooltip from '@material-ui/core/Tooltip';
 import { useCreatePost } from '@frontend/shared/hooks/post';
 import Chip from '@material-ui/core/Chip';
-import Button from '@material-ui/core/Button';
-import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary';
 import InputGroup from '../common/InputGroup';
 import SelectTag from '../post/SelectTag';
 import ErrorLoading from '../common/ErrorLoading';
@@ -10,8 +8,8 @@ import LoadingButton from '../common/LoadingButton';
 import { onAlert } from '../../utils/alert';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { useFacebookSDK } from '../facebook/fbsdk';
-import ImageList from './ImageList';
 import MentionInput from '../common/MentionInput';
+import ImagePicker from '../common/ImagePicker';
 
 export default function PostScreen({ post, onClose = () => {} }: any) {
   const {
@@ -32,11 +30,6 @@ export default function PostScreen({ post, onClose = () => {} }: any) {
     handleSelectTag,
     handleOpenTagModel,
     onSave,
-    handleFileChange,
-    handleRemoveTempMedia,
-    handleRemoveMedia,
-    onTempCaptionChange,
-    onCaptionChange,
   } = useCreatePost({ onAlert, onSuccess, post });
 
   const postToGroup = (groupId: string, message) => {
@@ -111,33 +104,7 @@ export default function PostScreen({ post, onClose = () => {} }: any) {
         />
       </InputGroup>
       <InputGroup>
-        <input
-          id="contained-button-file"
-          type="file"
-          multiple
-          accept="image/*, video/*"
-          hidden
-          onChange={handleFileChange}
-        />
-        <label htmlFor="contained-button-file">
-          <Button
-            size="small"
-            variant="outlined"
-            component="span"
-            color="primary"
-            startIcon={<PhotoLibraryIcon />}>
-            Select Image/Video
-          </Button>
-        </label>
-        <ImageList
-          showIcon={true}
-          media={state.media}
-          tempMedia={state.tempMedia}
-          removeTempMedia={handleRemoveTempMedia}
-          removeMedia={handleRemoveMedia}
-          onTempCaptionChange={onTempCaptionChange}
-          onCaptionChange={onCaptionChange}
-        />
+        <ImagePicker state={state} setState={setState} />
       </InputGroup>
       <InputGroup>
         {data.getLists.data.map((list) => (

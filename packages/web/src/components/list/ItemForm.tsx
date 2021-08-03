@@ -1,20 +1,22 @@
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import TextField from '@material-ui/core/TextField';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import LoadingButton from '../common/LoadingButton';
 import InputGroup from '../common/InputGroup';
+import ImagePicker from '../common/ImagePicker';
 
 interface IProps {
   open: boolean;
   onClose: () => void;
   formik: any;
   edit: boolean;
+  state: any;
+  setState: any;
 }
-export default function ListForm({ open, onClose, formik, edit }: IProps) {
+export default function ListForm({ open, onClose, formik, edit, state, setState }: IProps) {
   return (
     <Dialog
       fullWidth
@@ -49,6 +51,9 @@ export default function ListForm({ open, onClose, formik, edit }: IProps) {
               error={formik.touched.description && Boolean(formik.errors.description)}
               helperText={formik.touched.description && formik.errors.description}
             />
+          </InputGroup>
+          <InputGroup>
+            <ImagePicker state={state} setState={setState} />
           </InputGroup>
         </DialogContent>
         <DialogActions>

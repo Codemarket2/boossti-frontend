@@ -9,6 +9,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import AddIcon from '@material-ui/icons/Add';
 import Divider from '@material-ui/core/Divider';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import Avatar from '@material-ui/core/Avatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Menu from '@material-ui/core/Menu';
@@ -74,8 +76,10 @@ export default function ListPage({ _id }: IProps) {
         onClose={() => setState({ ...state, showItemForm: false })}
         formik={itemFormik}
         edit={state.editItem}
+        state={state}
+        setState={setState}
       />
-      <Paper>
+      <Paper variant="outlined">
         <div className="pt-2 pl-3 d-flex justify-content-between align-items-center">
           <Typography variant="h5">List of {list.name}</Typography>
           <div>
@@ -109,6 +113,9 @@ export default function ListPage({ _id }: IProps) {
             <>
               <Divider />
               <ListItem>
+                <ListItemAvatar>
+                  <Avatar alt={item.title} src={item.media[0] && item.media[0].url} />
+                </ListItemAvatar>
                 <ListItemText
                   primary={`${index + 1} ${item.title}`}
                   secondary={item.description || null}
@@ -138,7 +145,12 @@ export default function ListPage({ _id }: IProps) {
               itemFormik.setFieldValue('title', state2.selectedItem.title, false);
               itemFormik.setFieldValue('description', state2.selectedItem.description || '', false);
               itemFormik.setFieldValue('_id', state2.selectedItem._id, false);
-              setState({ ...state, showItemForm: true, editItem: true });
+              setState({
+                ...state,
+                showItemForm: true,
+                editItem: true,
+                media: state2.selectedItem.media,
+              });
               setState2({ ...state2, showMenu: null });
             }}>
             <ListItemIcon className="mr-n4">

@@ -12,6 +12,8 @@ import {
 import { updateListAction, removeListAction } from '../../redux/actions/list';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
+import { fileUpload } from '../../utils/fileUpload';
+import { omitTypename } from '../../utils/omitTypename';
 
 const listItemFormValidationSchema = yup.object({
   title: yup.string().required('Title is required'),
@@ -58,6 +60,9 @@ export function useListCRUD({ _id, onListDelete, onItemDelete, onAlert }: IProps
     listdeleteLoading: false,
     itemdeleteLoading: false,
     editItem: false,
+    media: [],
+    tempMediaFiles: [],
+    tempMedia: [],
   });
   const [updateListMutation] = useMutation(UPDATE_LIST);
   const [deleteListMutation] = useMutation(DELETE_LIST);
@@ -75,11 +80,7 @@ export function useListCRUD({ _id, onListDelete, onItemDelete, onAlert }: IProps
     initialValues: listItemFormDefaultValue,
     validationSchema: listItemFormValidationSchema,
     onSubmit: async (values: IListItemFormValues) => {
-      if (state.editItem) {
-        await handleUpdateItem(values);
-      } else {
-        await handleAddItem(values);
-      }
+      await onSave(values);
     },
   });
 
@@ -90,6 +91,26 @@ export function useListCRUD({ _id, onListDelete, onItemDelete, onAlert }: IProps
       await onSubmitList(values);
     },
   });
+
+  const onSave = async (values: IListItemFormValues) => {
+    try {
+      let newMedia = [];
+      if (state.tempMediaFiles.length > 0) {
+        newMedia = await fileUpload(state.tempMediaFiles, '/list-items');
+        newMedia = newMedia.map((n, i) => ({ url: n, caption: state.tempMedia[i].caption }));
+      }
+      let media = [...state.media, ...newMedia];
+      media = media.map((m) => JSON.parse(JSON.stringify(m), omitTypename));
+      if (state.editItem) {
+        await handleUpdateItem({ ...values, media });
+      } else {
+        await handleAddItem({ ...values, media });
+      }
+    } catch (error) {
+      setState({ ...state, submitLoading: false });
+      onAlert('Error', error.message);
+    }
+  };
 
   const handleAddItem = async (payload) => {
     try {
@@ -109,6 +130,7 @@ export function useListCRUD({ _id, onListDelete, onItemDelete, onAlert }: IProps
       return onAlert('Error', error.message);
     }
   };
+
   const handleUpdateItem = async (payload) => {
     try {
       const { data: updateListItemData } = await updateListItemMutation({
@@ -127,6 +149,7 @@ export function useListCRUD({ _id, onListDelete, onItemDelete, onAlert }: IProps
       return onAlert('Error', error.message);
     }
   };
+
   const handleDeleteItem = async (deleteID: string) => {
     try {
       setState({

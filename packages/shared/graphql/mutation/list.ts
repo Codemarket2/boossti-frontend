@@ -27,8 +27,8 @@ export const DELETE_LIST = gql`
 `;
 
 export const ADD_LIST_ITEM = gql`
-  mutation MyMutation($listId: ID!, $title: String!, $description: String) {
-    addListItem(listId: $listId, title: $title, description: $description) {
+  mutation MyMutation($listId: ID!, $title: String!, $description: String, $media: [MediaInput]) {
+    addListItem(listId: $listId, title: $title, description: $description, media: $media) {
       _id
       name
       inUse
@@ -38,13 +38,29 @@ export const ADD_LIST_ITEM = gql`
         title
         description
         active
+        media {
+          url
+          caption
+        }
       }
     }
   }
 `;
 export const UPDATE_LIST_ITEM = gql`
-  mutation MyMutation($listId: ID!, $_id: ID!, $title: String, $description: String) {
-    updateListItem(listId: $listId, _id: $_id, title: $title, description: $description) {
+  mutation MyMutation(
+    $listId: ID!
+    $_id: ID!
+    $title: String
+    $description: String
+    $media: [MediaInput]
+  ) {
+    updateListItem(
+      listId: $listId
+      _id: $_id
+      title: $title
+      description: $description
+      media: $media
+    ) {
       _id
       name
       inUse
@@ -54,6 +70,10 @@ export const UPDATE_LIST_ITEM = gql`
         title
         description
         active
+        media {
+          url
+          caption
+        }
       }
     }
   }

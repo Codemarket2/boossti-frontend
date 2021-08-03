@@ -15,7 +15,7 @@ export default function AlignItemsList() {
 
   return (
     <>
-      <Paper className="mb-4">
+      <Paper className="mb-4" variant="outlined">
         <TextField
           fullWidth
           variant="outlined"
@@ -41,7 +41,7 @@ export default function AlignItemsList() {
       {loading ? (
         <Loading />
       ) : (
-        <Paper>
+        <Paper variant="outlined">
           <List className="py-0">
             {allData.users.map((user) => (
               <UserCard

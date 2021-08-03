@@ -25,6 +25,10 @@ export const GET_INUSE_LISTS = gql`
           _id
           title
           description
+          media {
+            url
+            caption
+          }
         }
       }
     }
@@ -43,6 +47,10 @@ export const GET_LIST = gql`
         title
         description
         active
+        media {
+          url
+          caption
+        }
       }
     }
   }
