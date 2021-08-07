@@ -18,7 +18,7 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import DarkModeToggle from '../common/DarkModeToggle';
-import { useGetLists } from '@frontend/shared/hooks/list';
+// import { useGetLists } from '@frontend/shared/hooks/list';
 import ListForm from '../list/ListForm';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -47,12 +47,12 @@ const checkActiveListRoute = (activeRoute, _id) => {
 
 export default function AdminDrawer({ darkMode }: TProps) {
   const classes = useStyles();
-  const { formik, state, loading, handleShowForm, handleCloseForm } = useGetLists();
+  // const { formik, state, loading, handleShowForm, handleCloseForm } = useGetLists();
   const list = useSelector(({ list }: any) => list);
   const [activeRoute, setActiveRoute] = useState({
     pathname: '/',
     _id: '',
-    showList: false,
+    showList: true,
   });
   const router = useRouter();
 
@@ -88,8 +88,20 @@ export default function AdminDrawer({ darkMode }: TProps) {
           {activeRoute.showList ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
         <Collapse in={activeRoute.showList} timeout="auto" unmountOnExit>
-          <List dense component="div" disablePadding>
-            {loading ? (
+          <List component="div" disablePadding>
+            <Divider />
+            <Link href={`/admin/list/types`}>
+              <StyledListItem button selected={checkActiveRoute(activeRoute, '/admin/list/types')}>
+                <ListItemText primary="List Types" />
+              </StyledListItem>
+            </Link>
+            <Divider />
+            <Link href={`/admin/list/items`}>
+              <StyledListItem button selected={checkActiveRoute(activeRoute, '/admin/list/items')}>
+                <ListItemText primary="List Items" />
+              </StyledListItem>
+            </Link>
+            {/* {loading ? (
               <StyledListItem className="justify-content-center" button>
                 <CircularProgress />
               </StyledListItem>
@@ -112,7 +124,7 @@ export default function AdminDrawer({ darkMode }: TProps) {
                   </Link>
                 ))}
               </>
-            )}
+            )} */}
           </List>
         </Collapse>
         <Divider />
@@ -127,7 +139,7 @@ export default function AdminDrawer({ darkMode }: TProps) {
         </Link>
       </List>
       <Divider />
-      <ListForm open={state.showForm} formik={formik} onClose={handleCloseForm} />
+      {/* <ListForm open={state.showForm} formik={formik} onClose={handleCloseForm} /> */}
     </div>
   );
 }

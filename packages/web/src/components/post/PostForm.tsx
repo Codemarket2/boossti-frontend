@@ -107,7 +107,7 @@ export default function PostScreen({ post, onClose = () => {} }: any) {
         <ImagePicker state={state} setState={setState} />
       </InputGroup>
       <InputGroup>
-        {data.getLists.data.map((list) => (
+        {data.getListTypes.data.map((list) => (
           <Tooltip key={list._id} title={`Select ${list.name}`}>
             <Chip
               onClick={() => handleOpenTagModel(list)}

@@ -3,7 +3,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 const InitialLoading = () => {
   return (
-    <div className="text-center pt-5 mt-5">
+    <div className="text-center py-5 my-5">
       <CircularProgress />
     </div>
   );

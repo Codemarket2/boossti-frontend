@@ -1,6 +1,6 @@
 import { MentionsInput, Mention } from 'react-mentions';
 import classNames from '../../utils/mention.module.css';
-import { useGetInUseLists } from '@frontend/shared/hooks/list';
+import { useMentionList } from '@frontend/shared/hooks/list';
 
 interface IProps {
   value: string;
@@ -15,7 +15,7 @@ export default function MentionInput({
   minHeight = 0,
   placeholder = "What's on your mind ?",
 }: IProps) {
-  const { state, setState, data, suggestions } = useGetInUseLists();
+  const { suggestions, state, setState, data } = useMentionList();
 
   const handleChange = ({ target }: any) => {
     target.value = target.value.split('@@@^^^@@@__').join('@@@^^^ @@@__');
@@ -29,10 +29,9 @@ export default function MentionInput({
       let textAfterCursorPosition = value.substring(startPos, endPos - 1);
       let newString =
         textBeforeCursorPosition + `@@@__${id}^^__${display}@@@^^^@` + textAfterCursorPosition;
-      const selectedList = data.getLists.data.filter((list) => list._id === id)[0];
       setState({
         ...state,
-        selectedList,
+        selectedType: id,
         showSubList: true,
       });
       return onChange(newString);

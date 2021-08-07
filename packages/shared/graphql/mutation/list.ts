@@ -1,85 +1,77 @@
 import { gql } from '@apollo/client';
 
-export const CREATE_LIST = gql`
+export const CREATE_LIST_TYPE = gql`
   mutation MyMutation($name: String!) {
-    createList(name: $name) {
+    createListType(name: $name) {
       _id
       name
-      inUse
-      active
     }
   }
 `;
-
-export const UPDATE_LIST = gql`
+export const UPDATE_LIST_TYPE = gql`
   mutation MyMutation($_id: ID!, $name: String) {
-    updateList(_id: $_id, name: $name) {
+    updateListType(_id: $_id, name: $name) {
       _id
       name
     }
   }
 `;
 
-export const DELETE_LIST = gql`
+export const DELETE_LIST_TYPE = gql`
   mutation MyMutation($_id: ID!) {
-    deleteList(_id: $_id)
+    deleteListType(_id: $_id)
   }
 `;
 
-export const ADD_LIST_ITEM = gql`
-  mutation MyMutation($listId: ID!, $title: String!, $description: String, $media: [MediaInput]) {
-    addListItem(listId: $listId, title: $title, description: $description, media: $media) {
+export const CREATE_LIST_ITEM = gql`
+  mutation MyMutation($types: [ID!], $title: String!, $description: String, $media: [MediaInput]) {
+    createListItem(types: $types, title: $title, description: $description, media: $media) {
       _id
-      name
-      inUse
-      active
-      items {
+      title
+      description
+      types {
         _id
-        title
-        description
-        active
-        media {
-          url
-          caption
-        }
+        name
+      }
+      media {
+        url
+        caption
       }
     }
   }
 `;
 export const UPDATE_LIST_ITEM = gql`
   mutation MyMutation(
-    $listId: ID!
     $_id: ID!
-    $title: String
+    $types: [ID!]
+    $title: String!
     $description: String
     $media: [MediaInput]
   ) {
     updateListItem(
-      listId: $listId
       _id: $_id
+      types: $types
       title: $title
       description: $description
       media: $media
     ) {
       _id
-      name
-      inUse
-      active
-      items {
+      title
+      description
+      types {
         _id
-        title
-        description
-        active
-        media {
-          url
-          caption
-        }
+        name
+      }
+      media {
+        url
+        caption
       }
     }
   }
 `;
+
 export const DELETE_LIST_ITEM = gql`
-  mutation MyMutation($listId: ID!, $_id: ID!) {
-    deleteListItem(listId: $listId, _id: $_id)
+  mutation MyMutation($_id: ID!) {
+    deleteListItem(_id: $_id)
   }
 `;
