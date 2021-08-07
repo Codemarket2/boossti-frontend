@@ -1,18 +1,28 @@
 import { gql } from '@apollo/client';
 
 export const CREATE_LIST_TYPE = gql`
-  mutation MyMutation($name: String!) {
-    createListType(name: $name) {
+  mutation MyMutation($name: String!, $description: String, $media: [MediaInput]) {
+    createListType(name: $name, description: $description, media: $media) {
       _id
       name
+      description
+      media {
+        url
+        caption
+      }
     }
   }
 `;
 export const UPDATE_LIST_TYPE = gql`
-  mutation MyMutation($_id: ID!, $name: String) {
-    updateListType(_id: $_id, name: $name) {
+  mutation MyMutation($_id: ID!, $name: String, $description: String, $media: [MediaInput]) {
+    updateListType(_id: $_id, name: $name, description: $description, media: $media) {
       _id
       name
+      description
+      media {
+        url
+        caption
+      }
     }
   }
 `;

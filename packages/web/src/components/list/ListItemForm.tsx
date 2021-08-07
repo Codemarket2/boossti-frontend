@@ -19,15 +19,6 @@ import InputGroup from '../common/InputGroup';
 import ErrorLoading from '../common/ErrorLoading';
 import ImagePicker from '../common/ImagePicker';
 
-const names = [
-  { name: 'Oliver Hansen', _id: '121' },
-  { name: 'rhtr', _id: '122' },
-  { name: 'dw Hansen', _id: '123' },
-  { name: 'e2 Hansen', _id: '124' },
-  { name: 'rth Hansen', _id: '125' },
-  { name: 'tyu', _id: '126' },
-];
-
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -58,21 +49,6 @@ export default function ListForm({
   setState,
 }: IProps) {
   const { data, loading, error } = useGetListTypes();
-  // const [lisTypes, setLisTypes] = useState([]);
-
-  // const handleChange = (event: any) => {
-  //   console.log('event.target.value', JSON.parse(event.target.value[0]));
-  //   setLisTypes(event.target.value);
-  // };
-
-  // useEffect(() => {
-  //   if (data && data.getListTypes) {
-  //     console.log('data.getListItems', data.getListTypes);
-  //     setLisTypes(data.getListTypes.data.map((t) => JSON.stringify(t)));
-  //   }
-  // }, [data]);
-
-  // console.log('lisTypes', lisTypes);
 
   return (
     <Dialog
@@ -157,6 +133,7 @@ export default function ListForm({
               />
             </InputGroup>
             <InputGroup>
+              <InputLabel htmlFor="my-input">Images/Video</InputLabel>
               <ImagePicker state={state} setState={setState} />
             </InputGroup>
           </DialogContent>

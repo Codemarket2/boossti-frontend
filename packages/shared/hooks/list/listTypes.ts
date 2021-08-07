@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useQuery, useMutation } from '@apollo/client';
 import { CREATE_LIST_TYPE, UPDATE_LIST_TYPE, DELETE_LIST_TYPE } from '../../graphql/mutation/list';
 import { GET_LIST_TYPES } from '../../graphql/query/list';
 import { IHooksProps } from '../../types/common';
+import { fileUpload } from '../../utils/fileUpload';
+import { omitTypename } from '../../utils/omitTypename';
 
 const defaultGetListTypes = { limit: 100, page: 1 };
 
@@ -24,12 +26,14 @@ interface IListTypesFormValues {
   _id: string;
   edit: boolean;
   name: string;
+  description: string;
 }
 
 const listTypesDefaultValue = {
   _id: '',
   edit: false,
   name: '',
+  description: '',
 };
 
 export function useCRUDListTypes({ onAlert }: IHooksProps) {
@@ -37,6 +41,9 @@ export function useCRUDListTypes({ onAlert }: IHooksProps) {
     showForm: false,
     showCRUDMenu: null,
     selectedListType: null,
+    media: [],
+    tempMediaFiles: [],
+    tempMedia: [],
   });
 
   const [createListTypeMutation, { loading: createLoading }] = useMutation(CREATE_LIST_TYPE);
@@ -48,13 +55,30 @@ export function useCRUDListTypes({ onAlert }: IHooksProps) {
     validationSchema: listTypesValidationSchema,
     onSubmit: async (payload: IListTypesFormValues) => {
       try {
-        if (payload.edit) {
-          await onUpdate(payload);
+        let newMedia = [];
+        let newPayload: any = { ...payload };
+        if (state.tempMediaFiles.length > 0) {
+          newMedia = await fileUpload(state.tempMediaFiles, '/list-items');
+          newMedia = newMedia.map((n, i) => ({ url: n, caption: state.tempMedia[i].caption }));
+        }
+        let media = [...state.media, ...newMedia];
+        media = media.map((m) => JSON.parse(JSON.stringify(m), omitTypename));
+        newPayload = { ...newPayload, media };
+        if (newPayload.edit) {
+          await onUpdate(newPayload);
         } else {
-          await onCreate(payload);
+          await onCreate(newPayload);
         }
         listTypeFormik.handleReset('');
-        setState({ ...state, showForm: false, showCRUDMenu: null, selectedListType: null });
+        setState({
+          ...state,
+          showForm: false,
+          showCRUDMenu: null,
+          selectedListType: null,
+          media: [],
+          tempMediaFiles: [],
+          tempMedia: [],
+        });
       } catch (error) {
         onAlert('Error', error.message);
       }
@@ -114,18 +138,6 @@ export function useCRUDListTypes({ onAlert }: IHooksProps) {
     });
   };
 
-  const handleShowForm = (edit?: boolean) => {
-    if (edit) {
-      listTypeFormik.setFieldValue('edit', true, false);
-      listTypeFormik.setFieldValue('name', state.selectedListType.name, false);
-      listTypeFormik.setFieldValue('_id', state.selectedListType._id, false);
-      setState({ ...state, showForm: true });
-    } else {
-      listTypeFormik.handleReset('');
-      setState({ ...state, showForm: true });
-    }
-  };
-
   const handleDelete = async () => {
     try {
       const deleteInCache = (client) => {
@@ -153,6 +165,33 @@ export function useCRUDListTypes({ onAlert }: IHooksProps) {
       setState({ ...state, showCRUDMenu: null, selectedListType: null });
     } catch (error) {
       onAlert('Error', error.message);
+    }
+  };
+
+  const handleShowForm = (edit?: boolean) => {
+    if (edit) {
+      // console.log('state.selectedListType.media', state.selectedListType.description);
+      listTypeFormik.setFieldValue('edit', true, false);
+      listTypeFormik.setFieldValue('name', state.selectedListType.name, false);
+      listTypeFormik.setFieldValue('description', state.selectedListType.description, false);
+      listTypeFormik.setFieldValue('_id', state.selectedListType._id, false);
+      setState({
+        ...state,
+        showForm: true,
+        media: state.selectedListType.media,
+        tempMediaFiles: [],
+        tempMedia: [],
+        showCRUDMenu: null,
+      });
+    } else {
+      listTypeFormik.handleReset('');
+      setState({
+        ...state,
+        showForm: true,
+        media: [],
+        tempMediaFiles: [],
+        tempMedia: [],
+      });
     }
   };
 

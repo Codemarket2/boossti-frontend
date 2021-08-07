@@ -1,5 +1,6 @@
 import parse from 'html-react-parser';
 import Typography from '@material-ui/core/Typography';
+import Link from 'next/link';
 import Tooltip from '@material-ui/core/Tooltip';
 import { useCreateBookmark } from '@frontend/shared/hooks/boomark';
 import Menu from '@material-ui/core/Menu';
@@ -8,6 +9,7 @@ import Divider from '@material-ui/core/Divider';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
+import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 import Chip from '@material-ui/core/Chip';
 import { onAlert } from '../../utils/alert';
 import Backdrop from './Backdrop';
@@ -84,6 +86,14 @@ export default function MentionParser({
             />
           </MenuItem>
           <Divider />
+          <Link href={`/list/${bookmarkState.selectedTag && bookmarkState.selectedTag._id}`}>
+            <MenuItem>
+              <ListItemIcon className="mr-n4">
+                <OpenInNewIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Go to Page" />
+            </MenuItem>
+          </Link>
           <MenuItem
             onClick={async () => {
               if (authenticated) {

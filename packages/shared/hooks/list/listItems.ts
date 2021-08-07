@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useQuery, useMutation } from '@apollo/client';
@@ -71,7 +71,6 @@ export function useCRUDListItems({ onAlert }: IHooksProps) {
           newMedia = newMedia.map((n, i) => ({ url: n, caption: state.tempMedia[i].caption }));
         }
         let media = [...state.media, ...newMedia];
-
         media = media.map((m) => JSON.parse(JSON.stringify(m), omitTypename));
         newPayload = { ...newPayload, media };
         let types = payload.types.map((t) => JSON.parse(t)._id);
@@ -93,7 +92,6 @@ export function useCRUDListItems({ onAlert }: IHooksProps) {
           tempMedia: [],
         });
       } catch (error) {
-        console.log('Error', error);
         onAlert('Error', error.message);
       }
     },
@@ -150,31 +148,6 @@ export function useCRUDListItems({ onAlert }: IHooksProps) {
     });
   };
 
-  const handleShowForm = (edit?: boolean) => {
-    if (edit) {
-      listItemFormik.setFieldValue('edit', true, false);
-      listItemFormik.setFieldValue('title', state.selectedListItem.title, false);
-      listItemFormik.setFieldValue('description', state.selectedListItem.description, false);
-      listItemFormik.setFieldValue(
-        'types',
-        state.selectedListItem.types.map((t) => JSON.stringify(t)),
-        false,
-      );
-      listItemFormik.setFieldValue('_id', state.selectedListItem._id, false);
-      setState({
-        ...state,
-        showForm: true,
-        media: state.selectedListItem.media,
-        tempMediaFiles: [],
-        tempMedia: [],
-        showCRUDMenu: null,
-      });
-    } else {
-      listItemFormik.handleReset('');
-      setState({ ...state, showForm: true, media: [], tempMediaFiles: [], tempMedia: [] });
-    }
-  };
-
   const handleDelete = async () => {
     const deleteInCache = (client) => {
       const { getListItems } = client.readQuery({
@@ -199,6 +172,31 @@ export function useCRUDListItems({ onAlert }: IHooksProps) {
       update: deleteInCache,
     });
     setState({ ...state, showCRUDMenu: null, selectedListItem: null });
+  };
+
+  const handleShowForm = (edit?: boolean) => {
+    if (edit) {
+      listItemFormik.setFieldValue('edit', true, false);
+      listItemFormik.setFieldValue('title', state.selectedListItem.title, false);
+      listItemFormik.setFieldValue('description', state.selectedListItem.description, false);
+      listItemFormik.setFieldValue(
+        'types',
+        state.selectedListItem.types.map((t) => JSON.stringify(t)),
+        false,
+      );
+      listItemFormik.setFieldValue('_id', state.selectedListItem._id, false);
+      setState({
+        ...state,
+        showForm: true,
+        media: state.selectedListItem.media,
+        tempMediaFiles: [],
+        tempMedia: [],
+        showCRUDMenu: null,
+      });
+    } else {
+      listItemFormik.handleReset('');
+      setState({ ...state, showForm: true, media: [], tempMediaFiles: [], tempMedia: [] });
+    }
   };
 
   const CRUDLoading = createLoading || updateLoading || deleteLoading;

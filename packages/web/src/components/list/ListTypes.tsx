@@ -9,6 +9,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import AddIcon from '@material-ui/icons/Add';
+import Avatar from '@material-ui/core/Avatar';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import { useGetListTypes, useCRUDListTypes } from '@frontend/shared/hooks/list';
 import Backdrop from '../common/Backdrop';
 import ErrorLoading from '../common/ErrorLoading';
@@ -30,7 +32,7 @@ export default function ListTypes() {
   });
   return (
     <>
-      <Backdrop open={CRUDLoading} />
+      <Backdrop open={CRUDLoading || listTypeFormik.isSubmitting} />
       <Paper variant="outlined">
         <div className="px-3 py-1 d-flex justify-content-between align-items-center">
           <Typography variant="h5">List Types</Typography>
@@ -51,7 +53,10 @@ export default function ListTypes() {
               <>
                 {i > 0 && <Divider />}
                 <ListItem key={t._id}>
-                  <ListItemText primary={t.name} />
+                  <ListItemAvatar>
+                    <Avatar alt={t.title} src={t.media[0] && t.media[0].url} />
+                  </ListItemAvatar>
+                  <ListItemText primary={t.name} secondary={t.description} />
                   <ListItemSecondaryAction>
                     <IconButton
                       edge="end"
@@ -75,6 +80,8 @@ export default function ListTypes() {
         open={state.showForm}
         onClose={() => setState({ ...state, showForm: false })}
         formik={listTypeFormik}
+        state={state}
+        setState={setState}
       />
       <CRUDMenu
         show={state.showCRUDMenu}

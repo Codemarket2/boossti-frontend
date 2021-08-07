@@ -7,6 +7,11 @@ export const GET_LIST_TYPES = gql`
       data {
         _id
         name
+        description
+        media {
+          url
+          caption
+        }
         inUse
         active
       }
@@ -56,13 +61,16 @@ export const GET_LIST_ITEMS_BY_TYPE = gql`
   }
 `;
 
-// export const GET_LIST = gql`
-//   query MyQuery($_id: ID!) {
-//     getList(_id: $_id) {
-//       _id
-//       name
-//       inUse
-//       active
-//     }
-//   }
-// `;
+export const GET_LIST = gql`
+  query MyQuery($_id: ID!) {
+    getList(_id: $_id) {
+      __typename
+      ... on ListType {
+        _id
+      }
+      ... on ListItem {
+        _id
+      }
+    }
+  }
+`;

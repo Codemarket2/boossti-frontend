@@ -32,7 +32,7 @@ export default function ListItems() {
   });
   return (
     <>
-      <Backdrop open={CRUDLoading} />
+      <Backdrop open={CRUDLoading || listItemFormik.isSubmitting} />
       <Paper variant="outlined">
         <div className="px-3 py-1 d-flex justify-content-between align-items-center">
           <Typography variant="h5">List Items</Typography>
@@ -56,7 +56,7 @@ export default function ListItems() {
                   <ListItemAvatar>
                     <Avatar alt={t.title} src={t.media[0] && t.media[0].url} />
                   </ListItemAvatar>
-                  <ListItemText primary={t.title} />
+                  <ListItemText primary={t.title} secondary={t.description} />
                   <ListItemSecondaryAction>
                     <IconButton
                       edge="end"
