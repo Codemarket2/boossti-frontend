@@ -5,8 +5,7 @@ import { Divider } from '@material-ui/core';
 import { Topbar } from './components';
 
 const useStyles = makeStyles(() => ({
-  root: {
-  },
+  root: {},
   content: {
     height: '100%',
   },
@@ -16,7 +15,7 @@ interface Props {
   children: React.ReactNode;
   themeMode: string;
   className?: string;
-};
+}
 
 const Minimal = ({ themeMode, children, className }: Props): JSX.Element => {
   const classes = useStyles();

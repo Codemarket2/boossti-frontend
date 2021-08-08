@@ -2,7 +2,7 @@ import { useUserFeeds } from '@frontend/shared/hooks/post';
 import ErrorLoading from '../common/ErrorLoading';
 import PostCard from './PostCard';
 import PostCardSkeleton from './PostCardSkeleton';
-import ListHeader from './ListHeader';
+import ListHeader from '../common/ListHeader';
 
 export default function FeedsList({ userId }) {
   const { data, error, loading, state: postsState, setState: postsSetState } = useUserFeeds({

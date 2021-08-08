@@ -3,30 +3,41 @@ import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useQuery, useMutation } from '@apollo/client';
 import { CREATE_LIST_ITEM, UPDATE_LIST_ITEM, DELETE_LIST_ITEM } from '../../graphql/mutation/list';
-import { GET_LIST_ITEMS } from '../../graphql/query/list';
+import { GET_LIST_ITEMS_BY_TYPE, GET_LIST_ITEM_BY_SLUG } from '../../graphql/query/list';
 import { IHooksProps } from '../../types/common';
 import { fileUpload } from '../../utils/fileUpload';
 import { omitTypename } from '../../utils/omitTypename';
 
 const defaultGetListItems = { limit: 100, page: 1 };
 
-export function useGetListItems() {
-  const { data, error, loading } = useQuery(GET_LIST_ITEMS, {
-    variables: defaultGetListItems,
+export function useGetListItemsByType({ types }: any) {
+  const [state, setState] = useState({
+    search: '',
+    showSearch: false,
+  });
+  const { data, error, loading } = useQuery(GET_LIST_ITEMS_BY_TYPE, {
+    variables: { ...defaultGetListItems, types: types, search: state.search },
+    fetchPolicy: 'cache-and-network',
   });
 
-  // console.log('data, error, loading ', data, error, loading);
+  return { data, error, loading, state, setState };
+}
 
+export function useGetListItemBySlug({ slug }: any) {
+  const { data, error, loading } = useQuery(GET_LIST_ITEM_BY_SLUG, {
+    variables: { slug },
+    fetchPolicy: 'cache-and-network',
+  });
   return { data, error, loading };
 }
 
 const listItemsValidationSchema = yup.object({
   title: yup.string().required('Title is required'),
-  types: yup
-    .array()
-    .min(1, 'Select atleast select one type')
-    .required('Select atleast select one type')
-    .nullable(),
+  // types: yup
+  //   .array()
+  //   .min(1, 'Select atleast select one type')
+  //   .required('Select atleast select one type')
+  //   .nullable(),
 });
 
 interface IListItemsFormValues {
@@ -42,10 +53,15 @@ const listItemsDefaultValue = {
   edit: false,
   title: '',
   description: '',
-  types: [],
+  // types: [],
 };
 
-export function useCRUDListItems({ onAlert }: IHooksProps) {
+interface IProps extends IHooksProps {
+  types: [string];
+  createCallBack: () => void;
+}
+
+export function useCRUDListItems({ onAlert, types, createCallBack }: IProps) {
   const [state, setState] = useState({
     showForm: false,
     showCRUDMenu: null,
@@ -59,7 +75,7 @@ export function useCRUDListItems({ onAlert }: IHooksProps) {
   const [updateListTypeMutation, { loading: updateLoading }] = useMutation(UPDATE_LIST_ITEM);
   const [deleteListTypeMutation, { loading: deleteLoading }] = useMutation(DELETE_LIST_ITEM);
 
-  const listItemFormik = useFormik({
+  const formik = useFormik({
     initialValues: listItemsDefaultValue,
     validationSchema: listItemsValidationSchema,
     onSubmit: async (payload: IListItemsFormValues) => {
@@ -72,16 +88,17 @@ export function useCRUDListItems({ onAlert }: IHooksProps) {
         }
         let media = [...state.media, ...newMedia];
         media = media.map((m) => JSON.parse(JSON.stringify(m), omitTypename));
-        newPayload = { ...newPayload, media };
-        let types = payload.types.map((t) => JSON.parse(t)._id);
-        newPayload = { ...newPayload, types };
+        newPayload = { ...newPayload, media, types };
+        // let types = payload.types.map((t) => JSON.parse(t)._id);
+        // newPayload = { ...newPayload, types };
 
         if (newPayload.edit) {
           await onUpdate(newPayload);
         } else {
           await onCreate(newPayload);
         }
-        listItemFormik.handleReset('');
+        formik.handleReset('');
+        createCallBack();
         setState({
           ...state,
           showForm: false,
@@ -98,33 +115,33 @@ export function useCRUDListItems({ onAlert }: IHooksProps) {
   });
 
   const onCreate = async (payload) => {
-    const createInCache = (client, mutationResult) => {
-      const { getListItems } = client.readQuery({
-        query: GET_LIST_ITEMS,
-        variables: defaultGetListItems,
-      });
-      const newData = {
-        getListItems: {
-          ...getListItems,
-          data: [...getListItems.data, mutationResult.data.createListItem],
-        },
-      };
-      client.writeQuery({
-        query: GET_LIST_ITEMS,
-        variables: defaultGetListItems,
-        data: newData,
-      });
-    };
+    // const createInCache = (client, mutationResult) => {
+    //   const { getListItems } = client.readQuery({
+    //     query: GET_LIST_ITEMS_BY_TYPE,
+    //     variables: defaultGetListItems,
+    //   });
+    //   const newData = {
+    //     getListItems: {
+    //       ...getListItems,
+    //       data: [...getListItems.data, mutationResult.data.createListItem],
+    //     },
+    //   };
+    //   client.writeQuery({
+    //     query: GET_LIST_ITEMS_BY_TYPE,
+    //     variables: defaultGetListItems,
+    //     data: newData,
+    //   });
+    // };
     await createListTypeMutation({
       variables: payload,
-      update: createInCache,
+      // update: createInCache,
     });
   };
 
   const onUpdate = async (payload) => {
     const updateInCache = (client, mutationResult) => {
       const { getListItems } = client.readQuery({
-        query: GET_LIST_ITEMS,
+        query: GET_LIST_ITEMS_BY_TYPE,
         variables: defaultGetListItems,
       });
 
@@ -137,7 +154,7 @@ export function useCRUDListItems({ onAlert }: IHooksProps) {
         },
       };
       client.writeQuery({
-        query: GET_LIST_ITEMS,
+        query: GET_LIST_ITEMS_BY_TYPE,
         variables: defaultGetListItems,
         data: newData,
       });
@@ -151,7 +168,7 @@ export function useCRUDListItems({ onAlert }: IHooksProps) {
   const handleDelete = async () => {
     const deleteInCache = (client) => {
       const { getListItems } = client.readQuery({
-        query: GET_LIST_ITEMS,
+        query: GET_LIST_ITEMS_BY_TYPE,
         variables: defaultGetListItems,
       });
 
@@ -162,7 +179,7 @@ export function useCRUDListItems({ onAlert }: IHooksProps) {
         },
       };
       client.writeQuery({
-        query: GET_LIST_ITEMS,
+        query: GET_LIST_ITEMS_BY_TYPE,
         variables: defaultGetListItems,
         data: newData,
       });
@@ -176,15 +193,15 @@ export function useCRUDListItems({ onAlert }: IHooksProps) {
 
   const handleShowForm = (edit?: boolean) => {
     if (edit) {
-      listItemFormik.setFieldValue('edit', true, false);
-      listItemFormik.setFieldValue('title', state.selectedListItem.title, false);
-      listItemFormik.setFieldValue('description', state.selectedListItem.description, false);
-      listItemFormik.setFieldValue(
+      formik.setFieldValue('edit', true, false);
+      formik.setFieldValue('title', state.selectedListItem.title, false);
+      formik.setFieldValue('description', state.selectedListItem.description, false);
+      formik.setFieldValue(
         'types',
         state.selectedListItem.types.map((t) => JSON.stringify(t)),
         false,
       );
-      listItemFormik.setFieldValue('_id', state.selectedListItem._id, false);
+      formik.setFieldValue('_id', state.selectedListItem._id, false);
       setState({
         ...state,
         showForm: true,
@@ -194,12 +211,12 @@ export function useCRUDListItems({ onAlert }: IHooksProps) {
         showCRUDMenu: null,
       });
     } else {
-      listItemFormik.handleReset('');
+      formik.handleReset('');
       setState({ ...state, showForm: true, media: [], tempMediaFiles: [], tempMedia: [] });
     }
   };
 
   const CRUDLoading = createLoading || updateLoading || deleteLoading;
 
-  return { state, setState, listItemFormik, handleShowForm, handleDelete, CRUDLoading };
+  return { state, setState, formik, handleShowForm, handleDelete, CRUDLoading };
 }

@@ -1,11 +1,11 @@
-import React from 'react';
+import { ReactNode } from 'react';
 import { useSelector } from 'react-redux';
 import UnAuthorised from './UnAuthorised';
 import NotFound from './NotFound';
 import InitialLoading from './InitialLoading';
 
 interface IProps {
-  children: React.ReactNode;
+  children: ReactNode;
   redirectPath?: string;
   mustAdmin?: boolean;
 }

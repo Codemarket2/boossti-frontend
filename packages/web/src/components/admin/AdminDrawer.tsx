@@ -18,8 +18,6 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import DarkModeToggle from '../common/DarkModeToggle';
-// import { useGetLists } from '@frontend/shared/hooks/list';
-import ListForm from '../list/ListForm';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -41,14 +39,13 @@ const StyledListItem = styled(ListItem)`
 const checkActiveRoute = (activeRoute, linkPathname) => {
   return activeRoute.pathname === linkPathname;
 };
+
 const checkActiveListRoute = (activeRoute, _id) => {
   return activeRoute.pathname === '/admin/list/[_id]' && activeRoute._id === _id;
 };
 
 export default function AdminDrawer({ darkMode }: TProps) {
   const classes = useStyles();
-  // const { formik, state, loading, handleShowForm, handleCloseForm } = useGetLists();
-  const list = useSelector(({ list }: any) => list);
   const [activeRoute, setActiveRoute] = useState({
     pathname: '/',
     _id: '',

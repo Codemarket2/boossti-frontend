@@ -1,11 +1,12 @@
 import { gql } from '@apollo/client';
 
 export const GET_LIST_TYPES = gql`
-  query MyQuery($limit: Int, $page: Int) {
-    getListTypes(limit: $limit, page: $page) {
+  query MyQuery($limit: Int, $page: Int, $search: String) {
+    getListTypes(limit: $limit, page: $page, search: $search) {
       count
       data {
         _id
+        slug
         name
         description
         media {
@@ -19,38 +20,19 @@ export const GET_LIST_TYPES = gql`
   }
 `;
 
-export const GET_LIST_ITEMS = gql`
-  query MyQuery($limit: Int, $page: Int) {
-    getListItems(limit: $limit, page: $page) {
-      count
-      data {
-        _id
-        title
-        description
-        types {
-          _id
-          name
-        }
-        media {
-          url
-          caption
-        }
-      }
-    }
-  }
-`;
-
 export const GET_LIST_ITEMS_BY_TYPE = gql`
-  query MyQuery($limit: Int, $page: Int, $types: [ID]) {
-    getListItems(limit: $limit, page: $page, types: $types) {
+  query MyQuery($limit: Int, $page: Int, $types: [ID], $search: String) {
+    getListItems(limit: $limit, page: $page, types: $types, search: $search) {
       count
       data {
         _id
+        slug
         title
         description
         types {
           _id
           name
+          slug
         }
         media {
           url
@@ -61,15 +43,34 @@ export const GET_LIST_ITEMS_BY_TYPE = gql`
   }
 `;
 
-export const GET_LIST = gql`
-  query MyQuery($_id: ID!) {
-    getList(_id: $_id) {
-      __typename
-      ... on ListType {
-        _id
+export const GET_LIST_TYPE_BY_SLUG = gql`
+  query MyQuery($slug: String!) {
+    getListTypeBySlug(slug: $slug) {
+      _id
+      slug
+      name
+      description
+      media {
+        url
+        caption
       }
-      ... on ListItem {
+      inUse
+      active
+    }
+  }
+`;
+
+export const GET_LIST_ITEM_BY_SLUG = gql`
+  query MyQuery($slug: String!) {
+    getListItemBySlug(slug: $slug) {
+      _id
+      slug
+      title
+      description
+      types {
         _id
+        name
+        slug
       }
     }
   }

@@ -1,4 +1,3 @@
-export { useCRUDListTypes, useGetListTypes } from './listTypes';
-export { useCRUDListItems, useGetListItems } from './listItems';
+export { useCRUDListTypes, useGetListTypes, useGetListTypeBySlug } from './listTypes';
+export { useCRUDListItems, useGetListItemsByType, useGetListItemBySlug } from './listItems';
 export { useMentionList } from './mentionList';
-export { useGetList } from './list';

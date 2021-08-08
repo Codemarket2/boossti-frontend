@@ -1,42 +1,40 @@
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
 import TextField from '@material-ui/core/TextField';
-import DialogActions from '@material-ui/core/DialogActions';
+import Paper from '@material-ui/core/Paper';
+import { useRouter } from 'next/router';
 import Button from '@material-ui/core/Button';
 import InputLabel from '@material-ui/core/InputLabel';
 import AddCircle from '@material-ui/icons/AddCircle';
+import Link from 'next/link';
 import LoadingButton from '../common/LoadingButton';
 import InputGroup from '../common/InputGroup';
 import ImagePicker from '../common/ImagePicker';
+import { useCRUDListTypes } from '@frontend/shared/hooks/list';
+import { onAlert } from '../../utils/alert';
+import Backdrop from '../common/Backdrop';
 
-interface IProps {
-  open: boolean;
-  onClose: () => void;
-  formik: any;
-  disabled?: boolean;
-  state: any;
-  setState: any;
-}
-export default function ListForm({
-  open,
-  onClose,
-  formik,
-  disabled = false,
-  state,
-  setState,
-}: IProps) {
+// interface IProps {
+//   open: boolean;
+//   onClose: () => void;
+//   formik: any;
+//   disabled?: boolean;
+//   state: any;
+//   setState: any;
+// }
+
+export default function ListTypeForm() {
+  const router = useRouter();
+  const createCallBack = (slug) => {
+    router.push(`/types/${slug}`);
+  };
+  const { state, setState, formik, CRUDLoading } = useCRUDListTypes({
+    onAlert,
+    createCallBack,
+  });
   return (
-    <Dialog
-      fullWidth
-      open={open}
-      onClose={formik.isSubmitting ? null : onClose}
-      aria-labelledby="form-dialog-title">
-      <DialogTitle id="form-dialog-title">
-        {formik.values.edit ? 'Update List Type' : 'Add List Type'}
-      </DialogTitle>
-      <form onSubmit={formik.handleSubmit}>
-        <DialogContent>
+    <>
+      <Backdrop open={CRUDLoading || formik.isSubmitting} />
+      <Paper className="px-3" variant="outlined">
+        <form onSubmit={formik.handleSubmit}>
           <InputGroup>
             <TextField
               fullWidth
@@ -80,16 +78,18 @@ export default function ListForm({
               Add new field
             </Button>
           </InputGroup>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={onClose} disabled={formik.isSubmitting} color="primary">
-            Cancel
-          </Button>
-          <LoadingButton type="submit" color="primary" loading={formik.isSubmitting}>
-            Submit
-          </LoadingButton>
-        </DialogActions>
-      </form>
-    </Dialog>
+          <InputGroup>
+            <LoadingButton type="submit" color="primary" loading={formik.isSubmitting}>
+              {formik.values.edit ? 'Update' : 'Create'}
+            </LoadingButton>
+            <Link href="/types">
+              <Button className="ml-2" disabled={formik.isSubmitting} color="primary">
+                Cancel
+              </Button>
+            </Link>
+          </InputGroup>
+        </form>
+      </Paper>
+    </>
   );
 }

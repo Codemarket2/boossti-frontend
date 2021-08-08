@@ -5,6 +5,7 @@ export const CREATE_LIST_TYPE = gql`
     createListType(name: $name, description: $description, media: $media) {
       _id
       name
+      slug
       description
       media {
         url
@@ -18,6 +19,7 @@ export const UPDATE_LIST_TYPE = gql`
     updateListType(_id: $_id, name: $name, description: $description, media: $media) {
       _id
       name
+      slug
       description
       media {
         url
@@ -38,10 +40,12 @@ export const CREATE_LIST_ITEM = gql`
     createListItem(types: $types, title: $title, description: $description, media: $media) {
       _id
       title
+      slug
       description
       types {
         _id
         name
+        slug
       }
       media {
         url
@@ -67,10 +71,12 @@ export const UPDATE_LIST_ITEM = gql`
     ) {
       _id
       title
+      slug
       description
       types {
         _id
         name
+        slug
       }
       media {
         url

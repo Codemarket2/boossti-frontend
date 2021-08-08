@@ -1,23 +1,17 @@
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
+import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
-import DialogActions from '@material-ui/core/DialogActions';
-import FormHelperText from '@material-ui/core/FormHelperText';
+import { useRouter } from 'next/router';
 import Button from '@material-ui/core/Button';
+import Link from 'next/link';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
-import Input from '@material-ui/core/Input';
-import Chip from '@material-ui/core/Chip';
-import MenuItem from '@material-ui/core/MenuItem';
-import Checkbox from '@material-ui/core/Checkbox';
-import Select from '@material-ui/core/Select';
-import ListItemText from '@material-ui/core/ListItemText';
-import { useGetListTypes } from '@frontend/shared/hooks/list';
+import { useCRUDListItems } from '@frontend/shared/hooks/list';
 import LoadingButton from '../common/LoadingButton';
 import InputGroup from '../common/InputGroup';
-import ErrorLoading from '../common/ErrorLoading';
 import ImagePicker from '../common/ImagePicker';
+import { onAlert } from '../../utils/alert';
+import Backdrop from '../common/Backdrop';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -31,122 +25,69 @@ const MenuProps = {
 };
 
 interface IProps {
-  open: boolean;
-  handleChangeTypes: (arg: any) => void;
-  onClose: () => void;
-  formik: any;
-  disabled?: boolean;
-  state: any;
-  setState: any;
+  slug: string;
+  types: [string];
 }
-export default function ListForm({
-  open,
-  onClose,
-  formik,
-  disabled = false,
-  handleChangeTypes,
-  state,
-  setState,
-}: IProps) {
-  const { data, loading, error } = useGetListTypes();
+export default function ListItemForm({ slug, types }: IProps) {
+  const router = useRouter();
+  const createCallBack = () => {
+    router.push(`/types/${slug}`);
+  };
+  const { state, setState, formik, handleShowForm, handleDelete, CRUDLoading } = useCRUDListItems({
+    onAlert,
+    types,
+    createCallBack,
+  });
 
   return (
-    <Dialog
-      fullWidth
-      open={open}
-      onClose={formik.isSubmitting ? null : onClose}
-      aria-labelledby="form-dialog-title">
-      <DialogTitle id="form-dialog-title">
-        {formik.values.edit ? 'Update List Item' : 'Add List Item'}
-      </DialogTitle>
-      {error || !data ? (
-        <ErrorLoading error={error} />
-      ) : (
+    <>
+      <Backdrop open={CRUDLoading || formik.isSubmitting} />
+      <Paper className="px-3" variant="outlined">
         <form onSubmit={formik.handleSubmit}>
-          <DialogContent>
-            <InputGroup>
-              <FormControl className="w-100">
-                <InputLabel id="demo-mutiple-checkbox-label">Types</InputLabel>
-                <Select
-                  labelId="demo-mutiple-checkbox-label"
-                  id="demo-mutiple-checkbox"
-                  multiple
-                  value={formik.values.types}
-                  onChange={(event) => handleChangeTypes(event.target.value)}
-                  input={<Input />}
-                  renderValue={(selected) => (
-                    <div className="d-flex flex-wrap">
-                      {(selected as string[]).map((value, i) => (
-                        <Chip
-                          className="m-1"
-                          color="primary"
-                          key={i}
-                          label={JSON.parse(value).name}
-                        />
-                      ))}
-                    </div>
-                  )}
-                  MenuProps={MenuProps}>
-                  {data.getListTypes.data.map((t) => (
-                    <MenuItem key={t._id} value={JSON.stringify(t)}>
-                      <Checkbox
-                        checked={
-                          formik.values.types.filter((st: any) => JSON.parse(st)._id === t._id)
-                            .length > 0
-                        }
-                      />
-                      <ListItemText primary={t.name} />
-                    </MenuItem>
-                  ))}
-                </Select>
-                {formik.errors.types && (
-                  <FormHelperText className="text-danger">{formik.errors.types}</FormHelperText>
-                )}
-              </FormControl>
-            </InputGroup>
-            <InputGroup>
-              <TextField
-                fullWidth
-                variant="outlined"
-                label="Title*"
-                name="title"
-                type="text"
-                disabled={formik.isSubmitting}
-                value={formik.values.title}
-                onChange={formik.handleChange}
-                error={formik.touched.title && Boolean(formik.errors.title)}
-                helperText={formik.touched.title && formik.errors.title}
-              />
-            </InputGroup>
-            <InputGroup>
-              <TextField
-                fullWidth
-                variant="outlined"
-                label="Description*"
-                name="description"
-                type="text"
-                disabled={formik.isSubmitting}
-                value={formik.values.description}
-                onChange={formik.handleChange}
-                error={formik.touched.description && Boolean(formik.errors.description)}
-                helperText={formik.touched.description && formik.errors.description}
-              />
-            </InputGroup>
-            <InputGroup>
-              <InputLabel htmlFor="my-input">Images/Video</InputLabel>
-              <ImagePicker state={state} setState={setState} />
-            </InputGroup>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={onClose} disabled={formik.isSubmitting} color="primary">
-              Cancel
-            </Button>
+          <InputGroup>
+            <TextField
+              fullWidth
+              variant="outlined"
+              label="Title*"
+              name="title"
+              type="text"
+              disabled={formik.isSubmitting}
+              value={formik.values.title}
+              onChange={formik.handleChange}
+              error={formik.touched.title && Boolean(formik.errors.title)}
+              helperText={formik.touched.title && formik.errors.title}
+            />
+          </InputGroup>
+          <InputGroup>
+            <TextField
+              fullWidth
+              variant="outlined"
+              label="Description*"
+              name="description"
+              type="text"
+              disabled={formik.isSubmitting}
+              value={formik.values.description}
+              onChange={formik.handleChange}
+              error={formik.touched.description && Boolean(formik.errors.description)}
+              helperText={formik.touched.description && formik.errors.description}
+            />
+          </InputGroup>
+          <InputGroup>
+            <InputLabel htmlFor="my-input">Images/Video</InputLabel>
+            <ImagePicker state={state} setState={setState} />
+          </InputGroup>
+          <InputGroup>
             <LoadingButton type="submit" color="primary" loading={formik.isSubmitting}>
-              Submit
+              {formik.values.edit ? 'Update' : 'Create'}
             </LoadingButton>
-          </DialogActions>
+            <Link href={`/types/${slug}`}>
+              <Button className="ml-2" disabled={formik.isSubmitting} color="primary">
+                Cancel
+              </Button>
+            </Link>
+          </InputGroup>
         </form>
-      )}
-    </Dialog>
+      </Paper>
+    </>
   );
 }

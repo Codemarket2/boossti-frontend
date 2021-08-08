@@ -1,4 +1,4 @@
-import React from 'react';
+import { ReactNode } from 'react';
 import Head from 'next/head';
 import { useSelector } from 'react-redux';
 import projectConfig from '@frontend/shared';
@@ -12,12 +12,14 @@ import styled from 'styled-components';
 
 const StyledPaper = styled(Paper)`
   background-color: ${(props) => props.theme.palette.background.level2} !important;
+  min-height: 100vh !important;
 `;
 
 interface IProps {
   title?: string;
-  children: React.ReactNode;
+  children: ReactNode;
   authRequired?: boolean;
+  mustAdmin?: boolean;
   redirectPath?: string;
 }
 
@@ -25,6 +27,7 @@ const UserLayout = ({
   children,
   title = projectConfig.title,
   authRequired = false,
+  mustAdmin = false,
   redirectPath,
 }: IProps) => {
   const authenticated = useSelector(({ auth }: any) => auth.authenticated);
@@ -37,7 +40,9 @@ const UserLayout = ({
       <AppBar />
       <Container>
         {authRequired ? (
-          <AuthRequired redirectPath={redirectPath}>{children}</AuthRequired>
+          <AuthRequired redirectPath={redirectPath} mustAdmin={mustAdmin}>
+            {children}
+          </AuthRequired>
         ) : (
           children
         )}

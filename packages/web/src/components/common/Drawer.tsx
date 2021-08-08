@@ -1,15 +1,11 @@
 import React from 'react';
 import Drawer from '@material-ui/core/Drawer';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-import SupervisorAccount from '@material-ui/icons/SupervisorAccount';
-import Link from 'next/link';
 import DarkModeToggle from './DarkModeToggle';
+import AdminDrawerList from '../admin/AdminDrawerList';
 
 interface IProps {
   openDrawer: boolean;
@@ -35,26 +31,9 @@ export default function DrawerContent({ openDrawer, setOpenDrawer, darkMode, adm
       </div>
       <Divider />
       <List style={{ minWidth: 300 }}>
-        {/* <ListItem button>
-          <ListItemIcon>
-            <Settings />
-          </ListItemIcon>
-          <ListItemText primary="Settings" />
-        </ListItem> */}
-        {/* <Divider /> */}
         <DarkModeToggle darkMode={darkMode} />
         <Divider />
-        {admin && (
-          <Link href="/admin">
-            <ListItem button>
-              <ListItemIcon>
-                <SupervisorAccount />
-              </ListItemIcon>
-              <ListItemText primary="Admin" />
-            </ListItem>
-          </Link>
-        )}
-        <Divider />
+        {admin && <AdminDrawerList />}
       </List>
     </Drawer>
   );
