@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_LIST_TYPES, GET_LIST_ITEMS_BY_TYPE } from '../../graphql/query/list';
 
-const defaultGetListTypes = { limit: 100, page: 1 };
+const defaultGetListTypes = { limit: 100, page: 1, search: '' };
 
 export function useMentionList() {
   const [state, setState] = useState({
