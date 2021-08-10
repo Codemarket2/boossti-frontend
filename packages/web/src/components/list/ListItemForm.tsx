@@ -1,10 +1,9 @@
-import Typography from '@material-ui/core/Typography';
+import { useEffect } from 'react';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import { useRouter } from 'next/router';
 import Button from '@material-ui/core/Button';
 import Link from 'next/link';
-import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import { useCRUDListItems } from '@frontend/shared/hooks/list';
 import LoadingButton from '../common/LoadingButton';
@@ -13,31 +12,40 @@ import ImagePicker from '../common/ImagePicker';
 import { onAlert } from '../../utils/alert';
 import Backdrop from '../common/Backdrop';
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
-
 interface IProps {
-  slug: string;
+  typeSlug: string;
   types: [string];
+  item?: any;
+  updateCallBack?: () => void;
+  onCancel?: () => void;
 }
-export default function ListItemForm({ slug, types }: IProps) {
+export default function ListItemForm({
+  typeSlug,
+  types,
+  item = null,
+  updateCallBack,
+  onCancel,
+}: IProps) {
   const router = useRouter();
-  const createCallBack = () => {
-    router.push(`/types/${slug}`);
+  const createCallBack = (itemSlug) => {
+    router.push(`/types/${typeSlug}/${itemSlug}`);
   };
-  const { state, setState, formik, handleShowForm, handleDelete, CRUDLoading } = useCRUDListItems({
+  const { state, setState, formik, setFormValues, CRUDLoading } = useCRUDListItems({
     onAlert,
     types,
     createCallBack,
+    updateCallBack,
   });
+
+  useEffect(() => {
+    if (item) {
+      setFormValues(item);
+    }
+  }, [item]);
+
+  const defaultOnCancel = () => {
+    router.push(`/types/${typeSlug}`);
+  };
 
   return (
     <>
@@ -80,11 +88,13 @@ export default function ListItemForm({ slug, types }: IProps) {
             <LoadingButton type="submit" color="primary" loading={formik.isSubmitting}>
               {formik.values.edit ? 'Update' : 'Create'}
             </LoadingButton>
-            <Link href={`/types/${slug}`}>
-              <Button className="ml-2" disabled={formik.isSubmitting} color="primary">
-                Cancel
-              </Button>
-            </Link>
+            <Button
+              onClick={onCancel ? onCancel : defaultOnCancel}
+              className="ml-2"
+              disabled={formik.isSubmitting}
+              color="primary">
+              Cancel
+            </Button>
           </InputGroup>
         </form>
       </Paper>

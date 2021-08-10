@@ -51,10 +51,11 @@ const listTypesDefaultValue = {
 };
 
 interface IProps extends IHooksProps {
-  createCallBack: (slug: string) => void;
+  createCallBack?: (slug: string) => void;
+  updateCallBack?: (slug: string) => void;
 }
 
-export function useCRUDListTypes({ onAlert, createCallBack }: IProps) {
+export function useCRUDListTypes({ onAlert, createCallBack, updateCallBack }: IProps) {
   const [state, setState] = useState({
     showForm: false,
     showCRUDMenu: null,
@@ -66,7 +67,6 @@ export function useCRUDListTypes({ onAlert, createCallBack }: IProps) {
 
   const [createListTypeMutation, { loading: createLoading }] = useMutation(CREATE_LIST_TYPE);
   const [updateListTypeMutation, { loading: updateLoading }] = useMutation(UPDATE_LIST_TYPE);
-  const [deleteListTypeMutation, { loading: deleteLoading }] = useMutation(DELETE_LIST_TYPE);
 
   const formik = useFormik({
     initialValues: listTypesDefaultValue,
@@ -132,89 +132,74 @@ export function useCRUDListTypes({ onAlert, createCallBack }: IProps) {
 
   const onUpdate = async (payload) => {
     const updateInCache = (client, mutationResult) => {
-      const { getListTypes } = client.readQuery({
-        query: GET_LIST_TYPES,
-        variables: defaultGetListTypes,
+      const { getListTypeBySlug } = client.readQuery({
+        query: GET_LIST_TYPE_BY_SLUG,
+        variables: { slug: mutationResult.data.updateListType.slug },
       });
-
       const newData = {
-        getListTypes: {
-          ...getListTypes,
-          data: getListTypes.data.map((b) =>
-            b._id === state.selectedListType._id ? mutationResult.data.updateListType : b,
-          ),
-        },
+        getListTypeBySlug: mutationResult.data.updateListType,
       };
       client.writeQuery({
-        query: GET_LIST_TYPES,
-        variables: defaultGetListTypes,
+        query: GET_LIST_TYPE_BY_SLUG,
+        variables: { slug: mutationResult.data.updateListType.slug },
         data: newData,
       });
     };
-    await updateListTypeMutation({
+    const res = await updateListTypeMutation({
       variables: payload,
       update: updateInCache,
     });
+    updateCallBack(res.data.updateListType.slug);
   };
 
-  const handleDelete = async () => {
-    try {
-      const deleteInCache = (client) => {
-        const { getListTypes } = client.readQuery({
-          query: GET_LIST_TYPES,
-          variables: defaultGetListTypes,
-        });
+  const setFormValues = (vType: any) => {
+    formik.setFieldValue('edit', true, false);
+    formik.setFieldValue('name', vType.name, false);
+    formik.setFieldValue('description', vType.description, false);
+    formik.setFieldValue('_id', vType._id, false);
+    setState({
+      ...state,
+      media: vType.media,
+      tempMediaFiles: [],
+      tempMedia: [],
+    });
+  };
 
-        const newData = {
-          getListTypes: {
-            ...getListTypes,
-            data: getListTypes.data.filter((b) => b._id !== state.selectedListType._id),
-          },
-        };
-        client.writeQuery({
-          query: GET_LIST_TYPES,
-          variables: defaultGetListTypes,
-          data: newData,
-        });
-      };
+  const CRUDLoading = createLoading || updateLoading;
+
+  return { state, setState, formik, setFormValues, CRUDLoading };
+}
+
+export function useDeleteListType({ onAlert }: IHooksProps) {
+  const [deleteListTypeMutation, { loading: deleteLoading }] = useMutation(DELETE_LIST_TYPE);
+  const handleDelete = async (_id: any, deleteCallBack: any) => {
+    try {
+      // const deleteInCache = (client) => {
+      //   const { getListTypes } = client.readQuery({
+      //     query: GET_LIST_TYPES,
+      //     variables: defaultGetListTypes,
+      //   });
+
+      //   const newData = {
+      //     getListTypes: {
+      //       ...getListTypes,
+      //       data: getListTypes.data.filter((b) => b._id !== state.selectedListType._id),
+      //     },
+      //   };
+      //   client.writeQuery({
+      //     query: GET_LIST_TYPES,
+      //     variables: defaultGetListTypes,
+      //     data: newData,
+      //   });
+      // };
       await deleteListTypeMutation({
-        variables: { _id: state.selectedListType._id },
-        update: deleteInCache,
+        variables: { _id },
+        // update: deleteInCache,
       });
-      setState({ ...state, showCRUDMenu: null, selectedListType: null });
     } catch (error) {
       onAlert('Error', error.message);
     }
   };
 
-  const handleShowForm = (edit?: boolean) => {
-    if (edit) {
-      // console.log('state.selectedListType.media', state.selectedListType.description);
-      formik.setFieldValue('edit', true, false);
-      formik.setFieldValue('name', state.selectedListType.name, false);
-      formik.setFieldValue('description', state.selectedListType.description, false);
-      formik.setFieldValue('_id', state.selectedListType._id, false);
-      setState({
-        ...state,
-        showForm: true,
-        media: state.selectedListType.media,
-        tempMediaFiles: [],
-        tempMedia: [],
-        showCRUDMenu: null,
-      });
-    } else {
-      formik.handleReset('');
-      setState({
-        ...state,
-        showForm: true,
-        media: [],
-        tempMediaFiles: [],
-        tempMedia: [],
-      });
-    }
-  };
-
-  const CRUDLoading = createLoading || updateLoading || deleteLoading;
-
-  return { state, setState, formik, handleShowForm, handleDelete, CRUDLoading };
+  return { handleDelete, deleteLoading };
 }

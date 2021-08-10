@@ -15,6 +15,7 @@ interface IProps {
   search: string;
   children?: ReactNode;
   button?: ReactNode;
+  buttonClass?: string;
 }
 
 export default function ListHeader({
@@ -25,13 +26,14 @@ export default function ListHeader({
   search,
   children,
   button,
+  buttonClass = 'justify-content-end',
 }: IProps) {
   return (
     <Paper
-      className="px-2 my-y d-flex flex-row-reverse justify-content-between align-items-center"
+      className="px-2 d-flex flex-row-reverse justify-content-between align-items-center"
       variant="outlined"
       style={{ minHeight: 60 }}>
-      <div className="d-flex align-items-center w-100 justify-content-end">
+      <div className={`d-flex align-items-center w-100 ${buttonClass}`}>
         {showSearch ? (
           <TextField
             size="small"

@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
@@ -12,24 +13,33 @@ import { useCRUDListTypes } from '@frontend/shared/hooks/list';
 import { onAlert } from '../../utils/alert';
 import Backdrop from '../common/Backdrop';
 
-// interface IProps {
-//   open: boolean;
-//   onClose: () => void;
-//   formik: any;
-//   disabled?: boolean;
-//   state: any;
-//   setState: any;
-// }
+interface IProps {
+  vType?: any;
+  updateCallBack?: () => void;
+  onCancel?: () => void;
+}
 
-export default function ListTypeForm() {
+export default function ListTypeForm({ vType = null, updateCallBack, onCancel }: IProps) {
   const router = useRouter();
   const createCallBack = (slug) => {
     router.push(`/types/${slug}`);
   };
-  const { state, setState, formik, CRUDLoading } = useCRUDListTypes({
+
+  const defaultOnCancel = () => {
+    router.push('/types');
+  };
+
+  const { state, setState, formik, CRUDLoading, setFormValues } = useCRUDListTypes({
     onAlert,
     createCallBack,
+    updateCallBack,
   });
+
+  useEffect(() => {
+    if (vType) {
+      setFormValues(vType);
+    }
+  }, [vType]);
   return (
     <>
       <Backdrop open={CRUDLoading || formik.isSubmitting} />
@@ -82,11 +92,13 @@ export default function ListTypeForm() {
             <LoadingButton type="submit" color="primary" loading={formik.isSubmitting}>
               {formik.values.edit ? 'Update' : 'Create'}
             </LoadingButton>
-            <Link href="/types">
-              <Button className="ml-2" disabled={formik.isSubmitting} color="primary">
-                Cancel
-              </Button>
-            </Link>
+            <Button
+              onClick={onCancel ? onCancel : defaultOnCancel}
+              className="ml-2"
+              disabled={formik.isSubmitting}
+              color="primary">
+              Cancel
+            </Button>
           </InputGroup>
         </form>
       </Paper>

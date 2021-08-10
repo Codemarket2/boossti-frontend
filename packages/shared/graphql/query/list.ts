@@ -67,6 +67,10 @@ export const GET_LIST_ITEM_BY_SLUG = gql`
       slug
       title
       description
+      media {
+        url
+        caption
+      }
       types {
         _id
         name

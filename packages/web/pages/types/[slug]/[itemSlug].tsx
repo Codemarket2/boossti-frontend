@@ -4,9 +4,9 @@ import Loading from '../../../src/components/common/Loading';
 
 export default function Page() {
   const router = useRouter();
-  const { itemSlug } = router.query;
-  if (itemSlug) {
-    return <ItemScreen slug={itemSlug} />;
+  const { itemSlug, slug } = router.query;
+  if (itemSlug && slug) {
+    return <ItemScreen slug={itemSlug} typeSlug={slug} />;
   }
   return <Loading />;
 }
