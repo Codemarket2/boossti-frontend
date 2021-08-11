@@ -43,7 +43,7 @@ export default function Screen({ slug, typeSlug }: IProps) {
       <Breadcrumbs>
         <Link href="/types">Types</Link>
         <Link href={`/types/${data.getListItemBySlug.types[0].slug}`}>
-          <a>{data.getListItemBySlug.types[0].name}</a>
+          <a>{data.getListItemBySlug.types[0].title}</a>
         </Link>
         <Typography color="textPrimary">{data.getListItemBySlug.title}</Typography>
       </Breadcrumbs>

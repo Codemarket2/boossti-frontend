@@ -49,21 +49,21 @@ export default function ListTypeForm({ vType = null, updateCallBack, onCancel }:
             <TextField
               fullWidth
               variant="outlined"
-              label="Name*"
-              name="name"
+              label="Title*"
+              name="title"
               type="text"
               disabled={formik.isSubmitting}
-              value={formik.values.name}
+              value={formik.values.title}
               onChange={formik.handleChange}
-              error={formik.touched.name && Boolean(formik.errors.name)}
-              helperText={formik.touched.name && formik.errors.name}
+              error={formik.touched.title && Boolean(formik.errors.title)}
+              helperText={formik.touched.title && formik.errors.title}
             />
           </InputGroup>
           <InputGroup>
             <TextField
               fullWidth
               variant="outlined"
-              label="Description*"
+              label="Description"
               name="description"
               type="text"
               disabled={formik.isSubmitting}

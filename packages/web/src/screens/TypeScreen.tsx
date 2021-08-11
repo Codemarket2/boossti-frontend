@@ -40,7 +40,7 @@ export default function Screen({ slug }: IProps) {
     <UserLayout authRequired>
       <Breadcrumbs>
         <Link href="/types">Types</Link>
-        <Typography color="textPrimary">{data.getListTypeBySlug.name}</Typography>
+        <Typography color="textPrimary">{data.getListTypeBySlug.title}</Typography>
       </Breadcrumbs>
       {state.vType ? (
         <ListTypeForm
@@ -52,7 +52,7 @@ export default function Screen({ slug }: IProps) {
         <>
           <Paper variant="outlined" className="p-2 mb-2">
             <div className="d-flex justify-content-between align-content-center align-items-center">
-              <Typography variant="h4">{data.getListTypeBySlug.name}</Typography>
+              <Typography variant="h4">{data.getListTypeBySlug.title}</Typography>
               <ActionButtons
                 onEdit={() => setState({ ...state, vType: { ...data.getListTypeBySlug } })}
                 onDelete={() => {
@@ -69,7 +69,7 @@ export default function Screen({ slug }: IProps) {
           </Paper>
           <ListItems
             types={[data.getListTypeBySlug._id]}
-            name={data.getListTypeBySlug.name}
+            name={data.getListTypeBySlug.title}
             slug={data.getListTypeBySlug.slug}
           />
         </>

@@ -8,34 +8,18 @@ import List from '@material-ui/core/List';
 import Link from 'next/link';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import SearchIcon from '@material-ui/icons/Search';
 import AddIcon from '@material-ui/icons/Add';
 import Avatar from '@material-ui/core/Avatar';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import { useGetListTypes, useCRUDListTypes } from '@frontend/shared/hooks/list';
-import Backdrop from '../common/Backdrop';
+import { useGetListTypes } from '@frontend/shared/hooks/list';
 import ErrorLoading from '../common/ErrorLoading';
 import ListHeader from '../common/ListHeader';
-// import ListTypeForm from './ListTypeForm';
-// import CRUDMenu from '../common/CRUDMenu';
-// import { onAlert } from '../../utils/alert';
 
 export default function ListTypes() {
   const { data, loading, error, state, setState } = useGetListTypes();
-  // const {
-  //   state,
-  //   setState,
-  //   listTypeFormik,
-  //   handleShowForm,
-  //   handleDelete,
-  //   CRUDLoading,
-  // } = useCRUDListTypes({
-  //   onAlert,
-  // });
+
   return (
     <>
-      {/* <Backdrop open={CRUDLoading || listTypeFormik.isSubmitting} /> */}
       <ListHeader
         button={
           <Link href="/types/new">
@@ -72,20 +56,7 @@ export default function ListTypes() {
                     <ListItemAvatar>
                       <Avatar alt={t.title} src={t.media[0] && t.media[0].url} />
                     </ListItemAvatar>
-                    <ListItemText primary={t.name} secondary={t.description} />
-                    {/* <ListItemSecondaryAction>
-                    <IconButton
-                      edge="end"
-                      onClick={(event) =>
-                        setState({
-                          ...state,
-                          showCRUDMenu: event.currentTarget,
-                          selectedListType: t,
-                        })
-                      }>
-                      <MoreHorizIcon />
-                    </IconButton>
-                  </ListItemSecondaryAction> */}
+                    <ListItemText primary={t.title} secondary={t.description} />
                   </ListItem>
                 </Link>
               </>
@@ -93,19 +64,6 @@ export default function ListTypes() {
           </List>
         )}
       </Paper>
-      {/* <ListTypeForm
-        open={state.showForm}
-        onClose={() => setState({ ...state, showForm: false })}
-        formik={listTypeFormik}
-        state={state}
-        setState={setState}
-      /> */}
-      {/* <CRUDMenu
-        show={state.showCRUDMenu}
-        onClose={() => setState({ ...state, showCRUDMenu: null, selectedListType: null })}
-        onEdit={() => handleShowForm(true)}
-        onDelete={handleDelete}
-      /> */}
     </>
   );
 }

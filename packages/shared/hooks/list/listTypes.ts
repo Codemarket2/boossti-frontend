@@ -21,6 +21,8 @@ export function useGetListTypes() {
     fetchPolicy: 'cache-and-network',
   });
 
+  console.log('data, error, loading', data, error, loading);
+
   return { data, error, loading, state, setState };
 }
 
@@ -33,20 +35,20 @@ export function useGetListTypeBySlug({ slug }: any) {
 }
 
 const listTypesValidationSchema = yup.object({
-  name: yup.string().required('Name is required'),
+  title: yup.string().required('Title is required'),
 });
 
 interface IListTypesFormValues {
   _id: string;
   edit: boolean;
-  name: string;
+  title: string;
   description: string;
 }
 
 const listTypesDefaultValue = {
   _id: '',
   edit: false,
-  name: '',
+  title: '',
   description: '',
 };
 
@@ -104,28 +106,8 @@ export function useCRUDListTypes({ onAlert, createCallBack, updateCallBack }: IP
   });
 
   const onCreate = async (payload) => {
-    // const createInCache = (client, mutationResult) => {
-    //   const { getListTypes } = client.readQuery({
-    //     query: GET_LIST_TYPES,
-    //     variables: defaultGetListTypes,
-    //   });
-
-    //   const newData = {
-    //     getListTypes: {
-    //       ...getListTypes,
-    //       data: [...getListTypes.data, mutationResult.data.createListType],
-    //     },
-    //   };
-
-    //   client.writeQuery({
-    //     query: GET_LIST_TYPES,
-    //     variables: defaultGetListTypes,
-    //     data: newData,
-    //   });
-    // };
     const res = await createListTypeMutation({
       variables: payload,
-      // update: createInCache,
     });
     createCallBack(res.data.createListType.slug);
   };
@@ -154,7 +136,7 @@ export function useCRUDListTypes({ onAlert, createCallBack, updateCallBack }: IP
 
   const setFormValues = (vType: any) => {
     formik.setFieldValue('edit', true, false);
-    formik.setFieldValue('name', vType.name, false);
+    formik.setFieldValue('title', vType.title, false);
     formik.setFieldValue('description', vType.description, false);
     formik.setFieldValue('_id', vType._id, false);
     setState({

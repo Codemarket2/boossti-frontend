@@ -7,7 +7,7 @@ export const GET_LIST_TYPES = gql`
       data {
         _id
         slug
-        name
+        title
         description
         media {
           url
@@ -31,7 +31,7 @@ export const GET_LIST_ITEMS_BY_TYPE = gql`
         description
         types {
           _id
-          name
+          title
           slug
         }
         media {
@@ -48,7 +48,7 @@ export const GET_LIST_TYPE_BY_SLUG = gql`
     getListTypeBySlug(slug: $slug) {
       _id
       slug
-      name
+      title
       description
       media {
         url
@@ -73,7 +73,7 @@ export const GET_LIST_ITEM_BY_SLUG = gql`
       }
       types {
         _id
-        name
+        title
         slug
       }
     }
