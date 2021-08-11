@@ -16,7 +16,7 @@ interface IProps {
   typeSlug: string;
   types: [string];
   item?: any;
-  updateCallBack?: () => void;
+  updateCallBack?: (arg: string) => void;
   onCancel?: () => void;
 }
 export default function ListItemForm({
@@ -73,6 +73,8 @@ export default function ListItemForm({
               label="Description*"
               name="description"
               type="text"
+              multiline
+              rows={4}
               disabled={formik.isSubmitting}
               value={formik.values.description}
               onChange={formik.handleChange}

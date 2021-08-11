@@ -27,11 +27,19 @@ export default function Screen({ slug, typeSlug }: IProps) {
   const deleteCallBack = () => {
     router.push(`/types/${typeSlug}`);
   };
+
+  const updateCallBack = (newSlug) => {
+    setState({ ...state, item: null });
+    if (newSlug !== slug) {
+      router.push(`/types/${typeSlug}/${newSlug}`);
+    }
+  };
   const { handleDelete, deleteLoading } = useDeleteListItem({ onAlert });
 
   const [state, setState] = useState({ item: null });
 
   const { data, loading, error } = useGetListItemBySlug({ slug });
+
   if (error || !data) {
     return <ErrorLoading error={error} />;
   } else if (!data.getListItemBySlug) {
@@ -53,7 +61,7 @@ export default function Screen({ slug, typeSlug }: IProps) {
           item={state.item}
           typeSlug={typeSlug}
           types={[data.getListItemBySlug.types[0]._id]}
-          updateCallBack={() => setState({ ...state, item: null })}
+          updateCallBack={updateCallBack}
           onCancel={() => setState({ ...state, item: null })}
         />
       ) : (

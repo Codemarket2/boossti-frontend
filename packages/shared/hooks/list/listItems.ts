@@ -53,7 +53,7 @@ const listItemsDefaultValue = {
 interface IProps extends IHooksProps {
   types?: [string];
   createCallBack?: (arg: string) => void;
-  updateCallBack?: () => void;
+  updateCallBack?: (arg: string) => void;
 }
 
 export function useCRUDListItems({ onAlert, types, createCallBack, updateCallBack }: IProps) {
@@ -84,22 +84,12 @@ export function useCRUDListItems({ onAlert, types, createCallBack, updateCallBac
         media = media.map((m) => JSON.parse(JSON.stringify(m), omitTypename));
         newPayload = { ...newPayload, media, types };
         if (newPayload.edit) {
-          await onUpdate(newPayload);
-          updateCallBack();
+          const res = await onUpdate(newPayload);
+          updateCallBack(res.data.updateListItem.slug);
         } else {
           let res = await onCreate(newPayload);
           createCallBack(res.data.createListItem.slug);
         }
-        // formik.handleReset('');
-        // setState({
-        //   ...state,
-        //   showForm: false,
-        //   showCRUDMenu: null,
-        //   selectedListItem: null,
-        //   media: [],
-        //   tempMediaFiles: [],
-        //   tempMedia: [],
-        // });
       } catch (error) {
         onAlert('Error', error.message);
       }

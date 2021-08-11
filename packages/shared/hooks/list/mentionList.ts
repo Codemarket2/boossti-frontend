@@ -28,7 +28,7 @@ export function useMentionList() {
 
   const listTypes =
     data && data.getListTypes
-      ? data.getListTypes.data.map((listType) => ({ id: listType._id, display: listType.name }))
+      ? data.getListTypes.data.map((listType) => ({ id: listType._id, display: listType.title }))
       : [];
 
   const suggestions = state.showSubList ? listItems : listTypes;

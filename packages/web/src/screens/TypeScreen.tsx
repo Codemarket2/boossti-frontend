@@ -21,8 +21,16 @@ interface IProps {
 
 export default function Screen({ slug }: IProps) {
   const router = useRouter();
+
   const deleteCallBack = () => {
     router.push(`/types`);
+  };
+
+  const updateCallBack = (newSlug) => {
+    setState({ ...state, vType: null });
+    if (newSlug !== slug) {
+      router.push(`/types/${newSlug}`);
+    }
   };
 
   const { data, loading, error } = useGetListTypeBySlug({ slug });
@@ -45,7 +53,7 @@ export default function Screen({ slug }: IProps) {
       {state.vType ? (
         <ListTypeForm
           vType={state.vType}
-          updateCallBack={() => setState({ ...state, vType: null })}
+          updateCallBack={updateCallBack}
           onCancel={() => setState({ ...state, vType: null })}
         />
       ) : (

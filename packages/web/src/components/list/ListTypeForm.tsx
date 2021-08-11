@@ -15,7 +15,7 @@ import Backdrop from '../common/Backdrop';
 
 interface IProps {
   vType?: any;
-  updateCallBack?: () => void;
+  updateCallBack?: (arg: string) => void;
   onCancel?: () => void;
 }
 
@@ -66,6 +66,8 @@ export default function ListTypeForm({ vType = null, updateCallBack, onCancel }:
               label="Description"
               name="description"
               type="text"
+              multiline
+              rows={4}
               disabled={formik.isSubmitting}
               value={formik.values.description}
               onChange={formik.handleChange}

@@ -108,11 +108,11 @@ export default function PostScreen({ post, onClose = () => {} }: any) {
       </InputGroup>
       <InputGroup>
         {data.getListTypes.data.map((list) => (
-          <Tooltip key={list._id} title={`Select ${list.name}`}>
+          <Tooltip key={list._id} title={`Select ${list.title}`}>
             <Chip
               onClick={() => handleOpenTagModel(list)}
               color="secondary"
-              label={list.name}
+              label={list.title}
               className="mr-1 mb-1"
               style={{ backgroundColor: '#f5f5f5' }}
             />
