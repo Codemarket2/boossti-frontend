@@ -6,10 +6,10 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 
 interface IProps {
-  onDelete: () => void;
-  onClose: () => void;
-  onEdit: () => void;
   show: any;
+  onClose: () => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
 }
 
 export default function CRUDMenu({ show, onDelete, onEdit, onClose }: IProps) {

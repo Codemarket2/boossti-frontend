@@ -3,7 +3,6 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import { useRouter } from 'next/router';
 import Button from '@material-ui/core/Button';
-import Link from 'next/link';
 import InputLabel from '@material-ui/core/InputLabel';
 import { useCRUDListItems } from '@frontend/shared/hooks/list';
 import LoadingButton from '../common/LoadingButton';

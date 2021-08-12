@@ -14,6 +14,7 @@ import NotFound from '../components/common/NotFound';
 import Backdrop from '../components/common/Backdrop';
 import ActionButtons from '../components/list/ActionButtons';
 import { onAlert } from '../utils/alert';
+import Fields from '../components/list/Fields';
 
 interface IProps {
   slug: any;
@@ -75,6 +76,7 @@ export default function Screen({ slug }: IProps) {
             <Typography>{data.getListTypeBySlug.description}</Typography>
             <ImageList media={data.getListTypeBySlug.media} />
           </Paper>
+          <Fields />
           <ListItems
             types={[data.getListTypeBySlug._id]}
             name={data.getListTypeBySlug.title}

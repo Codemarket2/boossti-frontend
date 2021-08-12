@@ -4,8 +4,6 @@ import Paper from '@material-ui/core/Paper';
 import { useRouter } from 'next/router';
 import Button from '@material-ui/core/Button';
 import InputLabel from '@material-ui/core/InputLabel';
-import AddCircle from '@material-ui/icons/AddCircle';
-import Link from 'next/link';
 import LoadingButton from '../common/LoadingButton';
 import InputGroup from '../common/InputGroup';
 import ImagePicker from '../common/ImagePicker';
@@ -79,17 +77,7 @@ export default function ListTypeForm({ vType = null, updateCallBack, onCancel }:
             <InputLabel htmlFor="my-input">Images/Video</InputLabel>
             <ImagePicker state={state} setState={setState} />
           </InputGroup>
-          <InputGroup>
-            <InputLabel htmlFor="my-input">Fields</InputLabel>
-            <Button
-              size="small"
-              variant="outlined"
-              component="span"
-              color="primary"
-              startIcon={<AddCircle />}>
-              Add new field
-            </Button>
-          </InputGroup>
+
           <InputGroup>
             <LoadingButton type="submit" color="primary" loading={formik.isSubmitting}>
               {formik.values.edit ? 'Update' : 'Create'}
