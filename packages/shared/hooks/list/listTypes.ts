@@ -8,20 +8,28 @@ import { IHooksProps } from '../../types/common';
 import { fileUpload } from '../../utils/fileUpload';
 import { omitTypename } from '../../utils/omitTypename';
 
-const defaultGetListTypes = { limit: 100, page: 1 };
+const defaultQueryVariables = { limit: 100, page: 1 };
 
-export function useGetListTypes() {
+interface IQueryProps {
+  limit?: number;
+  page?: number;
+}
+
+export function useGetListTypes(queryVariables?: IQueryProps) {
   const [state, setState] = useState({
     search: '',
     showSearch: false,
   });
 
+  const limit =
+    queryVariables && queryVariables.limit ? queryVariables.limit : defaultQueryVariables.limit;
+  const page =
+    queryVariables && queryVariables.page ? queryVariables.page : defaultQueryVariables.page;
+
   const { data, error, loading } = useQuery(GET_LIST_TYPES, {
-    variables: { defaultGetListTypes, search: state.search },
+    variables: { limit, page, search: state.search },
     fetchPolicy: 'cache-and-network',
   });
-
-  console.log('data, error, loading', data, error, loading);
 
   return { data, error, loading, state, setState };
 }
@@ -159,7 +167,7 @@ export function useDeleteListType({ onAlert }: IHooksProps) {
       // const deleteInCache = (client) => {
       //   const { getListTypes } = client.readQuery({
       //     query: GET_LIST_TYPES,
-      //     variables: defaultGetListTypes,
+      //     variables: defaultQueryVariables,
       //   });
 
       //   const newData = {
@@ -170,7 +178,7 @@ export function useDeleteListType({ onAlert }: IHooksProps) {
       //   };
       //   client.writeQuery({
       //     query: GET_LIST_TYPES,
-      //     variables: defaultGetListTypes,
+      //     variables: defaultQueryVariables,
       //     data: newData,
       //   });
       // };
