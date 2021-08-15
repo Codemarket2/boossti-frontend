@@ -8,6 +8,11 @@ export const GET_FIELDS_BY_TYPE = gql`
         _id
         label
         fieldType
+        multipleValues
+        typeId {
+          _id
+          title
+        }
       }
     }
   }

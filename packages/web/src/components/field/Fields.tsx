@@ -21,11 +21,18 @@ interface IProps {
   parentId: any;
 }
 
+const initialState = {
+  showForm: false,
+  showMenu: null,
+  selectedField: null,
+  edit: false,
+};
+
 export default function Fields({ parentId }: IProps) {
-  const [state, setState] = useState({ showForm: false, showMenu: null, selectedField: null });
+  const [state, setState] = useState(initialState);
 
   const deleteCallback = () => {
-    setState({ ...state, showMenu: null, selectedField: null });
+    setState({ ...state, showMenu: null, selectedField: null, edit: false });
   };
   const { data, loading, error } = useGetFieldsByType({ parentId });
 
@@ -42,7 +49,7 @@ export default function Fields({ parentId }: IProps) {
       <Paper variant="outlined" className="p-2 mb-2">
         <Typography variant="h5">Fields</Typography>
         {state.showForm ? (
-          <FieldForm parentId={parentId} onCancel={() => setState({ ...state, showForm: false })} />
+          <FieldForm parentId={parentId} onCancel={() => setState(initialState)} />
         ) : (
           <Button
             className="mt-2"
@@ -51,30 +58,40 @@ export default function Fields({ parentId }: IProps) {
             component="span"
             color="primary"
             startIcon={<AddCircle />}
-            onClick={() => setState({ ...state, showForm: true })}>
+            onClick={() => setState({ ...initialState, showForm: true })}>
             Add new field
           </Button>
         )}
         <List component="div">
-          {data.getFieldsByType.data.map((field) => (
-            <ListItem key={field._id} button>
-              <ListItemText primary={field.label} secondary={field.fieldType} />
-              <ListItemSecondaryAction>
-                <IconButton
-                  edge="end"
-                  onClick={(event) =>
-                    setState({ ...state, showMenu: event.currentTarget, selectedField: field })
-                  }>
-                  <MoreHoriz />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-          ))}
+          {data.getFieldsByType.data.map((field) =>
+            state.selectedField && state.selectedField._id === field._id && state.edit ? (
+              <FieldForm
+                key={field._id}
+                field={state.selectedField}
+                parentId={parentId}
+                onCancel={() => setState(initialState)}
+              />
+            ) : (
+              <ListItem key={field._id} button>
+                <ListItemText primary={field.label} secondary={field.fieldType} />
+                <ListItemSecondaryAction>
+                  <IconButton
+                    edge="end"
+                    onClick={(event) =>
+                      setState({ ...state, showMenu: event.currentTarget, selectedField: field })
+                    }>
+                    <MoreHoriz />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              </ListItem>
+            ),
+          )}
         </List>
         <CRUDMenu
           show={state.showMenu}
-          onClose={() => setState({ ...state, showMenu: null, selectedField: null })}
+          onClose={() => setState(initialState)}
           onDelete={() => handleDelete(state.selectedField._id, deleteCallback)}
+          onEdit={() => setState({ ...state, edit: true, showMenu: null })}
         />
       </Paper>
       <Backdrop open={deleteLoading} />

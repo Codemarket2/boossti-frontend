@@ -1,13 +1,13 @@
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import Radio from '@material-ui/core/Radio';
+// import Autocomplete from '@material-ui/lab/Autocomplete';
+// import FormControl from '@material-ui/core/FormControl';
+// import FormLabel from '@material-ui/core/FormLabel';
+// import FormHelperText from '@material-ui/core/FormHelperText';
+// import FormControlLabel from '@material-ui/core/FormControlLabel';
+// import Checkbox from '@material-ui/core/Checkbox';
+// import RadioGroup from '@material-ui/core/RadioGroup';
+// import Radio from '@material-ui/core/Radio';
 import { useCRUDFields } from '@frontend/shared/hooks/field';
 import { useGetListTypes } from '@frontend/shared/hooks/list';
 import InputGroup from '../common/InputGroup';
@@ -19,9 +19,15 @@ interface IProps {
   onCancel: () => void;
   parentId: any;
   field?: any;
+  label: string;
 }
 
-export default function FieldForm({ onCancel, parentId, field = null }: IProps) {
+export default function ItemFieldForm({
+  onCancel,
+  parentId,
+  field = null,
+  label = 'Value',
+}: IProps) {
   const { data, error, loading, state, setState } = useGetListTypes({ limit: 10 });
 
   const { formik, formLoading, setFormValues } = useCRUDFields({
@@ -38,42 +44,29 @@ export default function FieldForm({ onCancel, parentId, field = null }: IProps) 
 
   return (
     <div>
-      <form onSubmit={formik.handleSubmit}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          alert('Under Development');
+        }}
+        // onSubmit={formik.handleSubmit}
+      >
         <InputGroup>
           <TextField
             fullWidth
-            label="Label"
+            label={label}
             variant="outlined"
-            name="label"
+            name="value"
             size="small"
             disabled={formik.isSubmitting}
-            value={formik.values.label}
-            onChange={formik.handleChange}
+            // value={formik.values.label}
+            // onChange={formik.handleChange}
             error={formik.touched.label && Boolean(formik.errors.label)}
             helperText={formik.touched.label && formik.errors.label}
           />
         </InputGroup>
-        <InputGroup>
-          <FormControl disabled={formik.isSubmitting} component="fieldset">
-            <FormLabel component="legend">Field Type</FormLabel>
-            <RadioGroup
-              aria-label="fieldType"
-              name="fieldType"
-              value={formik.values.fieldType}
-              onChange={formik.handleChange}>
-              <FormControlLabel value="string" control={<Radio color="primary" />} label="String" />
-              <FormControlLabel
-                value="type"
-                control={<Radio color="primary" />}
-                label="Exisiting Type"
-              />
-            </RadioGroup>
-            {formik.touched.fieldType && formik.errors.fieldType && (
-              <FormHelperText className="text-danger">{formik.errors.fieldType}</FormHelperText>
-            )}
-          </FormControl>
-        </InputGroup>
-        {formik.values.fieldType === 'type' && (
+
+        {/* {formik.values.fieldType === 'type' && (
           <InputGroup>
             {error ? (
               <p>Error - {error.message}</p>
@@ -96,21 +89,8 @@ export default function FieldForm({ onCancel, parentId, field = null }: IProps) 
               />
             )}
           </InputGroup>
-        )}
-        <InputGroup>
-          <FormControlLabel
-            disabled={formik.isSubmitting}
-            control={
-              <Checkbox
-                checked={formik.values.multipleValues}
-                onChange={({ target }) => formik.setFieldValue('multipleValues', target.checked)}
-                name="multipleValues"
-                color="primary"
-              />
-            }
-            label="Allow other users to add their own value"
-          />
-        </InputGroup>
+        )} */}
+
         <InputGroup>
           <LoadingButton type="submit" loading={formLoading} size="small">
             Save

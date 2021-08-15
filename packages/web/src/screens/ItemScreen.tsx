@@ -15,6 +15,7 @@ import Backdrop from '../components/common/Backdrop';
 import ListItemForm from '../components/list/ListItemForm';
 import ImageList from '../components/post/ImageList';
 import NotFound from '../components/common/NotFound';
+import ItemFields from '../components/field/ItemFields';
 import { onAlert } from '../utils/alert';
 
 interface IProps {
@@ -65,38 +66,41 @@ export default function Screen({ slug, typeSlug }: IProps) {
           onCancel={() => setState({ ...state, item: null })}
         />
       ) : (
-        <Paper variant="outlined" className="p-2 pb-5">
-          <div className="d-flex justify-content-between align-content-center align-items-center">
-            <Typography variant="h4">{data.getListItemBySlug.title}</Typography>
-            <div className="d-flex align-content-center align-items-center">
-              <Tooltip title="Edit">
-                <Button
-                  onClick={() => setState({ ...state, item: { ...data.getListItemBySlug } })}
-                  className="mr-2"
-                  size="small"
-                  variant="outlined"
-                  component="span"
-                  color="primary"
-                  startIcon={<EditIcon />}>
-                  Edit
-                </Button>
-              </Tooltip>
-              <Tooltip title="Delete">
-                <Button
-                  onClick={() => handleDelete(data.getListItemBySlug._id, deleteCallBack)}
-                  size="small"
-                  variant="outlined"
-                  component="span"
-                  color="primary"
-                  startIcon={<DeleteIcon />}>
-                  Delete
-                </Button>
-              </Tooltip>
+        <>
+          <Paper variant="outlined" className="p-2 pb-5">
+            <div className="d-flex justify-content-between align-content-center align-items-center">
+              <Typography variant="h4">{data.getListItemBySlug.title}</Typography>
+              <div className="d-flex align-content-center align-items-center">
+                <Tooltip title="Edit">
+                  <Button
+                    onClick={() => setState({ ...state, item: { ...data.getListItemBySlug } })}
+                    className="mr-2"
+                    size="small"
+                    variant="outlined"
+                    component="span"
+                    color="primary"
+                    startIcon={<EditIcon />}>
+                    Edit
+                  </Button>
+                </Tooltip>
+                <Tooltip title="Delete">
+                  <Button
+                    onClick={() => handleDelete(data.getListItemBySlug._id, deleteCallBack)}
+                    size="small"
+                    variant="outlined"
+                    component="span"
+                    color="primary"
+                    startIcon={<DeleteIcon />}>
+                    Delete
+                  </Button>
+                </Tooltip>
+              </div>
             </div>
-          </div>
-          <Typography>{data.getListItemBySlug.description}</Typography>
-          <ImageList media={data.getListItemBySlug.media} />
-        </Paper>
+            <Typography>{data.getListItemBySlug.description}</Typography>
+            <ImageList media={data.getListItemBySlug.media} />
+            <ItemFields parentId={data.getListItemBySlug.types[0]._id} />
+          </Paper>
+        </>
       )}
       <Backdrop open={deleteLoading} />
     </UserLayout>

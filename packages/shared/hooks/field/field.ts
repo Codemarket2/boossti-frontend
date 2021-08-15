@@ -59,12 +59,12 @@ export function useCRUDFields({ onAlert, parentId, createCallback }: ICRUDProps)
     validationSchema: validationSchema,
     onSubmit: async (payload: IFormValues) => {
       try {
-        // console.log('Save', payload);
         let newPayload = payload;
         if (newPayload.typeId && newPayload.typeId._id) {
           newPayload.typeId = newPayload.typeId._id;
         }
         if (newPayload.edit) {
+          await onUpdate(newPayload);
         } else {
           await onCreate(newPayload);
         }
@@ -100,9 +100,45 @@ export function useCRUDFields({ onAlert, parentId, createCallback }: ICRUDProps)
     });
   };
 
+  const onUpdate = async (payload) => {
+    const updateInCache = (client, mutationResult) => {
+      const { getFieldsByType } = client.readQuery({
+        query: GET_FIELDS_BY_TYPE,
+        variables: { ...defaultQueryVariables, parentId },
+      });
+      const newData = {
+        getFieldsByType: {
+          ...getFieldsByType,
+          data: getFieldsByType.data.map((f) =>
+            f._id === mutationResult.data.updateField._id ? mutationResult.data.updateField : f,
+          ),
+          // data: [...getFieldsByType.data, mutationResult.data.createField],
+        },
+      };
+      client.writeQuery({
+        query: GET_FIELDS_BY_TYPE,
+        variables: { ...defaultQueryVariables, parentId },
+        data: newData,
+      });
+    };
+    return await updateFieldMutation({
+      variables: payload,
+      update: updateInCache,
+    });
+  };
+
+  const setFormValues = (field) => {
+    formik.setFieldValue('edit', true, false);
+    formik.setFieldValue('label', field.label, false);
+    formik.setFieldValue('fieldType', field.fieldType, false);
+    formik.setFieldValue('multipleValues', field.multipleValues, false);
+    formik.setFieldValue('typeId', field.typeId, false);
+    formik.setFieldValue('_id', field._id, false);
+  };
+
   const formLoading = createLoading || updateLoading || formik.isSubmitting;
 
-  return { formik, formLoading };
+  return { formik, formLoading, setFormValues };
 }
 
 interface IDeleteProps extends IHooksProps {
