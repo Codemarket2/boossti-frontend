@@ -12,6 +12,7 @@ export const GET_FIELDS_BY_TYPE = gql`
         typeId {
           _id
           title
+          slug
         }
       }
     }
@@ -24,16 +25,17 @@ export const GET_FIELD_VALUES_BY_FIELD = gql`
       count
       data {
         _id
-        # value
-        # itemId {
-        #   _id
-        #   title
-        # }
-        # createdBy {
-        #   _id
-        #   picture
-        #   name
-        # }
+        value
+        itemId {
+          _id
+          title
+          slug
+        }
+        createdBy {
+          _id
+          picture
+          name
+        }
       }
     }
   }

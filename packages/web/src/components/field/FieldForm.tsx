@@ -91,7 +91,14 @@ export default function FieldForm({ onCancel, parentId, field = null }: IProps) 
                 }}
                 options={data && data.getListTypes ? data.getListTypes.data : []}
                 renderInput={(params) => (
-                  <TextField fullWidth {...params} label="Select Type" variant="outlined" />
+                  <TextField
+                    fullWidth
+                    {...params}
+                    label="Select Type"
+                    variant="outlined"
+                    error={formik.touched.typeId && Boolean(formik.errors.typeId)}
+                    helperText={formik.touched.typeId && formik.errors.typeId}
+                  />
                 )}
               />
             )}

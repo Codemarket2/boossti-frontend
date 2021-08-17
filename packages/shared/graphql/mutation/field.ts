@@ -21,6 +21,7 @@ export const CREATE_FIELD = gql`
       typeId {
         _id
         title
+        slug
       }
       multipleValues
     }
@@ -48,6 +49,7 @@ export const UPDATE_FIELD = gql`
       typeId {
         _id
         title
+        slug
       }
       multipleValues
     }
@@ -57,5 +59,49 @@ export const UPDATE_FIELD = gql`
 export const DELETE_FIELD = gql`
   mutation MyMutation($_id: ID!) {
     deleteField(_id: $_id)
+  }
+`;
+
+export const CREATE_FIELD_VALUE = gql`
+  mutation MyMutation($field: ID!, $value: String, $itemId: ID) {
+    createFieldValue(field: $field, value: $value, itemId: $itemId) {
+      _id
+      value
+      itemId {
+        _id
+        title
+        slug
+      }
+      createdBy {
+        _id
+        picture
+        name
+      }
+    }
+  }
+`;
+
+export const UPDATE_FIELD_VALUE = gql`
+  mutation MyMutation($_id: ID!, $value: String, $itemId: ID) {
+    updateFieldValue(_id: $_id, value: $value, itemId: $itemId) {
+      _id
+      value
+      itemId {
+        _id
+        title
+        slug
+      }
+      createdBy {
+        _id
+        picture
+        name
+      }
+    }
+  }
+`;
+
+export const DELETE_FIELD_VALUE = gql`
+  mutation MyMutation($_id: ID!) {
+    deleteFieldValue(_id: $_id)
   }
 `;

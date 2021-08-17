@@ -1,2 +1,2 @@
 export { useGetFieldsByType, useCRUDFields, useDeleteField } from './field';
-export { useGetFieldValuesByField } from './fieldValue';
+export { useGetFieldValuesByField, useCRUDFieldValue, useDeleteFieldValue } from './fieldValue';

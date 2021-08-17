@@ -1,15 +1,8 @@
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-// import Autocomplete from '@material-ui/lab/Autocomplete';
-// import FormControl from '@material-ui/core/FormControl';
-// import FormLabel from '@material-ui/core/FormLabel';
-// import FormHelperText from '@material-ui/core/FormHelperText';
-// import FormControlLabel from '@material-ui/core/FormControlLabel';
-// import Checkbox from '@material-ui/core/Checkbox';
-// import RadioGroup from '@material-ui/core/RadioGroup';
-// import Radio from '@material-ui/core/Radio';
-import { useCRUDFields } from '@frontend/shared/hooks/field';
-import { useGetListTypes } from '@frontend/shared/hooks/list';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import { useCRUDFieldValue } from '@frontend/shared/hooks/field';
+import { useGetListItemsByType } from '@frontend/shared/hooks/list';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
 import { onAlert } from '../../utils/alert';
@@ -17,80 +10,88 @@ import { useEffect } from 'react';
 
 interface IProps {
   onCancel: () => void;
-  parentId: any;
-  field?: any;
+  field: any;
+  fieldValue?: any;
   label: string;
+  fieldType: string;
+  typeId: string;
 }
 
 export default function ItemFieldForm({
   onCancel,
-  parentId,
   field = null,
+  fieldValue = null,
+  fieldType,
   label = 'Value',
+  typeId,
 }: IProps) {
-  // const { data, error, loading, state, setState } = useGetListTypes({ limit: 10 });
+  const { data, error, loading, state, setState } = useGetListItemsByType({
+    limit: 10,
+    types: [typeId],
+  });
 
-  const { formik, formLoading, setFormValues } = useCRUDFields({
+  const { formik, formLoading, setFormValues } = useCRUDFieldValue({
     onAlert,
-    parentId,
+    field,
     createCallback: onCancel,
+    fieldType,
   });
 
   useEffect(() => {
-    if (field) {
-      setFormValues(field);
+    if (fieldValue) {
+      setFormValues(fieldValue);
     }
-  }, [field]);
+  }, [fieldValue]);
 
   return (
     <div>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          alert('Under Development');
-        }}
-        // onSubmit={formik.handleSubmit}
-      >
-        <InputGroup>
-          <TextField
-            fullWidth
-            label={label}
-            variant="outlined"
-            name="value"
-            size="small"
-            disabled={formik.isSubmitting}
-            // value={formik.values.label}
-            // onChange={formik.handleChange}
-            error={formik.touched.label && Boolean(formik.errors.label)}
-            helperText={formik.touched.label && formik.errors.label}
-          />
-        </InputGroup>
-
-        {/* {formik.values.fieldType === 'type' && (
+      <form onSubmit={formik.handleSubmit}>
+        {formik.values.fieldType === 'string' ? (
+          <InputGroup>
+            <TextField
+              fullWidth
+              label={label}
+              variant="outlined"
+              name="value"
+              size="small"
+              disabled={formik.isSubmitting}
+              value={formik.values.value}
+              onChange={formik.handleChange}
+              error={formik.touched.value && Boolean(formik.errors.value)}
+              helperText={formik.touched.value && formik.errors.value}
+            />
+          </InputGroup>
+        ) : (
           <InputGroup>
             {error ? (
               <p>Error - {error.message}</p>
             ) : (
               <Autocomplete
                 disabled={formik.isSubmitting}
-                value={formik.values.typeId}
+                value={formik.values.itemId}
                 onChange={(event: any, newValue) => {
-                  formik.setFieldValue('typeId', newValue);
+                  formik.setFieldValue('itemId', newValue);
                 }}
                 getOptionLabel={(option) => option.title}
                 inputValue={state.search}
                 onInputChange={(event, newInputValue) => {
                   setState({ ...state, search: newInputValue });
                 }}
-                options={data && data.getListTypes ? data.getListTypes.data : []}
+                options={data && data.getListItems ? data.getListItems.data : []}
                 renderInput={(params) => (
-                  <TextField fullWidth {...params} label="Select Type" variant="outlined" />
+                  <TextField
+                    error={formik.touched.itemId && Boolean(formik.errors.itemId)}
+                    helperText={formik.touched.itemId && formik.errors.itemId}
+                    fullWidth
+                    {...params}
+                    label={`Select Value`}
+                    variant="outlined"
+                  />
                 )}
               />
             )}
           </InputGroup>
-        )} */}
-
+        )}
         <InputGroup>
           <LoadingButton type="submit" loading={formLoading} size="small">
             Save

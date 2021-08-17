@@ -18,6 +18,11 @@ export function useGetFieldsByType({ parentId }: any) {
 const validationSchema = yup.object({
   label: yup.string().required('Label is required'),
   fieldType: yup.string().required('Select Field Type'),
+  typeId: yup.object().when('fieldType', {
+    is: (value) => value === 'type',
+    then: yup.object().nullable(true).required('Type is required'),
+    otherwise: yup.object().nullable(true),
+  }),
 });
 
 interface IFormValues {
@@ -107,7 +112,6 @@ export function useCRUDFields({ onAlert, parentId, createCallback }: ICRUDProps)
           data: getFieldsByType.data.map((f) =>
             f._id === mutationResult.data.updateField._id ? mutationResult.data.updateField : f,
           ),
-          // data: [...getFieldsByType.data, mutationResult.data.createField],
         },
       };
       client.writeQuery({
