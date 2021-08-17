@@ -8,11 +8,6 @@ import { IHooksProps } from '../../types/common';
 const defaultQueryVariables = { limit: 1000, page: 1 };
 
 export function useGetFieldsByType({ parentId }: any) {
-  //   const [state, setState] = useState({
-  //     search: '',
-  //     showSearch: false,
-  //   });
-
   const { data, error, loading } = useQuery(GET_FIELDS_BY_TYPE, {
     variables: { ...defaultQueryVariables, parentId },
     fetchPolicy: 'cache-and-network',

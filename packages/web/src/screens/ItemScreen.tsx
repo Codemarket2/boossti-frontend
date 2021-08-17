@@ -15,7 +15,7 @@ import Backdrop from '../components/common/Backdrop';
 import ListItemForm from '../components/list/ListItemForm';
 import ImageList from '../components/post/ImageList';
 import NotFound from '../components/common/NotFound';
-import ItemFields from '../components/field/ItemFields';
+import FieldValues from '../components/field/FieldValues';
 import { onAlert } from '../utils/alert';
 
 interface IProps {
@@ -98,7 +98,7 @@ export default function Screen({ slug, typeSlug }: IProps) {
             </div>
             <Typography>{data.getListItemBySlug.description}</Typography>
             <ImageList media={data.getListItemBySlug.media} />
-            <ItemFields parentId={data.getListItemBySlug.types[0]._id} />
+            <FieldValues parentId={data.getListItemBySlug.types[0]._id} />
           </Paper>
         </>
       )}

@@ -28,7 +28,7 @@ export default function ItemFieldForm({
   field = null,
   label = 'Value',
 }: IProps) {
-  const { data, error, loading, state, setState } = useGetListTypes({ limit: 10 });
+  // const { data, error, loading, state, setState } = useGetListTypes({ limit: 10 });
 
   const { formik, formLoading, setFormValues } = useCRUDFields({
     onAlert,
