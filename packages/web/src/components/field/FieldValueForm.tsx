@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 
 interface IProps {
   onCancel: () => void;
+  parentId: any;
   field: any;
   fieldValue?: any;
   label: string;
@@ -19,6 +20,7 @@ interface IProps {
 
 export default function ItemFieldForm({
   onCancel,
+  parentId = null,
   field = null,
   fieldValue = null,
   fieldType,
@@ -32,6 +34,7 @@ export default function ItemFieldForm({
 
   const { formik, formLoading, setFormValues } = useCRUDFieldValue({
     onAlert,
+    parentId,
     field,
     createCallback: onCancel,
     fieldType,

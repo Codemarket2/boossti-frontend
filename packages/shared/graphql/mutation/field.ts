@@ -63,9 +63,11 @@ export const DELETE_FIELD = gql`
 `;
 
 export const CREATE_FIELD_VALUE = gql`
-  mutation MyMutation($field: ID!, $value: String, $itemId: ID) {
-    createFieldValue(field: $field, value: $value, itemId: $itemId) {
+  mutation MyMutation($parentId: ID!, $field: ID!, $value: String, $itemId: ID) {
+    createFieldValue(parentId: $parentId, field: $field, value: $value, itemId: $itemId) {
       _id
+      parentId
+      field
       value
       itemId {
         _id
@@ -85,6 +87,8 @@ export const UPDATE_FIELD_VALUE = gql`
   mutation MyMutation($_id: ID!, $value: String, $itemId: ID) {
     updateFieldValue(_id: $_id, value: $value, itemId: $itemId) {
       _id
+      parentId
+      field
       value
       itemId {
         _id

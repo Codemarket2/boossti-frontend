@@ -11,9 +11,10 @@ import {
 
 const defaultQueryVariables = { limit: 1000, page: 1 };
 
-export function useGetFieldValuesByField({ field }: any) {
+export function useGetFieldValuesByItem({ parentId, field }: any) {
+  console.log('parentId', parentId);
   const { data, error, loading } = useQuery(GET_FIELD_VALUES_BY_FIELD, {
-    variables: { ...defaultQueryVariables, field },
+    variables: { ...defaultQueryVariables, parentId, field },
     fetchPolicy: 'cache-and-network',
   });
   // console.log('data, error, loading', data, error, loading);
@@ -38,6 +39,7 @@ interface IFormValues {
   _id: string;
   edit: boolean;
   fieldType: string;
+  parentId: string;
   field: string;
   value: string;
   itemId: any;
@@ -47,31 +49,41 @@ const defaultFormValues = {
   _id: '',
   edit: false,
   fieldType: 'string',
+  parentId: '',
   field: '',
   value: '',
   itemId: null,
 };
 
 interface ICRUDProps extends IHooksProps {
+  parentId: string;
   field: string;
   fieldType: string;
   createCallback: () => void;
 }
 
-export function useCRUDFieldValue({ onAlert, field, fieldType, createCallback }: ICRUDProps) {
+export function useCRUDFieldValue({
+  onAlert,
+  parentId,
+  field,
+  fieldType,
+  createCallback,
+}: ICRUDProps) {
   const [createFieldValueMutation, { loading: createLoading }] = useMutation(CREATE_FIELD_VALUE);
   const [updateFieldValueMutation, { loading: updateLoading }] = useMutation(UPDATE_FIELD_VALUE);
 
+  const queryVariables = { ...defaultQueryVariables, parentId, field };
+
   const formik = useFormik({
-    initialValues: { ...defaultFormValues, field, fieldType },
+    initialValues: { ...defaultFormValues, parentId, field, fieldType },
     validationSchema: validationSchema,
     onSubmit: async (payload: IFormValues) => {
       try {
         let newPayload = payload;
         if (newPayload.itemId && newPayload.itemId._id) {
-          newPayload.itemId = newPayload.itemId._id;
+          newPayload = { ...newPayload, itemId: newPayload.itemId._id };
         }
-        if (newPayload.edit) {
+        if (payload.edit) {
           await onUpdate(newPayload);
         } else {
           await onCreate(newPayload);
@@ -86,19 +98,19 @@ export function useCRUDFieldValue({ onAlert, field, fieldType, createCallback }:
 
   const onCreate = async (payload) => {
     const updateCache = (client, mutationResult) => {
-      const { getFieldValuesByField } = client.readQuery({
+      const { getFieldValuesByItem } = client.readQuery({
         query: GET_FIELD_VALUES_BY_FIELD,
-        variables: { ...defaultQueryVariables, field },
+        variables: queryVariables,
       });
       const newData = {
-        getFieldValuesByField: {
-          ...getFieldValuesByField,
-          data: [...getFieldValuesByField.data, mutationResult.data.createFieldValue],
+        getFieldValuesByItem: {
+          ...getFieldValuesByItem,
+          data: [...getFieldValuesByItem.data, mutationResult.data.createFieldValue],
         },
       };
       client.writeQuery({
         query: GET_FIELD_VALUES_BY_FIELD,
-        variables: { ...defaultQueryVariables, field },
+        variables: queryVariables,
         data: newData,
       });
     };
@@ -110,14 +122,14 @@ export function useCRUDFieldValue({ onAlert, field, fieldType, createCallback }:
 
   const onUpdate = async (payload) => {
     const updateInCache = (client, mutationResult) => {
-      const { getFieldValuesByField } = client.readQuery({
+      const { getFieldValuesByItem } = client.readQuery({
         query: GET_FIELD_VALUES_BY_FIELD,
-        variables: { ...defaultQueryVariables, field },
+        variables: queryVariables,
       });
       const newData = {
-        getFieldValuesByField: {
-          ...getFieldValuesByField,
-          data: getFieldValuesByField.data.map((f) =>
+        getFieldValuesByItem: {
+          ...getFieldValuesByItem,
+          data: getFieldValuesByItem.data.map((f) =>
             f._id === mutationResult.data.updateFieldValue._id
               ? mutationResult.data.updateFieldValue
               : f,
@@ -126,7 +138,7 @@ export function useCRUDFieldValue({ onAlert, field, fieldType, createCallback }:
       };
       client.writeQuery({
         query: GET_FIELD_VALUES_BY_FIELD,
-        variables: { ...defaultQueryVariables, field },
+        variables: queryVariables,
         data: newData,
       });
     };
@@ -139,6 +151,7 @@ export function useCRUDFieldValue({ onAlert, field, fieldType, createCallback }:
   const setFormValues = (fieldValue) => {
     formik.setFieldValue('_id', fieldValue._id, false);
     formik.setFieldValue('edit', true, false);
+    formik.setFieldValue('parentId', fieldValue.parentId, false);
     formik.setFieldValue('field', fieldValue.field, false);
     formik.setFieldValue('value', fieldValue.value, false);
     formik.setFieldValue('itemId', fieldValue.itemId, false);
@@ -150,27 +163,29 @@ export function useCRUDFieldValue({ onAlert, field, fieldType, createCallback }:
 }
 
 interface IDeleteProps extends IHooksProps {
-  field: any;
+  parentId: string;
+  field: string;
 }
 
-export function useDeleteFieldValue({ onAlert, field }: IDeleteProps) {
+export function useDeleteFieldValue({ onAlert, parentId, field }: IDeleteProps) {
   const [deleteFieldMutation, { loading: deleteLoading }] = useMutation(DELETE_FIELD_VALUE);
+  const queryVariables = { ...defaultQueryVariables, parentId, field };
   const handleDelete = async (_id: any, deleteCallBack: any) => {
     try {
       const deleteInCache = (client) => {
-        const { getFieldValuesByField } = client.readQuery({
+        const { getFieldValuesByItem } = client.readQuery({
           query: GET_FIELD_VALUES_BY_FIELD,
-          variables: { ...defaultQueryVariables, field },
+          variables: queryVariables,
         });
         const newData = {
-          getFieldValuesByField: {
-            ...getFieldValuesByField,
-            data: getFieldValuesByField.data.filter((f) => f._id !== _id),
+          getFieldValuesByItem: {
+            ...getFieldValuesByItem,
+            data: getFieldValuesByItem.data.filter((f) => f._id !== _id),
           },
         };
         client.writeQuery({
           query: GET_FIELD_VALUES_BY_FIELD,
-          variables: { ...defaultQueryVariables, field },
+          variables: queryVariables,
           data: newData,
         });
       };

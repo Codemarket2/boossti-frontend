@@ -1,5 +1,5 @@
 import {
-  useGetFieldValuesByField,
+  useGetFieldValuesByItem,
   useGetFieldsByType,
   useDeleteFieldValue,
 } from '@frontend/shared/hooks/field';
@@ -32,7 +32,7 @@ const initialState = {
   edit: false,
 };
 
-function ItemOneFields({ field }) {
+function ItemOneFields({ field, parentId }) {
   const [state, setState] = useState(initialState);
   const attributes = useSelector(({ auth }: any) => auth.attributes);
   const currentUserId = attributes['custom:_id'];
@@ -41,10 +41,23 @@ function ItemOneFields({ field }) {
     setState({ ...state, showMenu: null, selectedFieldValue: null, edit: false });
   };
 
-  const { data, error, loading } = useGetFieldValuesByField({ field: field._id });
-  const { handleDelete, deleteLoading } = useDeleteFieldValue({ onAlert, field: field._id });
+  const { data, error, loading } = useGetFieldValuesByItem({ parentId, field: field._id });
+  const { handleDelete, deleteLoading } = useDeleteFieldValue({
+    onAlert,
+    parentId,
+    field: field._id,
+  });
 
-  if (!error && (!data || !data.getFieldValuesByField)) {
+  const formProps = {
+    field: field._id,
+    parentId: parentId,
+    typeId: field.typeId._id,
+    fieldType: field.fieldType,
+    label: `${field.label} Value`,
+    onCancel: () => setState(initialState),
+  };
+
+  if (!error && (!data || !data.getFieldValuesByItem)) {
     return <FieldsSkeleton />;
   } else if (error) {
     return <ErrorLoading error={error} />;
@@ -54,13 +67,7 @@ function ItemOneFields({ field }) {
     <div key={field._id} className="mt-4">
       <Typography variant="h5">{field.label}</Typography>
       {state.showForm ? (
-        <FieldValueForm
-          field={field._id}
-          typeId={field.typeId._id}
-          fieldType={field.fieldType}
-          label={`${field.label} Value`}
-          onCancel={() => setState(initialState)}
-        />
+        <FieldValueForm {...formProps} />
       ) : (
         <Button
           className="mt-2"
@@ -74,19 +81,11 @@ function ItemOneFields({ field }) {
         </Button>
       )}
       <List component="div">
-        {data.getFieldValuesByField.data.map((fieldValue, index) =>
+        {data.getFieldValuesByItem.data.map((fieldValue, index) =>
           state.selectedFieldValue &&
           state.selectedFieldValue._id === fieldValue._id &&
           state.edit ? (
-            <FieldValueForm
-              fieldValue={fieldValue}
-              key={fieldValue._id}
-              field={field._id}
-              typeId={field.typeId._id}
-              fieldType={field.fieldType}
-              label={`${field.label} Value`}
-              onCancel={() => setState(initialState)}
-            />
+            <FieldValueForm key={fieldValue._id} {...formProps} fieldValue={fieldValue} />
           ) : (
             <>
               <ListItem key={fieldValue._id}>
@@ -134,7 +133,7 @@ function ItemOneFields({ field }) {
                   </ListItemSecondaryAction>
                 )}
               </ListItem>
-              {data.getFieldValuesByField.data.length - 1 !== index && (
+              {data.getFieldValuesByItem.data.length - 1 !== index && (
                 <Divider key={fieldValue._id} />
               )}
             </>
@@ -163,7 +162,7 @@ export default function ItemsFieldsMap({ parentId }) {
   return (
     <>
       {data.getFieldsByType.data.map((field) => (
-        <ItemOneFields field={field} key={field._id} />
+        <ItemOneFields parentId={parentId} field={field} key={field._id} />
       ))}
     </>
   );

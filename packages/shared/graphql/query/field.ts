@@ -20,11 +20,13 @@ export const GET_FIELDS_BY_TYPE = gql`
 `;
 
 export const GET_FIELD_VALUES_BY_FIELD = gql`
-  query MyQuery($field: ID!, $limit: Int, $page: Int) {
-    getFieldValuesByField(field: $field, limit: $limit, page: $page) {
+  query MyQuery($parentId: ID!, $field: ID!, $limit: Int, $page: Int) {
+    getFieldValuesByItem(parentId: $parentId, field: $field, limit: $limit, page: $page) {
       count
       data {
         _id
+        parentId
+        field
         value
         itemId {
           _id
