@@ -98,7 +98,10 @@ export default function Screen({ slug, typeSlug }: IProps) {
             </div>
             <Typography>{data.getListItemBySlug.description}</Typography>
             <ImageList media={data.getListItemBySlug.media} />
-            <FieldValues parentId={data.getListItemBySlug.types[0]._id} />
+            <FieldValues
+              parentId={data.getListItemBySlug._id}
+              typeId={data.getListItemBySlug.types[0]._id}
+            />
           </Paper>
         </>
       )}

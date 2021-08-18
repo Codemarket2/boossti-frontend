@@ -33,6 +33,7 @@ interface IFormValues {
   fieldType: string;
   typeId: any;
   multipleValues: boolean;
+  oneUserMultipleValues: boolean;
 }
 
 const defaultFormValues = {
@@ -43,6 +44,7 @@ const defaultFormValues = {
   fieldType: '',
   typeId: null,
   multipleValues: true,
+  oneUserMultipleValues: true,
 };
 
 interface ICRUDProps extends IHooksProps {
@@ -61,10 +63,11 @@ export function useCRUDFields({ onAlert, parentId, createCallback }: ICRUDProps)
       try {
         let newPayload = payload;
         if (newPayload.typeId && newPayload.typeId._id) {
-          newPayload.typeId = newPayload.typeId._id;
+          newPayload = { ...newPayload, typeId: newPayload.typeId._id };
         }
         if (newPayload.edit) {
-          await onUpdate(newPayload);
+          const updateRes = await onUpdate(newPayload);
+          console.log('updateRes', updateRes);
         } else {
           await onCreate(newPayload);
         }
@@ -131,6 +134,7 @@ export function useCRUDFields({ onAlert, parentId, createCallback }: ICRUDProps)
     formik.setFieldValue('label', field.label, false);
     formik.setFieldValue('fieldType', field.fieldType, false);
     formik.setFieldValue('multipleValues', field.multipleValues, false);
+    formik.setFieldValue('oneUserMultipleValues', field.oneUserMultipleValues, false);
     formik.setFieldValue('typeId', field.typeId, false);
     formik.setFieldValue('_id', field._id, false);
   };

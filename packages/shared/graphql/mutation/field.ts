@@ -7,6 +7,7 @@ export const CREATE_FIELD = gql`
     $fieldType: String!
     $typeId: ID
     $multipleValues: Boolean
+    $oneUserMultipleValues: Boolean
   ) {
     createField(
       parentId: $parentId
@@ -14,6 +15,7 @@ export const CREATE_FIELD = gql`
       fieldType: $fieldType
       typeId: $typeId
       multipleValues: $multipleValues
+      oneUserMultipleValues: $oneUserMultipleValues
     ) {
       _id
       label
@@ -24,6 +26,7 @@ export const CREATE_FIELD = gql`
         slug
       }
       multipleValues
+      oneUserMultipleValues
     }
   }
 `;
@@ -35,6 +38,7 @@ export const UPDATE_FIELD = gql`
     $fieldType: String
     $typeId: ID
     $multipleValues: Boolean
+    $oneUserMultipleValues: Boolean
   ) {
     updateField(
       _id: $_id
@@ -42,6 +46,7 @@ export const UPDATE_FIELD = gql`
       fieldType: $fieldType
       typeId: $typeId
       multipleValues: $multipleValues
+      oneUserMultipleValues: $oneUserMultipleValues
     ) {
       _id
       label
@@ -52,6 +57,7 @@ export const UPDATE_FIELD = gql`
         slug
       }
       multipleValues
+      oneUserMultipleValues
     }
   }
 `;

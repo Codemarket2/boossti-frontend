@@ -24,6 +24,7 @@ import CRUDMenu from '../common/CRUDMenu';
 import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
 import { useSelector } from 'react-redux';
+import moment from 'moment';
 
 const initialState = {
   showForm: false,
@@ -32,9 +33,9 @@ const initialState = {
   edit: false,
 };
 
-function ItemOneFields({ field, parentId }) {
+function ItemOneFields({ field, parentId, hideCreatedBy = false }) {
   const [state, setState] = useState(initialState);
-  const attributes = useSelector(({ auth }: any) => auth.attributes);
+  const { attributes, admin } = useSelector(({ auth }: any) => auth);
   const currentUserId = attributes['custom:_id'];
 
   const deleteCallback = () => {
@@ -51,7 +52,7 @@ function ItemOneFields({ field, parentId }) {
   const formProps = {
     field: field._id,
     parentId: parentId,
-    typeId: field.typeId._id,
+    typeId: field.typeId ? field.typeId._id : null,
     fieldType: field.fieldType,
     label: `${field.label} Value`,
     onCancel: () => setState(initialState),
@@ -63,61 +64,73 @@ function ItemOneFields({ field, parentId }) {
     return <ErrorLoading error={error} />;
   }
 
+  const hasAlreadyAdded =
+    data.getFieldValuesByItem.data.filter((v) => v.createdBy._id === currentUserId).length > 0;
+
   return (
     <div key={field._id} className="mt-4">
       <Typography variant="h5">{field.label}</Typography>
-      {state.showForm ? (
-        <FieldValueForm {...formProps} />
-      ) : (
-        <Button
-          className="mt-2"
-          size="small"
-          variant="outlined"
-          component="span"
-          color="primary"
-          startIcon={<AddCircle />}
-          onClick={() => setState({ ...initialState, showForm: true })}>
-          Add Value
-        </Button>
-      )}
+      {(data.getFieldValuesByItem.data.length === 0 || field.multipleValues) &&
+        (field.oneUserMultipleValues || !hasAlreadyAdded) && (
+          <>
+            {state.showForm ? (
+              <FieldValueForm {...formProps} />
+            ) : (
+              <Button
+                className="mt-2"
+                size="small"
+                variant="outlined"
+                component="span"
+                color="primary"
+                startIcon={<AddCircle />}
+                onClick={() => setState({ ...initialState, showForm: true })}>
+                Add Value
+              </Button>
+            )}
+          </>
+        )}
       <List component="div">
         {data.getFieldValuesByItem.data.map((fieldValue, index) =>
           state.selectedFieldValue &&
           state.selectedFieldValue._id === fieldValue._id &&
           state.edit ? (
-            <FieldValueForm key={fieldValue._id} {...formProps} fieldValue={fieldValue} />
+            <FieldValueForm {...formProps} fieldValue={fieldValue} />
           ) : (
             <>
               <ListItem key={fieldValue._id}>
                 <ListItemText
                   secondary={
                     <span style={{ paddingLeft: 10 }}>
-                      {field.fieldType === 'string' ? (
-                        fieldValue.value
-                      ) : (
+                      {field.fieldType === 'date' ? (
+                        moment(fieldValue.value).format('L')
+                      ) : field.fieldType === 'type' ? (
                         <Link href={`/types/${field.typeId.slug}/${fieldValue.itemId.slug}`}>
                           {fieldValue.itemId.title}
                         </Link>
+                      ) : (
+                        fieldValue.value
                       )}
                     </span>
                   }
                   primary={
-                    <Link href={`/user/${fieldValue.createdBy._id}`}>
-                      <Chip
-                        avatar={
-                          <Avatar
-                            alt={fieldValue.createdBy.name}
-                            src={fieldValue.createdBy.picture}
-                          />
-                        }
-                        label={<span>{fieldValue.createdBy.name}</span>}
-                        style={{ border: 'none', marginBottom: 10 }}
-                        variant="outlined"
-                      />
-                    </Link>
+                    field.multipleValues && !hideCreatedBy ? (
+                      <Link href={`/user/${fieldValue.createdBy._id}`}>
+                        <Chip
+                          avatar={
+                            <Avatar
+                              alt={fieldValue.createdBy.name}
+                              src={fieldValue.createdBy.picture}
+                            />
+                          }
+                          label={<span>{fieldValue.createdBy.name}</span>}
+                          style={{ border: 'none', marginBottom: 10 }}
+                          variant="outlined"
+                        />
+                      </Link>
+                    ) : null
                   }
                 />
-                {currentUserId === fieldValue.createdBy._id && (
+                {(currentUserId === fieldValue.createdBy._id || (admin && !hideCreatedBy)) && (
                   <ListItemSecondaryAction>
                     <IconButton
                       edge="end"
@@ -152,17 +165,23 @@ function ItemOneFields({ field, parentId }) {
   );
 }
 
-export default function ItemsFieldsMap({ parentId }) {
-  const { data, loading, error } = useGetFieldsByType({ parentId });
+export default function ItemsFieldsMap({ parentId, typeId, hideCreatedBy = false }) {
+  const { data, loading, error } = useGetFieldsByType({ parentId: typeId });
   if (loading || (!error && (!data || !data.getFieldsByType))) {
     return <FieldsSkeleton />;
   } else if (error) {
     return <ErrorLoading error={error} />;
   }
+
   return (
     <>
       {data.getFieldsByType.data.map((field) => (
-        <ItemOneFields parentId={parentId} field={field} key={field._id} />
+        <ItemOneFields
+          parentId={parentId}
+          field={field}
+          key={field._id}
+          hideCreatedBy={hideCreatedBy}
+        />
       ))}
     </>
   );

@@ -9,6 +9,7 @@ export const GET_FIELDS_BY_TYPE = gql`
         label
         fieldType
         multipleValues
+        oneUserMultipleValues
         typeId {
           _id
           title

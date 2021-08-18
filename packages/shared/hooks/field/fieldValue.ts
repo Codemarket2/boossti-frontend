@@ -12,7 +12,6 @@ import {
 const defaultQueryVariables = { limit: 1000, page: 1 };
 
 export function useGetFieldValuesByItem({ parentId, field }: any) {
-  console.log('parentId', parentId);
   const { data, error, loading } = useQuery(GET_FIELD_VALUES_BY_FIELD, {
     variables: { ...defaultQueryVariables, parentId, field },
     fetchPolicy: 'cache-and-network',

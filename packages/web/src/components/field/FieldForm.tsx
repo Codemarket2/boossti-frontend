@@ -62,6 +62,7 @@ export default function FieldForm({ onCancel, parentId, field = null }: IProps) 
               value={formik.values.fieldType}
               onChange={formik.handleChange}>
               <FormControlLabel value="string" control={<Radio color="primary" />} label="String" />
+              <FormControlLabel value="date" control={<Radio color="primary" />} label="Date" />
               <FormControlLabel
                 value="type"
                 control={<Radio color="primary" />}
@@ -116,6 +117,22 @@ export default function FieldForm({ onCancel, parentId, field = null }: IProps) 
               />
             }
             label="Allow other users to add their own value"
+          />
+        </InputGroup>
+        <InputGroup>
+          <FormControlLabel
+            disabled={formik.isSubmitting}
+            control={
+              <Checkbox
+                checked={formik.values.oneUserMultipleValues}
+                onChange={({ target }) =>
+                  formik.setFieldValue('oneUserMultipleValues', target.checked)
+                }
+                name="oneUserMultipleValues"
+                color="primary"
+              />
+            }
+            label="Each user can add mutiple values"
           />
         </InputGroup>
         <InputGroup>

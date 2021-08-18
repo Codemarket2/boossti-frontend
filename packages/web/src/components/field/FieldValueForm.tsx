@@ -3,10 +3,14 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useCRUDFieldValue } from '@frontend/shared/hooks/field';
 import { useGetListItemsByType } from '@frontend/shared/hooks/list';
+import MomentUtils from '@date-io/moment';
+import { MuiPickersUtilsProvider, KeyboardDatePicker, DatePicker } from '@material-ui/pickers';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
 import { onAlert } from '../../utils/alert';
 import { useEffect } from 'react';
+import { useState } from 'react';
+import moment from 'moment';
 
 interface IProps {
   onCancel: () => void;
@@ -46,11 +50,53 @@ export default function ItemFieldForm({
     }
   }, [fieldValue]);
 
+  const dateFormatter = (str) => {
+    return str;
+  };
+
   return (
     <div>
       <form onSubmit={formik.handleSubmit}>
-        {formik.values.fieldType === 'string' ? (
-          <InputGroup>
+        <InputGroup>
+          {formik.values.fieldType === 'date' ? (
+            <MuiPickersUtilsProvider libInstance={moment} utils={MomentUtils}>
+              <KeyboardDatePicker
+                name="value"
+                placeholder={moment().format('L')}
+                value={formik.values.value ? moment(formik.values.value) : null}
+                onChange={(value) => formik.setFieldValue('value', moment(value))}
+                error={formik.touched.value && Boolean(formik.errors.value)}
+                helperText={formik.touched.value && formik.errors.value}
+                format="MM/DD/YYYY"
+              />
+            </MuiPickersUtilsProvider>
+          ) : error ? (
+            <p>Error - {error.message}</p>
+          ) : formik.values.fieldType === 'type' ? (
+            <Autocomplete
+              disabled={formik.isSubmitting}
+              value={formik.values.itemId}
+              onChange={(event: any, newValue) => {
+                formik.setFieldValue('itemId', newValue);
+              }}
+              getOptionLabel={(option) => option.title}
+              inputValue={state.search}
+              onInputChange={(event, newInputValue) => {
+                setState({ ...state, search: newInputValue });
+              }}
+              options={data && data.getListItems ? data.getListItems.data : []}
+              renderInput={(params) => (
+                <TextField
+                  error={formik.touched.itemId && Boolean(formik.errors.itemId)}
+                  helperText={formik.touched.itemId && formik.errors.itemId}
+                  fullWidth
+                  {...params}
+                  label={`Select Value`}
+                  variant="outlined"
+                />
+              )}
+            />
+          ) : (
             <TextField
               fullWidth
               label={label}
@@ -63,38 +109,8 @@ export default function ItemFieldForm({
               error={formik.touched.value && Boolean(formik.errors.value)}
               helperText={formik.touched.value && formik.errors.value}
             />
-          </InputGroup>
-        ) : (
-          <InputGroup>
-            {error ? (
-              <p>Error - {error.message}</p>
-            ) : (
-              <Autocomplete
-                disabled={formik.isSubmitting}
-                value={formik.values.itemId}
-                onChange={(event: any, newValue) => {
-                  formik.setFieldValue('itemId', newValue);
-                }}
-                getOptionLabel={(option) => option.title}
-                inputValue={state.search}
-                onInputChange={(event, newInputValue) => {
-                  setState({ ...state, search: newInputValue });
-                }}
-                options={data && data.getListItems ? data.getListItems.data : []}
-                renderInput={(params) => (
-                  <TextField
-                    error={formik.touched.itemId && Boolean(formik.errors.itemId)}
-                    helperText={formik.touched.itemId && formik.errors.itemId}
-                    fullWidth
-                    {...params}
-                    label={`Select Value`}
-                    variant="outlined"
-                  />
-                )}
-              />
-            )}
-          </InputGroup>
-        )}
+          )}
+        </InputGroup>
         <InputGroup>
           <LoadingButton type="submit" loading={formLoading} size="small">
             Save
