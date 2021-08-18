@@ -28,6 +28,7 @@
     "browser-image-compression": "1.0.14",
     "graphql": "15.5.0",
     "html-react-parser": "^1.2.7",
+    "immer": "^9.0.5",
     "moment": "2.29.1",
     "moment-range": "4.0.2",
     "next": "10.2.0",
