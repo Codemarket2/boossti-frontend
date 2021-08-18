@@ -33,7 +33,7 @@ const initialState = {
   edit: false,
 };
 
-function ItemOneFields({ field, parentId, hideCreatedBy = false }) {
+function ItemOneFields({ field, parentId, hideCreatedBy = false, guest }) {
   const [state, setState] = useState(initialState);
   const { attributes, admin } = useSelector(({ auth }: any) => auth);
   const currentUserId = attributes['custom:_id'];
@@ -71,7 +71,8 @@ function ItemOneFields({ field, parentId, hideCreatedBy = false }) {
     <div key={field._id} className="mt-4">
       <Typography variant="h5">{field.label}</Typography>
       {(data.getFieldValuesByItem.data.length === 0 || field.multipleValues) &&
-        (field.oneUserMultipleValues || !hasAlreadyAdded) && (
+        (field.oneUserMultipleValues || !hasAlreadyAdded) &&
+        !guest && (
           <>
             {state.showForm ? (
               <FieldValueForm {...formProps} />
@@ -165,7 +166,7 @@ function ItemOneFields({ field, parentId, hideCreatedBy = false }) {
   );
 }
 
-export default function ItemsFieldsMap({ parentId, typeId, hideCreatedBy = false }) {
+export default function ItemsFieldsMap({ parentId, typeId, hideCreatedBy = false, guest = false }) {
   const { data, loading, error } = useGetFieldsByType({ parentId: typeId });
   if (loading || (!error && (!data || !data.getFieldsByType))) {
     return <FieldsSkeleton />;
@@ -181,6 +182,7 @@ export default function ItemsFieldsMap({ parentId, typeId, hideCreatedBy = false
           field={field}
           key={field._id}
           hideCreatedBy={hideCreatedBy}
+          guest={guest}
         />
       ))}
     </>
