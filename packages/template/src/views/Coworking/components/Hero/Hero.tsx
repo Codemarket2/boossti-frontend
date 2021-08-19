@@ -4,6 +4,9 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { useMediaQuery, Button, Typography } from '@material-ui/core';
 import { SectionHeader, SwiperImage } from '../../../../components/molecules';
 import { HeroShaped } from '../../../../components/organisms';
+// import { HeroShaped } from '../../../../assets/images/custom/place1@2x.jpeg';
+
+// packages/template/src/assets/images/custom/place1@2x.jpeg
 
 const useStyles = makeStyles((theme) => ({
   swiperNavButton: {
@@ -23,6 +26,8 @@ const Hero = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
 
   return (
     <div className={className} {...rest}>
+      {/* <p>eheh</p> */}
+      {/* <img src={require('../../../../assets/images/custom/place1@2x.jpeg')} /> */}
       <HeroShaped
         leftSide={
           <SectionHeader
@@ -52,21 +57,18 @@ const Hero = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
             navigationButtonStyle={classes.swiperNavButton}
             items={[
               {
-                src: 'https://assets.maccarianagency.com/the-front/photos/coworking/place2.jpg',
-                srcSet:
-                  'https://assets.maccarianagency.com/the-front/photos/coworking/place2@2x.jpg 2x',
+                src: require('../../../../assets/images/custom/place1@2x.jpeg'),
+                srcSet: require('../../../../assets/images/custom/place1@2x.jpeg'),
                 alt: '...',
               },
               {
-                src: 'https://assets.maccarianagency.com/the-front/photos/coworking/place1.jpg',
-                srcSet:
-                  'https://assets.maccarianagency.com/the-front/photos/coworking/place1@2x.jpg 2x',
+                src: require('../../../../assets/images/custom/place2@2x.jpeg'),
+                srcSet: require('../../../../assets/images/custom/place2@2x.jpeg'),
                 alt: '...',
               },
               {
-                src: 'https://assets.maccarianagency.com/the-front/photos/coworking/place3.jpg',
-                srcSet:
-                  'https://assets.maccarianagency.com/the-front/photos/coworking/place3@2x.jpg 2x',
+                src: require('../../../../assets/images/custom/place3@2x.jpeg'),
+                srcSet: require('../../../../assets/images/custom/place3@2x.jpeg'),
                 alt: '...',
               },
             ]}

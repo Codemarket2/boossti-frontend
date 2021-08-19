@@ -2,6 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Swiper from 'swiper';
+// import { HeroShaped } from '../../../assets/images/custom/place1@2x.jpeg';
 
 import { Image } from '../../atoms';
 

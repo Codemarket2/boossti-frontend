@@ -29,8 +29,7 @@ const Image = ({
   },
   className,
   ...rest
-}: ImageProps): JSX.Element  => {
-
+}: ImageProps): JSX.Element => {
   const classes = useStyles();
   if (lazy) {
     return (

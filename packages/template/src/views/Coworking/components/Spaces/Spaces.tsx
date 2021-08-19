@@ -25,21 +25,18 @@ const Spaces = ({ className, ...rest }: ViewComponentProps): JSX.Element => (
       <Grid item xs={12} md={6} data-aos="fade-up">
         <OverlapedImages
           image1={{
-            src: 'https://assets.maccarianagency.com/the-front/photos/coworking/place1.jpg',
-            srcSet:
-              'https://assets.maccarianagency.com/the-front/photos/coworking/place1@2x.jpg 2x',
+            src: require('../../../../assets/images/custom/place1@2x.jpeg'),
+            srcSet: require('../../../../assets/images/custom/place1@2x.jpeg'),
             alt: '...',
           }}
           image2={{
-            src: 'https://assets.maccarianagency.com/the-front/photos/coworking/place2.jpg',
-            srcSet:
-              'https://assets.maccarianagency.com/the-front/photos/coworking/place2@2x.jpg 2x',
+            src: require('../../../../assets/images/custom/place2@2x.jpeg'),
+            srcSet: require('../../../../assets/images/custom/place2@2x.jpeg'),
             alt: '...',
           }}
           image3={{
-            src: 'https://assets.maccarianagency.com/the-front/photos/coworking/place3.jpg',
-            srcSet:
-              'https://assets.maccarianagency.com/the-front/photos/coworking/place3@2x.jpg 2x',
+            src: require('../../../../assets/images/custom/place3@2x.jpeg'),
+            srcSet: require('../../../../assets/images/custom/place3@2x.jpeg'),
             alt: '...',
           }}
         />

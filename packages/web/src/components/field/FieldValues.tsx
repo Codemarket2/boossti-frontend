@@ -69,27 +69,43 @@ function ItemOneFields({ field, parentId, hideCreatedBy = false, guest }) {
 
   return (
     <div key={field._id} className="mt-4">
-      <Typography variant="h5">{field.label}</Typography>
-      {(data.getFieldValuesByItem.data.length === 0 || field.multipleValues) &&
+      <Typography variant="h5" className="d-flex align-items-center">
+        {field.label}
+        {(data.getFieldValuesByItem.data.length === 0 || field.multipleValues) &&
+          (field.oneUserMultipleValues || !hasAlreadyAdded) &&
+          !guest &&
+          !state.showForm && (
+            <IconButton
+              color="primary"
+              onClick={() => setState({ ...initialState, showForm: true })}>
+              <AddCircle />
+            </IconButton>
+          )}
+      </Typography>
+      {state.showForm && <FieldValueForm {...formProps} />}
+      {/* {(data.getFieldValuesByItem.data.length === 0 || field.multipleValues) &&
         (field.oneUserMultipleValues || !hasAlreadyAdded) &&
         !guest && (
           <>
             {state.showForm ? (
               <FieldValueForm {...formProps} />
             ) : (
-              <Button
-                className="mt-2"
-                size="small"
-                variant="outlined"
-                component="span"
-                color="primary"
-                startIcon={<AddCircle />}
-                onClick={() => setState({ ...initialState, showForm: true })}>
-                Add Value
-              </Button>
+              <IconButton onClick={() => setState({ ...initialState, showForm: true })}>
+                <AddCircle />
+              </IconButton>
+              // <Button
+              //   className="mt-2"
+              //   size="small"
+              //   variant="outlined"
+              //   component="span"
+              //   color="primary"
+              //   startIcon={<AddCircle />}
+              //   onClick={() => setState({ ...initialState, showForm: true })}>
+              //   Add Value
+              // </Button>
             )}
           </>
-        )}
+        )} */}
       <List component="div">
         {data.getFieldValuesByItem.data.map((fieldValue, index) =>
           state.selectedFieldValue &&
