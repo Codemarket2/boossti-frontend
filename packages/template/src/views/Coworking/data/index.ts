@@ -30,27 +30,24 @@ export const partners = [
 export const advantages = [
   {
     icon: 'fas fa-users',
-    title: 'Coworking communities',
+    title: 'Verify doctors',
     subtitle:
-      'Connect in spaces designed to bring incredible people together. Learn with them and take your project to new heights.',
+      'Verify doctors about their past experince details in treating patients with symptoms like yours.',
   },
   {
     icon: 'far fa-address-book',
-    title: 'Flexible contracts',
-    subtitle:
-      'Stay as little as 3 months with rolling contracts. Like it here? This is your space, so stay as long as you want.',
+    title: 'Compare treatments',
+    subtitle: 'Compare treatment plans with other patients.',
   },
   {
     icon: 'fab fa-angellist',
-    title: 'All inclusive',
-    subtitle:
-      'Monthly fee covers everything you need hassle free. Keep cool and focus on what matters to you.',
+    title: 'Improve health',
+    subtitle: 'Educate yourself about health and wellness to improve your wellbeing.',
   },
   {
     icon: 'fas fa-phone-alt',
-    title: 'Hospitality service',
-    subtitle:
-      '24/7 support. No more hidden prices. It is your workingplace, playground, relax room.',
+    title: 'Community support',
+    subtitle: 'Build a community around yourself rather than doing it alone.',
   },
 ];
 

@@ -14,13 +14,13 @@ const Advantages = ({ data, className, ...rest }: ViewComponentProps): JSX.Eleme
       <SectionHeader
         title={
           <span>
-            We are reimagining renting to help you{' '}
+            Learn from experts and survivors to use traditional and holsitic treatments to{' '}
             <Typography component="span" variant="inherit" color="primary">
-              achieve your dreams
+              prevent and cure illneses
             </Typography>
           </span>
         }
-        subtitle="Our mission is to help you grow your business, meet and connect with people who share your passions. We help you fulfill your best potential through an engaging lifestyle experience."
+        subtitle="Our mission is to help everyone to learn about the best available treatment plans to reclaim their optimum health ."
         fadeUp
       />
       <Grid container spacing={4}>
