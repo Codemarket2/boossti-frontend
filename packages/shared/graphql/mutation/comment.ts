@@ -12,6 +12,23 @@ export const CREATE_COMMENT = gql`
   }
 `;
 
-// export const UPDATE_COMMENT;
+export const UPDATE_COMMENT = gql`
+  mutation MyMutation($_id: ID!, $body: String!) {
+    updateComment(_id: $_id, body: $body) {
+      _id
+      body
+      createdAt
+      updatedAt
+      createdBy {
+        name
+        picture
+      }
+    }
+  }
+`;
 
-// export const DELETE_COMMENT;
+export const DELETE_COMMENT = gql`
+  mutation MyMutation($_id: ID!) {
+    deleteComment(_id: $_id)
+  }
+`;

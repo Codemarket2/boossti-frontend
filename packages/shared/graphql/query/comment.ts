@@ -7,6 +7,7 @@ export const GET_COMMENTS_BY_PARENT_ID = gql`
         body
         _id
         createdAt
+        updatedAt
         parentId
         createdBy {
           name
