@@ -56,7 +56,7 @@ const Location = ({ data, className, ...rest }: ViewComponentProps): JSX.Element
       <SectionHeader
         title={
           <span>
-            Health & Welness{' '}
+            Health & Wellness{' '}
             <Typography component="span" variant="inherit" color="primary">
               events
             </Typography>

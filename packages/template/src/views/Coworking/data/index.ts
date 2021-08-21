@@ -275,11 +275,11 @@ export const locations = [
 
 export const properties = [
   {
-    title: '24/7 concierge',
+    title: 'Questions to doctors',
     icon: 'fas fa-phone-alt',
   },
   {
-    title: 'Coworking spaces',
+    title: 'Compare treatments',
     icon: 'fas fa-users',
   },
   {
