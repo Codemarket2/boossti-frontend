@@ -13,10 +13,10 @@ const Spaces = ({ className, ...rest }: ViewComponentProps): JSX.Element => (
               <Typography color="secondary" variant="inherit" component="span">
                 Learn about{' '}
               </Typography>
-              herbs, supplements, medications.
+              herbs, supplements, alternate treatements.
             </span>
           }
-          subtitle="Know what herbs, supplements & medications are good for you."
+          subtitle="Know what herbs, supplements & alternate treatments are good for you."
           align="left"
           fadeUp
           disableGutter

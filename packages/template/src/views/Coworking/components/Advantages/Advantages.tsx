@@ -14,7 +14,7 @@ const Advantages = ({ data, className, ...rest }: ViewComponentProps): JSX.Eleme
       <SectionHeader
         title={
           <span>
-            Learn from experts and survivors to use traditional and holistic treatments to{' '}
+            Learn from experts and survivors to use both traditional and holistic treatments to{' '}
             <Typography component="span" variant="inherit" color="primary">
               prevent and cure illneses
             </Typography>
