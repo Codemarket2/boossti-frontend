@@ -55,7 +55,12 @@ export default function PostCard({ post, onClickMore = () => {}, authenticated =
       />
       <CardContent>
         <div data-testid="post-body">
-          <MentionParser value={post.body} className="mb-1" authenticated={authenticated} />
+          <MentionParser
+            value={post.body}
+            tags={post.tags}
+            className="mb-1"
+            authenticated={authenticated}
+          />
         </div>
         <ImageList media={post.media} authenticated={authenticated} />
       </CardContent>

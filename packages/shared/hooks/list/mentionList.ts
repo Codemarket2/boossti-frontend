@@ -15,7 +15,7 @@ export function useMentionList() {
   });
 
   const { data: itemsData } = useQuery(GET_LIST_ITEMS_BY_TYPE, {
-    variables: { ...defaultGetListTypes, types: [state.selectedType] },
+    variables: { ...defaultGetListTypes, types: state.selectedType ? [state.selectedType] : [] },
   });
 
   const listItems =

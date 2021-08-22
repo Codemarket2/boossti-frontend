@@ -11,6 +11,8 @@ export function useGetMyFeeds() {
     fetchPolicy: 'cache-and-network',
   });
 
+  // console.log('data, loading, error', data, loading, error);
+
   // useEffect(() => {
   //   subscribeToMore({
   //     document: ADDED_POST,

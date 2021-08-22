@@ -45,8 +45,6 @@ export default function Screen({ slug }: IProps) {
     return <NotFound />;
   }
 
-  console.log('data.getListTypeBySlug._id', data.getListTypeBySlug._id);
-
   return (
     <UserLayout authRequired>
       <Breadcrumbs>

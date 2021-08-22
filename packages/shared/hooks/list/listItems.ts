@@ -10,7 +10,7 @@ import { omitTypename } from '../../utils/omitTypename';
 
 const defaultGetListItems = { limit: 100, page: 1 };
 
-export function useGetListItemsByType({ types }: any) {
+export function useGetListItemsByType({ types = [] }: any) {
   const [state, setState] = useState({
     search: '',
     showSearch: false,
@@ -19,6 +19,8 @@ export function useGetListItemsByType({ types }: any) {
     variables: { ...defaultGetListItems, types: types, search: state.search },
     fetchPolicy: 'cache-and-network',
   });
+
+  console.log('data, error, loading', data, error, loading);
 
   return { data, error, loading, state, setState };
 }
@@ -85,6 +87,7 @@ export function useCRUDListItems({ onAlert, types, createCallBack, updateCallBac
         newPayload = { ...newPayload, media, types };
         if (newPayload.edit) {
           const res = await onUpdate(newPayload);
+          // console.log('onUpdate res', res);
           updateCallBack(res.data.updateListItem.slug);
         } else {
           let res = await onCreate(newPayload);
@@ -121,6 +124,7 @@ export function useCRUDListItems({ onAlert, types, createCallBack, updateCallBac
   };
 
   const onUpdate = async (payload) => {
+    // console.log('onUpdate function');
     const updateInCache = (client, mutationResult) => {
       const res = client.readQuery({
         query: GET_LIST_ITEM_BY_SLUG,

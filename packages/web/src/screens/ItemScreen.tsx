@@ -31,7 +31,7 @@ export default function Screen({ slug, typeSlug }: IProps) {
 
   const updateCallBack = (newSlug) => {
     setState({ ...state, item: null });
-    if (newSlug !== slug) {
+    if (newSlug) {
       router.push(`/types/${typeSlug}/${newSlug}`);
     }
   };

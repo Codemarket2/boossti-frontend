@@ -11,6 +11,22 @@ export const GET_MY_POSTS = gql`
           url
           caption
         }
+        tags {
+          tag {
+            _id
+            title
+            slug
+            description
+            media {
+              url
+              caption
+            }
+            types {
+              _id
+              slug
+            }
+          }
+        }
         createdAt
         createdBy {
           _id
@@ -33,6 +49,22 @@ export const GET_USER_POSTS = gql`
           url
           caption
         }
+        tags {
+          tag {
+            _id
+            title
+            slug
+            description
+            media {
+              url
+              caption
+            }
+            types {
+              _id
+              slug
+            }
+          }
+        }
         createdAt
         createdBy {
           _id
@@ -54,6 +86,22 @@ export const GET_POSTS = gql`
         media {
           url
           caption
+        }
+        tags {
+          tag {
+            _id
+            title
+            slug
+            description
+            media {
+              url
+              caption
+            }
+            types {
+              _id
+              slug
+            }
+          }
         }
         createdAt
         createdBy {

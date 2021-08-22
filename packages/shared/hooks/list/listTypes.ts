@@ -122,18 +122,20 @@ export function useCRUDListTypes({ onAlert, createCallBack, updateCallBack }: IP
 
   const onUpdate = async (payload) => {
     const updateInCache = (client, mutationResult) => {
-      const { getListTypeBySlug } = client.readQuery({
+      const data = client.readQuery({
         query: GET_LIST_TYPE_BY_SLUG,
         variables: { slug: mutationResult.data.updateListType.slug },
       });
-      const newData = {
-        getListTypeBySlug: mutationResult.data.updateListType,
-      };
-      client.writeQuery({
-        query: GET_LIST_TYPE_BY_SLUG,
-        variables: { slug: mutationResult.data.updateListType.slug },
-        data: newData,
-      });
+      if (data && data.getListTypeBySlug) {
+        const newData = {
+          getListTypeBySlug: mutationResult.data.updateListType,
+        };
+        client.writeQuery({
+          query: GET_LIST_TYPE_BY_SLUG,
+          variables: { slug: mutationResult.data.updateListType.slug },
+          data: newData,
+        });
+      }
     };
     const res = await updateListTypeMutation({
       variables: payload,
