@@ -31,9 +31,9 @@ const MapHero = ({ data, className, ...rest }: ViewComponentProps): JSX.Element 
                 title={
                   <span>
                     <Typography color="secondary" variant="inherit" component="span">
-                      Over 400 locations{' '}
+                      All types of diseases{' '}
                     </Typography>
-                    spread across the entire planet.
+                    and treatments.
                   </span>
                 }
                 subtitle="We picked our office locations to maximize our availability to you! We try to keep locations in every major city, as well as common vacatino destinations in case you need to sneak work in on the side."

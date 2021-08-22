@@ -11,12 +11,12 @@ const Spaces = ({ className, ...rest }: ViewComponentProps): JSX.Element => (
           title={
             <span>
               <Typography color="secondary" variant="inherit" component="span">
-                Flexible office space{' '}
+                Learn about{' '}
               </Typography>
-              means growing your team is easy.
+              herbs, supplements, alternate treatements.
             </span>
           }
-          subtitle="Rather than worrying about switching offices every couple years, you can instead stay in the same location and grow-up from your shared coworking space to an office that takes up an entire floor."
+          subtitle="Know what herbs, supplements & alternate treatments are good for you."
           align="left"
           fadeUp
           disableGutter
