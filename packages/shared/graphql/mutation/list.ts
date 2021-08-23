@@ -55,20 +55,8 @@ export const CREATE_LIST_ITEM = gql`
   }
 `;
 export const UPDATE_LIST_ITEM = gql`
-  mutation MyMutation(
-    $_id: ID!
-    $types: [ID!]
-    $title: String!
-    $description: String
-    $media: [MediaInput]
-  ) {
-    updateListItem(
-      _id: $_id
-      types: $types
-      title: $title
-      description: $description
-      media: $media
-    ) {
+  mutation MyMutation($_id: ID!, $title: String!, $description: String, $media: [MediaInput]) {
+    updateListItem(_id: $_id, title: $title, description: $description, media: $media) {
       _id
       title
       slug

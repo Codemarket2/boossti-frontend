@@ -4,6 +4,10 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
+import EditIcon from '@material-ui/icons/Edit';
+import { useCRUDListTypes } from '@frontend/shared/hooks/list';
 import UserLayout from '../components/common/UserLayout';
 import Breadcrumbs from '../components/common/Breadcrumbs';
 import ErrorLoading from '../components/common/ErrorLoading';
@@ -15,6 +19,7 @@ import Backdrop from '../components/common/Backdrop';
 import ActionButtons from '../components/list/ActionButtons';
 import { onAlert } from '../utils/alert';
 import Fields from '../components/field/Fields';
+import InlineForm from '../components/list/InlineForm';
 
 interface IProps {
   slug: any;
@@ -22,13 +27,14 @@ interface IProps {
 
 export default function Screen({ slug }: IProps) {
   const router = useRouter();
+  const [state, setState] = useState({ vType: null, fieldName: '' });
 
   const deleteCallBack = () => {
     router.push(`/types`);
   };
 
   const updateCallBack = (newSlug) => {
-    setState({ ...state, vType: null });
+    setState({ ...state, vType: null, fieldName: '' });
     if (newSlug !== slug) {
       router.push(`/types/${newSlug}`);
     }
@@ -37,7 +43,25 @@ export default function Screen({ slug }: IProps) {
   const { data, loading, error } = useGetListTypeBySlug({ slug });
   const { handleDelete, deleteLoading } = useDeleteListType({ onAlert });
 
-  const [state, setState] = useState({ vType: null });
+  const {
+    state: crudState,
+    setState: setCrudState,
+    formik,
+    CRUDLoading,
+    setFormValues,
+  } = useCRUDListTypes({
+    onAlert,
+    updateCallBack,
+  });
+
+  const onCancel = () => {
+    setState({ ...state, fieldName: '' });
+  };
+
+  const onEdit = (fieldName) => {
+    setFormValues(data.getListTypeBySlug);
+    setState({ ...state, fieldName });
+  };
 
   if (error || !data) {
     return <ErrorLoading error={error} />;
@@ -47,10 +71,22 @@ export default function Screen({ slug }: IProps) {
 
   return (
     <UserLayout authRequired>
-      <Breadcrumbs>
-        <Link href="/types">Types</Link>
-        <Typography color="textPrimary">{data.getListTypeBySlug.title}</Typography>
-      </Breadcrumbs>
+      <div className="d-flex justify-content-between align-content-center align-items-center">
+        <Breadcrumbs>
+          <Link href="/types">Types</Link>
+          <Typography color="textPrimary">{data.getListTypeBySlug.title}</Typography>
+        </Breadcrumbs>
+        <ActionButtons
+          onEdit={() => setState({ ...state, vType: { ...data.getListTypeBySlug } })}
+          onDelete={() => {
+            if (data.getListTypeBySlug.inUse) {
+              alert("This type is being used in some form, you can't delete");
+            } else {
+              handleDelete(data.getListTypeBySlug._id, deleteCallBack);
+            }
+          }}
+        />
+      </div>
       {state.vType ? (
         <ListTypeForm
           vType={state.vType}
@@ -60,20 +96,52 @@ export default function Screen({ slug }: IProps) {
       ) : (
         <>
           <Paper variant="outlined" className="p-2 mb-2">
-            <div className="d-flex justify-content-between align-content-center align-items-center">
-              <Typography variant="h4">{data.getListTypeBySlug.title}</Typography>
-              <ActionButtons
-                onEdit={() => setState({ ...state, vType: { ...data.getListTypeBySlug } })}
-                onDelete={() => {
-                  if (data.getListTypeBySlug.inUse) {
-                    alert("This type is being used in some form, you can't delete");
-                  } else {
-                    handleDelete(data.getListTypeBySlug._id, deleteCallBack);
-                  }
-                }}
+            {state.fieldName === 'title' ? (
+              <InlineForm
+                fieldName={state.fieldName}
+                label="Title"
+                onCancel={onCancel}
+                formik={formik}
+                formLoading={CRUDLoading}
               />
-            </div>
-            <Typography>{data.getListTypeBySlug.description}</Typography>
+            ) : (
+              <Typography variant="h4" className="d-flex align-items-center">
+                {data.getListTypeBySlug.title}
+                <Tooltip title="Edit Title">
+                  <IconButton onClick={() => onEdit('title')}>
+                    <EditIcon />
+                  </IconButton>
+                </Tooltip>
+              </Typography>
+            )}
+            {state.fieldName === 'description' ? (
+              <InlineForm
+                label="Description"
+                onCancel={onCancel}
+                multiline
+                fieldName={state.fieldName}
+                formik={formik}
+                formLoading={CRUDLoading}
+              />
+            ) : (
+              <Typography className="d-flex align-items-center">
+                {data.getListTypeBySlug.description}
+                <Tooltip title="Edit Description">
+                  <IconButton onClick={() => onEdit('description')}>
+                    <EditIcon />
+                  </IconButton>
+                </Tooltip>
+              </Typography>
+            )}
+            <Typography className="d-flex align-items-center">
+              Media
+              <Tooltip title="Edit Description">
+                <IconButton
+                  onClick={() => setState({ ...state, vType: { ...data.getListTypeBySlug } })}>
+                  <EditIcon />
+                </IconButton>
+              </Tooltip>
+            </Typography>
             <ImageList media={data.getListTypeBySlug.media} />
           </Paper>
           <Fields parentId={data.getListTypeBySlug._id} />
@@ -84,7 +152,7 @@ export default function Screen({ slug }: IProps) {
           />
         </>
       )}
-      <Backdrop open={deleteLoading} />
+      <Backdrop open={deleteLoading || CRUDLoading || formik.isSubmitting} />
     </UserLayout>
   );
 }

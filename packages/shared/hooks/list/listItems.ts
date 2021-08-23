@@ -53,7 +53,7 @@ const listItemsDefaultValue = {
 };
 
 interface IProps extends IHooksProps {
-  types?: [string];
+  types?: any;
   createCallBack?: (arg: string) => void;
   updateCallBack?: (arg: string) => void;
 }

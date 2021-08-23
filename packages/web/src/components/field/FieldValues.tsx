@@ -5,7 +5,7 @@ import {
 } from '@frontend/shared/hooks/field';
 import FieldsSkeleton from './FieldsSkeleton';
 import ErrorLoading from '../common/ErrorLoading';
-import Button from '@material-ui/core/Button';
+import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import AddCircle from '@material-ui/icons/AddCircle';
@@ -75,11 +75,13 @@ function ItemOneFields({ field, parentId, hideCreatedBy = false, guest }) {
           (field.oneUserMultipleValues || !hasAlreadyAdded) &&
           !guest &&
           !state.showForm && (
-            <IconButton
-              color="primary"
-              onClick={() => setState({ ...initialState, showForm: true })}>
-              <AddCircle />
-            </IconButton>
+            <Tooltip title="Add New Value">
+              <IconButton
+                color="primary"
+                onClick={() => setState({ ...initialState, showForm: true })}>
+                <AddCircle />
+              </IconButton>
+            </Tooltip>
           )}
       </Typography>
       {state.showForm && <FieldValueForm {...formProps} />}

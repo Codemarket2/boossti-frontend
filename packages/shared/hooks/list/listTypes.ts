@@ -126,16 +126,14 @@ export function useCRUDListTypes({ onAlert, createCallBack, updateCallBack }: IP
         query: GET_LIST_TYPE_BY_SLUG,
         variables: { slug: mutationResult.data.updateListType.slug },
       });
-      if (data && data.getListTypeBySlug) {
-        const newData = {
-          getListTypeBySlug: mutationResult.data.updateListType,
-        };
-        client.writeQuery({
-          query: GET_LIST_TYPE_BY_SLUG,
-          variables: { slug: mutationResult.data.updateListType.slug },
-          data: newData,
-        });
-      }
+      const newData = {
+        getListTypeBySlug: mutationResult.data.updateListType,
+      };
+      client.writeQuery({
+        query: GET_LIST_TYPE_BY_SLUG,
+        variables: { slug: mutationResult.data.updateListType.slug },
+        data: newData,
+      });
     };
     const res = await updateListTypeMutation({
       variables: payload,
