@@ -112,7 +112,7 @@ export default function Screen({ slug, typeSlug }: IProps) {
         {state.fieldName === 'description' ? (
           <InlineForm
             fieldName={state.fieldName}
-            label="Title"
+            label="Description"
             onCancel={onCancel}
             formik={formik}
             formLoading={CRUDLoading}
