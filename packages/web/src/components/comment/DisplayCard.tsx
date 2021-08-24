@@ -19,9 +19,11 @@ interface IDisplayComment {
   setEdit: any;
   postId: string;
   index: number;
-  setReplyOnComment: any;
+  setReplyOnComment?: any;
+  showIcon?: boolean;
 }
 export default function DisplayCard({
+  showIcon = false,
   commentedUser,
   handleDelete,
   setEdit,
@@ -48,14 +50,20 @@ export default function DisplayCard({
                     onClick={() => handleDelete(commentedUser._id, postId, index)}>
                     <DeleteIcon />
                   </IconButton>
-                  <IconButton aria-label="settings" onClick={() => setReplyOnComment(true)}>
-                    <ReplyIcon />
-                  </IconButton>
+                  {showIcon && (
+                    <IconButton aria-label="settings" onClick={() => setReplyOnComment(true)}>
+                      <ReplyIcon />
+                    </IconButton>
+                  )}
                 </>
               ) : (
-                <IconButton aria-label="settings" onClick={() => setReplyOnComment(true)}>
-                  <ReplyIcon />
-                </IconButton>
+                <>
+                  {showIcon && (
+                    <IconButton aria-label="settings" onClick={() => setReplyOnComment(true)}>
+                      <ReplyIcon />
+                    </IconButton>
+                  )}
+                </>
               )}
             </>
           }
