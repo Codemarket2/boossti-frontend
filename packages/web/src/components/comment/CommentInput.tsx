@@ -7,8 +7,15 @@ interface IComment {
   onClick: any;
   postId?: string;
   handleChange: any;
+  label?: string;
 }
-export default function CommentInput({ handleChange, inputVal, onClick, postId }: IComment) {
+export default function CommentInput({
+  label = 'add a comment',
+  handleChange,
+  inputVal,
+  onClick,
+  postId,
+}: IComment) {
   return (
     <div>
       <Grid container alignItems="center">
@@ -17,7 +24,7 @@ export default function CommentInput({ handleChange, inputVal, onClick, postId }
             variant="standard"
             value={inputVal}
             onChange={handleChange}
-            label="add a comment"
+            label={label}
             fullWidth
           />
         </Grid>
