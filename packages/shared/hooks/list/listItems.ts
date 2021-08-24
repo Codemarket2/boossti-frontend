@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import * as yup from 'yup';
+import { v4 as uuid } from 'uuid';
 import { useFormik } from 'formik';
 import { useQuery, useMutation } from '@apollo/client';
 import { CREATE_LIST_ITEM, UPDATE_LIST_ITEM, DELETE_LIST_ITEM } from '../../graphql/mutation/list';
@@ -159,36 +160,38 @@ export function useCRUDListItems({ onAlert, types, createCallBack, updateCallBac
     });
   };
 
-  const CRUDLoading = createLoading || updateLoading;
+  const CRUDLoading = createLoading || updateLoading || formik.isSubmitting;
 
   return { state, setState, formik, setFormValues, CRUDLoading };
+}
+
+export function useCreateListItem({ onAlert }: IHooksProps) {
+  const [createListItemMutation, { loading: createLoading }] = useMutation(CREATE_LIST_ITEM);
+  const handleCreate = async (types, createCallback) => {
+    try {
+      const payload = {
+        types,
+        title: `${uuid()}-${new Date().getTime()}-n-e-w`,
+        description: '',
+        media: [],
+      };
+      const res = await createListItemMutation({
+        variables: payload,
+      });
+      createCallback(res.data.createListItem.slug);
+    } catch (error) {
+      onAlert('Error', error.message);
+    }
+  };
+  return { handleCreate, createLoading };
 }
 
 export function useDeleteListItem({ onAlert }: IHooksProps) {
   const [deleteListItemMutation, { loading: deleteLoading }] = useMutation(DELETE_LIST_ITEM);
   const handleDelete = async (_id: any, deleteCallBack: any) => {
     try {
-      // const deleteInCache = (client) => {
-      //   const { getListItems } = client.readQuery({
-      //     query: GET_LIST_ITEMS_BY_TYPE,
-      //     variables: defaultGetListItems,
-      //   });
-
-      //   const newData = {
-      //     getListItems: {
-      //       ...getListItems,
-      //       data: getListItems.data.filter((b) => b._id !== state.selectedListItem._id),
-      //     },
-      //   };
-      //   client.writeQuery({
-      //     query: GET_LIST_ITEMS_BY_TYPE,
-      //     variables: defaultGetListItems,
-      //     data: newData,
-      //   });
-      // };
       await deleteListItemMutation({
         variables: { _id },
-        // update: deleteInCache,
       });
       deleteCallBack();
     } catch (error) {

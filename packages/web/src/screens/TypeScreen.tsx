@@ -12,7 +12,6 @@ import UserLayout from '../components/common/UserLayout';
 import Breadcrumbs from '../components/common/Breadcrumbs';
 import ErrorLoading from '../components/common/ErrorLoading';
 import ListItems from '../components/list/ListItems';
-import ListTypeForm from '../components/list/ListTypeForm';
 import ImageList from '../components/post/ImageList';
 import NotFound from '../components/common/NotFound';
 import Backdrop from '../components/common/Backdrop';
@@ -20,6 +19,7 @@ import ActionButtons from '../components/list/ActionButtons';
 import { onAlert } from '../utils/alert';
 import Fields from '../components/field/Fields';
 import InlineForm from '../components/list/InlineForm';
+import MediaForm from '../components/list/MediaForm';
 
 interface IProps {
   slug: any;
@@ -27,14 +27,14 @@ interface IProps {
 
 export default function Screen({ slug }: IProps) {
   const router = useRouter();
-  const [state, setState] = useState({ vType: null, fieldName: '' });
+  const [state, setState] = useState({ fieldName: '' });
 
   const deleteCallBack = () => {
     router.push(`/types`);
   };
 
   const updateCallBack = (newSlug) => {
-    setState({ ...state, vType: null, fieldName: '' });
+    setState({ ...state, fieldName: '' });
     if (newSlug !== slug) {
       router.push(`/types/${newSlug}`);
     }
@@ -74,10 +74,14 @@ export default function Screen({ slug }: IProps) {
       <div className="d-flex justify-content-between align-content-center align-items-center">
         <Breadcrumbs>
           <Link href="/types">Types</Link>
-          <Typography color="textPrimary">{data.getListTypeBySlug.title}</Typography>
+          <Typography color="textPrimary">
+            {data.getListTypeBySlug.title.includes('-n-e-w')
+              ? 'Title'
+              : data.getListTypeBySlug.title}
+          </Typography>
         </Breadcrumbs>
         <ActionButtons
-          onEdit={() => setState({ ...state, vType: { ...data.getListTypeBySlug } })}
+          hideEdit
           onDelete={() => {
             if (data.getListTypeBySlug.inUse) {
               alert("This type is being used in some form, you can't delete");
@@ -87,72 +91,75 @@ export default function Screen({ slug }: IProps) {
           }}
         />
       </div>
-      {state.vType ? (
-        <ListTypeForm
-          vType={state.vType}
-          updateCallBack={updateCallBack}
-          onCancel={() => setState({ ...state, vType: null })}
-        />
-      ) : (
-        <>
-          <Paper variant="outlined" className="p-2 mb-2">
-            {state.fieldName === 'title' ? (
-              <InlineForm
-                fieldName={state.fieldName}
-                label="Title"
-                onCancel={onCancel}
-                formik={formik}
-                formLoading={CRUDLoading}
-              />
-            ) : (
-              <Typography variant="h4" className="d-flex align-items-center">
-                {data.getListTypeBySlug.title}
-                <Tooltip title="Edit Title">
-                  <IconButton onClick={() => onEdit('title')}>
-                    <EditIcon />
-                  </IconButton>
-                </Tooltip>
-              </Typography>
-            )}
-            {state.fieldName === 'description' ? (
-              <InlineForm
-                label="Description"
-                onCancel={onCancel}
-                multiline
-                fieldName={state.fieldName}
-                formik={formik}
-                formLoading={CRUDLoading}
-              />
-            ) : (
-              <Typography className="d-flex align-items-center">
-                {data.getListTypeBySlug.description}
-                <Tooltip title="Edit Description">
-                  <IconButton onClick={() => onEdit('description')}>
-                    <EditIcon />
-                  </IconButton>
-                </Tooltip>
-              </Typography>
-            )}
+      <Paper variant="outlined" className="p-2 mb-2">
+        {state.fieldName === 'title' ? (
+          <InlineForm
+            fieldName={state.fieldName}
+            label="Title"
+            onCancel={onCancel}
+            formik={formik}
+            formLoading={CRUDLoading}
+          />
+        ) : (
+          <Typography variant="h4" className="d-flex align-items-center">
+            {data.getListTypeBySlug.title.includes('-n-e-w')
+              ? 'Title'
+              : data.getListTypeBySlug.title}
+            <Tooltip title="Edit Title">
+              <IconButton onClick={() => onEdit('title')}>
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
+          </Typography>
+        )}
+        {state.fieldName === 'description' ? (
+          <InlineForm
+            label="Description"
+            onCancel={onCancel}
+            multiline
+            fieldName={state.fieldName}
+            formik={formik}
+            formLoading={CRUDLoading}
+          />
+        ) : (
+          <Typography className="d-flex align-items-center">
+            {data.getListTypeBySlug.description || 'Description'}
+            <Tooltip title="Edit Description">
+              <IconButton onClick={() => onEdit('description')}>
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
+          </Typography>
+        )}
+        {state.fieldName === 'media' ? (
+          <MediaForm
+            state={crudState}
+            setState={setCrudState}
+            onCancel={onCancel}
+            onSave={formik.handleSubmit}
+            loading={CRUDLoading}
+          />
+        ) : (
+          <>
             <Typography className="d-flex align-items-center">
               Media
               <Tooltip title="Edit Description">
-                <IconButton
-                  onClick={() => setState({ ...state, vType: { ...data.getListTypeBySlug } })}>
+                <IconButton onClick={() => onEdit('media')}>
                   <EditIcon />
                 </IconButton>
               </Tooltip>
             </Typography>
             <ImageList media={data.getListTypeBySlug.media} />
-          </Paper>
-          <Fields parentId={data.getListTypeBySlug._id} />
-          <ListItems
-            types={[data.getListTypeBySlug._id]}
-            name={data.getListTypeBySlug.title}
-            slug={data.getListTypeBySlug.slug}
-          />
-        </>
-      )}
-      <Backdrop open={deleteLoading || CRUDLoading || formik.isSubmitting} />
+          </>
+        )}
+      </Paper>
+      <Fields parentId={data.getListTypeBySlug._id} />
+      <ListItems
+        types={[data.getListTypeBySlug._id]}
+        name={data.getListTypeBySlug.title}
+        slug={data.getListTypeBySlug.slug}
+      />
+      <Backdrop open={deleteLoading || CRUDLoading} />
     </UserLayout>
   );
 }
