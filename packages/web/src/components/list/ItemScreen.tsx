@@ -70,7 +70,7 @@ export default function Screen({ slug, typeSlug, hideBreadcrumbs = false }: IPro
 
   return (
     <>
-      {hideBreadcrumbs && (
+      {!hideBreadcrumbs && (
         <div className="d-flex justify-content-between align-content-center align-items-center">
           <Breadcrumbs>
             <Link href="/types">Types</Link>

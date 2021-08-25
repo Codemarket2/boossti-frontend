@@ -28,7 +28,7 @@ export default function ItemFormDrawer({ open, onClose, typeTitle = 'Item' }: IP
             </Button>
           </Toolbar>
         </AppBar>
-        <ItemScreen typeSlug="developers" slug="vivek-developer" />
+        <ItemScreen hideBreadcrumbs typeSlug="developers" slug="vivek-developer" />
       </div>
     </Drawer>
   );

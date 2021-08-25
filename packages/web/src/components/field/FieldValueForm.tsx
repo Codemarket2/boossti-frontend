@@ -12,7 +12,7 @@ import { onAlert } from '../../utils/alert';
 import { useEffect, useState } from 'react';
 import moment from 'moment';
 
-const filter = createFilterOptions<FilmOptionType>();
+const filter = createFilterOptions();
 
 interface IProps {
   onCancel: () => void;
