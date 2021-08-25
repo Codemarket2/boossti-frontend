@@ -1,15 +1,18 @@
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import { useCRUDFieldValue } from '@frontend/shared/hooks/field';
 import { useGetListItemsByType } from '@frontend/shared/hooks/list';
 import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider, KeyboardDatePicker, DatePicker } from '@material-ui/pickers';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
+import ItemFormDrawer from '../list/ItemFormDrawer';
 import { onAlert } from '../../utils/alert';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import moment from 'moment';
+
+const filter = createFilterOptions<FilmOptionType>();
 
 interface IProps {
   onCancel: () => void;
@@ -35,6 +38,8 @@ export default function ItemFieldForm({
     types: [typeId],
   });
 
+  const [drawer, setDrawer] = useState({ showDrawer: false });
+
   const { formik, formLoading, setFormValues } = useCRUDFieldValue({
     onAlert,
     parentId,
@@ -48,10 +53,6 @@ export default function ItemFieldForm({
       setFormValues(fieldValue);
     }
   }, [fieldValue]);
-
-  const dateFormatter = (str) => {
-    return str;
-  };
 
   return (
     <div>
@@ -72,29 +73,56 @@ export default function ItemFieldForm({
           ) : error ? (
             <p>Error - {error.message}</p>
           ) : formik.values.fieldType === 'type' ? (
-            <Autocomplete
-              disabled={formik.isSubmitting}
-              value={formik.values.itemId}
-              onChange={(event: any, newValue) => {
-                formik.setFieldValue('itemId', newValue);
-              }}
-              getOptionLabel={(option) => option.title}
-              inputValue={state.search}
-              onInputChange={(event, newInputValue) => {
-                setState({ ...state, search: newInputValue });
-              }}
-              options={data && data.getListItems ? data.getListItems.data : []}
-              renderInput={(params) => (
-                <TextField
-                  error={formik.touched.itemId && Boolean(formik.errors.itemId)}
-                  helperText={formik.touched.itemId && formik.errors.itemId}
-                  fullWidth
-                  {...params}
-                  label={`Select Value`}
-                  variant="outlined"
-                />
-              )}
-            />
+            <>
+              <Autocomplete
+                filterOptions={(options, params) => {
+                  const filtered = filter(options, params);
+                  // Suggest the creation of a new value
+                  if (params.inputValue !== '') {
+                    filtered.push({
+                      inputValue: params.inputValue,
+                      title: `Add New "${params.inputValue}"`,
+                    });
+                  }
+                  return filtered;
+                }}
+                disabled={formik.isSubmitting}
+                value={formik.values.itemId}
+                onChange={(event: any, newValue) => {
+                  formik.setFieldValue('itemId', newValue);
+                }}
+                getOptionLabel={(option) => option.title}
+                inputValue={state.search}
+                onInputChange={(event, newInputValue) => {
+                  setState({ ...state, search: newInputValue });
+                }}
+                options={data && data.getListItems ? data.getListItems.data : []}
+                renderInput={(params) => (
+                  <TextField
+                    error={formik.touched.itemId && Boolean(formik.errors.itemId)}
+                    helperText={formik.touched.itemId && formik.errors.itemId}
+                    fullWidth
+                    {...params}
+                    label={`Select Value`}
+                    variant="outlined"
+                  />
+                )}
+              />
+              <ItemFormDrawer
+                open={drawer.showDrawer}
+                onClose={() => setDrawer({ showDrawer: false })}
+                typeTitle={label}
+              />
+              <Button
+                className="mt-2"
+                disabled={formLoading}
+                variant="contained"
+                color="primary"
+                size="small"
+                onClick={() => setDrawer({ ...drawer, showDrawer: true })}>
+                Add Your New {label}
+              </Button>
+            </>
           ) : (
             <TextField
               fullWidth
