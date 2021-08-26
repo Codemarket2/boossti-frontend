@@ -71,6 +71,39 @@ const Hero = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
     </Container>
   );
 };
+{
+  /* <Container>
+      <Grid container className={classes.root}>
+        <Grid item lg={6} md={6} sm={12} xs={12} className={classes.tagLine}>
+          <SectionHeader
+            title={
+              <span>
+                12-Step Program to{' '}
+                <Typography component="span" variant="inherit" color="primary">
+                  Survive Cancer
+                </Typography>
+              </span>
+            }
+            subtitle="Learn from other cancer patients and cancer surviors."
+            ctaGroup={[
+              <Button variant="contained" color="primary" size={isMd ? 'large' : 'medium'}>
+                JOIN
+              </Button>,
+              <Button variant="outlined" color="primary" size={isMd ? 'large' : 'medium'}>
+                Browse
+              </Button>,
+            ]}
+            align="left"
+            titleVariant="h3"
+          />
+        </Grid>
+        <Grid item lg={6} md={6} sm={12} xs={12} className={classes.centerFormGrid}>
+          <AuthScreen />
+        </Grid>
+      </Grid>
+    </Container> */
+}
+
 // const Hero = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
 //   const classes = useStyles();
 

@@ -5,7 +5,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
-import Button from '@material-ui/core/Button';
+import Tooltip from '@material-ui/core/Tooltip';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { useGetFieldsByType, useDeleteField } from '@frontend/shared/hooks/field';
@@ -47,20 +47,20 @@ export default function Fields({ parentId }: IProps) {
   return (
     <>
       <Paper variant="outlined" className="p-2 mb-2">
-        <Typography variant="h5">Fields</Typography>
-        {state.showForm ? (
+        <Typography variant="h5" className="d-flex align-items-center">
+          Fields
+          {!state.showForm && (
+            <Tooltip title="Add New Field">
+              <IconButton
+                color="primary"
+                onClick={() => setState({ ...initialState, showForm: true })}>
+                <AddCircle />
+              </IconButton>
+            </Tooltip>
+          )}
+        </Typography>
+        {state.showForm && (
           <FieldForm parentId={parentId} onCancel={() => setState(initialState)} />
-        ) : (
-          <Button
-            className="mt-2"
-            size="small"
-            variant="outlined"
-            component="span"
-            color="primary"
-            startIcon={<AddCircle />}
-            onClick={() => setState({ ...initialState, showForm: true })}>
-            Add new field
-          </Button>
         )}
         <List component="div">
           {data.getFieldsByType.data.map((field) =>

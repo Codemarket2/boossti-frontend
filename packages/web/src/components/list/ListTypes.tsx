@@ -2,8 +2,6 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import Link from 'next/link';
 import ListItem from '@material-ui/core/ListItem';
@@ -11,12 +9,21 @@ import ListItemText from '@material-ui/core/ListItemText';
 import AddIcon from '@material-ui/icons/Add';
 import Avatar from '@material-ui/core/Avatar';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import { useGetListTypes } from '@frontend/shared/hooks/list';
+import { useGetListTypes, useCreateListType } from '@frontend/shared/hooks/list';
 import ErrorLoading from '../common/ErrorLoading';
 import ListHeader from '../common/ListHeader';
+import LoadingButton from '../common/LoadingButton';
+import Backdrop from '../common/Backdrop';
+import { useRouter } from 'next/router';
+import { onAlert } from '../../utils/alert';
 
 export default function ListTypes() {
   const { data, loading, error, state, setState } = useGetListTypes();
+  const router = useRouter();
+  const createCallback = (slug) => {
+    router.push(`/types/${slug}`);
+  };
+  const { handleCreate, createLoading } = useCreateListType({ onAlert });
 
   return (
     <>
@@ -24,15 +31,17 @@ export default function ListTypes() {
         button={
           <Link href="/types/new">
             <Tooltip title="Add New Types">
-              <Button
+              <LoadingButton
                 className="ml-2"
                 size="small"
                 variant="contained"
-                component="span"
+                type="button"
                 color="primary"
+                onClick={() => handleCreate(createCallback)}
+                loading={createLoading}
                 startIcon={<AddIcon />}>
                 Add New
-              </Button>
+              </LoadingButton>
             </Tooltip>
           </Link>
         }
@@ -56,7 +65,10 @@ export default function ListTypes() {
                     <ListItemAvatar>
                       <Avatar alt={t.title} src={t.media[0] && t.media[0].url} />
                     </ListItemAvatar>
-                    <ListItemText primary={t.title} secondary={t.description} />
+                    <ListItemText
+                      primary={t.title.includes('-n-e-w') ? 'Title' : t.title}
+                      secondary={t.description}
+                    />
                   </ListItem>
                 </Link>
               </>
@@ -64,6 +76,7 @@ export default function ListTypes() {
           </List>
         )}
       </Paper>
+      <Backdrop open={createLoading} />
     </>
   );
 }

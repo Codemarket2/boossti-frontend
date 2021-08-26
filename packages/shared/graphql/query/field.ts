@@ -9,9 +9,35 @@ export const GET_FIELDS_BY_TYPE = gql`
         label
         fieldType
         multipleValues
+        oneUserMultipleValues
         typeId {
           _id
           title
+          slug
+        }
+      }
+    }
+  }
+`;
+
+export const GET_FIELD_VALUES_BY_FIELD = gql`
+  query MyQuery($parentId: ID!, $field: ID!, $limit: Int, $page: Int) {
+    getFieldValuesByItem(parentId: $parentId, field: $field, limit: $limit, page: $page) {
+      count
+      data {
+        _id
+        parentId
+        field
+        value
+        itemId {
+          _id
+          title
+          slug
+        }
+        createdBy {
+          _id
+          picture
+          name
         }
       }
     }

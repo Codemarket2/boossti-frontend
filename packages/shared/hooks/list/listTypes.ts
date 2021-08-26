@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
+import { v4 as uuid } from 'uuid';
 import { useQuery, useMutation } from '@apollo/client';
 import { CREATE_LIST_TYPE, UPDATE_LIST_TYPE, DELETE_LIST_TYPE } from '../../graphql/mutation/list';
 import { GET_LIST_TYPES, GET_LIST_TYPE_BY_SLUG } from '../../graphql/query/list';
@@ -65,6 +66,26 @@ interface IProps extends IHooksProps {
   updateCallBack?: (slug: string) => void;
 }
 
+export function useCreateListType({ onAlert }: IHooksProps) {
+  const [createListTypeMutation, { loading: createLoading }] = useMutation(CREATE_LIST_TYPE);
+  const handleCreate = async (createCallback) => {
+    try {
+      const payload = {
+        title: `${uuid()}-${new Date().getTime()}-n-e-w`,
+        description: '',
+        media: [],
+      };
+      const res = await createListTypeMutation({
+        variables: payload,
+      });
+      createCallback(res.data.createListType.slug);
+    } catch (error) {
+      onAlert('Error', error.message);
+    }
+  };
+  return { handleCreate, createLoading };
+}
+
 export function useCRUDListTypes({ onAlert, createCallBack, updateCallBack }: IProps) {
   const [state, setState] = useState({
     showForm: false,
@@ -122,7 +143,7 @@ export function useCRUDListTypes({ onAlert, createCallBack, updateCallBack }: IP
 
   const onUpdate = async (payload) => {
     const updateInCache = (client, mutationResult) => {
-      const { getListTypeBySlug } = client.readQuery({
+      const data = client.readQuery({
         query: GET_LIST_TYPE_BY_SLUG,
         variables: { slug: mutationResult.data.updateListType.slug },
       });
@@ -155,7 +176,7 @@ export function useCRUDListTypes({ onAlert, createCallBack, updateCallBack }: IP
     });
   };
 
-  const CRUDLoading = createLoading || updateLoading;
+  const CRUDLoading = createLoading || updateLoading || formik.isSubmitting;
 
   return { state, setState, formik, setFormValues, CRUDLoading };
 }
@@ -164,28 +185,10 @@ export function useDeleteListType({ onAlert }: IHooksProps) {
   const [deleteListTypeMutation, { loading: deleteLoading }] = useMutation(DELETE_LIST_TYPE);
   const handleDelete = async (_id: any, deleteCallBack: any) => {
     try {
-      // const deleteInCache = (client) => {
-      //   const { getListTypes } = client.readQuery({
-      //     query: GET_LIST_TYPES,
-      //     variables: defaultQueryVariables,
-      //   });
-
-      //   const newData = {
-      //     getListTypes: {
-      //       ...getListTypes,
-      //       data: getListTypes.data.filter((b) => b._id !== state.selectedListType._id),
-      //     },
-      //   };
-      //   client.writeQuery({
-      //     query: GET_LIST_TYPES,
-      //     variables: defaultQueryVariables,
-      //     data: newData,
-      //   });
-      // };
       await deleteListTypeMutation({
         variables: { _id },
-        // update: deleteInCache,
       });
+      deleteCallBack();
     } catch (error) {
       onAlert('Error', error.message);
     }

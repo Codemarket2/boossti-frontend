@@ -93,7 +93,8 @@ export default function ListItemForm({
               onClick={onCancel ? onCancel : defaultOnCancel}
               className="ml-2"
               disabled={formik.isSubmitting}
-              color="primary">
+              color="primary"
+              variant="outlined">
               Cancel
             </Button>
           </InputGroup>

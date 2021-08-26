@@ -8,6 +8,7 @@ import ProfileCard from './ProfileCard';
 import MyPostsList from '../post/MyPostsList';
 import BookmarkList from '../bookmark/BookmarkList';
 import FBSettings from '../facebook/FBSettings';
+import About from './About';
 
 export default function ProfileScreen() {
   const [value, setValue] = useState('posts');
@@ -32,6 +33,7 @@ export default function ProfileScreen() {
         </Tabs>
       </Paper>
       {value === 'posts' && <MyPostsList />}
+      {value === 'about' && <About userId={attributes['custom:_id']} />}
       {value === 'bookmarks' && <BookmarkList />}
       {value === 'facebookPostSetting' && <FBSettings showUser={true} />}
     </div>

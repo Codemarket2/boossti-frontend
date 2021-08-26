@@ -8,11 +8,6 @@ import { IHooksProps } from '../../types/common';
 const defaultQueryVariables = { limit: 1000, page: 1 };
 
 export function useGetFieldsByType({ parentId }: any) {
-  //   const [state, setState] = useState({
-  //     search: '',
-  //     showSearch: false,
-  //   });
-
   const { data, error, loading } = useQuery(GET_FIELDS_BY_TYPE, {
     variables: { ...defaultQueryVariables, parentId },
     fetchPolicy: 'cache-and-network',
@@ -23,6 +18,11 @@ export function useGetFieldsByType({ parentId }: any) {
 const validationSchema = yup.object({
   label: yup.string().required('Label is required'),
   fieldType: yup.string().required('Select Field Type'),
+  typeId: yup.object().when('fieldType', {
+    is: (value) => value === 'type',
+    then: yup.object().nullable(true).required('Type is required'),
+    otherwise: yup.object().nullable(true),
+  }),
 });
 
 interface IFormValues {
@@ -33,6 +33,7 @@ interface IFormValues {
   fieldType: string;
   typeId: any;
   multipleValues: boolean;
+  oneUserMultipleValues: boolean;
 }
 
 const defaultFormValues = {
@@ -43,6 +44,7 @@ const defaultFormValues = {
   fieldType: '',
   typeId: null,
   multipleValues: true,
+  oneUserMultipleValues: true,
 };
 
 interface ICRUDProps extends IHooksProps {
@@ -61,10 +63,11 @@ export function useCRUDFields({ onAlert, parentId, createCallback }: ICRUDProps)
       try {
         let newPayload = payload;
         if (newPayload.typeId && newPayload.typeId._id) {
-          newPayload.typeId = newPayload.typeId._id;
+          newPayload = { ...newPayload, typeId: newPayload.typeId._id };
         }
         if (newPayload.edit) {
-          await onUpdate(newPayload);
+          const updateRes = await onUpdate(newPayload);
+          console.log('updateRes', updateRes);
         } else {
           await onCreate(newPayload);
         }
@@ -112,7 +115,6 @@ export function useCRUDFields({ onAlert, parentId, createCallback }: ICRUDProps)
           data: getFieldsByType.data.map((f) =>
             f._id === mutationResult.data.updateField._id ? mutationResult.data.updateField : f,
           ),
-          // data: [...getFieldsByType.data, mutationResult.data.createField],
         },
       };
       client.writeQuery({
@@ -132,6 +134,7 @@ export function useCRUDFields({ onAlert, parentId, createCallback }: ICRUDProps)
     formik.setFieldValue('label', field.label, false);
     formik.setFieldValue('fieldType', field.fieldType, false);
     formik.setFieldValue('multipleValues', field.multipleValues, false);
+    formik.setFieldValue('oneUserMultipleValues', field.oneUserMultipleValues, false);
     formik.setFieldValue('typeId', field.typeId, false);
     formik.setFieldValue('_id', field._id, false);
   };

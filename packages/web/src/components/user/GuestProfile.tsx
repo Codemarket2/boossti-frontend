@@ -7,6 +7,7 @@ import ProfileCard from './ProfileCard';
 import UserPostList from '../post/UserPostList';
 import { useGetOneUser } from '@frontend/shared/hooks/user';
 import UserProfileCardSkeleton from './UserProfileCardSkeleton';
+import About from './About';
 
 export default function ProfileScreen({ _id }: any) {
   const [value, setValue] = useState('posts');
@@ -28,7 +29,8 @@ export default function ProfileScreen({ _id }: any) {
           <Tab label="About" value="about" />
         </Tabs>
       </Paper>
-      {_id && <UserPostList userId={_id} />}
+      {value === 'posts' && <UserPostList userId={_id} />}
+      {value === 'about' && <About userId={_id} guest={true} />}
     </div>
   );
 }

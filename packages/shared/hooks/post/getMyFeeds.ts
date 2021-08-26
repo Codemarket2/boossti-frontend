@@ -11,22 +11,24 @@ export function useGetMyFeeds() {
     fetchPolicy: 'cache-and-network',
   });
 
-  // useEffect(() => {
-  //   subscribeToMore({
-  //     document: ADDED_POST,
-  //     updateQuery: (prev, { subscriptionData }) => {
-  //       if (!subscriptionData.data) return prev;
-  //       const newFeedItem = subscriptionData.data.addedPost;
-  //       return {
-  //         ...prev,
-  //         getPosts: {
-  //           ...prev.getPosts,
-  //           data: [newFeedItem, ...prev.getPosts.data],
-  //         },
-  //       };
-  //     },
-  //   });
-  // }, []);
+  // console.log('data, loading, error', data, loading, error);
+
+  useEffect(() => {
+    subscribeToMore({
+      document: ADDED_POST,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+        const newFeedItem = subscriptionData.data.addedPost;
+        return {
+          ...prev,
+          getPosts: {
+            ...prev.getPosts,
+            data: [newFeedItem, ...prev.getPosts.data],
+          },
+        };
+      },
+    });
+  }, []);
 
   return { data, loading, error, state, setState };
 }

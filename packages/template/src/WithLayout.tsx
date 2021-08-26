@@ -64,6 +64,7 @@ export default function WithLayout({
   }, []);
 
   const [themeMode, themeToggler, mountedComponent] = useDarkMode();
+
   useEffect(() => {
     AOS.refresh();
   }, [mountedComponent]);

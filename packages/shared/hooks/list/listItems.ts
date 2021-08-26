@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import * as yup from 'yup';
+import { v4 as uuid } from 'uuid';
 import { useFormik } from 'formik';
 import { useQuery, useMutation } from '@apollo/client';
 import { CREATE_LIST_ITEM, UPDATE_LIST_ITEM, DELETE_LIST_ITEM } from '../../graphql/mutation/list';
@@ -10,7 +11,7 @@ import { omitTypename } from '../../utils/omitTypename';
 
 const defaultGetListItems = { limit: 100, page: 1 };
 
-export function useGetListItemsByType({ types }: any) {
+export function useGetListItemsByType({ types = [] }: any) {
   const [state, setState] = useState({
     search: '',
     showSearch: false,
@@ -19,6 +20,8 @@ export function useGetListItemsByType({ types }: any) {
     variables: { ...defaultGetListItems, types: types, search: state.search },
     fetchPolicy: 'cache-and-network',
   });
+
+  console.log('data, error, loading', data, error, loading);
 
   return { data, error, loading, state, setState };
 }
@@ -51,7 +54,7 @@ const listItemsDefaultValue = {
 };
 
 interface IProps extends IHooksProps {
-  types?: [string];
+  types?: any;
   createCallBack?: (arg: string) => void;
   updateCallBack?: (arg: string) => void;
 }
@@ -85,6 +88,7 @@ export function useCRUDListItems({ onAlert, types, createCallBack, updateCallBac
         newPayload = { ...newPayload, media, types };
         if (newPayload.edit) {
           const res = await onUpdate(newPayload);
+          // console.log('onUpdate res', res);
           updateCallBack(res.data.updateListItem.slug);
         } else {
           let res = await onCreate(newPayload);
@@ -121,6 +125,7 @@ export function useCRUDListItems({ onAlert, types, createCallBack, updateCallBac
   };
 
   const onUpdate = async (payload) => {
+    // console.log('onUpdate function');
     const updateInCache = (client, mutationResult) => {
       const res = client.readQuery({
         query: GET_LIST_ITEM_BY_SLUG,
@@ -155,36 +160,38 @@ export function useCRUDListItems({ onAlert, types, createCallBack, updateCallBac
     });
   };
 
-  const CRUDLoading = createLoading || updateLoading;
+  const CRUDLoading = createLoading || updateLoading || formik.isSubmitting;
 
   return { state, setState, formik, setFormValues, CRUDLoading };
+}
+
+export function useCreateListItem({ onAlert }: IHooksProps) {
+  const [createListItemMutation, { loading: createLoading }] = useMutation(CREATE_LIST_ITEM);
+  const handleCreate = async (types, createCallback) => {
+    try {
+      const payload = {
+        types,
+        title: `${uuid()}-${new Date().getTime()}-n-e-w`,
+        description: '',
+        media: [],
+      };
+      const res = await createListItemMutation({
+        variables: payload,
+      });
+      createCallback(res.data.createListItem.slug);
+    } catch (error) {
+      onAlert('Error', error.message);
+    }
+  };
+  return { handleCreate, createLoading };
 }
 
 export function useDeleteListItem({ onAlert }: IHooksProps) {
   const [deleteListItemMutation, { loading: deleteLoading }] = useMutation(DELETE_LIST_ITEM);
   const handleDelete = async (_id: any, deleteCallBack: any) => {
     try {
-      // const deleteInCache = (client) => {
-      //   const { getListItems } = client.readQuery({
-      //     query: GET_LIST_ITEMS_BY_TYPE,
-      //     variables: defaultGetListItems,
-      //   });
-
-      //   const newData = {
-      //     getListItems: {
-      //       ...getListItems,
-      //       data: getListItems.data.filter((b) => b._id !== state.selectedListItem._id),
-      //     },
-      //   };
-      //   client.writeQuery({
-      //     query: GET_LIST_ITEMS_BY_TYPE,
-      //     variables: defaultGetListItems,
-      //     data: newData,
-      //   });
-      // };
       await deleteListItemMutation({
         variables: { _id },
-        // update: deleteInCache,
       });
       deleteCallBack();
     } catch (error) {

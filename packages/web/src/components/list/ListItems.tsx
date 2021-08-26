@@ -9,31 +9,42 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Link from 'next/link';
 import AddIcon from '@material-ui/icons/Add';
-import { useGetListItemsByType } from '@frontend/shared/hooks/list';
+import { useGetListItemsByType, useCreateListItem } from '@frontend/shared/hooks/list';
 import ErrorLoading from '../common/ErrorLoading';
 import ListHeader from '../common/ListHeader';
+import LoadingButton from '../common/LoadingButton';
+import Backdrop from '../common/Backdrop';
+import { useRouter } from 'next/router';
+import { onAlert } from '../../utils/alert';
 
 export default function ListItems({ types, name, slug }: any) {
   const { data, loading, error, state, setState } = useGetListItemsByType({ types });
+  const router = useRouter();
+
+  const createCallback = (itemSlug) => {
+    router.push(`/types/${slug}/${itemSlug}`);
+  };
+
+  const { handleCreate, createLoading } = useCreateListItem({ onAlert });
 
   return (
     <>
       <ListHeader
         buttonClass="justify-content-between flex-row-reverse"
         button={
-          <Link href={`/types/${slug}/new`}>
-            <Tooltip title="Add New Types">
-              <Button
-                className="ml-2"
-                size="small"
-                variant="contained"
-                component="span"
-                color="primary"
-                startIcon={<AddIcon />}>
-                Add New
-              </Button>
-            </Tooltip>
-          </Link>
+          <Tooltip title="Add New Types">
+            <LoadingButton
+              className="ml-2"
+              size="small"
+              variant="contained"
+              color="primary"
+              type="button"
+              onClick={() => handleCreate(types, createCallback)}
+              loading={createLoading}
+              startIcon={<AddIcon />}>
+              Add New
+            </LoadingButton>
+          </Tooltip>
         }
         search={state.search}
         showSearch={state.showSearch}
@@ -54,7 +65,10 @@ export default function ListItems({ types, name, slug }: any) {
                     <ListItemAvatar>
                       <Avatar alt={t.title} src={t.media[0] && t.media[0].url} />
                     </ListItemAvatar>
-                    <ListItemText primary={t.title} secondary={t.description} />
+                    <ListItemText
+                      primary={t.title.includes('-n-e-w') ? 'Title' : t.title}
+                      secondary={t.description}
+                    />
                   </ListItem>
                 </Link>
               </>
@@ -62,6 +76,7 @@ export default function ListItems({ types, name, slug }: any) {
           </List>
         )}
       </Paper>
+      <Backdrop open={createLoading} />
     </>
   );
 }

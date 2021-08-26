@@ -48,6 +48,18 @@ export default function PostScreen({ post, onClose = () => {} }: any) {
     if (state.body === '') {
       return alert('Enter some text');
     }
+
+    // let message = state.body;
+    // message = message.split('^^__');
+    // let tags = [];
+    // message.forEach((m) => {
+    //   if (m.includes('@@@__')) {
+    //     let tag = m.split('@@@__').pop();
+    //     tags.push(tag);
+    //   }
+    // });
+    // console.log('tag', tags);
+
     setState({ ...state, submitLoading: true });
     if (!state.edit && fbsdkConnected) {
       const selectedGroups: any = JSON.parse(localStorage.getItem('selectedGroups'));
