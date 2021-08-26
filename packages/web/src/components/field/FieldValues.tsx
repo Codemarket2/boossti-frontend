@@ -69,6 +69,7 @@ function ItemOneFields({ field, parentId, hideCreatedBy = false, guest }) {
 
   return (
     <div key={field._id} className="mt-4">
+      <Divider />
       <Typography variant="h5" className="d-flex align-items-center">
         {field.label}
         {(data.getFieldValuesByItem.data.length === 0 || field.multipleValues) &&
@@ -85,29 +86,6 @@ function ItemOneFields({ field, parentId, hideCreatedBy = false, guest }) {
           )}
       </Typography>
       {state.showForm && <FieldValueForm {...formProps} />}
-      {/* {(data.getFieldValuesByItem.data.length === 0 || field.multipleValues) &&
-        (field.oneUserMultipleValues || !hasAlreadyAdded) &&
-        !guest && (
-          <>
-            {state.showForm ? (
-              <FieldValueForm {...formProps} />
-            ) : (
-              <IconButton onClick={() => setState({ ...initialState, showForm: true })}>
-                <AddCircle />
-              </IconButton>
-              // <Button
-              //   className="mt-2"
-              //   size="small"
-              //   variant="outlined"
-              //   component="span"
-              //   color="primary"
-              //   startIcon={<AddCircle />}
-              //   onClick={() => setState({ ...initialState, showForm: true })}>
-              //   Add Value
-              // </Button>
-            )}
-          </>
-        )} */}
       <List component="div">
         {data.getFieldValuesByItem.data.map((fieldValue, index) =>
           state.selectedFieldValue &&
@@ -172,7 +150,6 @@ function ItemOneFields({ field, parentId, hideCreatedBy = false, guest }) {
           ),
         )}
       </List>
-      <Divider />
       <CRUDMenu
         show={state.showMenu}
         onClose={() => setState(initialState)}

@@ -70,6 +70,7 @@ export default function ImagePicker({ state, setState }: IProps) {
           variant="outlined"
           component="span"
           color="primary"
+          className="mb-2"
           startIcon={<PhotoLibraryIcon />}>
           Select Image/Video
         </Button>

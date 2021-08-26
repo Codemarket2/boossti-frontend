@@ -1,15 +1,7 @@
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import { useCRUDFieldValue } from '@frontend/shared/hooks/field';
-import { useGetListItemsByType } from '@frontend/shared/hooks/list';
-import MomentUtils from '@date-io/moment';
-import { MuiPickersUtilsProvider, KeyboardDatePicker, DatePicker } from '@material-ui/pickers';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
-import { onAlert } from '../../utils/alert';
-import { useEffect } from 'react';
-import moment from 'moment';
 
 interface IProps {
   label: string;
@@ -41,7 +33,8 @@ export default function InlineForm({
             multiline={multiline}
             rows={multiline ? 4 : null}
             disabled={formik.isSubmitting}
-            value={formik.values[fieldName]}
+            value={formik.values[fieldName].includes('-n-e-w') ? '' : formik.values[fieldName]}
+            // value={formik.values[fieldName]}
             onChange={formik.handleChange}
             error={formik.touched[fieldName] && Boolean(formik.errors[fieldName])}
             helperText={formik.touched[fieldName] && formik.errors[fieldName]}
