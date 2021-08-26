@@ -1,6 +1,6 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
+yarn web:build
 yarn web:test
 yarn shared:test
-yarn web:build

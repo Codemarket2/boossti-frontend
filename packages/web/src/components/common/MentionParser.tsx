@@ -1,14 +1,16 @@
 import parse from 'html-react-parser';
 import Typography from '@material-ui/core/Typography';
+import Link from 'next/link';
 import Tooltip from '@material-ui/core/Tooltip';
 import { useCreateBookmark } from '@frontend/shared/hooks/boomark';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Divider from '@material-ui/core/Divider';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import Avatar from '@material-ui/core/Avatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
-import Chip from '@material-ui/core/Chip';
 import { onAlert } from '../../utils/alert';
 import Backdrop from './Backdrop';
 
@@ -18,6 +20,7 @@ interface IProps {
   component?: any;
   className?: string;
   authenticated?: boolean;
+  tags?: any;
 }
 export default function MentionParser({
   value,
@@ -25,6 +28,7 @@ export default function MentionParser({
   component = 'p',
   className = '',
   authenticated,
+  tags = [],
 }: IProps) {
   const { handleBookmark, state: bookmarkState, setState: bookmarkSetState } = useCreateBookmark({
     onAlert,
@@ -54,13 +58,26 @@ export default function MentionParser({
                 <Tooltip title="Save Tag">
                   <Typography
                     className="mx-1 font-weight-bold"
-                    onClick={(event) =>
+                    onClick={(event) => {
+                      let selectedTag = tags.filter((t) => t.tag._id == tag._id)[0];
+                      selectedTag = selectedTag && selectedTag.tag ? selectedTag.tag : selectedTag;
+                      // console.log('selectedTag', selectedTag);
+                      let url =
+                        selectedTag &&
+                        selectedTag.types &&
+                        Object.prototype.hasOwnProperty.call(selectedTag, 'types')
+                          ? `/types/${selectedTag.types[0].slug}/${selectedTag.slug}`
+                          : selectedTag.slug
+                          ? `/types/${selectedTag.slug}`
+                          : `/types/${Date.now()}`;
                       bookmarkSetState({
                         ...bookmarkState,
                         showMenu: event.currentTarget,
                         selectedTag: tag,
-                      })
-                    }
+                        tag: selectedTag ? selectedTag : null,
+                        url: url,
+                      });
+                    }}
                     color="primary"
                     variant="body2"
                     component="span">
@@ -76,14 +93,31 @@ export default function MentionParser({
           keepMounted
           open={Boolean(bookmarkState.showMenu)}
           onClose={() => bookmarkSetState({ ...bookmarkState, showMenu: null, selectedTag: null })}>
-          <MenuItem>
-            <Chip
-              role="button"
-              color="primary"
-              label={(bookmarkState.selectedTag && bookmarkState.selectedTag.text) || ''}
-            />
-          </MenuItem>
+          <Link href={bookmarkState.url}>
+            <MenuItem>
+              <ListItemAvatar>
+                <Avatar
+                  alt={bookmarkState.selectedTag && bookmarkState.selectedTag.text}
+                  src={
+                    bookmarkState.tag &&
+                    bookmarkState.tag.media &&
+                    bookmarkState.tag.media[0] &&
+                    bookmarkState.tag.media[0].url
+                  }
+                />
+              </ListItemAvatar>
+              <ListItemText primary={bookmarkState.selectedTag && bookmarkState.selectedTag.text} />
+            </MenuItem>
+          </Link>
           <Divider />
+          {/* <Link href={bookmarkState.url}>
+            <MenuItem>
+              <ListItemIcon className="mr-n4">
+                <OpenInNewIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Go to Page" />
+            </MenuItem>
+          </Link> */}
           <MenuItem
             onClick={async () => {
               if (authenticated) {

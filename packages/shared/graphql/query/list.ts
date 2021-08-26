@@ -1,12 +1,18 @@
 import { gql } from '@apollo/client';
 
-export const GET_LISTS = gql`
-  query MyQuery($limit: Int, $page: Int) {
-    getLists(limit: $limit, page: $page) {
+export const GET_LIST_TYPES = gql`
+  query MyQuery($limit: Int, $page: Int, $search: String) {
+    getListTypes(limit: $limit, page: $page, search: $search) {
       count
       data {
         _id
-        name
+        slug
+        title
+        description
+        media {
+          url
+          caption
+        }
         inUse
         active
       }
@@ -14,35 +20,61 @@ export const GET_LISTS = gql`
   }
 `;
 
-export const GET_INUSE_LISTS = gql`
-  query MyQuery($limit: Int, $page: Int) {
-    getLists(limit: $limit, page: $page) {
+export const GET_LIST_ITEMS_BY_TYPE = gql`
+  query MyQuery($limit: Int, $page: Int, $types: [ID], $search: String) {
+    getListItems(limit: $limit, page: $page, types: $types, search: $search) {
       count
       data {
         _id
-        name
-        items {
+        slug
+        title
+        description
+        types {
           _id
           title
-          description
+          slug
+        }
+        media {
+          url
+          caption
         }
       }
     }
   }
 `;
 
-export const GET_LIST = gql`
-  query MyQuery($_id: ID!) {
-    getList(_id: $_id) {
+export const GET_LIST_TYPE_BY_SLUG = gql`
+  query MyQuery($slug: String!) {
+    getListTypeBySlug(slug: $slug) {
       _id
-      name
+      slug
+      title
+      description
+      media {
+        url
+        caption
+      }
       inUse
       active
-      items {
+    }
+  }
+`;
+
+export const GET_LIST_ITEM_BY_SLUG = gql`
+  query MyQuery($slug: String!) {
+    getListItemBySlug(slug: $slug) {
+      _id
+      slug
+      title
+      description
+      media {
+        url
+        caption
+      }
+      types {
         _id
         title
-        description
-        active
+        slug
       }
     }
   }

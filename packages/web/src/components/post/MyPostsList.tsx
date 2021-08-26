@@ -14,7 +14,7 @@ import { onAlert } from '../../utils/alert';
 import PostCard from './PostCard';
 import PostEditForm from './PostEditForm';
 import PostCardSkeleton from './PostCardSkeleton';
-import ListHeader from './ListHeader';
+import ListHeader from '../common/ListHeader';
 
 export default function MyPostsList() {
   const {

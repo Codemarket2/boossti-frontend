@@ -25,30 +25,29 @@ export const partners = [
   },
 ];
 
+// const vt = require('../../../assets/images/custom/place3@2x.jpeg');
+
 export const advantages = [
   {
     icon: 'fas fa-users',
-    title: 'Coworking communities',
+    title: 'Verify doctors',
     subtitle:
-      'Connect in spaces designed to bring incredible people together. Learn with them and take your project to new heights.',
+      'Verify doctors about their past experince details in treating patients with symptoms like yours.',
   },
   {
     icon: 'far fa-address-book',
-    title: 'Flexible contracts',
-    subtitle:
-      'Stay as little as 3 months with rolling contracts. Like it here? This is your space, so stay as long as you want.',
+    title: 'Compare treatments',
+    subtitle: 'Compare treatment plans with other patients.',
   },
   {
     icon: 'fab fa-angellist',
-    title: 'All inclusive',
-    subtitle:
-      'Monthly fee covers everything you need hassle free. Keep cool and focus on what matters to you.',
+    title: 'Improve health',
+    subtitle: 'Educate yourself about health and wellness to improve your wellbeing.',
   },
   {
     icon: 'fas fa-phone-alt',
-    title: 'Hospitality service',
-    subtitle:
-      '24/7 support. No more hidden prices. It is your workingplace, playground, relax room.',
+    title: 'Community support',
+    subtitle: 'Build a community around yourself rather than doing it alone.',
   },
 ];
 
@@ -56,18 +55,18 @@ export const locations = [
   {
     images: [
       {
-        src: 'https://assets.maccarianagency.com/the-front/photos/coworking/place1.jpg',
-        srcSet: 'https://assets.maccarianagency.com/the-front/photos/coworking/place1@2x.jpg 2x',
+        src: require('../../../assets/images/custom/place1@2x.jpeg'),
+        srcSet: require('../../../assets/images/custom/place1@2x.jpeg'),
         alt: '...',
       },
       {
-        src: 'https://assets.maccarianagency.com/the-front/photos/coworking/place2.jpg',
-        srcSet: 'https://assets.maccarianagency.com/the-front/photos/coworking/place2@2x.jpg 2x',
+        src: require('../../../assets/images/custom/place2@2x.jpeg'),
+        srcSet: require('../../../assets/images/custom/place2@2x.jpeg'),
         alt: '...',
       },
       {
-        src: 'https://assets.maccarianagency.com/the-front/photos/coworking/place3.jpg',
-        srcSet: 'https://assets.maccarianagency.com/the-front/photos/coworking/place3@2x.jpg 2x',
+        src: require('../../../assets/images/custom/place3@2x.jpeg'),
+        srcSet: require('../../../assets/images/custom/place3@2x.jpeg'),
         alt: '...',
       },
     ],
@@ -78,14 +77,16 @@ export const locations = [
       {
         authorPhoto: {
           src: 'https://assets.maccarianagency.com/the-front/photos/people/veronica-adams.jpg',
-          srcSet: 'https://assets.maccarianagency.com/the-front/photos/people/veronica-adams@2x.jpg 2x',
+          srcSet:
+            'https://assets.maccarianagency.com/the-front/photos/people/veronica-adams@2x.jpg 2x',
         },
         authorName: 'Veronica Adams',
       },
       {
         authorPhoto: {
           src: 'https://assets.maccarianagency.com/the-front/photos/people/akachi-luccini.jpg',
-          srcSet: 'https://assets.maccarianagency.com/the-front/photos/people/akachi-luccini@2x.jpg 2x',
+          srcSet:
+            'https://assets.maccarianagency.com/the-front/photos/people/akachi-luccini@2x.jpg 2x',
         },
         authorName: 'Akachi Luccini',
       },
@@ -99,21 +100,24 @@ export const locations = [
       {
         authorPhoto: {
           src: 'https://assets.maccarianagency.com/the-front/photos/people/kate-segelson.jpg',
-          srcSet: 'https://assets.maccarianagency.com/the-front/photos/people/kate-segelson@2x.jpg 2x',
+          srcSet:
+            'https://assets.maccarianagency.com/the-front/photos/people/kate-segelson@2x.jpg 2x',
         },
         authorName: 'Kate Segelson',
       },
       {
         authorPhoto: {
           src: 'https://assets.maccarianagency.com/the-front/photos/people/alex-johnson.jpg',
-          srcSet: 'https://assets.maccarianagency.com/the-front/photos/people/alex-johnson@2x.jpg 2x',
+          srcSet:
+            'https://assets.maccarianagency.com/the-front/photos/people/alex-johnson@2x.jpg 2x',
         },
         authorName: 'Alex Johnson',
       },
       {
         authorPhoto: {
           src: 'https://assets.maccarianagency.com/the-front/photos/people/valeria-kogan.jpg',
-          srcSet: 'https://assets.maccarianagency.com/the-front/photos/people/valeria-kogan@2x.jpg 2x',
+          srcSet:
+            'https://assets.maccarianagency.com/the-front/photos/people/valeria-kogan@2x.jpg 2x',
         },
         authorName: 'Valeria Kogan',
       },
@@ -124,18 +128,18 @@ export const locations = [
   {
     images: [
       {
-        src: 'https://assets.maccarianagency.com/the-front/photos/coworking/place2.jpg',
-        srcSet: 'https://assets.maccarianagency.com/the-front/photos/coworking/place2@2x.jpg 2x',
+        src: require('../../../assets/images/custom/place1@2x.jpeg'),
+        srcSet: require('../../../assets/images/custom/place1@2x.jpeg'),
         alt: '...',
       },
       {
-        src: 'https://assets.maccarianagency.com/the-front/photos/coworking/place1.jpg',
-        srcSet: 'https://assets.maccarianagency.com/the-front/photos/coworking/place1@2x.jpg 2x',
+        src: require('../../../assets/images/custom/place2@2x.jpeg'),
+        srcSet: require('../../../assets/images/custom/place2@2x.jpeg'),
         alt: '...',
       },
       {
-        src: 'https://assets.maccarianagency.com/the-front/photos/coworking/place3.jpg',
-        srcSet: 'https://assets.maccarianagency.com/the-front/photos/coworking/place3@2x.jpg 2x',
+        src: require('../../../assets/images/custom/place3@2x.jpeg'),
+        srcSet: require('../../../assets/images/custom/place3@2x.jpeg'),
         alt: '...',
       },
     ],
@@ -146,14 +150,16 @@ export const locations = [
       {
         authorPhoto: {
           src: 'https://assets.maccarianagency.com/the-front/photos/people/veronica-adams.jpg',
-          srcSet: 'https://assets.maccarianagency.com/the-front/photos/people/veronica-adams@2x.jpg 2x',
+          srcSet:
+            'https://assets.maccarianagency.com/the-front/photos/people/veronica-adams@2x.jpg 2x',
         },
         authorName: 'Veronica Adams',
       },
       {
         authorPhoto: {
           src: 'https://assets.maccarianagency.com/the-front/photos/people/akachi-luccini.jpg',
-          srcSet: 'https://assets.maccarianagency.com/the-front/photos/people/akachi-luccini@2x.jpg 2x',
+          srcSet:
+            'https://assets.maccarianagency.com/the-front/photos/people/akachi-luccini@2x.jpg 2x',
         },
         authorName: 'Akachi Luccini',
       },
@@ -167,21 +173,24 @@ export const locations = [
       {
         authorPhoto: {
           src: 'https://assets.maccarianagency.com/the-front/photos/people/kate-segelson.jpg',
-          srcSet: 'https://assets.maccarianagency.com/the-front/photos/people/kate-segelson@2x.jpg 2x',
+          srcSet:
+            'https://assets.maccarianagency.com/the-front/photos/people/kate-segelson@2x.jpg 2x',
         },
         authorName: 'Kate Segelson',
       },
       {
         authorPhoto: {
           src: 'https://assets.maccarianagency.com/the-front/photos/people/alex-johnson.jpg',
-          srcSet: 'https://assets.maccarianagency.com/the-front/photos/people/alex-johnson@2x.jpg 2x',
+          srcSet:
+            'https://assets.maccarianagency.com/the-front/photos/people/alex-johnson@2x.jpg 2x',
         },
         authorName: 'Alex Johnson',
       },
       {
         authorPhoto: {
           src: 'https://assets.maccarianagency.com/the-front/photos/people/valeria-kogan.jpg',
-          srcSet: 'https://assets.maccarianagency.com/the-front/photos/people/valeria-kogan@2x.jpg 2x',
+          srcSet:
+            'https://assets.maccarianagency.com/the-front/photos/people/valeria-kogan@2x.jpg 2x',
         },
         authorName: 'Valeria Kogan',
       },
@@ -192,18 +201,18 @@ export const locations = [
   {
     images: [
       {
-        src: 'https://assets.maccarianagency.com/the-front/photos/coworking/place3.jpg',
-        srcSet: 'https://assets.maccarianagency.com/the-front/photos/coworking/place3@2x.jpg 2x',
+        src: require('../../../assets/images/custom/place1@2x.jpeg'),
+        srcSet: require('../../../assets/images/custom/place1@2x.jpeg'),
         alt: '...',
       },
       {
-        src: 'https://assets.maccarianagency.com/the-front/photos/coworking/place2.jpg',
-        srcSet: 'https://assets.maccarianagency.com/the-front/photos/coworking/place2@2x.jpg 2x',
+        src: require('../../../assets/images/custom/place2@2x.jpeg'),
+        srcSet: require('../../../assets/images/custom/place2@2x.jpeg'),
         alt: '...',
       },
       {
-        src: 'https://assets.maccarianagency.com/the-front/photos/coworking/place1.jpg',
-        srcSet: 'https://assets.maccarianagency.com/the-front/photos/coworking/place1@2x.jpg 2x',
+        src: require('../../../assets/images/custom/place3@2x.jpeg'),
+        srcSet: require('../../../assets/images/custom/place3@2x.jpeg'),
         alt: '...',
       },
     ],
@@ -214,14 +223,16 @@ export const locations = [
       {
         authorPhoto: {
           src: 'https://assets.maccarianagency.com/the-front/photos/people/veronica-adams.jpg',
-          srcSet: 'https://assets.maccarianagency.com/the-front/photos/people/veronica-adams@2x.jpg 2x',
+          srcSet:
+            'https://assets.maccarianagency.com/the-front/photos/people/veronica-adams@2x.jpg 2x',
         },
         authorName: 'Veronica Adams',
       },
       {
         authorPhoto: {
           src: 'https://assets.maccarianagency.com/the-front/photos/people/akachi-luccini.jpg',
-          srcSet: 'https://assets.maccarianagency.com/the-front/photos/people/akachi-luccini@2x.jpg 2x',
+          srcSet:
+            'https://assets.maccarianagency.com/the-front/photos/people/akachi-luccini@2x.jpg 2x',
         },
         authorName: 'Akachi Luccini',
       },
@@ -235,21 +246,24 @@ export const locations = [
       {
         authorPhoto: {
           src: 'https://assets.maccarianagency.com/the-front/photos/people/kate-segelson.jpg',
-          srcSet: 'https://assets.maccarianagency.com/the-front/photos/people/kate-segelson@2x.jpg 2x',
+          srcSet:
+            'https://assets.maccarianagency.com/the-front/photos/people/kate-segelson@2x.jpg 2x',
         },
         authorName: 'Kate Segelson',
       },
       {
         authorPhoto: {
           src: 'https://assets.maccarianagency.com/the-front/photos/people/alex-johnson.jpg',
-          srcSet: 'https://assets.maccarianagency.com/the-front/photos/people/alex-johnson@2x.jpg 2x',
+          srcSet:
+            'https://assets.maccarianagency.com/the-front/photos/people/alex-johnson@2x.jpg 2x',
         },
         authorName: 'Alex Johnson',
       },
       {
         authorPhoto: {
           src: 'https://assets.maccarianagency.com/the-front/photos/people/valeria-kogan.jpg',
-          srcSet: 'https://assets.maccarianagency.com/the-front/photos/people/valeria-kogan@2x.jpg 2x',
+          srcSet:
+            'https://assets.maccarianagency.com/the-front/photos/people/valeria-kogan@2x.jpg 2x',
         },
         authorName: 'Valeria Kogan',
       },
@@ -261,11 +275,11 @@ export const locations = [
 
 export const properties = [
   {
-    title: '24/7 concierge',
+    title: 'Questions to doctors',
     icon: 'fas fa-phone-alt',
   },
   {
-    title: 'Coworking spaces',
+    title: 'Compare treatments',
     icon: 'fas fa-users',
   },
   {
@@ -330,8 +344,8 @@ export const reviews = [
 export const events = [
   {
     cover: {
-      src: 'https://assets.maccarianagency.com/the-front/photos/expo-gallery/gallery1.jpg',
-      srcSet: 'https://assets.maccarianagency.com/the-front/photos/expo-gallery/gallery1@2x.jpg 2x',
+      src: require('../../../assets/images/custom/expo/gallery1@2x.jpeg'),
+      srcSet: require('../../../assets/images/custom/expo/gallery1@2x.jpeg'),
     },
     title: 'Sales philosophy and future',
     description:
@@ -341,8 +355,8 @@ export const events = [
   },
   {
     cover: {
-      src: 'https://assets.maccarianagency.com/the-front/photos/expo-gallery/gallery2.jpg',
-      srcSet: 'https://assets.maccarianagency.com/the-front/photos/expo-gallery/gallery2@2x.jpg 2x',
+      src: require('../../../assets/images/custom/expo/gallery2@2x.jpeg'),
+      srcSet: require('../../../assets/images/custom/expo/gallery2@2x.jpeg'),
     },
     title: 'Introduction to Design Thinking',
     description:
@@ -352,8 +366,8 @@ export const events = [
   },
   {
     cover: {
-      src: 'https://assets.maccarianagency.com/the-front/photos/expo-gallery/gallery3.jpg',
-      srcSet: 'https://assets.maccarianagency.com/the-front/photos/expo-gallery/gallery3@2x.jpg 2x',
+      src: require('../../../assets/images/custom/expo/gallery3@2x.jpeg'),
+      srcSet: require('../../../assets/images/custom/expo/gallery3@2x.jpeg'),
     },
     title: 'Instagram grow experiments',
     description:

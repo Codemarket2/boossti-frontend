@@ -56,16 +56,16 @@ const Location = ({ data, className, ...rest }: ViewComponentProps): JSX.Element
       <SectionHeader
         title={
           <span>
-            We are reimagining renting to help you{' '}
+            Health & Wellness{' '}
             <Typography component="span" variant="inherit" color="primary">
-              achieve your dreams
+              events
             </Typography>
           </span>
         }
-        subtitle="Our mission is to help you grow your business, meet and connect with people who share your passions. We help you fulfill your best potential through an engaging lifestyle experience."
+        subtitle="Organize events on topics related to health and wellness."
         ctaGroup={[
           <Button variant="contained" size={isMd ? 'large' : 'medium'} color="primary">
-            Explore our locations
+            Join
           </Button>,
         ]}
         fadeUp

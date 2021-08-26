@@ -11,6 +11,8 @@ export function useCreateBookmark({ onAlert }: any) {
   const [state, setState] = useState({
     showMenu: null,
     selectedTag: null,
+    tag: null,
+    url: '/types',
     saveTagLoading: false,
   });
   const [createPostMutation] = useMutation(CREATE_BOOKMARK);

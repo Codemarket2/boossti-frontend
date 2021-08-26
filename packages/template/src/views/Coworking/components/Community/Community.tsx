@@ -36,10 +36,10 @@ const Community = ({ data, className, ...rest }: ViewComponentProps): JSX.Elemen
     <div className={className} {...rest}>
       <SectionHeader
         title="Join our community"
-        subtitle="Over +8000 who use our coworking spaces to make their dreams come true."
+        subtitle="Over +8000 members."
         ctaGroup={[
           <Button variant="contained" size={isMd ? 'large' : 'medium'} color="primary">
-            Book now
+            Join
           </Button>,
         ]}
       />

@@ -5,7 +5,7 @@ import ErrorLoading from '../common/ErrorLoading';
 import PostCard from './PostCard';
 import PostForm from './PostForm';
 import PostCardSkeleton from './PostCardSkeleton';
-import ListHeader from './ListHeader';
+import ListHeader from '../common/ListHeader';
 
 export default function FeedsList() {
   const { data, error, state: postsState, setState: postsSetState } = useGetMyFeeds();

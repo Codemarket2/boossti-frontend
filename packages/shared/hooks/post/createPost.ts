@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/client';
 import { CREATE_POST, UPDATE_POST } from '../../graphql/mutation/post';
-import { useGetInUseLists } from '../list';
+import { useMentionList } from '../list';
 import { GET_MY_POSTS } from '../../graphql/query/post';
 import { fileUpload } from '../../utils/fileUpload';
 import { omitTypename } from '../../utils/omitTypename';
@@ -20,7 +20,7 @@ const defaultPost = {
 };
 
 export function useCreatePost({ onAlert, onSuccess, post = defaultPost }: IProps) {
-  const { data, loading, error } = useGetInUseLists();
+  const { data, loading, error } = useMentionList();
   const [state, setState] = useState({
     edit: false,
     _id: '',
@@ -127,52 +127,6 @@ export function useCreatePost({ onAlert, onSuccess, post = defaultPost }: IProps
     return setState({ ...state, body: value });
   };
 
-  const handleFileChange = (event) => {
-    if (event.target.files.length > 0) {
-      let newArray = [...state.tempMedia];
-      for (let i = 0; i < event.target.files.length; i++) {
-        let item = {
-          url: URL.createObjectURL(event.target.files[i]),
-          type: event.target.files[i].type,
-          caption: '',
-        };
-        newArray.push(item);
-      }
-      setState({
-        ...state,
-        tempMediaFiles: [...state.tempMediaFiles, ...event.target.files],
-        tempMedia: newArray,
-      });
-    }
-  };
-
-  const onTempCaptionChange = (value: string, index: number) => {
-    setState({
-      ...state,
-      tempMedia: state.tempMedia.map((t, i) => (i === index ? { ...t, caption: value } : t)),
-    });
-  };
-  const onCaptionChange = (value: string, index: number) => {
-    setState({
-      ...state,
-      media: state.media.map((t, i) => (i === index ? { ...t, caption: value } : t)),
-    });
-  };
-
-  const handleRemoveMedia = (index: number) => {
-    let urlArray = [...state.media];
-    urlArray.splice(index, 1);
-    setState({ ...state, media: urlArray });
-  };
-
-  const handleRemoveTempMedia = (index: number) => {
-    let fileArray = [...state.tempMediaFiles];
-    let urlArray = [...state.tempMedia];
-    fileArray.splice(index, 1);
-    urlArray.splice(index, 1);
-    setState({ ...state, tempMedia: urlArray, tempMediaFiles: fileArray });
-  };
-
   return {
     state,
     setState,
@@ -183,10 +137,5 @@ export function useCreatePost({ onAlert, onSuccess, post = defaultPost }: IProps
     handleSelectTag,
     handleOpenTagModel,
     onSave,
-    handleFileChange,
-    handleRemoveTempMedia,
-    handleRemoveMedia,
-    onTempCaptionChange,
-    onCaptionChange,
   };
 }

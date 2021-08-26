@@ -7,6 +7,7 @@ import projectConfig from '../index';
 
 let url = projectConfig.appsyncGraphqlEndpoint;
 let region = projectConfig.appsyncRegion;
+let apiKey = projectConfig.appsyncRegion;
 // const url = USE_DEBUG
 //   ? process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT
 //   : projectConfig.appsyncGraphqlEndpoint;
@@ -18,17 +19,17 @@ if (
   process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT &&
   process.env.NEXT_PUBLIC_GRAPHQL_APIKEY
 ) {
-  console.log('Use debug endpoint');
+  // console.log('Use debug endpoint');
   url = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT;
-  region = process.env.NEXT_PUBLIC_GRAPHQL_APIKEY;
+  apiKey = process.env.NEXT_PUBLIC_GRAPHQL_APIKEY;
 } else if (
   process.env.NODE_ENV === 'production' &&
   process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT &&
   process.env.NEXT_PUBLIC_GRAPHQL_APIKEY
 ) {
-  console.log('Use prod endpoint');
+  // console.log('Use prod endpoint');
   url = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT;
-  region = process.env.NEXT_PUBLIC_GRAPHQL_APIKEY;
+  apiKey = process.env.NEXT_PUBLIC_GRAPHQL_APIKEY;
 }
 
 const cognitoAuth: AuthOptions = {
@@ -54,7 +55,7 @@ export const client = new ApolloClient({
 
 const apiKeyAuth: AuthOptions = {
   type: AUTH_TYPE.API_KEY,
-  apiKey: projectConfig.appsyncApiKey,
+  apiKey: apiKey,
 };
 
 const guestLink = ApolloLink.from([

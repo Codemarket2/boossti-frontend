@@ -1,65 +1,81 @@
 import { gql } from '@apollo/client';
 
-export const CREATE_LIST = gql`
-  mutation MyMutation($name: String!) {
-    createList(name: $name) {
+export const CREATE_LIST_TYPE = gql`
+  mutation MyMutation($title: String!, $description: String, $media: [MediaInput]) {
+    createListType(title: $title, description: $description, media: $media) {
       _id
-      name
-      inUse
-      active
+      title
+      slug
+      description
+      media {
+        url
+        caption
+      }
+    }
+  }
+`;
+export const UPDATE_LIST_TYPE = gql`
+  mutation MyMutation($_id: ID!, $title: String, $description: String, $media: [MediaInput]) {
+    updateListType(_id: $_id, title: $title, description: $description, media: $media) {
+      _id
+      title
+      slug
+      description
+      media {
+        url
+        caption
+      }
     }
   }
 `;
 
-export const UPDATE_LIST = gql`
-  mutation MyMutation($_id: ID!, $name: String) {
-    updateList(_id: $_id, name: $name) {
-      _id
-      name
-    }
-  }
-`;
-
-export const DELETE_LIST = gql`
+export const DELETE_LIST_TYPE = gql`
   mutation MyMutation($_id: ID!) {
-    deleteList(_id: $_id)
+    deleteListType(_id: $_id)
   }
 `;
 
-export const ADD_LIST_ITEM = gql`
-  mutation MyMutation($listId: ID!, $title: String!, $description: String) {
-    addListItem(listId: $listId, title: $title, description: $description) {
+export const CREATE_LIST_ITEM = gql`
+  mutation MyMutation($types: [ID!], $title: String!, $description: String, $media: [MediaInput]) {
+    createListItem(types: $types, title: $title, description: $description, media: $media) {
       _id
-      name
-      inUse
-      active
-      items {
+      title
+      slug
+      description
+      types {
         _id
         title
-        description
-        active
+        slug
+      }
+      media {
+        url
+        caption
       }
     }
   }
 `;
 export const UPDATE_LIST_ITEM = gql`
-  mutation MyMutation($listId: ID!, $_id: ID!, $title: String, $description: String) {
-    updateListItem(listId: $listId, _id: $_id, title: $title, description: $description) {
+  mutation MyMutation($_id: ID!, $title: String!, $description: String, $media: [MediaInput]) {
+    updateListItem(_id: $_id, title: $title, description: $description, media: $media) {
       _id
-      name
-      inUse
-      active
-      items {
+      title
+      slug
+      description
+      types {
         _id
         title
-        description
-        active
+        slug
+      }
+      media {
+        url
+        caption
       }
     }
   }
 `;
+
 export const DELETE_LIST_ITEM = gql`
-  mutation MyMutation($listId: ID!, $_id: ID!) {
-    deleteListItem(listId: $listId, _id: $_id)
+  mutation MyMutation($_id: ID!) {
+    deleteListItem(_id: $_id)
   }
 `;

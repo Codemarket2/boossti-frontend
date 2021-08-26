@@ -19,7 +19,7 @@ const Props = ({ data, className, ...rest }: ViewComponentProps): JSX.Element =>
             title="What's included"
             ctaGroup={[
               <Button variant="contained" size={isMd ? 'large' : 'medium'} color="primary">
-                Explore our locations
+                Join
               </Button>,
             ]}
             fadeUp
