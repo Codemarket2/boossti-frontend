@@ -2,8 +2,8 @@ import React from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 import { useMediaQuery, Button, Typography, Container, Grid } from '@material-ui/core';
-import { SectionHeader, SwiperImage } from '../../../../components/molecules';
-import { HeroShaped } from '../../../../components/organisms';
+import { SectionHeader, SwiperImage } from '../../../components/molecules';
+import { HeroShaped } from '../../../components/organisms';
 
 import AuthScreen from '@frontend/web/src/screens/AuthScreen';
 
