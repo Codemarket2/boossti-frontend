@@ -8,6 +8,8 @@ import {
   UPDATE_FIELD_VALUE,
   DELETE_FIELD_VALUE,
 } from '../../graphql/mutation/field';
+import { fileUpload } from '../../utils/fileUpload';
+import { omitTypename } from '../../utils/omitTypename';
 
 const defaultQueryVariables = { limit: 1000, page: 1 };
 
@@ -24,13 +26,20 @@ const validationSchema = yup.object({
   fieldType: yup.string(),
   itemId: yup.object().when('fieldType', {
     is: (value) => value === 'type',
-    then: yup.object().nullable(true).required('Value is required'),
+    then: yup.object().nullable(true).required('Required'),
     otherwise: yup.object().nullable(true),
   }),
   value: yup.string().when('fieldType', {
-    is: (value) => value === 'string',
-    then: yup.string().nullable(true).required('Value is required'),
+    is: (value) => value !== 'type' && value !== 'media',
+    then: yup.string().nullable(true).required('Required'),
     otherwise: yup.string().nullable(true),
+  }),
+  media: yup.array().when(['fieldType', 'tempMedia'], {
+    is: (fieldType, tempMedia) => fieldType === 'media' && tempMedia.length === 0,
+    then: yup.array().min(1, 'Select atleast one media'),
+    otherwise: yup.array(),
+    // then: yup.array(),
+    // otherwise: yup.array().min(1, 'Select atleast one media'),
   }),
 });
 
@@ -41,6 +50,9 @@ interface IFormValues {
   parentId: string;
   field: string;
   value: string;
+  media: any;
+  tempMedia: any;
+  tempMediaFiles: any;
   itemId: any;
 }
 
@@ -51,6 +63,9 @@ const defaultFormValues = {
   parentId: '',
   field: '',
   value: '',
+  media: [],
+  tempMedia: [],
+  tempMediaFiles: [],
   itemId: null,
 };
 
@@ -78,10 +93,18 @@ export function useCRUDFieldValue({
     validationSchema: validationSchema,
     onSubmit: async (payload: IFormValues) => {
       try {
-        let newPayload = payload;
+        let newPayload = { ...payload };
         if (newPayload.itemId && newPayload.itemId._id) {
           newPayload = { ...newPayload, itemId: newPayload.itemId._id };
         }
+        let newMedia = [];
+        if (newPayload.tempMediaFiles.length > 0) {
+          newMedia = await fileUpload(newPayload.tempMediaFiles, '/field-values');
+          newMedia = newMedia.map((n, i) => ({ url: n, caption: newPayload.tempMedia[i].caption }));
+        }
+        let media = [...newPayload.media, ...newMedia];
+        media = media.map((m) => JSON.parse(JSON.stringify(m), omitTypename));
+        newPayload = { ...newPayload, media };
         if (payload.edit) {
           await onUpdate(newPayload);
         } else {
@@ -153,12 +176,25 @@ export function useCRUDFieldValue({
     formik.setFieldValue('parentId', fieldValue.parentId, false);
     formik.setFieldValue('field', fieldValue.field, false);
     formik.setFieldValue('value', fieldValue.value, false);
+    formik.setFieldValue('media', fieldValue.media, false);
     formik.setFieldValue('itemId', fieldValue.itemId, false);
+  };
+
+  const setMediaState = (state) => {
+    formik.setFieldValue('media', state.media);
+    formik.setFieldValue('tempMedia', state.tempMedia);
+    formik.setFieldValue('tempMediaFiles', state.tempMediaFiles);
+  };
+
+  const mediaState = {
+    media: formik.values.media,
+    tempMedia: formik.values.tempMedia,
+    tempMediaFiles: formik.values.tempMediaFiles,
   };
 
   const formLoading = createLoading || updateLoading || formik.isSubmitting;
 
-  return { formik, formLoading, setFormValues };
+  return { formik, formLoading, setFormValues, mediaState, setMediaState };
 }
 
 interface IDeleteProps extends IHooksProps {

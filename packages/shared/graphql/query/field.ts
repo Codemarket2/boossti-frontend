@@ -29,6 +29,10 @@ export const GET_FIELD_VALUES_BY_FIELD = gql`
         parentId
         field
         value
+        media {
+          url
+          caption
+        }
         itemId {
           _id
           title

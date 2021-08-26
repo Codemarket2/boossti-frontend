@@ -62,7 +62,23 @@ export default function FieldForm({ onCancel, parentId, field = null }: IProps) 
               value={formik.values.fieldType}
               onChange={formik.handleChange}>
               <FormControlLabel value="string" control={<Radio color="primary" />} label="String" />
+              <FormControlLabel
+                value="textarea"
+                control={<Radio color="primary" />}
+                label="Textarea"
+              />
+              <FormControlLabel
+                value="boolean"
+                control={<Radio color="primary" />}
+                label="Boolean (Yes/No)"
+              />
+              <FormControlLabel value="url" control={<Radio color="primary" />} label="URL" />
               <FormControlLabel value="date" control={<Radio color="primary" />} label="Date" />
+              <FormControlLabel
+                value="media"
+                control={<Radio color="primary" />}
+                label="Media (Images/Video)"
+              />
               <FormControlLabel
                 value="type"
                 control={<Radio color="primary" />}
