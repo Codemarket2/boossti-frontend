@@ -45,20 +45,20 @@ const Hero = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
           <SectionHeader
             title={
               <span>
-                12-Step Program to{' '}
+                Learn, Share &{' '}
                 <Typography component="span" variant="inherit" color="primary">
-                  Survive Cancer
+                  Get Well Soon
                 </Typography>
               </span>
             }
-            subtitle="Learn from other cancer patients and cancer surviors."
+            subtitle="Prevent & Survive Cancer and other Illnesses."
             ctaGroup={[
               <Button variant="contained" color="primary" size={isMd ? 'large' : 'medium'}>
                 JOIN
               </Button>,
-              <Button variant="outlined" color="primary" size={isMd ? 'large' : 'medium'}>
-                Browse
-              </Button>,
+              // <Button variant="outlined" color="primary" size={isMd ? 'large' : 'medium'}>
+              // Browse
+              // </Button>,
             ]}
             align="left"
             titleVariant="h3"
