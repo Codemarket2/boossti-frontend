@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 import { useUpdateComment } from '@frontend/shared/hooks/comment/createComment';
 import CommentInput from './CommentInput';
@@ -18,6 +19,9 @@ export default function DisplayComment({
   commentedUser,
   index,
 }: IDisplayComment) {
+  const { attributes, admin } = useSelector(({ auth }: any) => auth);
+  const currentUserId = attributes['custom:_id'];
+
   const [edit, setEdit] = useState(false);
   const [replyOnComment, setReplyOnComment] = useState(false);
   const { handleUpdate, setUpdateInputVal, updateInputVal } = useUpdateComment(
@@ -38,7 +42,7 @@ export default function DisplayComment({
 
   return (
     <>
-      {edit && commentedUser._id ? (
+      {edit && currentUserId === commentedUser._id ? (
         <CommentInput
           inputVal={updateInputVal}
           handleChange={handleOnChangeUpdate}

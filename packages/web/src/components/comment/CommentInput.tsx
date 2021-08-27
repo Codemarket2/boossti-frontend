@@ -26,10 +26,11 @@ export default function CommentInput({
             onChange={handleChange}
             label={label}
             fullWidth
+            name="comment"
           />
         </Grid>
         <Grid item lg={1} md={1} sm={1} xs={1}>
-          <IconButton onClick={onClick}>
+          <IconButton onClick={onClick} data-testid="add-comment">
             <SendIcon color="primary" />
           </IconButton>
         </Grid>
