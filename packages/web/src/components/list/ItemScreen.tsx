@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useGetListItemBySlug, useDeleteListItem } from '@frontend/shared/hooks/list';
 import { useCRUDListItems } from '@frontend/shared/hooks/list';
 import Link from 'next/link';
@@ -23,9 +23,10 @@ interface IProps {
   slug: any;
   typeSlug: any;
   hideBreadcrumbs?: boolean;
+  setItem?: any;
 }
 
-export default function Screen({ slug, typeSlug, hideBreadcrumbs = false }: IProps) {
+export default function Screen({ slug, typeSlug, hideBreadcrumbs = false, setItem }: IProps) {
   const router = useRouter();
   const [state, setState] = useState({ fieldName: '' });
   const deleteCallBack = () => {
@@ -61,6 +62,12 @@ export default function Screen({ slug, typeSlug, hideBreadcrumbs = false }: IPro
     setFormValues(data.getListItemBySlug);
     setState({ ...state, fieldName });
   };
+
+  useEffect(() => {
+    if (data && data.getListItemBySlug && setItem) {
+      setItem(data.getListItemBySlug);
+    }
+  }, [data]);
 
   if (error || !data) {
     return <ErrorLoading error={error} />;

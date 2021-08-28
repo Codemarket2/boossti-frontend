@@ -6,6 +6,10 @@ import {
 import FieldsSkeleton from './FieldsSkeleton';
 import ErrorLoading from '../common/ErrorLoading';
 import Tooltip from '@material-ui/core/Tooltip';
+import Collapse from '@material-ui/core/Collapse';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import AddCircle from '@material-ui/icons/AddCircle';
@@ -23,6 +27,7 @@ import Link from 'next/link';
 import CRUDMenu from '../common/CRUDMenu';
 import Backdrop from '../common/Backdrop';
 import ImageList from '../post/ImageList';
+import ItemScreen from '../list/ItemScreen';
 import { onAlert } from '../../utils/alert';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
@@ -32,6 +37,7 @@ const initialState = {
   showMenu: null,
   selectedFieldValue: null,
   edit: false,
+  expanded: false,
 };
 
 function ItemOneFields({ field, parentId, hideCreatedBy = false, guest }) {
@@ -102,9 +108,22 @@ function ItemOneFields({ field, parentId, hideCreatedBy = false, guest }) {
                       {field.fieldType === 'date' ? (
                         moment(fieldValue.value).format('L')
                       ) : field.fieldType === 'type' ? (
-                        <Link href={`/types/${field.typeId.slug}/${fieldValue.itemId.slug}`}>
-                          {fieldValue.itemId.title}
-                        </Link>
+                        <div>
+                          <IconButton
+                            onClick={() => setState({ ...state, expanded: !state.expanded })}>
+                            {state.expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                          </IconButton>
+                          <Link href={`/types/${field.typeId.slug}/${fieldValue.itemId.slug}`}>
+                            {fieldValue.itemId.title}
+                          </Link>
+                          <Collapse in={state.expanded} timeout="auto" unmountOnExit>
+                            <ItemScreen
+                              hideBreadcrumbs
+                              typeSlug={field.typeId.slug}
+                              slug={fieldValue.itemId.slug}
+                            />
+                          </Collapse>
+                        </div>
                       ) : field.fieldType === 'url' ? (
                         <a target="_blank" href={fieldValue.value}>
                           {fieldValue.value}
@@ -170,7 +189,8 @@ function ItemOneFields({ field, parentId, hideCreatedBy = false, guest }) {
 
 export default function ItemsFieldsMap({ parentId, typeId, hideCreatedBy = false, guest = false }) {
   const { data, loading, error } = useGetFieldsByType({ parentId: typeId });
-  if (loading || (!error && (!data || !data.getFieldsByType))) {
+
+  if (!error && (!data || !data.getFieldsByType)) {
     return <FieldsSkeleton />;
   } else if (error) {
     return <ErrorLoading error={error} />;
