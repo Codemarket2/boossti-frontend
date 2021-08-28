@@ -38,7 +38,7 @@ export default function DisplayReplyComment({
   };
   return (
     <>
-      {edit && currentUserId === commentedUser._id ? (
+      {edit && currentUserId === commentedUser!.createdBy!._id ? (
         <CommentInput
           inputVal={updateInputVal}
           handleChange={handleOnChangeUpdate}

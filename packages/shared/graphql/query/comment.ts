@@ -12,6 +12,7 @@ export const GET_COMMENTS_BY_PARENT_ID = gql`
         createdBy {
           name
           picture
+          _id
         }
       }
     }

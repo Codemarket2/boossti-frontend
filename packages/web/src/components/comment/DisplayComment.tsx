@@ -42,7 +42,7 @@ export default function DisplayComment({
 
   return (
     <>
-      {edit && currentUserId === commentedUser._id ? (
+      {edit && currentUserId === commentedUser!.createdBy!._id ? (
         <CommentInput
           inputVal={updateInputVal}
           handleChange={handleOnChangeUpdate}

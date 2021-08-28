@@ -46,7 +46,7 @@ export default function DisplayCard({
           }
           action={
             <>
-              {currentUserId === commentedUser._id ? (
+              {currentUserId === commentedUser!.createdBy!._id ? (
                 <>
                   <IconButton aria-label="settings" onClick={() => setEdit(true)}>
                     <EditIcon />
@@ -74,7 +74,7 @@ export default function DisplayCard({
               )}
             </>
           }
-          title={<span data-testid="author-name">commentedUser?.createdBy?.name</span>}
+          title={<span data-testid="author-name">{commentedUser?.createdBy?.name}</span>}
           subheader={
             commentedUser?.updatedAt ? (
               <span>
