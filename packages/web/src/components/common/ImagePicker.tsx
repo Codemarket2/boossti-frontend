@@ -54,6 +54,7 @@ export default function ImagePicker({ state, setState }: IProps) {
     urlArray.splice(index, 1);
     setState({ ...state, tempMedia: urlArray, tempMediaFiles: fileArray });
   };
+
   return (
     <>
       <input

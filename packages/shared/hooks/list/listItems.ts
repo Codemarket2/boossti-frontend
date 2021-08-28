@@ -21,7 +21,7 @@ export function useGetListItemsByType({ types = [] }: any) {
     fetchPolicy: 'cache-and-network',
   });
 
-  console.log('data, error, loading', data, error, loading);
+  // console.log('data, error, loading', data, error, loading);
 
   return { data, error, loading, state, setState };
 }

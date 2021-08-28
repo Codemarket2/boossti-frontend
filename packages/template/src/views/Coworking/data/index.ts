@@ -283,27 +283,27 @@ export const properties = [
     icon: 'fas fa-users',
   },
   {
-    title: 'Shared spaces',
+    title: 'Herbs',
     icon: 'fas fa-couch',
   },
   {
-    title: 'Room cleaning',
+    title: 'Supplements',
     icon: 'fas fa-pump-soap',
   },
   {
-    title: 'Gym membership',
+    title: 'Holistic',
     icon: 'fas fa-dumbbell',
   },
   {
-    title: 'Super fast WiFi',
+    title: 'Nutrition',
     icon: 'fas fa-wifi',
   },
   {
-    title: 'Washing machines & dryers',
+    title: 'Frequencies',
     icon: 'fas fa-soap',
   },
   {
-    title: 'Cultural events programme',
+    title: 'Workout',
     icon: 'fas fa-calendar-week',
   },
 ];

@@ -22,6 +22,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import CRUDMenu from '../common/CRUDMenu';
 import Backdrop from '../common/Backdrop';
+import ImageList from '../post/ImageList';
 import { onAlert } from '../../utils/alert';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
@@ -54,7 +55,7 @@ function ItemOneFields({ field, parentId, hideCreatedBy = false, guest }) {
     parentId: parentId,
     typeId: field.typeId ? field.typeId._id : null,
     fieldType: field.fieldType,
-    label: `${field.label} Value`,
+    label: field.label,
     onCancel: () => setState(initialState),
   };
 
@@ -104,6 +105,12 @@ function ItemOneFields({ field, parentId, hideCreatedBy = false, guest }) {
                         <Link href={`/types/${field.typeId.slug}/${fieldValue.itemId.slug}`}>
                           {fieldValue.itemId.title}
                         </Link>
+                      ) : field.fieldType === 'url' ? (
+                        <a target="_blank" href={fieldValue.value}>
+                          {fieldValue.value}
+                        </a>
+                      ) : field.fieldType === 'media' ? (
+                        <ImageList media={fieldValue.media} />
                       ) : (
                         fieldValue.value
                       )}
