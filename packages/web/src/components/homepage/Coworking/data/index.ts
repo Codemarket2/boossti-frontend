@@ -41,8 +41,8 @@ export const advantages = [
   },
   {
     icon: 'fab fa-angellist',
-    title: 'Improve health',
-    subtitle: 'Educate yourself about health and wellness to improve your wellbeing.',
+    title: 'Herbs & Supplements',
+    subtitle: 'Educate yourself about herbs and other alternative treatments.',
   },
   {
     icon: 'fas fa-phone-alt',

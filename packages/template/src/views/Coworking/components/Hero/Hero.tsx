@@ -45,9 +45,9 @@ const Hero = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
           <SectionHeader
             title={
               <span>
-                12-Step Program to{' '}
+                Learn, Share{' '}
                 <Typography component="span" variant="inherit" color="primary">
-                  Survive Cancer
+                  & Get Well Soon
                 </Typography>
               </span>
             }
