@@ -2,6 +2,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -83,17 +84,18 @@ export default function ItemFieldForm({
             ) : (
               <>
                 <Autocomplete
-                  filterOptions={(options, params) => {
-                    const filtered = filter(options, params);
-                    // Suggest the creation of a new value
-                    if (params.inputValue !== '') {
-                      filtered.push({
-                        inputValue: params.inputValue,
-                        title: `Add New "${params.inputValue}"`,
-                      });
-                    }
-                    return filtered;
-                  }}
+                  // filterOptions={(options, params) => {
+                  //   const filtered = filter(options, params);
+                  //   // Suggest the creation of a new value
+                  //   if (params.inputValue !== '') {
+                  //     filtered.push({
+                  //       inputValue: params.inputValue,
+                  //       title: `Add New "${params.inputValue}"`,
+                  //     });
+                  //   }
+                  //   return filtered;
+                  // }}
+                  loading={loading}
                   disabled={formik.isSubmitting}
                   value={formik.values.itemId}
                   onChange={(event: any, newValue) => {
@@ -113,6 +115,15 @@ export default function ItemFieldForm({
                       {...params}
                       label={`Select Value`}
                       variant="outlined"
+                      InputProps={{
+                        ...params.InputProps,
+                        endAdornment: (
+                          <>
+                            {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                            {params.InputProps.endAdornment}
+                          </>
+                        ),
+                      }}
                     />
                   )}
                 />
@@ -120,6 +131,10 @@ export default function ItemFieldForm({
                   open={drawer.showDrawer}
                   onClose={() => setDrawer({ showDrawer: false })}
                   typeTitle={label}
+                  onSelect={(newValue) => {
+                    formik.setFieldValue('itemId', newValue);
+                    setDrawer({ showDrawer: false });
+                  }}
                 />
                 <Button
                   className="mt-2"
