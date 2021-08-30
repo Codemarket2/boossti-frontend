@@ -16,9 +16,9 @@ const projectConfig: IProjectConfig = {
     'https://codemarket-common-bucket.s3.amazonaws.com/public/defaults/pictures/default.jpg',
   oneSignalAppId: '39d662b6-c57e-4b00-bab7-df62ceaee266',
   appsyncGraphqlEndpoint:
-    'https://3r4grvrq75ffffaieqmrk255l4.appsync-api.us-east-1.amazonaws.com/graphql',
+    'https://cow33tgsh5cntohwurp3aosbca.appsync-api.us-east-1.amazonaws.com/graphql',
+  appsyncApiKey: 'da2-g22usoh4dza4zou6qxdyt2cg3q',
   appsyncRegion: 'us-east-1',
-  appsyncApiKey: 'da2-ug6gnunnifbu7fbydaut4pfvji',
 };
 
 export default projectConfig;
