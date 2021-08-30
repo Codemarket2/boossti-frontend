@@ -24,9 +24,16 @@ interface IProps {
   typeSlug: any;
   hideBreadcrumbs?: boolean;
   setItem?: any;
+  onSlugUpdate?: (arg: string) => void;
 }
 
-export default function Screen({ slug, typeSlug, hideBreadcrumbs = false, setItem }: IProps) {
+export default function Screen({
+  slug,
+  typeSlug,
+  hideBreadcrumbs = false,
+  setItem,
+  onSlugUpdate,
+}: IProps) {
   const router = useRouter();
   const [state, setState] = useState({ fieldName: '' });
   const deleteCallBack = () => {
@@ -35,10 +42,11 @@ export default function Screen({ slug, typeSlug, hideBreadcrumbs = false, setIte
 
   const updateCallBack = (newSlug) => {
     setState({ ...state, fieldName: '' });
-    if (newSlug !== slug) {
-      router.push(`/types/${typeSlug}/${newSlug}`);
+    if (newSlug !== slug && onSlugUpdate) {
+      onSlugUpdate(newSlug);
     }
   };
+
   const { handleDelete, deleteLoading } = useDeleteListItem({ onAlert });
 
   const { data, loading, error } = useGetListItemBySlug({ slug });

@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import UserLayout from '../components/common/UserLayout';
 import ItemScreen from '../components/list/ItemScreen';
 
@@ -7,9 +8,13 @@ interface IProps {
 }
 
 export default function Screen({ slug, typeSlug }: IProps) {
+  const router = useRouter();
+  const onSlugUpdate = (newSlug) => {
+    router.push(`/types/${typeSlug}/${newSlug}`);
+  };
   return (
     <UserLayout authRequired>
-      <ItemScreen slug={slug} typeSlug={typeSlug} />
+      <ItemScreen onSlugUpdate={onSlugUpdate} slug={slug} typeSlug={typeSlug} />
     </UserLayout>
   );
 }

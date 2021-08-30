@@ -7,7 +7,7 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useCRUDFieldValue } from '@frontend/shared/hooks/field';
 import { useGetListItemsByType } from '@frontend/shared/hooks/list';
 import MomentUtils from '@date-io/moment';
@@ -20,8 +20,6 @@ import { onAlert } from '../../utils/alert';
 import { useEffect, useState } from 'react';
 import moment from 'moment';
 
-const filter = createFilterOptions();
-
 interface IProps {
   onCancel: () => void;
   parentId: any;
@@ -30,6 +28,7 @@ interface IProps {
   label: string;
   fieldType: string;
   typeId: string;
+  typeSlug: string;
 }
 
 export default function ItemFieldForm({
@@ -40,6 +39,7 @@ export default function ItemFieldForm({
   fieldType,
   label = 'Value',
   typeId,
+  typeSlug,
 }: IProps) {
   const { data, error, loading, state, setState } = useGetListItemsByType({
     limit: 10,
@@ -84,17 +84,6 @@ export default function ItemFieldForm({
             ) : (
               <>
                 <Autocomplete
-                  // filterOptions={(options, params) => {
-                  //   const filtered = filter(options, params);
-                  //   // Suggest the creation of a new value
-                  //   if (params.inputValue !== '') {
-                  //     filtered.push({
-                  //       inputValue: params.inputValue,
-                  //       title: `Add New "${params.inputValue}"`,
-                  //     });
-                  //   }
-                  //   return filtered;
-                  // }}
                   loading={loading}
                   disabled={formik.isSubmitting}
                   value={formik.values.itemId}
@@ -131,6 +120,8 @@ export default function ItemFieldForm({
                   open={drawer.showDrawer}
                   onClose={() => setDrawer({ showDrawer: false })}
                   typeTitle={label}
+                  typeSlug={typeSlug}
+                  typeId={typeId}
                   onSelect={(newValue) => {
                     formik.setFieldValue('itemId', newValue);
                     setDrawer({ showDrawer: false });

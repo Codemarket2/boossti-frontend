@@ -38,6 +38,7 @@ const initialState = {
   selectedFieldValue: null,
   edit: false,
   expanded: false,
+  expandId: '',
 };
 
 function ItemOneFields({ field, parentId, hideCreatedBy = false, guest }) {
@@ -60,6 +61,7 @@ function ItemOneFields({ field, parentId, hideCreatedBy = false, guest }) {
     field: field._id,
     parentId: parentId,
     typeId: field.typeId ? field.typeId._id : null,
+    typeSlug: field.typeId ? field.typeId.slug : null,
     fieldType: field.fieldType,
     label: field.label,
     onCancel: () => setState(initialState),
@@ -110,13 +112,22 @@ function ItemOneFields({ field, parentId, hideCreatedBy = false, guest }) {
                       ) : field.fieldType === 'type' ? (
                         <div>
                           <IconButton
-                            onClick={() => setState({ ...state, expanded: !state.expanded })}>
+                            onClick={() =>
+                              setState({
+                                ...state,
+                                expanded: !state.expanded,
+                                expandId: fieldValue._id,
+                              })
+                            }>
                             {state.expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                           </IconButton>
                           <Link href={`/types/${field.typeId.slug}/${fieldValue.itemId.slug}`}>
                             {fieldValue.itemId.title}
                           </Link>
-                          <Collapse in={state.expanded} timeout="auto" unmountOnExit>
+                          <Collapse
+                            in={state.expanded && state.expandId === fieldValue._id}
+                            timeout="auto"
+                            unmountOnExit>
                             <ItemScreen
                               hideBreadcrumbs
                               typeSlug={field.typeId.slug}
