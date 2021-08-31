@@ -12,6 +12,7 @@
     "aws-appsync-subscription-link": "^3.0.7",
     "formik": "2.2.9",
     "graphql": "15.5.0",
+    "immer": "^9.0.5",
     "moment": "2.29.1",
     "react": "17.0.1",
     "react-redux": "7.2.4",
