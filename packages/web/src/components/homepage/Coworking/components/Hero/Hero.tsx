@@ -51,10 +51,10 @@ const Hero = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
                 </Typography>
               </span>
             }
-            subtitle="Prevent & Survive Cancer and other Illnesses."
+            subtitle="Stories about prevention and survival."
             ctaGroup={[
               <Button variant="contained" color="primary" size={isMd ? 'large' : 'medium'}>
-                JOIN
+                Tell Your Story
               </Button>,
               // <Button variant="outlined" color="primary" size={isMd ? 'large' : 'medium'}>
               // Browse
