@@ -62,6 +62,7 @@ export default function FieldForm({ onCancel, parentId, field = null }: IProps) 
               value={formik.values.fieldType}
               onChange={formik.handleChange}>
               <FormControlLabel value="string" control={<Radio color="primary" />} label="String" />
+              <FormControlLabel value="number" control={<Radio color="primary" />} label="Number" />
               <FormControlLabel
                 value="textarea"
                 control={<Radio color="primary" />}
@@ -83,6 +84,11 @@ export default function FieldForm({ onCancel, parentId, field = null }: IProps) 
                 value="type"
                 control={<Radio color="primary" />}
                 label="Exisiting Type"
+              />
+              <FormControlLabel
+                value="address"
+                control={<Radio color="primary" />}
+                label="Address"
               />
             </RadioGroup>
             {formik.touched.fieldType && formik.errors.fieldType && (

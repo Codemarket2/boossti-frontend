@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import Button from '@material-ui/core/Button';
 import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary';
 import ImageList from '../post/ImageList';
@@ -8,6 +9,7 @@ interface IProps {
 }
 
 export default function ImagePicker({ state, setState }: IProps) {
+  const ref: any = useRef();
   const handleFileChange = (event) => {
     if (event.target.files.length > 0) {
       let newArray = [...state.tempMedia];
@@ -24,6 +26,7 @@ export default function ImagePicker({ state, setState }: IProps) {
         tempMediaFiles: [...state.tempMediaFiles, ...event.target.files],
         tempMedia: newArray,
       });
+      ref.current.value = null;
     }
   };
 
@@ -64,6 +67,7 @@ export default function ImagePicker({ state, setState }: IProps) {
         accept="image/*, video/*"
         hidden
         onChange={handleFileChange}
+        ref={ref}
       />
       <label htmlFor="contained-button-file">
         <Button
