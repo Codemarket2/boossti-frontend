@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import TextField from '@material-ui/core/TextField';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import Grid from '@material-ui/core/Grid';
@@ -98,7 +98,7 @@ export default function GoogleMaps({ value, label, onChange }: IProps) {
 
     fetch({ input: inputValue }, (results?: PlaceType[]) => {
       if (active) {
-        let newOptions = [] as PlaceType[];
+        let newOptions = [] as any;
 
         if (value) {
           newOptions = [value];

@@ -43,6 +43,7 @@ export const GET_FIELD_VALUES_BY_FIELD = gql`
           picture
           name
         }
+        createdAt
       }
     }
   }

@@ -21,6 +21,10 @@ import { useEffect, useState } from 'react';
 import moment from 'moment';
 import AddressSearch from '../common/AddressSearch';
 
+import dynamic from 'next/dynamic';
+
+const RichTextarea = dynamic(() => import('../common/RichTextarea'), { ssr: false });
+
 interface IProps {
   onCancel: () => void;
   parentId: any;
@@ -168,10 +172,13 @@ export default function ItemFieldForm({
               value={formik.values.value}
               onChange={(value) => formik.setFieldValue('value', value)}
             />
+          ) : formik.values.fieldType === 'textarea' ? (
+            <RichTextarea
+              value={formik.values.value}
+              onChange={(value) => formik.setFieldValue('value', value)}
+            />
           ) : (
             <TextField
-              multiline={formik.values.fieldType === 'textarea'}
-              rows={formik.values.fieldType === 'textarea' ? 4 : null}
               fullWidth
               label={label}
               variant="outlined"

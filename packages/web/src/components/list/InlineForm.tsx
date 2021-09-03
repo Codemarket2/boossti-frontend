@@ -1,7 +1,10 @@
+import dynamic from 'next/dynamic';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
+
+const RichTextarea = dynamic(() => import('../common/RichTextarea'), { ssr: false });
 
 interface IProps {
   label: string;
@@ -24,21 +27,27 @@ export default function InlineForm({
     <div>
       <form onSubmit={formik.handleSubmit}>
         <InputGroup>
-          <TextField
-            fullWidth
-            variant="outlined"
-            size="small"
-            name={fieldName}
-            label={label}
-            multiline={multiline}
-            rows={multiline ? 4 : null}
-            disabled={formik.isSubmitting}
-            value={formik.values[fieldName].includes('-n-e-w') ? '' : formik.values[fieldName]}
-            // value={formik.values[fieldName]}
-            onChange={formik.handleChange}
-            error={formik.touched[fieldName] && Boolean(formik.errors[fieldName])}
-            helperText={formik.touched[fieldName] && formik.errors[fieldName]}
-          />
+          {multiline ? (
+            <RichTextarea
+              value={formik.values[fieldName].includes('-n-e-w') ? '' : formik.values[fieldName]}
+              onChange={(value) => formik.setFieldValue(fieldName, value)}
+            />
+          ) : (
+            <TextField
+              fullWidth
+              variant="outlined"
+              size="small"
+              name={fieldName}
+              label={label}
+              multiline={multiline}
+              rows={multiline ? 4 : null}
+              disabled={formik.isSubmitting}
+              value={formik.values[fieldName].includes('-n-e-w') ? '' : formik.values[fieldName]}
+              onChange={formik.handleChange}
+              error={formik.touched[fieldName] && Boolean(formik.errors[fieldName])}
+              helperText={formik.touched[fieldName] && formik.errors[fieldName]}
+            />
+          )}
         </InputGroup>
         <InputGroup>
           <LoadingButton type="submit" loading={formLoading} size="small">
