@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import { useUpdateComment } from '@frontend/shared/hooks/comment/createComment';
 import CommentInput from './CommentInput';
 import DisplayCard from './DisplayCard';
-import ReplyComment from './ReplyComment';
 
 interface IDisplayComment {
   postId: string;
@@ -23,7 +22,7 @@ export default function DisplayComment({
   const currentUserId = attributes['custom:_id'];
 
   const [edit, setEdit] = useState(false);
-  const [replyOnComment, setReplyOnComment] = useState(false);
+
   const { handleUpdate, setUpdateInputVal, updateInputVal } = useUpdateComment(
     postId,
     commentedUser._id,
@@ -55,11 +54,9 @@ export default function DisplayComment({
           index={index}
           postId={postId}
           setEdit={setEdit}
-          setReplyOnComment={setReplyOnComment}
           showIcon={true}
         />
       )}
-      <ReplyComment replyOnComment={replyOnComment} postId={commentedUser._id} />
     </>
   );
 }

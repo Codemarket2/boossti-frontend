@@ -1,5 +1,5 @@
 import { MentionsInput, Mention } from 'react-mentions';
-import classNames from '../../utils/mention.module.css';
+// import classNames from '../../utils/mention.module.css';
 import { useMentionList } from '@frontend/shared/hooks/list';
 
 interface IProps {
@@ -45,14 +45,15 @@ export default function MentionInput({
       value={value}
       onChange={handleChange}
       placeholder={placeholder}
-      classNames={classNames}>
+      // classNames={classNames}
+    >
       <Mention
         trigger="@"
         data={suggestions}
         markup="@@@____id__^^____display__@@@^^^"
         appendSpaceOnAdd
         onAdd={handleOnAdd}
-        className={classNames.mentions__mention}
+        // className={classNames.mentions__mention}
       />
     </MentionsInput>
   );

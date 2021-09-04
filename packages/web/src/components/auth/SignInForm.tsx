@@ -10,8 +10,12 @@ import { onAlert } from '../../utils/alert';
 import SocialSignIn from './SocialSignIn';
 import InputGroup from '../common/InputGroup';
 
-export default function SignInForm() {
-  const { state, setState, formik } = useSignIn({ onAlert });
+interface IProps {
+  successCallback?: () => void;
+}
+
+export default function SignInForm({ successCallback }: IProps) {
+  const { state, setState, formik } = useSignIn({ onAlert, successCallback });
 
   if (state.showForgetPasswordForm) {
     return (
