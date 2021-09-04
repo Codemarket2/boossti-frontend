@@ -120,7 +120,7 @@ export default function Screen({
             <Typography>
               Title
               <Tooltip title="Edit Description">
-                <IconButton onClick={() => onEdit('description')}>
+                <IconButton onClick={() => onEdit('title')}>
                   <EditIcon />
                 </IconButton>
               </Tooltip>
