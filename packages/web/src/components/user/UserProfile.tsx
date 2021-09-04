@@ -27,7 +27,7 @@ export default function ProfileScreen() {
           variant="scrollable"
           scrollButtons="on">
           <Tab label="Posts" value="posts" />
-          <Tab label="About" value="about" />
+          <Tab label="My Story" value="about" />
           <Tab label="Saved Tags" value="bookmarks" />
           <Tab label="Facebook Setting" value="facebookPostSetting" />
         </Tabs>
