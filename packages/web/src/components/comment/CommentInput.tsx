@@ -16,6 +16,14 @@ export default function CommentInput({
   onClick,
   postId,
 }: IComment) {
+  const _handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      if (inputVal !== '') {
+        onClick();
+      }
+    }
+  };
+
   return (
     <div>
       <Grid container alignItems="center">
@@ -27,6 +35,7 @@ export default function CommentInput({
             label={label}
             fullWidth
             name="comment"
+            onKeyPress={_handleKeyPress}
           />
         </Grid>
         <Grid item lg={1} md={1} sm={1} xs={1}>

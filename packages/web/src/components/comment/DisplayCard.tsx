@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   IconButton,
   Avatar,
@@ -13,13 +13,15 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import ReplyIcon from '@material-ui/icons/Reply';
 import { useSelector } from 'react-redux';
+
+import Comment from './Comment';
+
 interface IDisplayComment {
   commentedUser: any;
   handleDelete: any;
   setEdit: any;
   postId: string;
   index: number;
-  setReplyOnComment?: any;
   showIcon?: boolean;
 }
 export default function DisplayCard({
@@ -29,10 +31,17 @@ export default function DisplayCard({
   setEdit,
   postId,
   index,
-  setReplyOnComment,
 }: IDisplayComment) {
   const { attributes, admin } = useSelector(({ auth }: any) => auth);
+
+  const [showReply, setShowReply] = useState(false);
+  const [showCommentInput, setShowCommentInput] = useState(true);
+
   const currentUserId = attributes['custom:_id'];
+  useEffect(() => {
+    setShowReply(true);
+    setShowCommentInput(false);
+  }, []);
   return (
     <>
       <Card key={commentedUser._id} className="my-1" variant="outlined">
@@ -58,7 +67,12 @@ export default function DisplayCard({
                     <DeleteIcon />
                   </IconButton>
                   {showIcon && (
-                    <IconButton aria-label="settings" onClick={() => setReplyOnComment(true)}>
+                    <IconButton
+                      aria-label="settings"
+                      onClick={() => {
+                        setShowReply(!showReply);
+                        setShowCommentInput(true);
+                      }}>
                       <ReplyIcon />
                     </IconButton>
                   )}
@@ -66,7 +80,12 @@ export default function DisplayCard({
               ) : (
                 <>
                   {showIcon && (
-                    <IconButton aria-label="settings" onClick={() => setReplyOnComment(true)}>
+                    <IconButton
+                      aria-label="settings"
+                      onClick={() => {
+                        setShowReply(!showReply);
+                        setShowCommentInput(true);
+                      }}>
                       <ReplyIcon />
                     </IconButton>
                   )}
@@ -93,6 +112,16 @@ export default function DisplayCard({
         />
         <Divider />
         <CardContent data-testid="comment-body">{commentedUser?.body}</CardContent>
+        {showReply && (
+          <Grid style={{ marginLeft: '25px', marginTop: '10px' }}>
+            <Divider orientation="vertical" variant="inset" />
+            <Comment
+              postId={commentedUser._id}
+              label="Add Reply on Comment"
+              showInput={showCommentInput}
+            />
+          </Grid>
+        )}
       </Card>
     </>
   );
