@@ -8,9 +8,11 @@ import DisplayComment from './DisplayComment';
 
 interface IComment {
   postId: string;
+  label?: string;
+  showInput?: boolean;
 }
 
-export default function Comment({ postId }: IComment) {
+export default function Comment({ postId, label, showInput = true }: IComment) {
   const { handleSave, inputVal, setInputVal, loading: submitLoading } = useCreateComment(postId);
   const { handleDelete, loading: deleteLoading } = useDeleteComment();
   const { data, loading } = useGetComments(postId);
@@ -22,27 +24,31 @@ export default function Comment({ postId }: IComment) {
 
   return (
     <>
-      {loading || submitLoading || deleteLoading ? (
+      {loading ? (
         <CircularProgress />
       ) : (
         data &&
         data?.getCommentsByParentID?.data?.map((commentedUser, index) => (
-          <DisplayComment
-            key={commentedUser._id}
-            postId={postId}
-            commentedUser={commentedUser}
-            index={index}
-            handleDelete={handleDelete}
-          />
+          <>
+            <DisplayComment
+              key={commentedUser._id}
+              postId={postId}
+              commentedUser={commentedUser}
+              index={index}
+              handleDelete={handleDelete}
+            />
+          </>
         ))
       )}
-
-      <CommentInput
-        handleChange={handleChange}
-        onClick={handleSave}
-        inputVal={inputVal}
-        postId={postId}
-      />
+      {showInput && (
+        <CommentInput
+          handleChange={handleChange}
+          onClick={handleSave}
+          inputVal={inputVal}
+          postId={postId}
+          label={label}
+        />
+      )}
     </>
   );
 }
