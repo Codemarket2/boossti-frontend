@@ -4,7 +4,12 @@ import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
-const routes = { feeds: '/feeds', myStory: '/my-story', fbSettings: '/fb-settings' };
+const routes = {
+  feeds: '/feeds',
+  myStory: '/my-story',
+  settings: '/settings',
+  saved: '/saved',
+};
 
 export default function CenteredTabs() {
   const router = useRouter();
@@ -31,7 +36,8 @@ export default function CenteredTabs() {
         centered>
         <Tab label="Feeds" value={routes.feeds} />
         <Tab label="My Story" value={routes.myStory} />
-        <Tab label="Settings" value={routes.fbSettings} />
+        <Tab label="Saved" value={routes.saved} />
+        <Tab label="Settings" value={routes.settings} />
       </Tabs>
     </Paper>
   );

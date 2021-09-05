@@ -17,7 +17,6 @@ import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import ClearIcon from '@material-ui/icons/Clear';
 import ErrorLoading from '../common/ErrorLoading';
-import Loading from '../common/Loading';
 import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
 
@@ -74,7 +73,6 @@ export default function BookmarkList() {
         <ErrorLoading error={error} />
       ) : (
         <>
-          {loading && <Loading />}
           {data.getMyBookmarks.data.map((bookmark) => (
             <Card
               variant="outlined"

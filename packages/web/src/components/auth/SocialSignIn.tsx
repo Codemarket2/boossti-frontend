@@ -17,7 +17,7 @@ const StyledCaptionWrapper = styled.div`
 
 const StyledCaption = styled(Typography)`
   margin-top: -12px !important;
-  background-color: ${(props) => props.theme.palette.background.default};
+  background-color: ${(props) => props.theme.palette.background.level2};
   min-width: ${(props) => props.theme.spacing(4)}px;
   text-align: center;
 `;

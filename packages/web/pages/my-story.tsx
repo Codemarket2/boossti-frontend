@@ -1,5 +1,5 @@
-import MyStory from '../src/screens/MyStory';
+import MyStoryScreen from '../src/screens/MyStoryScreen';
 
 export default function Page() {
-  return <MyStory />;
+  return <MyStoryScreen />;
 }
