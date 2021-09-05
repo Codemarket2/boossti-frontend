@@ -55,35 +55,32 @@ export default function MentionParser({
                 text: node.data,
               };
               return (
-                <Tooltip title="Save Tag">
-                  <Typography
-                    className="mx-1 font-weight-bold"
-                    onClick={(event) => {
-                      let selectedTag = tags.filter((t) => t.tag._id == tag._id)[0];
-                      selectedTag = selectedTag && selectedTag.tag ? selectedTag.tag : selectedTag;
-                      // console.log('selectedTag', selectedTag);
-                      let url =
-                        selectedTag &&
-                        selectedTag.types &&
-                        Object.prototype.hasOwnProperty.call(selectedTag, 'types')
-                          ? `/types/${selectedTag.types[0].slug}/${selectedTag.slug}`
-                          : selectedTag.slug
-                          ? `/types/${selectedTag.slug}`
-                          : `/types/${Date.now()}`;
-                      bookmarkSetState({
-                        ...bookmarkState,
-                        showMenu: event.currentTarget,
-                        selectedTag: tag,
-                        tag: selectedTag ? selectedTag : null,
-                        url: url,
-                      });
-                    }}
-                    color="primary"
-                    variant="body2"
-                    component="span">
-                    <u style={{ cursor: 'pointer' }}>{node.data}</u>
-                  </Typography>
-                </Tooltip>
+                <Typography
+                  className="mx-1 font-weight-bold"
+                  onClick={(event) => {
+                    let selectedTag = tags.filter((t) => t.tag._id == tag._id)[0];
+                    selectedTag = selectedTag && selectedTag.tag ? selectedTag.tag : selectedTag;
+                    let url =
+                      selectedTag &&
+                      selectedTag.types &&
+                      Object.prototype.hasOwnProperty.call(selectedTag, 'types')
+                        ? `/types/${selectedTag.types[0].slug}/${selectedTag.slug}`
+                        : selectedTag.slug
+                        ? `/types/${selectedTag.slug}`
+                        : `/types/${Date.now()}`;
+                    bookmarkSetState({
+                      ...bookmarkState,
+                      showMenu: event.currentTarget,
+                      selectedTag: tag,
+                      tag: selectedTag ? selectedTag : null,
+                      url: url,
+                    });
+                  }}
+                  color="primary"
+                  variant="body2"
+                  component="span">
+                  <u style={{ cursor: 'pointer' }}>{node.data}</u>
+                </Typography>
               );
             }
           },
@@ -110,14 +107,6 @@ export default function MentionParser({
             </MenuItem>
           </Link>
           <Divider />
-          {/* <Link href={bookmarkState.url}>
-            <MenuItem>
-              <ListItemIcon className="mr-n4">
-                <OpenInNewIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText primary="Go to Page" />
-            </MenuItem>
-          </Link> */}
           <MenuItem
             onClick={async () => {
               if (authenticated) {

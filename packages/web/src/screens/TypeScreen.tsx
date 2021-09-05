@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
+import Divider from '@material-ui/core/Divider';
 import EditIcon from '@material-ui/icons/Edit';
 import { useCRUDListTypes } from '@frontend/shared/hooks/list';
 import UserLayout from '../components/common/UserLayout';
@@ -20,6 +21,7 @@ import { onAlert } from '../utils/alert';
 import Fields from '../components/field/Fields';
 import InlineForm from '../components/list/InlineForm';
 import MediaForm from '../components/list/MediaForm';
+import parse from 'html-react-parser';
 
 interface IProps {
   slug: any;
@@ -101,17 +103,23 @@ export default function Screen({ slug }: IProps) {
             formLoading={CRUDLoading}
           />
         ) : (
-          <Typography variant="h4" className="d-flex align-items-center">
-            {data.getListTypeBySlug.title.includes('-n-e-w')
-              ? 'Title'
-              : data.getListTypeBySlug.title}
-            <Tooltip title="Edit Title">
-              <IconButton onClick={() => onEdit('title')}>
-                <EditIcon />
-              </IconButton>
-            </Tooltip>
-          </Typography>
+          <div>
+            <Typography className="d-flex align-items-center">
+              Title
+              <Tooltip title="Edit Title">
+                <IconButton onClick={() => onEdit('title')}>
+                  <EditIcon />
+                </IconButton>
+              </Tooltip>
+            </Typography>
+            <Typography variant="h4" className="d-flex align-items-center">
+              {data.getListTypeBySlug.title.includes('-n-e-w')
+                ? 'Title'
+                : data.getListTypeBySlug.title}
+            </Typography>
+          </div>
         )}
+        <Divider className="my-2" />
         {state.fieldName === 'description' ? (
           <InlineForm
             label="Description"
@@ -122,15 +130,19 @@ export default function Screen({ slug }: IProps) {
             formLoading={CRUDLoading}
           />
         ) : (
-          <Typography className="d-flex align-items-center">
-            {data.getListTypeBySlug.description || 'Description'}
-            <Tooltip title="Edit Description">
-              <IconButton onClick={() => onEdit('description')}>
-                <EditIcon />
-              </IconButton>
-            </Tooltip>
-          </Typography>
+          <div>
+            <Typography className="d-flex align-items-center">
+              Description
+              <Tooltip title="Edit Description">
+                <IconButton onClick={() => onEdit('description')}>
+                  <EditIcon />
+                </IconButton>
+              </Tooltip>
+            </Typography>
+            {parse(data.getListTypeBySlug.description)}
+          </div>
         )}
+        <Divider className="my-2" />
         {state.fieldName === 'media' ? (
           <MediaForm
             state={crudState}

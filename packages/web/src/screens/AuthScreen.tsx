@@ -6,7 +6,11 @@ import { useTheme } from '@material-ui/core/styles';
 import SignUpForm from '../components/auth/SignUpForm';
 import SignInForm from '../components/auth/SignInForm';
 
-const AuthScreen = () => {
+interface IProps {
+  signinSuccessCallback?: () => void;
+}
+
+const AuthScreen = ({ signinSuccessCallback }: IProps) => {
   const [value, setValue] = useState<string>('Sign-In');
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('xs'));
@@ -26,7 +30,11 @@ const AuthScreen = () => {
         <Tab label="Sign-In" value="Sign-In" />
         <Tab label="Sign-Up" value="Sign-Up" />
       </Tabs>
-      {value === 'Sign-In' ? <SignInForm /> : <SignUpForm />}
+      {value === 'Sign-In' ? (
+        <SignInForm successCallback={signinSuccessCallback} />
+      ) : (
+        <SignUpForm />
+      )}
     </>
   );
 };

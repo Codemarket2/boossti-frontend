@@ -24,8 +24,6 @@
     "web:cypress": "yarn workspace @frontend/web run cypress",
     "web:storybook": "yarn workspace @frontend/web run storybook",
     "shared:test": "yarn workspace @frontend/shared test",
-    "template": "yarn workspace @frontend/template run dev",
-    "template:build": "yarn workspace @frontend/template run build",
     "lint": "eslint .",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json}\"",
     "postinstall": "jetify",

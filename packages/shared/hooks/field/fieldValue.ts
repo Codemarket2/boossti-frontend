@@ -38,8 +38,6 @@ const validationSchema = yup.object({
     is: (fieldType, tempMedia) => fieldType === 'media' && tempMedia.length === 0,
     then: yup.array().min(1, 'Select atleast one media'),
     otherwise: yup.array(),
-    // then: yup.array(),
-    // otherwise: yup.array().min(1, 'Select atleast one media'),
   }),
 });
 

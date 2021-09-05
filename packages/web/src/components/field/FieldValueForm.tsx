@@ -19,6 +19,11 @@ import ImagePicker from '../common/ImagePicker';
 import { onAlert } from '../../utils/alert';
 import { useEffect, useState } from 'react';
 import moment from 'moment';
+import AddressSearch from '../common/AddressSearch';
+
+import dynamic from 'next/dynamic';
+
+const RichTextarea = dynamic(() => import('../common/RichTextarea'), { ssr: false });
 
 interface IProps {
   onCancel: () => void;
@@ -161,15 +166,25 @@ export default function ItemFieldForm({
                 <FormHelperText className="text-danger">{formik.errors.media}</FormHelperText>
               )}
             </div>
+          ) : formik.values.fieldType === 'address' ? (
+            <AddressSearch
+              label={label}
+              value={formik.values.value}
+              onChange={(value) => formik.setFieldValue('value', value)}
+            />
+          ) : formik.values.fieldType === 'textarea' ? (
+            <RichTextarea
+              value={formik.values.value}
+              onChange={(value) => formik.setFieldValue('value', value)}
+            />
           ) : (
             <TextField
-              multiline={formik.values.fieldType === 'textarea'}
-              rows={formik.values.fieldType === 'textarea' ? 4 : null}
               fullWidth
               label={label}
               variant="outlined"
               name="value"
               size="small"
+              type={formik.values.fieldType === 'number' ? 'number' : 'text'}
               disabled={formik.isSubmitting}
               value={formik.values.value}
               onChange={formik.handleChange}

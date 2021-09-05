@@ -13,11 +13,11 @@ import MenuIcon from '@material-ui/icons/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import Button from '@material-ui/core/Button';
-import ChatBubble from '@material-ui/icons/ChatBubble';
 import AddIcon from '@material-ui/icons/Add';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import Event from '@material-ui/icons/Event';
-import Videocam from '@material-ui/icons/Videocam';
+// import ChatBubble from '@material-ui/icons/ChatBubble';
+// import Event from '@material-ui/icons/Event';
+// import Videocam from '@material-ui/icons/Videocam';
 import HomeIcon from '@material-ui/icons/Home';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -72,16 +72,11 @@ export default function AppBarComponent() {
   useEffect(() => {
     if (activeRoute !== router.pathname) {
       setActiveRoute(router.pathname);
-      ``;
     }
   }, []);
 
   return (
-    <AppBar
-      elevation={1}
-      position={matches ? 'sticky' : 'static'}
-      // color={darkMode ? 'default' : 'primary'}
-      color="inherit">
+    <AppBar elevation={1} position={matches ? 'sticky' : 'static'} color="inherit">
       <Toolbar>
         {authenticated ? (
           <>
@@ -108,12 +103,25 @@ export default function AppBarComponent() {
             <MenuWrapper>
               <Tooltip title="Home">
                 <IconButton
-                  onClick={() => router.push(routes.home)}
-                  color={setActiveRouteColor(activeRoute, routes.home)}>
+                  onClick={() => router.push(routes.feeds)}
+                  color={setActiveRouteColor(activeRoute, routes.feeds)}>
                   <HomeIcon />
                 </IconButton>
               </Tooltip>
-              <Tooltip title="Inbox">
+              {/* <Tooltip title="Profile">
+                <IconButton onClick={() => router.push(`/user/${attributes['custom:_id']}`)}>
+                  <AccountCircleIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Logout">
+                <IconButton
+                  onClick={() => {
+                    confirm('Are you sure you want to logout?') && handleLogout();
+                  }}>
+                  <ExitToAppIcon />
+                </IconButton>
+              </Tooltip> */}
+              {/* <Tooltip title="Inbox">
                 <IconButton
                   onClick={() => router.push(routes.inbox)}
                   color={setActiveRouteColor(activeRoute, routes.inbox)}>
@@ -131,7 +139,7 @@ export default function AppBarComponent() {
                   color={setActiveRouteColor(activeRoute, routes.sessions)}>
                   <Videocam />
                 </IconButton>
-              </Tooltip>
+              </Tooltip> */}
             </MenuWrapper>
             <div>
               <Tooltip title="Profile">

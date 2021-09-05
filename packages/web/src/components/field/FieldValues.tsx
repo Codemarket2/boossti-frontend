@@ -1,3 +1,4 @@
+import parse from 'html-react-parser';
 import {
   useGetFieldValuesByItem,
   useGetFieldsByType,
@@ -9,7 +10,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import AddCircle from '@material-ui/icons/AddCircle';
@@ -141,6 +141,8 @@ function ItemOneFields({ field, parentId, hideCreatedBy = false, guest }) {
                         </a>
                       ) : field.fieldType === 'media' ? (
                         <ImageList media={fieldValue.media} />
+                      ) : field.fieldType === 'textarea' ? (
+                        parse(fieldValue.value)
                       ) : (
                         fieldValue.value
                       )}
@@ -156,7 +158,12 @@ function ItemOneFields({ field, parentId, hideCreatedBy = false, guest }) {
                               src={fieldValue.createdBy.picture}
                             />
                           }
-                          label={<span>{fieldValue.createdBy.name}</span>}
+                          label={
+                            <span>
+                              {fieldValue.createdBy.name} on{' '}
+                              {moment(fieldValue.createdAt).format('lll')}
+                            </span>
+                          }
                           style={{ border: 'none', marginBottom: 10 }}
                           variant="outlined"
                         />
