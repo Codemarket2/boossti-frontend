@@ -5,7 +5,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import Amplify, { Hub } from 'aws-amplify';
 import { useSelector } from 'react-redux';
-import { wrapper } from '../src/utils/store';
+import { wrapper } from '../../src/utils/store';
 import { ApolloProvider } from '@apollo/client/react';
 import { client } from '@frontend/shared/graphql';
 import aws_exports from '@frontend/shared/aws-exports';
@@ -14,9 +14,9 @@ import { useCurrentAuthenticatedUser } from '@frontend/shared/hooks/auth';
 import projectConfig from '@frontend/shared';
 import { createMuiTheme, ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import LoadingBar from '../src/components/common/LoadingBar';
+import LoadingBar from '../../src/components/common/LoadingBar';
 import Head from 'next/head';
-import { light, dark } from '../src/components/home/theme/palette';
+import { light, dark } from '../../src/components/home/theme/palette';
 
 // CSS from node modules
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -24,7 +24,6 @@ import 'react-lazy-load-image-component/src/effects/opacity.css';
 import 'leaflet/dist/leaflet.css';
 import 'swiper/css/swiper.min.css';
 import 'aos/dist/aos.css';
-import '../src/assets/css/ckeditor.css';
 
 const customsSignInUrl =
   process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : 'https://www.vijaa.com/';

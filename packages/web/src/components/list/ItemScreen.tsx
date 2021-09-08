@@ -152,7 +152,7 @@ export default function Screen({
                 </IconButton>
               </Tooltip>
             </Typography>
-            {parse(data.getListItemBySlug.description)}
+            <div className="ck-content">{parse(data.getListItemBySlug.description)}</div>
           </>
         )}
         <Divider className="my-2" />

@@ -139,7 +139,7 @@ export default function Screen({ slug }: IProps) {
                 </IconButton>
               </Tooltip>
             </Typography>
-            {parse(data.getListTypeBySlug.description)}
+            <div className="ck-content">{parse(data.getListTypeBySlug.description)}</div>
           </div>
         )}
         <Divider className="my-2" />

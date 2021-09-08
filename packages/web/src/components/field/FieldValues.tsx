@@ -142,7 +142,7 @@ function ItemOneFields({ field, parentId, hideCreatedBy = false, guest }) {
                       ) : field.fieldType === 'media' ? (
                         <ImageList media={fieldValue.media} />
                       ) : field.fieldType === 'textarea' ? (
-                        parse(fieldValue.value)
+                        <div className="ck-content">{parse(fieldValue.value)}</div>
                       ) : (
                         fieldValue.value
                       )}
