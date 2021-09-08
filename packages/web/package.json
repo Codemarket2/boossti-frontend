@@ -17,7 +17,6 @@
   },
   "dependencies": {
     "@apollo/client": "3.3.21",
-    "@ckeditor/ckeditor5-build-classic": "^29.2.0",
     "@ckeditor/ckeditor5-react": "^3.0.2",
     "@date-io/moment": "1.x",
     "@frontend/ckeditor": "1.0.0",

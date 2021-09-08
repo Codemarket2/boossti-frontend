@@ -2614,38 +2614,6 @@
   dependencies:
     ckeditor5 "^29.2.0"
 
-"@ckeditor/ckeditor5-build-classic@^29.2.0":
-  version "29.2.0"
-  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-build-classic/-/ckeditor5-build-classic-29.2.0.tgz#0fa4e51c1a70d3f2a2e188c07b8835c3ed0005f7"
-  integrity sha512-Hoysq4JxTpepfKknOklBwnjamOCLMhdRyKUT9j/slJzBbPgcxcJEooxD0iL8viBVJzXGHCVJltoNgNsQh4CaDQ==
-  dependencies:
-    "@ckeditor/ckeditor5-adapter-ckfinder" "^29.2.0"
-    "@ckeditor/ckeditor5-autoformat" "^29.2.0"
-    "@ckeditor/ckeditor5-basic-styles" "^29.2.0"
-    "@ckeditor/ckeditor5-block-quote" "^29.2.0"
-    "@ckeditor/ckeditor5-ckfinder" "^29.2.0"
-    "@ckeditor/ckeditor5-cloud-services" "^29.2.0"
-    "@ckeditor/ckeditor5-easy-image" "^29.2.0"
-    "@ckeditor/ckeditor5-editor-classic" "^29.2.0"
-    "@ckeditor/ckeditor5-essentials" "^29.2.0"
-    "@ckeditor/ckeditor5-heading" "^29.2.0"
-    "@ckeditor/ckeditor5-image" "^29.2.0"
-    "@ckeditor/ckeditor5-indent" "^29.2.0"
-    "@ckeditor/ckeditor5-link" "^29.2.0"
-    "@ckeditor/ckeditor5-list" "^29.2.0"
-    "@ckeditor/ckeditor5-media-embed" "^29.2.0"
-    "@ckeditor/ckeditor5-paragraph" "^29.2.0"
-    "@ckeditor/ckeditor5-paste-from-office" "^29.2.0"
-    "@ckeditor/ckeditor5-table" "^29.2.0"
-    "@ckeditor/ckeditor5-typing" "^29.2.0"
-
-"@ckeditor/ckeditor5-ckfinder@^29.2.0":
-  version "29.2.0"
-  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-ckfinder/-/ckeditor5-ckfinder-29.2.0.tgz#41bf1be7651ca47e77d11b6b5794cb355f02cb75"
-  integrity sha512-JXxLes9ztvUeqO/lsoxfkb6f9/NFlO8Hu0v+Flh3WfExcEhvQYTAJBLyWKzfAM8/+arlwMtxRPXJumV1xysWtQ==
-  dependencies:
-    ckeditor5 "^29.2.0"
-
 "@ckeditor/ckeditor5-clipboard@^29.2.0":
   version "29.2.0"
   resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-clipboard/-/ckeditor5-clipboard-29.2.0.tgz#c2a9d79713232fc1a311d98e63615227fa0e1e6a"
@@ -2656,13 +2624,6 @@
     "@ckeditor/ckeditor5-utils" "^29.2.0"
     "@ckeditor/ckeditor5-widget" "^29.2.0"
     lodash-es "^4.17.11"
-
-"@ckeditor/ckeditor5-cloud-services@^29.2.0":
-  version "29.2.0"
-  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-cloud-services/-/ckeditor5-cloud-services-29.2.0.tgz#7157703f17c203a14e3338ae37eaaf9791ff4584"
-  integrity sha512-6KQv2UyhWBpVZKkWwi1CPpa9r9cMEEyLgqSfFtJMlmK7FApcHpNqtuGQbpLjOWXcN6AQuOM5l48iBhbS6xbMEQ==
-  dependencies:
-    ckeditor5 "^29.2.0"
 
 "@ckeditor/ckeditor5-code-block@^29.2.0":
   version "29.2.0"
@@ -2717,13 +2678,6 @@
     rimraf "^3.0.2"
     semver "^7.3.4"
     webpack-sources "^2.0.1"
-
-"@ckeditor/ckeditor5-easy-image@^29.2.0":
-  version "29.2.0"
-  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-easy-image/-/ckeditor5-easy-image-29.2.0.tgz#cc06f382008ebe2474d412929a842151fbd8fc4d"
-  integrity sha512-yYlZsWW3U6f6dbkbz6UFet9Kx9M5TpIteIwqsQOQ/tq3mnaeFq4vu1fRPtHdBfhNeLDHisQC5h2nbKnn2phseQ==
-  dependencies:
-    ckeditor5 "^29.2.0"
 
 "@ckeditor/ckeditor5-editor-classic@^29.2.0":
   version "29.2.0"
