@@ -46,8 +46,13 @@ export default function MyPostsList() {
         onShow={() => postsSetState({ ...postsState, search: '', showSearch: true })}
         onChange={(value) => postsSetState({ ...postsState, search: value })}>
         <Link href="/create-post">
-          <Button size="small" startIcon={<AddIcon />} variant="contained" color="primary">
-            Create Post
+          <Button
+            className="inline-block"
+            size="small"
+            startIcon={<AddIcon />}
+            variant="contained"
+            color="primary">
+            CreatePost
           </Button>
         </Link>
       </ListHeader>

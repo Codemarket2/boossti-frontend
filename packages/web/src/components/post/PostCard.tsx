@@ -1,4 +1,4 @@
-import react, { useState } from 'react';
+import { useState } from 'react';
 import { Card, Divider } from '@material-ui/core';
 import CardHeader from '@material-ui/core/CardHeader';
 import Link from 'next/link';
@@ -11,7 +11,6 @@ import ShareIcon from '@material-ui/icons/Share';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ModeCommentIcon from '@material-ui/icons/ModeComment';
 import moment from 'moment';
-
 import ImageList from './ImageList';
 import MentionParser from '../common/MentionParser';
 import Comment from '../comment/Comment';

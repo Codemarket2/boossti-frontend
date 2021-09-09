@@ -1,6 +1,8 @@
 import Editor from '@frontend/ckeditor';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import { fileUpload } from '@frontend/shared/utils/fileUpload';
+import Skeleton from '@material-ui/lab/Skeleton';
+import { useState } from 'react';
 
 const editorConfiguration = {
   toolbar: [
@@ -78,24 +80,29 @@ interface IProps {
 }
 
 export default function RichTextarea({ value = '', onChange }: IProps) {
+  const [loading, setLoading] = useState(true);
   return (
-    <CKEditor
-      config={editorConfiguration}
-      editor={Editor}
-      data={value}
-      onReady={(editor) => {
-        editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
-          return new MyUploadAdapter(loader);
-        };
-        editor.editing.view.change((writer) => {
-          writer.setStyle('min-height', '200px', editor.editing.view.document.getRoot());
-          writer.setStyle('max-height', '90vh', editor.editing.view.document.getRoot());
-        });
-      }}
-      onChange={(event, editor) => {
-        const data = editor.getData();
-        onChange(data);
-      }}
-    />
+    <>
+      {loading && <Skeleton variant="rect" height="150px" />}
+      <CKEditor
+        config={editorConfiguration}
+        editor={Editor}
+        data={value}
+        onReady={(editor) => {
+          editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+            return new MyUploadAdapter(loader);
+          };
+          editor.editing.view.change((writer) => {
+            writer.setStyle('min-height', '200px', editor.editing.view.document.getRoot());
+            writer.setStyle('max-height', '90vh', editor.editing.view.document.getRoot());
+          });
+          setLoading(false);
+        }}
+        onChange={(event, editor) => {
+          const data = editor.getData();
+          onChange(data);
+        }}
+      />
+    </>
   );
 }

@@ -30,6 +30,7 @@ export default function ListItems({ types, name, slug }: any) {
   return (
     <>
       <ListHeader
+        loading={loading}
         buttonClass="justify-content-between flex-row-reverse"
         button={
           <Tooltip title="Add New Types">
@@ -67,7 +68,7 @@ export default function ListItems({ types, name, slug }: any) {
                     </ListItemAvatar>
                     <ListItemText
                       primary={t.title.includes('-n-e-w') ? 'Title' : t.title}
-                      secondary={t.description}
+                      // secondary={t.description}
                     />
                   </ListItem>
                 </Link>

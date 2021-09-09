@@ -8,11 +8,13 @@ import PostCardSkeleton from './PostCardSkeleton';
 import ListHeader from '../common/ListHeader';
 
 export default function FeedsList() {
-  const { data, error, state: postsState, setState: postsSetState } = useGetMyFeeds();
+  const { data, error, loading, state: postsState, setState: postsSetState } = useGetMyFeeds();
 
   return (
     <div>
       <ListHeader
+        loading={loading}
+        alwaysHideSearch
         search={postsState.search}
         showSearch={postsState.showSearch}
         onHide={() => postsSetState({ ...postsState, search: '', showSearch: false })}

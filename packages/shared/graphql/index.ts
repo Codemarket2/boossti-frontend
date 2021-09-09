@@ -8,10 +8,6 @@ import projectConfig from '../index';
 let url = projectConfig.appsyncGraphqlEndpoint;
 let region = projectConfig.appsyncRegion;
 let apiKey = projectConfig.appsyncRegion;
-// const url = USE_DEBUG
-//   ? process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT
-//   : projectConfig.appsyncGraphqlEndpoint;
-// const region = USE_DEBUG ? process.env.NEXT_PUBLIC_GRAPHQL_APIKEY : projectConfig.appsyncRegion;
 
 if (
   process.env.NODE_ENV === 'development' &&

@@ -69,6 +69,7 @@ export default function ItemFieldForm({
 
   return (
     <div>
+      {/* <p>{formik.values.value}</p> */}
       <form onSubmit={formik.handleSubmit}>
         <InputGroup>
           {formik.values.fieldType === 'date' ? (

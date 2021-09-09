@@ -1,8 +1,5 @@
-import Divider from '@material-ui/core/Divider';
 import { useCreatePost } from '@frontend/shared/hooks/post';
-
 import InputGroup from '../common/InputGroup';
-// import SelectTag from '../post/SelectTag';
 import ErrorLoading from '../common/ErrorLoading';
 import LoadingButton from '../common/LoadingButton';
 import { onAlert } from '../../utils/alert';
@@ -78,7 +75,7 @@ export default function PostScreen({ post, onClose = () => {} }: any) {
 
   if (fbsdkLoading) {
     return (
-      <ErrorLoading error={{ message: 'SOmething went wrong' }}>
+      <ErrorLoading>
         <Skeleton variant="rect" height={100} className="my-2" />
         <div className="my-2 d-flex">
           <Skeleton variant="rect" width={100} height={30} className="mr-2" />
@@ -91,12 +88,6 @@ export default function PostScreen({ post, onClose = () => {} }: any) {
 
   return (
     <div>
-      {/* <SelectTag
-        open={state.showTagModel}
-        onClose={() => setState({ ...state, showTagModel: false })}
-        selectedList={state.selectedList}
-        onSelect={handleSelectTag}
-      /> */}
       <InputGroup>
         <MentionInput
           onChange={handleChange}
@@ -109,19 +100,6 @@ export default function PostScreen({ post, onClose = () => {} }: any) {
         <ImagePicker state={state} setState={setState} />
       </InputGroup>
       <TagTabs handleSelectTag={handleSelectTag} />
-      {/* <InputGroup>
-        {data.getListTypes.data.map((list) => (
-          <Tooltip key={list._id} title={`Select ${list.title}`}>
-            <Chip
-              onClick={() => handleOpenTagModel(list)}
-              color="secondary"
-              label={list.title}
-              className="mr-1 mb-1"
-              style={{ backgroundColor: '#f5f5f5' }}
-            />
-          </Tooltip>
-        ))}
-      </InputGroup> */}
       <InputGroup>
         <LoadingButton
           loading={state.submitLoading}

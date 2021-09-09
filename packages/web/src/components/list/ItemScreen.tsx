@@ -119,9 +119,9 @@ export default function Screen({
           <>
             <Typography>
               Title
-              <Tooltip title="Edit Description">
+              <Tooltip title="Edit Title">
                 <IconButton onClick={() => onEdit('title')}>
-                  <EditIcon />
+                  <EditIcon fontSize="small" />
                 </IconButton>
               </Tooltip>
             </Typography>
@@ -148,7 +148,7 @@ export default function Screen({
               Description
               <Tooltip title="Edit Description">
                 <IconButton onClick={() => onEdit('description')}>
-                  <EditIcon />
+                  <EditIcon fontSize="small" />
                 </IconButton>
               </Tooltip>
             </Typography>
@@ -168,9 +168,9 @@ export default function Screen({
           <>
             <Typography className="d-flex align-items-center">
               Media
-              <Tooltip title="Edit Description">
+              <Tooltip title="Edit Media">
                 <IconButton onClick={() => onEdit('media')}>
-                  <EditIcon />
+                  <EditIcon fontSize="small" />
                 </IconButton>
               </Tooltip>
             </Typography>
