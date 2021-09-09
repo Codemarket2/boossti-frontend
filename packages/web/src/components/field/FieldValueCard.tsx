@@ -47,7 +47,36 @@ export default function FieldValueCard({
 
   return (
     <Card variant="outlined">
-      {showAuthor && (
+      {field.multipleValues ? (
+        showAuthor && (
+          <CardHeader
+            avatar={<Avatar alt={fieldValue.createdBy.name} src={fieldValue.createdBy.picture} />}
+            action={
+              showAction && (
+                <IconButton
+                  aria-label="settings"
+                  onClick={(event) => onSelect(event.target, fieldValue)}>
+                  <MoreVertIcon />
+                </IconButton>
+              )
+            }
+            title={
+              <Link href={`/user/${fieldValue.createdBy._id}`}>{fieldValue.createdBy.name}</Link>
+            }
+            subheader={moment(fieldValue.createdAt).format('lll')}
+          />
+        )
+      ) : (
+        <div className="d-flex justify-content-end">
+          <IconButton
+            className="position-absolute"
+            aria-label="settings"
+            onClick={(event) => onSelect(event.target, fieldValue)}>
+            <MoreVertIcon />
+          </IconButton>
+        </div>
+      )}
+      {/* {showAuthor && (
         <CardHeader
           avatar={<Avatar alt={fieldValue.createdBy.name} src={fieldValue.createdBy.picture} />}
           action={
@@ -64,7 +93,7 @@ export default function FieldValueCard({
           }
           subheader={moment(fieldValue.createdAt).format('lll')}
         />
-      )}
+      )} */}
       <CardContent>
         {field.fieldType === 'date' ? (
           moment(fieldValue.value).format('L')

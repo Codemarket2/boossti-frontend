@@ -63,26 +63,29 @@ function ItemOneFields({ field, parentId, showAuthor = true, guest }) {
   const hasAlreadyAdded =
     data.getFieldValuesByItem.data.filter((v) => v.createdBy._id === currentUserId).length > 0;
 
+  const showAddButton =
+    data.getFieldValuesByItem.data.length === 0 ||
+    (field.multipleValues &&
+      !guest &&
+      !state.showForm &&
+      (field.oneUserMultipleValues || !hasAlreadyAdded));
+
   return (
     <div key={field._id} className="mt-4">
       <Divider />
       <Typography variant="h5" className="d-flex align-items-center">
         {field.label}
-        {(data.getFieldValuesByItem.data.length === 0 || field.multipleValues) &&
-          (field.oneUserMultipleValues || !hasAlreadyAdded) &&
-          !guest &&
-          !state.showForm && (
-            <Tooltip title="Add New Value">
-              <IconButton
-                color="primary"
-                onClick={() => setState({ ...initialState, showForm: true })}>
-                <AddCircle />
-              </IconButton>
-            </Tooltip>
-          )}
+        {showAddButton && (
+          <Tooltip title="Add New Value">
+            <IconButton
+              color="primary"
+              onClick={() => setState({ ...initialState, showForm: true })}>
+              <AddCircle />
+            </IconButton>
+          </Tooltip>
+        )}
       </Typography>
       {state.showForm && <FieldValueForm {...formProps} />}
-      {/* {state.edit && <FieldValueForm {...formProps} fieldValue={state.selectedFieldValue} />} */}
       {data.getFieldValuesByItem.data.map((fieldValue, index) => (
         <Fragment key={fieldValue._id}>
           {state.selectedFieldValue &&
@@ -94,7 +97,7 @@ function ItemOneFields({ field, parentId, showAuthor = true, guest }) {
               fieldValue={fieldValue}
               field={field}
               showAction={currentUserId === fieldValue.createdBy._id || admin}
-              showAuthor={showAuthor}
+              showAuthor={showAuthor || showAddButton}
               onSelect={(target, fieldValue) =>
                 setState({
                   ...state,
