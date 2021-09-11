@@ -2,6 +2,8 @@ import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { ServerStyleSheet as StyledComponentSheets } from 'styled-components';
 import { ServerStyleSheets as MaterialUiServerStyleSheets } from '@material-ui/core/styles';
 
+import { resetServerContext } from 'react-beautiful-dnd';
+
 export default class MyDocument extends Document {
   static async getInitialProps(ctx) {
     const styledComponentSheet = new StyledComponentSheets();
@@ -9,6 +11,7 @@ export default class MyDocument extends Document {
     const originalRenderPage = ctx.renderPage;
 
     try {
+      resetServerContext();
       ctx.renderPage = () =>
         originalRenderPage({
           enhanceApp: (App) => (props) =>
