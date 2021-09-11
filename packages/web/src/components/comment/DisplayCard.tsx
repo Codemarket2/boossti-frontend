@@ -7,14 +7,21 @@ import {
   CardContent,
   Divider,
   Grid,
+  Typography,
+  Container,
 } from '@material-ui/core/';
+import parse from 'html-react-parser';
 import moment from 'moment';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import ReplyIcon from '@material-ui/icons/Reply';
+import ModeCommentIcon from '@material-ui/icons/ModeComment';
+import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 import { useSelector } from 'react-redux';
 
-import Comment from './Comment';
+import { Comment } from 'semantic-ui-react';
+
+import CommentUI from './Comment';
 
 interface IDisplayComment {
   commentedUser: any;
@@ -32,7 +39,7 @@ export default function DisplayCard({
   postId,
   index,
 }: IDisplayComment) {
-  const { attributes, admin } = useSelector(({ auth }: any) => auth);
+  const { attributes } = useSelector(({ auth }: any) => auth);
 
   const [showReply, setShowReply] = useState(false);
   const [showCommentInput, setShowCommentInput] = useState(true);
@@ -43,8 +50,101 @@ export default function DisplayCard({
     setShowCommentInput(false);
   }, []);
   return (
-    <>
-      <Card key={commentedUser._id} className="my-1" variant="outlined">
+    <Comment.Group threaded>
+      <Comment>
+        <Comment.Avatar
+          className="ui circular image"
+          data-testid="author-profile"
+          src={commentedUser?.createdBy?.picture}
+          alt={commentedUser?.createdBy?.name}
+        />
+        <Comment.Content>
+          <Comment.Author as="a" data-testid="author-name">
+            {commentedUser?.createdBy?.name}
+          </Comment.Author>
+          <Comment.Metadata>
+            <div>
+              {commentedUser?.updatedAt ? (
+                <span>
+                  {moment(commentedUser?.updatedAt) > moment().subtract(7, 'days')
+                    ? moment(commentedUser?.updatedAt).fromNow()
+                    : moment(commentedUser?.updatedAt).format('LL')}
+                </span>
+              ) : (
+                <span data-testid="created-timestamp">
+                  {moment(commentedUser?.createdAt) > moment().subtract(7, 'days')
+                    ? moment(commentedUser?.createdAt).fromNow()
+                    : moment(commentedUser?.createdAt).format('LL')}
+                </span>
+              )}
+            </div>
+          </Comment.Metadata>
+          <Comment.Text data-testid="comment-body">{parse(commentedUser?.body)}</Comment.Text>
+          <Comment.Actions>
+            {currentUserId === commentedUser!.createdBy!._id ? (
+              <>
+                <Comment.Action>
+                  <span onClick={() => console.log('heelo')}>Like</span>
+                </Comment.Action>
+                {showIcon && (
+                  <Comment.Action>
+                    <span
+                      onClick={() => {
+                        setShowReply(!showReply);
+                        setShowCommentInput(true);
+                      }}>
+                      Comment
+                    </span>
+                  </Comment.Action>
+                )}
+
+                <Comment.Action>
+                  <span onClick={() => setEdit(true)}>Edit</span>
+                </Comment.Action>
+                <Comment.Action>
+                  <span
+                    data-testid="btn-delete"
+                    onClick={() => handleDelete(commentedUser._id, postId, index)}>
+                    Delete
+                  </span>
+                </Comment.Action>
+              </>
+            ) : (
+              <>
+                {showIcon && (
+                  <Comment.Action>
+                    <Comment.Action>
+                      <span onClick={() => console.log('heelo')}>Like</span>
+                    </Comment.Action>
+                    <Comment.Action>
+                      <span
+                        onClick={() => {
+                          setShowReply(!showReply);
+                          setShowCommentInput(true);
+                        }}>
+                        Comment
+                      </span>
+                    </Comment.Action>
+                  </Comment.Action>
+                )}
+              </>
+            )}
+          </Comment.Actions>
+        </Comment.Content>
+        {showReply && (
+          <CommentUI
+            postId={commentedUser._id}
+            label="Add Reply on Comment"
+            showInput={showCommentInput}
+          />
+        )}
+      </Comment>
+    </Comment.Group>
+  );
+}
+
+{
+  /* <Card key={commentedUser._id} className="my-1" variant="outlined">
         <CardHeader
           avatar={
             <Avatar
@@ -122,7 +222,5 @@ export default function DisplayCard({
             />
           </Grid>
         )}
-      </Card>
-    </>
-  );
+      </Card> */
 }
