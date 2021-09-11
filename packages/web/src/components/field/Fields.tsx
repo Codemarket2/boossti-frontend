@@ -38,7 +38,7 @@ export default function Fields({ parentId }: IProps) {
 
   const { handleDelete, deleteLoading } = useDeleteField({ onAlert, parentId });
 
-  if (loading || (!error && (!data || !data.getFieldsByType))) {
+  if (!error && (!data || !data.getFieldsByType)) {
     return <FieldsSkeleton />;
   } else if (error) {
     return <ErrorLoading error={error} />;

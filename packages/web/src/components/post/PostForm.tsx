@@ -1,8 +1,5 @@
-import Tooltip from '@material-ui/core/Tooltip';
 import { useCreatePost } from '@frontend/shared/hooks/post';
-import Chip from '@material-ui/core/Chip';
 import InputGroup from '../common/InputGroup';
-import SelectTag from '../post/SelectTag';
 import ErrorLoading from '../common/ErrorLoading';
 import LoadingButton from '../common/LoadingButton';
 import { onAlert } from '../../utils/alert';
@@ -10,6 +7,7 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import { useFacebookSDK } from '../facebook/fbsdk';
 import MentionInput from '../common/MentionInput';
 import ImagePicker from '../common/ImagePicker';
+import TagTabs from './TagTabs';
 
 export default function PostScreen({ post, onClose = () => {} }: any) {
   const {
@@ -23,9 +21,9 @@ export default function PostScreen({ post, onClose = () => {} }: any) {
   const {
     state,
     setState,
-    data,
-    loading,
-    error,
+    // data,
+    // loading,
+    // error,
     handleChange,
     handleSelectTag,
     handleOpenTagModel,
@@ -48,17 +46,6 @@ export default function PostScreen({ post, onClose = () => {} }: any) {
     if (state.body === '') {
       return alert('Enter some text');
     }
-
-    // let message = state.body;
-    // message = message.split('^^__');
-    // let tags = [];
-    // message.forEach((m) => {
-    //   if (m.includes('@@@__')) {
-    //     let tag = m.split('@@@__').pop();
-    //     tags.push(tag);
-    //   }
-    // });
-    // console.log('tag', tags);
 
     setState({ ...state, submitLoading: true });
     if (!state.edit && fbsdkConnected) {
@@ -86,9 +73,9 @@ export default function PostScreen({ post, onClose = () => {} }: any) {
     await onSave();
   };
 
-  if (fbsdkLoading || error || loading || !data) {
+  if (fbsdkLoading) {
     return (
-      <ErrorLoading error={error}>
+      <ErrorLoading>
         <Skeleton variant="rect" height={100} className="my-2" />
         <div className="my-2 d-flex">
           <Skeleton variant="rect" width={100} height={30} className="mr-2" />
@@ -101,12 +88,6 @@ export default function PostScreen({ post, onClose = () => {} }: any) {
 
   return (
     <div>
-      <SelectTag
-        open={state.showTagModel}
-        onClose={() => setState({ ...state, showTagModel: false })}
-        selectedList={state.selectedList}
-        onSelect={handleSelectTag}
-      />
       <InputGroup>
         <MentionInput
           onChange={handleChange}
@@ -118,19 +99,7 @@ export default function PostScreen({ post, onClose = () => {} }: any) {
       <InputGroup>
         <ImagePicker state={state} setState={setState} />
       </InputGroup>
-      <InputGroup>
-        {data.getListTypes.data.map((list) => (
-          <Tooltip key={list._id} title={`Select ${list.title}`}>
-            <Chip
-              onClick={() => handleOpenTagModel(list)}
-              color="secondary"
-              label={list.title}
-              className="mr-1 mb-1"
-              style={{ backgroundColor: '#f5f5f5' }}
-            />
-          </Tooltip>
-        ))}
-      </InputGroup>
+      <TagTabs handleSelectTag={handleSelectTag} />
       <InputGroup>
         <LoadingButton
           loading={state.submitLoading}

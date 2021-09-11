@@ -7,7 +7,7 @@ export default function About({ userId, guest = false }) {
       <FieldValues
         typeId="6119695c580ba8000904f06b"
         parentId={userId}
-        hideCreatedBy={true}
+        showAuthor={false}
         guest={guest}
       />
     </Paper>

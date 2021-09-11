@@ -9,6 +9,7 @@ import { client } from '../../graphql';
 
 interface ISignInArgs {
   onAlert: (a: string, b: string) => void;
+  successCallback?: () => void;
 }
 
 interface ISignInState {
@@ -36,7 +37,7 @@ const signInValues: ISignInFormValues = {
   password: '',
 };
 
-export function useSignIn({ onAlert = () => {} }: ISignInArgs) {
+export function useSignIn({ onAlert = () => {}, successCallback }: ISignInArgs) {
   const [state, setState] = useState<ISignInState>({
     email: '',
     verify: false,
@@ -69,6 +70,9 @@ export function useSignIn({ onAlert = () => {} }: ISignInArgs) {
       client.resetStore();
       dispatch(setAuthUser(payload));
       dispatch(hideLoading());
+      if (successCallback) {
+        successCallback();
+      }
       return 'true';
     } catch (error) {
       dispatch(hideLoading());

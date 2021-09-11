@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 import { useGetListItemBySlug, useDeleteListItem } from '@frontend/shared/hooks/list';
 import { useCRUDListItems } from '@frontend/shared/hooks/list';
 import Link from 'next/link';
+import parse from 'html-react-parser';
 import { useRouter } from 'next/router';
 import Paper from '@material-ui/core/Paper';
+import Divider from '@material-ui/core/Divider';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
@@ -114,17 +116,23 @@ export default function Screen({
             formLoading={CRUDLoading}
           />
         ) : (
-          <Typography variant="h4" className="d-flex align-items-center">
-            {data.getListItemBySlug.title.includes('-n-e-w')
-              ? 'Title'
-              : data.getListItemBySlug.title}
-            <Tooltip title="Edit Title">
-              <IconButton onClick={() => onEdit('title')}>
-                <EditIcon />
-              </IconButton>
-            </Tooltip>
-          </Typography>
+          <>
+            <Typography>
+              Title
+              <Tooltip title="Edit Title">
+                <IconButton onClick={() => onEdit('title')}>
+                  <EditIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            </Typography>
+            <Typography variant="h4" className="d-flex align-items-center">
+              {data.getListItemBySlug.title.includes('-n-e-w')
+                ? 'Title'
+                : data.getListItemBySlug.title}
+            </Typography>
+          </>
         )}
+        <Divider className="my-2" />
         {state.fieldName === 'description' ? (
           <InlineForm
             multiline
@@ -135,15 +143,19 @@ export default function Screen({
             formLoading={CRUDLoading}
           />
         ) : (
-          <Typography>
-            {data.getListItemBySlug.description || 'Description'}
-            <Tooltip title="Edit Description">
-              <IconButton onClick={() => onEdit('description')}>
-                <EditIcon />
-              </IconButton>
-            </Tooltip>
-          </Typography>
+          <>
+            <Typography>
+              Description
+              <Tooltip title="Edit Description">
+                <IconButton onClick={() => onEdit('description')}>
+                  <EditIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            </Typography>
+            <div className="ck-content">{parse(data.getListItemBySlug.description)}</div>
+          </>
         )}
+        <Divider className="my-2" />
         {state.fieldName === 'media' ? (
           <MediaForm
             state={crudState}
@@ -156,9 +168,9 @@ export default function Screen({
           <>
             <Typography className="d-flex align-items-center">
               Media
-              <Tooltip title="Edit Description">
+              <Tooltip title="Edit Media">
                 <IconButton onClick={() => onEdit('media')}>
-                  <EditIcon />
+                  <EditIcon fontSize="small" />
                 </IconButton>
               </Tooltip>
             </Typography>

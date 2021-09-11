@@ -1,4 +1,4 @@
-import react, { useState } from 'react';
+import { useState } from 'react';
 import { Card, Divider } from '@material-ui/core';
 import CardHeader from '@material-ui/core/CardHeader';
 import Link from 'next/link';
@@ -11,7 +11,6 @@ import ShareIcon from '@material-ui/icons/Share';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ModeCommentIcon from '@material-ui/icons/ModeComment';
 import moment from 'moment';
-
 import ImageList from './ImageList';
 import MentionParser from '../common/MentionParser';
 import Comment from '../comment/Comment';
@@ -24,6 +23,7 @@ interface IProps {
 
 export default function PostCard({ post, onClickMore = () => {}, authenticated = true }: IProps) {
   const [showCommentSection, setShowCommentSection] = useState(false);
+
   return (
     <>
       <Card className="my-3" variant="outlined">
@@ -55,12 +55,15 @@ export default function PostCard({ post, onClickMore = () => {}, authenticated =
                 : moment(post.createdAt).format('LL')}
             </span>
           }
-          // subheader={moment(post.createdAt).fromNow()}
-          // subheader={moment(post.createdAt).format('LLL')}
         />
         <CardContent>
           <div data-testid="post-body">
-            <MentionParser value={post.body} className="mb-1" authenticated={authenticated} />
+            <MentionParser
+              tags={post.tags}
+              value={post.body}
+              className="mb-1"
+              authenticated={authenticated}
+            />
           </div>
           <ImageList media={post.media} authenticated={authenticated} />
         </CardContent>

@@ -101,6 +101,7 @@ export const CREATE_FIELD_VALUE = gql`
         picture
         name
       }
+      createdAt
     }
   }
 `;
@@ -126,6 +127,7 @@ export const UPDATE_FIELD_VALUE = gql`
         picture
         name
       }
+      createdAt
     }
   }
 `;

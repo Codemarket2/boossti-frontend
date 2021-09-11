@@ -17,7 +17,10 @@ export function useGetOneUser({ _id }: any) {
         },
       })
       .then(({ data }) => setState({ ...state, data, loading: false }))
-      .catch((error) => setState({ ...state, error, loading: false }));
+      .catch((error) => {
+        console.log('error', error);
+        setState({ ...state, error, loading: false });
+      });
   }, []);
   return state;
 }

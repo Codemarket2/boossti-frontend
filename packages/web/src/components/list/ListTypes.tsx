@@ -28,6 +28,7 @@ export default function ListTypes() {
   return (
     <>
       <ListHeader
+        loading={loading}
         button={
           <Link href="/types/new">
             <Tooltip title="Add New Types">
@@ -67,7 +68,7 @@ export default function ListTypes() {
                     </ListItemAvatar>
                     <ListItemText
                       primary={t.title.includes('-n-e-w') ? 'Title' : t.title}
-                      secondary={t.description}
+                      // secondary={t.description}
                     />
                   </ListItem>
                 </Link>
