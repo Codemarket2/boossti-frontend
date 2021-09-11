@@ -91,7 +91,7 @@ function ItemOneFields({ field, parentId, showAuthor = true, guest }) {
           {state.selectedFieldValue &&
           state.selectedFieldValue._id === fieldValue._id &&
           state.edit ? (
-            <FieldValueForm {...formProps} fieldValue={fieldValue} />
+            <FieldValueForm edit {...formProps} fieldValue={fieldValue} />
           ) : (
             <FieldValueCard
               fieldValue={fieldValue}

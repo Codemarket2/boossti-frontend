@@ -76,24 +76,6 @@ export default function FieldValueCard({
           </IconButton>
         </div>
       )}
-      {/* {showAuthor && (
-        <CardHeader
-          avatar={<Avatar alt={fieldValue.createdBy.name} src={fieldValue.createdBy.picture} />}
-          action={
-            showAction && (
-              <IconButton
-                aria-label="settings"
-                onClick={(event) => onSelect(event.target, fieldValue)}>
-                <MoreVertIcon />
-              </IconButton>
-            )
-          }
-          title={
-            <Link href={`/user/${fieldValue.createdBy._id}`}>{fieldValue.createdBy.name}</Link>
-          }
-          subheader={moment(fieldValue.createdAt).format('lll')}
-        />
-      )} */}
       <CardContent>
         {field.fieldType === 'date' ? (
           moment(fieldValue.value).format('L')

@@ -34,6 +34,7 @@ interface IProps {
   fieldType: string;
   typeId: string;
   typeSlug: string;
+  edit?: boolean;
 }
 
 export default function ItemFieldForm({
@@ -45,6 +46,7 @@ export default function ItemFieldForm({
   label = 'Value',
   typeId,
   typeSlug,
+  edit = false,
 }: IProps) {
   const { data, error, loading, state, setState } = useGetListItemsByType({
     limit: 10,
@@ -67,9 +69,12 @@ export default function ItemFieldForm({
     }
   }, [fieldValue]);
 
+  if (edit && formik.values._id === '') {
+    return <p>Loading</p>;
+  }
+
   return (
     <div>
-      {/* <p>{formik.values.value}</p> */}
       <form onSubmit={formik.handleSubmit}>
         <InputGroup>
           {formik.values.fieldType === 'date' ? (

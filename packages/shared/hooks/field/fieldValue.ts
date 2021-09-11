@@ -169,11 +169,11 @@ export function useCRUDFieldValue({
   };
 
   const setFormValues = (fieldValue) => {
+    formik.setFieldValue('value', fieldValue.value, false);
     formik.setFieldValue('_id', fieldValue._id, false);
     formik.setFieldValue('edit', true, false);
     formik.setFieldValue('parentId', fieldValue.parentId, false);
     formik.setFieldValue('field', fieldValue.field, false);
-    formik.setFieldValue('value', fieldValue.value, false);
     formik.setFieldValue('media', fieldValue.media, false);
     formik.setFieldValue('itemId', fieldValue.itemId, false);
   };
