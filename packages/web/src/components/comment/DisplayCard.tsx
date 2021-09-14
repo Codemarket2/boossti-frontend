@@ -22,6 +22,8 @@ import { useSelector } from 'react-redux';
 import { Comment } from 'semantic-ui-react';
 
 import CommentUI from './Comment';
+import { useGetCommentCount } from '@frontend/shared/hooks/comment/getComment';
+import ErrorLoading from '../common/ErrorLoading';
 
 interface IDisplayComment {
   commentedUser: any;
@@ -43,18 +45,22 @@ export default function DisplayCard({
 
   const [showReply, setShowReply] = useState(false);
   const [showCommentInput, setShowCommentInput] = useState(true);
+  const { data, error, loading } = useGetCommentCount(commentedUser._id);
+  if (!data || error || !data.getCommentCount) {
+    return <ErrorLoading error={error} />;
+  }
 
   const currentUserId = attributes['custom:_id'];
   useEffect(() => {
-    setShowReply(true);
-    setShowCommentInput(false);
+    // setShowReply(true);
+    // setShowCommentInput(false);
   }, []);
   return (
     <Comment.Group threaded>
       <Comment>
         <Comment.Avatar
-          className="ui circular image"
           data-testid="author-profile"
+          className="ui circular image"
           src={commentedUser?.createdBy?.picture}
           alt={commentedUser?.createdBy?.name}
         />
@@ -79,7 +85,9 @@ export default function DisplayCard({
               )}
             </div>
           </Comment.Metadata>
-          <Comment.Text data-testid="comment-body">{parse(commentedUser?.body)}</Comment.Text>
+          <Comment.Text data-testid="comment-body">
+            <div className="ck-content">{parse(commentedUser?.body)}</div>
+          </Comment.Text>
           <Comment.Actions>
             {currentUserId === commentedUser!.createdBy!._id ? (
               <>
@@ -94,6 +102,7 @@ export default function DisplayCard({
                         setShowCommentInput(true);
                       }}>
                       Comment
+                      <b>{data!.getCommentCount!.count}</b>
                     </span>
                   </Comment.Action>
                 )}
@@ -141,86 +150,4 @@ export default function DisplayCard({
       </Comment>
     </Comment.Group>
   );
-}
-
-{
-  /* <Card key={commentedUser._id} className="my-1" variant="outlined">
-        <CardHeader
-          avatar={
-            <Avatar
-              data-testid="author-profile"
-              src={commentedUser?.createdBy?.picture}
-              alt={commentedUser?.createdBy?.name}
-            />
-          }
-          action={
-            <>
-              {currentUserId === commentedUser!.createdBy!._id ? (
-                <>
-                  <IconButton aria-label="settings" onClick={() => setEdit(true)}>
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton
-                    data-testid="btn-delete"
-                    aria-label="settings"
-                    onClick={() => handleDelete(commentedUser._id, postId, index)}>
-                    <DeleteIcon />
-                  </IconButton>
-                  {showIcon && (
-                    <IconButton
-                      aria-label="settings"
-                      onClick={() => {
-                        setShowReply(!showReply);
-                        setShowCommentInput(true);
-                      }}>
-                      <ReplyIcon />
-                    </IconButton>
-                  )}
-                </>
-              ) : (
-                <>
-                  {showIcon && (
-                    <IconButton
-                      aria-label="settings"
-                      onClick={() => {
-                        setShowReply(!showReply);
-                        setShowCommentInput(true);
-                      }}>
-                      <ReplyIcon />
-                    </IconButton>
-                  )}
-                </>
-              )}
-            </>
-          }
-          title={<span data-testid="author-name">{commentedUser?.createdBy?.name}</span>}
-          subheader={
-            commentedUser?.updatedAt ? (
-              <span>
-                {moment(commentedUser?.updatedAt) > moment().subtract(7, 'days')
-                  ? moment(commentedUser?.updatedAt).fromNow()
-                  : moment(commentedUser?.updatedAt).format('LL')}
-              </span>
-            ) : (
-              <span data-testid="created-timestamp">
-                {moment(commentedUser?.createdAt) > moment().subtract(7, 'days')
-                  ? moment(commentedUser?.createdAt).fromNow()
-                  : moment(commentedUser?.createdAt).format('LL')}
-              </span>
-            )
-          }
-        />
-        <Divider />
-        <CardContent data-testid="comment-body">{commentedUser?.body}</CardContent>
-        {showReply && (
-          <Grid style={{ marginLeft: '25px', marginTop: '10px' }}>
-            <Divider orientation="vertical" variant="inset" />
-            <Comment
-              postId={commentedUser._id}
-              label="Add Reply on Comment"
-              showInput={showCommentInput}
-            />
-          </Grid>
-        )}
-      </Card> */
 }

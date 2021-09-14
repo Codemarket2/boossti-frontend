@@ -18,8 +18,9 @@ export default function Comment({ postId, label, showInput = true }: IComment) {
   const { data, error } = useGetComments(postId);
 
   const handleChange = (e) => {
-    let newVal = e.target.value;
-    setInputVal(newVal);
+    // let newVal = e.target.value;
+
+    setInputVal(e);
   };
 
   return (

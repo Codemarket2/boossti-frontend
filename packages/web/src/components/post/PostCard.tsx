@@ -10,10 +10,14 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ModeCommentIcon from '@material-ui/icons/ModeComment';
+import Badge from '@material-ui/core/Badge';
 import moment from 'moment';
+
+import { useGetCommentCount } from '@frontend/shared/hooks/comment/getComment';
 import ImageList from './ImageList';
 import MentionParser from '../common/MentionParser';
 import Comment from '../comment/Comment';
+import ErrorLoading from '../common/ErrorLoading';
 
 interface IProps {
   post: any;
@@ -23,6 +27,7 @@ interface IProps {
 
 export default function PostCard({ post, onClickMore = () => {}, authenticated = true }: IProps) {
   const [showCommentSection, setShowCommentSection] = useState(false);
+  const { data, error, loading } = useGetCommentCount(post._id);
 
   return (
     <>
@@ -71,11 +76,18 @@ export default function PostCard({ post, onClickMore = () => {}, authenticated =
           <IconButton aria-label="like">
             <FavoriteIcon />
           </IconButton>
-          <IconButton
-            aria-label="comment"
-            onClick={() => setShowCommentSection(!showCommentSection)}>
-            <ModeCommentIcon />
-          </IconButton>
+          {error || !data || !data.getCommentCount ? (
+            <ErrorLoading error={error} />
+          ) : (
+            <IconButton
+              aria-label="comment"
+              onClick={() => setShowCommentSection(!showCommentSection)}>
+              <Badge badgeContent={data!.getCommentCount!.count} color="primary">
+                <ModeCommentIcon />
+              </Badge>
+            </IconButton>
+          )}
+
           <IconButton aria-label="share">
             <ShareIcon />
           </IconButton>
