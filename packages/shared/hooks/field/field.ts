@@ -2,7 +2,13 @@ import { useQuery, useMutation } from '@apollo/client';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { GET_FIELDS_BY_TYPE } from '../../graphql/query/field';
-import { CREATE_FIELD, UPDATE_FIELD, DELETE_FIELD } from '../../graphql/mutation/field';
+import { client as apolloClient } from '../../graphql';
+import {
+  CREATE_FIELD,
+  UPDATE_FIELD,
+  DELETE_FIELD,
+  UPDATE_FIELD_POSITION,
+} from '../../graphql/mutation/field';
 import { IHooksProps } from '../../types/common';
 
 const defaultQueryVariables = { limit: 1000, page: 1 };
@@ -146,6 +152,41 @@ export function useCRUDFields({ onAlert, parentId, createCallback }: ICRUDProps)
 
 interface IDeleteProps extends IHooksProps {
   parentId: any;
+}
+
+export function useUpdateFieldPosition({ onAlert, parentId }: IDeleteProps) {
+  const [updateFieldPositionMutation, { loading: updateLoading }] = useMutation(
+    UPDATE_FIELD_POSITION,
+  );
+  const updatePositionInCache = async (newFields) => {
+    const { getFieldsByType } = await apolloClient.readQuery({
+      query: GET_FIELDS_BY_TYPE,
+      variables: { ...defaultQueryVariables, parentId },
+    });
+    const newData = {
+      getFieldsByType: {
+        ...getFieldsByType,
+        data: newFields,
+      },
+    };
+    apolloClient.writeQuery({
+      query: GET_FIELDS_BY_TYPE,
+      variables: { ...defaultQueryVariables, parentId },
+      data: newData,
+    });
+  };
+
+  const handleUpdatePosition = async (_id: any, position: number) => {
+    try {
+      const res = await updateFieldPositionMutation({
+        variables: { _id, position },
+      });
+    } catch (error) {
+      onAlert('Error', error.message);
+    }
+  };
+
+  return { handleUpdatePosition, updateLoading, updatePositionInCache };
 }
 
 export function useDeleteField({ onAlert, parentId }: IDeleteProps) {

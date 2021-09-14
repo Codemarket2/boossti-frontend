@@ -6,6 +6,7 @@ export const GET_FIELDS_BY_TYPE = gql`
       count
       data {
         _id
+        position
         label
         fieldType
         multipleValues

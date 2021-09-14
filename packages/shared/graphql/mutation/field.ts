@@ -18,6 +18,7 @@ export const CREATE_FIELD = gql`
       oneUserMultipleValues: $oneUserMultipleValues
     ) {
       _id
+      position
       label
       fieldType
       typeId {
@@ -49,6 +50,25 @@ export const UPDATE_FIELD = gql`
       oneUserMultipleValues: $oneUserMultipleValues
     ) {
       _id
+      position
+      label
+      fieldType
+      typeId {
+        _id
+        title
+        slug
+      }
+      multipleValues
+      oneUserMultipleValues
+    }
+  }
+`;
+
+export const UPDATE_FIELD_POSITION = gql`
+  mutation MyMutation($_id: ID!, $position: Float!) {
+    updateFieldPosition(_id: $_id, position: $position) {
+      _id
+      position
       label
       fieldType
       typeId {

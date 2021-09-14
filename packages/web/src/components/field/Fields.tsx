@@ -7,13 +7,18 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Tooltip from '@material-ui/core/Tooltip';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import { useGetFieldsByType, useDeleteField } from '@frontend/shared/hooks/field';
+import {
+  useGetFieldsByType,
+  useDeleteField,
+  useUpdateFieldPosition,
+} from '@frontend/shared/hooks/field';
 import FieldForm from './FieldForm';
 import CRUDMenu from '../common/CRUDMenu';
-import { useState, useEffect, memo } from 'react';
+import { useState, memo } from 'react';
 import FieldsSkeleton from './FieldsSkeleton';
 import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
@@ -49,7 +54,7 @@ function Quote({ field, index, onClick }: any) {
           <ListItemIcon>
             <DragIndicatorIcon />
           </ListItemIcon>
-          <ListItemText primary={field.label} secondary={field.fieldType} />
+          <ListItemText primary={field.label} secondary={field.position} />
           <ListItemSecondaryAction>
             <IconButton edge="end" onClick={(event) => onClick(event.currentTarget, field)}>
               <MoreHoriz />
@@ -80,10 +85,12 @@ export default function Fields({ parentId }: IProps) {
   const { data, loading, error } = useGetFieldsByType({ parentId });
 
   const { handleDelete, deleteLoading } = useDeleteField({ onAlert, parentId });
+  const { handleUpdatePosition, updateLoading, updatePositionInCache } = useUpdateFieldPosition({
+    onAlert,
+    parentId,
+  });
 
-  const [fields, setFields] = useState([]);
-
-  function onDragEnd(result) {
+  async function onDragEnd(result) {
     if (!result.destination) {
       return;
     }
@@ -92,16 +99,39 @@ export default function Fields({ parentId }: IProps) {
       return;
     }
 
-    const tempField: any = reorder(fields, result.source.index, result.destination.index);
+    let fields = [...data.getFieldsByType.data];
 
-    setFields(tempField);
-  }
+    let position = 1010;
 
-  useEffect(() => {
-    if (data && data.getFieldsByType) {
-      setFields(data.getFieldsByType.data);
+    if (result.destination.index === 0) {
+      let startPosition = 0;
+      let endPosition = fields[result.destination.index + 1].position;
+      position = (endPosition - startPosition) / 2 + startPosition;
+    } else if (result.destination.index === fields.length - 1) {
+      position = fields[fields.length - 1].position;
+      position = parseInt(position.toString()) + 1;
+    } else if (fields.length - 1 > result.destination.index) {
+      let startPosition = 0;
+      let endPosition = 0;
+      if (result.source.index < result.destination.index) {
+        startPosition = fields[result.destination.index].position;
+        endPosition = fields[result.destination.index + 1].position;
+      } else {
+        startPosition = fields[result.destination.index - 1].position;
+        endPosition = fields[result.destination.index].position;
+      }
+      position = (endPosition - startPosition) / 2 + startPosition;
     }
-  }, [data]);
+    // console.log('new position', position);
+    let updateId = fields[result.source.index]._id;
+
+    let tempField = fields.map((f, i) => (i === result.source.index ? { ...f, position } : f));
+
+    tempField = reorder(tempField, result.source.index, result.destination.index);
+
+    updatePositionInCache(tempField);
+    handleUpdatePosition(updateId, position);
+  }
 
   if (!error && (!data || !data.getFieldsByType)) {
     return <FieldsSkeleton />;
@@ -117,12 +147,14 @@ export default function Fields({ parentId }: IProps) {
           {!state.showForm && (
             <Tooltip title="Add New Field">
               <IconButton
+                disabled={updateLoading}
                 color="primary"
                 onClick={() => setState({ ...initialState, showForm: true })}>
                 <AddCircle />
               </IconButton>
             </Tooltip>
           )}
+          {updateLoading && <CircularProgress size={25} />}
         </Typography>
         {state.showForm && (
           <FieldForm parentId={parentId} onCancel={() => setState(initialState)} />
@@ -139,7 +171,7 @@ export default function Fields({ parentId }: IProps) {
             {(provided) => (
               <div ref={provided.innerRef} {...provided.droppableProps}>
                 <QuoteList
-                  fields={fields}
+                  fields={data.getFieldsByType.data}
                   onClick={(currentTarget, field) =>
                     setState({ ...state, showMenu: currentTarget, selectedField: field })
                   }
@@ -149,39 +181,6 @@ export default function Fields({ parentId }: IProps) {
             )}
           </Droppable>
         </DragDropContext>
-        {/* <List component="div">
-          {data.getFieldsByType.data.map((field) =>
-            state.selectedField && state.selectedField._id === field._id && state.edit ? (
-              <FieldForm
-                key={field._id}
-                field={state.selectedField}
-                parentId={parentId}
-                onCancel={() => setState(initialState)}
-              />
-            ) : (
-              <ListItem key={field._id}>
-                <ListItemIcon>
-                  <IconButton
-                    edge="start"
-                    color="primary"
-                    onClick={() => setState({ ...initialState, showForm: true })}>
-                    <DragIndicatorIcon />
-                  </IconButton>
-                </ListItemIcon>
-                <ListItemText primary={field.label} secondary={field.fieldType} />
-                <ListItemSecondaryAction>
-                  <IconButton
-                    edge="end"
-                    onClick={(event) =>
-                      setState({ ...state, showMenu: event.currentTarget, selectedField: field })
-                    }>
-                    <MoreHoriz />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              </ListItem>
-            ),
-          )}
-        </List> */}
         <CRUDMenu
           show={state.showMenu}
           onClose={() => setState(initialState)}

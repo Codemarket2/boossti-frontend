@@ -1,3 +1,4 @@
+import parse from 'html-react-parser';
 import { useGetListTypeBySlug, useDeleteListType } from '@frontend/shared/hooks/list';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
@@ -21,7 +22,7 @@ import { onAlert } from '../utils/alert';
 import Fields from '../components/field/Fields';
 import InlineForm from '../components/list/InlineForm';
 import MediaForm from '../components/list/MediaForm';
-import parse from 'html-react-parser';
+import CommentButton from '../components/comment/CommentButton';
 
 interface IProps {
   slug: any;
@@ -140,6 +141,7 @@ export default function Screen({ slug }: IProps) {
               </Tooltip>
             </Typography>
             <div className="ck-content">{parse(data.getListTypeBySlug.description)}</div>
+            <CommentButton parentId={data.getListTypeBySlug._id} />
           </div>
         )}
         <Divider className="my-2" />

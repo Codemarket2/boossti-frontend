@@ -20,6 +20,7 @@ import ActionButtons from '../list/ActionButtons';
 import InlineForm from '../list/InlineForm';
 import MediaForm from '../list/MediaForm';
 import { onAlert } from '../../utils/alert';
+import CommentButton from '../comment/CommentButton';
 
 interface IProps {
   slug: any;
@@ -153,6 +154,7 @@ export default function Screen({
               </Tooltip>
             </Typography>
             <div className="ck-content">{parse(data.getListItemBySlug.description)}</div>
+            <CommentButton parentId={data.getListItemBySlug._id} />
           </>
         )}
         <Divider className="my-2" />
