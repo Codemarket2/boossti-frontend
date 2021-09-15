@@ -5,7 +5,7 @@ import { useCreateComment, useDeleteComment } from '@frontend/shared/hooks/comme
 import { useGetComments } from '@frontend/shared/hooks/comment/getComment';
 import CommentInput from './CommentInput';
 import DisplayComment from './DisplayComment';
-
+import ErrorLoading from '../common/ErrorLoading';
 interface IComment {
   postId: string;
   label?: string;
@@ -15,17 +15,18 @@ interface IComment {
 export default function Comment({ postId, label, showInput = true }: IComment) {
   const { handleSave, inputVal, setInputVal, loading: submitLoading } = useCreateComment(postId);
   const { handleDelete, loading: deleteLoading } = useDeleteComment();
-  const { data, loading } = useGetComments(postId);
+  const { data, error } = useGetComments(postId);
 
   const handleChange = (e) => {
-    let newVal = e.target.value;
-    setInputVal(newVal);
+    // let newVal = e.target.value;
+
+    setInputVal(e);
   };
 
   return (
     <>
-      {loading ? (
-        <CircularProgress />
+      {error || !data || !data.getCommentsByParentID ? (
+        <ErrorLoading error={error} />
       ) : (
         data &&
         data?.getCommentsByParentID?.data?.map((commentedUser, index) => (

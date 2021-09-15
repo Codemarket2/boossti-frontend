@@ -59,6 +59,8 @@
     "react-typed": "1.2.0",
     "react-visibility-sensor": "5.1.1",
     "redux": "4.1.0",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^2.0.3",
     "styled-components": "5.3.0",
     "swiper": "5.4.1",
     "validate.js": "0.13.1"

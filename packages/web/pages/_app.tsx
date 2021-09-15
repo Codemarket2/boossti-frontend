@@ -25,6 +25,7 @@ import 'leaflet/dist/leaflet.css';
 import 'swiper/css/swiper.min.css';
 import 'aos/dist/aos.css';
 import '../src/assets/css/ckeditor.css';
+import 'semantic-ui-css/semantic.min.css';
 
 const customsSignInUrl =
   process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : 'https://www.vijaa.com/';
