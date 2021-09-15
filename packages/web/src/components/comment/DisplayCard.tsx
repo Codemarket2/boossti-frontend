@@ -45,15 +45,12 @@ export default function DisplayCard({
 
   const [showReply, setShowReply] = useState(false);
   const [showCommentInput, setShowCommentInput] = useState(true);
-  const { data, error, loading } = useGetCommentCount(commentedUser._id);
-  if (!data || error || !data.getCommentCount) {
-    return <ErrorLoading error={error} />;
-  }
+  // const { data, error, loading } = useGetCommentCount(commentedUser._id);
 
   const currentUserId = attributes['custom:_id'];
   useEffect(() => {
-    // setShowReply(true);
-    // setShowCommentInput(false);
+    setShowReply(true);
+    setShowCommentInput(false);
   }, []);
   return (
     <Comment.Group threaded>
@@ -102,11 +99,9 @@ export default function DisplayCard({
                         setShowCommentInput(true);
                       }}>
                       Comment
-                      <b>{data!.getCommentCount!.count}</b>
                     </span>
                   </Comment.Action>
                 )}
-
                 <Comment.Action>
                   <span onClick={() => setEdit(true)}>Edit</span>
                 </Comment.Action>
