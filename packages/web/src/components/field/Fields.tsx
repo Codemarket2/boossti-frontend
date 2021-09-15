@@ -54,7 +54,7 @@ function Quote({ field, index, onClick }: any) {
           <ListItemIcon>
             <DragIndicatorIcon />
           </ListItemIcon>
-          <ListItemText primary={field.label} secondary={field.position} />
+          <ListItemText primary={field.label} secondary={field.fieldType} />
           <ListItemSecondaryAction>
             <IconButton edge="end" onClick={(event) => onClick(event.currentTarget, field)}>
               <MoreHoriz />
@@ -104,9 +104,8 @@ export default function Fields({ parentId }: IProps) {
     let position = 1010;
 
     if (result.destination.index === 0) {
-      let startPosition = 0;
-      let endPosition = fields[result.destination.index + 1].position;
-      position = (endPosition - startPosition) / 2 + startPosition;
+      position = fields[0].position;
+      position = parseInt(position.toString()) - 1;
     } else if (result.destination.index === fields.length - 1) {
       position = fields[fields.length - 1].position;
       position = parseInt(position.toString()) + 1;
