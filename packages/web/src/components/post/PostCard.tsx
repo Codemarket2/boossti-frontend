@@ -18,6 +18,7 @@ import ImageList from './ImageList';
 import MentionParser from '../common/MentionParser';
 import Comment from '../comment/Comment';
 import ErrorLoading from '../common/ErrorLoading';
+import Like from '../like/Like';
 
 interface IProps {
   post: any;
@@ -28,7 +29,7 @@ interface IProps {
 export default function PostCard({ post, onClickMore = () => {}, authenticated = true }: IProps) {
   const [showCommentSection, setShowCommentSection] = useState(false);
   const { data, error, loading } = useGetCommentCount(post._id);
-
+  const [Liked, setLiked] = useState(false);
   return (
     <>
       <Card className="my-3" variant="outlined">
@@ -73,9 +74,10 @@ export default function PostCard({ post, onClickMore = () => {}, authenticated =
           <ImageList media={post.media} authenticated={authenticated} />
         </CardContent>
         <CardActions disableSpacing>
-          <IconButton aria-label="like">
-            <FavoriteIcon />
-          </IconButton>
+          {/* <IconButton aria-label="like" onClick={() => console.log('object')}>
+            <FavoriteIcon/>
+          </IconButton> */}
+          <Like parentId={post._id} />
           {error || !data || !data.getCommentCount ? (
             <ErrorLoading error={error} />
           ) : (
