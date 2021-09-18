@@ -1,24 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import {
-  IconButton,
-  Avatar,
-  Card,
-  CardHeader,
-  CardContent,
-  Divider,
-  Grid,
-  Typography,
-  Container,
-} from '@material-ui/core/';
 import parse from 'html-react-parser';
 import moment from 'moment';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import ModeCommentIcon from '@material-ui/icons/ModeComment';
-import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
-import FavoriteIcon from '@material-ui/icons/Favorite';
 import { useSelector } from 'react-redux';
-
 import { Comment } from 'semantic-ui-react';
 
 import CommentUI from './Comment';
@@ -45,13 +28,14 @@ export default function DisplayCard({
 
   const [showReply, setShowReply] = useState(false);
   const [showCommentInput, setShowCommentInput] = useState(true);
-  // const { data, error, loading } = useGetCommentCount(commentedUser._id);
+  const { data } = useGetCommentCount(commentedUser._id);
+  const [payload, setPayload] = useState<any>();
 
   const currentUserId = attributes['custom:_id'];
   useEffect(() => {
-    setShowReply(true);
-    setShowCommentInput(false);
-  }, []);
+    setPayload(data);
+  }, [data]);
+
   return (
     <Comment.Group threaded>
       <Comment>
@@ -94,11 +78,21 @@ export default function DisplayCard({
                 {showIcon && (
                   <Comment.Action>
                     <span
+                      style={{
+                        fontWeight: showReply ? 'bold' : 'normal',
+                        color: showReply && 'rgb(17, 82, 147)',
+                      }}
                       onClick={() => {
                         setShowReply(!showReply);
                         setShowCommentInput(true);
                       }}>
                       Comment
+                      {payload &&
+                        (payload?.getCommentCount?.count === 0 ? (
+                          ''
+                        ) : (
+                          <b>{payload?.getCommentCount?.count}</b>
+                        ))}
                     </span>
                   </Comment.Action>
                 )}
@@ -112,6 +106,11 @@ export default function DisplayCard({
                     Delete
                   </span>
                 </Comment.Action>
+                <Comment.Action>
+                  <span data-testid="btn-delete" onClick={() => console.log('share')}>
+                    Share
+                  </span>
+                </Comment.Action>
               </>
             ) : (
               <>
@@ -122,11 +121,26 @@ export default function DisplayCard({
                     </Comment.Action>
                     <Comment.Action>
                       <span
+                        style={{
+                          fontWeight: showReply ? 'bold' : 'normal',
+                          color: showReply && 'rgb(17, 82, 147)',
+                        }}
                         onClick={() => {
                           setShowReply(!showReply);
                           setShowCommentInput(true);
                         }}>
                         Comment
+                        {payload &&
+                          (payload?.getCommentCount?.count === 0 ? (
+                            ''
+                          ) : (
+                            <b>{payload?.getCommentCount?.count}</b>
+                          ))}
+                      </span>
+                    </Comment.Action>
+                    <Comment.Action>
+                      <span data-testid="btn-delete" onClick={() => console.log('share')}>
+                        Share
                       </span>
                     </Comment.Action>
                   </Comment.Action>

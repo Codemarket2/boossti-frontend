@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Card, Divider } from '@material-ui/core';
+import { Card, Divider, Grid, Typography, Container } from '@material-ui/core';
 import CardHeader from '@material-ui/core/CardHeader';
 import Link from 'next/link';
 import CardContent from '@material-ui/core/CardContent';
@@ -13,11 +13,12 @@ import ModeCommentIcon from '@material-ui/icons/ModeComment';
 import Badge from '@material-ui/core/Badge';
 import moment from 'moment';
 
-import { useGetCommentCount } from '@frontend/shared/hooks/comment/getComment';
 import ImageList from './ImageList';
 import MentionParser from '../common/MentionParser';
 import Comment from '../comment/Comment';
 import ErrorLoading from '../common/ErrorLoading';
+import PostLike from '../like/PostLike';
+import CommentLikeShareCounter from './CommentLikeShareCounter';
 
 interface IProps {
   post: any;
@@ -27,8 +28,12 @@ interface IProps {
 
 export default function PostCard({ post, onClickMore = () => {}, authenticated = true }: IProps) {
   const [showCommentSection, setShowCommentSection] = useState(false);
-  const { data, error, loading } = useGetCommentCount(post._id);
 
+  const [Liked, setLiked] = useState(false);
+
+  const toggleCommentSection = () => {
+    setShowCommentSection(!showCommentSection);
+  };
   return (
     <>
       <Card className="my-3" variant="outlined">
@@ -72,21 +77,16 @@ export default function PostCard({ post, onClickMore = () => {}, authenticated =
           </div>
           <ImageList media={post.media} authenticated={authenticated} />
         </CardContent>
+        <CommentLikeShareCounter parentId={post._id} toggleCommentSection={toggleCommentSection} />
+        <Divider />
         <CardActions disableSpacing>
-          <IconButton aria-label="like">
-            <FavoriteIcon />
+          <PostLike parentId={post._id} />
+
+          <IconButton aria-label="comment" onClick={toggleCommentSection}>
+            <Badge badgeContent={0} color="primary">
+              <ModeCommentIcon />
+            </Badge>
           </IconButton>
-          {error || !data || !data.getCommentCount ? (
-            <ErrorLoading error={error} />
-          ) : (
-            <IconButton
-              aria-label="comment"
-              onClick={() => setShowCommentSection(!showCommentSection)}>
-              <Badge badgeContent={data!.getCommentCount!.count} color="primary">
-                <ModeCommentIcon />
-              </Badge>
-            </IconButton>
-          )}
 
           <IconButton aria-label="share">
             <ShareIcon />
