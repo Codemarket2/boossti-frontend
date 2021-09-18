@@ -126,7 +126,7 @@ export default function ItemsFieldsMap({
   typeId,
   showAuthor = true,
   guest = false,
-  setFields,
+  setFields = (arg: any) => {},
 }) {
   const { data, loading, error } = useGetFieldsByType({ parentId: typeId });
   const router = useRouter();
