@@ -33,7 +33,7 @@ export default function TagTabs({ handleSelectTag }: any) {
         className="mt-n2">
         {data.getListTypes.data.map((listType) => (
           <Chip
-            label={listType.title}
+            label={listType.title.includes('-n-e-w') ? 'Title' : listType.title}
             className="mt-2 mr-1"
             onClick={() =>
               setState({ ...state, typeId: listType._id, title: listType.title, showModel: true })

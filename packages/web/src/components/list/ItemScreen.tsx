@@ -5,9 +5,11 @@ import Link from 'next/link';
 import parse from 'html-react-parser';
 import { useRouter } from 'next/router';
 import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
-import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
+import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
+import Tooltip from '@material-ui/core/Tooltip';
 import EditIcon from '@material-ui/icons/Edit';
 import Typography from '@material-ui/core/Typography';
 import Breadcrumbs from '../common/Breadcrumbs';
@@ -21,6 +23,10 @@ import InlineForm from '../list/InlineForm';
 import MediaForm from '../list/MediaForm';
 import { onAlert } from '../../utils/alert';
 import CommentButton from '../comment/CommentButton';
+import LeftNavigation from '../field/LeftNavigation';
+import Hidden from '@material-ui/core/Hidden';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateSettingAction } from '@frontend/shared/redux/actions/setting';
 
 interface IProps {
   slug: any;
@@ -38,7 +44,9 @@ export default function Screen({
   onSlugUpdate,
 }: IProps) {
   const router = useRouter();
-  const [state, setState] = useState({ fieldName: '' });
+  const setting = useSelector(({ setting }: any) => setting);
+
+  const [state, setState] = useState({ fieldName: '', fields: [] });
   const deleteCallBack = () => {
     router.push(`/types/${typeSlug}`);
   };
@@ -53,6 +61,15 @@ export default function Screen({
   const { handleDelete, deleteLoading } = useDeleteListItem({ onAlert });
 
   const { data, loading, error } = useGetListItemBySlug({ slug });
+
+  const dispatch = useDispatch();
+
+  const handleShowBottomSheet = () => {
+    dispatch(updateSettingAction({ bottomDrawer: true }));
+  };
+  const handleHideBottomSheet = () => {
+    dispatch(updateSettingAction({ bottomDrawer: false }));
+  };
 
   const {
     state: crudState,
@@ -107,83 +124,113 @@ export default function Screen({
           />
         </div>
       )}
-      <Paper variant="outlined" className="p-2 pb-5">
-        {state.fieldName === 'title' ? (
-          <InlineForm
-            fieldName={state.fieldName}
-            label="Title"
-            onCancel={onCancel}
-            formik={formik}
-            formLoading={CRUDLoading}
+      <Hidden smUp>
+        <SwipeableDrawer
+          anchor="bottom"
+          open={setting.bottomDrawer}
+          onClose={handleHideBottomSheet}
+          onOpen={handleShowBottomSheet}>
+          <LeftNavigation
+            style={{ maxHeight: '40vh' }}
+            onClick={handleHideBottomSheet}
+            fields={state.fields}
+            parentId={data.getListItemBySlug.types[0]._id}
+            slug={`/types/${data.getListItemBySlug.types[0].slug}/${data.getListItemBySlug.slug}`}
           />
-        ) : (
-          <>
-            <Typography>
-              Title
-              <Tooltip title="Edit Title">
-                <IconButton onClick={() => onEdit('title')}>
-                  <EditIcon fontSize="small" />
-                </IconButton>
-              </Tooltip>
-            </Typography>
-            <Typography variant="h4" className="d-flex align-items-center">
-              {data.getListItemBySlug.title.includes('-n-e-w')
-                ? 'Title'
-                : data.getListItemBySlug.title}
-            </Typography>
-          </>
-        )}
-        <Divider className="my-2" />
-        {state.fieldName === 'description' ? (
-          <InlineForm
-            multiline
-            fieldName={state.fieldName}
-            label="Description"
-            onCancel={onCancel}
-            formik={formik}
-            formLoading={CRUDLoading}
-          />
-        ) : (
-          <>
-            <Typography>
-              Description
-              <Tooltip title="Edit Description">
-                <IconButton onClick={() => onEdit('description')}>
-                  <EditIcon fontSize="small" />
-                </IconButton>
-              </Tooltip>
-            </Typography>
-            <div className="ck-content">{parse(data.getListItemBySlug.description)}</div>
-            <CommentButton parentId={data.getListItemBySlug._id} />
-          </>
-        )}
-        <Divider className="my-2" />
-        {state.fieldName === 'media' ? (
-          <MediaForm
-            state={crudState}
-            setState={setCrudState}
-            onCancel={onCancel}
-            onSave={formik.handleSubmit}
-            loading={CRUDLoading}
-          />
-        ) : (
-          <>
-            <Typography className="d-flex align-items-center">
-              Media
-              <Tooltip title="Edit Media">
-                <IconButton onClick={() => onEdit('media')}>
-                  <EditIcon fontSize="small" />
-                </IconButton>
-              </Tooltip>
-            </Typography>
-            <ImageList media={data.getListItemBySlug.media} />
-          </>
-        )}
-        <FieldValues
-          parentId={data.getListItemBySlug._id}
-          typeId={data.getListItemBySlug.types[0]._id}
-        />
-      </Paper>
+        </SwipeableDrawer>
+      </Hidden>
+      <Grid container spacing={1}>
+        <Hidden xsDown>
+          <Grid item xs={2}>
+            <LeftNavigation
+              style={{ position: 'fixed', minWidth: '15vw' }}
+              fields={state.fields}
+              parentId={data.getListItemBySlug.types[0]._id}
+              slug={`/types/${data.getListItemBySlug.types[0].slug}/${data.getListItemBySlug.slug}`}
+            />
+          </Grid>
+        </Hidden>
+        <Grid item xs>
+          <Paper variant="outlined" className="p-2 pb-5">
+            {state.fieldName === 'title' ? (
+              <InlineForm
+                fieldName={state.fieldName}
+                label="Title"
+                onCancel={onCancel}
+                formik={formik}
+                formLoading={CRUDLoading}
+              />
+            ) : (
+              <>
+                <Typography id="Title">
+                  Title
+                  <Tooltip title="Edit Title">
+                    <IconButton onClick={() => onEdit('title')}>
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </Typography>
+                <Typography variant="h4" className="d-flex align-items-center">
+                  {data.getListItemBySlug.title.includes('-n-e-w')
+                    ? 'Title'
+                    : data.getListItemBySlug.title}
+                </Typography>
+              </>
+            )}
+            <Divider className="my-2" />
+            {state.fieldName === 'description' ? (
+              <InlineForm
+                multiline
+                fieldName={state.fieldName}
+                label="Description"
+                onCancel={onCancel}
+                formik={formik}
+                formLoading={CRUDLoading}
+              />
+            ) : (
+              <>
+                <Typography id="Description">
+                  Description
+                  <Tooltip title="Edit Description">
+                    <IconButton onClick={() => onEdit('description')}>
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </Typography>
+                <div className="ck-content">{parse(data.getListItemBySlug.description)}</div>
+                <CommentButton parentId={data.getListItemBySlug._id} />
+              </>
+            )}
+            <Divider className="my-2" />
+            {state.fieldName === 'media' ? (
+              <MediaForm
+                state={crudState}
+                setState={setCrudState}
+                onCancel={onCancel}
+                onSave={formik.handleSubmit}
+                loading={CRUDLoading}
+              />
+            ) : (
+              <>
+                <Typography className="d-flex align-items-center" id="Media">
+                  Media
+                  <Tooltip title="Edit Media">
+                    <IconButton onClick={() => onEdit('media')}>
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </Typography>
+                <ImageList media={data.getListItemBySlug.media} />
+              </>
+            )}
+            <FieldValues
+              parentId={data.getListItemBySlug._id}
+              typeId={data.getListItemBySlug.types[0]._id}
+              setFields={(fields) => setState({ ...state, fields })}
+            />
+          </Paper>
+        </Grid>
+      </Grid>
       <Backdrop open={deleteLoading || CRUDLoading} />
     </>
   );

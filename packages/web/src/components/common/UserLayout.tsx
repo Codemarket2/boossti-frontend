@@ -6,6 +6,7 @@ import AuthRequired from './AuthRequired';
 import AppBar from './AppBar';
 import BottomBar from './BottomBar';
 import Container from './Container';
+import { DivContainer } from './Container';
 import Paper from '@material-ui/core/Paper';
 
 import styled from 'styled-components';
@@ -21,6 +22,7 @@ interface IProps {
   authRequired?: boolean;
   mustAdmin?: boolean;
   redirectPath?: string;
+  container?: boolean;
 }
 
 const UserLayout = ({
@@ -29,6 +31,7 @@ const UserLayout = ({
   authRequired = false,
   mustAdmin = false,
   redirectPath,
+  container = true,
 }: IProps) => {
   const authenticated = useSelector(({ auth }: any) => auth.authenticated);
   return (
@@ -38,15 +41,27 @@ const UserLayout = ({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AppBar />
-      <Container>
-        {authRequired ? (
-          <AuthRequired redirectPath={redirectPath} mustAdmin={mustAdmin}>
-            {children}
-          </AuthRequired>
-        ) : (
-          children
-        )}
-      </Container>
+      {container ? (
+        <Container>
+          {authRequired ? (
+            <AuthRequired redirectPath={redirectPath} mustAdmin={mustAdmin}>
+              {children}
+            </AuthRequired>
+          ) : (
+            children
+          )}
+        </Container>
+      ) : (
+        <DivContainer>
+          {authRequired ? (
+            <AuthRequired redirectPath={redirectPath} mustAdmin={mustAdmin}>
+              {children}
+            </AuthRequired>
+          ) : (
+            children
+          )}
+        </DivContainer>
+      )}
       {authenticated && <BottomBar />}
     </StyledPaper>
   );
