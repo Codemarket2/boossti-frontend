@@ -13,8 +13,10 @@ export default function Screen({ slug, typeSlug }: IProps) {
     router.push(`/types/${typeSlug}/${newSlug}`);
   };
   return (
-    <UserLayout authRequired>
-      <ItemScreen onSlugUpdate={onSlugUpdate} slug={slug} typeSlug={typeSlug} />
+    <UserLayout container={false} authRequired>
+      <div className="px-3">
+        <ItemScreen onSlugUpdate={onSlugUpdate} slug={slug} typeSlug={typeSlug} />
+      </div>
     </UserLayout>
   );
 }

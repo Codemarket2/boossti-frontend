@@ -11,13 +11,14 @@ import Divider from '@material-ui/core/Divider';
 import AddCircle from '@material-ui/icons/AddCircle';
 import FieldValueForm from './FieldValueForm';
 import IconButton from '@material-ui/core/IconButton';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CRUDMenu from '../common/CRUDMenu';
 import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
 import { useSelector } from 'react-redux';
 import { Fragment } from 'react';
 import FieldValueCard from './FieldValueCard';
+import { useRouter } from 'next/router';
 
 const initialState = {
   showForm: false,
@@ -73,7 +74,7 @@ function ItemOneFields({ field, parentId, showAuthor = true, guest }) {
   return (
     <div key={field._id} className="mt-4">
       <Divider />
-      <Typography variant="h5" className="d-flex align-items-center">
+      <Typography variant="h5" className="d-flex align-items-center" id={field.label}>
         {field.label}
         {showAddButton && (
           <Tooltip title="Add New Value">
@@ -120,8 +121,26 @@ function ItemOneFields({ field, parentId, showAuthor = true, guest }) {
   );
 }
 
-export default function ItemsFieldsMap({ parentId, typeId, showAuthor = true, guest = false }) {
+export default function ItemsFieldsMap({
+  parentId,
+  typeId,
+  showAuthor = true,
+  guest = false,
+  setFields = (arg: any) => {},
+}) {
   const { data, loading, error } = useGetFieldsByType({ parentId: typeId });
+  const router = useRouter();
+  useEffect(() => {
+    if (data && data.getFieldsByType) {
+      setFields(data.getFieldsByType.data);
+
+      if (router.asPath.includes('#')) {
+        setTimeout(() => {
+          router.push(router.asPath);
+        }, 1500);
+      }
+    }
+  }, [data]);
 
   if (!error && (!data || !data.getFieldsByType)) {
     return <FieldsSkeleton />;

@@ -8,6 +8,7 @@ import Paper from '@material-ui/core/Paper';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
 import EditIcon from '@material-ui/icons/Edit';
 import { useCRUDListTypes } from '@frontend/shared/hooks/list';
 import UserLayout from '../components/common/UserLayout';
@@ -73,106 +74,114 @@ export default function Screen({ slug }: IProps) {
   }
 
   return (
-    <UserLayout authRequired>
-      <div className="d-flex justify-content-between align-content-center align-items-center">
-        <Breadcrumbs>
-          <Link href="/types">Types</Link>
-          <Typography color="textPrimary">
-            {data.getListTypeBySlug.title.includes('-n-e-w')
-              ? 'Title'
-              : data.getListTypeBySlug.title}
-          </Typography>
-        </Breadcrumbs>
-        <ActionButtons
-          hideEdit
-          onDelete={() => {
-            if (data.getListTypeBySlug.inUse) {
-              alert("This type is being used in some form, you can't delete");
-            } else {
-              handleDelete(data.getListTypeBySlug._id, deleteCallBack);
-            }
-          }}
-        />
-      </div>
-      <Paper variant="outlined" className="p-2 mb-2">
-        {state.fieldName === 'title' ? (
-          <InlineForm
-            fieldName={state.fieldName}
-            label="Title"
-            onCancel={onCancel}
-            formik={formik}
-            formLoading={CRUDLoading}
-          />
-        ) : (
-          <div>
-            <Typography className="d-flex align-items-center">
-              Title
-              <Tooltip title="Edit Title">
-                <IconButton onClick={() => onEdit('title')}>
-                  <EditIcon fontSize="small" />
-                </IconButton>
-              </Tooltip>
-            </Typography>
-            <Typography variant="h4" className="d-flex align-items-center">
+    <UserLayout container={false} authRequired>
+      <div className="px-3">
+        <div className="d-flex justify-content-between align-content-center align-items-center">
+          <Breadcrumbs>
+            <Link href="/types">Types</Link>
+            <Typography color="textPrimary">
               {data.getListTypeBySlug.title.includes('-n-e-w')
                 ? 'Title'
                 : data.getListTypeBySlug.title}
             </Typography>
-          </div>
-        )}
-        <Divider className="my-2" />
-        {state.fieldName === 'description' ? (
-          <InlineForm
-            label="Description"
-            onCancel={onCancel}
-            multiline
-            fieldName={state.fieldName}
-            formik={formik}
-            formLoading={CRUDLoading}
+          </Breadcrumbs>
+          <ActionButtons
+            hideEdit
+            onDelete={() => {
+              if (data.getListTypeBySlug.inUse) {
+                alert("This type is being used in some form, you can't delete");
+              } else {
+                handleDelete(data.getListTypeBySlug._id, deleteCallBack);
+              }
+            }}
           />
-        ) : (
-          <div>
-            <Typography className="d-flex align-items-center">
-              Description
-              <Tooltip title="Edit Description">
-                <IconButton onClick={() => onEdit('description')}>
-                  <EditIcon fontSize="small" />
-                </IconButton>
-              </Tooltip>
-            </Typography>
-            <div className="ck-content">{parse(data.getListTypeBySlug.description)}</div>
-            <CommentButton parentId={data.getListTypeBySlug._id} />
-          </div>
-        )}
-        <Divider className="my-2" />
-        {state.fieldName === 'media' ? (
-          <MediaForm
-            state={crudState}
-            setState={setCrudState}
-            onCancel={onCancel}
-            onSave={formik.handleSubmit}
-            loading={CRUDLoading}
-          />
-        ) : (
-          <>
-            <Typography className="d-flex align-items-center">
-              Media
-              <Tooltip title="Edit Media">
-                <IconButton onClick={() => onEdit('media')}>
-                  <EditIcon fontSize="small" />
-                </IconButton>
-              </Tooltip>
-            </Typography>
-            <ImageList media={data.getListTypeBySlug.media} />
-          </>
-        )}
-      </Paper>
-      <Fields parentId={data.getListTypeBySlug._id} />
-      <ListItems
-        types={[data.getListTypeBySlug._id]}
-        name={data.getListTypeBySlug.title}
-        slug={data.getListTypeBySlug.slug}
-      />
+        </div>
+        <Grid container spacing={1}>
+          <Grid item sm={3} xs={12}>
+            <Paper variant="outlined" className="p-2 mb-2">
+              {state.fieldName === 'title' ? (
+                <InlineForm
+                  fieldName={state.fieldName}
+                  label="Title"
+                  onCancel={onCancel}
+                  formik={formik}
+                  formLoading={CRUDLoading}
+                />
+              ) : (
+                <div>
+                  <Typography className="d-flex align-items-center">
+                    Title
+                    <Tooltip title="Edit Title">
+                      <IconButton onClick={() => onEdit('title')}>
+                        <EditIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  </Typography>
+                  <Typography variant="h4" className="d-flex align-items-center">
+                    {data.getListTypeBySlug.title.includes('-n-e-w')
+                      ? 'Title'
+                      : data.getListTypeBySlug.title}
+                  </Typography>
+                </div>
+              )}
+              <Divider className="my-2" />
+              {state.fieldName === 'description' ? (
+                <InlineForm
+                  label="Description"
+                  onCancel={onCancel}
+                  multiline
+                  fieldName={state.fieldName}
+                  formik={formik}
+                  formLoading={CRUDLoading}
+                />
+              ) : (
+                <div>
+                  <Typography className="d-flex align-items-center">
+                    Description
+                    <Tooltip title="Edit Description">
+                      <IconButton onClick={() => onEdit('description')}>
+                        <EditIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  </Typography>
+                  <div className="ck-content">{parse(data.getListTypeBySlug.description)}</div>
+                  <CommentButton parentId={data.getListTypeBySlug._id} />
+                </div>
+              )}
+              <Divider className="my-2" />
+              {state.fieldName === 'media' ? (
+                <MediaForm
+                  state={crudState}
+                  setState={setCrudState}
+                  onCancel={onCancel}
+                  onSave={formik.handleSubmit}
+                  loading={CRUDLoading}
+                />
+              ) : (
+                <>
+                  <Typography className="d-flex align-items-center">
+                    Media
+                    <Tooltip title="Edit Media">
+                      <IconButton onClick={() => onEdit('media')}>
+                        <EditIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  </Typography>
+                  <ImageList media={data.getListTypeBySlug.media} />
+                </>
+              )}
+            </Paper>
+            <Fields parentId={data.getListTypeBySlug._id} />
+          </Grid>
+          <Grid item xs>
+            <ListItems
+              types={[data.getListTypeBySlug._id]}
+              name={data.getListTypeBySlug.title}
+              slug={data.getListTypeBySlug.slug}
+            />
+          </Grid>
+        </Grid>
+      </div>
       <Backdrop open={deleteLoading || CRUDLoading} />
     </UserLayout>
   );

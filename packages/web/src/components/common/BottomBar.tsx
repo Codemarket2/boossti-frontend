@@ -3,13 +3,12 @@ import { useRouter } from 'next/router';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-// import ChatBubble from '@material-ui/icons/ChatBubble';
-// import Event from '@material-ui/icons/Event';
-// import Videocam from '@material-ui/icons/Videocam';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import HomeIcon from '@material-ui/icons/Home';
 import styled from 'styled-components';
 import { routes } from '../../utils/routes';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateSettingAction } from '@frontend/shared/redux/actions/setting';
 
 const StyledBottomNavigation = styled(BottomNavigation)`
   position: fixed;
@@ -23,8 +22,12 @@ const StyledBottomNavigation = styled(BottomNavigation)`
 
 export default function SimpleBottomNavigation() {
   const router = useRouter();
+  const dispatch = useDispatch();
   const [activeRoute, setActiveRoute] = useState('/');
-  const attributes = useSelector(({ auth }: any) => auth.attributes);
+  const { attributes, setting } = useSelector(({ auth, setting }: any) => ({
+    attributes: auth.attributes,
+    setting,
+  }));
 
   useEffect(() => {
     if (activeRoute !== router.pathname) {
@@ -32,20 +35,23 @@ export default function SimpleBottomNavigation() {
     }
   }, []);
 
+  const onClick = (event, newValue) => {
+    if (newValue === 'more') {
+      dispatch(updateSettingAction({ bottomDrawer: !setting.bottomDrawer }));
+    } else {
+      router.push(newValue);
+    }
+  };
+
   return (
-    <StyledBottomNavigation
-      value={activeRoute}
-      onChange={(event, newValue) => router.push(newValue)}
-      showLabels>
+    <StyledBottomNavigation value={activeRoute} onChange={onClick} showLabels>
       <BottomNavigationAction value={routes.feeds} label="Home" icon={<HomeIcon />} />
       <BottomNavigationAction
         value={`/user/${attributes['custom:_id']}`}
         label="Profile"
         icon={<AccountCircleIcon />}
       />
-      {/* <BottomNavigationAction value={routes.inbox} label="Inbox" icon={<ChatBubble />} />
-      <BottomNavigationAction value={routes.offerings} label="Offerings" icon={<Event />} />
-      <BottomNavigationAction value={routes.sessions} label="Sessions" icon={<Videocam />} /> */}
+      <BottomNavigationAction value="more" label="More" icon={<MoreVertIcon />} />
     </StyledBottomNavigation>
   );
 }
