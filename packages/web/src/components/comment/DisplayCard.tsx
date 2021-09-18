@@ -78,6 +78,10 @@ export default function DisplayCard({
                 {showIcon && (
                   <Comment.Action>
                     <span
+                      style={{
+                        fontWeight: showReply ? 'bold' : 'normal',
+                        color: showReply && 'rgb(17, 82, 147)',
+                      }}
                       onClick={() => {
                         setShowReply(!showReply);
                         setShowCommentInput(true);
@@ -102,6 +106,11 @@ export default function DisplayCard({
                     Delete
                   </span>
                 </Comment.Action>
+                <Comment.Action>
+                  <span data-testid="btn-delete" onClick={() => console.log('share')}>
+                    Share
+                  </span>
+                </Comment.Action>
               </>
             ) : (
               <>
@@ -112,6 +121,10 @@ export default function DisplayCard({
                     </Comment.Action>
                     <Comment.Action>
                       <span
+                        style={{
+                          fontWeight: showReply ? 'bold' : 'normal',
+                          color: showReply && 'rgb(17, 82, 147)',
+                        }}
                         onClick={() => {
                           setShowReply(!showReply);
                           setShowCommentInput(true);
@@ -123,6 +136,11 @@ export default function DisplayCard({
                           ) : (
                             <b>{payload?.getCommentCount?.count}</b>
                           ))}
+                      </span>
+                    </Comment.Action>
+                    <Comment.Action>
+                      <span data-testid="btn-delete" onClick={() => console.log('share')}>
+                        Share
                       </span>
                     </Comment.Action>
                   </Comment.Action>

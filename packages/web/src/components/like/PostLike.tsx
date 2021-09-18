@@ -7,13 +7,10 @@ import ErrorLoading from '../common/ErrorLoading';
 interface ILike {
   parentId: string;
 }
-export default function Like({ parentId }: ILike) {
+export default function PostLike({ parentId }: ILike) {
   const { data, error } = useGetLikes(parentId);
   const { handleLiked } = useCreateLike(parentId);
   const [liked, setLiked] = useState(false);
-  console.log(data);
-
-  //   useEffect();
 
   return (
     <>
@@ -29,7 +26,6 @@ export default function Like({ parentId }: ILike) {
             }
           }}>
           <FavoriteIcon style={{ color: liked && 'red' }} />
-          {data && data!.getLikesByParentId!.data.length}
         </IconButton>
       )}
     </>
