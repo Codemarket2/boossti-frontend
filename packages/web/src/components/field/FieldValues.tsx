@@ -19,6 +19,7 @@ import { useSelector } from 'react-redux';
 import { Fragment } from 'react';
 import FieldValueCard from './FieldValueCard';
 import { useRouter } from 'next/router';
+import { convertToSlug } from './LeftNavigation';
 
 const initialState = {
   showForm: false,
@@ -74,7 +75,10 @@ function ItemOneFields({ field, parentId, showAuthor = true, guest }) {
   return (
     <div key={field._id} className="mt-4">
       <Divider />
-      <Typography variant="h5" className="d-flex align-items-center" id={field.label}>
+      <Typography
+        variant="h5"
+        className="d-flex align-items-center"
+        id={convertToSlug(field.label)}>
         {field.label}
         {showAddButton && (
           <Tooltip title="Add New Value">

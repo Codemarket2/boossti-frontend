@@ -9,6 +9,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
 import { useCRUDListTypes } from '@frontend/shared/hooks/list';
 import UserLayout from '../components/common/UserLayout';
@@ -24,14 +25,25 @@ import Fields from '../components/field/Fields';
 import InlineForm from '../components/list/InlineForm';
 import MediaForm from '../components/list/MediaForm';
 import CommentButton from '../components/comment/CommentButton';
+import ListItemForm from '../components/list/ListItemForm';
+import ListItemsGrid from '../components/list/ListItemsGrid';
 
 interface IProps {
   slug: any;
 }
 
+const buttonLabels = ['List View', 'Grid View', 'Form View'];
+
 export default function Screen({ slug }: IProps) {
   const router = useRouter();
-  const [state, setState] = useState({ fieldName: '' });
+
+  const [state, setState] = useState({
+    fieldName: '',
+    view: buttonLabels[1],
+    showMenu: false,
+    selectedIndex: 0,
+  });
+  const [fields, setFields] = useState([]);
 
   const deleteCallBack = () => {
     router.push(`/types`);
@@ -85,16 +97,31 @@ export default function Screen({ slug }: IProps) {
                 : data.getListTypeBySlug.title}
             </Typography>
           </Breadcrumbs>
-          <ActionButtons
-            hideEdit
-            onDelete={() => {
-              if (data.getListTypeBySlug.inUse) {
-                alert("This type is being used in some form, you can't delete");
-              } else {
-                handleDelete(data.getListTypeBySlug._id, deleteCallBack);
-              }
-            }}
-          />
+          <div className="d-flex">
+            {buttonLabels.map(
+              (buttonLabel) =>
+                buttonLabel !== state.view && (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    className="mr-2"
+                    onClick={() => setState({ ...state, view: buttonLabel })}>
+                    {buttonLabel}
+                  </Button>
+                ),
+            )}
+            <ActionButtons
+              hideEdit
+              onDelete={() => {
+                if (data.getListTypeBySlug.inUse) {
+                  alert("This type is being used in some form, you can't delete");
+                } else {
+                  handleDelete(data.getListTypeBySlug._id, deleteCallBack);
+                }
+              }}
+            />
+          </div>
         </div>
         <Grid container spacing={1}>
           <Grid item sm={3} xs={12}>
@@ -171,14 +198,24 @@ export default function Screen({ slug }: IProps) {
                 </>
               )}
             </Paper>
-            <Fields parentId={data.getListTypeBySlug._id} />
+            <Fields setFields={setFields} parentId={data.getListTypeBySlug._id} />
           </Grid>
           <Grid item xs>
-            <ListItems
-              types={[data.getListTypeBySlug._id]}
-              name={data.getListTypeBySlug.title}
-              slug={data.getListTypeBySlug.slug}
-            />
+            {state.view === 'Form View' ? (
+              <ListItemForm
+                typeSlug={data.getListTypeBySlug.slug}
+                types={[data.getListTypeBySlug._id]}
+                parentId={data.getListTypeBySlug._id}
+              />
+            ) : state.view === 'Grid View' ? (
+              <ListItemsGrid fields={fields} types={[data.getListTypeBySlug._id]} />
+            ) : (
+              <ListItems
+                types={[data.getListTypeBySlug._id]}
+                name={data.getListTypeBySlug.title}
+                slug={data.getListTypeBySlug.slug}
+              />
+            )}
           </Grid>
         </Grid>
       </div>
