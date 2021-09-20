@@ -8,6 +8,7 @@ export const GET_LIKES_BY_PARENT_ID = gql`
         like
         parentId
         createdBy {
+          _id
           name
           picture
         }

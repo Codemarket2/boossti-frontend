@@ -44,7 +44,7 @@ export function useCreateLike(parentId: string) {
 
 export function useDeleteLike() {
   const [deleteLikeMutation, { data, loading, error }] = useMutation(DELETE_LIKE);
-  const handleLikeDelete = (id: string, parentId: string) => {
+  const handleLikeDelete = (id: string, parentId: string, index) => {
     deleteLikeMutation({
       variables: {
         _id: id,
@@ -56,13 +56,13 @@ export function useDeleteLike() {
             parentId: parentId,
           },
         });
-        let newLike = produce(currentLikes, (draft: any) => {
-          draft?.getLikesByParentId?.data.filter((like) => like._id !== id);
-        });
 
+        let DeletedLike = produce(currentLikes, (draft: any) => {
+          draft!.getLikesByParentId!.data!.splice(index, 1);
+        });
         store.writeQuery({
           query: GET_LIKES_BY_PARENT_ID,
-          data: newLike,
+          data: DeletedLike,
           variables: {
             parentId: parentId,
           },
