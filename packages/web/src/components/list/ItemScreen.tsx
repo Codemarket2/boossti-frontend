@@ -162,7 +162,10 @@ export default function Screen({
         </Hidden>
       )}
       <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-        <Paper style={{ width: matches ? '100%' : '84%' }} variant="outlined" className="p-2 pb-5">
+        <Paper
+          style={{ width: matches || hideBreadcrumbs ? '100%' : '84%' }}
+          variant="outlined"
+          className="p-2 pb-5">
           {state.fieldName === 'title' ? (
             <InlineForm
               fieldName={state.fieldName}
