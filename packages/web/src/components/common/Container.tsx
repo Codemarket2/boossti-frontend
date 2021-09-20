@@ -14,4 +14,17 @@ const StyledContainer = styled(Container)`
   }
 `;
 
+export const DivContainer = styled.div`
+  padding-bottom: ${(props) => props.theme.spacing(2)}px;
+  padding-top: ${(props) => props.theme.spacing(2)}px;
+  ${(props) => props.theme.breakpoints.down('sm')} {
+    padding-bottom: 60px;
+    /* padding-top: 4px; */
+  }
+  video {
+    width: 100% !important;
+    height: auto !important;
+  }
+`;
+
 export default StyledContainer;

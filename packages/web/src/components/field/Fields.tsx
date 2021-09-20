@@ -54,7 +54,7 @@ function Quote({ field, index, onClick }: any) {
           <ListItemIcon>
             <DragIndicatorIcon />
           </ListItemIcon>
-          <ListItemText primary={field.label} secondary={`${field.position}-${field.fieldType}`} />
+          <ListItemText primary={field.label} secondary={field.fieldType} />
           <ListItemSecondaryAction>
             <IconButton edge="end" onClick={(event) => onClick(event.currentTarget, field)}>
               <MoreHoriz />
