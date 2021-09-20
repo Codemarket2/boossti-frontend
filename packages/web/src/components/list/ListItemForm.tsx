@@ -1,31 +1,38 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import { useRouter } from 'next/router';
 import Button from '@material-ui/core/Button';
 import InputLabel from '@material-ui/core/InputLabel';
+import { useGetFieldsByType } from '@frontend/shared/hooks/field';
 import { useCRUDListItems } from '@frontend/shared/hooks/list';
 import LoadingButton from '../common/LoadingButton';
 import InputGroup from '../common/InputGroup';
 import ImagePicker from '../common/ImagePicker';
 import { onAlert } from '../../utils/alert';
 import Backdrop from '../common/Backdrop';
+import ErrorLoading from '../common/ErrorLoading';
+import FieldValueForm2 from '../field/FieldValueForm2';
 
 interface IProps {
   typeSlug: string;
+  parentId: string;
   types: [string];
   item?: any;
   updateCallBack?: (arg: string) => void;
   onCancel?: () => void;
 }
+
 export default function ListItemForm({
   typeSlug,
   types,
   item = null,
   updateCallBack,
   onCancel,
+  parentId,
 }: IProps) {
   const router = useRouter();
+  const [extraFields, setExtraFields] = useState([]);
   const createCallBack = (itemSlug) => {
     router.push(`/types/${typeSlug}/${itemSlug}`);
   };
@@ -35,6 +42,8 @@ export default function ListItemForm({
     createCallBack,
     updateCallBack,
   });
+
+  const { data, loading, error } = useGetFieldsByType({ parentId });
 
   useEffect(() => {
     if (item) {
@@ -46,6 +55,30 @@ export default function ListItemForm({
     router.push(`/types/${typeSlug}`);
   };
 
+  useEffect(() => {
+    if (data && data.getFieldsByType) {
+      const newFields = data.getFieldsByType.data.map((field) => ({
+        value: '',
+        media: [],
+        tempMedia: [],
+        tempMediaFiles: [],
+        itemId: null,
+        fieldType: field.fieldType,
+        parentId,
+        field: field._id,
+        label: field.label,
+        typeId: field.fieldType === 'type' ? field.typeId : null,
+      }));
+      setExtraFields(newFields);
+    }
+  }, [data]);
+
+  if (error || !data || !data.getFieldsByType) {
+    return <ErrorLoading error={error} />;
+  }
+
+  console.log('extra', extraFields);
+
   return (
     <>
       <Backdrop open={CRUDLoading || formik.isSubmitting} />
@@ -53,6 +86,7 @@ export default function ListItemForm({
         <form onSubmit={formik.handleSubmit}>
           <InputGroup>
             <TextField
+              size="small"
               fullWidth
               variant="outlined"
               label="Title*"
@@ -67,6 +101,7 @@ export default function ListItemForm({
           </InputGroup>
           <InputGroup>
             <TextField
+              size="small"
               fullWidth
               variant="outlined"
               label="Description*"
@@ -85,9 +120,44 @@ export default function ListItemForm({
             <InputLabel htmlFor="my-input">Images/Video</InputLabel>
             <ImagePicker state={state} setState={setState} />
           </InputGroup>
+          {extraFields.map((field, index) => (
+            <div className="my-4" key={field._id}>
+              <FieldValueForm2
+                label={field.label}
+                fieldType={field.fieldType}
+                value={field.value}
+                onChange={(newValue) => {
+                  if (field.fieldType === 'type') {
+                    setExtraFields(
+                      extraFields.map((oldValue, i) =>
+                        i === index ? { ...oldValue, itemId: newValue } : oldValue,
+                      ),
+                    );
+                  } else {
+                    setExtraFields(
+                      extraFields.map((oldValue, i) =>
+                        i === index ? { ...oldValue, value: newValue } : oldValue,
+                      ),
+                    );
+                  }
+                }}
+                itemId={field.itemId}
+                typeId={field.typeId ? field.typeId._id : null}
+                typeSlug={field.typeId ? field.typeId.slug : null}
+                mediaState={field}
+                setMediaState={(newValue) =>
+                  setExtraFields(
+                    extraFields.map((oldValue, i) =>
+                      i === index ? { ...oldValue, ...newValue } : oldValue,
+                    ),
+                  )
+                }
+              />
+            </div>
+          ))}
           <InputGroup>
             <LoadingButton type="submit" color="primary" loading={formik.isSubmitting}>
-              {formik.values.edit ? 'Update' : 'Create'}
+              {formik.values.edit ? 'Submit' : 'Submit'}
             </LoadingButton>
             <Button
               onClick={onCancel ? onCancel : defaultOnCancel}

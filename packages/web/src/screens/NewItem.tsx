@@ -19,7 +19,11 @@ export default function Screen({ slug }: any) {
         <Link href={`/types/${data.getListTypeBySlug.slug}`}>{data.getListTypeBySlug.title}</Link>
         <Typography color="textPrimary">New</Typography>
       </Breadcrumbs>
-      <ListItemForm typeSlug={data.getListTypeBySlug.slug} types={[data.getListTypeBySlug._id]} />
+      <ListItemForm
+        typeSlug={data.getListTypeBySlug.slug}
+        types={[data.getListTypeBySlug._id]}
+        parentId={data.getListTypeBySlug._id}
+      />
     </UserLayout>
   );
 }

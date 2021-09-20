@@ -18,7 +18,7 @@ import {
 } from '@frontend/shared/hooks/field';
 import FieldForm from './FieldForm';
 import CRUDMenu from '../common/CRUDMenu';
-import { useState, memo } from 'react';
+import { useState, memo, useEffect } from 'react';
 import FieldsSkeleton from './FieldsSkeleton';
 import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
@@ -27,6 +27,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 interface IProps {
   parentId: any;
+  setFields: (args: any) => void;
 }
 
 const initialState = {
@@ -76,7 +77,7 @@ const QuoteList = memo(function QuoteList({ fields, onClick }: any) {
   );
 });
 
-export default function Fields({ parentId }: IProps) {
+export default function Fields({ parentId, setFields }: IProps) {
   const [state, setState] = useState(initialState);
 
   const deleteCallback = () => {
@@ -131,6 +132,12 @@ export default function Fields({ parentId }: IProps) {
     updatePositionInCache(tempField);
     handleUpdatePosition(updateId, position);
   }
+
+  useEffect(() => {
+    if (data && data.getFieldsByType && setFields) {
+      setFields(data.getFieldsByType.data);
+    }
+  }, [data]);
 
   if (!error && (!data || !data.getFieldsByType)) {
     return <FieldsSkeleton />;

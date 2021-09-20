@@ -8,27 +8,34 @@ import LinkIcon from '@material-ui/icons/Link';
 import Divider from '@material-ui/core/Divider';
 import Skeleton from '@material-ui/lab/Skeleton';
 
+export function convertToSlug(text) {
+  return text
+    .toLowerCase()
+    .replace(/ /g, '-')
+    .replace(/[^\w-]+/g, '');
+}
+
 export default function LeftNavigation({ style, slug, fields, onClick = () => {} }: any) {
   return (
     <Paper variant="outlined" style={style}>
-      <List component="nav">
+      <List component="nav" dense>
         <ListItem>
           <ListItemIcon className="mr-n4">{<LinkIcon />}</ListItemIcon>
           <ListItemText primary="Fields" />
         </ListItem>
         <Divider />
         <ListItem button>
-          <Link href={`${slug}#Title`}>
+          <Link href={`${slug}#title`}>
             <ListItemText primary="Title" />
           </Link>
         </ListItem>
         <ListItem button>
-          <Link href={`${slug}#Description`}>
+          <Link href={`${slug}#description`}>
             <ListItemText primary="Description" />
           </Link>
         </ListItem>
         <ListItem button>
-          <Link href={`${slug}#Media`}>
+          <Link href={`${slug}#media`}>
             <ListItemText primary="Media" />
           </Link>
         </ListItem>
@@ -40,7 +47,7 @@ export default function LeftNavigation({ style, slug, fields, onClick = () => {}
         ) : (
           fields.map((fieldType) => (
             <ListItem button key={fieldType._id} onClick={onClick}>
-              <Link href={`${slug}#${fieldType.label}`}>
+              <Link href={`${slug}#${convertToSlug(fieldType.label)}`}>
                 <ListItemText primary={fieldType.label} />
               </Link>
             </ListItem>
