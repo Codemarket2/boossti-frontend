@@ -39,7 +39,7 @@ export default function Screen({ slug }: IProps) {
 
   const [state, setState] = useState({
     fieldName: '',
-    view: buttonLabels[1],
+    view: buttonLabels[0],
     showMenu: false,
     selectedIndex: 0,
   });
