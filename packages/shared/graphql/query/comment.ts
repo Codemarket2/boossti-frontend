@@ -26,3 +26,15 @@ export const GET_COMMENTCOUNT = gql`
     }
   }
 `;
+
+export const GET_ACTION_COUNTS = gql`
+  query MyQuery($parentId: ID!) {
+    getActionCounts(parentId: $parentId) {
+      commentCount
+      likeCount
+      likedByUser {
+        like
+      }
+    }
+  }
+`;

@@ -8,8 +8,9 @@ import { useGetLikes } from '@frontend/shared/hooks/like/getLike';
 import ErrorLoading from '../common/ErrorLoading';
 interface ILike {
   parentId: string;
+  likedByUser: any;
 }
-export default function PostLike({ parentId }: ILike) {
+export default function PostLike({ parentId, likedByUser }: ILike) {
   const { attributes } = useSelector(({ auth }: any) => auth);
   const currentUserId = attributes['custom:_id'];
   const { handleLiked } = useCreateLike(parentId);
@@ -45,13 +46,7 @@ export default function PostLike({ parentId }: ILike) {
           }}>
           {
             <>
-              {data!.getLikesByParentId!.data!.find(
-                (user) => user.createdBy._id === currentUserId,
-              ) ? (
-                <FavoriteIcon style={{ color: liked && 'red' }} />
-              ) : (
-                <FavoriteIcon style={{ color: liked && 'red' }} />
-              )}
+              <FavoriteIcon style={{ color: (likedByUser || liked) && 'red' }} />
             </>
           }
         </IconButton>
