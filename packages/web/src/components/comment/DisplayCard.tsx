@@ -4,10 +4,12 @@ import moment from 'moment';
 import { useSelector } from 'react-redux';
 import { Comment } from 'semantic-ui-react';
 
-import CommentUI from './Comment';
+import { useGetLikes } from '@frontend/shared/hooks/like/getLike';
 import { useGetActionCounts } from '@frontend/shared/hooks/comment/getComment';
-import { useCreateLike, useDeleteLike } from '@frontend/shared/hooks/like/createLike';
+import CommentUI from './Comment';
 import ErrorLoading from '../common/ErrorLoading';
+import Like from '../like/Like';
+import LikeModal from '../like/LikeModal';
 
 interface IDisplayComment {
   commentedUser: any;
@@ -26,17 +28,23 @@ export default function DisplayCard({
   index,
 }: IDisplayComment) {
   const { attributes } = useSelector(({ auth }: any) => auth);
-  //comment state
+  //comment
   const [showReply, setShowReply] = useState(false);
   const [showCommentInput, setShowCommentInput] = useState(true);
   const { data: actionCountData, error } = useGetActionCounts(commentedUser._id);
   const [payload, setPayload] = useState<any>();
-  //like state
-  const { handleLiked } = useCreateLike(commentedUser._id);
-  const { handleLikeDelete } = useDeleteLike();
-  const [liked, setLiked] = useState(false);
-
   const currentUserId = attributes['custom:_id'];
+  //like
+  const { data: likeData, error: likeError } = useGetLikes(commentedUser._id);
+  // like modal state
+  const [open, setOpen] = useState(false);
+  const handleOpenLikeModal = () => {
+    setOpen(true);
+  };
+  const handleCloseLikeModal = () => {
+    setOpen(false);
+  };
+
   useEffect(() => {
     setPayload(actionCountData);
   }, [actionCountData]);
@@ -74,22 +82,38 @@ export default function DisplayCard({
           <Comment.Text data-testid="comment-body">
             <div className="ck-content">{parse(commentedUser?.body)}</div>
           </Comment.Text>
+          {open && (
+            <LikeModal
+              open={open}
+              handleOpenLikeModal={handleOpenLikeModal}
+              handleCloseLikeModal={handleCloseLikeModal}
+              totalLike={likeData!.getLikesByParentId!.data!.length}
+              data={likeData!.getLikesByParentId!.data}
+            />
+          )}
           <Comment.Actions>
             {error || !payload || !payload!.getActionCounts ? (
               <ErrorLoading error={error} />
             ) : (
-              <Comment.Action onClick={() => console.log('heelo')}>
-                Like
-                {payload &&
-                  (payload!.getActionCounts!.likeCount === 0 ? (
-                    ''
-                  ) : (
-                    <b>
-                      {payload!.getActionCounts!.likeCount && payload!.getActionCounts!.likeCount}
-                    </b>
-                  ))}
+              <Comment.Action>
+                <Like
+                  likedByUser={payload!.getActionCounts!.likedByUser}
+                  parentId={commentedUser._id}
+                  commentLike={true}
+                />
               </Comment.Action>
             )}
+            {!likeData || !likeData!.getLikesByParentId!.data || likeError ? (
+              <ErrorLoading error={likeError} />
+            ) : (
+              <Comment.Action onClick={handleOpenLikeModal}>
+                Like &nbsp;
+                {likeData!.getLikesByParentId!.data!.length === 0
+                  ? ''
+                  : likeData!.getLikesByParentId!.data!.length}
+              </Comment.Action>
+            )}
+
             {currentUserId === commentedUser!.createdBy!._id ? (
               <>
                 {showIcon && (
@@ -107,7 +131,7 @@ export default function DisplayCard({
                             setShowReply(!showReply);
                             setShowCommentInput(true);
                           }}>
-                          Comment
+                          Comment &nbsp;
                           {payload &&
                             (payload!.getActionCounts!.commentCount === 0 ? (
                               ''
@@ -133,7 +157,7 @@ export default function DisplayCard({
                   </span>
                 </Comment.Action>
                 <Comment.Action>
-                  <span data-testid="btn-delete" onClick={() => console.log('share')}>
+                  <span data-testid="btn-share" onClick={() => console.log('share')}>
                     Share
                   </span>
                 </Comment.Action>
