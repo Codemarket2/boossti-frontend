@@ -6,6 +6,7 @@ import { useState } from 'react';
 
 const editorConfiguration = {
   toolbar: [
+    'sourceEditing',
     'heading',
     '|',
     'bold',
@@ -53,7 +54,6 @@ const editorConfiguration = {
       {
         marker: '@',
         feed: ['@Sumi', '@Vivek', '@Muzzamil', '@Robin', '@Ted'],
-        // minimumCharacters: 1,
       },
     ],
   },
