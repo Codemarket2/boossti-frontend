@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import Link from 'next/link';
 import ListItem from '@material-ui/core/ListItem';
 import Divider from '@material-ui/core/Divider';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -16,7 +17,7 @@ interface IUser {
 }
 
 interface IProps {
-  user: IUser;
+  user: any;
   handleUpdateUserStatus: (arg1: string, arg2: boolean) => void;
 }
 
@@ -29,11 +30,13 @@ export default function UserCard({ user, handleUpdateUserStatus }: IProps) {
   };
   return (
     <>
-      <ListItem alignItems="flex-start">
+      <ListItem button alignItems="flex-start">
         <ListItemAvatar>
           <Avatar alt={user.name} src={user.picture} />
         </ListItemAvatar>
-        <ListItemText primary={user.name} secondary={user.email} />
+        <Link href={`/user/${user._id}`}>
+          <ListItemText primary={user.name} secondary={user.email} />
+        </Link>
         <ListItemSecondaryAction>
           <LoadingButton variant="contained" size="small" loading={loading} onClick={updateUser}>
             {user.active ? 'Block' : 'Unblock'}
