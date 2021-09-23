@@ -19,7 +19,7 @@ import Comment from '../comment/Comment';
 import ErrorLoading from '../common/ErrorLoading';
 import PostLike from '../like/PostLike';
 import CommentLikeShareCounter from './CommentLikeShareCounter';
-
+import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
 interface IProps {
   post: any;
   onClickMore?: (arg1: any, arg2: any) => void;
@@ -29,11 +29,10 @@ interface IProps {
 export default function PostCard({ post, onClickMore = () => {}, authenticated = true }: IProps) {
   const [showCommentSection, setShowCommentSection] = useState(false);
 
-  const [Liked, setLiked] = useState(false);
-
   const toggleCommentSection = () => {
     setShowCommentSection(!showCommentSection);
   };
+
   return (
     <>
       <Card className="my-3" variant="outlined">
@@ -77,9 +76,12 @@ export default function PostCard({ post, onClickMore = () => {}, authenticated =
           </div>
           <ImageList media={post.media} authenticated={authenticated} />
         </CardContent>
-        <CommentLikeShareCounter parentId={post._id} toggleCommentSection={toggleCommentSection} />
-        <Divider />
+        {/* <CommentLikeShareCounter parentId={post._id} toggleCommentSection={toggleCommentSection} /> */}
+        {/* <Divider /> */}
         <CardActions disableSpacing>
+          <CommentLikeShare parentId={post._id} />
+        </CardActions>
+        {/* <CardActions disableSpacing>
           <PostLike parentId={post._id} />
 
           <IconButton aria-label="comment" onClick={toggleCommentSection}>
@@ -91,15 +93,16 @@ export default function PostCard({ post, onClickMore = () => {}, authenticated =
           <IconButton aria-label="share">
             <ShareIcon />
           </IconButton>
-        </CardActions>
-        {showCommentSection && (
+        </CardActions> */}
+
+        {/* {showCommentSection && (
           <>
             <Divider />
             <CardContent>
               <Comment postId={post._id} />
             </CardContent>
           </>
-        )}
+        )} */}
       </Card>
     </>
   );
