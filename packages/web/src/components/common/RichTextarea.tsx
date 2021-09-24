@@ -7,6 +7,7 @@ import { useState } from 'react';
 const editorConfiguration = {
   toolbar: [
     'sourceEditing',
+    'htmlEmbed',
     'heading',
     '|',
     'bold',
