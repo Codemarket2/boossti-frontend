@@ -7,7 +7,7 @@ import { useGetActionCounts } from '@frontend/shared/hooks/comment/getComment';
 import { useGetLikes } from '@frontend/shared/hooks/like/getLike';
 import ErrorLoading from '../ErrorLoading';
 import LikeModal from '../../like/LikeModal';
-import PostLike from '../../like/PostLike';
+import Like from '../../like/Like';
 import Comment from '../../comment/Comment';
 
 interface ICommentLikeShare {
@@ -16,18 +16,19 @@ interface ICommentLikeShare {
 export default function CommentLikeShare({ parentId }: ICommentLikeShare) {
   const { data, error } = useGetActionCounts(parentId);
   const { data: likeData, error: likeError } = useGetLikes(parentId);
+  // like modal state & effect
   const [open, setOpen] = useState(false);
-  const [showCommentSection, setShowCommentSection] = useState(false);
-
-  const toggleCommentSection = () => {
-    setShowCommentSection(!showCommentSection);
-  };
   const handleOpenLikeModal = () => {
     setOpen(true);
   };
 
   const handleCloseLikeModal = () => {
     setOpen(false);
+  };
+  //comment state
+  const [showCommentSection, setShowCommentSection] = useState(false);
+  const toggleCommentSection = () => {
+    setShowCommentSection(!showCommentSection);
   };
 
   return (
@@ -37,14 +38,13 @@ export default function CommentLikeShare({ parentId }: ICommentLikeShare) {
           <ErrorLoading error={error} />
         ) : (
           <>
-            <PostLike parentId={parentId} likedByUser={data!.getActionCounts!.likedByUser} />
+            <Like parentId={parentId} likedByUser={data!.getActionCounts!.likedByUser} />
             {!likeData || !likeData!.getLikesByParentId!.data || likeError ? (
               <ErrorLoading error={likeError} />
             ) : (
               <>
                 <Button onClick={handleOpenLikeModal} color="primary">
-                  Likes
-                  {likeData!.getLikesByParentId!.data!.length}
+                  Likes &nbsp;{likeData!.getLikesByParentId!.data!.length}
                 </Button>
                 <LikeModal
                   handleOpenLikeModal={handleOpenLikeModal}
@@ -56,7 +56,7 @@ export default function CommentLikeShare({ parentId }: ICommentLikeShare) {
               </>
             )}
             <Button onClick={toggleCommentSection} color="primary">
-              Comment
+              Comment &nbsp;
               {/* <ModeCommentIcon /> */}
               {data!.getActionCounts!.commentCount && data!.getActionCounts!.commentCount}
             </Button>

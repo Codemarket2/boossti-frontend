@@ -19,14 +19,6 @@ export const GET_COMMENTS_BY_PARENT_ID = gql`
   }
 `;
 
-export const GET_COMMENTCOUNT = gql`
-  query MyQuery($parentId: ID!) {
-    getCommentCount(parentId: $parentId) {
-      count
-    }
-  }
-`;
-
 export const GET_ACTION_COUNTS = gql`
   query MyQuery($parentId: ID!) {
     getActionCounts(parentId: $parentId) {

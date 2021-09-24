@@ -2805,6 +2805,14 @@
     "@ckeditor/ckeditor5-ui" "^29.2.0"
     "@ckeditor/ckeditor5-utils" "^29.2.0"
 
+"@ckeditor/ckeditor5-source-editing@^29.2.0":
+  version "29.2.0"
+  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-source-editing/-/ckeditor5-source-editing-29.2.0.tgz#1c7138218a87234e664591a4f7d4b61bec6b9d4a"
+  integrity sha512-Jc06rhAUXIjHWpfusnacVc4ZRLky4P4VB9Oyh6p4Nc1TRroSQ6lxin/VSL5oU+3iLFe3v/UzlhPcqtFobE0eeQ==
+  dependencies:
+    "@ckeditor/ckeditor5-theme-lark" "^29.2.0"
+    ckeditor5 "^29.2.0"
+
 "@ckeditor/ckeditor5-table@^29.2.0":
   version "29.2.0"
   resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-table/-/ckeditor5-table-29.2.0.tgz#737e9e47f0ef862bb8d195f7785b56fffe8ee9c2"

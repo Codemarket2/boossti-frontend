@@ -21,7 +21,7 @@ import ActionButtons from '../list/ActionButtons';
 import InlineForm from '../list/InlineForm';
 import MediaForm from '../list/MediaForm';
 import { onAlert } from '../../utils/alert';
-import CommentButton from '../comment/CommentButton';
+import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
 import LeftNavigation from '../field/LeftNavigation';
 import Hidden from '@material-ui/core/Hidden';
 import { useSelector, useDispatch } from 'react-redux';
@@ -212,7 +212,7 @@ export default function Screen({
                 </Tooltip>
               </Typography>
               <div className="ck-content">{parse(data.getListItemBySlug.description)}</div>
-              <CommentButton parentId={data.getListItemBySlug._id} />
+              <CommentLikeShare parentId={data.getListItemBySlug._id} />
             </>
           )}
           <Divider className="my-2" />
