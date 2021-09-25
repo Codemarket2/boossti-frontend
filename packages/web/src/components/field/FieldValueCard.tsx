@@ -18,7 +18,7 @@ import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ItemScreen from '../list/ItemScreen';
 import ImageList from '../post/ImageList';
 import { useState } from 'react';
-import Comment from '../comment/Comment';
+import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
 
 interface IProps {
   fieldValue: any;
@@ -123,19 +123,20 @@ export default function FieldValueCard({
         )}
       </CardContent>
       <CardActions disableSpacing>
-        <Button
+        <CommentLikeShare parentId={fieldValue._id} />
+        {/* <Button
           color="primary"
           onClick={handleExpandClick}
           size="small"
           startIcon={<ChatBubbleIcon />}>
           Comments
-        </Button>
+        </Button> */}
       </CardActions>
-      <Collapse in={state.expandedComments} timeout="auto" unmountOnExit>
+      {/* <Collapse in={state.expandedComments} timeout="auto" unmountOnExit>
         <CardContent>
           <Comment postId={fieldValue._id} />
         </CardContent>
-      </Collapse>
+      </Collapse> */}
     </Card>
   );
 }

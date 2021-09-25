@@ -24,7 +24,7 @@ import { onAlert } from '../utils/alert';
 import Fields from '../components/field/Fields';
 import InlineForm from '../components/list/InlineForm';
 import MediaForm from '../components/list/MediaForm';
-import CommentButton from '../components/comment/CommentButton';
+import CommentLikeShare from '../components/common/commentLikeShare/CommentLikeShare';
 import ListItemForm from '../components/list/ListItemForm';
 import ListItemsGrid from '../components/list/ListItemsGrid';
 
@@ -172,7 +172,7 @@ export default function Screen({ slug }: IProps) {
                     </Tooltip>
                   </Typography>
                   <div className="ck-content">{parse(data.getListTypeBySlug.description)}</div>
-                  <CommentButton parentId={data.getListTypeBySlug._id} />
+                  <CommentLikeShare parentId={data.getListTypeBySlug._id} />
                 </div>
               )}
               <Divider className="my-2" />
