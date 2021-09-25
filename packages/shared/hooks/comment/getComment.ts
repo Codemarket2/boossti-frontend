@@ -21,11 +21,23 @@ export const useGetComments = (postId: string) => {
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev;
         const newComment = subscriptionData.data.addedComment;
+        let newData = [...prev.getCommentsByParentID.data];
+        const isUpdated = prev.getCommentsByParentID.data.filter(
+          (comment) => comment._id === newComment._id,
+        );
+        if (isUpdated.length > 0) {
+          newData = prev.getCommentsByParentID.data.map((comment) =>
+            comment._id === newComment._id ? newComment : comment,
+          );
+        } else {
+          newData = [newComment, ...newData];
+        }
+
         return {
           ...prev,
           getCommentsByParentID: {
             ...prev.getCommentsByParentID,
-            data: [newComment, ...prev.getCommentsByParentID.data],
+            data: newData,
           },
         };
       },

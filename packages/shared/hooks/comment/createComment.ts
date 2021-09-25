@@ -63,29 +63,9 @@ export function useUpdateComment(postId: string, id: string, setEdit: any) {
     if (updateInputVal !== '') {
       updateCommentMutation({
         variables: {
+          parentId: postId,
           _id: id,
           body: updateInputVal,
-        },
-        update: (store) => {
-          const currentComment = store.readQuery({
-            query: GET_COMMENTS_BY_PARENT_ID,
-            variables: {
-              parentId: postId,
-            },
-          });
-          const updatedComment = produce(currentComment, (draft: any) => {
-            draft!.getCommentsByParentID!.data[
-              draft!.getCommentsByParentID!.data!.findIndex((index) => index._id === id)
-            ].body = updateInputVal;
-          });
-
-          store.writeQuery({
-            query: GET_COMMENTS_BY_PARENT_ID,
-            data: updatedComment,
-            variables: {
-              parentId: postId,
-            },
-          });
         },
       });
       setUpdateInputVal('');

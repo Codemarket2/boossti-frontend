@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Grid, IconButton, Button } from '@material-ui/core/';
-import SendIcon from '@material-ui/icons/Send';
+import { Grid, Button } from '@material-ui/core/';
 import dynamic from 'next/dynamic';
 
 const RichTextarea = dynamic(() => import('../common/RichTextarea'), { ssr: false });
@@ -31,21 +30,9 @@ export default function CommentInput({
     <div>
       <Grid container alignItems="center" spacing={1}>
         <Grid item lg={12} md={12} sm={12} xs={12}>
-          {/* <TextField
-            variant="standard"
-            value={inputVal}
-            onChange={handleChange}
-            label={label}
-            fullWidth
-            name="comment"
-            onKeyPress={_handleKeyPress}
-          /> */}
           <RichTextarea onChange={handleChange} value={inputVal} />
         </Grid>
         <Grid item lg={12} md={12} sm={12} xs={12}>
-          {/* <IconButton onClick={onClick} data-testid="add-comment">
-            <SendIcon color="primary" />
-          </IconButton> */}
           <Button onClick={onClick} data-testid="add-comment" variant="contained" color="primary">
             add comment
           </Button>
