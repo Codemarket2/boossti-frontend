@@ -6,6 +6,7 @@ import {
 import FieldsSkeleton from './FieldsSkeleton';
 import ErrorLoading from '../common/ErrorLoading';
 import Tooltip from '@material-ui/core/Tooltip';
+import Badge from '@material-ui/core/Badge';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import AddCircle from '@material-ui/icons/AddCircle';
@@ -20,6 +21,7 @@ import { Fragment } from 'react';
 import FieldValueCard from './FieldValueCard';
 import { useRouter } from 'next/router';
 import { convertToSlug } from './LeftNavigation';
+import Carousel from 'react-material-ui-carousel';
 
 const initialState = {
   showForm: false,
@@ -79,7 +81,9 @@ function ItemOneFields({ field, parentId, showAuthor = true, guest }) {
         variant="h5"
         className="d-flex align-items-center"
         id={convertToSlug(field.label)}>
-        {field.label}
+        <Badge badgeContent={data.getFieldValuesByItem.data.length} color="primary">
+          {field.label}
+        </Badge>
         {showAddButton && (
           <Tooltip title="Add New Value">
             <IconButton
@@ -91,29 +95,58 @@ function ItemOneFields({ field, parentId, showAuthor = true, guest }) {
         )}
       </Typography>
       {state.showForm && <FieldValueForm {...formProps} />}
-      {data.getFieldValuesByItem.data.map((fieldValue, index) => (
-        <Fragment key={fieldValue._id}>
-          {state.selectedFieldValue &&
-          state.selectedFieldValue._id === fieldValue._id &&
-          state.edit ? (
-            <FieldValueForm edit {...formProps} fieldValue={fieldValue} />
-          ) : (
-            <FieldValueCard
-              fieldValue={fieldValue}
-              field={field}
-              showAction={currentUserId === fieldValue.createdBy._id || admin}
-              showAuthor={showAuthor || showAddButton}
-              onSelect={(target, fieldValue) =>
-                setState({
-                  ...state,
-                  showMenu: target,
-                  selectedFieldValue: fieldValue,
-                })
-              }
-            />
-          )}
-        </Fragment>
-      ))}
+      {data.getFieldValuesByItem.data.length > 1 ? (
+        <Carousel autoPlay={false} animation="slide" navButtonsAlwaysVisible={true}>
+          {data.getFieldValuesByItem.data.map((fieldValue, index) => (
+            <div className="px-5" key={fieldValue._id}>
+              {state.selectedFieldValue &&
+              state.selectedFieldValue._id === fieldValue._id &&
+              state.edit ? (
+                <FieldValueForm edit {...formProps} fieldValue={fieldValue} />
+              ) : (
+                <FieldValueCard
+                  fieldValue={fieldValue}
+                  field={field}
+                  showAction={currentUserId === fieldValue.createdBy._id || admin}
+                  showAuthor={showAuthor || showAddButton}
+                  onSelect={(target, fieldValue) =>
+                    setState({
+                      ...state,
+                      showMenu: target,
+                      selectedFieldValue: fieldValue,
+                    })
+                  }
+                />
+              )}
+            </div>
+          ))}
+        </Carousel>
+      ) : (
+        data.getFieldValuesByItem.data.map((fieldValue, index) => (
+          <Fragment key={fieldValue._id}>
+            {state.selectedFieldValue &&
+            state.selectedFieldValue._id === fieldValue._id &&
+            state.edit ? (
+              <FieldValueForm edit {...formProps} fieldValue={fieldValue} />
+            ) : (
+              <FieldValueCard
+                fieldValue={fieldValue}
+                field={field}
+                showAction={currentUserId === fieldValue.createdBy._id || admin}
+                showAuthor={showAuthor || showAddButton}
+                onSelect={(target, fieldValue) =>
+                  setState({
+                    ...state,
+                    showMenu: target,
+                    selectedFieldValue: fieldValue,
+                  })
+                }
+              />
+            )}
+          </Fragment>
+        ))
+      )}
+
       <CRUDMenu
         show={state.showMenu}
         onClose={() => setState(initialState)}
