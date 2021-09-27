@@ -52,6 +52,7 @@
     "react-icons": "4.2.0",
     "react-lazy-load-image-component": "1.5.0",
     "react-leaflet": "2.7.0",
+    "react-material-ui-carousel": "^2.3.5",
     "react-mentions": "^4.3.0",
     "react-player": "^2.9.0",
     "react-redux": "7.2.4",

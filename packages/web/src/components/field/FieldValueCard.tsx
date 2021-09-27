@@ -38,16 +38,19 @@ export default function FieldValueCard({
   const [state, setState] = useState({
     expandedItem: false,
     itemId: '',
-    expandedComments: false,
   });
 
-  const handleExpandClick = () => {
-    setState({ ...state, expandedComments: !state.expandedComments });
-  };
-
   return (
-    <Card variant="outlined">
-      {field.multipleValues ? (
+    <Card variant="outlined" style={{ border: 'none' }}>
+      <div className="d-flex justify-content-end">
+        <IconButton
+          className="position-absolute"
+          aria-label="settings"
+          onClick={(event) => onSelect(event.target, fieldValue)}>
+          <MoreVertIcon />
+        </IconButton>
+      </div>
+      {/* {field.multipleValues ? (
         showAuthor && (
           <CardHeader
             avatar={<Avatar alt={fieldValue.createdBy.name} src={fieldValue.createdBy.picture} />}
@@ -75,7 +78,7 @@ export default function FieldValueCard({
             <MoreVertIcon />
           </IconButton>
         </div>
-      )}
+      )} */}
       <CardContent>
         {field.fieldType === 'date' ? (
           moment(fieldValue.value).format('L')
@@ -122,21 +125,7 @@ export default function FieldValueCard({
           </Typography>
         )}
       </CardContent>
-      <CardActions disableSpacing>
-        <CommentLikeShare parentId={fieldValue._id} />
-        {/* <Button
-          color="primary"
-          onClick={handleExpandClick}
-          size="small"
-          startIcon={<ChatBubbleIcon />}>
-          Comments
-        </Button> */}
-      </CardActions>
-      {/* <Collapse in={state.expandedComments} timeout="auto" unmountOnExit>
-        <CardContent>
-          <Comment postId={fieldValue._id} />
-        </CardContent>
-      </Collapse> */}
+      <CommentLikeShare parentId={fieldValue._id} />
     </Card>
   );
 }

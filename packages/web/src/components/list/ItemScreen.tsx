@@ -163,7 +163,7 @@ export default function Screen({
       )}
       <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
         <Paper
-          style={{ width: matches || hideBreadcrumbs ? '100%' : '84%' }}
+          style={{ width: matches || hideBreadcrumbs ? '100%' : '84%', border: 'none' }}
           variant="outlined"
           className="p-2 pb-5">
           {state.fieldName === 'title' ? (
