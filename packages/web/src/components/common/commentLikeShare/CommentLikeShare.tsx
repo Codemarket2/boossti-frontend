@@ -1,10 +1,9 @@
 import { Fragment, useState } from 'react';
-import { Button, IconButton, Divider, Grid } from '@material-ui/core';
-import ModeCommentIcon from '@material-ui/icons/ModeComment';
+import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
 import ShareIcon from '@material-ui/icons/Share';
-
+import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 import { useGetActionCounts } from '@frontend/shared/hooks/comment/getComment';
-import { useGetLikes } from '@frontend/shared/hooks/like/getLike';
 import ErrorLoading from '../ErrorLoading';
 import LikeModal from '../../like/LikeModal';
 import Like from '../../like/Like';
@@ -38,12 +37,9 @@ export default function CommentLikeShare({ parentId }: ICommentLikeShare) {
         <div>
           {data?.getActionCounts?.likeCount && data.getActionCounts.likeCount > 0 ? (
             <>
-              <Button
-                onClick={handleOpenLikeModal}
-                color="primary"
-                className="text-capitalize ml-n3 p-0 m-0">
-                {data.getActionCounts.likeCount} Likes
-              </Button>
+              <span onClick={handleOpenLikeModal} style={{ cursor: 'pointer' }} className="mr-2">
+                {data.getActionCounts.likeCount}
+              </span>
               {open && (
                 <LikeModal
                   parentId={parentId}
@@ -55,17 +51,15 @@ export default function CommentLikeShare({ parentId }: ICommentLikeShare) {
               )}
             </>
           ) : null}
-          <Button
-            onClick={toggleCommentSection}
-            color="primary"
-            className="text-capitalize p-0 m-0">
-            {data?.getActionCounts?.commentCount && data.getActionCounts.commentCount > 0
-              ? `${data.getActionCounts.commentCount} Comments`
-              : 'Comment'}
-          </Button>
-          <Button color="primary" className="text-capitalize p-0 m-0">
-            {'Share'}
-          </Button>
+          <IconButton onClick={toggleCommentSection}>
+            <ChatBubbleIcon />
+          </IconButton>
+          {data?.getActionCounts?.commentCount && data.getActionCounts.commentCount > 0 ? (
+            <span className="mr-2">{data.getActionCounts.commentCount}</span>
+          ) : null}
+          <IconButton>
+            <ShareIcon />
+          </IconButton>
         </div>
       </div>
       {showCommentSection && (
