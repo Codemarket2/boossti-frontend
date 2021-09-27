@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import * as yup from 'yup';
 import { v4 as uuid } from 'uuid';
 import { useFormik } from 'formik';
@@ -8,6 +8,7 @@ import { GET_LIST_ITEMS_BY_TYPE, GET_LIST_ITEM_BY_SLUG } from '../../graphql/que
 import { IHooksProps } from '../../types/common';
 import { fileUpload } from '../../utils/fileUpload';
 import { omitTypename } from '../../utils/omitTypename';
+import { ADDED_LIST_ITEM, UPDATED_LIST_ITEM } from '../../graphql/subscription/list';
 
 const defaultGetListItems = { limit: 100, page: 1 };
 
@@ -16,10 +17,27 @@ export function useGetListItemsByType({ types = [] }: any) {
     search: '',
     showSearch: false,
   });
-  const { data, error, loading } = useQuery(GET_LIST_ITEMS_BY_TYPE, {
+  const { data, error, loading, subscribeToMore } = useQuery(GET_LIST_ITEMS_BY_TYPE, {
     variables: { ...defaultGetListItems, types: types, search: state.search },
     fetchPolicy: 'cache-and-network',
   });
+
+  useEffect(() => {
+    subscribeToMore({
+      document: ADDED_LIST_ITEM,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+        const newListItem = subscriptionData.data.AddedListItem;
+        return {
+          ...prev,
+          getListItems: {
+            ...prev.getListItems,
+            data: [newListItem, ...prev.getListItems.data],
+          },
+        };
+      },
+    });
+  }, []);
 
   // console.log('data, error, loading', data, error, loading);
 
@@ -27,10 +45,31 @@ export function useGetListItemsByType({ types = [] }: any) {
 }
 
 export function useGetListItemBySlug({ slug }: any) {
-  const { data, error, loading } = useQuery(GET_LIST_ITEM_BY_SLUG, {
+  const { data, error, loading, subscribeToMore } = useQuery(GET_LIST_ITEM_BY_SLUG, {
     variables: { slug },
     fetchPolicy: 'cache-and-network',
   });
+
+  useEffect(() => {
+    subscribeToMore({
+      document: UPDATED_LIST_ITEM,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+        const newListItem = subscriptionData.data.updatedListItem;
+        let newData = { ...prev.getListItemBySlug };
+        const isUpdated = prev.getListItemBySlug._id === newListItem._id;
+        newData = isUpdated ? newListItem : newData;
+        return {
+          ...prev,
+          getListItemBySlug: {
+            ...prev.getListItemBySlug,
+            data: newData,
+          },
+        };
+      },
+    });
+  }, [data]);
+
   return { data, error, loading };
 }
 
