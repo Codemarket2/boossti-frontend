@@ -46,7 +46,12 @@ export default function CommentInput({
           {/* <IconButton onClick={onClick} data-testid="add-comment">
             <SendIcon color="primary" />
           </IconButton> */}
-          <Button onClick={onClick} data-testid="add-comment" variant="contained" color="primary">
+          <Button
+            size="small"
+            onClick={onClick}
+            data-testid="add-comment"
+            variant="contained"
+            color="primary">
             add comment
           </Button>
         </Grid>

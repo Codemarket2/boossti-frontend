@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { GET_COMMENTS_BY_PARENT_ID, GET_ACTION_COUNTS } from '../../graphql/query/comment';
 import { useQuery } from '@apollo/client';
 

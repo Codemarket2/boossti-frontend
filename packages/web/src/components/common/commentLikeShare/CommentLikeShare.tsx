@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { Button, IconButton, Divider, Grid } from '@material-ui/core';
 import ModeCommentIcon from '@material-ui/icons/ModeComment';
 import ShareIcon from '@material-ui/icons/Share';
@@ -15,7 +15,6 @@ interface ICommentLikeShare {
 }
 export default function CommentLikeShare({ parentId }: ICommentLikeShare) {
   const { data, error } = useGetActionCounts(parentId);
-  const { data: likeData, error: likeError } = useGetLikes(parentId);
   // like modal state & effect
   const [open, setOpen] = useState(false);
   const handleOpenLikeModal = () => {
@@ -32,50 +31,49 @@ export default function CommentLikeShare({ parentId }: ICommentLikeShare) {
   };
 
   return (
-    <>
-      <Grid container lg={12} md={12} sm={12}>
-        {!data || error || !data!.getActionCounts ? (
-          <ErrorLoading error={error} />
-        ) : (
-          <>
-            <Like parentId={parentId} likedByUser={data!.getActionCounts!.likedByUser} />
-            {!likeData || !likeData!.getLikesByParentId!.data || likeError ? (
-              <ErrorLoading error={likeError} />
-            ) : (
-              <>
-                <Button onClick={handleOpenLikeModal} color="primary">
-                  Likes &nbsp;{likeData!.getLikesByParentId!.data!.length}
-                </Button>
+    <div className="w-100">
+      {error && <ErrorLoading error={error} />}
+      <div className="d-flex align-items-center">
+        <Like parentId={parentId} likedByUser={data?.getActionCounts?.likedByUser || false} />
+        <div>
+          {data?.getActionCounts?.likeCount && data.getActionCounts.likeCount > 0 ? (
+            <>
+              <Button
+                onClick={handleOpenLikeModal}
+                color="primary"
+                className="text-capitalize ml-n3 p-0 m-0">
+                {data.getActionCounts.likeCount} Likes
+              </Button>
+              {open && (
                 <LikeModal
+                  parentId={parentId}
                   handleOpenLikeModal={handleOpenLikeModal}
                   handleCloseLikeModal={handleCloseLikeModal}
-                  totalLike={data!.getActionCounts!.likeCount}
+                  totalLike={data.getActionCounts.likeCount}
                   open={open}
-                  data={likeData!.getLikesByParentId!.data}
                 />
-              </>
-            )}
-            <Button onClick={toggleCommentSection} color="primary">
-              Comment &nbsp;
-              {/* <ModeCommentIcon /> */}
-              {data!.getActionCounts!.commentCount && data!.getActionCounts!.commentCount}
-            </Button>
-            <Button color="primary">
-              Share
-              {/* <ShareIcon /> */}
-            </Button>
-          </>
-        )}
-
-        <Grid item lg={12} md={12} sm={12}>
-          {showCommentSection && (
-            <>
-              <Divider />
-              <Comment postId={parentId} />
+              )}
             </>
-          )}
-        </Grid>
-      </Grid>
-    </>
+          ) : null}
+          <Button
+            onClick={toggleCommentSection}
+            color="primary"
+            className="text-capitalize p-0 m-0">
+            {data?.getActionCounts?.commentCount && data.getActionCounts.commentCount > 0
+              ? `${data.getActionCounts.commentCount} Comments`
+              : 'Comment'}
+          </Button>
+          <Button color="primary" className="text-capitalize p-0 m-0">
+            {'Share'}
+          </Button>
+        </div>
+      </div>
+      {showCommentSection && (
+        <Fragment>
+          <Divider />
+          <Comment postId={parentId} />
+        </Fragment>
+      )}
+    </div>
   );
 }
