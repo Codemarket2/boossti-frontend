@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
@@ -10,14 +11,55 @@ import {
 } from '../../graphql/mutation/field';
 import { fileUpload } from '../../utils/fileUpload';
 import { omitTypename } from '../../utils/omitTypename';
+import { UPDATED_FIELD_VALUE, ADDED_FIELD_VALUE } from '../../graphql/subscription/field';
 
 const defaultQueryVariables = { limit: 1000, page: 1 };
 
 export function useGetFieldValuesByItem({ parentId, field }: any) {
-  const { data, error, loading } = useQuery(GET_FIELD_VALUES_BY_FIELD, {
+  const { data, error, loading, subscribeToMore } = useQuery(GET_FIELD_VALUES_BY_FIELD, {
     variables: { ...defaultQueryVariables, parentId, field },
     fetchPolicy: 'cache-and-network',
   });
+  useEffect(() => {
+    subscribeToMore({
+      document: ADDED_FIELD_VALUE,
+      variables: {
+        parentId,
+      },
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+        const newFieldValue = subscriptionData.data.addedFieldValue;
+        return {
+          ...prev,
+          getFieldValuesByItem: {
+            ...prev.getFieldValuesByItem,
+            data: [newFieldValue, ...prev.getFieldValuesByItem.data],
+          },
+        };
+      },
+    });
+  }, []);
+
+  useEffect(() => {
+    subscribeToMore({
+      document: UPDATED_FIELD_VALUE,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+        const newFieldValue = subscriptionData.data.updatedFieldValue;
+        let newData = { ...prev.getFieldValuesByItem };
+        const isUpdated = prev.getFieldValuesByItem._id === newFieldValue._id;
+        newData = isUpdated ? newFieldValue : newData;
+        return {
+          ...prev,
+          getFieldValuesByItem: {
+            ...prev.getFieldValuesByItem,
+            data: newData,
+          },
+        };
+      },
+    });
+  }, [data]);
+
   // console.log('data, error, loading', data, error, loading);
   return { data, error, loading };
 }
