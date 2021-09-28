@@ -16,7 +16,7 @@ export const CREATE_LIKE = gql`
 `;
 
 export const DELETE_LIKE = gql`
-  mutation MyMutation($_id: ID!) {
-    deleteLike(_id: $_id)
+  mutation MyMutation($parentId: ID!) {
+    deleteLike(parentId: $parentId)
   }
 `;

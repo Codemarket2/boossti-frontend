@@ -3,11 +3,9 @@ import parse from 'html-react-parser';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
 import { Comment } from 'semantic-ui-react';
-
 import { useGetLikes } from '@frontend/shared/hooks/like/getLike';
 import { useGetActionCounts } from '@frontend/shared/hooks/comment/getComment';
 import CommentUI from './Comment';
-import ErrorLoading from '../common/ErrorLoading';
 import Like from '../like/Like';
 import LikeModal from '../like/LikeModal';
 
@@ -88,63 +86,40 @@ export default function DisplayCard({
               handleOpenLikeModal={handleOpenLikeModal}
               handleCloseLikeModal={handleCloseLikeModal}
               totalLike={likeData!.getLikesByParentId!.data!.length}
-              data={likeData!.getLikesByParentId!.data}
+              parentId={commentedUser._id}
             />
           )}
           <Comment.Actions>
-            {error || !payload || !payload!.getActionCounts ? (
-              <ErrorLoading error={error} />
-            ) : (
-              <Comment.Action>
-                <Like
-                  likedByUser={payload!.getActionCounts!.likedByUser}
-                  parentId={commentedUser._id}
-                  commentLike={true}
-                />
-              </Comment.Action>
-            )}
-            {!likeData || !likeData!.getLikesByParentId!.data || likeError ? (
-              <ErrorLoading error={likeError} />
-            ) : (
+            <Comment.Action>
+              <Like
+                likedByUser={actionCountData?.getActionCounts?.likedByUser}
+                parentId={commentedUser._id}
+                commentLike={true}
+              />
+            </Comment.Action>
+            {actionCountData?.getActionCounts?.likeCount ? (
               <Comment.Action onClick={handleOpenLikeModal}>
-                Like &nbsp;
-                {likeData!.getLikesByParentId!.data!.length === 0
-                  ? ''
-                  : likeData!.getLikesByParentId!.data!.length}
+                {actionCountData?.getActionCounts?.likeCount} Likes
               </Comment.Action>
-            )}
-
+            ) : null}
             {currentUserId === commentedUser!.createdBy!._id ? (
               <>
                 {showIcon && (
-                  <>
-                    {error || !payload || !payload!.getActionCounts ? (
-                      <ErrorLoading error={error} />
-                    ) : (
-                      <Comment.Action>
-                        <span
-                          style={{
-                            fontWeight: showReply ? 'bold' : 'normal',
-                            color: showReply && 'rgb(17, 82, 147)',
-                          }}
-                          onClick={() => {
-                            setShowReply(!showReply);
-                            setShowCommentInput(true);
-                          }}>
-                          Comment &nbsp;
-                          {payload &&
-                            (payload!.getActionCounts!.commentCount === 0 ? (
-                              ''
-                            ) : (
-                              <b>
-                                {payload!.getActionCounts!.commentCount &&
-                                  payload!.getActionCounts!.commentCount}
-                              </b>
-                            ))}
-                        </span>
-                      </Comment.Action>
-                    )}
-                  </>
+                  <Comment.Action>
+                    <span
+                      style={{
+                        fontWeight: showReply ? 'bold' : 'normal',
+                        color: showReply && 'rgb(17, 82, 147)',
+                      }}
+                      onClick={() => {
+                        setShowReply(!showReply);
+                        setShowCommentInput(true);
+                      }}>
+                      {actionCountData?.getActionCounts?.commentCount
+                        ? `${actionCountData.getActionCounts.commentCount} Comments`
+                        : 'Comment'}
+                    </span>
+                  </Comment.Action>
                 )}
                 <Comment.Action>
                   <span onClick={() => setEdit(true)}>Edit</span>
@@ -166,32 +141,21 @@ export default function DisplayCard({
               <>
                 {showIcon && (
                   <Comment.Action>
-                    {error || !payload || !payload!.getActionCounts ? (
-                      <ErrorLoading error={error} />
-                    ) : (
-                      <Comment.Action>
-                        <span
-                          style={{
-                            fontWeight: showReply ? 'bold' : 'normal',
-                            color: showReply && 'rgb(17, 82, 147)',
-                          }}
-                          onClick={() => {
-                            setShowReply(!showReply);
-                            setShowCommentInput(true);
-                          }}>
-                          Comment
-                          {payload &&
-                            (payload!.getActionCounts!.commentCount === 0 ? (
-                              ''
-                            ) : (
-                              <b>
-                                {payload!.getActionCounts!.commentCount &&
-                                  payload!.getActionCounts!.commentCount}
-                              </b>
-                            ))}
-                        </span>
-                      </Comment.Action>
-                    )}
+                    <Comment.Action>
+                      <span
+                        style={{
+                          fontWeight: showReply ? 'bold' : 'normal',
+                          color: showReply && 'rgb(17, 82, 147)',
+                        }}
+                        onClick={() => {
+                          setShowReply(!showReply);
+                          setShowCommentInput(true);
+                        }}>
+                        {actionCountData?.getActionCounts?.commentCount
+                          ? `${actionCountData.getActionCounts.commentCount} Comments`
+                          : 'Comment'}
+                      </span>
+                    </Comment.Action>
                     <Comment.Action>
                       <span data-testid="btn-delete" onClick={() => console.log('share')}>
                         Share

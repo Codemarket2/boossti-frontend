@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { GET_LIKES_BY_PARENT_ID } from '../../graphql/query/like';
 import { useQuery } from '@apollo/client';
 

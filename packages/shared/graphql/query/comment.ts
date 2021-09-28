@@ -24,9 +24,7 @@ export const GET_ACTION_COUNTS = gql`
     getActionCounts(parentId: $parentId) {
       commentCount
       likeCount
-      likedByUser {
-        like
-      }
+      likedByUser
     }
   }
 `;

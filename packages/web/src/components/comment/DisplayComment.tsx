@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-
 import { useUpdateComment } from '@frontend/shared/hooks/comment/createComment';
 import CommentInput from './CommentInput';
 import DisplayCard from './DisplayCard';

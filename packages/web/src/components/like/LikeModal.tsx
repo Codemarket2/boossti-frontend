@@ -1,6 +1,4 @@
-import React, { useState } from 'react';
 import {
-  Button,
   Avatar,
   List,
   ListItem,
@@ -9,23 +7,22 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogContentText,
-  Typography,
   IconButton,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
+import { useGetLikes } from '@frontend/shared/hooks/like/getLike';
+import ErrorLoading from '../common/ErrorLoading';
 
 interface ILikeModal {
   open: boolean;
   handleOpenLikeModal: any;
   handleCloseLikeModal: any;
   totalLike: number;
-  data: any;
+  parentId: string;
 }
 
 const BootstrapDialogTitle = (props) => {
   const { children, onClose, ...other } = props;
-
   return (
     <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
       {children}
@@ -50,21 +47,24 @@ export default function LikeModal({
   handleOpenLikeModal,
   handleCloseLikeModal,
   totalLike,
-  data,
+  parentId,
 }: ILikeModal) {
+  const { data, error } = useGetLikes(parentId);
   return (
-    <div>
-      <Dialog
-        fullWidth={true}
-        open={open}
-        onClose={handleCloseLikeModal}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description">
-        <BootstrapDialogTitle id="customized-dialog-title" onClose={handleCloseLikeModal}>
-          {totalLike && totalLike} Like
-        </BootstrapDialogTitle>
+    <Dialog
+      fullWidth={true}
+      open={open}
+      onClose={handleCloseLikeModal}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description">
+      <BootstrapDialogTitle id="customized-dialog-title" onClose={handleCloseLikeModal}>
+        {totalLike && totalLike} Like
+      </BootstrapDialogTitle>
+      {!data || error ? (
+        <ErrorLoading error={error} />
+      ) : (
         <DialogContent dividers>
-          {data!.map((user) => (
+          {data.getLikesByParentId.data.map((user) => (
             <List key={user._id}>
               <ListItem>
                 <ListItemAvatar>
@@ -75,7 +75,7 @@ export default function LikeModal({
             </List>
           ))}
         </DialogContent>
-      </Dialog>
-    </div>
+      )}
+    </Dialog>
   );
 }

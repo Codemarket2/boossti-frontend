@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import { Button, IconButton, Divider, Grid } from '@material-ui/core';
-import ModeCommentIcon from '@material-ui/icons/ModeComment';
+import { Fragment, useState } from 'react';
+import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
 import ShareIcon from '@material-ui/icons/Share';
-
+import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 import { useGetActionCounts } from '@frontend/shared/hooks/comment/getComment';
-import { useGetLikes } from '@frontend/shared/hooks/like/getLike';
 import ErrorLoading from '../ErrorLoading';
 import LikeModal from '../../like/LikeModal';
 import Like from '../../like/Like';
@@ -15,7 +14,6 @@ interface ICommentLikeShare {
 }
 export default function CommentLikeShare({ parentId }: ICommentLikeShare) {
   const { data, error } = useGetActionCounts(parentId);
-  const { data: likeData, error: likeError } = useGetLikes(parentId);
   // like modal state & effect
   const [open, setOpen] = useState(false);
   const handleOpenLikeModal = () => {
@@ -32,50 +30,44 @@ export default function CommentLikeShare({ parentId }: ICommentLikeShare) {
   };
 
   return (
-    <>
-      <Grid container lg={12} md={12} sm={12}>
-        {!data || error || !data!.getActionCounts ? (
-          <ErrorLoading error={error} />
-        ) : (
-          <>
-            <Like parentId={parentId} likedByUser={data!.getActionCounts!.likedByUser} />
-            {!likeData || !likeData!.getLikesByParentId!.data || likeError ? (
-              <ErrorLoading error={likeError} />
-            ) : (
-              <>
-                <Button onClick={handleOpenLikeModal} color="primary">
-                  Likes &nbsp;{likeData!.getLikesByParentId!.data!.length}
-                </Button>
+    <div className="w-100">
+      {error && <ErrorLoading error={error} />}
+      <div className="d-flex align-items-center">
+        <Like parentId={parentId} likedByUser={data?.getActionCounts?.likedByUser || false} />
+        <div>
+          {data?.getActionCounts?.likeCount && data.getActionCounts.likeCount > 0 ? (
+            <>
+              <span onClick={handleOpenLikeModal} style={{ cursor: 'pointer' }} className="mr-2">
+                {data.getActionCounts.likeCount}
+              </span>
+              {open && (
                 <LikeModal
+                  parentId={parentId}
                   handleOpenLikeModal={handleOpenLikeModal}
                   handleCloseLikeModal={handleCloseLikeModal}
-                  totalLike={data!.getActionCounts!.likeCount}
+                  totalLike={data.getActionCounts.likeCount}
                   open={open}
-                  data={likeData!.getLikesByParentId!.data}
                 />
-              </>
-            )}
-            <Button onClick={toggleCommentSection} color="primary">
-              Comment &nbsp;
-              {/* <ModeCommentIcon /> */}
-              {data!.getActionCounts!.commentCount && data!.getActionCounts!.commentCount}
-            </Button>
-            <Button color="primary">
-              Share
-              {/* <ShareIcon /> */}
-            </Button>
-          </>
-        )}
-
-        <Grid item lg={12} md={12} sm={12}>
-          {showCommentSection && (
-            <>
-              <Divider />
-              <Comment postId={parentId} />
+              )}
             </>
-          )}
-        </Grid>
-      </Grid>
-    </>
+          ) : null}
+          <IconButton onClick={toggleCommentSection}>
+            <ChatBubbleIcon />
+          </IconButton>
+          {data?.getActionCounts?.commentCount && data.getActionCounts.commentCount > 0 ? (
+            <span className="mr-2">{data.getActionCounts.commentCount}</span>
+          ) : null}
+          <IconButton>
+            <ShareIcon />
+          </IconButton>
+        </div>
+      </div>
+      {showCommentSection && (
+        <Fragment>
+          <Divider />
+          <Comment postId={parentId} />
+        </Fragment>
+      )}
+    </div>
   );
 }
