@@ -11,7 +11,7 @@ import {
   UPDATE_FIELD_POSITION,
 } from '../../graphql/mutation/field';
 import { IHooksProps } from '../../types/common';
-import { ADDED_FIELD, UPDATED_FIELD } from '../../graphql/subscription/field';
+import { ADDED_FIELD } from '../../graphql/subscription/field';
 
 const defaultQueryVariables = { limit: 1000, page: 1 };
 
@@ -29,23 +29,6 @@ export function useGetFieldsByType({ parentId }: any) {
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev;
         const newField = subscriptionData.data.addedField;
-        return {
-          ...prev,
-          getFieldsByType: {
-            ...prev.getFieldsByType,
-            data: [newField, ...prev.getFieldsByType.data],
-          },
-        };
-      },
-    });
-  }, []);
-
-  useEffect(() => {
-    subscribeToMore({
-      document: UPDATED_FIELD,
-      updateQuery: (prev, { subscriptionData }) => {
-        if (!subscriptionData.data) return prev;
-        const newField = subscriptionData.data.updatedField;
         let newData = { ...prev.getFieldsByType };
         const isUpdated = prev.getFieldsByType._id === newField._id;
         newData = isUpdated ? newField : newData;

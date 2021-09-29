@@ -9,7 +9,7 @@ import { IHooksProps } from '../../types/common';
 import { fileUpload } from '../../utils/fileUpload';
 import { omitTypename } from '../../utils/omitTypename';
 import { ADDED_LIST_ITEM, UPDATED_LIST_ITEM } from '../../graphql/subscription/list';
-
+import { updateLikeInCache } from '../like/createLike';
 const defaultGetListItems = { limit: 100, page: 1 };
 
 export function useGetListItemsByType({ types = [] }: any) {
@@ -22,22 +22,30 @@ export function useGetListItemsByType({ types = [] }: any) {
     fetchPolicy: 'cache-and-network',
   });
 
+  // console.log('data, loading, error', data, loading, error);
+
   useEffect(() => {
     subscribeToMore({
       document: ADDED_LIST_ITEM,
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev;
-        const newListItem = subscriptionData.data.AddedListItem;
-        return {
-          ...prev,
-          getListItems: {
-            ...prev.getListItems,
-            data: [newListItem, ...prev.getListItems.data],
-          },
-        };
+        const newListItem = subscriptionData.data.addedListItem;
+        let newData = { ...prev.getListItems };
+        if (types[0] === newListItem.addedListItem.types[0]._id) {
+          updateLikeInCache(newListItem._id, 1);
+          const isUpdated = prev.getListItems._id === newListItem._id;
+          newData = isUpdated ? newListItem : newData;
+          return {
+            ...prev,
+            getListItems: {
+              ...prev.getListItems,
+              data: newData,
+            },
+          };
+        }
       },
     });
-  }, []);
+  }, [data]);
 
   // console.log('data, error, loading', data, error, loading);
 
@@ -49,25 +57,31 @@ export function useGetListItemBySlug({ slug }: any) {
     variables: { slug },
     fetchPolicy: 'cache-and-network',
   });
-
+  const [subscribed, setSubscribed] = useState(false);
   useEffect(() => {
-    subscribeToMore({
-      document: UPDATED_LIST_ITEM,
-      updateQuery: (prev, { subscriptionData }) => {
-        if (!subscriptionData.data) return prev;
-        const newListItem = subscriptionData.data.updatedListItem;
-        let newData = { ...prev.getListItemBySlug };
-        const isUpdated = prev.getListItemBySlug._id === newListItem._id;
-        newData = isUpdated ? newListItem : newData;
-        return {
-          ...prev,
-          getListItemBySlug: {
-            ...prev.getListItemBySlug,
-            data: newData,
-          },
-        };
-      },
-    });
+    if (data && data.getListItems && !subscribed) {
+      subscribeToMore({
+        document: UPDATED_LIST_ITEM,
+        variables: {
+          _id: data.getListItemBySlug._id,
+        },
+        updateQuery: (prev, { subscriptionData }) => {
+          if (!subscriptionData.data) return prev;
+          const newListItem = subscriptionData.data.updatedListItem;
+          let newData = { ...prev.getListItemBySlug };
+          const isUpdated = prev.getListItemBySlug._id === newListItem._id;
+          newData = isUpdated ? newListItem : newData;
+          return {
+            ...prev,
+            getListItemBySlug: {
+              ...prev.getListItemBySlug,
+              data: newData,
+            },
+          };
+        },
+      });
+    }
+    setSubscribed(true);
   }, [data]);
 
   return { data, error, loading };

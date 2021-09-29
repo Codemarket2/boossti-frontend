@@ -16,8 +16,8 @@ export const ADDED_LIST_TYPE = gql`
 `;
 
 export const UPDATED_LIST_TYPE = gql`
-  subscription MySubscription {
-    updateListType {
+  subscription MySubscription($_id: ID!) {
+    updatedListType(_id: $_id) {
       _id
       title
       slug
@@ -32,7 +32,7 @@ export const UPDATED_LIST_TYPE = gql`
 
 export const ADDED_LIST_ITEM = gql`
   subscription MySubscription {
-    AddedListItem {
+    addedListItem {
       _id
       title
       slug
@@ -47,8 +47,8 @@ export const ADDED_LIST_ITEM = gql`
 `;
 
 export const UPDATED_LIST_ITEM = gql`
-  subscription MySubscription {
-    updatedListItem {
+  subscription MySubscription($_id: ID!) {
+    updatedListItem(_id: $_id) {
       _id
       title
       slug

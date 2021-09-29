@@ -18,7 +18,7 @@ export function useCreateLike(parentId: string) {
   };
 }
 
-const updateLikeInCache = async (parentId: string, countValue: number) => {
+export const updateLikeInCache = async (parentId: string, countValue: number) => {
   const { getActionCounts } = await apolloClient.readQuery({
     query: GET_ACTION_COUNTS,
     variables: { parentId },
