@@ -34,8 +34,8 @@ export default function DisplayComment({
   }, []);
 
   const handleOnChangeUpdate = (e) => {
-    let updateVal = e.target.value;
-    setUpdateInputVal(updateVal);
+    // let updateVal = e.target.value;
+    setUpdateInputVal(e);
   };
 
   return (

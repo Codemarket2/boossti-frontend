@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
@@ -10,14 +11,55 @@ import {
   UPDATE_FIELD_POSITION,
 } from '../../graphql/mutation/field';
 import { IHooksProps } from '../../types/common';
+import { ADDED_FIELD, UPDATED_FIELD } from '../../graphql/subscription/field';
 
 const defaultQueryVariables = { limit: 1000, page: 1 };
 
 export function useGetFieldsByType({ parentId }: any) {
-  const { data, error, loading } = useQuery(GET_FIELDS_BY_TYPE, {
+  const { data, error, loading, subscribeToMore } = useQuery(GET_FIELDS_BY_TYPE, {
     variables: { ...defaultQueryVariables, parentId },
     fetchPolicy: 'cache-and-network',
   });
+  useEffect(() => {
+    subscribeToMore({
+      document: ADDED_FIELD,
+      variables: {
+        parentId,
+      },
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+        const newField = subscriptionData.data.addedField;
+        return {
+          ...prev,
+          getFieldsByType: {
+            ...prev.getFieldsByType,
+            data: [newField, ...prev.getFieldsByType.data],
+          },
+        };
+      },
+    });
+  }, []);
+
+  useEffect(() => {
+    subscribeToMore({
+      document: UPDATED_FIELD,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+        const newField = subscriptionData.data.updatedField;
+        let newData = { ...prev.getFieldsByType };
+        const isUpdated = prev.getFieldsByType._id === newField._id;
+        newData = isUpdated ? newField : newData;
+        return {
+          ...prev,
+          getFieldsByType: {
+            ...prev.getFieldsByType,
+            data: newData,
+          },
+        };
+      },
+    });
+  }, [data]);
+
   return { data, error, loading };
 }
 

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { v4 as uuid } from 'uuid';
@@ -8,6 +8,7 @@ import { GET_LIST_TYPES, GET_LIST_TYPE_BY_SLUG } from '../../graphql/query/list'
 import { IHooksProps } from '../../types/common';
 import { fileUpload } from '../../utils/fileUpload';
 import { omitTypename } from '../../utils/omitTypename';
+import { ADDED_LIST_TYPE, UPDATED_LIST_TYPE } from '../../graphql/subscription/list';
 
 const defaultQueryVariables = { limit: 100, page: 1 };
 
@@ -27,19 +28,53 @@ export function useGetListTypes(queryVariables?: IQueryProps) {
   const page =
     queryVariables && queryVariables.page ? queryVariables.page : defaultQueryVariables.page;
 
-  const { data, error, loading } = useQuery(GET_LIST_TYPES, {
+  const { data, error, loading, subscribeToMore } = useQuery(GET_LIST_TYPES, {
     variables: { limit, page, search: state.search },
     fetchPolicy: 'cache-and-network',
   });
-
+  useEffect(() => {
+    subscribeToMore({
+      document: ADDED_LIST_TYPE,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+        const newListType = subscriptionData.data.addedListType;
+        return {
+          ...prev,
+          getListTypes: {
+            ...prev.getListTypes,
+            data: [newListType, ...prev.getListTypes.data],
+          },
+        };
+      },
+    });
+  }, []);
   return { data, error, loading, state, setState };
 }
 
 export function useGetListTypeBySlug({ slug }: any) {
-  const { data, error, loading } = useQuery(GET_LIST_TYPE_BY_SLUG, {
+  const { data, error, loading, subscribeToMore } = useQuery(GET_LIST_TYPE_BY_SLUG, {
     variables: { slug },
     fetchPolicy: 'cache-and-network',
   });
+  useEffect(() => {
+    subscribeToMore({
+      document: UPDATED_LIST_TYPE,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+        const newListType = subscriptionData.data.updateListType;
+        let newData = { ...prev.getListTypeBySlug };
+        const isUpdated = prev.getListTypeBySlug._id === newListType._id;
+        newData = isUpdated ? newListType : newData;
+        return {
+          ...prev,
+          getListTypeBySlug: {
+            ...prev.getListTypeBySlug,
+            data: newData,
+          },
+        };
+      },
+    });
+  }, [data]);
   return { data, error, loading };
 }
 

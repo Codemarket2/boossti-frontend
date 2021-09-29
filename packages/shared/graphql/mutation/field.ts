@@ -18,6 +18,7 @@ export const CREATE_FIELD = gql`
       oneUserMultipleValues: $oneUserMultipleValues
     ) {
       _id
+      parentId
       position
       label
       fieldType
@@ -50,6 +51,7 @@ export const UPDATE_FIELD = gql`
       oneUserMultipleValues: $oneUserMultipleValues
     ) {
       _id
+      parentId
       position
       label
       fieldType
