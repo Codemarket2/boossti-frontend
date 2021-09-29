@@ -19,7 +19,6 @@ import { onAlert } from '../../utils/alert';
 import { useSelector } from 'react-redux';
 import { Fragment } from 'react';
 import FieldValueCard from './FieldValueCard';
-import { useRouter } from 'next/router';
 import { convertToSlug } from './LeftNavigation';
 import Carousel from 'react-material-ui-carousel';
 
@@ -118,6 +117,9 @@ function ItemOneFields({ field, parentId, showAuthor = true, guest }) {
                   }
                 />
               )}
+              <p className="text-center w-100">
+                {index + 1}/{data.getFieldValuesByItem.data.length}
+              </p>
             </div>
           ))}
         </Carousel>
@@ -146,7 +148,6 @@ function ItemOneFields({ field, parentId, showAuthor = true, guest }) {
           </Fragment>
         ))
       )}
-
       <CRUDMenu
         show={state.showMenu}
         onClose={() => setState(initialState)}
@@ -164,18 +165,14 @@ export default function ItemsFieldsMap({
   showAuthor = true,
   guest = false,
   setFields = (arg: any) => {},
+  pushToAnchor = () => {},
 }) {
   const { data, loading, error } = useGetFieldsByType({ parentId: typeId });
-  const router = useRouter();
+
   useEffect(() => {
     if (data && data.getFieldsByType) {
       setFields(data.getFieldsByType.data);
-
-      if (router.asPath.includes('#')) {
-        setTimeout(() => {
-          router.push(router.asPath);
-        }, 1500);
-      }
+      pushToAnchor();
     }
   }, [data]);
 

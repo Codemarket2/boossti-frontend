@@ -35,6 +35,7 @@ interface IProps {
   hideBreadcrumbs?: boolean;
   setItem?: any;
   onSlugUpdate?: (arg: string) => void;
+  pushToAnchor?: () => void;
 }
 
 export default function Screen({
@@ -43,6 +44,7 @@ export default function Screen({
   hideBreadcrumbs = false,
   setItem,
   onSlugUpdate,
+  pushToAnchor,
 }: IProps) {
   const router = useRouter();
   const theme = useTheme();
@@ -238,6 +240,7 @@ export default function Screen({
             </>
           )}
           <FieldValues
+            pushToAnchor={pushToAnchor}
             parentId={data.getListItemBySlug._id}
             typeId={data.getListItemBySlug.types[0]._id}
             setFields={(fields) => setState({ ...state, fields })}
