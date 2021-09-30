@@ -6,6 +6,7 @@ import DisplayCard from './DisplayCard';
 
 interface IDisplayComment {
   postId: string;
+  threadId: string;
   handleDelete: any;
   commentedUser: any;
   index: number;
@@ -16,8 +17,9 @@ export default function DisplayComment({
   handleDelete,
   commentedUser,
   index,
+  threadId,
 }: IDisplayComment) {
-  const { attributes, admin } = useSelector(({ auth }: any) => auth);
+  const { attributes } = useSelector(({ auth }: any) => auth);
   const currentUserId = attributes['custom:_id'];
 
   const [edit, setEdit] = useState(false);
@@ -51,6 +53,7 @@ export default function DisplayComment({
           commentedUser={commentedUser}
           handleDelete={handleDelete}
           index={index}
+          threadId={threadId}
           postId={postId}
           setEdit={setEdit}
           showIcon={true}
