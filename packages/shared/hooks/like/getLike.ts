@@ -12,28 +12,11 @@ export const useGetLikes = (parentId: string) => {
     fetchPolicy: 'cache-and-network',
   });
 
-  // useEffect(() => {
-  //   subscribeToMore({
-  //     document: ADDED_LIKE,
-  //     updateQuery: (prev, { subscriptionData }) => {
-  //       if (!subscriptionData.data) return prev;
-  //       const newLike = subscriptionData.data.addedLike;
-  //       return {
-  //         ...prev,
-  //         getLikesByParentId: {
-  //           ...prev.getLikesByParentId,
-  //           data: { newLike, ...prev.getLikesByParentId.data },
-  //         },
-  //       };
-  //     },
-  //   });
-  // }, [data]);
   return { data, error, loading };
 };
 
 export const useLikeSubscription = () => {
   const { data: likeData, loading: likeLoading, error: likeError } = useSubscription(ADDED_LIKE);
-  // console.log('data, loading, error', data, loading, error);
 
   useEffect(() => {
     if (likeData && likeData.addedLike) {
