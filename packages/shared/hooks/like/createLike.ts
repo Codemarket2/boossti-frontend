@@ -19,22 +19,24 @@ export function useCreateLike(parentId: string) {
 }
 
 export const updateLikeInCache = async (parentId: string, countValue: number) => {
-  const { getActionCounts } = await apolloClient.readQuery({
+  const data = await apolloClient.readQuery({
     query: GET_ACTION_COUNTS,
     variables: { parentId },
   });
-  const newData = {
-    getActionCounts: {
-      ...getActionCounts,
-      likeCount: getActionCounts.likeCount + countValue,
-      likedByUser: countValue === 1 ? true : false,
-    },
-  };
-  await apolloClient.writeQuery({
-    query: GET_ACTION_COUNTS,
-    variables: { parentId },
-    data: newData,
-  });
+  if (data && data.getActionCounts) {
+    const newData = {
+      getActionCounts: {
+        ...data.getActionCounts,
+        likeCount: data.getActionCounts.likeCount + countValue,
+        likedByUser: countValue === 1 ? true : false,
+      },
+    };
+    await apolloClient.writeQuery({
+      query: GET_ACTION_COUNTS,
+      variables: { parentId },
+      data: newData,
+    });
+  }
 };
 
 export function useDeleteLike(parentId) {

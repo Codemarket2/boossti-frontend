@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { useQuery, useSubscription } from '@apollo/client';
+import { useQuery } from '@apollo/client';
+
 import { GET_POSTS, GET_USER_POSTS } from '../../graphql/query/post';
 import { ADDED_POST } from '../../graphql/subscription/post';
-import { ADDED_LIKE } from '../../graphql/subscription/like';
 import { guestClient } from '../../graphql';
-import { updateLikeInCache } from '../like/createLike';
+import { useLikeSubscription } from '../like/getLike';
 
 export function useGetMyFeeds() {
   const [state, setState] = useState({ search: '', showSearch: false });
@@ -12,19 +12,7 @@ export function useGetMyFeeds() {
     variables: { limit: 20, page: 1, search: state.search },
     fetchPolicy: 'cache-and-network',
   });
-  const { data: likeData, loading: likeLoading, error: likeError } = useSubscription(ADDED_LIKE);
-  // console.log('data, loading, error', data, loading, error);
-
-  useEffect(() => {
-    if (likeData && likeData.addedLike) {
-      const currentPost = data.getPosts.data.filter((post) => {
-        post._id === likeData.addedLike.parentId;
-      });
-      if (currentPost.length > 0) {
-        updateLikeInCache(likeData.addedLike.parentId, 1);
-      }
-    }
-  }, [likeData]);
+  useLikeSubscription();
 
   useEffect(() => {
     subscribeToMore({
@@ -50,7 +38,7 @@ export function useGetMyFeeds() {
         };
       },
     });
-  }, []);
+  }, [data]);
 
   return { data, loading, error, state, setState };
 }
