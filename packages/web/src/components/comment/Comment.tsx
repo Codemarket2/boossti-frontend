@@ -1,32 +1,37 @@
-import React, { useState, useEffect } from 'react';
-import { CircularProgress } from '@material-ui/core/';
-
+import Skeleton from '@material-ui/lab/Skeleton';
 import { useCreateComment, useDeleteComment } from '@frontend/shared/hooks/comment/createComment';
 import { useGetComments } from '@frontend/shared/hooks/comment/getComment';
 import CommentInput from './CommentInput';
 import DisplayComment from './DisplayComment';
 import ErrorLoading from '../common/ErrorLoading';
+import Backdrop from '../common/Backdrop';
+
 interface IComment {
   postId: string;
+  threadId: string;
   label?: string;
   showInput?: boolean;
 }
 
-export default function Comment({ postId, label, showInput = true }: IComment) {
-  const { handleSave, inputVal, setInputVal, loading: submitLoading } = useCreateComment(postId);
+export default function Comment({ postId, label, showInput = true, threadId }: IComment) {
+  const { handleSave, inputVal, setInputVal, loading: submitLoading } = useCreateComment(
+    postId,
+    threadId,
+  );
   const { handleDelete, loading: deleteLoading } = useDeleteComment();
   const { data, error } = useGetComments(postId);
 
   const handleChange = (e) => {
-    // let newVal = e.target.value;
-
     setInputVal(e);
   };
 
   return (
     <>
       {error || !data || !data.getCommentsByParentID ? (
-        <ErrorLoading error={error} />
+        <ErrorLoading error={error}>
+          <Skeleton height={60} />
+          <Skeleton height={60} />
+        </ErrorLoading>
       ) : (
         data &&
         data?.getCommentsByParentID?.data?.map((commentedUser, index) => (
@@ -34,6 +39,7 @@ export default function Comment({ postId, label, showInput = true }: IComment) {
             <DisplayComment
               key={commentedUser._id}
               postId={postId}
+              threadId={threadId}
               commentedUser={commentedUser}
               index={index}
               handleDelete={handleDelete}
@@ -43,13 +49,14 @@ export default function Comment({ postId, label, showInput = true }: IComment) {
       )}
       {showInput && (
         <CommentInput
+          loading={submitLoading}
           handleChange={handleChange}
           onClick={handleSave}
           inputVal={inputVal}
-          postId={postId}
           label={label}
         />
       )}
+      <Backdrop open={deleteLoading || submitLoading} />
     </>
   );
 }
