@@ -6,7 +6,6 @@ import {
 import FieldsSkeleton from './FieldsSkeleton';
 import ErrorLoading from '../common/ErrorLoading';
 import Tooltip from '@material-ui/core/Tooltip';
-import Badge from '@material-ui/core/Badge';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import AddCircle from '@material-ui/icons/AddCircle';
@@ -31,7 +30,7 @@ const initialState = {
   expandId: '',
 };
 
-function ItemOneFields({ field, parentId, showAuthor = true, guest }) {
+function ItemOneFields({ field, parentId, showAuthor = true, guest, setFieldValueCount }) {
   const [state, setState] = useState(initialState);
   const { attributes, admin } = useSelector(({ auth }: any) => auth);
   const currentUserId = attributes['custom:_id'];
@@ -57,6 +56,12 @@ function ItemOneFields({ field, parentId, showAuthor = true, guest }) {
     onCancel: () => setState(initialState),
   };
 
+  useEffect(() => {
+    if (data && data.getFieldValuesByItem) {
+      setFieldValueCount(data.getFieldValuesByItem.data.length);
+    }
+  }, [data]);
+
   if (!error && (!data || !data.getFieldValuesByItem)) {
     return <FieldsSkeleton />;
   } else if (error) {
@@ -80,9 +85,7 @@ function ItemOneFields({ field, parentId, showAuthor = true, guest }) {
         variant="h5"
         className="d-flex align-items-center"
         id={convertToSlug(field.label)}>
-        <Badge badgeContent={data.getFieldValuesByItem.data.length} color="primary">
-          {field.label}
-        </Badge>
+        {field.label}
         {showAddButton && (
           <Tooltip title="Add New Value">
             <IconButton
@@ -95,7 +98,28 @@ function ItemOneFields({ field, parentId, showAuthor = true, guest }) {
       </Typography>
       {state.showForm && <FieldValueForm {...formProps} />}
       {data.getFieldValuesByItem.data.length > 1 ? (
-        <Carousel autoPlay={false} animation="slide" navButtonsAlwaysVisible={true}>
+        <Carousel
+          NextIcon={
+            <img
+              style={{ width: 50, transform: 'rotate(180deg)' }}
+              src="https://images.zerodown.com//website/foyer/static/images/carousel-arrow.png?tr=w-128,h-128,pr-true,f-auto"
+            />
+          }
+          PrevIcon={
+            <img
+              style={{ width: 50 }}
+              src="https://images.zerodown.com//website/foyer/static/images/carousel-arrow.png?tr=w-128,h-128,pr-true,f-auto"
+            />
+          }
+          navButtonsProps={{
+            style: {
+              padding: 0,
+              backgroundColor: 'inherit',
+            },
+          }}
+          autoPlay={false}
+          animation="slide"
+          navButtonsAlwaysVisible={true}>
           {data.getFieldValuesByItem.data.map((fieldValue, index) => (
             <div className="px-5" key={fieldValue._id}>
               {state.selectedFieldValue &&
@@ -165,6 +189,7 @@ export default function ItemsFieldsMap({
   showAuthor = true,
   guest = false,
   setFields = (arg: any) => {},
+  setFieldValueCount = (index: number, value: number) => {},
   pushToAnchor = () => {},
 }) {
   const { data, loading, error } = useGetFieldsByType({ parentId: typeId });
@@ -184,13 +209,14 @@ export default function ItemsFieldsMap({
 
   return (
     <>
-      {data.getFieldsByType.data.map((field) => (
+      {data.getFieldsByType.data.map((field, index) => (
         <ItemOneFields
           parentId={parentId}
           field={field}
           key={field._id}
           showAuthor={showAuthor}
           guest={guest}
+          setFieldValueCount={(value) => setFieldValueCount(index, value)}
         />
       ))}
     </>

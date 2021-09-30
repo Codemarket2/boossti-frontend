@@ -13,6 +13,7 @@ interface IDisplayComment {
   commentedUser: any;
   handleDelete: any;
   setEdit: any;
+  threadId: string;
   postId: string;
   index: number;
   showIcon?: boolean;
@@ -23,6 +24,7 @@ export default function DisplayCard({
   handleDelete,
   setEdit,
   postId,
+  threadId,
   index,
 }: IDisplayComment) {
   const { attributes } = useSelector(({ auth }: any) => auth);
@@ -169,6 +171,7 @@ export default function DisplayCard({
         </Comment.Content>
         {showReply && (
           <CommentUI
+            threadId={threadId}
             postId={commentedUser._id}
             label="Add Reply on Comment"
             showInput={showCommentInput}

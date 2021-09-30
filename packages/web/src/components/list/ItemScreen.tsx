@@ -52,6 +52,7 @@ export default function Screen({
   const setting = useSelector(({ setting }: any) => setting);
 
   const [state, setState] = useState({ fieldName: '', fields: [] });
+  const [fieldValueCount, setFieldValueCount] = useState({});
   const deleteCallBack = () => {
     router.push(`/types/${typeSlug}`);
   };
@@ -108,6 +109,13 @@ export default function Screen({
     return <NotFound />;
   }
 
+  const leftNavigationProps = {
+    parentId: data.getListItemBySlug.types[0]._id,
+    slug: `/types/${data.getListItemBySlug.types[0].slug}/${data.getListItemBySlug.slug}`,
+    fields: state.fields,
+    fieldValueCount,
+  };
+
   return (
     <>
       {!hideBreadcrumbs && (
@@ -138,9 +146,7 @@ export default function Screen({
               <LeftNavigation
                 style={{ maxHeight: '40vh' }}
                 onClick={handleHideBottomSheet}
-                fields={state.fields}
-                parentId={data.getListItemBySlug.types[0]._id}
-                slug={`/types/${data.getListItemBySlug.types[0].slug}/${data.getListItemBySlug.slug}`}
+                {...leftNavigationProps}
               />
             </SwipeableDrawer>
           </Hidden>
@@ -157,9 +163,7 @@ export default function Screen({
               overflowX: 'hidden',
               overflowY: 'auto',
             }}
-            fields={state.fields}
-            parentId={data.getListItemBySlug.types[0]._id}
-            slug={`/types/${data.getListItemBySlug.types[0].slug}/${data.getListItemBySlug.slug}`}
+            {...leftNavigationProps}
           />
         </Hidden>
       )}
@@ -244,6 +248,9 @@ export default function Screen({
             parentId={data.getListItemBySlug._id}
             typeId={data.getListItemBySlug.types[0]._id}
             setFields={(fields) => setState({ ...state, fields })}
+            setFieldValueCount={(index, value) =>
+              setFieldValueCount({ ...fieldValueCount, [index]: value })
+            }
           />
         </Paper>
       </div>

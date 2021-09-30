@@ -1,23 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import produce from 'immer';
-
 import { CREATE_COMMENT, DELETE_COMMENT, UPDATE_COMMENT } from '../../graphql/mutation/comment';
 import { GET_COMMENTS_BY_PARENT_ID } from '../../graphql/query/comment';
 
-export function useCreateComment(postId: string) {
+export function useCreateComment(postId: string, threadId: string) {
   const [createCommentMutation, { loading }] = useMutation(CREATE_COMMENT);
   const [inputVal, setInputVal] = useState('');
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (inputVal === '') {
       return alert('Enter some text');
     }
     if (inputVal !== '') {
-      createCommentMutation({
+      await createCommentMutation({
         variables: {
           body: inputVal,
           parentId: postId,
+          threadId,
         },
         update: (store, { data }) => {
           try {
@@ -45,6 +45,7 @@ export function useCreateComment(postId: string) {
       setInputVal('');
     }
   };
+
   return {
     inputVal,
     setInputVal,

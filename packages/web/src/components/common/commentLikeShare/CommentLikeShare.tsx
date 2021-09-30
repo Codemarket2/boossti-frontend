@@ -65,7 +65,7 @@ export default function CommentLikeShare({ parentId }: ICommentLikeShare) {
       {showCommentSection && (
         <Fragment>
           <Divider />
-          <Comment postId={parentId} />
+          <Comment postId={parentId} threadId={parentId} />
         </Fragment>
       )}
     </div>
