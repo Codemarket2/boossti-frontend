@@ -1,7 +1,12 @@
 import { useQuery } from '@apollo/client';
 import { useEffect } from 'react';
 
-import { GET_COMMENTS_BY_PARENT_ID, GET_ACTION_COUNTS } from '../../graphql/query/comment';
+import {
+  GET_COMMENTS_BY_PARENT_ID,
+  GET_ACTION_COUNTS,
+  GET_COMMENT,
+} from '../../graphql/query/comment';
+import { useLikeSubscription } from '../like/getLike';
 import { ADDED_COMMENT } from '../../graphql/subscription/comment';
 
 export const useGetComments = (postId: string) => {
@@ -48,6 +53,17 @@ export const useGetComments = (postId: string) => {
     error,
     loading,
   };
+};
+
+export const useGetComment = (_id) => {
+  const { data, error, loading } = useQuery(GET_COMMENT, {
+    variables: {
+      _id,
+    },
+    fetchPolicy: 'cache-and-network',
+  });
+  useLikeSubscription();
+  return { data, error, loading };
 };
 
 export const useGetActionCounts = (parentId: string) => {

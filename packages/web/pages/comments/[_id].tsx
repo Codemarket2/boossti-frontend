@@ -1,8 +1,9 @@
 import { useRouter } from 'next/router';
+import CommentScreen from '../../src/screens/CommentScreen';
 
 export default function Page() {
   const router = useRouter();
   const { _id } = router.query;
 
-  return <div>{_id} - comment</div>;
+  return <CommentScreen _id={_id} />;
 }

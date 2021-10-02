@@ -3,6 +3,8 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import ShareIcon from '@material-ui/icons/Share';
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
+import { useSelector } from 'react-redux';
+
 import { useGetActionCounts } from '@frontend/shared/hooks/comment/getComment';
 import ErrorLoading from '../ErrorLoading';
 import LikeModal from '../../like/LikeModal';
@@ -11,8 +13,16 @@ import Comment from '../../comment/Comment';
 
 interface ICommentLikeShare {
   parentId: string;
+  showDivider?: boolean;
+  children?: React.ReactNode;
 }
-export default function CommentLikeShare({ parentId }: ICommentLikeShare) {
+export default function CommentLikeShare({
+  parentId,
+  showDivider = true,
+  children,
+}: ICommentLikeShare) {
+  const { attributes } = useSelector(({ auth }: any) => auth);
+  const currentUserId = attributes['custom:_id'];
   const { data, error } = useGetActionCounts(parentId);
   // like modal state & effect
   const [open, setOpen] = useState(false);
@@ -57,14 +67,16 @@ export default function CommentLikeShare({ parentId }: ICommentLikeShare) {
           {data?.getActionCounts?.commentCount && data.getActionCounts.commentCount > 0 ? (
             <span className="mr-2">{data.getActionCounts.commentCount}</span>
           ) : null}
+
           <IconButton>
             <ShareIcon />
           </IconButton>
+          {children}
         </div>
       </div>
       {showCommentSection && (
         <Fragment>
-          <Divider />
+          {showDivider && <Divider />}
           <Comment postId={parentId} threadId={parentId} />
         </Fragment>
       )}
