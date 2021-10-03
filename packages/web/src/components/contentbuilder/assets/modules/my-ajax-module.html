@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <base href="../../">
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <style>
+        html { height:100%; margin:15px;}
+        body { margin:0;height:100%;overflow:hidden;font-family:Sans-Serif;font-size:14px;letter-spacing:1px;line-height:1.7; }
+
+        .inptext {width:90%;font-size:14px;letter-spacing:1px;border:none;padding:10px;border:rgba(127, 127, 127, 0.32) 1px solid;}
+        .inptext:focus {outline:none}
+
+        label {display:flex;flex-direction:column;width:100%;margin:0 10px 15px}
+    </style>
+</head>
+<body>
+
+    <label>Title:
+        <input id="txtTitle" class="inptext" type="text" value="" />
+    </label>
+
+    <label>Request URL:
+        <input id="txtRequestUrl" class="inptext" type="text" value="" />
+    </label>
+  
+    <script>
+        var activeModule = parent._cb.getActiveModule();
+
+        var settings = parent._cb.getModuleSettings();
+        if (settings != 'undefined') {
+            try {
+                var json = JSON.parse(settings);
+                document.querySelector("#txtTitle").value = json.title; 
+                document.querySelector("#txtRequestUrl").value = json.requestUrl; 
+            } catch (e) { }
+        }
+        
+        document.querySelector('#txtTitle').addEventListener('blur', function(e){
+            generateHtml();
+        });
+        document.querySelector('#txtRequestUrl').addEventListener('blur', function(e){
+            generateHtml();
+        });
+
+        generateHtml();
+
+        function generateHtml() {
+            
+            var html = '<h2>' + document.querySelector("#txtTitle").value + '</h2>' +
+                '<div id="{id}"></div>' +
+                '<scr' + 'ipt>' +
+                    'var docReady = function (fn) {' +
+                        'var stateCheck = setInterval(function () {' +
+                            'if (document.readyState !== "complete") return;' +
+                            'clearInterval(stateCheck);' +
+                            'try { fn() } catch (e) { }' +
+                        '}, 1);' +
+                    '};' +
+                    'docReady(function () {' +
+                        '' +
+                        'var xmlhttp = new XMLHttpRequest();' +
+                        'xmlhttp.onreadystatechange = function() {' +
+                            'if (xmlhttp.readyState == XMLHttpRequest.DONE) {' + 
+                                'if (xmlhttp.status == 200) {' +
+                                    'var jsonObj = JSON.parse(xmlhttp.responseText);' +
+                                    'var randomMessagesArray = jsonObj.randomMessages;' +
+                                    'var randomIndex = Math.floor(Math.random()*randomMessagesArray.length);' +
+                                    'var messageObj = randomMessagesArray[randomIndex];' +
+                                    'document.getElementById("{id}").innerHTML = messageObj.message;' +
+                                    'document.getElementById("{id}").style.color = messageObj.color;' +
+                                '} else {' +
+                                    'console.log("Status error: " + xmlhttp.status);' +
+                                '}' +
+                            '}' +
+                        '};' +
+                        'xmlhttp.open("GET", "' + document.querySelector("#txtRequestUrl").value + '", true);' +
+                        'xmlhttp.send();' +
+                        '' +
+                    '});' +
+                '</scr' + 'ipt>';
+
+            html = html.replace(/{id}/g, parent._cb.makeId()); // replace {id} with an auto generated unique Id (to prevent conflict).
+
+            parent._cb.setModuleHtml(html); 
+
+            /*
+                {
+                    title: "Sample Content From Ajax Request", 
+                    requestUrl: "assets/sampledata.txt"
+                }
+            */
+           var settings = '{"title": "' + document.querySelector("#txtTitle").value + '", "requestUrl": "' + document.querySelector("#txtRequestUrl").value + '"}';
+            parent._cb.setModuleSettings(settings); 
+        }
+
+    </script>
+
+</body>
+</html>
