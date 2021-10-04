@@ -8,7 +8,6 @@ import BottomBar from './BottomBar';
 import Container from './Container';
 import { DivContainer } from './Container';
 import Paper from '@material-ui/core/Paper';
-
 import styled from 'styled-components';
 
 const StyledPaper = styled(Paper)`

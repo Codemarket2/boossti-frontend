@@ -6,7 +6,6 @@ const StyledContainer = styled(Container)`
   padding-top: ${(props) => props.theme.spacing(2)}px;
   ${(props) => props.theme.breakpoints.down('sm')} {
     padding-bottom: 60px;
-    /* padding-top: 4px; */
   }
   video {
     width: 100% !important;
@@ -19,7 +18,6 @@ export const DivContainer = styled.div`
   padding-top: ${(props) => props.theme.spacing(2)}px;
   ${(props) => props.theme.breakpoints.down('sm')} {
     padding-bottom: 60px;
-    /* padding-top: 4px; */
   }
   video {
     width: 100% !important;

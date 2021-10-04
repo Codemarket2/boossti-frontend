@@ -134,7 +134,12 @@ export default function Screen({
             </Breadcrumbs>
             <ActionButtons
               hideEdit
-              onDelete={() => handleDelete(data.getListItemBySlug._id, deleteCallBack)}
+              onDelete={() => {
+                const answer = confirm('Are you sure you want to delete?');
+                if (answer) {
+                  handleDelete(data.getListItemBySlug._id, deleteCallBack);
+                }
+              }}
             />
           </div>
           <Hidden smUp>
@@ -182,7 +187,7 @@ export default function Screen({
             />
           ) : (
             <>
-              <Typography id="title">
+              <Typography id="title" style={matches ? { paddingTop: 50 } : {}}>
                 Title
                 <Tooltip title="Edit Title">
                   <IconButton onClick={() => onEdit('title')}>
@@ -209,7 +214,7 @@ export default function Screen({
             />
           ) : (
             <>
-              <Typography id="description">
+              <Typography id="description" style={matches ? { paddingTop: 50 } : {}}>
                 Description
                 <Tooltip title="Edit Description">
                   <IconButton onClick={() => onEdit('description')}>
@@ -232,7 +237,10 @@ export default function Screen({
             />
           ) : (
             <>
-              <Typography className="d-flex align-items-center" id="media">
+              <Typography
+                className="d-flex align-items-center"
+                id="media"
+                style={matches ? { paddingTop: 50 } : {}}>
                 Media
                 <Tooltip title="Edit Media">
                   <IconButton onClick={() => onEdit('media')}>
