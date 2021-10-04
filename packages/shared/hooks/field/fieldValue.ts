@@ -20,28 +20,29 @@ export function useGetFieldValuesByItem({ parentId, field }: any) {
     variables: { ...defaultQueryVariables, parentId, field },
     fetchPolicy: 'cache-and-network',
   });
-  useEffect(() => {
-    subscribeToMore({
-      document: ADDED_FIELD_VALUE,
-      variables: {
-        parentId,
-      },
-      updateQuery: (prev, { subscriptionData }) => {
-        if (!subscriptionData.data) return prev;
-        const newFieldValue = subscriptionData.data.addedFieldValue;
-        let newData = { ...prev.getFieldValuesByItem };
-        const isUpdated = prev.getFieldValuesByItem._id === newFieldValue._id;
-        newData = isUpdated ? newFieldValue : newData;
-        return {
-          ...prev,
-          getFieldValuesByItem: {
-            ...prev.getFieldValuesByItem,
-            data: [newFieldValue, ...prev.getFieldValuesByItem.data],
-          },
-        };
-      },
-    });
-  }, [data]);
+
+  // useEffect(() => {
+  //   subscribeToMore({
+  //     document: ADDED_FIELD_VALUE,
+  //     variables: {
+  //       parentId,
+  //     },
+  //     updateQuery: (prev, { subscriptionData }) => {
+  //       if (!subscriptionData.data) return prev;
+  //       const newFieldValue = subscriptionData.data.addedFieldValue;
+  //       let newData = { ...prev.getFieldValuesByItem };
+  //       const isUpdated = prev.getFieldValuesByItem._id === newFieldValue._id;
+  //       newData = isUpdated ? newFieldValue : newData;
+  //       return {
+  //         ...prev,
+  //         getFieldValuesByItem: {
+  //           ...prev.getFieldValuesByItem,
+  //           data: [newFieldValue, ...prev.getFieldValuesByItem.data],
+  //         },
+  //       };
+  //     },
+  //   });
+  // }, [data]);
 
   // console.log('data, error, loading', data, error, loading);
   return { data, error, loading };
