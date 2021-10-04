@@ -120,7 +120,10 @@ export default function FieldValueCard({
           </Typography>
         )}
       </CardContent>
-      <CommentLikeShare parentId={fieldValue._id} />
+      <CommentLikeShare
+        parentId={fieldValue._id}
+        typeSlug={`/types/${field.typeId.slug}/${fieldValue.itemId.slug}`}
+      />
     </Card>
   );
 }

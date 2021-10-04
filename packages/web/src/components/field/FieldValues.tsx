@@ -11,7 +11,7 @@ import Divider from '@material-ui/core/Divider';
 import AddCircle from '@material-ui/icons/AddCircle';
 import FieldValueForm from './FieldValueForm';
 import IconButton from '@material-ui/core/IconButton';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CRUDMenu from '../common/CRUDMenu';
 import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
@@ -20,6 +20,7 @@ import { Fragment } from 'react';
 import FieldValueCard from './FieldValueCard';
 import { convertToSlug } from './LeftNavigation';
 import Carousel from 'react-material-ui-carousel';
+import Share from '../share/Share';
 
 const initialState = {
   showForm: false,
@@ -87,13 +88,18 @@ function ItemOneFields({ field, parentId, showAuthor = true, guest, setFieldValu
         id={convertToSlug(field.label)}>
         {field.label}
         {showAddButton && (
-          <Tooltip title="Add New Value">
-            <IconButton
-              color="primary"
-              onClick={() => setState({ ...initialState, showForm: true })}>
-              <AddCircle />
+          <React.Fragment>
+            <Tooltip title="Add New Value">
+              <IconButton
+                color="primary"
+                onClick={() => setState({ ...initialState, showForm: true })}>
+                <AddCircle />
+              </IconButton>
+            </Tooltip>
+            <IconButton color="primary">
+              <Share itemSlug={convertToSlug(field.label)} />
             </IconButton>
-          </Tooltip>
+          </React.Fragment>
         )}
       </Typography>
       {state.showForm && <FieldValueForm {...formProps} />}

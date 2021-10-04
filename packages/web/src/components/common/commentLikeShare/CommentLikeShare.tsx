@@ -10,16 +10,19 @@ import ErrorLoading from '../ErrorLoading';
 import LikeModal from '../../like/LikeModal';
 import Like from '../../like/Like';
 import Comment from '../../comment/Comment';
+import Share from '../../share/Share';
 
 interface ICommentLikeShare {
   parentId: string;
   showDivider?: boolean;
   children?: React.ReactNode;
+  typeSlug?: string;
 }
 export default function CommentLikeShare({
   parentId,
   showDivider = true,
   children,
+  typeSlug,
 }: ICommentLikeShare) {
   const { attributes } = useSelector(({ auth }: any) => auth);
   const currentUserId = attributes['custom:_id'];
@@ -69,7 +72,8 @@ export default function CommentLikeShare({
           ) : null}
 
           <IconButton>
-            <ShareIcon />
+            {/* <ShareIcon /> */}
+            <Share typeSlug={typeSlug} />
           </IconButton>
           {children}
         </div>
