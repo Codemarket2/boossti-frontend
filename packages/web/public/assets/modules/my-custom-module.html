@@ -1,0 +1,115 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <base href="../../">
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <style>
+        html { height:100%; }
+        body { margin:20px;height:100%;overflow:hidden;font-family:Sans-Serif;font-size:17px;line-height:1.7; }
+    </style>
+</head>
+<body>
+
+    <label for="chkVariable1">
+        <input id="chkVariable1" type="checkbox" checked="checked" /> Variable 1
+    </label>
+
+    <label>Variable 2:
+        <input id="txtVariable2" class="inptext" type="text" style="width:120px;" value="Hello World" />
+    </label>
+  
+    <script>
+        var activeModule = parent._cb.getActiveModule();
+
+        // A module snippet has:
+        //  1. content (html) and 
+        //  2. settings (custom variables) => this is optional
+        // In this page, we will read and modify custom variables and also generate and render content (html) for the Module snippet.
+        // This page is opened when you click settings icon on a Module snippet. 
+
+        // Custom variables are data that can be used for any purpose. For example, on a slider snippet, custom variables are used to store the url of the images and also other slider settings that user can change.
+        // Ini this example, we have a checkbox and an input text as example on how to interact with custom variables.
+        // (that's why custom variables are stored in a data attribute named data-settings on the snippet, because custom variables can contain settings that controls the snippet content)
+
+        // Get custom variables by calling getModuleSettings() method. Basically, this function reads data-settings attribute defined on snippet => see minimalist-blocks/content.js
+        var settings = parent._cb.getModuleSettings();
+        if (settings != 'undefined') {
+            try {
+                var json = JSON.parse(settings);
+
+                // Then display custom variable values on the checkbox and input text
+                document.querySelector("#chkVariable1").checked = json.variable1; // variable1: true,
+                document.querySelector("#txtVariable2").value = json.variable2; // variable2: "Hello World"  
+
+            } catch (e) { }
+        }
+        
+        // When user make any change to the value, we call generateHtml() function.
+        // generateHtml() function generates HTML content and render it to the snippet.
+        document.querySelector('#chkVariable1').addEventListener('click', function(e){
+            generateHtml();
+        });
+        document.querySelector('#txtVariable2').addEventListener('blur', function(e){
+            generateHtml();
+        });
+
+        generateHtml();
+
+
+        // Generate html content. 
+        // Here you can use the custom variables to control how you generate the HTML. Ini this example,
+        // we will just display their values.
+        // Also you can embed custom javascript to do anything.
+        // Here you can also create a unique ID {id} so that multiple snippets won't be a problem.
+        function generateHtml() {
+
+            var html = '<h2>My Custom Module - Id: <span id="{id}">{id}</span></h2>' +
+                    '<p>' +
+                        'My variable 1: ' + document.querySelector("#chkVariable1").checked + '<br>' +
+                        'My variable 2: ' + document.querySelector("#txtVariable2").value + 
+                    '</p>' +
+
+                    //  EXTRA: Below is a subblock (still experimental). It is an editable area that you can place inside a module snippet.
+                    '<div class="is-subblock" data-subblock style="border:#efefef 1px solid;padding: 10px 30px;margin: 15px 0;background: #fff;">' +
+                        '....This area will be ignored and will be filled with actual content edited by user....' +
+                    '</div>' +
+                '' +
+
+                // Custom Javascript
+                '<scr' + 'ipt>' +
+                    'var docReady = function (fn) {' +
+                        'var stateCheck = setInterval(function () {' +
+                            'if (document.readyState !== "complete") return;' +
+                            'clearInterval(stateCheck);' +
+                            'try { fn() } catch (e) { }' +
+                        '}, 1);' +
+                    '};' +
+                    'docReady(function () {' + // Always place your code inside docReady (in case your script interact with a javascript include)
+                        'document.querySelector("#{id}").style.color = "red";' +
+                    '});' +
+                '</scr' + 'ipt>'
+
+            html = html.replace(/{id}/g, parent._cb.makeId()); // replace {id} with an auto generated unique Id (to prevent conflict).
+
+            // After generate the html, put the html on the snippet by calling setModuleHtml() method. This will render the content.
+            parent._cb.setModuleHtml(html); 
+
+            // We also put the custom variables on the snippet by calling setModuleSettings() method.
+            /*
+                {
+                    variable1: true, 
+                    variable2: "Hello World"
+                }
+            */
+            var settings = '{"variable1":' + document.querySelector("#chkVariable1").checked + ',"variable2":"' + document.querySelector("#txtVariable2").value + '"}';
+            
+            parent._cb.setModuleSettings(settings); 
+        }
+
+    </script>
+
+</body>
+</html>

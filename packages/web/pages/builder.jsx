@@ -1,12 +1,12 @@
 import dynamic from 'next/dynamic';
-const Edit = dynamic(() => import('../src/components/contentbuilder/Builder'), {
+const BuilderScreen = dynamic(() => import('../src/components/contentbuilder/BuilderScreen'), {
   ssr: false,
 });
 
 export default function Builder() {
   return (
     <div>
-      <Edit />
+      <BuilderScreen />
     </div>
   );
 }

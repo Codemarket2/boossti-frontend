@@ -19,13 +19,13 @@ import Head from 'next/head';
 import { light, dark } from '../src/components/home/theme/palette';
 
 // // CSS from node modules
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'react-lazy-load-image-component/src/effects/opacity.css';
-import 'leaflet/dist/leaflet.css';
-import 'swiper/css/swiper.min.css';
-import 'aos/dist/aos.css';
-import '../src/assets/css/ckeditor.css';
-import 'semantic-ui-css/semantic.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'react-lazy-load-image-component/src/effects/opacity.css';
+// import 'leaflet/dist/leaflet.css';
+// import 'swiper/css/swiper.min.css';
+// import 'aos/dist/aos.css';
+// import '../src/assets/css/ckeditor.css';
+// import 'semantic-ui-css/semantic.min.css';
 
 import '../src/components/contentbuilder/contentbuilder.css';
 import '../src/components/contentbuilder/Home.css';

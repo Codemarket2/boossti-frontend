@@ -1,0 +1,65 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Images</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content=""> 
+    <style>
+        body {
+            font-family:sans-serif;
+            font-weight: 300;
+            font-size:13px;
+            color:#111;
+        }
+        #files {opacity:0}
+        #files img {cursor: pointer; margin:20px; max-height:150px;max-width:150px;}
+    </style>
+</head>
+<body>
+
+<div id="files">
+    <img src="uploads/food.png" />
+    <img src="uploads/office1.png" />
+    <img src="uploads/office2.png" />
+    <img src="uploads/office3.png" />
+    <img src="uploads/person1.png" />
+    <img src="uploads/person2.png" />
+    <img src="uploads/person3.png" />
+    <img src="uploads/person4.png" />
+    <img src="uploads/travel.png" />
+</div>
+
+<script>
+    // ----------- Do Not Remove -------------
+    // When changing light to dark theme, this page color will be inferted. 
+    // This block prevent images to be inverted by inverting back:
+    var filter = window.getComputedStyle(parent.document.querySelector('.imageselect iframe')).getPropertyValue('filter');
+    var cssAdjust = '';
+    var elms = document.querySelectorAll('img');
+    if(filter.indexOf('invert(1)')!==-1){
+        elms.forEach(function(elm){
+            elm.style.filter = 'invert(1)';
+        });
+    }
+    document.querySelector('#files').style.opacity = '1';
+    // ----------- /Do Not Remove -------------
+
+    var images = document.querySelectorAll('#files img');
+    [].forEach.call(images, function(img) {
+        
+        var imgurl = img.getAttribute('src');
+        img.addEventListener('click', () => {
+            
+            /* 
+            USE THIS FUNCTION TO SELECT CUSTOM ASSET WITH CUSTOM VALUE TO RETURN 
+            An asset can be a file, an image or a page in your own CMS
+            */
+            parent.selectImage(imgurl);
+            
+        });
+
+    });
+</script>
+</body>
+</html>

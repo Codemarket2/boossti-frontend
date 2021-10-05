@@ -1,12 +1,15 @@
+import React, { Component } from 'react';
+import BuilderControl from './BuilderControl';
+
 export default class Edit extends Component {
   constructor(props) {
     super(props);
     this.state = {
       // see Home.js where localStorage is set first as a sample/initial content
-      html: localStorage.getItem('mywebcontent'),
+      html: this.props.htmlData,
     };
 
-    this.history = props.history;
+    // this.history = props.history;
 
     this.handleOnSave = this.handleOnSave.bind(this);
     this.handleOnSaveAndFinish = this.handleOnSaveAndFinish.bind(this);
@@ -14,15 +17,14 @@ export default class Edit extends Component {
 
   handleOnSave(html) {
     // Save content
-    localStorage.setItem('mywebcontent', html);
+    this.props.onSave(html);
   }
 
   handleOnSaveAndFinish(html) {
     // Save content
-    localStorage.setItem('mywebcontent', html);
+    this.props.onSave(html);
 
-    // this.props.history.push('/');
-    Router.push('/pageview');
+    this.props.onClose();
   }
 
   componentWillUnmount() {
@@ -34,15 +36,14 @@ export default class Edit extends Component {
     // cancel the navigation and stay on the same page
     if (!answer) return false;
 
-    // this.props.history.push('/');
-    Router.push('/pageview');
+    this.props.onClose();
   };
 
   render() {
     return (
       <>
         <BuilderControl
-          history={this.history}
+          // history={this.history}
           initialHtml={this.state.html}
           onSave={this.handleOnSave}
           onSaveAndFinish={this.handleOnSaveAndFinish}
@@ -51,16 +52,20 @@ export default class Edit extends Component {
           } /* https://stackoverflow.com/questions/37949981/call-child-method-from-parent */
           doSaveAndFinish={(f) => (this.callSaveAndFinish = f)}
           doDestroy={(f) => (this.callDestroy = f)}
-          base64Handler={'/upload'}
-          largerImageHandler={'/upload'}
+          base64Handler={'http://localhost:8001/upload'}
+          largerImageHandler={'http://localhost:8001/upload'}
           imageSelect={'images.html'}
           snippetFile={'/assets/minimalist-blocks/content.js'}
           languageFile={'/contentbuilder/lang/en.js'}
         />
-
         <div
           className="is-ui"
-          style={{ position: 'fixed', right: '30px', bottom: '30px', display: 'flex' }}>
+          style={{
+            position: 'fixed',
+            right: '30px',
+            bottom: '30px',
+            display: 'flex',
+          }}>
           <button
             type="button"
             onClick={() => this.callSave()}
