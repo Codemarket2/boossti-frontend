@@ -242,6 +242,7 @@ export default function ItemsFieldsMap({
   pushToAnchor = () => {},
 }) {
   const { data, loading, error } = useGetFieldsByType({ parentId: typeId });
+  // useFieldValueSubscription(typeId);
 
   useEffect(() => {
     if (data && data.getFieldsByType) {
