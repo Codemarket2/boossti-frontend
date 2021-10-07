@@ -8,6 +8,7 @@ import { useGetActionCounts } from '@frontend/shared/hooks/comment/getComment';
 import CommentUI from './Comment';
 import Like from '../like/Like';
 import LikeModal from '../like/LikeModal';
+import 'semantic-ui-css/semantic.min.css';
 
 interface IDisplayComment {
   commentedUser: any;

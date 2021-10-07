@@ -1,15 +1,14 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import BuilderControl from './BuilderControl';
+import StyledDiv from './StyledDiv';
+import Button from '@material-ui/core/Button';
 
 export default class Edit extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // see Home.js where localStorage is set first as a sample/initial content
       html: this.props.htmlData,
     };
-
-    // this.history = props.history;
 
     this.handleOnSave = this.handleOnSave.bind(this);
     this.handleOnSaveAndFinish = this.handleOnSaveAndFinish.bind(this);
@@ -41,7 +40,7 @@ export default class Edit extends Component {
 
   render() {
     return (
-      <>
+      <StyledDiv>
         <BuilderControl
           // history={this.history}
           initialHtml={this.state.html}
@@ -59,33 +58,33 @@ export default class Edit extends Component {
           languageFile={'/contentbuilder/lang/en.js'}
         />
         <div
-          className="is-ui"
+          className="m-3"
           style={{
             position: 'fixed',
-            right: '30px',
-            bottom: '30px',
             display: 'flex',
+            top: 0,
           }}>
-          <button
-            type="button"
-            onClick={() => this.callSave()}
-            style={{ width: '85px', backgroundColor: 'rgba(0,0,0,0.06)' }}>
-            Save
-          </button>
-          <button
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
             type="button"
             onClick={() => this.callSaveAndFinish()}
-            style={{ width: '120px', backgroundColor: 'rgba(0,0,0,0.06)' }}>
-            Save & Finish
-          </button>
-          <button
+            disabled={this.props.loading}>
+            Save
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            color="primary"
             type="button"
             onClick={() => this.closeBuilder()}
-            style={{ width: '85px', backgroundColor: 'rgba(0,0,0,0.06)' }}>
+            className="ml-2"
+            disabled={this.props.loading}>
             Close
-          </button>
+          </Button>
         </div>
-      </>
+      </StyledDiv>
     );
   }
 }

@@ -5,6 +5,7 @@ import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth/lib/types';
 import { useRouter } from 'next/router';
 import HomeScreen from '../src/screens/HomeScreen';
 import InitialLoading from '../src/components/common/InitialLoading';
+import 'aos/dist/aos.css';
 
 export default function Page() {
   const router = useRouter();

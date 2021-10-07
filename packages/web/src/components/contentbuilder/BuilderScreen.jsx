@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, forwardRef } from 'react';
+import Dialog from '@material-ui/core/Dialog';
+import Slide from '@material-ui/core/Slide';
 import PageView from './PageView';
 import Builder from './Builder';
 
@@ -20,16 +22,26 @@ const defaultHtmlData = `<div class="row clearfix">
 </div>
 </div>`;
 
+const Transition = forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 export default function BuilderScreen() {
   const [state, setState] = useState({ edit: false, htmlData: defaultHtmlData });
   return (
     <div>
       {state.edit ? (
-        <Builder
-          onClose={() => setState({ ...state, edit: false })}
-          onSave={(htmlData) => setState({ ...state, htmlData })}
-          htmlData={state.htmlData}
-        />
+        <Dialog
+          TransitionComponent={Transition}
+          fullScreen
+          open={true}
+          onClose={() => setState({ ...state, edit: false })}>
+          <Builder
+            onClose={() => setState({ ...state, edit: false })}
+            onSave={(htmlData) => setState({ ...state, htmlData })}
+            htmlData={state.htmlData}
+          />
+        </Dialog>
       ) : (
         <PageView
           htmlData={state.htmlData}

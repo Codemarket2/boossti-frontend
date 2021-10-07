@@ -69,6 +69,11 @@ export default function FieldForm({ onCancel, parentId, field = null }: IProps) 
                 label="Textarea"
               />
               <FormControlLabel
+                value="contentBuilder"
+                control={<Radio color="primary" />}
+                label="Content Builder"
+              />
+              <FormControlLabel
                 value="boolean"
                 control={<Radio color="primary" />}
                 label="Boolean (Yes/No)"

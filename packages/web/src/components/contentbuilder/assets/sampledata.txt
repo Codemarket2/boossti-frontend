@@ -1,5 +1,0 @@
-{"randomMessages": [
-	{"message": "Welcome to my site!", "color": "red"},
-	{"message": "Thanks for visiting!", "color": "blue"},
-	{"message": "Hello visitor!", "color": "green"}
-]}

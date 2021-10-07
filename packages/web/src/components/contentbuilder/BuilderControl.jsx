@@ -16,7 +16,7 @@ class BuilderControl extends Component {
 
     this.saveContent = this.saveContent.bind(this);
     this.saveContentAndFinish = this.saveContentAndFinish.bind(this);
-    // this.destroy = this.destroy.bind(this);
+    this.destroy = this.destroy.bind(this);
   }
 
   componentDidMount() {
@@ -34,6 +34,8 @@ class BuilderControl extends Component {
         fileSelect: this.props.fileSelect,
         largerImageHandler: this.props.largerImageHandler,
         onLargerImageUpload: (e) => {
+          console.log('onLargerImageUpload');
+          alert('onLargerImageUpload');
           const selectedImage = e.target.files[0];
           const filename = selectedImage.name;
           const reader = new FileReader();
@@ -90,40 +92,33 @@ class BuilderControl extends Component {
       if (scripts[i].getAttribute('src') === src) return true;
     return false;
   };
-
   save = (callback) => {
-    if (this.props.base64Handler !== '') {
-      // If base64Handler is specified
+    // If base64Handler is specified
 
-      // Save all embedded base64 images first
-      this.obj.saveImages(
-        '',
-        () => {
-          // Then save the content
-          let html = this.obj.html();
+    // Save all embedded base64 images first
+    this.obj.saveImages(
+      '',
+      () => {
+        // Then save the content
+        let html = this.obj.html();
 
-          if (callback) callback(html);
-        },
-        async (img, base64, filename) => {
-          try {
-            let key = `media/content-builder/${uuid()}${+new Date()}.jpeg`;
-            let url = `https://${bucket}.s3.${region}.amazonaws.com/public/${key}`;
-            const blob = await fetch(base64).then((res) => res.blob());
-            const res = await Storage.put(key, blob, {
-              contentType: 'image/jpeg',
-              contentEncoding: 'base64',
-            });
-            img.setAttribute('src', url);
-          } catch (error) {
-            alert(error.message);
-          }
-        },
-      );
-    } else {
-      let html = this.obj.html();
-
-      if (callback) callback(html);
-    }
+        if (callback) callback(html);
+      },
+      async (img, base64, filename) => {
+        try {
+          const buf = Buffer.from(base64.replace(/^data:image\/\w+;base64,/, ''), 'base64');
+          let key = `media/content-builder/${uuid()}${+new Date()}.jpeg`;
+          let url = `https://${bucket}.s3.${region}.amazonaws.com/public/${key}`;
+          const res = await Storage.put(key, buf, {
+            contentType: 'image/jpeg',
+          });
+          img.setAttribute('src', url);
+          console.log('url', url);
+        } catch (error) {
+          console.log(error);
+        }
+      },
+    );
   };
 
   saveContent = () => {

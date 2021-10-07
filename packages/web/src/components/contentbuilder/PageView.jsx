@@ -1,4 +1,7 @@
 import { useEffect } from 'react';
+import Button from '@material-ui/core/Button';
+import EditIcon from '@material-ui/icons/Edit';
+import StyledDiv from './StyledDiv';
 
 export default function Home({ htmlData, onClickEdit }) {
   async function onLoad() {
@@ -11,15 +14,18 @@ export default function Home({ htmlData, onClickEdit }) {
     onLoad();
   }, []);
   return (
-    <>
-      <div className="panel-home is-cms">
-        <section>
-          <span style={{ cursor: 'pointer' }} onClick={onClickEdit}>
-            Edit
-          </span>
-        </section>
+    <StyledDiv>
+      <div className="position-fixed m-3">
+        <Button
+          size="small"
+          startIcon={<EditIcon />}
+          variant="contained"
+          color="primary"
+          onClick={onClickEdit}>
+          Edit
+        </Button>
       </div>
       <div className="is-container container"></div>
-    </>
+    </StyledDiv>
   );
 }
