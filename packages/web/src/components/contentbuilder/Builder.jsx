@@ -69,7 +69,12 @@ export default class Edit extends Component {
             variant="contained"
             color="primary"
             type="button"
-            onClick={() => this.callSaveAndFinish()}
+            onClick={() => {
+              if (this.props.setShowBackdrop) {
+                this.props.setShowBackdrop();
+              }
+              this.callSaveAndFinish();
+            }}
             disabled={this.props.loading}>
             Save
           </Button>
