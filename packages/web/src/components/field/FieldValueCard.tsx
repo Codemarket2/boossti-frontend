@@ -132,6 +132,7 @@ export default function FieldValueCard({
       </CardContent>
       <CommentLikeShare
         showHideComments={showHideComments}
+        setShowHideComments={setShowHideComments}
         parentId={fieldValue._id}
         index={index}
         itemSlug={convertToSlug(field.label)}

@@ -12,6 +12,7 @@ import LikeModal from '../../like/LikeModal';
 import Like from '../../like/Like';
 import Comment from '../../comment/Comment';
 import Share from '../../share/Share';
+import { AnyStyledComponent } from 'styled-components';
 
 interface ICommentLikeShare {
   parentId: string;
@@ -23,6 +24,7 @@ interface ICommentLikeShare {
   setShowSingleComment?: any;
   fieldTitle?: string;
   showHideComments?: boolean;
+  setShowHideComments?: any;
 }
 
 export default function CommentLikeShare({
@@ -34,6 +36,7 @@ export default function CommentLikeShare({
   commentId,
   fieldTitle,
   showHideComments,
+  setShowHideComments,
 }: ICommentLikeShare) {
   const { attributes } = useSelector(({ auth }: any) => auth);
   const currentUserId = attributes['custom:_id'];
@@ -52,6 +55,9 @@ export default function CommentLikeShare({
   const [showCommentSection, setShowCommentSection] = useState(false);
   const toggleCommentSection = () => {
     setShowCommentSection(!showCommentSection);
+    if (fieldTitle) {
+      setShowHideComments(!showHideComments);
+    }
   };
 
   return (
@@ -95,19 +101,18 @@ export default function CommentLikeShare({
           {children}
         </div>
       </div>
-      {showCommentSection ||
-        (showHideComments && (
-          <Fragment>
-            {showDivider && <Divider />}
-            <Comment
-              postId={parentId}
-              threadId={parentId}
-              itemSlug={itemSlug}
-              shareIndex={index}
-              fieldTitle={fieldTitle}
-            />
-          </Fragment>
-        ))}
+      {(showHideComments || showCommentSection) && (
+        <Fragment>
+          {showDivider && <Divider />}
+          <Comment
+            postId={parentId}
+            threadId={parentId}
+            itemSlug={itemSlug}
+            shareIndex={index}
+            fieldTitle={fieldTitle}
+          />
+        </Fragment>
+      )}
     </div>
   );
 }
