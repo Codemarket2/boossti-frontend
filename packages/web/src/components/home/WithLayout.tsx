@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Paper, CircularProgress } from '@material-ui/core';
-import Head from '../common/Head';
 // import { ThemeProvider } from '@material-ui/core/styles';
 // import getTheme from './theme';
 // // import CssBaseline from '@material-ui/core/CssBaseline';
@@ -72,7 +71,6 @@ export default function WithLayout({
   if (mountedComponent) {
     return (
       <Paper elevation={0}>
-        <Head />
         <Layout themeMode={themeMode} themeToggler={themeToggler}>
           <Component themeMode={themeMode} {...rest} />
         </Layout>

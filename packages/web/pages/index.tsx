@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Auth } from 'aws-amplify';
 import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth/lib/types';
 import { useRouter } from 'next/router';
 import HomeScreen from '../src/screens/HomeScreen';
 import InitialLoading from '../src/components/common/InitialLoading';
+import Head from '../src/components/common/Head';
 import 'aos/dist/aos.css';
 
 export default function Page() {
@@ -24,7 +25,18 @@ export default function Page() {
   }, [error_description]);
 
   if ((error_description && error_description.includes('_ACCOUNT_LINKED')) || !initial) {
-    return <InitialLoading />;
+    return (
+      <>
+        <Head />
+        <InitialLoading />
+      </>
+    );
   }
-  return <HomeScreen />;
+
+  return (
+    <>
+      <Head />
+      <HomeScreen />
+    </>
+  );
 }
