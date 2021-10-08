@@ -1,9 +1,10 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import ShareIcon from '@material-ui/icons/Share';
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
 import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 
 import { useGetActionCounts } from '@frontend/shared/hooks/comment/getComment';
 import ErrorLoading from '../ErrorLoading';
@@ -16,13 +17,23 @@ interface ICommentLikeShare {
   parentId: string;
   showDivider?: boolean;
   children?: React.ReactNode;
-  typeSlug?: string;
+  index?: any;
+  itemSlug?: string;
+  commentId?: string;
+  setShowSingleComment?: any;
+  fieldTitle?: string;
+  showHideComments?: boolean;
 }
+
 export default function CommentLikeShare({
   parentId,
   showDivider = true,
   children,
-  typeSlug,
+  index,
+  itemSlug,
+  commentId,
+  fieldTitle,
+  showHideComments,
 }: ICommentLikeShare) {
   const { attributes } = useSelector(({ auth }: any) => auth);
   const currentUserId = attributes['custom:_id'];
@@ -37,6 +48,7 @@ export default function CommentLikeShare({
     setOpen(false);
   };
   //comment state
+
   const [showCommentSection, setShowCommentSection] = useState(false);
   const toggleCommentSection = () => {
     setShowCommentSection(!showCommentSection);
@@ -73,17 +85,29 @@ export default function CommentLikeShare({
 
           <IconButton>
             {/* <ShareIcon /> */}
-            <Share typeSlug={typeSlug} />
+            <Share
+              index={index}
+              itemSlug={itemSlug}
+              commentId={commentId}
+              fieldTitle={fieldTitle}
+            />
           </IconButton>
           {children}
         </div>
       </div>
-      {showCommentSection && (
-        <Fragment>
-          {showDivider && <Divider />}
-          <Comment postId={parentId} threadId={parentId} />
-        </Fragment>
-      )}
+      {showCommentSection ||
+        (showHideComments && (
+          <Fragment>
+            {showDivider && <Divider />}
+            <Comment
+              postId={parentId}
+              threadId={parentId}
+              itemSlug={itemSlug}
+              shareIndex={index}
+              fieldTitle={fieldTitle}
+            />
+          </Fragment>
+        ))}
     </div>
   );
 }

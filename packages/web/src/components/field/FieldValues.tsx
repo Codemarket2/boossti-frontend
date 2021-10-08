@@ -1,3 +1,22 @@
+// import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import IconButton from '@material-ui/core/IconButton';
+import AddCircle from '@material-ui/icons/AddCircle';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Fragment } from 'react';
+import { convertToSlug } from './LeftNavigation';
+import Carousel from 'react-material-ui-carousel';
+import { useRouter } from 'next/router';
+import { useTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+
 import {
   useGetFieldValuesByItem,
   useGetFieldsByType,
@@ -5,21 +24,13 @@ import {
 } from '@frontend/shared/hooks/field';
 import FieldsSkeleton from './FieldsSkeleton';
 import ErrorLoading from '../common/ErrorLoading';
-import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import AddCircle from '@material-ui/icons/AddCircle';
 import FieldValueForm from './FieldValueForm';
-import IconButton from '@material-ui/core/IconButton';
-import React, { useEffect, useState } from 'react';
 import CRUDMenu from '../common/CRUDMenu';
 import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
-import { useSelector } from 'react-redux';
-import { Fragment } from 'react';
 import FieldValueCard from './FieldValueCard';
-import { convertToSlug } from './LeftNavigation';
-import Carousel from 'react-material-ui-carousel';
+// import DeleteIcon from '@material-ui/icons/Delete';
+// import EditIcon from '@material-ui/icons/Edit';
 import Share from '../share/Share';
 
 const initialState = {
@@ -29,12 +40,17 @@ const initialState = {
   edit: false,
   expanded: false,
   expandId: '',
+  showAddMenu: false,
+  addTarget: null,
 };
 
 function ItemOneFields({ field, parentId, showAuthor = true, guest, setFieldValueCount }) {
+  const { query } = useRouter();
   const [state, setState] = useState(initialState);
   const { attributes, admin } = useSelector(({ auth }: any) => auth);
   const currentUserId = attributes['custom:_id'];
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down('xs'));
 
   const deleteCallback = () => {
     setState({ ...state, showMenu: null, selectedFieldValue: null, edit: false });
@@ -63,6 +79,8 @@ function ItemOneFields({ field, parentId, showAuthor = true, guest, setFieldValu
     }
   }, [data]);
 
+  const onClickAdd = () => setState({ ...initialState, showForm: true });
+
   if (!error && (!data || !data.getFieldValuesByItem)) {
     return <FieldsSkeleton />;
   } else if (error) {
@@ -80,15 +98,34 @@ function ItemOneFields({ field, parentId, showAuthor = true, guest, setFieldValu
       (field.oneUserMultipleValues || !hasAlreadyAdded));
 
   return (
-    <div key={field._id} className="mt-4">
+    <div key={field._id}>
+      <Menu
+        anchorEl={state.addTarget}
+        keepMounted
+        open={Boolean(state.showAddMenu)}
+        onClose={() => setState({ ...state, showAddMenu: false, addTarget: null })}>
+        <MenuItem onClick={onClickAdd}>
+          <ListItemIcon className="mr-n4">
+            <AddCircle fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary="Add New Value" />
+        </MenuItem>
+        <MenuItem>
+          <ListItemIcon className="mr-n4">
+            <Share itemSlug={convertToSlug(field.label)} />
+          </ListItemIcon>
+          <ListItemText primary="Share" />
+        </MenuItem>
+      </Menu>
       <Divider />
-      <Typography
-        variant="h5"
-        className="d-flex align-items-center"
-        id={convertToSlug(field.label)}>
-        {field.label}
-        {showAddButton && (
-          <React.Fragment>
+      <div className="d-flex justify-content-between align-items-center align-content-center">
+        <Typography
+          style={matches ? { paddingTop: 50 } : {}}
+          variant="h5"
+          className="d-flex align-items-center link-anchor"
+          id={convertToSlug(field.label)}>
+          {field.label}
+          {/* {showAddButton && (
             <Tooltip title="Add New Value">
               <IconButton
                 color="primary"
@@ -96,24 +133,31 @@ function ItemOneFields({ field, parentId, showAuthor = true, guest, setFieldValu
                 <AddCircle />
               </IconButton>
             </Tooltip>
-            <IconButton color="primary">
-              <Share itemSlug={convertToSlug(field.label)} />
-            </IconButton>
-          </React.Fragment>
+          )} */}
+        </Typography>
+        {showAddButton && (
+          <IconButton
+            color="primary"
+            onClick={(event) =>
+              setState({ ...initialState, showAddMenu: true, addTarget: event.currentTarget })
+            }>
+            <MoreVertIcon />
+          </IconButton>
         )}
-      </Typography>
+      </div>
       {state.showForm && <FieldValueForm {...formProps} />}
       {data.getFieldValuesByItem.data.length > 1 ? (
         <Carousel
+          // index={parseInt(query.index)}
           NextIcon={
             <img
-              style={{ width: 50, transform: 'rotate(180deg)' }}
+              style={{ width: 30, transform: 'rotate(180deg)' }}
               src="https://images.zerodown.com//website/foyer/static/images/carousel-arrow.png?tr=w-128,h-128,pr-true,f-auto"
             />
           }
           PrevIcon={
             <img
-              style={{ width: 50 }}
+              style={{ width: 30 }}
               src="https://images.zerodown.com//website/foyer/static/images/carousel-arrow.png?tr=w-128,h-128,pr-true,f-auto"
             />
           }
@@ -121,19 +165,30 @@ function ItemOneFields({ field, parentId, showAuthor = true, guest, setFieldValu
             style: {
               padding: 0,
               backgroundColor: 'inherit',
+              width: 30,
+              height: 30,
+              // marginTop: 15,
             },
           }}
+          navButtonsWrapperProps={{
+            // Move the buttons to the bottom. Unsetting top here to override default style.
+            style: {
+              top: 50,
+            },
+          }}
+          fullHeightHover={false}
           autoPlay={false}
           animation="slide"
           navButtonsAlwaysVisible={true}>
           {data.getFieldValuesByItem.data.map((fieldValue, index) => (
-            <div className="px-5" key={fieldValue._id}>
+            <div className="px-" key={fieldValue._id}>
               {state.selectedFieldValue &&
               state.selectedFieldValue._id === fieldValue._id &&
               state.edit ? (
                 <FieldValueForm edit {...formProps} fieldValue={fieldValue} />
               ) : (
                 <FieldValueCard
+                  index={index}
                   fieldValue={fieldValue}
                   field={field}
                   showAction={currentUserId === fieldValue.createdBy._id || admin}
@@ -162,6 +217,7 @@ function ItemOneFields({ field, parentId, showAuthor = true, guest, setFieldValu
               <FieldValueForm edit {...formProps} fieldValue={fieldValue} />
             ) : (
               <FieldValueCard
+                index={index}
                 fieldValue={fieldValue}
                 field={field}
                 showAction={currentUserId === fieldValue.createdBy._id || admin}
@@ -199,6 +255,7 @@ export default function ItemsFieldsMap({
   pushToAnchor = () => {},
 }) {
   const { data, loading, error } = useGetFieldsByType({ parentId: typeId });
+  // useFieldValueSubscription(typeId);
 
   useEffect(() => {
     if (data && data.getFieldsByType) {

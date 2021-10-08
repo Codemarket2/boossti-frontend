@@ -4,9 +4,11 @@ import { Tooltip } from '@material-ui/core/';
 
 interface IShare {
   itemSlug?: string;
-  typeSlug?: string;
+  index?: any;
+  commentId?: string;
+  fieldTitle?: string;
 }
-export default function Share({ itemSlug, typeSlug }: IShare) {
+export default function Share({ itemSlug, index, commentId, fieldTitle }: IShare) {
   const [open, setOpen] = useState(false);
 
   const handleClose = () => {
@@ -19,29 +21,38 @@ export default function Share({ itemSlug, typeSlug }: IShare) {
   const [isCopied, setIsCopied] = useState(false);
 
   const handleSlugItem = () => {
-    if (itemSlug === undefined && typeSlug === undefined) {
+    if (itemSlug === undefined && index === undefined) {
       navigator.clipboard.writeText(window.location.href);
     }
-    if (itemSlug !== undefined && !window.location.href.includes('#') && typeSlug === undefined) {
+    if (itemSlug !== undefined && !window.location.href.includes('#') && index === undefined) {
       navigator.clipboard.writeText(`${window.location.href}#${itemSlug}`);
     } else if (
       itemSlug !== undefined &&
       `${window.location.href}#${itemSlug}` &&
-      typeSlug === undefined
+      index === undefined
     ) {
       navigator.clipboard.writeText(window.location.href);
     }
   };
 
-  const handleSlugType = () => {
-    if (typeSlug !== undefined) {
-      navigator.clipboard.writeText(`${window.location.origin}${typeSlug}`);
+  const handleIndexAndCommentId = () => {
+    if (index !== undefined && !window.location.href.includes('#') && commentId === undefined) {
+      navigator.clipboard.writeText(`${window.location.href}?index=${index + 1}#${itemSlug}`);
+    }
+    if (index !== undefined && !window.location.href.includes('#') && commentId !== undefined) {
+      navigator.clipboard.writeText(
+        `${window.location.href}?index=${
+          index + 1
+        }&commentId=${commentId}&field=${itemSlug}&fieldTitle=${fieldTitle}#${itemSlug}`,
+      );
     }
   };
 
+  //   navigator.clipboard.writeText(`${window.location.origin}${typeSlug}`);
+
   const handleCopyShareLink = () => {
     handleSlugItem();
-    handleSlugType();
+    handleIndexAndCommentId();
     setIsCopied(true);
   };
 

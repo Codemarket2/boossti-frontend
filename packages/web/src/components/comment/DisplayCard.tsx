@@ -22,6 +22,9 @@ interface IDisplayComment {
   postId: string;
   index: number;
   showIcon?: boolean;
+  itemSlug?: string;
+  shareIndex?: any;
+  fieldTitle?: string;
 }
 export default function DisplayCard({
   showIcon = false,
@@ -31,6 +34,9 @@ export default function DisplayCard({
   postId,
   threadId,
   index,
+  itemSlug,
+  shareIndex,
+  fieldTitle,
 }: IDisplayComment) {
   const { attributes } = useSelector(({ auth }: any) => auth);
   //comment
@@ -174,7 +180,13 @@ export default function DisplayCard({
             )} */}
 
             <Comment.Action>
-              <CommentLikeShare parentId={commentedUser._id} showDivider={false}>
+              <CommentLikeShare
+                parentId={commentedUser._id}
+                showDivider={false}
+                commentId={commentedUser._id}
+                itemSlug={itemSlug}
+                index={shareIndex}
+                fieldTitle={fieldTitle}>
                 {currentUserId === commentedUser!.createdBy!._id && (
                   <>
                     <IconButton onClick={() => setEdit(true)}>

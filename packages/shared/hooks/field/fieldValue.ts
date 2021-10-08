@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
+import { useQuery, useMutation, useSubscription } from '@apollo/client';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { IHooksProps } from '../../types/common';
@@ -10,16 +10,62 @@ import {
   DELETE_FIELD_VALUE,
 } from '../../graphql/mutation/field';
 import { fileUpload } from '../../utils/fileUpload';
-import { omitTypename } from '../../utils/omitTypename';
+// import { client as apolloClient } from '../../graphql';
 import { ADDED_FIELD_VALUE } from '../../graphql/subscription/field';
+import { omitTypename } from '../../utils/omitTypename';
 
 const defaultQueryVariables = { limit: 1000, page: 1 };
+
+// const updateFieldValueCache = async (newFieldValue) => {
+//   const queryVariables = {
+//     ...defaultQueryVariables,
+//     parentId: newFieldValue.parentId,
+//     field: newFieldValue.field,
+//   };
+//   const data = await apolloClient.readQuery({
+//     query: GET_FIELD_VALUES_BY_FIELD,
+//     variables: queryVariables,
+//   });
+//   if (data && data.getFieldValuesByItem) {
+//     const newData = {
+//       getFieldValuesByItem: {
+//         ...data.getFieldValuesByItem,
+//         data: [newFieldValue, ...data.getFieldValuesByItem.data],
+//       },
+//     };
+//     await apolloClient.writeQuery({
+//       query: GET_FIELD_VALUES_BY_FIELD,
+//       variables: queryVariables,
+//       data: newData,
+//     });
+//   }
+// };
+
+// export const useFieldValueSubscription = (parentId) => {
+//   const { data, loading, error } = useSubscription(ADDED_FIELD_VALUE, {
+//     variables: {
+//       parentId,
+//     },
+//   });
+//   console.log('data, loading, error', data, loading, error);
+
+//   useEffect(() => {
+//     // if (data && data.addedFieldValue) {
+//     //   console.log({ data });
+//     //   updateFieldValueCache(data.addedFieldValue);
+//     // }
+//     if (data) {
+//       alert('new value');
+//     }
+//   }, [data]);
+// };
 
 export function useGetFieldValuesByItem({ parentId, field }: any) {
   const { data, error, loading, subscribeToMore } = useQuery(GET_FIELD_VALUES_BY_FIELD, {
     variables: { ...defaultQueryVariables, parentId, field },
     fetchPolicy: 'cache-and-network',
   });
+
   useEffect(() => {
     subscribeToMore({
       document: ADDED_FIELD_VALUE,
@@ -29,19 +75,20 @@ export function useGetFieldValuesByItem({ parentId, field }: any) {
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev;
         const newFieldValue = subscriptionData.data.addedFieldValue;
-        let newData = { ...prev.getFieldValuesByItem };
-        const isUpdated = prev.getFieldValuesByItem._id === newFieldValue._id;
-        newData = isUpdated ? newFieldValue : newData;
-        return {
-          ...prev,
-          getFieldValuesByItem: {
-            ...prev.getFieldValuesByItem,
-            data: [newFieldValue, ...prev.getFieldValuesByItem.data],
-          },
-        };
+        if (field === newFieldValue.field) {
+          return {
+            ...prev,
+            getFieldValuesByItem: {
+              ...prev.getFieldValuesByItem,
+              data: [newFieldValue, ...prev.getFieldValuesByItem.data],
+            },
+          };
+        } else {
+          return prev;
+        }
       },
     });
-  }, [data]);
+  }, []);
 
   // console.log('data, error, loading', data, error, loading);
   return { data, error, loading };

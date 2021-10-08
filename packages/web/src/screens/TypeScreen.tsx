@@ -117,7 +117,10 @@ export default function Screen({ slug }: IProps) {
                 if (data.getListTypeBySlug.inUse) {
                   alert("This type is being used in some form, you can't delete");
                 } else {
-                  handleDelete(data.getListTypeBySlug._id, deleteCallBack);
+                  const answer = confirm('Are you sure you want to delete?');
+                  if (answer) {
+                    handleDelete(data.getListTypeBySlug._id, deleteCallBack);
+                  }
                 }
               }}
             />

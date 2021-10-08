@@ -248,19 +248,21 @@ const Topbar = ({
     <Toolbar disableGutters className={classes.toolbar} {...rest}>
       <div className={classes.logoContainer}>
         <Link href="/">
-          <Typography variant="h5" className="font-weight-bold" color="textPrimary">
+          {/* <Typography variant="h5" className="font-weight-bold" color="textPrimary">
             {projectConfig.title}
-          </Typography>
+          </Typography> */}
           {/* <Image
             className={classes.logoImage}
             src={
-              themeMode === 'light'
-                ? 'https://assets.maccarianagency.com/the-front/logos/logo.svg'
-                : 'https://assets.maccarianagency.com/the-front/logos/logo-negative.svg'
+              'https://res.cloudinary.com/dzo2ufh6a/image/upload/v1633438866/vijaa-logo_r5xsxm.jpg'
             }
             alt="thefront"
             lazy={false}
           /> */}
+          <img
+            src="https://res.cloudinary.com/dzo2ufh6a/image/upload/v1633449974/vijaa-logo_np6z16.png"
+            style={{ height: 40, width: 100 }}
+          />
         </Link>
       </div>
       <div className={classes.flexGrow} />
