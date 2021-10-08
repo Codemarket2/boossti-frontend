@@ -1,0 +1,631 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <base href="../../">
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <style>
+        html { height:100%; }
+        body { margin:0;height:100%;overflow:hidden;font-family:Sans-Serif;font-size:14px;letter-spacing:1px;line-height:1.7; }
+        
+        .is-icon-flex {
+            width: 16px;
+            height: 16px;
+            fill: rgba(0, 0, 0, 0.9);
+        }
+        svg {
+            overflow: hidden;
+            vertical-align: middle;
+        }
+        .is-tool {position:absolute;top:0;right:0;display:none;z-index:10001;background:rgba(239, 239, 239, 0.9);box-sizing: border-box;position:absolute;padding:0;outline: none;}  
+        .is-tool button {
+            width:20px; height: 20px;
+            background-color:transparent;
+            border: none;
+            cursor:pointer;
+            user-select: none;
+            -moz-user-select: none;
+            -khtml-user-select: none;
+            -webkit-user-select: none;
+            -o-user-select: none; 
+
+            /* backward */
+            color:#000;
+            float:left;
+            display: inline-block;
+            box-sizing:border-box;
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            letter-spacing: 1px;
+            font-size:12px;
+            font-weight:300;
+            text-transform:uppercase;
+            text-align:center;  
+            line-height: unset;
+            position:relative;
+            border-radius: 0;
+            transition: all ease 0.3s; 
+        }
+        .is-tool button:focus {outline:none}
+
+        .inptext {width:90%;font-size:14px;letter-spacing:1px;border:none;padding:10px;border:rgba(127, 127, 127, 0.32) 1px solid;}
+        button {
+            width: 55px;
+            height: 50px;
+            line-height: 1;
+            display: inline-block;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            cursor: pointer;
+            background-color: #fff;
+            color: #4a4a4a;
+            border: 1px solid transparent;
+            font-family: sans-serif;
+            letter-spacing: 1px;
+            font-size: 12px;
+            font-weight: normal;
+            text-transform: uppercase;
+            text-align: center;
+            position: relative;
+            border-radius: 0;
+            transition: all ease 0.3s           
+            }
+        .inptext:focus {outline:none}
+        button:focus {outline:none;}
+        
+        button.classic-primary {
+            display: inline-block;
+            width: auto;
+            height: 50px;
+            padding-left: 10px;
+            padding-right: 10px;
+            min-width: 135px;
+            background: #f7f7f7;
+        }
+        button.classic-secondary {
+            display: inline-block;
+            width: auto;
+            height: 50px;
+            padding-left: 10px;
+            padding-right: 10px;
+            background: transparent;
+        }
+        select {
+            font-size: 14px;
+            letter-spacing: 1px;
+            height: 40px;
+            line-height: 1.7;
+            color: #454545;
+            border-radius: 0;
+            border: none;
+            background-color: #eee;
+            width: auto;
+            display: inline-block;
+            background-image: none;
+            -webkit-appearance: menulist;
+            -moz-appearance: menulist;
+            appearance: menulist;
+            padding: 0 5px;
+        }
+        select:focus {outline:none}
+        label {width:100%;margin:0 10px 15px}
+
+        #slides > div {
+            margin: 20px 20px;
+            border: rgba(0, 0, 0, 0.09) 1px solid;
+            box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.08);
+            display: flex;
+            cursor: pointer;
+        }
+
+        #slides > div.active { border: #f5c800 1px solid; }
+
+        div#divCaption {display:none}
+    </style>
+</head>
+<body>
+    <svg width="0" height="0" style="position:absolute;display:none;">
+        <defs>
+            <symbol viewBox="0 0 512 512" id="ion-ios-arrow-thin-up"><path d="M349.7 189.8c-3.1 3.1-8 3-11.3 0L264 123.4V408c0 4.4-3.6 8-8 8s-8-3.6-8-8V123.4l-74.4 66.3c-3.4 2.9-8.1 3.2-11.2.1-3.1-3.1-3.3-8.5-.1-11.4 0 0 87-79.2 88-80s2.8-2.4 5.7-2.4 4.9 1.6 5.7 2.4 88 80 88 80c1.5 1.5 2.3 3.6 2.3 5.7s-.8 4.1-2.3 5.7z"></path></symbol>
+            <symbol viewBox="0 0 512 512" id="ion-ios-arrow-thin-down"><path d="M349.7 322.2c-3.1-3.1-8-3-11.3 0L264 388.6V104c0-4.4-3.6-8-8-8s-8 3.6-8 8v284.6l-74.4-66.3c-3.4-2.9-8.1-3.2-11.2-.1-3.1 3.1-3.3 8.5-.1 11.4 0 0 87 79.2 88 80s2.8 2.4 5.7 2.4 4.9-1.6 5.7-2.4 88-80 88-80c1.5-1.5 2.3-3.6 2.3-5.7s-.8-4.1-2.3-5.7z"></path></symbol>
+            <symbol viewBox="0 0 512 512" id="ion-ios-close-empty"><path d="M340.2 160l-84.4 84.3-84-83.9-11.8 11.8 84 83.8-84 83.9 11.8 11.7 84-83.8 84.4 84.2 11.8-11.7-84.4-84.3 84.4-84.2z"></path></symbol>
+        </defs>
+    </svg>
+            
+    <div style="display:flex;width:100%;height:100%;padding:0 20px 10px;box-sizing:border-box;">
+        <div style="width:200px;height:100%;display:flex;flex-direction: column;">
+            <div id="slides" style="width: 100%;height: 100%;background:#f3f3f3;overflow-y: auto;overflow-x: hidden;">
+        
+            </div>
+            <button class="input-add classic-primary" style="width:100%;flex:none;border: 1px solid #e4e4e4;background:#fff;">+ Add Slide</button>
+        </div>
+        <div style="width:100%;height:100%;margin-left: 20px;display: flex; flex-direction: column; flex-flow: wrap; align-content: start;">
+            <label>Type:
+                <select id="inpType">
+                    <option value="slider">Slider</option>
+                    <option value="carousel">Carousel</option>
+                </select>
+            </label>
+            <label>Autoplay:
+                <select id="inpAutoplay">
+                    <option value="false">false</option>
+                    <option value="1000">1000ms</option>
+                    <option value="1500">1500ms</option>
+                    <option value="2000">2000ms</option>
+                    <option value="2500">2500ms</option>
+                    <option value="3000">3000ms</option>
+                    <option value="3500">3500ms</option>
+                    <option value="4000">4000ms</option>
+                    <option value="4500">4500ms</option>
+                    <option value="5000">5000ms</option>
+                </select>
+            </label>
+            <label>Animation duration:
+                <select id="inpDuration">
+                    <option value="300">300ms</option>
+                    <option value="600">600ms</option>
+                    <option value="1000">1000ms</option>
+                    <option value="1500">1500ms</option>
+                    <option value="2000">2000ms</option>
+                    <option value="2500">2500ms</option>
+                    <option value="3000">3000ms</option>
+                    <option value="3500">3500ms</option>
+                    <option value="4000">4000ms</option>
+                    <option value="4500">4500ms</option>
+                    <option value="5000">5000ms</option>
+                </select>
+            </label>
+            <label style="width:120px">Per View:
+                <select id="inpPerView">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <!-- <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option> -->
+                </select>
+            </label>
+            <label style="width:110px">Gap:
+                <input id="inpGap" type="text" class="inptext" style="width:40px" value="0" onkeypress="return isNumber(event)">
+            </label>
+            <label for="chkArrow" style="width:70px;">
+                <input id="chkArrow" type="checkbox" checked="checked" /> Arrow
+            </label>
+            <label for="chkDots" style="width:70px;">
+                <input id="chkDots" type="checkbox" checked="checked" /> Dots
+            </label>
+
+            <div id="divCaption" style="flex-direction: column;flex-flow: wrap;align-content: start;">
+                <hr style="width: 100%; border: none; border-top: #eaeaea 1px solid; margin: 5px 0 20px;">
+
+                <label style="margin:0;padding:0">Caption: (HTML allowed)
+                    <textarea id="inpCaptionHtml" class="inptext" style="width: 268px;height: 70px;box-sizing: border-box;margin: 5px 0 0 0;"></textarea>
+                </label>
+                <label style="margin:0;padding:0">Style:
+                    <input id="inpCaptionStyle" type="text" class="inptext">
+                </label>
+                
+                <!--                 
+                <label style="width:67px;margin:0;padding:0;display:flex:flex;direction:column">Top:
+                    <input id="inpCaptionTop" type="text" class="inptext" style="width:40px" value="" onkeypress="return isNumber(event)">
+                </label>
+                <label style="width:67px;margin:0;padding:0;display:flex:flex;direction:column">Bottom:
+                    <input id="inpCaptionBottom" type="text" class="inptext" style="width:40px" value="4" onkeypress="return isNumber(event)">
+                </label>
+                <label style="width:67px;margin:0;padding:0;display:flex:flex;direction:column">Left:
+                    <input id="inpCaptionLeft" type="text" class="inptext" style="width:40px" value="4" onkeypress="return isNumber(event)">
+                </label>
+                <label style="width:67px;margin:0;padding:0;display:flex:flex;direction:column">Right:
+                    <input id="inpCaptionRight" type="text" class="inptext" style="width:40px" value="" onkeypress="return isNumber(event)">
+                </label> 
+                -->
+                
+            </div>
+
+        </div>
+    </div>
+
+
+    <script>
+        var activeModule = parent.document.querySelector("[data-module-active]"); //get active module 
+
+        // This page is opened when you click settings icon on the snippet. In this page, we will modify custom variables.
+        // Custom variables are data that be used for any purpose. For example, on a slider snippet, custom variables are used to store the url of the images and also other slider settings that user can change.
+        // Ini this example, we have a checkbox and an input text as example on how to interact with custom variables.
+        // That's why custom variables are stored (in snippet) in a data attribute named data-settings, because custom variables can control the snippet content.
+        
+
+        // Get custom variables by reading data-settings attribute defined on snippet => see minimalist-blocks/content.js
+        var settings = getSettings();
+        if (settings != 'undefined') {
+            // try {
+                var json = JSON.parse(settings);
+                // Display the custom variables on the checkbox and input text
+                // console.log(json);
+                document.querySelector("#inpType").value = json.type;  
+                document.querySelector("#inpAutoplay").value = json.autoplay;  
+                document.querySelector("#inpDuration").value = json.animationDuration;  
+                document.querySelector("#inpPerView").value = json.perView;  
+                document.querySelector("#inpGap").value = json.gap; 
+                document.querySelector("#chkArrow").checked = json.arrow; 
+                document.querySelector("#chkDots").checked = json.dots; 
+                        
+            // } catch (e) { }
+        }
+        
+        // When user make any change to the value, call constructList() function.
+        // constructList() function generates HTML content to be displayed on the snippet.
+        document.querySelector('#inpType').addEventListener('change', function(e){
+            constructList();
+        });
+        document.querySelector('#inpAutoplay').addEventListener('change', function(e){
+            constructList();
+        });
+        document.querySelector('#inpDuration').addEventListener('change', function(e){
+            constructList();
+        });
+        document.querySelector('#inpPerView').addEventListener('change', function(e){
+            if(document.querySelector('#inpPerView').value > 1){
+                document.querySelector('#inpType').value = 'carousel';
+            }
+            constructList();
+        });
+        document.querySelector('#chkArrow').addEventListener('click', function(e){
+            constructList();
+        });
+        document.querySelector('#chkDots').addEventListener('click', function(e){
+            constructList();
+        });
+        document.querySelector('#inpGap').addEventListener('input', function(e){
+            constructList();
+        });
+
+
+        var imagelist = '', index = 1;
+        var blocks = activeModule.querySelectorAll('[data-subblock');
+        Array.prototype.forEach.call(blocks, function(block){
+            if(hasClass(block, 'glide__slide--clone')) return;
+            block.setAttribute('data-index', index);
+            var imgsrc = block.querySelector('img').src;
+            var caption = block.parentNode.querySelector('.is-slider-caption');
+            var captionhtml = '', captionstyle = '';
+            if(caption) {
+                captionhtml = caption.innerHTML;
+                captionstyle = caption.style.cssText;
+            }
+            imagelist += '<div data-index="' + index + '" data-html-x="' + activeModule.getAttribute('data-html-' + index) + '" style="position:relative;" ' +
+                    'data-captionhtml="' + encodeURIComponent(captionhtml) + '" ' +
+                    'data-captionstyle="' + encodeURIComponent(captionstyle) + '" ' +
+                    '>' +
+                    '<img style="width:125px" src="' + imgsrc + '" />' +
+                    '<div class="is-tool" style="display: flex;">' +
+                        '<button class="elm-up" data-index="' + index + '" data-title="Up" title="Up"><svg class="is-icon-flex" style="width: 13px;height: 13px;"><use xlink:href="#ion-ios-arrow-thin-up"></use></svg></button>' +
+                        '<button class="elm-down" data-index="' + index + '" data-title="Down" title="Down"><svg class="is-icon-flex" style="width: 13px;height: 13px;"><use xlink:href="#ion-ios-arrow-thin-down"></use></svg></button>' +
+                        '<button class="elm-remove" data-index="' + index + '" data-title="Delete" title="Delete"><svg class="is-icon-flex" style=""><use xlink:href="#ion-ios-close-empty"></use></svg></button>' +
+                    '</div>' +
+                '</div>';
+            index++;
+        });
+        document.querySelector('#slides').innerHTML = imagelist;
+
+        document.querySelector('.input-add').addEventListener('click', function(e){
+            
+            var numOfSlides = document.querySelector('#slides').childElementCount;
+
+            var index = numOfSlides + 1;
+
+            var imgsrc='', datahtml='';
+            var items = document.querySelectorAll('#slides div[data-index]');
+            Array.prototype.forEach.call(items, function(item){
+                imgsrc = item.querySelector('img').src;
+                datahtml = item.getAttribute('data-html-x');
+            });
+
+            var html = '<div data-index="' + index + '" data-html-x="' + datahtml + '" style="position:relative;">' +
+                    '<img style="width:125px" src="' + imgsrc + '" />' +
+                    '<div class="is-tool" style="display: flex;">' +
+                        '<button class="elm-up" data-index="' + index + '" data-title="Up" title="Up"><svg class="is-icon-flex" style="width: 13px;height: 13px;"><use xlink:href="#ion-ios-arrow-thin-up"></use></svg></button>' +
+                        '<button class="elm-down" data-index="' + index + '" data-title="Down" title="Down"><svg class="is-icon-flex" style="width: 13px;height: 13px;"><use xlink:href="#ion-ios-arrow-thin-down"></use></svg></button>' +
+                        '<button class="elm-remove" data-index="' + index + '" data-title="Delete" title="Delete"><svg class="is-icon-flex" style=""><use xlink:href="#ion-ios-close-empty"></use></svg></button>' +
+                    '</div>' +
+                '</div>';
+            document.querySelector('#slides').insertAdjacentHTML('beforeend', html);
+
+            constructList();
+
+            var btnNewSlideUp = document.querySelector('#slides [data-index="' + index+'"] .elm-up');
+            btnNewSlideUp.addEventListener('click', function(e){
+                var index = btnNewSlideUp.getAttribute('data-index');
+                var slide = document.querySelector('#slides div[data-index="' + index + '"]');
+                if(slide.previousElementSibling) {
+                    slide.parentElement.insertBefore(slide, slide.previousElementSibling);        
+                    constructList();
+                }
+            });
+
+            var btnNewSlideDown = document.querySelector('#slides [data-index="' + index+'"] .elm-down');
+            btnNewSlideDown.addEventListener('click', function(e){
+                var index = btnNewSlideDown.getAttribute('data-index');
+                var slide = document.querySelector('#slides div[data-index="' + index + '"]');
+                if(slide.nextElementSibling) {
+                    slide.parentElement.insertBefore(slide.nextElementSibling, slide);         
+                    constructList();
+                }
+            });
+
+            var btnNewSlideRemove = document.querySelector('#slides [data-index="' + index+'"] .elm-remove');
+            btnNewSlideRemove.addEventListener('click', function(e){
+                var index = btnNewSlideRemove.getAttribute('data-index');
+                var slide = document.querySelector('#slides div[data-index="' + index + '"]');
+                slide.parentNode.removeChild(slide);        
+                constructList();
+            });
+
+        });
+
+
+        var btnUps = document.querySelectorAll('.elm-up');
+        Array.prototype.forEach.call(btnUps, function(btnUp){
+            btnUp.addEventListener('click', function(e){
+
+                var index = btnUp.getAttribute('data-index');
+                var slide = document.querySelector('#slides div[data-index="' + index + '"]');
+                if(slide.previousElementSibling) {
+                    slide.parentElement.insertBefore(slide, slide.previousElementSibling);
+        
+                    constructList();
+                }
+
+            });
+        });
+
+        var btnDowns = document.querySelectorAll('.elm-down');
+        Array.prototype.forEach.call(btnDowns, function(btnDown){
+            btnDown.addEventListener('click', function(e){
+
+                var index = btnDown.getAttribute('data-index');
+                var slide = document.querySelector('#slides div[data-index="' + index + '"]');
+                if(slide.nextElementSibling) {
+                    slide.parentElement.insertBefore(slide.nextElementSibling, slide); 
+        
+                    constructList();
+                }
+
+            });
+        });
+
+        var btnRemoves = document.querySelectorAll('.elm-remove');
+        Array.prototype.forEach.call(btnRemoves, function(btnRemove){
+            btnRemove.addEventListener('click', function(e){
+
+                var index = btnRemove.getAttribute('data-index');
+                var slide = document.querySelector('#slides div[data-index="' + index + '"]');
+                slide.parentNode.removeChild(slide);
+        
+                constructList();
+
+            });
+        });
+
+
+        var slides = document.querySelectorAll('#slides div[data-index]');
+        Array.prototype.forEach.call(slides, function(slide){
+
+            slide.addEventListener('click', function(e){
+
+                document.querySelector('#divCaption').style.display = 'flex';
+
+                var items = document.querySelectorAll('#slides div[data-index]');
+                Array.prototype.forEach.call(items, function(item){
+                    removeClass(item,'active');
+                });
+                addClass(slide,'active');
+
+                var captionhtml = decodeURIComponent(slide.getAttribute('data-captionhtml'));
+                var captionstyle = decodeURIComponent(slide.getAttribute('data-captionstyle'));
+
+                if(captionstyle==='') captionstyle='bottom:4vw;left:4vw;';
+
+                document.querySelector('#inpCaptionHtml').value = captionhtml;
+                document.querySelector('#inpCaptionStyle').value = captionstyle;
+
+            });
+
+        });
+
+        document.querySelector('#inpCaptionHtml').addEventListener('input', function(e){
+            var activeSlide = document.querySelector('#slides div.active');
+            activeSlide.setAttribute('data-captionhtml', encodeURIComponent(document.querySelector('#inpCaptionHtml').value));
+            activeSlide.setAttribute('data-captionstyle', encodeURIComponent(document.querySelector('#inpCaptionStyle').value));
+            constructList();
+        });
+
+        document.querySelector('#inpCaptionStyle').addEventListener('input', function(e){
+            var activeSlide = document.querySelector('#slides div.active');
+            activeSlide.setAttribute('data-captionhtml', encodeURIComponent(document.querySelector('#inpCaptionHtml').value));
+            activeSlide.setAttribute('data-captionstyle', encodeURIComponent(document.querySelector('#inpCaptionStyle').value));
+            constructList();
+        });
+
+
+
+        constructList();
+
+    
+
+        // Generate html content. 
+        // Here you can use the custom variables.
+        // Also you can embed custom javascript.
+        // Here you can also create a unique ID {id} so that multiple snippets won;t be a problem.
+        function constructList() {
+
+            var htmlDots = '', htmlImages = '', i = 0;
+            var items = document.querySelectorAll('#slides div[data-index]');
+            Array.prototype.forEach.call(items, function(item){
+                var imgsrc = item.querySelector('img').src;
+                htmlDots += '<button class="glide__bullet" data-glide-dir="=' + i + '"></button>';
+                htmlImages += '<li class="glide__slide is-html">' +
+                        '<div data-subblock>....This area will be ignored and will be filled with actual content edited by user....</div>' +
+                        (item.getAttribute('data-captionhtml')!==''? '<div class="is-slider-caption" style="' + decodeURIComponent(item.getAttribute('data-captionstyle')) + '">' + decodeURIComponent(item.getAttribute('data-captionhtml')) + '</div>': '') +
+                    '</li>';
+                i++;
+
+                activeModule.setAttribute('data-html-' + i, item.getAttribute('data-html-x')); // re-order
+            });
+
+            var html = '' +
+                '<svg width="0" height="0" style="position:absolute;display:none;">' +
+                    '<defs>' +
+                        '<symbol viewBox="0 0 512 512" id="ion-ios-arrow-left"><path d="M352 115.4L331.3 96 160 256l171.3 160 20.7-19.3L201.5 256z"></path></symbol>' +
+                        '<symbol viewBox="0 0 512 512" id="ion-ios-arrow-right"><path d="M160 115.4L180.7 96 352 256 180.7 416 160 396.7 310.5 256z"></path></symbol>' +
+                    '</defs>' +
+                '</svg>' +
+                '<div id="{id}" class="glide" style="display:none">' +
+                    '<div data-glide-el="track" class="glide__track">' +
+                        '<ul class="glide__slides">' +
+                            htmlImages +
+                        '</ul>' +
+                    '</div>' +
+                    '' +
+                    (document.querySelector("#chkArrow").checked? 
+                    '<div class="glide__arrows" data-glide-el="controls">' +
+                        '<button class="glide__arrow glide__arrow--left" data-glide-dir="<"><svg class="is-icon-flex"><use xlink:href="#ion-ios-arrow-left"></use></svg></button>' +
+                        '<button class="glide__arrow glide__arrow--right" data-glide-dir=">"><svg class="is-icon-flex"><use xlink:href="#ion-ios-arrow-right"></use></svg></button>' +
+                    '</div>' : '') +
+                    '' +
+                    (document.querySelector("#chkDots").checked? 
+                    '<div class="glide__bullets" data-glide-el="controls[nav]">' +
+                        htmlDots +
+                    '</div>' : '') +
+                '</div>' +
+                '' +
+                '<scr' + 'ipt>' +
+                    'var docReady = function (fn) {' +
+                        'var stateCheck = setInterval(function () {' +
+                            'if (document.readyState !== "complete") return;' +
+                            'clearInterval(stateCheck);' +
+                            'try { fn() } catch (e) { }' +
+                        '}, 1);' +
+                    '};' +
+                    'docReady(function () {' +
+                        'document.querySelector("#{id}").style.display="";' +
+                        'var _{id} = new Glide("#{id}", {' +
+                            'type: "' + document.querySelector("#inpType").value + '",' +
+                            'autoplay: ' + document.querySelector("#inpAutoplay").value + ',' +
+                            'animationDuration: ' + document.querySelector("#inpDuration").value + ',' +
+                            'gap: ' + document.querySelector("#inpGap").value + ',' +
+                            'perView: ' + document.querySelector("#inpPerView").value + ',' +
+                            'hoverpause: true,' +
+                            'arrow: ' + document.querySelector("#chkArrow").checked + ',' +
+                            'dots: ' + document.querySelector("#chkDots").checked + ',' +
+                        '}).mount();' +
+                        '_cleanClonedItems();' +
+                    '});' +
+                    'function _cleanClonedItems() {' +
+                        'var clones = document.querySelectorAll(".glide__slide--clone");' +
+                        'Array.prototype.forEach.call(clones, function(clone){' +
+                            'clone.removeAttribute("data-subblock");' +
+                            'clone.childNodes[0].removeAttribute("data-subblock");' +
+                        '});' +
+                    '}' +
+                    '' +
+                '</scr' + 'ipt>';
+
+            html = html.replace(/{id}/g, makeid());
+
+            // After generate the html, put the html on the snippet by calling setHtml() method. This will render the content.
+            setHtml(html);
+
+            // We also put the custom variables on the snippet by calling setSettings() method.
+            /*
+                {
+                    variable1: true, 
+                    variable2: "Hello World"
+                }
+            */
+            var settings = '{' +
+                '"type": "' + document.querySelector("#inpType").value + '",' +
+                '"autoplay": "' + document.querySelector("#inpAutoplay").value + '",' +
+                '"animationDuration":' + document.querySelector("#inpDuration").value + ',' +
+                '"gap": ' + document.querySelector("#inpGap").value + ',' +
+                '"perView":' + document.querySelector("#inpPerView").value + ',' +
+                '"hoverpause":true,' +
+                '"arrow":' + document.querySelector("#chkArrow").checked + ',' +
+                '"dots":' + document.querySelector("#chkDots").checked + '' +
+            '}';
+
+            setSettings(settings);
+        }
+
+
+        // UTILS (DO NOT CHANGE)
+        // This is for internal ContentBuilder.js purpose
+
+        function getSettings() {
+            var activeModule = parent.document.querySelector("[data-module-active]"); //get active module 
+            return decodeURIComponent(activeModule.getAttribute('data-settings'));
+        }
+
+        function setHtml(html) {
+            parent.document.querySelector('#hidContentModuleCode').value = html;
+        }
+
+        function setSettings(settings) {
+            parent.document.querySelector('#hidContentModuleSettings').value = settings;
+        }
+
+        // Others        
+        // source: http://stackoverflow.com/questions/1349404/generate-a-string-of-5-random-characters-in-javascript
+        function makeid() {
+            var text = "";
+            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+            for (var i = 0; i < 2; i++)
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+            var text2 = "";
+            var possible2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            for (var i = 0; i < 5; i++)
+                text2 += possible2.charAt(Math.floor(Math.random() * possible2.length));
+
+            return text + text2;
+        }
+        
+        function addClass(element, classname) {
+            if(!element) return;
+            if(hasClass(element,classname)) return;
+            if(element.classList.length===0) element.className = classname;
+            else element.className = element.className + ' ' + classname;
+            element.className = element.className.replace(/  +/g, ' ');
+        }
+
+        function hasClass(element, classname) {
+            if(!element) return false;
+            return element.classList ? element.classList.contains(classname) : new RegExp('\\b'+ classname+'\\b').test(element.className);
+        }
+
+        function removeClass(element, classname) {
+            if(!element) return;
+            if(element.classList.length>0) {
+                element.className = element.className.replace(classname, '');
+            }
+        }
+
+        // https://stackoverflow.com/questions/7295843/allow-only-numbers-to-be-typed-in-a-textbox
+        function isNumber(evt) {
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            return true;
+        }
+    </script>
+
+</body>
+</html>

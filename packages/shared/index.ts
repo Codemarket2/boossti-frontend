@@ -1,5 +1,8 @@
 interface IProjectConfig {
   title: string;
+  description: string;
+  image: string;
+  url: string;
   stripePublishableKey: string;
   defaultProfile: string;
   oneSignalAppId: string;
@@ -10,6 +13,10 @@ interface IProjectConfig {
 
 const projectConfig: IProjectConfig = {
   title: 'Vijaa',
+  description: 'Learn, Share & Get Well Soon, Stories about prevention and survival.',
+  image:
+    'https://vijaa-content-bucket202938-dev.s3.amazonaws.com/public/media/default/vijaalogo.jpeg',
+  url: 'https://vijaa.com',
   stripePublishableKey:
     'pk_test_517LnJnDPrb5EfwdRchW3z9AVO6xddwRZtSHqD311B4HW5j9Ouh9dmzU6UDiwH5Hwgh7jWSaqiQn7phQGitMPS0C500jhmK4yHw',
   defaultProfile:

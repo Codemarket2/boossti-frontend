@@ -39,15 +39,16 @@ export default class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <link
+          {/* <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-          />
+          /> */}
           <link
             href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i&display=swap"
             rel="stylesheet"
           />
-          {/* <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" /> */}
+          <link href="/assets/minimalist-blocks/content.css" rel="stylesheet" type="text/css" />
+          <link href="/assets/ionicons/css/ionicons.min.css" rel="stylesheet" />
         </Head>
         <body>
           <Main />

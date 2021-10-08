@@ -21,8 +21,8 @@ import { light, dark } from '../../src/components/home/theme/palette';
 // CSS from node modules
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-lazy-load-image-component/src/effects/opacity.css';
-import 'leaflet/dist/leaflet.css';
-import 'swiper/css/swiper.min.css';
+// import 'leaflet/dist/leaflet.css';
+// import 'swiper/css/swiper.min.css';
 import 'aos/dist/aos.css';
 
 const customsSignInUrl =

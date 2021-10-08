@@ -16,6 +16,7 @@ import { useRouter } from 'next/router';
 import ItemScreen from '../list/ItemScreen';
 import ImageList from '../post/ImageList';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
+import DisplayContent from '../contentbuilder/DisplayContent';
 import SingleComment from '../comment/SingleComment';
 import { convertToSlug } from './LeftNavigation';
 
@@ -121,6 +122,8 @@ export default function FieldValueCard({
           <ImageList media={fieldValue.media} />
         ) : field.fieldType === 'textarea' ? (
           <div className="ck-content">{parse(fieldValue.value)}</div>
+        ) : field.fieldType === 'contentBuilder' ? (
+          <DisplayContent value={fieldValue.value} />
         ) : (
           <Typography variant="body2" color="textSecondary" component="p">
             {fieldValue.value}

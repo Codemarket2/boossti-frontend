@@ -17,6 +17,9 @@ const StyledPaper = styled(Paper)`
 
 interface IProps {
   title?: string;
+  description?: string;
+  image?: string;
+  url?: string;
   children: ReactNode;
   authRequired?: boolean;
   mustAdmin?: boolean;
@@ -27,6 +30,9 @@ interface IProps {
 const UserLayout = ({
   children,
   title = projectConfig.title,
+  description = projectConfig.description,
+  image = projectConfig.image,
+  url = projectConfig.url,
   authRequired = false,
   mustAdmin = false,
   redirectPath,
@@ -38,6 +44,13 @@ const UserLayout = ({
       <Head>
         <title>{title}</title>
         <link rel="icon" href="/favicon.ico" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={image} />
+        <meta property="og:url" content={url} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta property="og:site_name" content={title} />
+        <meta name="twitter:image:alt" content={title} />
       </Head>
       <AppBar />
       {container ? (
