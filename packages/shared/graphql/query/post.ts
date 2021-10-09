@@ -113,3 +113,72 @@ export const GET_POSTS = gql`
     }
   }
 `;
+// export const GET_POST = gql`
+//   query MyQuery($_id: !ID) {
+//     getPost(_id:$_id) {
+//         _id
+//         body
+//         media {
+//           url
+//           caption
+//         }
+//         tags {
+//           tag {
+//             _id
+//             title
+//             slug
+//             description
+//             media {
+//               url
+//               caption
+//             }
+//             types {
+//               _id
+//               slug
+//             }
+//           }
+//         }
+//         createdAt
+//         createdBy {
+//           _id
+//           name
+//           picture
+//         }
+//     }
+//   }
+// `;
+
+export const GET_POST = gql`
+  query MyQuery($_id: ID!) {
+    getPost(_id: $_id) {
+      _id
+      body
+      media {
+        url
+        caption
+      }
+      tags {
+        tag {
+          _id
+          title
+          slug
+          description
+          media {
+            url
+            caption
+          }
+          types {
+            _id
+            slug
+          }
+        }
+      }
+      createdAt
+      createdBy {
+        _id
+        name
+        picture
+      }
+    }
+  }
+`;

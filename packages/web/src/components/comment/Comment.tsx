@@ -11,9 +11,20 @@ interface IComment {
   threadId: string;
   label?: string;
   showInput?: boolean;
+  itemSlug?: string;
+  shareIndex?: any;
+  fieldTitle?: string;
 }
 
-export default function Comment({ postId, label, showInput = true, threadId }: IComment) {
+export default function Comment({
+  postId,
+  label,
+  showInput = true,
+  threadId,
+  itemSlug,
+  shareIndex,
+  fieldTitle,
+}: IComment) {
   const { handleSave, inputVal, setInputVal, loading: submitLoading } = useCreateComment(
     postId,
     threadId,
@@ -43,6 +54,9 @@ export default function Comment({ postId, label, showInput = true, threadId }: I
               commentedUser={commentedUser}
               index={index}
               handleDelete={handleDelete}
+              itemSlug={itemSlug}
+              shareIndex={shareIndex}
+              fieldTitle={fieldTitle}
             />
           </>
         ))

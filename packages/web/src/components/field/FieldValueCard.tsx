@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import parse from 'html-react-parser';
 import Card from '@material-ui/core/Card';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -10,11 +11,14 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import moment from 'moment';
 import Link from 'next/link';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import { useRouter } from 'next/router';
+
 import ItemScreen from '../list/ItemScreen';
 import ImageList from '../post/ImageList';
-import { useState } from 'react';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
 import DisplayContent from '../contentbuilder/DisplayContent';
+import SingleComment from '../comment/SingleComment';
+import { convertToSlug } from './LeftNavigation';
 
 interface IProps {
   fieldValue: any;
@@ -22,6 +26,7 @@ interface IProps {
   showAction?: boolean;
   showAuthor?: boolean;
   onSelect: (arg1: any, arg2: any) => void;
+  index?: any;
 }
 
 export default function FieldValueCard({
@@ -29,13 +34,15 @@ export default function FieldValueCard({
   field,
   showAction = false,
   showAuthor = true,
+  index,
   onSelect,
 }: IProps) {
   const [state, setState] = useState({
     expandedItem: false,
     itemId: '',
   });
-
+  const { query } = useRouter();
+  const [showHideComments, setShowHideComments] = useState(false);
   return (
     <Card variant="outlined" style={{ border: 'none' }}>
       <div className="d-flex justify-content-end">
@@ -123,7 +130,23 @@ export default function FieldValueCard({
           </Typography>
         )}
       </CardContent>
-      <CommentLikeShare parentId={fieldValue._id} />
+      <CommentLikeShare
+        showHideComments={showHideComments}
+        setShowHideComments={setShowHideComments}
+        parentId={fieldValue._id}
+        index={index}
+        itemSlug={convertToSlug(field.label)}
+        fieldTitle={fieldValue.itemId.title.trim().toLowerCase()}
+      />
+      {/* {showSingleComment && <SingleComment _id={query.commentId as string} />} */}
+      {
+        <SingleComment
+          setShowHideComments={setShowHideComments}
+          _id={query.commentId as string}
+          itemSlug={convertToSlug(field.label)}
+          fieldTitle={fieldValue.itemId.title.trim().toLowerCase()}
+        />
+      }
     </Card>
   );
 }

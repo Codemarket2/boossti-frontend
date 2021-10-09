@@ -1,7 +1,8 @@
-import Tooltip from '@material-ui/core/Tooltip';
-import Button from '@material-ui/core/Button';
+import { Tooltip, IconButton, Button } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+
+import Share from '../share/Share';
 
 interface IProps {
   onEdit?: () => void;
@@ -45,6 +46,12 @@ export default function ActionButtons({
           </Button>
         </Tooltip>
       )}
+
+      <div className="ml-1">
+        <Button size="small" variant="outlined" component="span" color="primary">
+          <Share /> share
+        </Button>
+      </div>
     </div>
   );
 }

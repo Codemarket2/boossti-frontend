@@ -1,3 +1,22 @@
+// import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import IconButton from '@material-ui/core/IconButton';
+import AddCircle from '@material-ui/icons/AddCircle';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Fragment } from 'react';
+import { convertToSlug } from './LeftNavigation';
+import Carousel from 'react-material-ui-carousel';
+import { useRouter } from 'next/router';
+import { useTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+
 import {
   useGetFieldValuesByItem,
   useGetFieldsByType,
@@ -5,30 +24,14 @@ import {
 } from '@frontend/shared/hooks/field';
 import FieldsSkeleton from './FieldsSkeleton';
 import ErrorLoading from '../common/ErrorLoading';
-// import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import AddCircle from '@material-ui/icons/AddCircle';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import FieldValueForm from './FieldValueForm';
-import IconButton from '@material-ui/core/IconButton';
-import { useEffect, useState } from 'react';
 import CRUDMenu from '../common/CRUDMenu';
 import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
-import { useSelector } from 'react-redux';
-import { Fragment } from 'react';
 import FieldValueCard from './FieldValueCard';
-import { convertToSlug } from './LeftNavigation';
-import Carousel from 'react-material-ui-carousel';
-import { useTheme } from '@material-ui/core/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 // import DeleteIcon from '@material-ui/icons/Delete';
 // import EditIcon from '@material-ui/icons/Edit';
+import Share from '../share/Share';
 
 const initialState = {
   showForm: false,
@@ -42,6 +45,7 @@ const initialState = {
 };
 
 function ItemOneFields({ field, parentId, showAuthor = true, guest, setFieldValueCount }) {
+  const { query } = useRouter();
   const [state, setState] = useState(initialState);
   const { attributes, admin } = useSelector(({ auth }: any) => auth);
   const currentUserId = attributes['custom:_id'];
@@ -106,6 +110,12 @@ function ItemOneFields({ field, parentId, showAuthor = true, guest, setFieldValu
           </ListItemIcon>
           <ListItemText primary="Add New Value" />
         </MenuItem>
+        <MenuItem>
+          <ListItemIcon className="mr-n4">
+            <Share itemSlug={convertToSlug(field.label)} />
+          </ListItemIcon>
+          <ListItemText primary="Share" />
+        </MenuItem>
       </Menu>
       <Divider />
       <div className="d-flex justify-content-between align-items-center align-content-center">
@@ -138,6 +148,7 @@ function ItemOneFields({ field, parentId, showAuthor = true, guest, setFieldValu
       {state.showForm && <FieldValueForm {...formProps} />}
       {data.getFieldValuesByItem.data.length > 1 ? (
         <Carousel
+          // index={parseInt(query.index)}
           NextIcon={
             <img
               style={{ width: 30, transform: 'rotate(180deg)' }}
@@ -177,6 +188,7 @@ function ItemOneFields({ field, parentId, showAuthor = true, guest, setFieldValu
                 <FieldValueForm edit {...formProps} fieldValue={fieldValue} />
               ) : (
                 <FieldValueCard
+                  index={index}
                   fieldValue={fieldValue}
                   field={field}
                   showAction={currentUserId === fieldValue.createdBy._id || admin}
@@ -205,6 +217,7 @@ function ItemOneFields({ field, parentId, showAuthor = true, guest, setFieldValu
               <FieldValueForm edit {...formProps} fieldValue={fieldValue} />
             ) : (
               <FieldValueCard
+                index={index}
                 fieldValue={fieldValue}
                 field={field}
                 showAction={currentUserId === fieldValue.createdBy._id || admin}

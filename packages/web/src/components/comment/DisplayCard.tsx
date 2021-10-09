@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import { Comment } from 'semantic-ui-react';
 import parse from 'html-react-parser';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
-import { Comment } from 'semantic-ui-react';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import { IconButton } from '@material-ui/core';
+
 import { useGetLikes } from '@frontend/shared/hooks/like/getLike';
 import { useGetActionCounts } from '@frontend/shared/hooks/comment/getComment';
 import CommentUI from './Comment';
 import Like from '../like/Like';
 import LikeModal from '../like/LikeModal';
 import 'semantic-ui-css/semantic.min.css';
+import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
 
 interface IDisplayComment {
   commentedUser: any;
@@ -18,6 +23,9 @@ interface IDisplayComment {
   postId: string;
   index: number;
   showIcon?: boolean;
+  itemSlug?: string;
+  shareIndex?: any;
+  fieldTitle?: string;
 }
 export default function DisplayCard({
   showIcon = false,
@@ -27,6 +35,9 @@ export default function DisplayCard({
   postId,
   threadId,
   index,
+  itemSlug,
+  shareIndex,
+  fieldTitle,
 }: IDisplayComment) {
   const { attributes } = useSelector(({ auth }: any) => auth);
   //comment
@@ -83,7 +94,7 @@ export default function DisplayCard({
           <Comment.Text data-testid="comment-body">
             <div className="ck-content">{parse(commentedUser?.body)}</div>
           </Comment.Text>
-          {open && (
+          {/* {open && (
             <LikeModal
               open={open}
               handleOpenLikeModal={handleOpenLikeModal}
@@ -91,9 +102,9 @@ export default function DisplayCard({
               totalLike={likeData!.getLikesByParentId!.data!.length}
               parentId={commentedUser._id}
             />
-          )}
+          )} */}
           <Comment.Actions>
-            <Comment.Action>
+            {/* <Comment.Action>
               <Like
                 likedByUser={actionCountData?.getActionCounts?.likedByUser}
                 parentId={commentedUser._id}
@@ -167,7 +178,28 @@ export default function DisplayCard({
                   </Comment.Action>
                 )}
               </>
-            )}
+            )} */}
+
+            <Comment.Action>
+              <CommentLikeShare
+                parentId={commentedUser._id}
+                showDivider={false}
+                commentId={commentedUser._id}
+                itemSlug={itemSlug}
+                index={shareIndex}
+                fieldTitle={fieldTitle}>
+                {currentUserId === commentedUser!.createdBy!._id && (
+                  <>
+                    <IconButton onClick={() => setEdit(true)}>
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton onClick={() => handleDelete(commentedUser._id, postId, index)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </>
+                )}
+              </CommentLikeShare>
+            </Comment.Action>
           </Comment.Actions>
         </Comment.Content>
         {showReply && (

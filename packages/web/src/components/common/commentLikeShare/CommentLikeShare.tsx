@@ -1,18 +1,45 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import ShareIcon from '@material-ui/icons/Share';
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
+import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
+
 import { useGetActionCounts } from '@frontend/shared/hooks/comment/getComment';
 import ErrorLoading from '../ErrorLoading';
 import LikeModal from '../../like/LikeModal';
 import Like from '../../like/Like';
 import Comment from '../../comment/Comment';
+import Share from '../../share/Share';
+import { AnyStyledComponent } from 'styled-components';
 
 interface ICommentLikeShare {
   parentId: string;
+  showDivider?: boolean;
+  children?: React.ReactNode;
+  index?: any;
+  itemSlug?: string;
+  commentId?: string;
+  setShowSingleComment?: any;
+  fieldTitle?: string;
+  showHideComments?: boolean;
+  setShowHideComments?: any;
 }
-export default function CommentLikeShare({ parentId }: ICommentLikeShare) {
+
+export default function CommentLikeShare({
+  parentId,
+  showDivider = true,
+  children,
+  index,
+  itemSlug,
+  commentId,
+  fieldTitle,
+  showHideComments,
+  setShowHideComments,
+}: ICommentLikeShare) {
+  const { attributes } = useSelector(({ auth }: any) => auth);
+  const currentUserId = attributes['custom:_id'];
   const { data, error } = useGetActionCounts(parentId);
   // like modal state & effect
   const [open, setOpen] = useState(false);
@@ -24,9 +51,13 @@ export default function CommentLikeShare({ parentId }: ICommentLikeShare) {
     setOpen(false);
   };
   //comment state
+
   const [showCommentSection, setShowCommentSection] = useState(false);
   const toggleCommentSection = () => {
     setShowCommentSection(!showCommentSection);
+    if (fieldTitle) {
+      setShowHideComments(!showHideComments);
+    }
   };
 
   return (
@@ -57,15 +88,29 @@ export default function CommentLikeShare({ parentId }: ICommentLikeShare) {
           {data?.getActionCounts?.commentCount && data.getActionCounts.commentCount > 0 ? (
             <span className="mr-2">{data.getActionCounts.commentCount}</span>
           ) : null}
+
           <IconButton>
-            <ShareIcon />
+            {/* <ShareIcon /> */}
+            <Share
+              index={index}
+              itemSlug={itemSlug}
+              commentId={commentId}
+              fieldTitle={fieldTitle}
+            />
           </IconButton>
+          {children}
         </div>
       </div>
-      {showCommentSection && (
+      {(showHideComments || showCommentSection) && (
         <Fragment>
-          <Divider />
-          <Comment postId={parentId} threadId={parentId} />
+          {showDivider && <Divider />}
+          <Comment
+            postId={parentId}
+            threadId={parentId}
+            itemSlug={itemSlug}
+            shareIndex={index}
+            fieldTitle={fieldTitle}
+          />
         </Fragment>
       )}
     </div>

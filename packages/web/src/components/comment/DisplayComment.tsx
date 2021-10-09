@@ -10,6 +10,9 @@ interface IDisplayComment {
   handleDelete: any;
   commentedUser: any;
   index: number;
+  itemSlug?: string;
+  shareIndex?: any;
+  fieldTitle?: string;
 }
 
 export default function DisplayComment({
@@ -18,6 +21,9 @@ export default function DisplayComment({
   commentedUser,
   index,
   threadId,
+  itemSlug,
+  shareIndex,
+  fieldTitle,
 }: IDisplayComment) {
   const { attributes } = useSelector(({ auth }: any) => auth);
   const currentUserId = attributes['custom:_id'];
@@ -57,6 +63,9 @@ export default function DisplayComment({
           postId={postId}
           setEdit={setEdit}
           showIcon={true}
+          itemSlug={itemSlug}
+          shareIndex={shareIndex}
+          fieldTitle={fieldTitle}
         />
       )}
     </>

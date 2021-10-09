@@ -13,6 +13,12 @@ interface IProps {
   darkMode: boolean;
   admin: boolean;
 }
+{
+  /* <img
+src="https://res.cloudinary.com/dzo2ufh6a/image/upload/v1633438866/vijaa-logo_r5xsxm.jpg"
+style={{ height: 40, width: 100 }}
+/> */
+}
 
 export default function DrawerContent({ openDrawer, setOpenDrawer, darkMode, admin }: IProps) {
   return (
@@ -22,7 +28,8 @@ export default function DrawerContent({ openDrawer, setOpenDrawer, darkMode, adm
         className="d-flex justify-content-between  align-items-center align-content-center">
         <img
           style={{ width: '60%' }}
-          src={require('../../assets/images/vijaalogo-rec.jpeg')}
+          // src={require('../../assets/images/vijaalogo-rec.jpeg')}
+          src={'https://res.cloudinary.com/dzo2ufh6a/image/upload/v1633450543/menu-logo_hwyxba.png'}
           alt="vijaa logo"
         />
         <IconButton onClick={() => setOpenDrawer(false)}>
