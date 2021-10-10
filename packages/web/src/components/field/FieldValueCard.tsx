@@ -136,17 +136,15 @@ export default function FieldValueCard({
         parentId={fieldValue._id}
         index={index}
         itemSlug={convertToSlug(field.label)}
-        fieldTitle={fieldValue.itemId.title.trim().toLowerCase()}
+        fieldTitle={fieldValue?.itemId?.title?.trim().toLowerCase()}
       />
       {/* {showSingleComment && <SingleComment _id={query.commentId as string} />} */}
-      {
-        <SingleComment
-          setShowHideComments={setShowHideComments}
-          _id={query.commentId as string}
-          itemSlug={convertToSlug(field.label)}
-          fieldTitle={fieldValue.itemId.title.trim().toLowerCase()}
-        />
-      }
+      <SingleComment
+        setShowHideComments={setShowHideComments}
+        _id={query.commentId as string}
+        itemSlug={convertToSlug(field.label)}
+        fieldTitle={fieldValue?.itemId?.title?.trim().toLowerCase()}
+      />
     </Card>
   );
 }
