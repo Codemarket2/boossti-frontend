@@ -250,6 +250,17 @@ function ItemOneFields({
   );
 }
 
+interface IProps {
+  parentId: string;
+  typeId: string;
+  showAuthor?: boolean;
+  guest?: boolean;
+  setFields?: (arg: any) => void;
+  setFieldValueCount?: (arg: any, arg2: any) => void;
+  pushToAnchor?: () => void;
+  toggleLeftNavigation?: (value: boolean) => void;
+}
+
 export default function ItemsFieldsMap({
   parentId,
   typeId,
@@ -259,9 +270,8 @@ export default function ItemsFieldsMap({
   setFieldValueCount = (index: number, value: number) => {},
   pushToAnchor = () => {},
   toggleLeftNavigation,
-}) {
+}: IProps) {
   const { data, loading, error } = useGetFieldsByType({ parentId: typeId });
-  // useFieldValueSubscription(typeId);
 
   useEffect(() => {
     if (data && data.getFieldsByType) {
@@ -280,7 +290,11 @@ export default function ItemsFieldsMap({
     <>
       {data.getFieldsByType.data.map((field, index) => (
         <ItemOneFields
-          toggleLeftNavigation={toggleLeftNavigation}
+          toggleLeftNavigation={(value) => {
+            if (toggleLeftNavigation) {
+              toggleLeftNavigation(value);
+            }
+          }}
           parentId={parentId}
           field={field}
           key={field._id}
