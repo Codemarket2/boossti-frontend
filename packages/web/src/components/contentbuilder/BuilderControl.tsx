@@ -29,11 +29,12 @@ type TProps = {
 };
 type TState = {
   html: string;
+  containerClass: string;
 };
 
 class BuilderControl extends Component<TProps, TState> {
   static defaultProps = {
-    container: '.is-container',
+    // container: '.is-container',
     scriptPath: '/contentbuilder/',
     pluginPath: '/contentbuilder/',
     modulePath: '/assets/modules/',
@@ -53,6 +54,7 @@ class BuilderControl extends Component<TProps, TState> {
     super(props);
     this.state = {
       html: this.props.value,
+      containerClass: `container${uuid()}`,
     };
 
     this.saveContent = this.saveContent.bind(this);
@@ -65,7 +67,7 @@ class BuilderControl extends Component<TProps, TState> {
     this.loadLanguageFile(this.props.languageFile, () => {
       // Then init the ContentBuilder
       this.obj = new ContentBuilder({
-        container: this.props.container,
+        container: `.${this.state.containerClass}`,
         scriptPath: this.props.scriptPath,
         pluginPath: this.props.pluginPath,
         modulePath: this.props.modulePath,
@@ -179,7 +181,7 @@ class BuilderControl extends Component<TProps, TState> {
   };
 
   render() {
-    return <div className="is-container container"></div>;
+    return <div className={`is-container container ${this.state.containerClass}`}></div>;
   }
 }
 
