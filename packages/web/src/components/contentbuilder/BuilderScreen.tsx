@@ -1,10 +1,8 @@
-import { useState, forwardRef } from 'react';
-import Dialog from '@material-ui/core/Dialog';
-import Slide from '@material-ui/core/Slide';
+import { useState } from 'react';
 import PageView from './PageView';
 import Builder from './Builder';
 
-const defaultHtmlData = `<div class="row clearfix">
+const defaultValue = `<div class="row clearfix">
 <div class="column full">
     <h2 class="size-32" style="text-align: center; font-weight: 400;">Simply Beautiful</h2>
 </div>
@@ -22,31 +20,23 @@ const defaultHtmlData = `<div class="row clearfix">
 </div>
 </div>`;
 
-const Transition = forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+interface IState {
+  edit: boolean;
+  value: string;
+}
 
 export default function BuilderScreen() {
-  const [state, setState] = useState({ edit: false, htmlData: defaultHtmlData });
+  const [state, setState] = useState<IState>({ edit: false, value: defaultValue });
   return (
     <div>
       {state.edit ? (
-        <Dialog
-          TransitionComponent={Transition}
-          fullScreen
-          open={true}
-          onClose={() => setState({ ...state, edit: false })}>
-          <Builder
-            onClose={() => setState({ ...state, edit: false })}
-            onSave={(htmlData) => setState({ ...state, htmlData })}
-            htmlData={state.htmlData}
-          />
-        </Dialog>
-      ) : (
-        <PageView
-          htmlData={state.htmlData}
-          onClickEdit={() => setState({ ...state, edit: true })}
+        <Builder
+          onClose={() => setState({ ...state, edit: false })}
+          onSave={(value: string) => setState({ ...state, value })}
+          value={state.value}
         />
+      ) : (
+        <PageView value={state.value} onClickEdit={() => setState({ ...state, edit: true })} />
       )}
     </div>
   );

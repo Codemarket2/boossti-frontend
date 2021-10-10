@@ -20,12 +20,11 @@ import { onAlert } from '../../utils/alert';
 import { useEffect, useState } from 'react';
 import moment from 'moment';
 import AddressSearch from '../common/AddressSearch';
-// import BuilderDialog from '../contentbuilder/BuilderDialog';
 
 import dynamic from 'next/dynamic';
 
 const RichTextarea = dynamic(() => import('../common/RichTextarea'), { ssr: false });
-const BuilderDialog = dynamic(() => import('../contentbuilder/BuilderDialog'), { ssr: false });
+const Builder = dynamic(() => import('../contentbuilder/Builder'), { ssr: false });
 
 interface IProps {
   onCancel: () => void;
@@ -78,7 +77,7 @@ export default function ItemFieldForm({
   return (
     <div>
       {formik.values.fieldType === 'contentBuilder' ? (
-        <BuilderDialog
+        <Builder
           onClose={onCancel}
           value={formik.values.value}
           onSave={(newValue) => {

@@ -2,27 +2,38 @@ import { Component } from 'react';
 import BuilderControl from './BuilderControl';
 import StyledDiv from './StyledDiv';
 import Button from '@material-ui/core/Button';
+import Backdrop from '../common/Backdrop';
 
-export default class Edit extends Component {
+type TProps = {
+  value: string;
+  onSave: (newValue: string) => void;
+  onClose: () => void;
+  loading?: boolean;
+};
+type TState = {
+  showBackdrop: boolean;
+};
+
+export default class Builder extends Component<TProps, TState> {
   constructor(props) {
     super(props);
     this.state = {
-      html: this.props.htmlData,
+      showBackdrop: false,
     };
 
     this.handleOnSave = this.handleOnSave.bind(this);
     this.handleOnSaveAndFinish = this.handleOnSaveAndFinish.bind(this);
   }
 
+  callSaveAndFinish: any;
+  callDestroy: any;
+
   handleOnSave(html) {
-    // Save content
     this.props.onSave(html);
   }
 
   handleOnSaveAndFinish(html) {
-    // Save content
     this.props.onSave(html);
-
     this.props.onClose();
   }
 
@@ -41,14 +52,12 @@ export default class Edit extends Component {
   render() {
     return (
       <StyledDiv>
+        <Backdrop open={this.state.showBackdrop} />
         <BuilderControl
-          // history={this.history}
-          initialHtml={this.state.html}
-          onSave={this.handleOnSave}
+          value={this.props.value}
+          // onSave={this.handleOnSave}
           onSaveAndFinish={this.handleOnSaveAndFinish}
-          doSave={(f) =>
-            (this.callSave = f)
-          } /* https://stackoverflow.com/questions/37949981/call-child-method-from-parent */
+          // doSave={(f) => (this.callSave = f)}
           doSaveAndFinish={(f) => (this.callSaveAndFinish = f)}
           doDestroy={(f) => (this.callDestroy = f)}
           base64Handler={'http://localhost:8001/upload'}
@@ -70,9 +79,7 @@ export default class Edit extends Component {
             color="primary"
             type="button"
             onClick={() => {
-              if (this.props.setShowBackdrop) {
-                this.props.setShowBackdrop();
-              }
+              this.setState({ ...this.state, showBackdrop: true });
               this.callSaveAndFinish();
             }}
             disabled={this.props.loading}>

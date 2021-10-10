@@ -51,7 +51,7 @@ export default function Screen({
   const matches = useMediaQuery(theme.breakpoints.down('xs'));
   const setting = useSelector(({ setting }: any) => setting);
 
-  const [state, setState] = useState({ fieldName: '', fields: [] });
+  const [state, setState] = useState({ fieldName: '', fields: [], hideLeftNavigation: false });
   const [fieldValueCount, setFieldValueCount] = useState({});
   const deleteCallBack = () => {
     router.push(`/types/${typeSlug}`);
@@ -116,6 +116,8 @@ export default function Screen({
     fieldValueCount,
   };
 
+  const hideleft = hideBreadcrumbs || state.hideLeftNavigation;
+
   return (
     <>
       {!hideBreadcrumbs && (
@@ -157,7 +159,7 @@ export default function Screen({
           </Hidden>
         </>
       )}
-      {!hideBreadcrumbs && (
+      {!hideleft && (
         <Hidden xsDown>
           <LeftNavigation
             style={{
@@ -174,7 +176,7 @@ export default function Screen({
       )}
       <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
         <Paper
-          style={{ width: matches || hideBreadcrumbs ? '100%' : '84%', border: 'none' }}
+          style={{ width: matches || hideleft ? '100%' : '84%', border: 'none' }}
           variant="outlined"
           className="p-2 pb-5">
           {state.fieldName === 'title' ? (
@@ -252,6 +254,7 @@ export default function Screen({
             </>
           )}
           <FieldValues
+            toggleLeftNavigation={(value) => setState({ ...state, hideLeftNavigation: value })}
             pushToAnchor={pushToAnchor}
             parentId={data.getListItemBySlug._id}
             typeId={data.getListItemBySlug.types[0]._id}

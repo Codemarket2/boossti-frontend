@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import axios from 'axios';
 import ContentBuilder from '@innovastudio/contentbuilder';
 import config from '@frontend/shared/aws-exports';
@@ -7,11 +7,52 @@ import { v4 as uuid } from 'uuid';
 
 const { aws_user_files_s3_bucket_region: region, aws_user_files_s3_bucket: bucket } = config;
 
-class BuilderControl extends Component {
+type TProps = {
+  value: string;
+  onSave?: (value: string) => void;
+  onSaveAndFinish: (value: string) => void;
+  doSave?: any;
+  doSaveAndFinish: any;
+  doDestroy: any;
+  container?: any;
+  scriptPath?: any;
+  pluginPath?: any;
+  modulePath?: any;
+  fontAssetPath?: any;
+  assetPath?: any;
+  imageSelect?: any;
+  fileSelect?: any;
+  base64Handler?: any;
+  largerImageHandler?: any;
+  snippetFile?: any;
+  languageFile?: any;
+};
+type TState = {
+  html: string;
+};
+
+class BuilderControl extends Component<TProps, TState> {
+  static defaultProps = {
+    container: '.is-container',
+    scriptPath: '/contentbuilder/',
+    pluginPath: '/contentbuilder/',
+    modulePath: '/assets/modules/',
+    fontAssetPath: '/assets/fonts/',
+    assetPath: '/assets/',
+    imageSelect: '',
+    fileSelect: '',
+    base64Handler: '',
+    largerImageHandler: '',
+    snippetFile: '',
+    languageFile: '',
+  };
+
+  obj: any;
+
   constructor(props) {
     super(props);
     this.state = {
-      html: this.props.initialHtml,
+      html: this.props.value,
     };
 
     this.saveContent = this.saveContent.bind(this);
@@ -40,7 +81,7 @@ class BuilderControl extends Component {
           const filename = selectedImage.name;
           const reader = new FileReader();
           reader.onload = (e) => {
-            let base64 = e.target.result;
+            let base64: any = e.target.result;
             base64 = base64.replace(/^data:image\/(png|jpeg);base64,/, '');
 
             // Upload image process
@@ -49,7 +90,7 @@ class BuilderControl extends Component {
                 image: base64,
                 filename: filename,
               })
-              .then((response) => {
+              .then((response: any) => {
                 const uploadedImageUrl = response.data.url; // get saved image url
                 this.obj.applyLargerImage(uploadedImageUrl); // set input
               })
@@ -141,20 +182,5 @@ class BuilderControl extends Component {
     return <div className="is-container container"></div>;
   }
 }
-
-BuilderControl.defaultProps = {
-  container: '.is-container',
-  scriptPath: '/contentbuilder/',
-  pluginPath: '/contentbuilder/',
-  modulePath: '/assets/modules/',
-  fontAssetPath: '/assets/fonts/',
-  assetPath: '/assets/',
-  imageSelect: '',
-  fileSelect: '',
-  base64Handler: '',
-  largerImageHandler: '',
-  snippetFile: '',
-  languageFile: '',
-};
 
 export default BuilderControl;
