@@ -44,7 +44,14 @@ const initialState = {
   addTarget: null,
 };
 
-function ItemOneFields({ field, parentId, showAuthor = true, guest, setFieldValueCount }) {
+function ItemOneFields({
+  field,
+  parentId,
+  showAuthor = true,
+  guest,
+  setFieldValueCount,
+  toggleLeftNavigation,
+}) {
   const { query } = useRouter();
   const [state, setState] = useState(initialState);
   const { attributes, admin } = useSelector(({ auth }: any) => auth);
@@ -70,7 +77,10 @@ function ItemOneFields({ field, parentId, showAuthor = true, guest, setFieldValu
     typeSlug: field.typeId ? field.typeId.slug : null,
     fieldType: field.fieldType,
     label: field.label,
-    onCancel: () => setState(initialState),
+    onCancel: () => {
+      toggleLeftNavigation(false);
+      setState(initialState);
+    },
   };
 
   useEffect(() => {
@@ -79,7 +89,10 @@ function ItemOneFields({ field, parentId, showAuthor = true, guest, setFieldValu
     }
   }, [data]);
 
-  const onClickAdd = () => setState({ ...initialState, showForm: true });
+  const onClickAdd = () => {
+    toggleLeftNavigation(true);
+    setState({ ...initialState, showForm: true });
+  };
 
   if (!error && (!data || !data.getFieldValuesByItem)) {
     return <FieldsSkeleton />;
@@ -238,11 +251,27 @@ function ItemOneFields({ field, parentId, showAuthor = true, guest, setFieldValu
         show={state.showMenu}
         onClose={() => setState(initialState)}
         onDelete={() => handleDelete(state.selectedFieldValue._id, deleteCallback)}
-        onEdit={() => setState({ ...state, edit: true, showMenu: null })}
+        onEdit={() => {
+          if (field.fieldType === 'contentBuilder') {
+            toggleLeftNavigation(true);
+          }
+          setState({ ...state, edit: true, showMenu: null });
+        }}
       />
       <Backdrop open={deleteLoading} />
     </div>
   );
+}
+
+interface IProps {
+  parentId: string;
+  typeId: string;
+  showAuthor?: boolean;
+  guest?: boolean;
+  setFields?: (arg: any) => void;
+  setFieldValueCount?: (arg: any, arg2: any) => void;
+  pushToAnchor?: () => void;
+  toggleLeftNavigation?: (value: boolean) => void;
 }
 
 export default function ItemsFieldsMap({
@@ -253,9 +282,9 @@ export default function ItemsFieldsMap({
   setFields = (arg: any) => {},
   setFieldValueCount = (index: number, value: number) => {},
   pushToAnchor = () => {},
-}) {
+  toggleLeftNavigation,
+}: IProps) {
   const { data, loading, error } = useGetFieldsByType({ parentId: typeId });
-  // useFieldValueSubscription(typeId);
 
   useEffect(() => {
     if (data && data.getFieldsByType) {
@@ -274,6 +303,11 @@ export default function ItemsFieldsMap({
     <>
       {data.getFieldsByType.data.map((field, index) => (
         <ItemOneFields
+          toggleLeftNavigation={(value) => {
+            if (toggleLeftNavigation) {
+              toggleLeftNavigation(value);
+            }
+          }}
           parentId={parentId}
           field={field}
           key={field._id}
