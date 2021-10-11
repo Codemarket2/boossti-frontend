@@ -28,7 +28,12 @@ export default function Screen({ slug, typeSlug, metaTags }: IProps) {
   };
 
   return (
-    <UserLayout container={false} authRequired {...metaTags}>
+    <UserLayout
+      container={false}
+      authRequired
+      title={metaTags.title}
+      description={metaTags.description}
+      image={metaTags.image}>
       <div className="px-3">
         <ItemScreen
           onSlugUpdate={onSlugUpdate}

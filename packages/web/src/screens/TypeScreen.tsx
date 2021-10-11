@@ -87,8 +87,12 @@ export default function Screen({ slug, metaTags }: IProps) {
   }
 
   return (
-    <UserLayout container={false} authRequired {...metaTags}>
-      {/* <UserLayout container={false} authRequired> */}
+    <UserLayout
+      container={false}
+      authRequired
+      title={metaTags.title}
+      description={metaTags.description}
+      image={metaTags.image}>
       <div className="px-3">
         <div className="d-flex justify-content-between align-content-center align-items-center">
           <Breadcrumbs>
