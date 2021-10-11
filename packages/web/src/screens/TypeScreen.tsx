@@ -30,13 +30,14 @@ import ListItemsGrid from '../components/list/ListItemsGrid';
 
 interface IProps {
   slug: any;
+  metaTags?: any;
 }
 
 const buttonLabels = ['List View', 'Grid View', 'Form View'];
 
-export default function Screen({ slug }: IProps) {
+export default function Screen({ slug, metaTags }: IProps) {
+  // export default function Screen({ slug }: IProps) {
   const router = useRouter();
-
   const [state, setState] = useState({
     fieldName: '',
     view: buttonLabels[0],
@@ -86,7 +87,8 @@ export default function Screen({ slug }: IProps) {
   }
 
   return (
-    <UserLayout container={false} authRequired>
+    <UserLayout container={false} authRequired {...metaTags}>
+      {/* <UserLayout container={false} authRequired> */}
       <div className="px-3">
         <div className="d-flex justify-content-between align-content-center align-items-center">
           <Breadcrumbs>
