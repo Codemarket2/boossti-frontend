@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 
+import Head from '../../../src/components/common/Head';
 import { GET_LIST_TYPE_BY_SLUG } from '@frontend/shared/graphql/query/list';
 import TypeScreen from '../../../src/screens/TypeScreen';
 import Loading from '../../../src/components/common/Loading';
@@ -31,17 +32,16 @@ export async function getServerSideProps(context) {
         title: response.data.getListTypeBySlug.title,
         description: response.data.getListTypeBySlug.description,
         image:
-          response.data.getListTypeBySlug.media.length > 1
+          response.data.getListTypeBySlug.media.length >= 1
             ? response.data.getListTypeBySlug.media[0].url
             : null,
       };
     }
-    console.log({ metaTags });
   } catch (error) {
     console.log(error);
   }
 
   return {
-    props: { metaTags }, // will be passed to the page component as props
+    props: { metaTags },
   };
 }

@@ -31,7 +31,7 @@ export async function getServerSideProps(context) {
         title: response.data.getListItemBySlug.title,
         description: response.data.getListItemBySlug.description,
         image:
-          response.data.getListItemBySlug.media.length > 1
+          response.data.getListItemBySlug.media.length >= 1
             ? response.data.getListItemBySlug.media[0].url
             : null,
       };
@@ -41,6 +41,6 @@ export async function getServerSideProps(context) {
   }
 
   return {
-    props: { metaTags }, // will be passed to the page component as props
+    props: { metaTags },
   };
 }

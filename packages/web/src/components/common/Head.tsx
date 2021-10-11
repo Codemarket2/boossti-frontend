@@ -20,8 +20,8 @@ export default function HeadComponent({
       <link rel="icon" href="/favicon.ico" />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
-      <meta property="og:image" content={image} />
-      <meta property="og:url" content={url} />
+      <meta property="og:image:type" content={image} />
+      {/* <meta property="og:url" content={url} /> */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta property="og:site_name" content={title} />
       <meta name="twitter:image:alt" content={title} />
