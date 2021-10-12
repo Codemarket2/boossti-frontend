@@ -22,15 +22,18 @@ export default function Page({ metaTags }: IProps) {
 export async function getServerSideProps(context) {
   let metaTags = null;
   const { slug } = context.query;
+  const regex = /(<([^>]+)>)/gi;
   try {
     const response = await guestClient.query({
       query: GET_LIST_TYPE_BY_SLUG,
       variables: { slug },
     });
     if (response.data && response.data.getListTypeBySlug) {
+      const description = response.data.getListTypeBySlug.description.replace(regex, '');
       metaTags = {
         title: response.data.getListTypeBySlug.title,
-        description: response.data.getListTypeBySlug.description,
+        // description: response.data.getListTypeBySlug.description,
+        description: description,
         image:
           response.data.getListTypeBySlug.media.length >= 1
             ? response.data.getListTypeBySlug.media[0].url
