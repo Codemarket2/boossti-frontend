@@ -41,6 +41,13 @@ const StyledTitle = styled(Typography)`
     text-align: center !important;
   }
 `;
+const StyledImageContainer = styled.div`
+  width: 100%;
+  cursor: pointer;
+  ${(props) => props.theme.breakpoints.down('xs')} {
+    text-align: center !important;
+  }
+`;
 
 const MenuWrapper = styled.div`
   display: flex;
@@ -94,9 +101,15 @@ export default function AppBarComponent() {
           </>
         ) : null}
         <Link href="/">
-          <StyledTitle variant="h5" color="textPrimary">
+          {/* <StyledTitle variant="h5" color="textPrimary">
             {projectConfig.title}
-          </StyledTitle>
+          </StyledTitle> */}
+          <StyledImageContainer>
+            <img
+              src="https://res.cloudinary.com/dzo2ufh6a/image/upload/v1633449974/vijaa-logo_np6z16.png"
+              alt=""
+            />
+          </StyledImageContainer>
         </Link>
         {authenticated ? (
           <>
