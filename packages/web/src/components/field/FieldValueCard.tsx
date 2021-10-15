@@ -27,6 +27,7 @@ interface IProps {
   showAuthor?: boolean;
   onSelect: (arg1: any, arg2: any) => void;
   index?: any;
+  showPreview?: boolean;
 }
 
 export default function FieldValueCard({
@@ -36,6 +37,7 @@ export default function FieldValueCard({
   showAuthor = true,
   index,
   onSelect,
+  showPreview,
 }: IProps) {
   const [state, setState] = useState({
     expandedItem: false,
@@ -130,21 +132,25 @@ export default function FieldValueCard({
           </Typography>
         )}
       </CardContent>
-      <CommentLikeShare
-        showHideComments={showHideComments}
-        setShowHideComments={setShowHideComments}
-        parentId={fieldValue._id}
-        index={index}
-        itemSlug={convertToSlug(field.label)}
-        fieldTitle={fieldValue?.itemId?.title?.trim().toLowerCase()}
-      />
-      {/* {showSingleComment && <SingleComment _id={query.commentId as string} />} */}
-      <SingleComment
-        setShowHideComments={setShowHideComments}
-        _id={query.commentId as string}
-        itemSlug={convertToSlug(field.label)}
-        fieldTitle={fieldValue?.itemId?.title?.trim().toLowerCase()}
-      />
+      {!showPreview && (
+        <>
+          <CommentLikeShare
+            showHideComments={showHideComments}
+            setShowHideComments={setShowHideComments}
+            parentId={fieldValue._id}
+            index={index}
+            itemSlug={convertToSlug(field.label)}
+            fieldTitle={fieldValue?.itemId?.title?.trim().toLowerCase()}
+          />
+          {/* {showSingleComment && <SingleComment _id={query.commentId as string} />} */}
+          <SingleComment
+            setShowHideComments={setShowHideComments}
+            _id={query.commentId as string}
+            itemSlug={convertToSlug(field.label)}
+            fieldTitle={fieldValue?.itemId?.title?.trim().toLowerCase()}
+          />
+        </>
+      )}
     </Card>
   );
 }
