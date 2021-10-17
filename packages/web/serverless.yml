@@ -1,2 +1,4 @@
 myNextApplication:
-  component: "@sls-next/serverless-component@1.18"
+  component: '@sls-next/serverless-component@1.18'
+  inputs:
+    roleArn: 'arn:aws:iam::858116908646:role/nextjs-api-role'
