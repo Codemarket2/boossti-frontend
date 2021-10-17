@@ -50,6 +50,8 @@ export default async (req, res) => {
     console.log('error', error.message);
     return res
       .status(400)
-      .send(`<html><body onload="alert('Saving image to server failed')"></body></html>`);
+      .send(
+        `<html><body onload="alert('Saving image to server failed ${error.message}')"></body></html>`,
+      );
   }
 };
