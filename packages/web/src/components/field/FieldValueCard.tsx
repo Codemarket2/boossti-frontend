@@ -47,14 +47,17 @@ export default function FieldValueCard({
   const [showHideComments, setShowHideComments] = useState(false);
   return (
     <Card variant="outlined" style={{ border: 'none' }}>
-      <div className="d-flex justify-content-end">
-        <IconButton
-          className="position-absolute"
-          aria-label="settings"
-          onClick={(event) => onSelect(event.target, fieldValue)}>
-          <MoreVertIcon />
-        </IconButton>
-      </div>
+      {!showPreview && (
+        <div className="d-flex justify-content-end">
+          <IconButton
+            className="position-absolute"
+            aria-label="settings"
+            onClick={(event) => onSelect(event.target, fieldValue)}>
+            <MoreVertIcon />
+          </IconButton>
+        </div>
+      )}
+
       {/* {field.multipleValues ? (
         showAuthor && (
           <CardHeader

@@ -45,5 +45,7 @@ cypress/videos/*
 
 
 
-
+# PWA
 sw.js
+sw.js.map
+public/workbox

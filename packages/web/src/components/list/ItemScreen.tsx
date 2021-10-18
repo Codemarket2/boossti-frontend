@@ -1,36 +1,38 @@
 import { useState, useEffect } from 'react';
-import { useGetListItemBySlug, useDeleteListItem } from '@frontend/shared/hooks/list';
-import { useCRUDListItems } from '@frontend/shared/hooks/list';
 import Link from 'next/link';
 import parse from 'html-react-parser';
 import { useRouter } from 'next/router';
-import Paper from '@material-ui/core/Paper';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
-import Tooltip from '@material-ui/core/Tooltip';
 import EditIcon from '@material-ui/icons/Edit';
 import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import { Typography, Button, Fab } from '@material-ui/core';
+import {
+  Typography,
+  Button,
+  SwipeableDrawer,
+  Tooltip,
+  Hidden,
+  Divider,
+  Paper,
+  IconButton,
+  useMediaQuery,
+} from '@material-ui/core';
+import { useSelector, useDispatch } from 'react-redux';
+import { useTheme } from '@material-ui/core/styles';
+
+import { useCRUDListItems } from '@frontend/shared/hooks/list';
+import { useGetListItemBySlug, useDeleteListItem } from '@frontend/shared/hooks/list';
+import { updateSettingAction } from '@frontend/shared/redux/actions/setting';
+import { onAlert } from '../../utils/alert';
+import FieldValues from '../field/FieldValues';
+import ActionButtons from '../list/ActionButtons';
+import InlineForm from '../list/InlineForm';
+import MediaForm from '../list/MediaForm';
+import LeftNavigation from '../field/LeftNavigation';
 import Breadcrumbs from '../common/Breadcrumbs';
 import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
 import ImageList from '../post/ImageList';
 import NotFound from '../common/NotFound';
-import FieldValues from '../field/FieldValues';
-import ActionButtons from '../list/ActionButtons';
-import InlineForm from '../list/InlineForm';
-import MediaForm from '../list/MediaForm';
-import { onAlert } from '../../utils/alert';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
-import LeftNavigation from '../field/LeftNavigation';
-import Hidden from '@material-ui/core/Hidden';
-import { useSelector, useDispatch } from 'react-redux';
-import { updateSettingAction } from '@frontend/shared/redux/actions/setting';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { useTheme } from '@material-ui/core/styles';
-
 import AppSwitch from '../common/AppSwitch';
 
 interface IProps {
@@ -217,17 +219,12 @@ export default function Screen({
                       <EditIcon fontSize="small" />
                     </IconButton>
                   </Tooltip>
+                  Publish
                   <AppSwitch />
-                  <Button
-                    className="mr-2"
-                    onClick={handlePreview}
-                    size="small"
-                    variant="contained"
-                    component="span"
-                    endIcon={<Visibility />}
-                    color="primary">
-                    Preview
-                  </Button>
+                  Preview
+                  <IconButton onClick={handlePreview}>
+                    <Visibility />
+                  </IconButton>
                 </Typography>
                 <Typography variant="h4" className="d-flex align-items-center">
                   {data.getListItemBySlug.title.includes('-n-e-w')
@@ -299,19 +296,17 @@ export default function Screen({
         </div>
       )}
       {showPreview && (
-        <Paper variant="outlined">
-          <FieldValues
-            toggleLeftNavigation={(value) => setState({ ...state, hideLeftNavigation: value })}
-            pushToAnchor={pushToAnchor}
-            parentId={data.getListItemBySlug._id}
-            typeId={data.getListItemBySlug.types[0]._id}
-            setFields={(fields) => setState({ ...state, fields })}
-            setFieldValueCount={(index, value) =>
-              setFieldValueCount({ ...fieldValueCount, [index]: value })
-            }
-            showPreview={showPreview}
-          />
-        </Paper>
+        <FieldValues
+          toggleLeftNavigation={(value) => setState({ ...state, hideLeftNavigation: value })}
+          pushToAnchor={pushToAnchor}
+          parentId={data.getListItemBySlug._id}
+          typeId={data.getListItemBySlug.types[0]._id}
+          setFields={(fields) => setState({ ...state, fields })}
+          setFieldValueCount={(index, value) =>
+            setFieldValueCount({ ...fieldValueCount, [index]: value })
+          }
+          showPreview={showPreview}
+        />
       )}
 
       <Backdrop open={deleteLoading || CRUDLoading} />
