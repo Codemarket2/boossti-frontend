@@ -64,6 +64,7 @@ export const GET_LIST_ITEM_BY_SLUG = gql`
   query MyQuery($slug: String!) {
     getListItemBySlug(slug: $slug) {
       _id
+      active
       slug
       title
       description
