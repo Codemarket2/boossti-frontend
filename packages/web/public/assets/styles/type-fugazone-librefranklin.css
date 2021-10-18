@@ -1,0 +1,73 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Fugaz+One');
+@import url('https://fonts.googleapis.com/css?family=Libre+Franklin:200,200i,600');
+
+.type-fugazone-librefranklin {
+    font-family: 'Libre Franklin', sans-serif;
+    font-size: 100%; 
+    line-height: 2.2;
+    font-weight: 200;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-fugazone-librefranklin p, .type-fugazone-librefranklin td, .type-fugazone-librefranklin li, .type-fugazone-librefranklin label {
+    font-family: 'Libre Franklin', sans-serif;
+    font-size: 1.17rem;
+    line-height: 2.2;
+    font-weight: 200;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-fugazone-librefranklin h1, .type-fugazone-librefranklin h2, .type-fugazone-librefranklin h3, .type-fugazone-librefranklin h4, .type-fugazone-librefranklin h5, .type-fugazone-librefranklin h6 {
+    font-family: 'Fugaz One', cursive;
+    font-weight: 400;
+    line-height: 1.4;
+    letter-spacing: 1px;
+    text-transform: none;
+    font-style: normal;    
+}        
+
+.type-fugazone-librefranklin h1 {font-size: 3rem;margin: 0.18rem 0 0.3rem;}
+.type-fugazone-librefranklin h2 {font-size: 2.4rem;margin: 0.3rem 0 0.3rem;}
+.type-fugazone-librefranklin h3 {font-size: 2rem;margin: 0.42rem 0;}
+.type-fugazone-librefranklin h4 {font-size: 1.7rem;margin: 0.52rem 0;}
+.type-fugazone-librefranklin h5 {font-size: 1.4rem;margin: 0.58rem 0;line-height: 1.6;}
+.type-fugazone-librefranklin h6 {font-size: 1.24rem;margin: 0.63rem 0;line-height: 1.8;}
+.type-fugazone-librefranklin p {margin:0.5rem 0 1rem;}
+
+.type-fugazone-librefranklin .display { margin-bottom: 0.5rem; }
+.type-fugazone-librefranklin .display h1 {
+	font-family: 'Fugaz One', cursive;
+    font-size: 4rem;
+    line-height: 1.5;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: capitalize;
+    margin:0.4rem 0;
+    font-style: normal;
+}
+.type-fugazone-librefranklin .display p {
+    font-family: 'Libre Franklin', sans-serif;
+    font-size: 1.3rem;
+    line-height: 1.6;
+    letter-spacing: 3px;
+    font-style: normal;
+    text-transform: none;
+}
+
+@media only screen and (max-width: 640px) {
+    .type-fugazone-librefranklin .display h1 {font-size: 2.5rem;}
+    .type-fugazone-librefranklin .display p {font-size: 1.4rem;}
+    .type-fugazone-librefranklin h1 {font-size: 2.3rem;}
+    .type-fugazone-librefranklin h2 {font-size: 2rem;}
+    .type-fugazone-librefranklin h3 {font-size: 1.7rem;}
+    .type-fugazone-librefranklin h4 {font-size: 1.4rem;}
+    .type-fugazone-librefranklin h5 {font-size: 1.2rem;}
+    .type-fugazone-librefranklin h6 {font-size: 1rem;} 
+}
+
+.type-fugazone-librefranklin .display-font1 {font-family: 'Fugaz One', cursive;}
+.type-fugazone-librefranklin .display-font2 {font-family: 'Libre Franklin', sans-serif;}
+.type-fugazone-librefranklin .default-font1 {font-family: 'Fugaz One', cursive;}
+.type-fugazone-librefranklin .default-font2 {font-family: 'Libre Franklin', sans-serif;}

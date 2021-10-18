@@ -1,0 +1,80 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Sail');
+@import url('https://fonts.googleapis.com/css?family=Rasa:300,700');
+
+.type-sail-rasa {
+    font-family: 'Rasa', serif;
+    font-size: 100%; 
+    line-height: 1.9;
+    font-weight: 300;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-sail-rasa p, .type-sail-rasa td, .type-sail-rasa li, .type-sail-rasa label {
+    font-family: 'Rasa', serif;
+    font-size: 1.34rem;
+    line-height: 1.9;
+    font-weight: 300;
+    letter-spacing: 0.3px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-sail-rasa h1, .type-sail-rasa h2, .type-sail-rasa h3, .type-sail-rasa h4, .type-sail-rasa h5, .type-sail-rasa h6 {
+    font-family: 'Rasa', serif;
+    font-weight: 300;
+    line-height: 1.3;
+    letter-spacing: 1px;
+    text-transform: none;
+    font-style: normal;    
+}        
+
+.type-sail-rasa h1 {font-size: 3.2rem;margin: 0.14rem 0 0.1rem;}
+.type-sail-rasa h2 {font-size: 2.5rem;margin: 0.26rem 0 0.1rem;}
+.type-sail-rasa h3 {font-size: 2rem;margin: 0.44rem 0 0.1rem;}
+.type-sail-rasa h4 {font-size: 1.7rem;margin: 0.5rem 0 0.1rem;line-height: 1.4;}
+.type-sail-rasa h5 {font-size: 1.5rem;margin: 0.55rem 0 0.1rem;line-height: 1.5;}
+.type-sail-rasa h6 {font-size: 1.34rem;margin: 0.6rem 0 0.1rem;font-weight: bold;line-height: 1.6;}
+.type-sail-rasa p {margin: 0.5rem 0 1rem;}
+
+.type-sail-rasa .display { margin-bottom: 0.5rem; }
+.type-sail-rasa .display h1 {
+    font-family: 'Sail', cursive;
+    font-size: 5.2rem;
+    line-height: 1.4;
+    font-weight: 400;
+    letter-spacing: 4px;
+    text-transform: capitalize;
+    margin:0.4rem 0;
+    font-style: normal;
+}
+.type-sail-rasa .display p {
+    font-family: 'Rasa', serif;
+    font-size: 1.6rem;
+    line-height: 1.6;
+    letter-spacing: 2px;
+    font-style: normal;
+    text-transform: uppercase;
+}
+
+@media only screen and (max-width: 640px) {
+    .type-sail-rasa .display h1 {font-size: 2.5rem;}
+    .type-sail-rasa .display p {font-size: 1.4rem;}
+    .type-sail-rasa h1 {font-size: 2.3rem;}
+    .type-sail-rasa h2 {font-size: 2rem;}
+    .type-sail-rasa h3 {font-size: 1.7rem;}
+    .type-sail-rasa h4 {font-size: 1.4rem;}
+    .type-sail-rasa h5 {font-size: 1.2rem;}
+    .type-sail-rasa h6 {font-size: 1rem;} 
+}
+
+.type-sail-rasa .is-btn {
+    padding: 12px 50px 9px;
+}
+.type-sail-rasa .is-btn-small {
+    padding: 7px 25px 4px;
+}
+
+.type-sail-rasa .display-font1 {font-family: 'Sail', cursive;}
+.type-sail-rasa .display-font2 {font-family: 'Rasa', serif;}
+.type-sail-rasa .default-font1 {font-family: 'Rasa', serif;}
+.type-sail-rasa .default-font2 {font-family: 'Rasa', serif;}

@@ -1,0 +1,71 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Lato:300,300i,700');
+
+.type-lato {
+    font-family: 'Lato', sans-serif;
+    font-size: 100%; 
+    line-height: 2;
+    font-weight: 300;
+    letter-spacing: 0.3px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-lato p, .type-lato td, .type-lato li, .type-lato label {
+    font-family: 'Lato', sans-serif;
+    font-size: 1.13rem; 
+    line-height: 2;
+    font-weight: 300;
+    letter-spacing: 0.3px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-lato h1, .type-lato h2, .type-lato h3, .type-lato h4, .type-lato h5, .type-lato h6 {
+    font-family: 'Lato', sans-serif;
+    line-height: 1.4;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}        
+
+.type-lato h1 {font-size: 3rem;margin: 0.1rem 0 0.3rem;}
+.type-lato h2 {font-size: 2.4rem;margin: 0.2rem 0 0.3rem;}
+.type-lato h3 {font-size: 2rem;margin: 0.33rem 0 0.3rem;}
+.type-lato h4 {font-size: 1.7rem;margin: 0.4rem 0 0.3rem;line-height: 1.6;}
+.type-lato h5 {font-size: 1.3rem;margin: 0.57rem 0 0.3rem;line-height: 1.8;font-weight:bold;}
+.type-lato h6 {font-size: 1.16rem;margin: 0.65rem 0 0.3rem;line-height: 2;font-weight:bold;}
+.type-lato p {margin:0.59rem 0 1rem;}
+
+.type-lato .display { margin-bottom: 0.5rem; }
+.type-lato .display h1 {
+    font-family: 'Lato', sans-serif;
+    font-size: 4.5rem;
+    letter-spacing: 1px;
+    line-height: 1.4;
+    text-transform: capitalize;
+    font-weight: 300;
+    margin: 0.4rem 0;
+    font-style: normal;
+}
+.type-lato .display p {
+    font-family: 'Lato', sans-serif;
+    font-size: 1.2rem;
+    line-height: 2;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-style: normal;
+}
+
+@media only screen and (max-width: 640px) {
+    .type-lato .display h1 {font-size: 2.5rem;}
+    .type-lato .display p {font-size: 1.4rem;}
+    .type-lato h1 {font-size: 2.3rem;}
+    .type-lato h2 {font-size: 2rem;}
+    .type-lato h3 {font-size: 1.7rem;}
+    .type-lato h4 {font-size: 1.4rem;}
+    .type-lato h5 {font-size: 1.2rem;}
+    .type-lato h6 {font-size: 1rem;} 
+}
+
+.type-lato .display-font1 {font-family: 'Lato', sans-serif;}
+.type-lato .display-font2 {font-family: 'Lato', sans-serif;}
+.type-lato .default-font1 {font-family: 'Lato', sans-serif;}
+.type-lato .default-font2 {font-family: 'Lato', sans-serif;}

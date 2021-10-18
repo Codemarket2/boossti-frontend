@@ -1,0 +1,67 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Fjalla+One');
+@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Serif:200,200i,500');
+
+
+/**********************************
+    General
+***********************************/
+
+html { font-size: 100%; }  
+body {
+    margin: 0;
+    font-family: 'IBM Plex Serif', serif;
+    font-size: 100%; 
+    line-height: 2.2;
+    font-weight: 200;
+}
+p, td, li, label {
+    font-size: 1.02rem;
+    line-height: 2.2;
+    font-weight: 200;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Fjalla One', sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    letter-spacing: 1px;
+}        
+
+h1 {font-size: 3rem;margin: 0.12rem 0 0.3rem;}
+h2 {font-size: 2.4rem;margin: 0.24rem 0;}
+h3 {font-size: 2rem;margin: 0.39rem 0;}
+h4 {font-size: 1.7rem;margin: 0.39rem 0;line-height: 1.7;}
+h5 {font-size: 1.4rem;margin: 0.5rem 0;line-height: 1.9;}
+h6 {font-size: 1.18rem;margin: 0.65rem 0;line-height: 2.2;}
+p {margin:0.5rem 0 1rem;}
+
+.display { margin-bottom: 0.5rem; }
+.display h1 {
+    font-size: 4.4rem;
+    line-height: 1.4;
+    font-weight: 400;
+    letter-spacing: 9px;
+    text-transform: uppercase;
+    margin: 0.4rem 0;
+}
+.display p {
+    font-size: 1.5rem;
+    line-height: 1.7;
+    letter-spacing: 2px;
+    font-style: italic;
+}
+
+@media only screen and (max-width: 640px) {
+    .display h1 {font-size: 2.5rem;}
+    .display p {font-size: 1.4rem;}
+    h1 {font-size: 2.3rem;}
+    h2 {font-size: 2rem;}
+    h3 {font-size: 1.7rem;}
+    h4 {font-size: 1.4rem;}
+    h5 {font-size: 1.2rem;}
+    h6 {font-size: 1rem;} 
+}
+
+.display-font1 {font-family: 'Fjalla One', sans-serif;}
+.display-font2 {font-family: 'IBM Plex Serif', serif;}
+.default-font1 {font-family: 'Fjalla One', sans-serif;}
+.default-font2 {font-family: 'IBM Plex Serif', serif;}

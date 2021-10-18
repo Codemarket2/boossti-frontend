@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway:300,300i,400,400i,700');
+@import url('https://fonts.googleapis.com/css?family=Neuton:200,700');
+
+
+/**********************************
+    General
+***********************************/
+
+html { font-size: 100%; }  
+body {
+    margin: 0;
+    font-family: 'Neuton', serif;
+    font-size: 100%; 
+    line-height: 1.8;
+    font-weight: 200;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+p, td, li, label {
+    font-family: 'Neuton', serif;
+    font-size: 1.3rem; 
+    line-height: 1.8;
+    font-weight: 200;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 2px;
+    text-transform: none;
+    font-style: normal;
+}        
+
+h1 {font-size: 3.4rem;margin: 0.04rem 0 0.3rem;}
+h2 {font-size: 2.8rem;margin: 0.25rem 0 0.3rem;}
+h3 {font-size: 2.3rem;margin: 0.42rem 0 0.3rem;}
+h4 {font-size: 1.92rem;margin: 0.53rem 0 0.3rem;line-height: 1.6;}
+h5 {font-size: 1.6rem;margin: 0.56rem 0 0.3rem;line-height: 1.8;}
+h6 {font-size: 1.35rem;margin: 0.53rem 0 0.3rem;line-height: 2;}
+p {margin:0.4rem 0 1rem;}
+
+.display { margin-bottom: 0.5rem; }
+.display h1 {
+    font-family: 'Raleway', sans-serif;
+    font-size: 4.8rem;
+    line-height: 1.5;
+    font-weight: 400;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    font-style: normal;
+    margin: 0.4rem 0;
+}
+.display p {
+    font-family: 'Raleway', sans-serif;
+    font-size: 1.34rem;
+    line-height: 1.8;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: none;
+    font-style: italic;
+}
+
+@media only screen and (max-width: 640px) {
+    .display h1 {font-size: 2.5rem;}
+    .display p {font-size: 1.4rem;}
+    h1 {font-size: 2.3rem;}
+    h2 {font-size: 2rem;}
+    h3 {font-size: 1.7rem;}
+    h4 {font-size: 1.4rem;}
+    h5 {font-size: 1.2rem;}
+    h6 {font-size: 1rem;} 
+}
+
+.is-btn {
+    padding: 10px 50px;
+}
+.is-btn-small {
+    padding: 5px 25px;
+}
+
+.display-font1 {font-family: 'Raleway', sans-serif;}
+.display-font2 {font-family: 'Raleway', sans-serif;}
+.default-font1 {font-family: 'Raleway', sans-serif;}
+.default-font2 {font-family: 'Neuton', serif;}

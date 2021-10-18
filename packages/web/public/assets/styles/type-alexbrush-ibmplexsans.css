@@ -1,0 +1,73 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Alex+Brush');
+@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans:300,300i,700');
+
+.type-alexbrush-ibmplexsans {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 100%; 
+    line-height: 2.1;
+    font-weight: 300;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-alexbrush-ibmplexsans p, .type-alexbrush-ibmplexsans td, .type-alexbrush-ibmplexsans li, .type-alexbrush-ibmplexsans label {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 1.2rem;
+    line-height: 2.1;
+    font-weight: 300;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-alexbrush-ibmplexsans h1, .type-alexbrush-ibmplexsans h2, .type-alexbrush-ibmplexsans h3, .type-alexbrush-ibmplexsans h4, .type-alexbrush-ibmplexsans h5, .type-alexbrush-ibmplexsans h6 {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 200;
+    line-height: 1.4;
+    letter-spacing: 1px;
+    text-transform: none;
+    font-style: normal;
+}        
+
+.type-alexbrush-ibmplexsans h1 {font-size: 3.2rem;margin: 0.1rem 0 0.3rem;}
+.type-alexbrush-ibmplexsans h2 {font-size: 2.6rem;margin: 0.18rem 0 0.3rem;}
+.type-alexbrush-ibmplexsans h3 {font-size: 2.1rem;margin: 0.31rem 0 0.35rem;}
+.type-alexbrush-ibmplexsans h4 {font-size: 1.7rem;margin: 0.45rem 0 0.35rem;line-height: 1.5;}
+.type-alexbrush-ibmplexsans h5 {font-size: 1.4rem;margin: 0.47rem 0 0.4rem;line-height: 1.7;}
+.type-alexbrush-ibmplexsans h6 {font-size: 1.15rem;margin: 0.58rem 0 0.4rem;font-weight: bold;line-height: 1.9;}
+.type-alexbrush-ibmplexsans p {margin:0.5rem 0 1rem;}
+
+.type-alexbrush-ibmplexsans .display { margin-bottom: 0.5rem; }
+.type-alexbrush-ibmplexsans .display h1 {
+    font-family: 'Alex Brush', cursive;
+    font-size: 5rem;
+    line-height: 1.3;
+    font-weight: 400;
+    letter-spacing: 3px;
+    text-transform: capitalize;
+    margin: 0.4rem 0;
+    font-style: normal;
+}
+.type-alexbrush-ibmplexsans .display p {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 1.2rem;
+    line-height: 1.7;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-style: normal;
+}
+
+@media only screen and (max-width: 640px) {
+    .type-alexbrush-ibmplexsans .display h1 {font-size: 2.5rem;}
+    .type-alexbrush-ibmplexsans .display p {font-size: 1.4rem;}
+    .type-alexbrush-ibmplexsans h1 {font-size: 2.3rem;}
+    .type-alexbrush-ibmplexsans h2 {font-size: 2rem;}
+    .type-alexbrush-ibmplexsans h3 {font-size: 1.7rem;}
+    .type-alexbrush-ibmplexsans h4 {font-size: 1.4rem;}
+    .type-alexbrush-ibmplexsans h5 {font-size: 1.2rem;}
+    .type-alexbrush-ibmplexsans h6 {font-size: 1rem;} 
+}
+
+.type-alexbrush-ibmplexsans .display-font1 {font-family: 'Alex Brush', cursive;}
+.type-alexbrush-ibmplexsans .display-font2 {font-family: 'IBM Plex Sans', sans-serif;}
+.type-alexbrush-ibmplexsans .default-font1 {font-family: 'IBM Plex Sans', sans-serif;}
+.type-alexbrush-ibmplexsans .default-font2 {font-family: 'IBM Plex Sans', sans-serif;}

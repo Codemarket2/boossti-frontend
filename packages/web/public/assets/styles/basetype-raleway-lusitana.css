@@ -1,0 +1,64 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Raleway:200,300,400,500,600,700,800,900');
+@import url('https://fonts.googleapis.com/css?family=Lusitana');
+
+
+/**********************************
+    General
+***********************************/
+
+html { font-size: 100%; }  
+body {
+    margin: 0;
+    font-family: 'Lusitana', serif;
+    font-size: 100%;
+    line-height: 1.9;
+    font-weight: 400;
+}
+p, td, li, label {
+    font-family: 'Lusitana', serif;
+    font-size: 0.93rem;
+    letter-spacing: 0.7px;
+    line-height: 1.9;
+    font-weight: 400;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
+    letter-spacing: 1.7px;
+}        
+
+h1 {font-size: 1.9rem;margin: 0.8rem 0 0.9rem;}
+h2 {font-size: 1.25rem;margin: 1rem 0 0.3rem;}
+h3 {font-size: 1rem;margin: 1.15rem 0 0.3rem;}
+h4 {font-size: 0.8rem;margin: 0.35rem 0 0.3rem;line-height: 1.6;}
+h5 {font-size: 0.7rem;margin: 0.46rem 0 0.3rem;line-height: 1.8;}
+h6 {font-size: 0.6rem;margin: 0.53rem 0 0.3rem;line-height: 2;}
+p {margin:0.4rem 0 1rem;}
+
+.display { margin-bottom: 0.5rem; }
+.display h1 {
+    font-size: 2.25rem;
+    font-weight: 700;
+    text-transform: none;
+}
+.display p {
+    font-size: 0.93rem;
+    text-transform: none;
+    font-style: normal;
+}
+
+@media only screen and (max-width: 640px) {
+    .display h1 {font-size: 2.5rem;}
+    .display p {font-size: 0.93rem;}
+    h1 {font-size: 2.3rem;}
+    h2 {font-size: 2rem;}
+    h3 {font-size: 1.7rem;}
+    h4 {font-size: 1.4rem;}
+    h5 {font-size: 1.2rem;}
+    h6 {font-size: 1rem;} 
+}
+
+.display-font1 {font-family: 'Raleway', sans-serif;}
+.display-font2 {font-family: 'Lusitana', serif;}
+.default-font1 {font-family: 'Raleway', sans-serif;}
+.default-font2 {font-family: 'Lusitana', serif;}

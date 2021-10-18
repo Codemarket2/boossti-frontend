@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css?family=Oswald:300,400,700');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,800');
+@import url('https://fonts.googleapis.com/css?family=Bad+Script');
+
+.type-oswald-opensans {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 100%; 
+    line-height: 2;
+    font-weight: 300;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-oswald-opensans p, .type-oswald-opensans td, .type-oswald-opensans li, .type-oswald-opensans label {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.18rem; 
+    line-height: 2;
+    font-weight: 300;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-oswald-opensans h1, .type-oswald-opensans h2, .type-oswald-opensans h3, .type-oswald-opensans h4, .type-oswald-opensans h5, .type-oswald-opensans h6 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    letter-spacing: 2px;
+    text-transform: none;
+    font-style: normal;
+}        
+
+.type-oswald-opensans h1 {font-size: 3.3rem;margin: 0.02rem 0 0.3rem;}
+.type-oswald-opensans h2 {font-size: 2.7rem;margin: 0.18rem 0 0.3rem;}
+.type-oswald-opensans h3 {font-size: 2.4rem;margin: 0.3rem 0 0.3rem;}
+.type-oswald-opensans h4 {font-size: 2rem;margin: 0.45rem 0 0.3rem;line-height: 1.7;}
+.type-oswald-opensans h5 {font-size: 1.76rem;margin: 0.46rem 0 0.3rem;line-height: 1.8;}
+.type-oswald-opensans h6 {font-size: 1.4rem;margin: 0.53rem 0 0.3rem;line-height: 2;}
+.type-oswald-opensans p {margin:0.4rem 0 1rem;}
+
+.type-oswald-opensans .display { margin-bottom: 0.5rem; }
+.type-oswald-opensans .display h1 {
+	font-family: 'Oswald', sans-serif;
+    font-size: 5.8rem;
+    line-height: 1.5;
+    font-weight: 300;
+    letter-spacing: 5px;
+    text-transform: capitalize;
+    font-style: normal;
+    margin: 0.4rem 0;
+}
+.type-oswald-opensans .display p {
+    font-family: 'Bad Script', cursive;
+    font-size: 1.48rem;
+    line-height: 1.8;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: none;
+    font-style: normal;
+}
+
+@media only screen and (max-width: 640px) {
+    .type-oswald-opensans .display h1 {font-size: 2.5rem;}
+    .type-oswald-opensans .display p {font-size: 1.4rem;}
+    .type-oswald-opensans h1 {font-size: 2.3rem;}
+    .type-oswald-opensans h2 {font-size: 2rem;}
+    .type-oswald-opensans h3 {font-size: 1.7rem;}
+    .type-oswald-opensans h4 {font-size: 1.4rem;}
+    .type-oswald-opensans h5 {font-size: 1.2rem;}
+    .type-oswald-opensans h6 {font-size: 1rem;} 
+}
+
+.type-oswald-opensans .is-btn {
+    padding: 10px 50px;
+}
+.type-oswald-opensans .is-btn-small {
+    padding: 5px 25px;
+}
+
+.type-oswald-opensans .display-font1 {font-family: 'Oswald', sans-serif;}
+.type-oswald-opensans .display-font2 {font-family: 'Bad Script', cursive;}
+.type-oswald-opensans .default-font1 {font-family: 'Oswald', sans-serif;}
+.type-oswald-opensans .default-font2 {font-family: 'Open Sans', sans-serif;}

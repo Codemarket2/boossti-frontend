@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway:300,300i,400,400i,700');
+@import url('https://fonts.googleapis.com/css?family=Neuton:200,700');
+
+
+.type-raleway-neuton {
+    font-family: 'Neuton', serif;
+    font-size: 100%; 
+    line-height: 1.8;
+    font-weight: 200;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-raleway-neuton p, .type-raleway-neuton td, .type-raleway-neuton li, .type-raleway-neuton label {
+    font-family: 'Neuton', serif;
+    font-size: 1.3rem; 
+    line-height: 1.8;
+    font-weight: 200;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-raleway-neuton h1, .type-raleway-neuton h2, .type-raleway-neuton h3, .type-raleway-neuton h4, .type-raleway-neuton h5, .type-raleway-neuton h6 {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 2px;
+    text-transform: none;
+    font-style: normal;
+}        
+
+.type-raleway-neuton h1 {font-size: 3.4rem;margin: 0.04rem 0 0.3rem;}
+.type-raleway-neuton h2 {font-size: 2.8rem;margin: 0.25rem 0 0.3rem;}
+.type-raleway-neuton h3 {font-size: 2.3rem;margin: 0.42rem 0 0.3rem;}
+.type-raleway-neuton h4 {font-size: 1.92rem;margin: 0.53rem 0 0.3rem;line-height: 1.6;}
+.type-raleway-neuton h5 {font-size: 1.6rem;margin: 0.56rem 0 0.3rem;line-height: 1.8;}
+.type-raleway-neuton h6 {font-size: 1.35rem;margin: 0.53rem 0 0.3rem;line-height: 2;}
+.type-raleway-neuton p {margin:0.4rem 0 1rem;}
+
+.type-raleway-neuton .display { margin-bottom: 0.5rem; }
+.type-raleway-neuton .display h1 {
+	font-family: 'Raleway', sans-serif;
+    font-size: 4.8rem;
+    line-height: 1.5;
+    font-weight: 400;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    font-style: normal;
+    margin: 0.4rem 0;
+}
+.type-raleway-neuton .display p {
+    font-family: 'Raleway', sans-serif;
+    font-size: 1.34rem;
+    line-height: 1.8;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: none;
+    font-style: italic;
+}
+
+@media only screen and (max-width: 640px) {
+    .type-raleway-neuton .display h1 {font-size: 2.5rem;}
+    .type-raleway-neuton .display p {font-size: 1.4rem;}
+    .type-raleway-neuton h1 {font-size: 2.3rem;}
+    .type-raleway-neuton h2 {font-size: 2rem;}
+    .type-raleway-neuton h3 {font-size: 1.7rem;}
+    .type-raleway-neuton h4 {font-size: 1.4rem;}
+    .type-raleway-neuton h5 {font-size: 1.2rem;}
+    .type-raleway-neuton h6 {font-size: 1rem;} 
+}
+
+.type-raleway-neuton .is-btn {
+    padding: 10px 50px;
+}
+.type-raleway-neuton .is-btn-small {
+    padding: 5px 25px;
+}
+
+.type-raleway-neuton .display-font1 {font-family: 'Raleway', sans-serif;}
+.type-raleway-neuton .display-font2 {font-family: 'Raleway', sans-serif;}
+.type-raleway-neuton .default-font1 {font-family: 'Raleway', sans-serif;}
+.type-raleway-neuton .default-font2 {font-family: 'Neuton', serif;}

@@ -1,0 +1,68 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Six+Caps');
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono:300,300i,500');
+
+
+/**********************************
+    General
+***********************************/
+
+html { font-size: 100%; }  
+body {
+    margin: 0;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 100%; 
+    line-height: 2;
+    font-weight: 300;
+}
+p, td, li, label {
+    font-size: 1.04rem; 
+    line-height: 2;
+    font-weight: 300;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Roboto Mono', monospace;
+    font-weight: 300;
+    line-height: 1.4;
+}        
+
+h1 {font-size: 3rem;margin: 0.08rem 0 0.1rem;}
+h2 {font-size: 2.4rem;margin: 0.25rem 0 0.1rem;}
+h3 {font-size: 1.9rem;margin: 0.34rem 0 0.1rem;}
+h4 {font-size: 1.6rem;margin: 0.45rem 0 0.1rem;line-height: 1.6;}
+h5 {font-size: 1.3rem;margin: 0.55rem 0 0.1rem;line-height: 1.7;}
+h6 {font-size: 1.04rem;margin: 0.73rem 0 0.1rem;font-weight: bold;line-height: 2;}
+p {margin:0.78rem 0 1rem;}
+
+.display { margin-bottom: 0.5rem; }
+.display h1 {
+    font-family: 'Six Caps', sans-serif;
+    font-weight: 400;
+    font-size: 5.4rem;
+    letter-spacing: 5px;
+    line-height: 1.4;
+    text-transform: capitalize;
+    margin: 0.4rem 0;
+}
+.display p {
+    font-size: 1.2rem;
+    line-height: 2;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-style: normal;
+}
+
+@media only screen and (max-width: 640px) {
+    .display h1 {font-size: 2.5rem;}
+    .display p {font-size: 1.4rem;}
+    h1 {font-size: 2.3rem;}
+    h2 {font-size: 2rem;}
+    h3 {font-size: 1.7rem;}
+    h4 {font-size: 1.4rem;}
+    h5 {font-size: 1.2rem;}
+    h6 {font-size: 1rem;} 
+}
+
+.display-font1 {font-family: 'Six Caps', sans-serif;}
+.display-font2 {font-family: 'Roboto Mono', monospace;}
+.default-font1 {font-family: 'Roboto Mono', monospace;}
+.default-font2 {font-family: 'Roboto Mono', monospace;}

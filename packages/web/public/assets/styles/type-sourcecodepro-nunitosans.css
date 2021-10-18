@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Code+Pro:300,400,700');
+@import url('https://fonts.googleapis.com/css?family=Nunito+Sans:200,200i,700');
+
+.type-sourcecodepro-nunitosans {
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 100%; 
+    line-height: 1.8;
+    font-weight: 200;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-sourcecodepro-nunitosans p, .type-sourcecodepro-nunitosans td, .type-sourcecodepro-nunitosans li, .type-sourcecodepro-nunitosans label {
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 1.13rem; 
+    line-height: 1.8;
+    font-weight: 200;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-sourcecodepro-nunitosans h1, .type-sourcecodepro-nunitosans h2, .type-sourcecodepro-nunitosans h3, .type-sourcecodepro-nunitosans h4, .type-sourcecodepro-nunitosans h5, .type-sourcecodepro-nunitosans h6 {
+    font-family: 'Source Code Pro', monospace;
+    font-weight: 300;
+    line-height: 1.5;
+    letter-spacing: 1px;
+    text-transform: none;
+    font-style: normal;
+}        
+
+.type-sourcecodepro-nunitosans h1 {font-size: 3.3rem;margin: 0.02rem 0 0.3rem;}
+.type-sourcecodepro-nunitosans h2 {font-size: 2.8rem;margin: 0.15rem 0 0.3rem;}
+.type-sourcecodepro-nunitosans h3 {font-size: 2.4rem;margin: 0.35rem 0 0.3rem;}
+.type-sourcecodepro-nunitosans h4 {font-size: 2rem;margin: 0.47rem 0 0.3rem;line-height: 1.6;}
+.type-sourcecodepro-nunitosans h5 {font-size: 1.7rem;margin: 0.46rem 0 0.3rem;line-height: 1.8;}
+.type-sourcecodepro-nunitosans h6 {font-size: 1.4rem;margin: 0.53rem 0 0.3rem;line-height: 2;font-weight: bold;}
+.type-sourcecodepro-nunitosans p {margin:0.4rem 0 1rem;}
+
+.type-sourcecodepro-nunitosans .display { margin-bottom: 0.5rem; }
+.type-sourcecodepro-nunitosans .display h1 {
+	font-family: 'Source Code Pro', monospace;
+    font-size: 5.6rem;
+    line-height: 1.5;
+    font-weight: 300;
+    letter-spacing: 4px;
+    text-transform: capitalize;
+    font-style: normal;
+    margin: 0.4rem 0;
+}
+.type-sourcecodepro-nunitosans .display p {
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 1.48rem;
+    line-height: 1.8;
+    letter-spacing: 2px;
+    text-transform: none;
+    font-style: normal;
+}
+
+@media only screen and (max-width: 640px) {
+    .type-sourcecodepro-nunitosans .display h1 {font-size: 2.5rem;}
+    .type-sourcecodepro-nunitosans .display p {font-size: 1.4rem;}
+    .type-sourcecodepro-nunitosans h1 {font-size: 2.3rem;}
+    .type-sourcecodepro-nunitosans h2 {font-size: 2rem;}
+    .type-sourcecodepro-nunitosans h3 {font-size: 1.7rem;}
+    .type-sourcecodepro-nunitosans h4 {font-size: 1.4rem;}
+    .type-sourcecodepro-nunitosans h5 {font-size: 1.2rem;}
+    .type-sourcecodepro-nunitosans h6 {font-size: 1rem;} 
+}
+
+.type-sourcecodepro-nunitosans .is-btn {
+    padding: 12px 50px 10px;
+}
+.type-sourcecodepro-nunitosans .is-btn-small {
+    padding: 7px 25px 4px;
+}
+
+.type-sourcecodepro-nunitosans .display-font1 {font-family: 'Source Code Pro', monospace;}
+.type-sourcecodepro-nunitosans .display-font2 {font-family: 'Nunito Sans', sans-serif;}
+.type-sourcecodepro-nunitosans .default-font1 {font-family: 'Source Code Pro', monospace;}
+.type-sourcecodepro-nunitosans .default-font2 {font-family: 'Nunito Sans', sans-serif;}

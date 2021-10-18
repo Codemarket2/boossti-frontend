@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,700');
+@import url('https://fonts.googleapis.com/css?family=Lekton:400,400i,700');
+
+.type-poppins-lekton {
+    font-family: 'Lekton', sans-serif;
+    font-size: 100%; 
+    line-height: 1.8;
+    font-weight: 300;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-poppins-lekton p, .type-poppins-lekton td, .type-poppins-lekton li, .type-poppins-lekton label {
+    font-family: 'Lekton', sans-serif;
+    font-size: 1.19rem; 
+    line-height: 1.8;
+    font-weight: 300;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-poppins-lekton h1, .type-poppins-lekton h2, .type-poppins-lekton h3, .type-poppins-lekton h4, .type-poppins-lekton h5, .type-poppins-lekton h6 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 2px;
+    text-transform: none;
+    font-style: normal;
+}        
+
+.type-poppins-lekton h1 {font-size: 3rem;margin: 0.3rem 0 0.5rem;}
+.type-poppins-lekton h2 {font-size: 2.6rem;margin: 0.43rem 0 0.5rem;}
+.type-poppins-lekton h3 {font-size: 2.2rem;margin: 0.55rem 0 0.5rem;}
+.type-poppins-lekton h4 {font-size: 1.9rem;margin: 0.6rem 0 0.5rem;line-height: 1.6;}
+.type-poppins-lekton h5 {font-size: 1.7rem;margin: 0.46rem 0 0.5rem;line-height: 1.8;}
+.type-poppins-lekton h6 {font-size: 1.4rem;margin: 0.53rem 0 0.5rem;line-height: 2;}
+.type-poppins-lekton p {margin:0.4rem 0 1rem;}
+
+.type-poppins-lekton .display { margin-bottom: 0.5rem; }
+.type-poppins-lekton .display h1 {
+	font-family: 'Poppins', sans-serif;
+    font-size: 5rem;
+    line-height: 1.4;
+    font-weight: 400;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    font-style: normal;
+    margin: 0.4rem 0;
+}
+.type-poppins-lekton .display p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.35rem;
+    line-height: 1.8;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: none;
+    font-style: normal;
+}
+
+@media only screen and (max-width: 640px) {
+    .type-poppins-lekton .display h1 {font-size: 2.5rem;}
+    .type-poppins-lekton .display p {font-size: 1.4rem;}
+    .type-poppins-lekton h1 {font-size: 2.3rem;}
+    .type-poppins-lekton h2 {font-size: 2rem;}
+    .type-poppins-lekton h3 {font-size: 1.7rem;}
+    .type-poppins-lekton h4 {font-size: 1.4rem;}
+    .type-poppins-lekton h5 {font-size: 1.2rem;}
+    .type-poppins-lekton h6 {font-size: 1rem;} 
+}
+
+.type-poppins-lekton .is-btn {
+    padding: 12px 50px 8px;
+}
+.type-poppins-lekton .is-btn-small {
+    padding: 7px 25px 4px;
+}
+
+.type-poppins-lekton .display-font1 {font-family: 'Poppins', sans-serif;}
+.type-poppins-lekton .display-font2 {font-family: 'Poppins', sans-serif;}
+.type-poppins-lekton .default-font1 {font-family: 'Poppins', sans-serif;}
+.type-poppins-lekton .default-font2 {font-family: 'Lekton', sans-serif;}

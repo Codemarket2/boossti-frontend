@@ -1,0 +1,63 @@
+﻿@import url('https://fonts.googleapis.com/css?family=PT+Serif:400,700');
+@import url('https://fonts.googleapis.com/css?family=Poppins:300,300i,600');
+
+
+/**********************************
+    General
+***********************************/
+
+html { font-size: 100%; }  
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    font-size: 100%; 
+    line-height: 1.9;
+    font-weight: 300;
+}
+p, td, li, label {
+    font-size: 1.15em; 
+    line-height: 1.9;
+    font-weight: 300;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'PT Serif', serif;
+    font-weight: 400;
+    letter-spacing: 2px;
+    line-height: 1.4;
+}        
+
+h1 {font-size: 2.9em;margin: 0.12em 0 0.3em;}
+h2 {font-size: 2.3em;margin: 0.27em 0 0.3em;}
+h3 {font-size: 1.85em;margin: 0.39em 0 0.3em;}
+h4 {font-size: 1.5em;margin: 0.56em 0 0.3em;line-height: 1.6;}
+h5 {font-size: 1.2em;margin: 0.65em 0 0.3em;line-height: 1.8;}
+h6 {font-size: 1.05em;margin: 0.72em 0 0.3em;font-weight: bold;line-height: 2;}
+p {margin: 0.75em 0 1em;}
+
+.display { margin-bottom: 0.5em; }
+.display h1 {
+    font-weight: 400;
+    font-size: 4.3em;
+    letter-spacing: 5px;
+    line-height: 1.4;
+    text-transform: capitalize;
+    margin: 0.4em 0;
+}
+.display p {
+    font-size: 1.4em;
+    line-height: 1.9;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-style: normal;
+}
+
+@media only screen and (max-width: 640px) {
+    .display h1 {font-size: 2.5em;}
+    .display p {font-size: 1.4em;}
+    h1 {font-size: 2.3em;}
+    h2 {font-size: 2em;}
+    h3 {font-size: 1.7rem;}
+    h4 {font-size: 1.4em;}
+    h5 {font-size: 1.2rem;}
+    h6 {font-size: 1em;} 
+}

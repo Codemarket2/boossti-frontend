@@ -1,0 +1,62 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Julius+Sans+One');
+@import url('https://fonts.googleapis.com/css?family=Taviraj:300,300i,700');
+
+
+/**********************************
+    General
+***********************************/
+
+html { font-size: 100%; }  
+body {
+    margin: 0;
+    font-family: 'Taviraj', serif;
+    font-size: 100%; 
+    line-height: 2;
+    font-weight: 300;
+}
+p, td, li, label {
+    font-size: 1.2em; 
+    line-height: 2;
+    font-weight: 300;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Julius Sans One', sans-serif;
+    font-weight: 400;
+    line-height: 1.4;
+}        
+
+h1 {font-size: 3em;margin: 0.19em 0 0.3em;}
+h2 {font-size: 2.5em;margin: 0.25em 0 0.3em;}
+h3 {font-size: 2.1em;margin: 0.38em 0 0.3em;}
+h4 {font-size: 1.8em;margin: 0.5em 0 0.3em;line-height: 1.5;}
+h5 {font-size: 1.5em;margin: 0.53em 0 0.3em;line-height: 1.7;}
+h6 {font-size: 1.2em;margin: 0.65em 0 0.3em;font-weight: bold;line-height: 1.9;}
+p {margin:0.7em 0 1em;}
+
+.display { margin-bottom: 0.5em; }
+.display h1 {
+    font-weight: 400;
+    font-size: 4em;
+    letter-spacing: 3px;
+    line-height: 1.5;
+    text-transform: uppercase;
+    margin: 0.4em 0;
+}
+.display p {
+    font-size: 1.2em;
+    line-height: 2;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-style: normal;
+}
+
+@media only screen and (max-width: 640px) {
+    .display h1 {font-size: 2.5em;}
+    .display p {font-size: 1.4em;}
+    h1 {font-size: 2.3em;}
+    h2 {font-size: 2em;}
+    h3 {font-size: 1.7rem;}
+    h4 {font-size: 1.4em;}
+    h5 {font-size: 1.2rem;}
+    h6 {font-size: 1em;} 
+}

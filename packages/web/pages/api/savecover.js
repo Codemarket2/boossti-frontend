@@ -1,5 +1,11 @@
+import fs from 'fs';
 import formidable from 'formidable';
 import { v4 as uuid } from 'uuid';
+import { PutObjectCommand } from '@aws-sdk/client-s3';
+import awsConfig from '@frontend/shared/aws-exports';
+import { s3 } from '../../src/utils/s3Client';
+
+const { aws_user_files_s3_bucket_region: region, aws_user_files_s3_bucket: bucket } = awsConfig;
 
 export const config = {
   api: {
@@ -17,38 +23,31 @@ export default async (req, res) => {
         resolve({ fields, files });
       });
     });
-    const response = await data;
-    console.log(response);
-
-    // const formFields = (await data).fields;
-    // console.log(Object.keys(formFields.hidcustomval));
-    // const count = formFields.count;
-    // const base64Data = formFields['hidimg-' + count];
-    // const filename = formFields['hidname-' + count];
-    // const imgtype = formFields['hidtype-' + count];
-    // const buf = Buffer.from(
-    //   base64Data.replace(/^data:image\/\w+;base64,/, ''),
-    //   'base64'
-    // );
-    // const imageKey = `uploads/test/${Date.now()}-${uuid()}.jpeg`;
-    // const imageUrl = `http://localhost:3000/${imageKey}`;
-    // await require('fs/promises').writeFile(
-    //   `./public/${imageKey}`,
-    //   buf,
-    //   'base64'
-    // );
-    // console.log(imageUrl);
-    // const url =
-    //   'http://localhost:3000/uploads/test/1634382022574-f29156a2-cd12-43c2-bdd7-65b789c44f49.jpeg';
-    // const html = `<html><body onload="parent.applyBoxImage('${url}')"></body></html>`;
-    // return res.status(200).send(html);
-    response.inp.i;
+    const files = (await data).files;
+    // console.log(files.fileCover);
+    const imageFile = files.fileCover;
+    let fileStream = fs.createReadStream(imageFile.path);
+    // AWS SDK S3
+    const extension = imageFile.type.split('/')[1];
+    let key = `media/testing/${uuid()}${+new Date()}.${extension}`;
+    let url = `https://${bucket}.s3.${region}.amazonaws.com/public/${key}`;
+    const params = {
+      Bucket: bucket,
+      Key: `public/${key}`,
+      Body: fileStream,
+      ContentType: imageFile.type,
+      ACL: 'public-read',
+    };
+    await s3.send(new PutObjectCommand(params));
+    console.log(url);
+    const html = `<html><body onload="parent.applyBoxImage('${url}')"></body></html>`;
+    return res.status(200).send(html);
   } catch (error) {
-    console.log('error', error);
+    console.log('error', error.message);
     return res
       .status(400)
       .send(
-        `<html><body onload="alert('Sorry, your cover image file was not uploaded.')"></body></html>`
+        `<html><body onload="alert('Saving image to server failed ${error.message}')"></body></html>`,
       );
   }
 };

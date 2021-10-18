@@ -1,0 +1,77 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Prata');
+@import url('https://fonts.googleapis.com/css?family=Hind+Siliguri:300,700');
+@import url('https://fonts.googleapis.com/css?family=Waiting+for+the+Sunrise');
+
+
+/**********************************
+    General
+***********************************/
+
+html { font-size: 100%; }  
+body {
+    margin: 0;
+    font-family: 'Hind Siliguri', sans-serif;
+    font-size: 100%; 
+    line-height: 2.2;
+    font-weight: 300;
+}
+p, td, li, label {
+    font-size: 1.18rem;
+    line-height: 2.2;
+    font-weight: 300;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Prata', serif;
+    font-weight: 400;
+    line-height: 1.7;
+    letter-spacing: 2px;
+}        
+
+h1 {font-size: 3rem;margin: 0.1rem 0 0.3rem;}
+h2 {font-size: 2.5rem;margin: 0.2rem 0 0.3rem;}
+h3 {font-size: 2rem;margin: 0.37rem 0;}
+h4 {font-size: 1.7rem;margin: 0.51rem 0;}
+h5 {font-size: 1.4rem;margin: 0.64rem 0;font-weight:bold;line-height:1.8;}
+h6 {font-size: 1.18rem;margin: 0.72rem 0;font-weight:bold;text-transform:none;line-height:2;}
+p {margin:0.54rem 0 1rem;}
+
+.display { margin-bottom: 0.5rem; }
+.display h1 {
+    font-size: 4rem;
+    line-height: 1.8;
+    font-weight: 400;
+    letter-spacing: 9px;
+    text-transform: uppercase;
+    margin: 0.4rem 0;
+}
+.display p {
+    font-family: 'Waiting for the Sunrise', cursive;
+    font-size: 1.8rem;
+    line-height: 1.7;
+    font-weight: 400;
+    letter-spacing: 2px;
+    font-style: normal;
+}
+
+@media only screen and (max-width: 640px) {
+    .display h1 {font-size: 2.5rem;}
+    .display p {font-size: 1.4rem;}
+    h1 {font-size: 2.3rem;}
+    h2 {font-size: 2rem;}
+    h3 {font-size: 1.7rem;}
+    h4 {font-size: 1.4rem;}
+    h5 {font-size: 1.2rem;}
+    h6 {font-size: 1rem;} 
+}
+
+.is-btn {
+    padding: 10px 50px;
+}
+.is-btn-small {
+    padding: 7px 25px 4px;
+}
+
+.display-font1 {font-family: 'Prata', serif;}
+.display-font2 {font-family: 'Waiting for the Sunrise', cursive;}
+.default-font1 {font-family: 'Prata', serif;}
+.default-font2 {font-family: 'Hind Siliguri', sans-serif;}

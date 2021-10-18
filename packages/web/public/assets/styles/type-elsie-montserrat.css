@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css?family=Elsie:400,900');
+@import url('https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,700');
+
+.type-elsie-montserrat {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 100%; 
+    line-height: 2;
+    font-weight: 300;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-elsie-montserrat p, .type-elsie-montserrat td, .type-elsie-montserrat li, .type-elsie-montserrat label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2rem; 
+    line-height: 2;
+    font-weight: 300;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-elsie-montserrat h1, .type-elsie-montserrat h2, .type-elsie-montserrat h3, .type-elsie-montserrat h4, .type-elsie-montserrat h5, .type-elsie-montserrat h6 {
+    font-family: 'Elsie', cursive;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 2px;
+    text-transform: none;
+    font-style: normal;
+}        
+
+.type-elsie-montserrat h1 {font-size: 3.5rem;margin: 0.04rem 0 0.3rem;}
+.type-elsie-montserrat h2 {font-size: 2.9rem;margin: 0.26rem 0 0.3rem;}
+.type-elsie-montserrat h3 {font-size: 2.43rem;margin: 0.39rem 0 0.3rem;}
+.type-elsie-montserrat h4 {font-size: 2rem;margin: 0.47rem 0 0.3rem;line-height: 1.6;}
+.type-elsie-montserrat h5 {font-size: 1.74rem;margin: 0.46rem 0 0.3rem;line-height: 1.8;}
+.type-elsie-montserrat h6 {font-size: 1.4rem;margin: 0.53rem 0 0.3rem;line-height: 2;font-weight:bold;}
+.type-elsie-montserrat p {margin:0.4rem 0 1rem;}
+
+.type-elsie-montserrat .display { margin-bottom: 0.5rem; }
+.type-elsie-montserrat .display h1 {
+	font-family: 'Elsie', cursive;
+    font-size: 4.8rem;
+    line-height: 1.4;
+    font-weight: 400;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    font-style: normal;
+    margin: 0.4rem 0;
+}
+.type-elsie-montserrat .display p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.4rem;
+    line-height: 1.8;
+    letter-spacing: 3px;
+    text-transform: none;
+    font-style: italic;
+}
+
+@media only screen and (max-width: 640px) {
+    .type-elsie-montserrat .display h1 {font-size: 2.5rem;}
+    .type-elsie-montserrat .display p {font-size: 1.4rem;}
+    .type-elsie-montserrat h1 {font-size: 2.3rem;}
+    .type-elsie-montserrat h2 {font-size: 2rem;}
+    .type-elsie-montserrat h3 {font-size: 1.7rem;}
+    .type-elsie-montserrat h4 {font-size: 1.4rem;}
+    .type-elsie-montserrat h5 {font-size: 1.2rem;}
+    .type-elsie-montserrat h6 {font-size: 1rem;} 
+}
+
+.type-elsie-montserrat .is-btn {
+    padding: 12px 50px 8px;
+}
+.type-elsie-montserrat .is-btn-small {
+    padding: 6px 25px 5px;
+}
+
+.type-elsie-montserrat .display-font1 {font-family: 'Elsie', cursive;}
+.type-elsie-montserrat .display-font2 {font-family: 'Montserrat', sans-serif;}
+.type-elsie-montserrat .default-font1 {font-family: 'Elsie', cursive;}
+.type-elsie-montserrat .default-font2 {font-family: 'Montserrat', sans-serif;}

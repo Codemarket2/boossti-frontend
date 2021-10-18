@@ -1,0 +1,73 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Dancing+Script:400,700');
+@import url('https://fonts.googleapis.com/css?family=Anonymous+Pro:400,400i,700');
+
+.type-dancingscript-anonymouspro {
+    font-family: 'Anonymous Pro', monospace;
+    font-size: 100%; 
+    line-height: 2;
+    font-weight: 400;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-dancingscript-anonymouspro p, .type-dancingscript-anonymouspro td, .type-dancingscript-anonymouspro li, .type-dancingscript-anonymouspro label {
+    font-family: 'Anonymous Pro', monospace;
+    font-size: 1.12rem; 
+    line-height: 2;
+    font-weight: 400;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-dancingscript-anonymouspro h1, .type-dancingscript-anonymouspro h2, .type-dancingscript-anonymouspro h3, .type-dancingscript-anonymouspro h4, .type-dancingscript-anonymouspro h5, .type-dancingscript-anonymouspro h6 {
+    font-family: 'Dancing Script', cursive;
+    font-weight: 400;
+    line-height: 1.3;
+    letter-spacing: 1px;
+    text-transform: none;
+    font-style: normal;
+}        
+
+.type-dancingscript-anonymouspro h1 {font-size: 3.5rem;margin: 0.17rem 0 0.4rem;}
+.type-dancingscript-anonymouspro h2 {font-size: 2.9rem;margin: 0.25rem 0 0.4rem;}
+.type-dancingscript-anonymouspro h3 {font-size: 2.5rem;margin: 0.32rem 0 0.3rem;}
+.type-dancingscript-anonymouspro h4 {font-size: 1.9rem;margin: 0.48rem 0 0.3rem;line-height: 1.4;}
+.type-dancingscript-anonymouspro h5 {font-size: 1.6rem;margin: 0.54rem 0 0.3rem;line-height: 1.6;}
+.type-dancingscript-anonymouspro h6 {font-size: 1.14rem;margin: 0.79rem 0 0.3rem;font-weight: bold;line-height: 1.8;}
+.type-dancingscript-anonymouspro p {margin:0.65rem 0 1rem;}
+
+.type-dancingscript-anonymouspro .display { margin-bottom: 0.5rem; }
+.type-dancingscript-anonymouspro .display h1 {
+	font-family: 'Dancing Script', cursive;
+    font-size: 4.9rem;
+    letter-spacing: 2px;
+    line-height: 1.4;
+    text-transform: capitalize;
+    font-weight: 400;
+    margin: 0.4rem 0;
+    font-style: normal;
+}
+.type-dancingscript-anonymouspro .display p {
+    font-family: 'Anonymous Pro', monospace;
+    font-size: 1.4rem;
+    line-height: 2;
+    letter-spacing: 1px;
+    font-style: normal;
+    text-transform: none;
+}
+
+@media only screen and (max-width: 640px) {
+    .type-dancingscript-anonymouspro .display h1 {font-size: 2.5rem;}
+    .type-dancingscript-anonymouspro .display p {font-size: 1.4rem;}
+    .type-dancingscript-anonymouspro h1 {font-size: 2.3rem;}
+    .type-dancingscript-anonymouspro h2 {font-size: 2rem;}
+    .type-dancingscript-anonymouspro h3 {font-size: 1.7rem;}
+    .type-dancingscript-anonymouspro h4 {font-size: 1.4rem;}
+    .type-dancingscript-anonymouspro h5 {font-size: 1.2rem;}
+    .type-dancingscript-anonymouspro h6 {font-size: 1rem;} 
+}
+
+.type-dancingscript-anonymouspro .display-font1 {font-family: 'Dancing Script', cursive;}
+.type-dancingscript-anonymouspro .display-font2 {font-family: 'Anonymous Pro', monospace;}
+.type-dancingscript-anonymouspro .default-font1 {font-family: 'Dancing Script', cursive;}
+.type-dancingscript-anonymouspro .default-font2 {font-family: 'Anonymous Pro', monospace;}

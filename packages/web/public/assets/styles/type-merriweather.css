@@ -1,0 +1,79 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Merriweather:300,300i,700');
+
+.type-merriweather {
+    font-family: 'Merriweather', serif;
+    font-size: 100%;
+    line-height: 2.1;
+    font-weight: 300;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-merriweather p, .type-merriweather td, .type-merriweather li, .type-merriweather label {
+    font-family: 'Merriweather', serif;
+    font-size: 1.11rem; 
+    line-height: 2.1;
+    font-weight: 300;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-merriweather h1, .type-merriweather h2, .type-merriweather h3, .type-merriweather h4, .type-merriweather h5, .type-merriweather h6 {
+    font-family: 'Merriweather', serif;
+    font-weight: 300;
+    line-height: 1.6;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}        
+
+.type-merriweather h1 {font-size: 3rem;margin: 0.11rem 0 0.3rem;}
+.type-merriweather h2 {font-size: 2.4rem;margin: 0.22rem 0 0.3rem;}
+.type-merriweather h3 {font-size: 1.9rem;margin: 0.4rem 0 0.3rem;}
+.type-merriweather h4 {font-size: 1.6rem;margin: 0.55rem 0 0.3rem;}
+.type-merriweather h5 {font-size: 1.3rem;margin: 0.73rem 0 0.3rem;line-height: 1.8;}
+.type-merriweather h6 {font-size: 1.11rem;margin: 0.86rem 0 0.3rem;font-weight: bold;line-height: 2;}
+.type-merriweather p {margin:0.7rem 0 1rem;}
+
+.type-merriweather .display { margin-bottom: 0.5rem; }
+.type-merriweather .display h1 {
+    font-family: 'Merriweather', serif;
+    font-weight: 300;
+    font-size: 3.4rem;
+    letter-spacing: 2px;
+    line-height: 1.5;
+    text-transform: uppercase;
+    margin: 0.4rem 0;
+    font-style: normal;
+}
+.type-merriweather .display p {
+    font-family: 'Merriweather', serif;
+    font-size: 1.2rem;
+    line-height: 2;
+    letter-spacing: 1px;
+    font-style: normal;
+    text-transform: none;
+}
+
+@media only screen and (max-width: 640px) {
+    .type-merriweather .display h1 {font-size: 2.5rem;}
+    .type-merriweather .display p {font-size: 1.4rem;}
+    .type-merriweather h1 {font-size: 2.3rem;}
+    .type-merriweather h2 {font-size: 2rem;}
+    .type-merriweather h3 {font-size: 1.7rem;}
+    .type-merriweather h4 {font-size: 1.4rem;}
+    .type-merriweather h5 {font-size: 1.2rem;}
+    .type-merriweather h6 {font-size: 1rem;} 
+}
+
+.type-merriweather .is-btn {
+    padding: 10px 50px 9px;
+}
+.type-merriweather .is-btn-small {
+    padding: 7px 25px 4px;
+}
+
+.type-merriweather .display-font1 {font-family: 'Merriweather', serif;}
+.type-merriweather .display-font2 {font-family: 'Merriweather', serif;}
+.type-merriweather .default-font1 {font-family: 'Merriweather', serif;}
+.type-merriweather .default-font2 {font-family: 'Merriweather', serif;}

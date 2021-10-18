@@ -1,0 +1,63 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Sedgwick+Ave');
+@import url('https://fonts.googleapis.com/css?family=Spectral:300,300i,700');
+
+
+/**********************************
+    General
+***********************************/
+
+html { font-size: 100%; }  
+body {
+    margin: 0;
+    font-family: 'Spectral', serif;
+    font-size: 100%; 
+    line-height: 1.9;
+    font-weight: 300;
+}
+p, td, li, label {
+    font-size: 1.24em; 
+    line-height: 1.9;
+    font-weight: 300;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Spectral', serif;
+    font-weight: 300;
+    line-height: 1.4;
+}        
+
+h1 {font-size: 3em;margin: 0.2em 0 0.3em;}
+h2 {font-size: 2.5em;margin: 0.3em 0 0.3em;}
+h3 {font-size: 2.1em;margin: 0.44em 0 0.3em;}
+h4 {font-size: 1.8em;margin: 0.52em 0 0.3em;}
+h5 {font-size: 1.5em;margin: 0.52em 0 0.3em;line-height: 1.6;}
+h6 {font-size: 1.24em;margin: 0.72em 0 0.3em;font-weight: bold;line-height: 1.8;}
+p {margin:0.73em 0 1em;}
+
+.display { margin-bottom: 0.5em; }
+.display h1 {
+    font-family: 'Sedgwick Ave', cursive;
+    font-size: 3.8em;
+    letter-spacing: 1px;
+    line-height: 1.5;
+    text-transform: uppercase;
+    font-weight: 400;
+    margin: 0.4em 0;
+}
+.display p {
+    font-size: 1.45em;
+    line-height: 1.8;
+    letter-spacing: 0.5px;
+    font-style: normal;
+}
+
+@media only screen and (max-width: 640px) {
+    .display h1 {font-size: 2.5em;}
+    .display p {font-size: 1.4em;}
+    h1 {font-size: 2.3em;}
+    h2 {font-size: 2em;}
+    h3 {font-size: 1.7rem;}
+    h4 {font-size: 1.4em;}
+    h5 {font-size: 1.2rem;}
+    h6 {font-size: 1em;} 
+}
+

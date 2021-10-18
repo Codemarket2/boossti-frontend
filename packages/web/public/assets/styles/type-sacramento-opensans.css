@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css?family=Sacramento');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,300i,600,600i,700,700i');
+
+
+.type-sacramento-opensans {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+	font-size: 100%;
+	line-height: 1.6;
+    letter-spacing: 0.2px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-sacramento-opensans p, .type-sacramento-opensans td, .type-sacramento-opensans li, .type-sacramento-opensans label {
+   	font-family: 'Open Sans', sans-serif;
+	font-size: 0.9rem;
+    font-weight: 300;
+	line-height: 1.6;
+    letter-spacing: 0.2px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-sacramento-opensans h1, .type-sacramento-opensans h2, .type-sacramento-opensans h3, .type-sacramento-opensans h4, .type-sacramento-opensans h5, .type-sacramento-opensans h6 {
+   	font-family: 'Sacramento', cursive;
+    font-weight: 400;
+    line-height: 1.4;
+    text-transform: none;
+}        
+
+.type-sacramento-opensans h1 {font-size: 3.6rem;margin: 0.8rem 0px 1rem;}
+.type-sacramento-opensans h2 {font-size: 2.8rem;margin: 1.2rem 0 0.6rem;}
+.type-sacramento-opensans h3 {font-size: 2.5rem;margin: 1.1rem 0 0.3rem;}
+.type-sacramento-opensans h4 {font-size: 2.3rem;margin: 0.56rem 0 0.3rem;line-height: 1.6;}
+.type-sacramento-opensans h5 {font-size: 2.2rem;margin: 0.58rem 0 0.3rem;line-height: 1.7;}
+.type-sacramento-opensans h6 {font-size: 2.1rem;margin: 0.6rem 0 0.3rem;line-height: 2;}
+.type-sacramento-opensans p {margin:0.4rem 0 1rem;}
+
+.type-sacramento-opensans .display { margin-bottom: 0.5rem; }
+.type-sacramento-opensans .display h1 {
+	font-family: 'Sacramento', cursive;
+	font-size: 3.6rem;
+    letter-spacing: 0.5px;
+    font-weight: 400;
+    text-transform: none;
+    font-style: normal;
+}
+.type-sacramento-opensans .display p {
+	font-family: 'Open Sans', sans-serif;
+    font-size: 0.82rem;
+    text-transform: none;
+    font-style: italic;
+}
+
+@media only screen and (max-width: 640px) {
+    .type-sacramento-opensans .display h1 {font-size: 2.5rem;}
+    .type-sacramento-opensans .display p {font-size: 0.82rem;}
+    .type-sacramento-opensans h1 {font-size: 2.3rem;}
+    .type-sacramento-opensans h2 {font-size: 2rem;}
+    .type-sacramento-opensans h3 {font-size: 1.7rem;}
+    .type-sacramento-opensans h4 {font-size: 1.4rem;}
+    .type-sacramento-opensans h5 {font-size: 1.2rem;}
+    .type-sacramento-opensans h6 {font-size: 1rem;} 
+}
+
+.type-sacramento-opensans .is-btn {
+    padding: 10px 50px;
+}
+.type-sacramento-opensans .is-btn-small {
+    padding: 5px 25px;
+}
+
+.type-sacramento-opensans .display-font1 {font-family: 'Sacramento', cursive;}
+.type-sacramento-opensans .display-font2 {font-family: 'Open Sans', sans-serif;}
+.type-sacramento-opensans .default-font1 {font-family: 'Sacramento', cursive;}
+.type-sacramento-opensans .default-font2 {font-family: 'Open Sans', sans-serif;}

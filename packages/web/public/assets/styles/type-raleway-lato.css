@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway:200,300,400,500,600,700,800,900');
+@import url('https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900');
+
+
+.type-raleway-lato {
+    font-family: 'Lato', sans-serif;
+	line-height: 1.8;
+	font-size: 100%;
+	font-weight: 300;
+    text-transform: none;
+    font-style: normal;
+}
+.type-raleway-lato p, .type-raleway-lato td, .type-raleway-lato li, .type-raleway-lato label {
+   	font-family: 'Lato', sans-serif;
+	font-size: 0.93rem;
+	line-height: 1.8;
+	font-weight: 300;
+    text-transform: none;
+    font-style: normal;
+}
+.type-raleway-lato h1, .type-raleway-lato h2, .type-raleway-lato h3, .type-raleway-lato h4, .type-raleway-lato h5, .type-raleway-lato h6 {
+   	font-family: 'Raleway', sans-serif;
+    font-weight: 200;
+    line-height: 1.2;
+    text-transform: none;
+}        
+
+.type-raleway-lato h1 {font-size: 3.75rem;margin: 0.6rem 0 0.9rem;}
+.type-raleway-lato h2 {font-size: 2.5rem;margin: 0.9rem 0 0.3rem;}
+.type-raleway-lato h3 {font-size: 2.2rem;margin: 1rem 0 0.3rem;}
+.type-raleway-lato h4 {font-size: 2rem;margin: 0.56rem 0 0.3rem;line-height: 1.6;}
+.type-raleway-lato h5 {font-size: 1.9rem;margin: 0.58rem 0 0.3rem;line-height: 1.7;}
+.type-raleway-lato h6 {font-size: 1.8rem;margin: 0.6rem 0 0.3rem;line-height: 2;}
+.type-raleway-lato p {margin:0.4rem 0 1rem;}
+
+.type-raleway-lato .display { margin-bottom: 0.5rem; }
+.type-raleway-lato .display h1 {
+	font-family: 'Raleway', sans-serif;
+	font-size: 3.15rem;
+    font-weight: 200;
+    text-transform: none;
+    font-style: normal;
+}
+.type-raleway-lato .display p {
+	font-family: 'Lato', sans-serif;
+    font-size: 0.93rem;
+    letter-spacing: 1px;
+    text-transform: none;
+    font-style: normal;
+}
+
+@media only screen and (max-width: 640px) {
+    .type-raleway-lato .display h1 {font-size: 2.5rem;}
+    .type-raleway-lato .display p {font-size: 0.93rem;}
+    .type-raleway-lato h1 {font-size: 2.3rem;}
+    .type-raleway-lato h2 {font-size: 2rem;}
+    .type-raleway-lato h3 {font-size: 1.7rem;}
+    .type-raleway-lato h4 {font-size: 1.4rem;}
+    .type-raleway-lato h5 {font-size: 1.2rem;}
+    .type-raleway-lato h6 {font-size: 1rem;} 
+}
+
+.type-raleway-lato .is-btn {
+    padding: 10px 50px;
+}
+.type-raleway-lato .is-btn-small {
+    padding: 5px 25px;
+}
+
+.type-raleway-lato .display-font1 {font-family: 'Raleway', sans-serif;}
+.type-raleway-lato .display-font2 {font-family: 'Lato', sans-serif;}
+.type-raleway-lato .default-font1 {font-family: 'Raleway', sans-serif;}
+.type-raleway-lato .default-font2 {font-family: 'Lato', sans-serif;}

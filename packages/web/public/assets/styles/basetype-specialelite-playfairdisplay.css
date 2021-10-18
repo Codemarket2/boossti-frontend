@@ -1,0 +1,65 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Special+Elite');
+@import url('https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i');
+
+
+/**********************************
+    General
+***********************************/
+
+html { font-size: 100%; }  
+body {
+	font-family: 'Playfair Display', serif;
+    margin: 0;
+    font-size: 100%; 
+    line-height: 1.6;
+    font-weight: 400;   
+}
+p, td, li, label {
+    font-family: 'Playfair Display', serif;
+	font-size: 0.95rem;
+    line-height: 1.6;
+    font-weight: 400;
+    letter-spacing: 0.2px;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Special Elite', cursive;
+    font-weight: 400;
+    line-height: 1.2;
+}        
+
+h1 {font-size: 1.9rem;margin: 1.2rem 0 0.9rem;}
+h2 {font-size: 1.4rem;margin: 1.4rem 0 0.3rem;}
+h3 {font-size: 1.1rem;margin: 1.4rem 0 0.3rem;}
+h4 {font-size: 0.9rem;margin: 0.45rem 0 0.3rem;line-height: 1.5;}
+h5 {font-size: 0.8rem;margin: 0.53rem 0 0.3rem;line-height: 1.7;}
+h6 {font-size: 0.7rem;margin: 0.7rem 0 0.3rem;line-height: 1.9;}
+p {margin:0.55rem 0 1rem;}
+
+.display { margin-bottom: 0.5rem; }
+.display h1 {
+    font-size: 5.6rem;
+    line-height: 1;
+    font-weight: 400;
+    text-transform: none;
+}
+.display p {
+    font-size: 0.95rem;
+    text-transform: none;
+    font-style: normal;
+}
+
+@media only screen and (max-width: 640px) {
+    .display h1 {font-size: 2.5rem;}
+    .display p {font-size: 0.95rem;}
+    h1 {font-size: 2.3rem;}
+    h2 {font-size: 2rem;}
+    h3 {font-size: 1.7rem;}
+    h4 {font-size: 1.4rem;}
+    h5 {font-size: 1.2rem;}
+    h6 {font-size: 1rem;} 
+}
+
+.display-font1 {font-family: 'Special Elite', cursive;}
+.display-font2 {font-family: 'Playfair Display', serif;}
+.default-font1 {font-family: 'Special Elite', cursive;}
+.default-font2 {font-family: 'Playfair Display', serif;}
