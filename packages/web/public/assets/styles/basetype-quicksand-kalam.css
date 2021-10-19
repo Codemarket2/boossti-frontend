@@ -1,0 +1,77 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Quicksand:300,500');
+@import url('https://fonts.googleapis.com/css?family=Kalam:300');
+
+
+/**********************************
+    General
+***********************************/
+
+html { font-size: 100%; }  
+body {
+    margin: 0;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 100%; 
+    line-height: 2.2;
+    font-weight: 300;
+}
+p, td, li, label {
+    font-size: 1.19rem;
+    line-height: 2.2;
+    font-weight: 300;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 500;
+    letter-spacing: 1px;
+    line-height: 1.4;
+}        
+
+h1 {font-size: 3rem;margin: 0.1rem 0 0.3rem;}
+h2 {font-size: 2.4rem;margin: 0.23rem 0 0.3rem;}
+h3 {font-size: 1.9rem;margin: 0.41rem 0 0.3rem;}
+h4 {font-size: 1.7rem;margin: 0.48rem 0 0.3rem;}
+h5 {font-size: 1.4rem;margin: 0.55rem 0 0.3rem;line-height: 1.6;}
+h6 {font-size: 1.19rem;margin: 0.6rem 0 0.3rem;font-weight: bold;line-height: 1.8;}
+p {margin: 0.5rem 0 1rem;}
+
+.display { margin-bottom: 0.5rem; }
+.display h1 {
+    font-size: 4rem;
+    line-height: 1.35;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: capitalize;
+    margin: 0.4rem 0;
+}
+.display p {
+    font-family: 'Kalam', cursive;
+    font-size: 1.4rem;
+    line-height: 1.6;
+    letter-spacing: 2px;
+    font-weight: 300;
+    text-transform: uppercase;
+    font-style: normal;
+}
+
+@media only screen and (max-width: 640px) {
+    .display h1 {font-size: 2.5rem;}
+    .display p {font-size: 1.4rem;}
+    h1 {font-size: 2.3rem;}
+    h2 {font-size: 2rem;}
+    h3 {font-size: 1.7rem;}
+    h4 {font-size: 1.4rem;}
+    h5 {font-size: 1.2rem;}
+    h6 {font-size: 1rem;} 
+}
+
+.is-btn {
+    padding: 10px 50px 9px;
+}
+.is-btn-small {
+    padding: 5px 25px 4px;
+}
+
+.display-font1 {font-family: 'Quicksand', sans-serif;}
+.display-font2 {font-family: 'Kalam', cursive;}
+.default-font1 {font-family: 'Quicksand', sans-serif;}
+.default-font2 {font-family: 'Quicksand', sans-serif;}

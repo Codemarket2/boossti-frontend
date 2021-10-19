@@ -1,0 +1,80 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Poppins:300,300i,600,600i,800');
+@import url('https://fonts.googleapis.com/css?family=Old+Standard+TT:400,400i,700');
+ 
+.type-poppins-oldstandardtt {
+    font-family: 'Old Standard TT', serif;
+    font-size: 100%; 
+    line-height: 2;
+    font-weight: 400;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-poppins-oldstandardtt p, .type-poppins-oldstandardtt td, .type-poppins-oldstandardtt li, .type-poppins-oldstandardtt label {
+    font-family: 'Old Standard TT', serif;
+    font-size: 1.26rem; 
+    line-height: 2;
+    font-weight: 400;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-poppins-oldstandardtt h1, .type-poppins-oldstandardtt h2, .type-poppins-oldstandardtt h3, .type-poppins-oldstandardtt h4, .type-poppins-oldstandardtt h5, .type-poppins-oldstandardtt h6 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}        
+
+.type-poppins-oldstandardtt h1 {font-size: 2.7rem;margin: 0.13rem 0 0.3rem;}
+.type-poppins-oldstandardtt h2 {font-size: 2.3rem;margin: 0.23rem 0 0.3rem;}
+.type-poppins-oldstandardtt h3 {font-size: 1.9rem;margin: 0.35rem 0 0.3rem;}
+.type-poppins-oldstandardtt h4 {font-size: 1.6rem;margin: 0.47rem 0 0.3rem;line-height: 1.6;}
+.type-poppins-oldstandardtt h5 {font-size: 1.3rem;margin: 0.57rem 0 0.3rem;line-height: 1.7;}
+.type-poppins-oldstandardtt h6 {font-size: 1.1rem;margin: 0.74rem 0 0.3rem;line-height: 1.9;}
+.type-poppins-oldstandardtt p {margin:0.7rem 0 1rem;}
+
+.type-poppins-oldstandardtt .display { margin-bottom: 0.5rem; }
+.type-poppins-oldstandardtt .display h1 {
+	font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 3.8rem;
+    letter-spacing: 1px;
+    line-height: 1.4;
+    text-transform: capitalize;
+    margin: 0.6rem 0;
+    font-style: normal;
+}
+.type-poppins-oldstandardtt .display p {
+    font-family: 'Old Standard TT', serif;
+    font-size: 1.5rem;
+    line-height: 2;
+    letter-spacing: 1px;
+    font-style: normal;
+    text-transform: none;
+}
+
+@media only screen and (max-width: 640px) {
+    .type-poppins-oldstandardtt .display h1 {font-size: 2.5rem;}
+    .type-poppins-oldstandardtt .display p {font-size: 1.4rem;}
+    .type-poppins-oldstandardtt h1 {font-size: 2.3rem;}
+    .type-poppins-oldstandardtt h2 {font-size: 2rem;}
+    .type-poppins-oldstandardtt h3 {font-size: 1.7rem;}
+    .type-poppins-oldstandardtt h4 {font-size: 1.4rem;}
+    .type-poppins-oldstandardtt h5 {font-size: 1.2rem;}
+    .type-poppins-oldstandardtt h6 {font-size: 1rem;} 
+}
+
+.type-poppins-oldstandardtt .is-btn {
+    padding: 13px 50px 8px;
+}
+.type-poppins-oldstandardtt .is-btn-small {
+    padding: 7px 25px 4px;
+}
+
+.type-poppins-oldstandardtt .display-font1 {font-family: 'Poppins', sans-serif;}
+.type-poppins-oldstandardtt .display-font2 {font-family: 'Old Standard TT', serif;}
+.type-poppins-oldstandardtt .default-font1 {font-family: 'Poppins', sans-serif;}
+.type-poppins-oldstandardtt .default-font2 {font-family: 'Old Standard TT', serif;}

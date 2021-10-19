@@ -1,0 +1,74 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Josefin+Sans:300,300i,600,700');
+@import url('https://fonts.googleapis.com/css?family=Lekton:400,400i,700');
+
+
+/**********************************
+    General
+***********************************/
+
+html { font-size: 100%; }  
+body {
+    margin: 0;
+    font-family: 'Lekton', sans-serif;
+    font-size: 100%; 
+    line-height: 2;
+    font-weight: 400;
+}
+p, td, li, label {
+    font-size: 1.2rem; 
+    line-height: 2;
+    font-weight: 400;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Lekton', sans-serif;
+    font-weight: 400;
+    letter-spacing: 5px;
+    line-height: 1.4;
+}        
+
+h1 {font-size: 3rem;margin: 0.19rem 0 0.3rem;}
+h2 {font-size: 2.4rem;margin: 0.32rem 0 0.3rem;}
+h3 {font-size: 1.9rem;margin: 0.48rem 0 0.3rem;}
+h4 {font-size: 1.6rem;margin: 0.64rem 0 0.3rem;}
+h5 {font-size: 1.4rem;margin: 0.67rem 0 0.3rem;line-height: 1.6;}
+h6 {font-size: 1.2rem;margin: 0.77rem 0 0.3rem;font-weight: bold;text-transform: none;line-height: 1.8;}
+p {margin:0.6rem 0 1rem;}
+
+.display { margin-bottom: 0.5rem; }
+.display h1 {
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 600;
+    font-size: 3.4rem;
+    letter-spacing: 2px;
+    line-height: 1.5;
+    text-transform: uppercase;
+    margin: 0.4rem 0;
+}
+.display p {
+    font-size: 1.5rem;
+    line-height: 1.7;
+    font-style: normal;  
+}
+
+@media only screen and (max-width: 640px) {
+    .display h1 {font-size: 2.5rem;}
+    .display p {font-size: 1.4rem;}
+    h1 {font-size: 2.3rem;}
+    h2 {font-size: 2rem;}
+    h3 {font-size: 1.7rem;}
+    h4 {font-size: 1.4rem;}
+    h5 {font-size: 1.2rem;}
+    h6 {font-size: 1rem;} 
+}
+
+.is-btn {
+    padding: 11px 50px 8px;
+}
+.is-btn-small {
+    padding: 6px 25px 5px;
+}
+
+.display-font1 {font-family: 'Josefin Sans', sans-serif;}
+.display-font2 {font-family: 'Lekton', sans-serif;}
+.default-font1 {font-family: 'Lekton', sans-serif;}
+.default-font2 {font-family: 'Lekton', sans-serif;}

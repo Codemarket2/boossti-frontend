@@ -18,7 +18,8 @@ export const GlobalStyles = createGlobalStyle`
   body {
     background: ${({ theme }) => theme.body};
     color: ${({ theme }) => theme.text};
-    font-family: Tahoma, Helvetica, Arial, Roboto, sans-serif;
+    /* font-family: Tahoma, Helvetica, Arial, Roboto, sans-serif; */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     transition: all 0.50s linear;
   }
 `;

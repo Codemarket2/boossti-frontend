@@ -1,0 +1,74 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700');
+@import url('https://fonts.googleapis.com/css?family=Petit+Formal+Script');
+
+.type-playfairdisp-petitformalscr {
+    font-family: 'Playfair Display', serif;
+    font-size: 100%; 
+    line-height: 2;
+    font-weight: 400;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-playfairdisp-petitformalscr p, .type-playfairdisp-petitformalscr td, .type-playfairdisp-petitformalscr li, .type-playfairdisp-petitformalscr label {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.12rem; 
+    line-height: 2;
+    font-weight: 400;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-playfairdisp-petitformalscr h1, .type-playfairdisp-petitformalscr h2, .type-playfairdisp-petitformalscr h3, .type-playfairdisp-petitformalscr h4, .type-playfairdisp-petitformalscr h5, .type-playfairdisp-petitformalscr h6 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    letter-spacing: 2px;
+    line-height: 1.4;
+    text-transform: none;
+    font-style: normal;    
+}        
+
+.type-playfairdisp-petitformalscr h1 {font-size: 3.2rem;margin: 0.05rem 0 0.3rem;}
+.type-playfairdisp-petitformalscr h2 {font-size: 2.5rem;margin: 0.18rem 0 0.3rem;}
+.type-playfairdisp-petitformalscr h3 {font-size: 1.9rem;margin: 0.35rem 0 0.3rem;}
+.type-playfairdisp-petitformalscr h4 {font-size: 1.6rem;margin: 0.4rem 0 0.3rem;line-height: 1.6;}
+.type-playfairdisp-petitformalscr h5 {font-size: 1.35rem;margin: 0.5rem 0 0.3rem;line-height: 1.8;}
+.type-playfairdisp-petitformalscr h6 {font-size: 1.12rem;margin: 0.6rem 0 0.3rem;font-weight: bold;line-height: 2;}
+.type-playfairdisp-petitformalscr p {margin:0.63rem 0 1rem;}
+
+.type-playfairdisp-petitformalscr .display { margin-bottom: 0.5rem; }
+.type-playfairdisp-petitformalscr .display h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    font-size: 4rem;
+    letter-spacing: 7px;
+    line-height: 1.5;
+    text-transform: uppercase;
+    margin: 0.4rem 0;
+    font-style: normal;
+}
+.type-playfairdisp-petitformalscr .display p {
+    font-family: 'Petit Formal Script', cursive;
+    font-size: 1.5rem;
+    line-height: 1.8;
+    font-style: normal;
+    letter-spacing: 0px;
+    text-transform: none;
+}
+
+@media only screen and (max-width: 640px) {
+    .type-playfairdisp-petitformalscr .display h1 {font-size: 2.5rem;}
+    .type-playfairdisp-petitformalscr .display p {font-size: 1.4rem;}
+    .type-playfairdisp-petitformalscr h1 {font-size: 2.3rem;}
+    .type-playfairdisp-petitformalscr h2 {font-size: 2rem;}
+    .type-playfairdisp-petitformalscr h3 {font-size: 1.7rem;}
+    .type-playfairdisp-petitformalscr h4 {font-size: 1.4rem;}
+    .type-playfairdisp-petitformalscr h5 {font-size: 1.2rem;}
+    .type-playfairdisp-petitformalscr h6 {font-size: 1rem;} 
+}
+
+.type-playfairdisp-petitformalscr .display-font1 {font-family: 'Playfair Display', serif;}
+.type-playfairdisp-petitformalscr .display-font2 {font-family: 'Petit Formal Script', cursive;}
+.type-playfairdisp-petitformalscr .default-font1 {font-family: 'Playfair Display', serif;}
+.type-playfairdisp-petitformalscr .default-font2 {font-family: 'Playfair Display', serif;}
+

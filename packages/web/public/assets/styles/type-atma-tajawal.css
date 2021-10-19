@@ -1,0 +1,80 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Atma:400,600');
+@import url('https://fonts.googleapis.com/css?family=Tajawal:300,700');
+
+.type-atma-tajawal {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 100%; 
+    line-height: 2;
+    font-weight: 300;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-atma-tajawal p, .type-atma-tajawal td, .type-atma-tajawal li, .type-atma-tajawal label {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 1.3rem;
+    line-height: 2;
+    font-weight: 300;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-atma-tajawal h1, .type-atma-tajawal h2, .type-atma-tajawal h3, .type-atma-tajawal h4, .type-atma-tajawal h5, .type-atma-tajawal h6 {
+    font-family: 'Atma', cursive;
+    font-weight: 400;
+    line-height: 1.4;
+    letter-spacing: 1px;
+    text-transform: none;
+    font-style: normal;
+}        
+
+.type-atma-tajawal h1 {font-size: 3.2rem;margin: 0.13rem 0 0.3rem;}
+.type-atma-tajawal h2 {font-size: 2.6rem;margin: 0.24rem 0 0.3rem;}
+.type-atma-tajawal h3 {font-size: 2.2rem;margin: 0.31rem 0 0.3rem;}
+.type-atma-tajawal h4 {font-size: 1.9rem;margin: 0.49rem 0 0.3rem;}
+.type-atma-tajawal h5 {font-size: 1.6rem;margin: 0.5rem 0 0.3rem;line-height: 1.65;}
+.type-atma-tajawal h6 {font-size: 1.3rem;margin: 0.6rem 0 0.3rem;font-weight: bold;line-height: 1.9;}
+.type-atma-tajawal p {margin:0.45rem 0 1rem;}
+
+.type-atma-tajawal .display { margin-bottom: 0.5rem; }
+.type-atma-tajawal .display h1 {
+	font-family: 'Atma', cursive;
+    font-size: 4.8rem;
+    line-height: 1.4;
+    font-weight: 400;
+    letter-spacing: 5px;
+    text-transform: capitalize;
+    margin: 0.4rem 0;
+    font-style: normal;
+}
+.type-atma-tajawal .display p {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 1.3rem;
+    line-height: 1.7;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-style: normal;
+}
+
+@media only screen and (max-width: 640px) {
+    .type-atma-tajawal .display h1 {font-size: 2.5rem;}
+    .type-atma-tajawal .display p {font-size: 1.4rem;}
+    .type-atma-tajawal h1 {font-size: 2.3rem;}
+    .type-atma-tajawal h2 {font-size: 2rem;}
+    .type-atma-tajawal h3 {font-size: 1.7rem;}
+    .type-atma-tajawal h4 {font-size: 1.4rem;}
+    .type-atma-tajawal h5 {font-size: 1.2rem;}
+    .type-atma-tajawal h6 {font-size: 1rem;} 
+}
+
+.type-atma-tajawal .is-btn {
+    padding: 12px 50px 8px;
+}
+.type-atma-tajawal .is-btn-small {
+    padding: 7px 25px 2px;
+}
+
+.type-atma-tajawal .display-font1 {font-family: 'Atma', cursive;}
+.type-atma-tajawal .display-font2 {font-family: 'Tajawal', sans-serif;}
+.type-atma-tajawal .default-font1 {font-family: 'Atma', cursive;}
+.type-atma-tajawal .default-font2 {font-family: 'Tajawal', sans-serif;}

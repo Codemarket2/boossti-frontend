@@ -1,0 +1,80 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:300,700');
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans:300,300i,600');
+
+.type-yanonekaff-josefinsans {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 100%; 
+    line-height: 1.7;
+    font-weight: 300;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-yanonekaff-josefinsans p, .type-yanonekaff-josefinsans td, .type-yanonekaff-josefinsans li, .type-yanonekaff-josefinsans label {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 1.4rem;
+    line-height: 1.7;
+    font-weight: 300;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-yanonekaff-josefinsans h1, .type-yanonekaff-josefinsans h2, .type-yanonekaff-josefinsans h3, .type-yanonekaff-josefinsans h4, .type-yanonekaff-josefinsans h5, .type-yanonekaff-josefinsans h6 {
+    font-family: 'Yanone Kaffeesatz', sans-serif;
+    font-weight: 300;
+    line-height: 1.3;
+    letter-spacing: 1px;
+    text-transform: none;
+    font-style: normal;   
+}        
+
+.type-yanonekaff-josefinsans h1 {font-size: 3.5rem;margin: 0.09rem 0 0.3rem;}
+.type-yanonekaff-josefinsans h2 {font-size: 2.9rem;margin: 0.18rem 0 0.3rem;}
+.type-yanonekaff-josefinsans h3 {font-size: 2.4rem;margin: 0.3rem 0 0.3rem;}
+.type-yanonekaff-josefinsans h4 {font-size: 2rem;margin: 0.4rem 0 0.3rem;}
+.type-yanonekaff-josefinsans h5 {font-size: 1.7rem;margin: 0.5rem 0 0.3rem;line-height: 1.5;}
+.type-yanonekaff-josefinsans h6 {font-size: 1.4rem;margin: 0.54rem 0 0.3rem;font-weight: bold;line-height: 1.7;}
+.type-yanonekaff-josefinsans p {margin:0.63rem 0 1rem;}
+
+.type-yanonekaff-josefinsans .display { margin-bottom: 0.5rem; }
+.type-yanonekaff-josefinsans .display h1 {
+	font-family: 'Yanone Kaffeesatz', sans-serif;
+    font-size: 5.6rem;
+    line-height: 1.3;
+    font-weight: 300;
+    letter-spacing: 5px;
+    text-transform: capitalize;
+    margin: 0.4rem 0;
+    font-style: normal;
+}
+.type-yanonekaff-josefinsans .display p {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 1.8rem;
+    line-height: 1.6;
+    letter-spacing: 1px;
+    font-style: normal;
+    text-transform: none;
+}
+
+@media only screen and (max-width: 640px) {
+    .type-yanonekaff-josefinsans .display h1 {font-size: 2.5rem;}
+    .type-yanonekaff-josefinsans .display p {font-size: 1.4rem;}
+    .type-yanonekaff-josefinsans h1 {font-size: 2.3rem;}
+    .type-yanonekaff-josefinsans h2 {font-size: 2rem;}
+    .type-yanonekaff-josefinsans h3 {font-size: 1.7rem;}
+    .type-yanonekaff-josefinsans h4 {font-size: 1.4rem;}
+    .type-yanonekaff-josefinsans h5 {font-size: 1.2rem;}
+    .type-yanonekaff-josefinsans h6 {font-size: 1rem;} 
+}
+
+.type-yanonekaff-josefinsans .is-btn {
+    padding: 12px 50px 8px;
+}
+.type-yanonekaff-josefinsans .is-btn-small {
+    padding: 7px 25px 4px;
+}
+
+.type-yanonekaff-josefinsans .display-font1 {font-family: 'Yanone Kaffeesatz', sans-serif;}
+.type-yanonekaff-josefinsans .display-font2 {font-family: 'Josefin Sans', sans-serif;}
+.type-yanonekaff-josefinsans .default-font1 {font-family: 'Yanone Kaffeesatz', sans-serif;}
+.type-yanonekaff-josefinsans .default-font2 {font-family: 'Josefin Sans', sans-serif;}

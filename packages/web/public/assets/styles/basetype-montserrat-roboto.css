@@ -1,0 +1,68 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700,800');
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,500');
+
+
+/**********************************
+    General
+***********************************/
+
+html { font-size: 100%; }  
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 100%;
+    letter-spacing: 0.3px;
+    line-height: 1.7;
+}
+p, td, li, label {
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 300;
+    letter-spacing: 0.3px;
+    line-height: 1.7;
+}
+h1, h2, h3, h4, h5, h6 {
+   	font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    line-height: 1.2;
+    text-transform: none;
+}        
+
+h1 {font-size: 3.6rem;margin: 0.6rem 0 0.9rem;}
+h2 {font-size: 2.2rem;margin: 0.9rem 0 0.3rem;}
+h3 {font-size: 1.9rem;margin: 1.05rem 0 0.3rem;}
+h4 {font-size: 1.7rem;margin: 0.35rem 0 0.3rem;line-height: 1.6;}
+h5 {font-size: 1.6rem;margin: 0.46rem 0 0.3rem;line-height: 1.8;}
+h6 {font-size: 1.5rem;margin: 0.53rem 0 0.3rem;line-height: 2;}
+p {margin:0.4rem 0 1rem;}
+
+.display { margin-bottom: 0.5rem; }
+.display h1 {
+    font-size: 3.6rem;
+    letter-spacing: 1.5px;
+    font-weight: 800;
+    text-transform: none;
+}
+.display p {
+    font-size: 0.9rem;
+    font-weight: 300;
+    text-transform: none;
+    font-style: normal;
+}
+
+@media only screen and (max-width: 640px) {
+    .display h1 {font-size: 2.5rem;}
+    .display p {font-size: 0.9rem;}
+    h1 {font-size: 2.3rem;}
+    h2 {font-size: 2rem;}
+    h3 {font-size: 1.7rem;}
+    h4 {font-size: 1.4rem;}
+    h5 {font-size: 1.2rem;}
+    h6 {font-size: 1rem;} 
+}
+
+.display-font1 {font-family: 'Montserrat', sans-serif;}
+.display-font2 {font-family: 'Roboto', sans-serif;}
+.default-font1 {font-family: 'Montserrat', sans-serif;}
+.default-font2 {font-family: 'Roboto', sans-serif;}

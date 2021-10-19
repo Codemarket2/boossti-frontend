@@ -1,0 +1,73 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Kalam:400,700');
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono:300,300i,700');
+
+.type-kalam-robotomono {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 100%; 
+    line-height: 2;
+    font-weight: 300;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-kalam-robotomono p, .type-kalam-robotomono td, .type-kalam-robotomono li, .type-kalam-robotomono label {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1.1rem;
+    line-height: 2;
+    font-weight: 300;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-kalam-robotomono h1, .type-kalam-robotomono h2, .type-kalam-robotomono h3, .type-kalam-robotomono h4, .type-kalam-robotomono h5, .type-kalam-robotomono h6 {
+    font-family: 'Kalam', cursive;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 1px;
+    text-transform: none;
+    font-style: normal;
+}        
+
+.type-kalam-robotomono h1 {font-size: 3.1rem;margin: 0.2rem 0;}
+.type-kalam-robotomono h2 {font-size: 2.5rem;margin: 0.3rem 0;}
+.type-kalam-robotomono h3 {font-size: 2rem;margin: 0.4rem 0;}
+.type-kalam-robotomono h4 {font-size: 1.7rem;margin: 0.55rem 0;}
+.type-kalam-robotomono h5 {font-size: 1.5rem;margin: 0.6rem 0;line-height:1.6;}
+.type-kalam-robotomono h6 {font-size: 1.2rem;margin: 0.8rem 0;font-weight: bold;line-height:1.8;}
+.type-kalam-robotomono p {margin:0.65rem 0 1rem;}
+
+.type-kalam-robotomono .display { margin-bottom: 0.5rem; }
+.type-kalam-robotomono .display h1 {
+	font-family: 'Kalam', cursive;
+    font-size: 4.4rem;
+    line-height: 1.4;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: capitalize;
+    margin:0.4rem 0;
+    font-style: normal;
+}
+.type-kalam-robotomono .display p {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-style: normal;
+}
+
+@media only screen and (max-width: 640px) {
+    .type-kalam-robotomono .display h1 {font-size: 2.5rem;}
+    .type-kalam-robotomono .display p {font-size: 1.4rem;}
+    .type-kalam-robotomono h1 {font-size: 2.3rem;}
+    .type-kalam-robotomono h2 {font-size: 2rem;}
+    .type-kalam-robotomono h3 {font-size: 1.7rem;}
+    .type-kalam-robotomono h4 {font-size: 1.4rem;}
+    .type-kalam-robotomono h5 {font-size: 1.2rem;}
+    .type-kalam-robotomono h6 {font-size: 1rem;} 
+}
+
+.type-kalam-robotomono .display-font1 {font-family: 'Kalam', cursive;}
+.type-kalam-robotomono .display-font2 {font-family: 'Roboto Mono', monospace;}
+.type-kalam-robotomono .default-font1 {font-family: 'Kalam', cursive;}
+.type-kalam-robotomono .default-font2 {font-family: 'Roboto Mono', monospace;}

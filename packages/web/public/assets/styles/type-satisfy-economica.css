@@ -1,0 +1,73 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Satisfy');
+@import url('https://fonts.googleapis.com/css?family=Economica:400,400i,700');
+
+.type-satisfy-economica {
+    font-family: 'Economica', sans-serif;
+    font-size: 100%; 
+    line-height: 2;
+    font-weight: 400;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-satisfy-economica p, .type-satisfy-economica td, .type-satisfy-economica li, .type-satisfy-economica label {
+    font-family: 'Economica', sans-serif;
+    font-size: 1.34rem;
+    line-height: 2;
+    font-weight: 400;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-satisfy-economica h1, .type-satisfy-economica h2, .type-satisfy-economica h3, .type-satisfy-economica h4, .type-satisfy-economica h5, .type-satisfy-economica h6 {
+    font-family: 'Economica', sans-serif;
+    font-weight: 400;
+    line-height: 1.4;
+    letter-spacing: 1px;
+    text-transform: none;
+    font-style: normal;
+}        
+
+.type-satisfy-economica h1 {font-size: 3.5rem;margin: 0.05rem 0 0.3rem;}
+.type-satisfy-economica h2 {font-size: 2.7rem;margin: 0.2rem 0 0.3rem;}
+.type-satisfy-economica h3 {font-size: 2.1rem;margin: 0.33rem 0 0.3rem;}
+.type-satisfy-economica h4 {font-size: 1.8rem;margin: 0.49rem 0 0.3rem;line-height: 1.5;}
+.type-satisfy-economica h5 {font-size: 1.5rem;margin: 0.6rem 0 0.3rem;line-height: 1.7;}
+.type-satisfy-economica h6 {font-size: 1.34rem;margin: 0.7rem 0 0.3rem;font-weight: bold;text-transform: none;line-height: 1.9;}
+.type-satisfy-economica p {margin:0.45rem 0 1rem;}
+
+.type-satisfy-economica .display { margin-bottom: 0.5rem; }
+.type-satisfy-economica .display h1 {
+    font-family: 'Satisfy', cursive;
+    font-size: 4.8rem;
+    line-height: 1.4;
+    font-weight: 400;
+    text-transform: capitalize;
+    margin: 0.4rem 0;
+    letter-spacing: 0px;
+    font-style: normal;
+}
+.type-satisfy-economica .display p {
+    font-family: 'Economica', sans-serif;
+    font-size: 1.8rem;
+    line-height: 1.7;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-style: normal;
+}
+
+@media only screen and (max-width: 640px) {
+    .type-satisfy-economica .display h1 {font-size: 2.5rem;}
+    .type-satisfy-economica .display p {font-size: 1.4rem;}
+    .type-satisfy-economica h1 {font-size: 2.3rem;}
+    .type-satisfy-economica h2 {font-size: 2rem;}
+    .type-satisfy-economica h3 {font-size: 1.7rem;}
+    .type-satisfy-economica h4 {font-size: 1.4rem;}
+    .type-satisfy-economica h5 {font-size: 1.2rem;}
+    .type-satisfy-economica h6 {font-size: 1rem;} 
+}
+
+.type-satisfy-economica .display-font1 {font-family: 'Satisfy', cursive;}
+.type-satisfy-economica .display-font2 {font-family: 'Economica', sans-serif;}
+.type-satisfy-economica .default-font1 {font-family: 'Economica', sans-serif;}
+.type-satisfy-economica .default-font2 {font-family: 'Economica', sans-serif;}

@@ -1,0 +1,74 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Italiana');
+@import url('https://fonts.googleapis.com/css?family=Martel:200,700');
+
+
+/**********************************
+    General
+***********************************/
+
+html { font-size: 100%; }  
+body {
+    margin: 0;
+    font-family: 'Martel', serif;
+    font-size: 100%; 
+    line-height: 2.3;
+    font-weight: 200;
+}
+p, td, li, label {
+    font-size: 0.88rem; 
+    line-height: 2.3;
+    font-weight: 200;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Martel', serif;
+    line-height: 1.5;
+}        
+
+h1 {font-size: 2.9rem;margin: 0.22rem 0 0.3rem;}
+h2 {font-size: 2.4rem;margin: 0.35rem 0 0.3rem;}
+h3 {font-size: 2rem;margin: 0.41rem 0 0.3rem;}
+h4 {font-size: 1.6rem;margin: 0.6rem 0 0.3rem;line-height: 1.6;}
+h5 {font-size: 1.3rem;margin: 0.7rem 0 0.3rem;line-height: 1.8;}
+h6 {font-size: 1.04rem;margin: 0.85rem 0 0.3rem;line-height: 2;font-weight:bold;}
+p {margin:0.8rem 0 1rem;}
+
+.display { margin-bottom: 0.5rem; }
+.display h1 {
+    font-family: 'Italiana', serif;
+    font-size: 4.2rem;
+    letter-spacing: 2px;
+    line-height: 1.5;
+    text-transform: uppercase;
+    font-weight: 400;
+    margin: 0.4rem 0;
+}
+.display p {
+    font-size: 1.2rem;
+    line-height: 2;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-style: normal;
+}
+
+@media only screen and (max-width: 640px) {
+    .display h1 {font-size: 2.5rem;}
+    .display p {font-size: 1.4rem;}
+    h1 {font-size: 2.3rem;}
+    h2 {font-size: 2rem;}
+    h3 {font-size: 1.7rem;}
+    h4 {font-size: 1.4rem;}
+    h5 {font-size: 1.2rem;}
+    h6 {font-size: 1rem;} 
+}
+
+.is-btn {
+    padding: 12px 50px 8px;
+}
+.is-btn-small {
+    padding: 7px 25px 4px;
+}
+
+.display-font1 {font-family: 'Italiana', serif;}
+.display-font2 {font-family: 'Martel', serif;}
+.default-font1 {font-family: 'Martel', serif;}
+.default-font2 {font-family: 'Martel', serif;}

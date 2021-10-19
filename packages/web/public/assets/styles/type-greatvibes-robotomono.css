@@ -1,0 +1,74 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Great+Vibes');
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono:300,300i,700');
+@import url('https://fonts.googleapis.com/css?family=Tajawal:400,700');
+
+.type-greatvibes-robotomono {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 100%; 
+    line-height: 2;
+    font-weight: 300;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-greatvibes-robotomono p, .type-greatvibes-robotomono td, .type-greatvibes-robotomono li, .type-greatvibes-robotomono label {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1.02rem; 
+    line-height: 2;
+    font-weight: 300;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-greatvibes-robotomono h1, .type-greatvibes-robotomono h2, .type-greatvibes-robotomono h3, .type-greatvibes-robotomono h4, .type-greatvibes-robotomono h5, .type-greatvibes-robotomono h6 {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 400;
+    line-height: 1.3;
+    letter-spacing: 1px;
+    text-transform: none;
+    font-style: normal;
+}        
+
+.type-greatvibes-robotomono h1 {font-size: 3.3rem;margin: 0.22rem 0 0.3rem;}
+.type-greatvibes-robotomono h2 {font-size: 2.6rem;margin: 0.34rem 0 0.3rem;}
+.type-greatvibes-robotomono h3 {font-size: 2.1rem;margin: 0.48rem 0 0.3rem;}
+.type-greatvibes-robotomono h4 {font-size: 1.8rem;margin: 0.59rem 0 0.3rem;line-height: 1.4;}
+.type-greatvibes-robotomono h5 {font-size: 1.5rem;margin: 0.7rem 0 0.3rem;line-height: 1.6;}
+.type-greatvibes-robotomono h6 {font-size: 1.2rem;margin: 0.83rem 0 0.3rem;font-weight: bold;line-height: 1.8;}
+.type-greatvibes-robotomono p {margin:0.63rem 0 1rem;}
+
+.type-greatvibes-robotomono .display { margin-bottom: 0.5rem; }
+.type-greatvibes-robotomono .display h1 {
+    font-family: 'Great Vibes', cursive;
+    font-size: 4.4rem;
+    letter-spacing: 1.5px;
+    line-height: 1.5;
+    text-transform: capitalize;
+    font-weight: 400;
+    margin: 0.4rem 0;
+    font-style: normal;
+}
+.type-greatvibes-robotomono .display p {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 1.5rem;
+    line-height: 2;
+    letter-spacing: 1px;
+    font-style: normal;
+    text-transform: none;
+}
+
+@media only screen and (max-width: 640px) {
+    .type-greatvibes-robotomono .display h1 {font-size: 2.5rem;}
+    .type-greatvibes-robotomono .display p {font-size: 1.4rem;}
+    .type-greatvibes-robotomono h1 {font-size: 2.3rem;}
+    .type-greatvibes-robotomono h2 {font-size: 2rem;}
+    .type-greatvibes-robotomono h3 {font-size: 1.7rem;}
+    .type-greatvibes-robotomono h4 {font-size: 1.4rem;}
+    .type-greatvibes-robotomono h5 {font-size: 1.2rem;}
+    .type-greatvibes-robotomono h6 {font-size: 1rem;} 
+}
+
+.type-greatvibes-robotomono .display-font1 {font-family: 'Great Vibes', cursive;}
+.type-greatvibes-robotomono .display-font2 {font-family: 'Tajawal', sans-serif;}
+.type-greatvibes-robotomono .default-font1 {font-family: 'Tajawal', sans-serif;}
+.type-greatvibes-robotomono .default-font2 {font-family: 'Roboto Mono', monospace;}

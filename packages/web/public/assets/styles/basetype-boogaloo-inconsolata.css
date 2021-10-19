@@ -1,0 +1,68 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Boogaloo');
+@import url('https://fonts.googleapis.com/css?family=Inconsolata:400,700');
+
+
+/**********************************
+    General
+***********************************/
+
+html { font-size: 100%; }  
+body {
+    margin: 0;
+    font-family: 'Inconsolata', monospace;
+    font-size: 100%; 
+    line-height: 1.8;
+    font-weight: 400;
+}
+p, td, li, label {
+    font-size: 1.14rem; 
+    line-height: 1.8;
+    font-weight: 400;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Boogaloo', cursive;
+    font-weight: 400;
+    line-height: 1.6;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}        
+
+h1 {font-size: 2.4rem;margin: 0.14rem 0;}
+h2 {font-size: 2.1rem;margin: 0.27rem 0;}
+h3 {font-size: 1.8rem;margin: 0.35rem 0;}
+h4 {font-size: 1.6rem;margin: 0.49rem 0;}
+h5 {font-size: 1.4rem;margin: 0.59rem 0;}
+h6 {font-size: 1.4rem;margin: 0.6rem 0;text-transform: none;line-height:1.6;}
+p {margin:0.67rem 0 1rem;}
+
+.display { margin-bottom: 0.5rem; }
+.display h1 {
+    font-size: 4rem;
+    letter-spacing: 2px;
+    line-height: 1.5;
+    text-transform: uppercase;
+    font-weight: 400;
+    margin: 0.4rem 0;
+}
+.display p {
+    font-size: 1.4rem;
+    line-height: 2;
+    letter-spacing: 1px;
+    font-style: normal;
+}
+
+@media only screen and (max-width: 640px) {
+    .display h1 {font-size: 2.5rem;}
+    .display p {font-size: 1.4rem;}
+    h1 {font-size: 2.3rem;}
+    h2 {font-size: 2rem;}
+    h3 {font-size: 1.7rem;}
+    h4 {font-size: 1.4rem;}
+    h5 {font-size: 1.2rem;}
+    h6 {font-size: 1rem;} 
+}
+
+.display-font1 {font-family: 'Boogaloo', cursive;}
+.display-font2 {font-family: 'Inconsolata', monospace;}
+.default-font1 {font-family: 'Boogaloo', cursive;}
+.default-font2 {font-family: 'Inconsolata', monospace;}

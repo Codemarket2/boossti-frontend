@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css?family=Advent+Pro:400,700');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,800');
+
+.type-adventpro-opensans {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 100%; 
+    line-height: 1.8;
+    font-weight: 300;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-adventpro-opensans p, .type-adventpro-opensans td, .type-adventpro-opensans li, .type-adventpro-opensans label {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.12rem; 
+    line-height: 1.8;
+    font-weight: 300;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-adventpro-opensans h1, .type-adventpro-opensans h2, .type-adventpro-opensans h3, .type-adventpro-opensans h4, .type-adventpro-opensans h5, .type-adventpro-opensans h6 {
+    font-family: 'Advent Pro', sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 1px;
+    text-transform: none;
+    font-style: normal;
+}        
+
+.type-adventpro-opensans h1 {font-size: 3.2rem;margin: 0.07rem 0 0.3rem;}
+.type-adventpro-opensans h2 {font-size: 2.6rem;margin: 0.34rem 0 0.3rem;}
+.type-adventpro-opensans h3 {font-size: 2.1rem;margin: 0.49rem 0 0.3rem;}
+.type-adventpro-opensans h4 {font-size: 1.8rem;margin: 0.56rem 0 0.3rem;line-height: 1.6;}
+.type-adventpro-opensans h5 {font-size: 1.6rem;margin: 0.58rem 0 0.3rem;line-height: 1.7;}
+.type-adventpro-opensans h6 {font-size: 1.4rem;margin: 0.6rem 0 0.3rem;line-height: 2;}
+.type-adventpro-opensans p {margin:0.4rem 0 1rem;}
+
+.type-adventpro-opensans .display { margin-bottom: 0.5rem; }
+.type-adventpro-opensans .display h1 {
+	font-family: 'Advent Pro', sans-serif;
+    font-size: 6rem;
+    line-height: 1.6;
+    font-weight: 400;
+    letter-spacing: 7px;
+    text-transform: uppercase;
+    font-style: normal;
+    margin: 0.4rem 0;
+}
+.type-adventpro-opensans .display p {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.4rem;
+    line-height: 1.6;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-style: normal;
+}
+
+@media only screen and (max-width: 640px) {
+    .type-adventpro-opensans .display h1 {font-size: 2.5rem;}
+    .type-adventpro-opensans .display p {font-size: 1.4rem;}
+    .type-adventpro-opensans h1 {font-size: 2.3rem;}
+    .type-adventpro-opensans h2 {font-size: 2rem;}
+    .type-adventpro-opensans h3 {font-size: 1.7rem;}
+    .type-adventpro-opensans h4 {font-size: 1.4rem;}
+    .type-adventpro-opensans h5 {font-size: 1.2rem;}
+    .type-adventpro-opensans h6 {font-size: 1rem;} 
+}
+
+.type-adventpro-opensans .is-btn {
+    padding: 10px 50px;
+}
+.type-adventpro-opensans .is-btn-small {
+    padding: 5px 25px;
+}
+
+.type-adventpro-opensans .display-font1 {font-family: 'Advent Pro', sans-serif;}
+.type-adventpro-opensans .display-font2 {font-family: 'Open Sans', sans-serif;}
+.type-adventpro-opensans .default-font1 {font-family: 'Advent Pro', sans-serif;}
+.type-adventpro-opensans .default-font2 {font-family: 'Open Sans', sans-serif;}

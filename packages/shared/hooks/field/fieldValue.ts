@@ -3,7 +3,7 @@ import { useQuery, useMutation, useSubscription } from '@apollo/client';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { IHooksProps } from '../../types/common';
-import { GET_FIELD_VALUES_BY_FIELD } from '../../graphql/query/field';
+import { GET_FIELD_VALUES_BY_FIELD, GET_FIELD_VALUE } from '../../graphql/query/field';
 import {
   CREATE_FIELD_VALUE,
   UPDATE_FIELD_VALUE,
@@ -16,49 +16,33 @@ import { omitTypename } from '../../utils/omitTypename';
 
 const defaultQueryVariables = { limit: 1000, page: 1 };
 
-// const updateFieldValueCache = async (newFieldValue) => {
-//   const queryVariables = {
-//     ...defaultQueryVariables,
-//     parentId: newFieldValue.parentId,
-//     field: newFieldValue.field,
-//   };
-//   const data = await apolloClient.readQuery({
-//     query: GET_FIELD_VALUES_BY_FIELD,
-//     variables: queryVariables,
-//   });
-//   if (data && data.getFieldValuesByItem) {
-//     const newData = {
-//       getFieldValuesByItem: {
-//         ...data.getFieldValuesByItem,
-//         data: [newFieldValue, ...data.getFieldValuesByItem.data],
-//       },
-//     };
-//     await apolloClient.writeQuery({
-//       query: GET_FIELD_VALUES_BY_FIELD,
-//       variables: queryVariables,
-//       data: newData,
-//     });
-//   }
-// };
+export function useCreateFieldValue() {
+  const [createFieldValueMutation, { loading: createLoading }] = useMutation(CREATE_FIELD_VALUE);
+  const handleCreateField = async (payload) => {
+    return await createFieldValueMutation({
+      variables: payload,
+    });
+  };
+  return { handleCreateField };
+}
 
-// export const useFieldValueSubscription = (parentId) => {
-//   const { data, loading, error } = useSubscription(ADDED_FIELD_VALUE, {
-//     variables: {
-//       parentId,
-//     },
-//   });
-//   console.log('data, loading, error', data, loading, error);
+export function useUpdateFieldValue() {
+  const [updateFieldValueMutation] = useMutation(UPDATE_FIELD_VALUE);
+  const handleUpdateField = async (payload) => {
+    return await updateFieldValueMutation({
+      variables: payload,
+    });
+  };
+  return { handleUpdateField };
+}
 
-//   useEffect(() => {
-//     // if (data && data.addedFieldValue) {
-//     //   console.log({ data });
-//     //   updateFieldValueCache(data.addedFieldValue);
-//     // }
-//     if (data) {
-//       alert('new value');
-//     }
-//   }, [data]);
-// };
+export function useGetFieldValue(_id) {
+  const { data, error, loading } = useQuery(GET_FIELD_VALUE, {
+    variables: { _id },
+    fetchPolicy: 'cache-and-network',
+  });
+  return { data, error, loading };
+}
 
 export function useGetFieldValuesByItem({ parentId, field }: any) {
   const { data, error, loading, subscribeToMore } = useQuery(GET_FIELD_VALUES_BY_FIELD, {

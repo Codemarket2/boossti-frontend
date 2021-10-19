@@ -17,6 +17,7 @@ import ItemScreen from '../list/ItemScreen';
 import ImageList from '../post/ImageList';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
 import DisplayContent from '../contentbuilder/DisplayContent';
+import DisplayContentBox from '../contentbox/DisplayContentBox';
 import SingleComment from '../comment/SingleComment';
 import { convertToSlug } from './LeftNavigation';
 
@@ -50,6 +51,7 @@ export default function FieldValueCard({
       {!showPreview && (
         <div className="d-flex justify-content-end">
           <IconButton
+            style={{ zIndex: 9999 }}
             className="position-absolute"
             aria-label="settings"
             onClick={(event) => onSelect(event.target, fieldValue)}>
@@ -129,6 +131,8 @@ export default function FieldValueCard({
           <div className="ck-content">{parse(fieldValue.value)}</div>
         ) : field.fieldType === 'contentBuilder' ? (
           <DisplayContent value={fieldValue.value} />
+        ) : field.fieldType === 'contentBox' ? (
+          <DisplayContentBox value={fieldValue.value} />
         ) : (
           <Typography variant="body2" color="textSecondary" component="p">
             {fieldValue.value}

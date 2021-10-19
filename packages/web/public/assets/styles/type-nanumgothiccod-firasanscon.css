@@ -1,0 +1,73 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Nanum+Gothic+Coding:400,700');
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans+Condensed:200,200i,500');
+ 
+.type-nanumgothiccod-firasanscon {
+    font-family: 'Fira Sans Condensed', sans-serif;
+    font-size: 100%; 
+    line-height: 2.1;
+    font-weight: 200;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-nanumgothiccod-firasanscon p, .type-nanumgothiccod-firasanscon td, .type-nanumgothiccod-firasanscon li, .type-nanumgothiccod-firasanscon label {
+    font-family: 'Fira Sans Condensed', sans-serif;
+    font-size: 1.2rem; 
+    line-height: 2.1;
+    font-weight: 200;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-nanumgothiccod-firasanscon h1, .type-nanumgothiccod-firasanscon h2, .type-nanumgothiccod-firasanscon h3, .type-nanumgothiccod-firasanscon h4, .type-nanumgothiccod-firasanscon h5, .type-nanumgothiccod-firasanscon h6 {
+    font-family: 'Nanum Gothic Coding', monospace;
+    font-weight: 400;
+    line-height: 1.4;
+    letter-spacing: 1px;
+    text-transform: none;
+    font-style: normal;
+}        
+
+.type-nanumgothiccod-firasanscon h1 {font-size: 3.2rem;margin: 0.08rem 0 0.3rem;}
+.type-nanumgothiccod-firasanscon h2 {font-size: 2.6rem;margin: 0.18rem 0 0.3rem;}
+.type-nanumgothiccod-firasanscon h3 {font-size: 2rem;margin: 0.32rem 0 0.3rem;}
+.type-nanumgothiccod-firasanscon h4 {font-size: 1.7rem;margin: 0.35rem 0 0.3rem;line-height: 1.6;}
+.type-nanumgothiccod-firasanscon h5 {font-size: 1.4rem;margin: 0.45rem 0 0.3rem;line-height: 1.8;}
+.type-nanumgothiccod-firasanscon h6 {font-size: 1.2rem;margin: 0.57rem 0 0.3rem;font-weight: bold;line-height: 2;}
+.type-nanumgothiccod-firasanscon p {margin:0.5rem 0 1rem;}
+
+.type-nanumgothiccod-firasanscon .display { margin-bottom: 0.5rem; }
+.type-nanumgothiccod-firasanscon .display h1 {
+	font-family: 'Nanum Gothic Coding', monospace;
+    font-size: 3.7rem;
+    letter-spacing: 3px;
+    line-height: 1.4;
+    text-transform: uppercase;
+    font-weight: 400;
+    margin: 0.4rem 0;
+    font-style: normal;
+}
+.type-nanumgothiccod-firasanscon .display p {
+    font-family: 'Fira Sans Condensed', sans-serif;
+    font-size: 1.4rem;
+    line-height: 2.1;
+    letter-spacing: 1.5px;
+    font-style: normal;
+    text-transform: none;
+}
+
+@media only screen and (max-width: 640px) {
+    .type-nanumgothiccod-firasanscon .display h1 {font-size: 2.5rem;}
+    .type-nanumgothiccod-firasanscon .display p {font-size: 1.4rem;}
+    .type-nanumgothiccod-firasanscon h1 {font-size: 2.3rem;}
+    .type-nanumgothiccod-firasanscon h2 {font-size: 2rem;}
+    .type-nanumgothiccod-firasanscon h3 {font-size: 1.7rem;}
+    .type-nanumgothiccod-firasanscon h4 {font-size: 1.4rem;}
+    .type-nanumgothiccod-firasanscon h5 {font-size: 1.2rem;}
+    .type-nanumgothiccod-firasanscon h6 {font-size: 1rem;} 
+}
+
+.type-nanumgothiccod-firasanscon .display-font1 {font-family: 'Nanum Gothic Coding', monospace;}
+.type-nanumgothiccod-firasanscon .display-font2 {font-family: 'Fira Sans Condensed', sans-serif;}
+.type-nanumgothiccod-firasanscon .default-font1 {font-family: 'Nanum Gothic Coding', monospace;}
+.type-nanumgothiccod-firasanscon .default-font2 {font-family: 'Fira Sans Condensed', sans-serif;}

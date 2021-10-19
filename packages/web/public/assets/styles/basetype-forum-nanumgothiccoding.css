@@ -1,0 +1,68 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Forum');
+@import url('https://fonts.googleapis.com/css?family=Nanum+Gothic+Coding:400,700');
+
+
+/**********************************
+    General
+***********************************/
+
+html { font-size: 100%; }  
+body {
+    margin: 0;
+    font-family: 'Nanum Gothic Coding', monospace;
+    font-size: 100%; 
+    line-height: 1.9;
+    font-weight: 400;
+}
+p, td, li, label {
+    font-size: 1.12rem; 
+    line-height: 1.9;
+    font-weight: 400;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Forum', cursive;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}        
+
+h1 {font-size: 3rem;margin: 0.1rem 0 0.2rem;}
+h2 {font-size: 2.4rem;margin: 0.2rem 0 0.2rem;}
+h3 {font-size: 1.9rem;margin: 0.35rem 0 0.2rem;}
+h4 {font-size: 1.6rem;margin: 0.45rem 0 0.2rem;line-height: 1.6;}
+h5 {font-size: 1.3rem;margin: 0.6rem 0 0.2rem;line-height: 1.7;}
+h6 {font-size: 1.16rem;margin: 0.63rem 0 0.2rem;font-weight: bold;text-transform: none;line-height: 1.9;}
+p {margin:0.6rem 0 1rem;}
+
+.display { margin-bottom: 0.5rem; }
+.display h1 {
+    font-size: 3.8rem;
+    letter-spacing: 4px;
+    line-height: 1.5;
+    text-transform: uppercase;
+    font-weight: 400;
+    margin: 0.4rem 0;
+}
+.display p {
+    font-size: 1.3rem;
+    line-height: 2;
+    letter-spacing: 1px;
+    font-style: normal;
+}
+
+@media only screen and (max-width: 640px) {
+    .display h1 {font-size: 2.5rem;}
+    .display p {font-size: 1.4rem;}
+    h1 {font-size: 2.3rem;}
+    h2 {font-size: 2rem;}
+    h3 {font-size: 1.7rem;}
+    h4 {font-size: 1.4rem;}
+    h5 {font-size: 1.2rem;}
+    h6 {font-size: 1rem;} 
+}
+
+.display-font1 {font-family: 'Forum', cursive;}
+.display-font2 {font-family: 'Nanum Gothic Coding', monospace;}
+.default-font1 {font-family: 'Forum', cursive;}
+.default-font2 {font-family: 'Nanum Gothic Coding', monospace;}

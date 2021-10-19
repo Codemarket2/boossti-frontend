@@ -1,0 +1,75 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Josefin+Sans:300,600');
+@import url('https://fonts.googleapis.com/css?family=Neuton:200,700');
+
+
+/**********************************
+    General
+***********************************/
+
+html { font-size: 100%; }  
+body {
+    margin: 0;
+    font-family: 'Neuton', serif;
+    font-size: 100%; 
+    line-height: 1.9;
+    font-weight: 200;
+}
+p, td, li, label {
+    font-size: 1.13rem; 
+    line-height: 1.9;
+    font-weight: 200;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 300;
+    letter-spacing: 1px;
+    line-height: 1.5;
+    text-transform: uppercase;
+}        
+
+h1 {font-size: 3rem;margin: 0.17rem 0 0.1rem;}
+h2 {font-size: 2.4rem;margin: 0.3rem 0 0.1rem;}
+h3 {font-size: 1.9rem;margin: 0.46rem 0 0.1rem;}
+h4 {font-size: 1.7rem;margin: 0.5rem 0 0.1rem;line-height: 1.6;}
+h5 {font-size: 1.45rem;margin: 0.57rem 0 0.1rem;line-height: 1.7;}
+h6 {font-size: 1.32rem;margin: 0.64rem 0 0.1rem;font-weight: bold;text-transform: none;line-height: 1.9;}
+p {margin:0.39rem 0 1rem;}
+
+.display { margin-bottom: 0.5rem; }
+.display h1 {
+    font-weight: 300;
+    font-size: 3.7rem;
+    letter-spacing: 7px;
+    line-height: 1.5;
+    text-transform: uppercase;
+    margin: 0.4rem 0;
+}
+.display p {
+    font-size: 1.7rem;
+    line-height: 1.8;
+    letter-spacing: 2px;
+    font-style: normal;
+}
+
+@media only screen and (max-width: 640px) {
+    .display h1 {font-size: 2.5rem;}
+    .display p {font-size: 1.4rem;}
+    h1 {font-size: 2.3rem;}
+    h2 {font-size: 2rem;}
+    h3 {font-size: 1.7rem;}
+    h4 {font-size: 1.4rem;}
+    h5 {font-size: 1.2rem;}
+    h6 {font-size: 1rem;} 
+}
+
+.is-btn {
+    padding: 10px 50px 12px;
+}
+.is-btn-small {
+    padding: 5px 25px 7px;
+}
+
+.display-font1 {font-family: 'Josefin Sans', sans-serif;}
+.display-font2 {font-family: 'Neuton', serif;}
+.default-font1 {font-family: 'Josefin Sans', sans-serif;}
+.default-font2 {font-family: 'Neuton', serif;}

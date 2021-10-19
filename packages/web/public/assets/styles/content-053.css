@@ -1,0 +1,62 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Nanum+Gothic+Coding:400,700');
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans+Condensed:200,200i,500');
+
+
+/**********************************
+    General
+***********************************/
+
+html { font-size: 100%; }  
+body {
+    margin: 0;
+    font-family: 'Fira Sans Condensed', sans-serif;
+    font-size: 100%; 
+    line-height: 2.1;
+    font-weight: 200;
+}
+p, td, li, label {
+    font-size: 1.2em; 
+    line-height: 2.1;
+    font-weight: 200;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Nanum Gothic Coding', monospace;
+    font-weight: 400;
+    line-height: 1.4;
+    letter-spacing: 1px;
+}        
+
+h1 {font-size: 3.2em;margin: 0.08em 0 0.3em;}
+h2 {font-size: 2.6em;margin: 0.18em 0 0.3em;}
+h3 {font-size: 2em;margin: 0.32em 0 0.3em;}
+h4 {font-size: 1.7em;margin: 0.35em 0 0.3em;line-height: 1.6;}
+h5 {font-size: 1.4em;margin: 0.45em 0 0.3em;line-height: 1.8;}
+h6 {font-size: 1.2em;margin: 0.57em 0 0.3em;font-weight: bold;line-height: 2;}
+p {margin:0.5em 0 1em;}
+
+.display { margin-bottom: 0.5em; }
+.display h1 {
+    font-size: 3.7em;
+    letter-spacing: 3px;
+    line-height: 1.4;
+    text-transform: uppercase;
+    font-weight: 400;
+    margin: 0.4em 0;
+}
+.display p {
+    font-size: 1.4em;
+    line-height: 2.1;
+    letter-spacing: 1.5px;
+    font-style: normal;
+}
+
+@media only screen and (max-width: 640px) {
+    .display h1 {font-size: 2.5em;}
+    .display p {font-size: 1.4em;}
+    h1 {font-size: 2.3em;}
+    h2 {font-size: 2em;}
+    h3 {font-size: 1.7rem;}
+    h4 {font-size: 1.4em;}
+    h5 {font-size: 1.2rem;}
+    h6 {font-size: 1em;} 
+}

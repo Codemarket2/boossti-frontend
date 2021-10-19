@@ -1,0 +1,80 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Julius+Sans+One');
+@import url('https://fonts.googleapis.com/css?family=Taviraj:300,300i,700');
+
+.type-juliussansone-taviraj {
+    font-family: 'Taviraj', serif;
+    font-size: 100%; 
+    line-height: 2;
+    font-weight: 300;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-juliussansone-taviraj p, .type-juliussansone-taviraj td, .type-juliussansone-taviraj li, .type-juliussansone-taviraj label {
+    font-family: 'Taviraj', serif;
+    font-size: 1.2rem; 
+    line-height: 2;
+    font-weight: 300;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-juliussansone-taviraj h1, .type-juliussansone-taviraj h2, .type-juliussansone-taviraj h3, .type-juliussansone-taviraj h4, .type-juliussansone-taviraj h5, .type-juliussansone-taviraj h6 {
+    font-family: 'Julius Sans One', sans-serif;
+    font-weight: 400;
+    line-height: 1.4;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}        
+
+.type-juliussansone-taviraj h1 {font-size: 3rem;margin: 0.19rem 0 0.3rem;}
+.type-juliussansone-taviraj h2 {font-size: 2.5rem;margin: 0.25rem 0 0.3rem;}
+.type-juliussansone-taviraj h3 {font-size: 2.1rem;margin: 0.38rem 0 0.3rem;}
+.type-juliussansone-taviraj h4 {font-size: 1.8rem;margin: 0.5rem 0 0.3rem;line-height: 1.5;}
+.type-juliussansone-taviraj h5 {font-size: 1.5rem;margin: 0.53rem 0 0.3rem;line-height: 1.7;}
+.type-juliussansone-taviraj h6 {font-size: 1.2rem;margin: 0.65rem 0 0.3rem;font-weight: bold;line-height: 1.9;}
+.type-juliussansone-taviraj p {margin:0.7rem 0 1rem;}
+
+.type-juliussansone-taviraj .display { margin-bottom: 0.5rem; }
+.type-juliussansone-taviraj .display h1 {
+	font-family: 'Julius Sans One', sans-serif;
+    font-weight: 400;
+    font-size: 4rem;
+    letter-spacing: 3px;
+    line-height: 1.5;
+    text-transform: uppercase;
+    margin: 0.4rem 0;
+    font-style: normal;
+}
+.type-juliussansone-taviraj .display p {
+    font-family: 'Taviraj', serif;
+    font-size: 1.2rem;
+    line-height: 2;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-style: normal;
+}
+
+@media only screen and (max-width: 640px) {
+    .type-juliussansone-taviraj .display h1 {font-size: 2.5rem;}
+    .type-juliussansone-taviraj .display p {font-size: 1.4rem;}
+    .type-juliussansone-taviraj h1 {font-size: 2.3rem;}
+    .type-juliussansone-taviraj h2 {font-size: 2rem;}
+    .type-juliussansone-taviraj h3 {font-size: 1.7rem;}
+    .type-juliussansone-taviraj h4 {font-size: 1.4rem;}
+    .type-juliussansone-taviraj h5 {font-size: 1.2rem;}
+    .type-juliussansone-taviraj h6 {font-size: 1rem;} 
+}
+
+.type-juliussansone-taviraj .is-btn {
+    padding: 11px 50px 9px;
+}
+.type-juliussansone-taviraj .is-btn-small {
+    padding: 6px 25px 4px;
+}
+
+.type-juliussansone-taviraj .display-font1 {font-family: 'Julius Sans One', sans-serif;}
+.type-juliussansone-taviraj .display-font2 {font-family: 'Taviraj', serif;}
+.type-juliussansone-taviraj .default-font1 {font-family: 'Julius Sans One', sans-serif;}
+.type-juliussansone-taviraj .default-font2 {font-family: 'Taviraj', serif;}

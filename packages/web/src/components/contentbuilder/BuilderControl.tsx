@@ -2,7 +2,7 @@ import { Component } from 'react';
 import axios from 'axios';
 import ContentBuilder from '@innovastudio/contentbuilder';
 import config from '@frontend/shared/aws-exports';
-import { Storage } from 'aws-amplify';
+// import { Storage } from 'aws-amplify';
 import { v4 as uuid } from 'uuid';
 
 const { aws_user_files_s3_bucket_region: region, aws_user_files_s3_bucket: bucket } = config;
@@ -139,29 +139,35 @@ class BuilderControl extends Component<TProps, TState> {
     // If base64Handler is specified
 
     // Save all embedded base64 images first
-    this.obj.saveImages(
-      '',
-      () => {
-        // Then save the content
-        let html = this.obj.html();
+    this.obj.saveImages('/api/saveimage', () => {
+      // Then save the content
+      let html = this.obj.html();
 
-        if (callback) callback(html);
-      },
-      async (img, base64, filename) => {
-        try {
-          const buf = Buffer.from(base64.replace(/^data:image\/\w+;base64,/, ''), 'base64');
-          let key = `media/content-builder/${uuid()}${+new Date()}.jpeg`;
-          let url = `https://${bucket}.s3.${region}.amazonaws.com/public/${key}`;
-          const res = await Storage.put(key, buf, {
-            contentType: 'image/jpeg',
-          });
-          img.setAttribute('src', url);
-          console.log('url', url);
-        } catch (error) {
-          console.log(error);
-        }
-      },
-    );
+      if (callback) callback(html);
+    });
+    // this.obj.saveImages(
+    //   '',
+    //   () => {
+    //     // Then save the content
+    //     let html = this.obj.html();
+
+    //     if (callback) callback(html);
+    //   },
+    //   async (img, base64, filename) => {
+    //     try {
+    //       const buf = Buffer.from(base64.replace(/^data:image\/\w+;base64,/, ''), 'base64');
+    //       let key = `media/content-builder/${uuid()}${+new Date()}.jpeg`;
+    //       let url = `https://${bucket}.s3.${region}.amazonaws.com/public/${key}`;
+    //       const res = await Storage.put(key, buf, {
+    //         contentType: 'image/jpeg',
+    //       });
+    //       img.setAttribute('src', url);
+    //       console.log('url', url);
+    //     } catch (error) {
+    //       console.log(error);
+    //     }
+    //   },
+    // );
   };
 
   saveContent = () => {

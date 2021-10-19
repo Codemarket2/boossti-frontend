@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css?family=Julius+Sans+One');
+@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,700,700');
+
+
+.type-juliussansone-robotocondensed {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 300;
+	font-size: 100%;
+    text-transform: none;
+    font-style: normal;
+}
+.type-juliussansone-robotocondensed p, .type-juliussansone-robotocondensed td, .type-juliussansone-robotocondensed li, .type-juliussansone-robotocondensed label {
+   	font-family: 'Roboto Condensed', sans-serif;
+	font-size: 0.93rem;
+    font-weight: 300;
+    line-height: 1.7;
+    letter-spacing: 0.5px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-juliussansone-robotocondensed h1, .type-juliussansone-robotocondensed h2, .type-juliussansone-robotocondensed h3, .type-juliussansone-robotocondensed h4, .type-juliussansone-robotocondensed h5, .type-juliussansone-robotocondensed h6 {
+   	font-family: 'Julius Sans One', sans-serif;
+	line-height: 1.2;
+    font-weight: 400;
+    text-transform: none;
+}        
+
+.type-juliussansone-robotocondensed h1 {font-size: 2.5rem;margin: 1.02rem 0 0.9rem;}
+.type-juliussansone-robotocondensed h2 {font-size: 1.8rem;margin: 1.2rem 0 0.6rem;}
+.type-juliussansone-robotocondensed h3 {font-size: 1.5rem;margin: 1.2rem 0 0.6rem;}
+.type-juliussansone-robotocondensed h4 {font-size: 1.3rem;margin: 0.56rem 0 0.3rem;line-height: 1.6;}
+.type-juliussansone-robotocondensed h5 {font-size: 1.2rem;margin: 0.58rem 0 0.3rem;line-height: 1.7;}
+.type-juliussansone-robotocondensed h6 {font-size: 1.1rem;margin: 0.6rem 0 0.3rem;line-height: 2;}
+.type-juliussansone-robotocondensed p {margin:0.4rem 0 1rem;}
+
+.type-juliussansone-robotocondensed .display { margin-bottom: 0.5rem; }
+.type-juliussansone-robotocondensed .display h1 {
+	font-family: 'Julius Sans One', sans-serif;
+	font-size: 2.5rem;
+    font-weight: 400;
+    text-transform: none;
+    font-style: normal;
+}
+.type-juliussansone-robotocondensed .display p {
+	font-family: 'Roboto Condensed', sans-serif;
+    font-size: 0.93rem;
+    text-transform: none;
+    font-style: normal;
+}
+
+@media only screen and (max-width: 640px) {
+    .type-juliussansone-robotocondensed .display h1 {font-size: 2.5rem;}
+    .type-juliussansone-robotocondensed .display p {font-size: 0.93rem;}
+    .type-juliussansone-robotocondensed h1 {font-size: 2.3rem;}
+    .type-juliussansone-robotocondensed h2 {font-size: 2rem;}
+    .type-juliussansone-robotocondensed h3 {font-size: 1.7rem;}
+    .type-juliussansone-robotocondensed h4 {font-size: 1.4rem;}
+    .type-juliussansone-robotocondensed h5 {font-size: 1.2rem;}
+    .type-juliussansone-robotocondensed h6 {font-size: 1rem;} 
+}
+
+.type-juliussansone-robotocondensed .is-btn {
+    padding: 10px 50px;
+}
+.type-juliussansone-robotocondensed .is-btn-small {
+    padding: 5px 25px;
+}
+
+.type-juliussansone-robotocondensed .display-font1 {font-family: 'Julius Sans One', sans-serif;}
+.type-juliussansone-robotocondensed .display-font2 {font-family: 'Roboto Condensed', sans-serif;}
+.type-juliussansone-robotocondensed .default-font1 {font-family: 'Julius Sans One', sans-serif;}
+.type-juliussansone-robotocondensed .default-font2 {font-family: 'Roboto Condensed', sans-serif;}

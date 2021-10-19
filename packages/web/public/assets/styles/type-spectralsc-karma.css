@@ -1,0 +1,80 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Spectral+SC:200,700');
+@import url('https://fonts.googleapis.com/css?family=Karma:300,700');
+
+.type-spectralsc-karma {
+    font-family: 'Karma', serif;
+    font-size: 100%; 
+    line-height: 2;
+    font-weight: 300;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-spectralsc-karma p, .type-spectralsc-karma td, .type-spectralsc-karma li, .type-spectralsc-karma label {
+    font-family: 'Karma', serif;
+    font-size: 1.13rem; 
+    line-height: 2;
+    font-weight: 300;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-spectralsc-karma h1, .type-spectralsc-karma h2, .type-spectralsc-karma h3, .type-spectralsc-karma h4, .type-spectralsc-karma h5, .type-spectralsc-karma h6 {
+    font-family: 'Spectral SC', serif;
+    font-weight: 200;
+    letter-spacing: 0.5px;
+    line-height: 1.4;
+    text-transform: none;
+    font-style: normal;    
+}        
+
+.type-spectralsc-karma h1 {font-size: 3rem;margin: 0.14rem 0 0.3rem;}
+.type-spectralsc-karma h2 {font-size: 2.5rem;margin: 0.25rem 0 0.3rem;}
+.type-spectralsc-karma h3 {font-size: 2.1rem;margin: 0.33rem 0 0.3rem;}
+.type-spectralsc-karma h4 {font-size: 1.8rem;margin: 0.5rem 0 0.3rem;}
+.type-spectralsc-karma h5 {font-size: 1.5rem;margin: 0.52rem 0 0.3rem;line-height: 1.6;}
+.type-spectralsc-karma h6 {font-size: 1.22rem;margin: 0.67rem 0 0.3rem;font-weight:bold;line-height: 1.8;}
+.type-spectralsc-karma p {margin:0.7rem 0 1.3rem;}
+
+.type-spectralsc-karma .display { margin-bottom: 0.5rem; }
+.type-spectralsc-karma .display h1 {
+	font-family: 'Spectral SC', serif;
+    font-weight: 200;
+    font-size: 4.3rem;
+    line-height: 1.4;
+    text-transform: capitalize;
+    letter-spacing: 1.5px;
+    margin: 0.4rem 0;
+    font-style: normal;
+}
+.type-spectralsc-karma .display p {
+    font-family: 'Karma', serif;
+    font-size: 1.3rem;
+    line-height: 1.9;
+    letter-spacing: 1px;
+    font-style: normal;
+    text-transform: none;  
+}
+
+@media only screen and (max-width: 640px) {
+    .type-spectralsc-karma .display h1 {font-size: 2.5rem;}
+    .type-spectralsc-karma .display p {font-size: 1.4rem;}
+    .type-spectralsc-karma h1 {font-size: 2.3rem;}
+    .type-spectralsc-karma h2 {font-size: 2rem;}
+    .type-spectralsc-karma h3 {font-size: 1.7rem;}
+    .type-spectralsc-karma h4 {font-size: 1.4rem;}
+    .type-spectralsc-karma h5 {font-size: 1.2rem;}
+    .type-spectralsc-karma h6 {font-size: 1rem;} 
+}
+
+.type-spectralsc-karma .is-btn {
+    padding: 12px 50px 7px;
+}
+.type-spectralsc-karma .is-btn-small {
+    padding: 7px 25px 4px;
+}
+
+.type-spectralsc-karma .display-font1 {font-family: 'Spectral SC', serif;}
+.type-spectralsc-karma .display-font2 {font-family: 'Karma', serif;}
+.type-spectralsc-karma .default-font1 {font-family: 'Spectral SC', serif;}
+.type-spectralsc-karma .default-font2 {font-family: 'Karma', serif;}

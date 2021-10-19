@@ -1,0 +1,73 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Oregano:400,400i');
+@import url('https://fonts.googleapis.com/css?family=Zilla+Slab:300,300i,700');
+
+.type-oregano-zillaslab {
+    font-family: 'Zilla Slab', serif;
+    font-size: 100%; 
+    line-height: 1.9;
+    font-weight: 300;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-oregano-zillaslab p, .type-oregano-zillaslab td, .type-oregano-zillaslab li, .type-oregano-zillaslab label {
+    font-family: 'Zilla Slab', serif;
+    font-size: 1.22rem;
+    line-height: 1.9;
+    font-weight: 300;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-oregano-zillaslab h1, .type-oregano-zillaslab h2, .type-oregano-zillaslab h3, .type-oregano-zillaslab h4, .type-oregano-zillaslab h5, .type-oregano-zillaslab h6 {
+    font-family: 'Oregano', cursive;
+    font-weight: 400;
+    line-height: 1.3;
+    letter-spacing: 1px;   
+    text-transform: none;
+    font-style: normal; 
+}        
+
+.type-oregano-zillaslab h1 {font-size: 3rem;margin: 0.21rem 0 0.3rem;}
+.type-oregano-zillaslab h2 {font-size: 2.5rem;margin: 0.29rem 0 0.3rem;}
+.type-oregano-zillaslab h3 {font-size: 2.1rem;margin: 0.41rem 0 0.3rem;}
+.type-oregano-zillaslab h4 {font-size: 1.8rem;margin: 0.52rem 0 0.3rem;line-height: 1.4;}
+.type-oregano-zillaslab h5 {font-size: 1.5rem;margin: 0.58rem 0 0.3rem;line-height: 1.6;}
+.type-oregano-zillaslab h6 {font-size: 1.22rem;margin: 0.7rem 0 0.3rem;font-weight: bold;line-height: 1.8;}
+.type-oregano-zillaslab p {margin:0.6rem 0 1rem;}
+
+.type-oregano-zillaslab .display { margin-bottom: 0.5rem; }
+.type-oregano-zillaslab .display h1 {
+	font-family: 'Oregano', cursive;
+    font-size: 4rem;
+    letter-spacing: 6px;
+    line-height: 1.4;
+    font-weight: 400;
+    text-transform: uppercase;
+    margin: 0.4rem 0;
+    font-style: normal;
+}
+.type-oregano-zillaslab .display p {
+    font-family: 'Zilla Slab', serif;
+    font-size: 1.5rem;
+    line-height: 1.8;
+    letter-spacing: 3px;
+    font-style: normal;
+    text-transform: none;
+}
+
+@media only screen and (max-width: 640px) {
+    .type-oregano-zillaslab .display h1 {font-size: 2.5rem;}
+    .type-oregano-zillaslab .display p {font-size: 1.4rem;}
+    .type-oregano-zillaslab h1 {font-size: 2.3rem;}
+    .type-oregano-zillaslab h2 {font-size: 2rem;}
+    .type-oregano-zillaslab h3 {font-size: 1.7rem;}
+    .type-oregano-zillaslab h4 {font-size: 1.4rem;}
+    .type-oregano-zillaslab h5 {font-size: 1.2rem;}
+    .type-oregano-zillaslab h6 {font-size: 1rem;} 
+}
+
+.type-oregano-zillaslab .display-font1 {font-family: 'Oregano', cursive;}
+.type-oregano-zillaslab .display-font2 {font-family: 'Zilla Slab', serif;}
+.type-oregano-zillaslab .default-font1 {font-family: 'Oregano', cursive;}
+.type-oregano-zillaslab .default-font2 {font-family: 'Zilla Slab', serif;}

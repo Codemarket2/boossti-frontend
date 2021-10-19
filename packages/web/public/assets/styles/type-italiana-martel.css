@@ -1,0 +1,79 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Italiana');
+@import url('https://fonts.googleapis.com/css?family=Martel:200,700');
+
+.type-italiana-martel {
+    font-family: 'Martel', serif;
+    font-size: 100%; 
+    line-height: 2.3;
+    font-weight: 200;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-italiana-martel p, .type-italiana-martel td, .type-italiana-martel li, .type-italiana-martel label {
+    font-family: 'Martel', serif;
+    font-size: 0.88rem; 
+    line-height: 2.3;
+    font-weight: 200;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-italiana-martel h1, .type-italiana-martel h2, .type-italiana-martel h3, .type-italiana-martel h4, .type-italiana-martel h5, .type-italiana-martel h6 {
+    font-family: 'Martel', serif;
+    line-height: 1.5;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}        
+
+.type-italiana-martel h1 {font-size: 2.9rem;margin: 0.22rem 0 0.3rem;}
+.type-italiana-martel h2 {font-size: 2.4rem;margin: 0.35rem 0 0.3rem;}
+.type-italiana-martel h3 {font-size: 2rem;margin: 0.41rem 0 0.3rem;}
+.type-italiana-martel h4 {font-size: 1.6rem;margin: 0.6rem 0 0.3rem;line-height: 1.6;}
+.type-italiana-martel h5 {font-size: 1.3rem;margin: 0.7rem 0 0.3rem;line-height: 1.8;}
+.type-italiana-martel h6 {font-size: 1.04rem;margin: 0.85rem 0 0.3rem;line-height: 2;font-weight:bold;}
+.type-italiana-martel p {margin:0.8rem 0 1rem;}
+
+.type-italiana-martel .display { margin-bottom: 0.5rem; }
+.type-italiana-martel .display h1 {
+    font-family: 'Italiana', serif;
+    font-size: 4.2rem;
+    letter-spacing: 2px;
+    line-height: 1.5;
+    text-transform: uppercase;
+    font-weight: 400;
+    margin: 0.4rem 0;
+    font-style: normal;
+}
+.type-italiana-martel .display p {
+    font-family: 'Martel', serif;
+    font-size: 1.2rem;
+    line-height: 2;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-style: normal;
+}
+
+@media only screen and (max-width: 640px) {
+    .type-italiana-martel .display h1 {font-size: 2.5rem;}
+    .type-italiana-martel .display p {font-size: 1.4rem;}
+    .type-italiana-martel h1 {font-size: 2.3rem;}
+    .type-italiana-martel h2 {font-size: 2rem;}
+    .type-italiana-martel h3 {font-size: 1.7rem;}
+    .type-italiana-martel h4 {font-size: 1.4rem;}
+    .type-italiana-martel h5 {font-size: 1.2rem;}
+    .type-italiana-martel h6 {font-size: 1rem;} 
+}
+
+.type-italiana-martel .is-btn {
+    padding: 12px 50px 8px;
+}
+.type-italiana-martel .is-btn-small {
+    padding: 7px 25px 4px;
+}
+
+.type-italiana-martel .display-font1 {font-family: 'Italiana', serif;}
+.type-italiana-martel .display-font2 {font-family: 'Martel', serif;}
+.type-italiana-martel .default-font1 {font-family: 'Martel', serif;}
+.type-italiana-martel .default-font2 {font-family: 'Martel', serif;}

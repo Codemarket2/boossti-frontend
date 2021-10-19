@@ -1,0 +1,73 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Special+Elite');
+@import url('https://fonts.googleapis.com/css?family=Encode+Sans:300,700');
+
+.type-specialelite-encodesans {
+    font-family: 'Encode Sans', sans-serif;
+    font-size: 100%; 
+    line-height: 2.1;
+    font-weight: 300;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-specialelite-encodesans p, .type-specialelite-encodesans td, .type-specialelite-encodesans li, .type-specialelite-encodesans label {
+    font-family: 'Encode Sans', sans-serif;
+    font-size: 1.14rem; 
+    line-height: 2.1;
+    font-weight: 300;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-specialelite-encodesans h1, .type-specialelite-encodesans h2, .type-specialelite-encodesans h3, .type-specialelite-encodesans h4, .type-specialelite-encodesans h5, .type-specialelite-encodesans h6 {
+    font-family: 'Special Elite', cursive;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}        
+
+.type-specialelite-encodesans h1 {font-size: 3rem;margin: 0.24rem 0 0.3rem;}
+.type-specialelite-encodesans h2 {font-size: 2.5rem;margin: 0.32rem 0 0.3rem;}
+.type-specialelite-encodesans h3 {font-size: 2rem;margin: 0.47rem 0 0.3rem;}
+.type-specialelite-encodesans h4 {font-size: 1.7rem;margin: 0.62rem 0 0.3rem;line-height: 1.6;}
+.type-specialelite-encodesans h5 {font-size: 1.4rem;margin: 0.78rem 0 0.3rem;line-height: 1.8;}
+.type-specialelite-encodesans h6 {font-size: 1.14rem;margin: 0.87rem 0 0.3rem;line-height: 2;}
+.type-specialelite-encodesans p {margin:0.55rem 0 1rem;}
+
+.type-specialelite-encodesans .display { margin-bottom: 0.5rem; }
+.type-specialelite-encodesans .display h1 {
+	font-family: 'Special Elite', cursive;
+    font-weight: 400;
+    font-size: 3.5rem;
+    letter-spacing: 1px;
+    line-height: 1.5;
+    text-transform: uppercase;
+    margin: 0.4rem 0;
+    font-style: normal;
+}
+.type-specialelite-encodesans .display p {
+    font-family: 'Encode Sans', sans-serif;
+    font-size: 1.1rem;
+    line-height: 2;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-style: normal;
+}
+
+@media only screen and (max-width: 640px) {
+    .type-specialelite-encodesans .display h1 {font-size: 2.5rem;}
+    .type-specialelite-encodesans .display p {font-size: 1.4rem;}
+    .type-specialelite-encodesans h1 {font-size: 2.3rem;}
+    .type-specialelite-encodesans h2 {font-size: 2rem;}
+    .type-specialelite-encodesans h3 {font-size: 1.7rem;}
+    .type-specialelite-encodesans h4 {font-size: 1.4rem;}
+    .type-specialelite-encodesans h5 {font-size: 1.2rem;}
+    .type-specialelite-encodesans h6 {font-size: 1rem;} 
+}
+
+.type-specialelite-encodesans .display-font1 {font-family: 'Special Elite', cursive;}
+.type-specialelite-encodesans .display-font2 {font-family: 'Encode Sans', sans-serif;}
+.type-specialelite-encodesans .default-font1 {font-family: 'Special Elite', cursive;}
+.type-specialelite-encodesans .default-font2 {font-family: 'Encode Sans', sans-serif;}

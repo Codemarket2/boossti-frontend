@@ -1,0 +1,62 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Oswald:300,400,700');
+@import url('https://fonts.googleapis.com/css?family=Cousine:400,400i,700');
+
+
+/**********************************
+    General
+***********************************/
+
+html { font-size: 100%; }  
+body {
+    margin: 0;
+    font-family: 'Cousine', monospace;
+    font-size: 100%; 
+    line-height: 1.9;
+    font-weight: 400;
+}
+p, td, li, label {
+    font-size: 1.06em; 
+    line-height: 1.9;
+    font-weight: 400;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    letter-spacing: 7px;
+}        
+
+h1 {font-size: 3em;margin: 0.06em 0 0.3em;}
+h2 {font-size: 2.4em;margin: 0.16em 0 0.3em;}
+h3 {font-size: 2em;margin: 0.27em 0 0.3em;}
+h4 {font-size: 1.7em;margin: 0.44em 0 0.3em;}
+h5 {font-size: 1.25em;margin: 0.61em 0 0.3em;font-weight: bold;line-height: 1.8;}
+h6 {font-size: 1.06em;margin: 0.85em 0 0.3em;font-weight: bold;line-height: 2;letter-spacing: 4px;}
+p {margin: 0.9em 0 1em;}
+
+.display { margin-bottom: 0.5em; }
+.display h1 {
+    font-size: 4em;
+    letter-spacing: 15px;
+    line-height: 1.6;
+    text-transform: uppercase;
+    font-weight: 300;
+    margin: 0.4em 0;
+}
+.display p {
+    font-size: 1.2em;
+    line-height: 1.9;
+    letter-spacing: 1px;
+    font-style: normal;
+}
+
+@media only screen and (max-width: 640px) {
+    .display h1 {font-size: 2.5em;}
+    .display p {font-size: 1.4em;}
+    h1 {font-size: 2.3em;}
+    h2 {font-size: 2em;}
+    h3 {font-size: 1.7rem;}
+    h4 {font-size: 1.4em;}
+    h5 {font-size: 1.2rem;}
+    h6 {font-size: 1em;} 
+}

@@ -1,0 +1,80 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Tenali+Ramakrishna');
+@import url('https://fonts.googleapis.com/css?family=Overpass+Mono:300,700');
+
+.type-tenaram-overpassmono {
+    font-family: 'Overpass Mono', monospace;
+    font-size: 100%; 
+    line-height: 2;
+    font-weight: 300;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-tenaram-overpassmono p, .type-tenaram-overpassmono td, .type-tenaram-overpassmono li, .type-tenaram-overpassmono label {
+    font-family: 'Overpass Mono', monospace;
+    font-size: 1.05rem; 
+    line-height: 2;
+    font-weight: 300;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-tenaram-overpassmono h1, .type-tenaram-overpassmono h2, .type-tenaram-overpassmono h3, .type-tenaram-overpassmono h4, .type-tenaram-overpassmono h5, .type-tenaram-overpassmono h6 {
+    font-family: 'Tenali Ramakrishna', sans-serif;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: 1px;
+    text-transform: none;
+    font-style: normal;
+}        
+
+.type-tenaram-overpassmono h1 {font-size: 3.5rem;margin: 0.21rem 0;}
+.type-tenaram-overpassmono h2 {font-size: 2.8rem;margin: 0.32rem 0;}
+.type-tenaram-overpassmono h3 {font-size: 2.3rem;margin: 0.42rem 0;}
+.type-tenaram-overpassmono h4 {font-size: 2rem;margin: 0.54rem 0;}
+.type-tenaram-overpassmono h5 {font-size: 1.7rem;margin: 0.61rem 0;line-height: 1.3;}
+.type-tenaram-overpassmono h6 {font-size: 1.5rem;margin: 0.7rem 0;font-weight: bold;line-height: 1.4;}
+.type-tenaram-overpassmono p {margin:0.8rem 0 1rem;}
+
+.type-tenaram-overpassmono .display { margin-bottom: 0.5rem; }
+.type-tenaram-overpassmono .display h1 {
+	font-family: 'Tenali Ramakrishna', sans-serif;
+    font-size: 5.5rem;
+    letter-spacing: 2px;
+    line-height: 1.2;
+    text-transform: uppercase;
+    font-weight: 400;
+    margin: 0.4rem 0;
+    font-style: normal;
+}
+.type-tenaram-overpassmono .display p {
+    font-family: 'Overpass Mono', monospace;
+    font-size: 1.25rem;
+    line-height: 2;
+    letter-spacing: 1px;
+    font-style: normal;
+    text-transform: none;
+}
+
+@media only screen and (max-width: 640px) {
+    .type-tenaram-overpassmono .display h1 {font-size: 2.5rem;}
+    .type-tenaram-overpassmono .display p {font-size: 1.4rem;}
+    .type-tenaram-overpassmono h1 {font-size: 2.3rem;}
+    .type-tenaram-overpassmono h2 {font-size: 2rem;}
+    .type-tenaram-overpassmono h3 {font-size: 1.7rem;}
+    .type-tenaram-overpassmono h4 {font-size: 1.4rem;}
+    .type-tenaram-overpassmono h5 {font-size: 1.2rem;}
+    .type-tenaram-overpassmono h6 {font-size: 1rem;} 
+}
+
+.type-tenaram-overpassmono .is-btn {
+    padding: 11px 50px 8px;
+}
+.type-tenaram-overpassmono .is-btn-small {
+    padding: 5px 25px 4px;
+}
+
+.type-tenaram-overpassmono .display-font1 {font-family: 'Tenali Ramakrishna', sans-serif;}
+.type-tenaram-overpassmono .display-font2 {font-family: 'Overpass Mono', monospace;}
+.type-tenaram-overpassmono .default-font1 {font-family: 'Tenali Ramakrishna', sans-serif;}
+.type-tenaram-overpassmono .default-font2 {font-family: 'Overpass Mono', monospace;}

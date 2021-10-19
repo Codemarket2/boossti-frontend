@@ -1,0 +1,80 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Josefin+Sans:300,600');
+@import url('https://fonts.googleapis.com/css?family=Neuton:200,700');
+
+.type-josefinsans-neuton {
+    font-family: 'Neuton', serif;
+    font-size: 100%; 
+    line-height: 1.9;
+    font-weight: 200;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-josefinsans-neuton p, .type-josefinsans-neuton td, .type-josefinsans-neuton li, .type-josefinsans-neuton label {
+    font-family: 'Neuton', serif;
+    font-size: 1.13rem; 
+    line-height: 1.9;
+    font-weight: 200;
+    letter-spacing: 0px;
+    text-transform: none;
+    font-style: normal;
+}
+.type-josefinsans-neuton h1, .type-josefinsans-neuton h2, .type-josefinsans-neuton h3, .type-josefinsans-neuton h4, .type-josefinsans-neuton h5, .type-josefinsans-neuton h6 {
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 300;
+    letter-spacing: 1px;
+    line-height: 1.5;
+    text-transform: uppercase;
+    font-style: normal;
+}        
+
+.type-josefinsans-neuton h1 {font-size: 3rem;margin: 0.17rem 0 0.1rem;}
+.type-josefinsans-neuton h2 {font-size: 2.4rem;margin: 0.3rem 0 0.1rem;}
+.type-josefinsans-neuton h3 {font-size: 1.9rem;margin: 0.46rem 0 0.1rem;}
+.type-josefinsans-neuton h4 {font-size: 1.7rem;margin: 0.5rem 0 0.1rem;line-height: 1.6;}
+.type-josefinsans-neuton h5 {font-size: 1.45rem;margin: 0.57rem 0 0.1rem;line-height: 1.7;}
+.type-josefinsans-neuton h6 {font-size: 1.32rem;margin: 0.64rem 0 0.1rem;font-weight: bold;text-transform: none;line-height: 1.9;}
+.type-josefinsans-neuton p {margin:0.39rem 0 1rem;}
+
+.type-josefinsans-neuton .display { margin-bottom: 0.5rem; }
+.type-josefinsans-neuton .display h1 {
+	font-family: 'Josefin Sans', sans-serif;
+    font-weight: 300;
+    font-size: 3.7rem;
+    letter-spacing: 7px;
+    line-height: 1.5;
+    text-transform: uppercase;
+    margin: 0.4rem 0;
+    font-style: normal;
+}
+.type-josefinsans-neuton .display p {
+    font-family: 'Neuton', serif;
+    font-size: 1.7rem;
+    line-height: 1.8;
+    letter-spacing: 2px;
+    font-style: normal;
+    text-transform: none;
+}
+
+@media only screen and (max-width: 640px) {
+    .type-josefinsans-neuton .display h1 {font-size: 2.5rem;}
+    .type-josefinsans-neuton .display p {font-size: 1.4rem;}
+    .type-josefinsans-neuton h1 {font-size: 2.3rem;}
+    .type-josefinsans-neuton h2 {font-size: 2rem;}
+    .type-josefinsans-neuton h3 {font-size: 1.7rem;}
+    .type-josefinsans-neuton h4 {font-size: 1.4rem;}
+    .type-josefinsans-neuton h5 {font-size: 1.2rem;}
+    .type-josefinsans-neuton h6 {font-size: 1rem;} 
+}
+
+.type-josefinsans-neuton .is-btn {
+    padding: 10px 50px 12px;
+}
+.type-josefinsans-neuton .is-btn-small {
+    padding: 5px 25px 7px;
+}
+
+.type-josefinsans-neuton .display-font1 {font-family: 'Josefin Sans', sans-serif;}
+.type-josefinsans-neuton .display-font2 {font-family: 'Neuton', serif;}
+.type-josefinsans-neuton .default-font1 {font-family: 'Josefin Sans', sans-serif;}
+.type-josefinsans-neuton .default-font2 {font-family: 'Neuton', serif;}

@@ -74,7 +74,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column full">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/oleg-laptev-545268-unsplash-VD7ll2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/oleg-laptev-545268-unsplash-VD7ll2.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -85,7 +85,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/jon-lalin-731093-unsplash-(1)-tdmMt1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/jon-lalin-731093-unsplash-(1)-tdmMt1.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>" +
@@ -102,7 +102,7 @@ var data_basic = {
         "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>" +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/adam-birkett-209727-unsplash-(2)-H2BMm1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/adam-birkett-209727-unsplash-(2)-H2BMm1.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -173,7 +173,11 @@ var data_basic = {
       thumbnail: 'preview/basic-13.png',
       category: '120',
       html:
-        '<div class="row clearfix">' + '<div class="column full">' + '<hr>' + '</div>' + '</div>',
+        '<div class="row clearfix">' +
+        '<div class="column full">' +
+        '<hr>' +
+        '</div>' +
+        '</div>',
     },
 
     {
@@ -251,11 +255,11 @@ var data_basic = {
         '<div class="column full" data-noedit data-module="slider" data-module-desc="Slider" data-html="' +
         encodeURIComponent(
           '<div id="{id}" class="slider-on-content" style="width:100%;height:500px;display:none">' +
-            '<div class="is-boxes slider-image" style="background-image: url(\'assets/minimalist-blocks/images/slide1.jpg\');">' +
+            '<div class="is-boxes slider-image" style="background-image: url(\'https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/slide1.jpg\');">' +
             '</div>' +
-            '<div class="is-boxes slider-image" style="background-image: url(\'assets/minimalist-blocks/images/slide2.jpg\');">' +
+            '<div class="is-boxes slider-image" style="background-image: url(\'https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/slide2.jpg\');">' +
             '</div>' +
-            '<div class="is-boxes slider-image" style="background-image: url(\'assets/minimalist-blocks/images/slide3.jpg\');">' +
+            '<div class="is-boxes slider-image" style="background-image: url(\'https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/slide3.jpg\');">' +
             '</div>' +
             '</div>' +
             '' +
@@ -288,7 +292,7 @@ var data_basic = {
             '});' +
             '</scr' +
             'ipt>' +
-            '',
+            ''
         ) +
         '" data-settings="' +
         encodeURIComponent(
@@ -302,19 +306,19 @@ var data_basic = {
             '"images":' +
             '[' +
             '{' +
-            '"src": "assets/minimalist-blocks/images/slide1.jpg", ' +
+            '"src": "https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/slide1.jpg", ' +
             '"caption": "", "link": "", "width": "450", "align": "", "position": "bottom left"' +
             '},' +
             '{' +
-            '"src": "assets/minimalist-blocks/images/slide2.jpg", ' +
+            '"src": "https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/slide2.jpg", ' +
             '"caption": "", "link": "", "width": "450", "align": "", "position": "bottom left"' +
             '},' +
             '{' +
-            '"src": "assets/minimalist-blocks/images/slide3.jpg", ' +
+            '"src": "https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/slide3.jpg", ' +
             '"caption": "", "link": "", "width": "450", "align": "", "position": "bottom left"' +
             '}' +
             ']' +
-            '}]',
+            '}]'
         ) +
         '"' +
         '>' +
@@ -342,11 +346,11 @@ var data_basic = {
             '<div data-glide-el="track" class="glide__track">' +
             '<ul class="glide__slides">' +
             '<li class="glide__slide">' +
-            '<div data-subblock><img data-image-embed data-noresize data-sync src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/slide2.jpg" alt="" /></div>' +
+            '<div data-subblock><img data-image-embed data-noresize data-sync src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/slide2.jpg" alt="" /></div>' +
             '<div class="is-slider-caption" style="left:4vw;bottom:4vw">Lorem Ipsum</div>' +
             '</li>' +
             '<li class="glide__slide">' +
-            '<div data-subblock><img data-image-embed data-noresize data-sync src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/slide3.jpg" alt="" /></div>' +
+            '<div data-subblock><img data-image-embed data-noresize data-sync src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/slide3.jpg" alt="" /></div>' +
             '</li>' +
             '</ul>' +
             '</div>' +
@@ -390,7 +394,7 @@ var data_basic = {
             '' +
             '</scr' +
             'ipt>' +
-            '',
+            ''
         ) +
         '" data-settings="' +
         encodeURIComponent(
@@ -404,7 +408,7 @@ var data_basic = {
             '"hoverpause":true,' +
             '"arrow":true,' +
             '"dots":false' +
-            '}',
+            '}'
         ) +
         '">' +
         '</div>' +
@@ -434,7 +438,7 @@ var data_basic = {
             "document.querySelector('#{id}').innerHTML ='<b>Hello World..!</b>';" +
             '});' +
             '</scr' +
-            'ipt>',
+            'ipt>'
         ) +
         '">' +
         '</div>' +
@@ -2010,10 +2014,10 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/jon-lalin-731093-unsplash-(1)-tdmMt1.jpg" alt="" style="margin: 0;float: left;">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/jon-lalin-731093-unsplash-(1)-tdmMt1.jpg" alt="" style="margin: 0;float: left;">' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/adam-birkett-209727-unsplash-(2)-H2BMm1.jpg" alt="" style="margin: 0;float: left;">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/adam-birkett-209727-unsplash-(2)-H2BMm1.jpg" alt="" style="margin: 0;float: left;">' +
         '</div>' +
         '</div>',
     },
@@ -2024,13 +2028,13 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/chuttersnap-413002-unsplash-83HqE1.jpg" alt="" style="margin: 0;float: left;">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/chuttersnap-413002-unsplash-83HqE1.jpg" alt="" style="margin: 0;float: left;">' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/caroline-bertolini-270870-unsplash-1j5FB2.jpg" alt="" style="margin: 0;float: left;">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/caroline-bertolini-270870-unsplash-1j5FB2.jpg" alt="" style="margin: 0;float: left;">' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/theo-roland-740436-unsplash-WqnWJ3.jpg" alt="" style="margin: 0;float: left;">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/theo-roland-740436-unsplash-WqnWJ3.jpg" alt="" style="margin: 0;float: left;">' +
         '</div>' +
         '</div>',
     },
@@ -2041,7 +2045,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column full">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/oleg-laptev-545268-unsplash-VD7ll2.jpg" alt="" style="margin: 0;float: left;">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/oleg-laptev-545268-unsplash-VD7ll2.jpg" alt="" style="margin: 0;float: left;">' +
         '</div>' +
         '</div>',
     },
@@ -2052,7 +2056,7 @@ var data_basic = {
       html:
         '<div class="row clearfix" style="margin-left:-100px;margin-right:-100px">' +
         '<div class="column full">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/oleg-laptev-545268-unsplash-VD7ll2.jpg" alt="" style="margin: 0;float: left;">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/oleg-laptev-545268-unsplash-VD7ll2.jpg" alt="" style="margin: 0;float: left;">' +
         '</div>' +
         '</div>',
     },
@@ -2063,10 +2067,10 @@ var data_basic = {
       html:
         '<div class="row clearfix" style="padding: 0;">' +
         '<div class="column half" style="padding: 0;">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/jon-lalin-731093-unsplash-(1)-tdmMt1.jpg" alt="" style="margin: 0;float: left;">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/jon-lalin-731093-unsplash-(1)-tdmMt1.jpg" alt="" style="margin: 0;float: left;">' +
         '</div>' +
         '<div class="column half" style="padding: 0;">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/adam-birkett-209727-unsplash-(2)-H2BMm1.jpg" alt="" style="margin: 0;float: left;">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/adam-birkett-209727-unsplash-(2)-H2BMm1.jpg" alt="" style="margin: 0;float: left;">' +
         '</div>' +
         '</div>',
     },
@@ -2077,13 +2081,13 @@ var data_basic = {
       html:
         '<div class="row clearfix" style="padding: 0;">' +
         '<div class="column third" style="padding: 0;">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/chuttersnap-413002-unsplash-83HqE1.jpg" alt="" style="margin: 0;float: left;">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/chuttersnap-413002-unsplash-83HqE1.jpg" alt="" style="margin: 0;float: left;">' +
         '</div>' +
         '<div class="column third" style="padding: 0;">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/caroline-bertolini-270870-unsplash-1j5FB2.jpg" alt="" style="margin: 0;float: left;">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/caroline-bertolini-270870-unsplash-1j5FB2.jpg" alt="" style="margin: 0;float: left;">' +
         '</div>' +
         '<div class="column third" style="padding: 0;">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/theo-roland-740436-unsplash-WqnWJ3.jpg" alt="" style="margin: 0;float: left;">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/theo-roland-740436-unsplash-WqnWJ3.jpg" alt="" style="margin: 0;float: left;">' +
         '</div>' +
         '</div>',
     },
@@ -2094,7 +2098,7 @@ var data_basic = {
       html:
         '<div class="row clearfix" style="padding: 0;">' +
         '<div class="column full" style="padding: 0;">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/oleg-laptev-545268-unsplash-VD7ll2.jpg" alt="" style="margin: 0;float: left;">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/oleg-laptev-545268-unsplash-VD7ll2.jpg" alt="" style="margin: 0;float: left;">' +
         '</div>' +
         '</div>',
     },
@@ -2105,21 +2109,21 @@ var data_basic = {
       html:
         '<div class="row clearfix" style="padding: 0;">' +
         '<div class="column third" style="padding: 0;">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/chuttersnap-413002-unsplash-83HqE1.jpg" alt="" style="margin: 0;float: left;">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/chuttersnap-413002-unsplash-83HqE1.jpg" alt="" style="margin: 0;float: left;">' +
         '</div>' +
         '<div class="column third" style="padding: 0;">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/caroline-bertolini-270870-unsplash-1j5FB2.jpg" alt="" style="margin: 0;float: left;">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/caroline-bertolini-270870-unsplash-1j5FB2.jpg" alt="" style="margin: 0;float: left;">' +
         '</div>' +
         '<div class="column third" style="padding: 0;">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/theo-roland-740436-unsplash-WqnWJ3.jpg" alt="" style="margin: 0;float: left;">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/theo-roland-740436-unsplash-WqnWJ3.jpg" alt="" style="margin: 0;float: left;">' +
         '</div>' +
         '</div>' +
         '<div class="row clearfix" style="padding: 0;">' +
         '<div class="column half" style="padding: 0;">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/jon-lalin-731093-unsplash-(1)-tdmMt1.jpg" alt="" style="margin: 0;float: left;">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/jon-lalin-731093-unsplash-(1)-tdmMt1.jpg" alt="" style="margin: 0;float: left;">' +
         '</div>' +
         '<div class="column half" style="padding: 0;">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/adam-birkett-209727-unsplash-(2)-H2BMm1.jpg" alt="" style="margin: 0;float: left;">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/adam-birkett-209727-unsplash-(2)-H2BMm1.jpg" alt="" style="margin: 0;float: left;">' +
         '</div>' +
         '</div>',
     },
@@ -2140,12 +2144,12 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column half center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/pawel-czerwinski-1080345-unsplash-Zxz1W1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/pawel-czerwinski-1080345-unsplash-Zxz1W1.jpg" alt="">' +
         '\n<h3 class="size-21">IMAGE CAPTION</h3>' +
         '\n<p style="color: rgb(158, 158, 158);">Lorem Ipsum is simply dummy text</p>' +
         '</div>' +
         '<div class="column half center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/agata-create-1137058-unsplash-(1)-UvBs02.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/agata-create-1137058-unsplash-(1)-UvBs02.jpg" alt="">' +
         '\n<h3 class="size-21">IMAGE CAPTION</h3>' +
         '\n<p style="color: rgb(158, 158, 158);">Lorem Ipsum is simply dummy text</p>' +
         '</div>' +
@@ -2168,17 +2172,17 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/monika-grabkowska-742426-unsplash-AtCtH1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/monika-grabkowska-742426-unsplash-AtCtH1.jpg" alt="">' +
         '\n<h3 class="size-18">CAPTION</h3>' +
         '\n<p class="size-14" style="color: rgb(136, 136, 136);">Lorem Ipsum is dummy text.</p>' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/mira-bozhko-456995-YiVKC1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/mira-bozhko-456995-YiVKC1.jpg" alt="">' +
         '\n<h3 class="size-18">CAPTION</h3>' +
         '\n<p class="size-14" style="color: rgb(136, 136, 136);">Lorem Ipsum is dummy text.</p>' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/lauren-mancke-63448-unsplash-AtCtH2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/lauren-mancke-63448-unsplash-AtCtH2.jpg" alt="">' +
         '\n<h3 class="size-18">CAPTION</h3>' +
         '\n<p class="size-14" style="color: rgb(136, 136, 136);">Lorem Ipsum is dummy text.</p>' +
         '</div>' +
@@ -2191,7 +2195,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column full center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/susanne-schwarz-1142929-unsplash-IZGK11.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/susanne-schwarz-1142929-unsplash-IZGK11.jpg" alt="">' +
         '\n<h3 class="size-21">IMAGE CAPTION</h3>' +
         '\n<p style="color: rgb(158, 158, 158);">Lorem Ipsum is dummy text of the printing industry</p>' +
         '</div>' +
@@ -2216,19 +2220,19 @@ var data_basic = {
         '<div class="row clearfix">' +
         '<div class="column third center">' +
         '<div class="img-circular">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/art-materials-close-up-color-pencils-1484263-jT5E21.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/art-materials-close-up-color-pencils-1484263-jT5E21.jpg" alt="">' +
         '</div>' +
         '\n<p class="size-14">Lorem Ipsum is dummy text</p>' +
         '</div>' +
         '<div class="column third center">' +
         '<div class="img-circular">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/oleg-laptev-546607-unsplash-SKGb82.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/oleg-laptev-546607-unsplash-SKGb82.jpg" alt="">' +
         '</div>' +
         '\n<p class="size-14">Lorem Ipsum is dummy text</p>' +
         '</div>' +
         '<div class="column third center">' +
         '<div class="img-circular">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/michal-grosicki-XG2yA3.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/michal-grosicki-XG2yA3.jpg" alt="">' +
         '</div>' +
         '\n<p class="size-14">Lorem Ipsum is dummy text</p>' +
         '</div>' +
@@ -2251,11 +2255,11 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column half center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/remi-muller-359340-unsplash-JOL3q1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/remi-muller-359340-unsplash-JOL3q1.jpg" alt="">' +
         '\n<p><i>Lorem Ipsum is dummy text</i></p>' +
         '</div>' +
         '<div class="column half center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/dlanor-s-591314-unsplash-maNC32.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/dlanor-s-591314-unsplash-maNC32.jpg" alt="">' +
         '\n<p><i>Lorem Ipsum is dummy text</i></p>' +
         '</div>' +
         '</div>',
@@ -2277,15 +2281,15 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column third center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/agata-create-1132088-unsplash-(1)-adQTO1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/agata-create-1132088-unsplash-(1)-adQTO1.jpg" alt="">' +
         '\n<p>IMAGE CAPTION</p>' +
         '</div>' +
         '<div class="column third center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/lucrezia-carnelos-1127196-unsplash-Y7ahO2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/lucrezia-carnelos-1127196-unsplash-Y7ahO2.jpg" alt="">' +
         '\n<p>IMAGE CAPTION</p>' +
         '</div>' +
         '<div class="column third center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/bright-bulb-close-up-1166643-oof1G3.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/bright-bulb-close-up-1166643-oof1G3.jpg" alt="">' +
         '\n<p>IMAGE CAPTION</p>' +
         '</div>' +
         '</div>',
@@ -2297,7 +2301,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column full center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/omar-lopez-32084-8ciiC1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/omar-lopez-32084-8ciiC1.jpg" alt="">' +
         '\n<p style="color: rgb(136, 136, 136);">Lorem Ipsum is dummy text of the printing industry</p>' +
         '</div>' +
         '</div>',
@@ -2319,13 +2323,13 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-ORebV1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-ORebV1.jpg" alt="">' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/ian-dooley-298771-unsplash-Hu2RU3.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/ian-dooley-298771-unsplash-Hu2RU3.jpg" alt="">' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/daniel-klopper-1142809-unsplash-pToHm2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/daniel-klopper-1142809-unsplash-pToHm2.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -2347,7 +2351,7 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column full">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/anthony-tran-1076077-vcoLP1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/anthony-tran-1076077-vcoLP1.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -2358,7 +2362,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column two-third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/rawpixel-1200191-unsplash-Ms1O81.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/rawpixel-1200191-unsplash-Ms1O81.jpg" alt="">' +
         '</div>' +
         '<div class="column third">' +
         '<h4 class="size-21" style="letter-spacing: 2px;">IMAGE CAPTION</h4>' +
@@ -2377,7 +2381,7 @@ var data_basic = {
         '\n<p style="color: rgb(158, 158, 158);">Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s.</p>' +
         '</div>' +
         '<div class="column two-third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/iman-soleimany-zadeh-1205567-unsplash-AUqMZ2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/iman-soleimany-zadeh-1205567-unsplash-AUqMZ2.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -2388,7 +2392,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/maksym-zakharyak-688728-unsplash-p9w092.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/maksym-zakharyak-688728-unsplash-p9w092.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<div class="spacer height-60"></div>' +
@@ -2411,7 +2415,7 @@ var data_basic = {
         '\n<p style="color: rgb(158, 158, 158);">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/rodion-kutsaev-24833-unsplash-HEuVp1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/rodion-kutsaev-24833-unsplash-HEuVp1.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -2422,7 +2426,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column two-third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/monica-galentino-102655-unsplash-gfbdC1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/monica-galentino-102655-unsplash-gfbdC1.jpg" alt="">' +
         '</div>' +
         '<div class="column third">' +
         "<p>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. Vivamus leo ante.</p>" +
@@ -2439,7 +2443,7 @@ var data_basic = {
         "<p>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. Vivamus leo ante.</p>" +
         '</div>' +
         '<div class="column two-third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/rawpixel-1197453-unsplash-a7ozj2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/rawpixel-1197453-unsplash-a7ozj2.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -2450,8 +2454,8 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-XstZ21.jpg" alt="">' +
-        '\n<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-budQW2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-XstZ21.jpg" alt="">' +
+        '\n<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-budQW2.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<h3 style="font-style: normal; letter-spacing: 2px;">Caption.</h3>' +
@@ -2472,8 +2476,8 @@ var data_basic = {
         '\n<p style="color: rgb(158, 158, 158);">Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s.</p>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/sarah-dorweiler-211779-unsplash-dN96G1.jpg" alt="">' +
-        '\n<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/kris-atomic-39874-unsplash-vpMhe2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/sarah-dorweiler-211779-unsplash-dN96G1.jpg" alt="">' +
+        '\n<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/kris-atomic-39874-unsplash-vpMhe2.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -2484,7 +2488,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/rawpixel-1197458-unsplash-J52N31.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/rawpixel-1197458-unsplash-J52N31.jpg" alt="">' +
         '</div>' +
         '<div class="column half right">' +
         '<h3 style="text-align: right; letter-spacing: 3px;">Image Caption</h3>' +
@@ -2505,7 +2509,7 @@ var data_basic = {
         '\n<p style="border-bottom: 2px solid #000; width: 60px; display: inline-block;"></p>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-5F3zm1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-5F3zm1.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -2518,7 +2522,7 @@ var data_basic = {
         '<div class="column half">' +
         '<div style="padding-right:30px">' +
         _tabs(1) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-4r9Fa1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-4r9Fa1.jpg" alt="">' +
         '\n</div>' +
         '</div>' +
         '<div class="column half">' +
@@ -2544,7 +2548,7 @@ var data_basic = {
         '<div class="column half">' +
         '<div style="padding-left:30px">' +
         _tabs(1) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-lbizY1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-lbizY1.jpg" alt="">' +
         '\n</div>' +
         '</div>' +
         '</div>',
@@ -2556,7 +2560,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-ocaLR1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-ocaLR1.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<div class="spacer height-40"></div>' +
@@ -2573,7 +2577,7 @@ var data_basic = {
         '\n<p style="text-align: center;">Lorem Ipsum is simply dummy text of the printing industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s.</p>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-mHAa32.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-mHAa32.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -2584,7 +2588,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column two-third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-OJKzv1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-OJKzv1.jpg" alt="">' +
         '</div>' +
         '<div class="column third">' +
         '<div class="spacer height-180"></div>' +
@@ -2605,7 +2609,7 @@ var data_basic = {
         '\n<p style="color: rgb(158, 158, 158);">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>' +
         '</div>' +
         '<div class="column two-third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-I81sR1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-I81sR1.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -2616,7 +2620,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="center column half">' +
-        '<div class="img-circular" style="width:270px;height:270px"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/raychan-1667344-unsplash-5M5cC1.jpg" alt=""></div>' +
+        '<div class="img-circular" style="width:270px;height:270px"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/raychan-1667344-unsplash-5M5cC1.jpg" alt=""></div>' +
         '</div>' +
         '<div class="column half">' +
         '<h3 style="margin-top: 25px; letter-spacing: 1px;">Image Caption</h3>' +
@@ -2637,7 +2641,7 @@ var data_basic = {
         "\n<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>" +
         '</div>' +
         '<div class="center column half">' +
-        '<div class="img-circular" style="width:270px;height:270px"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/kris-atomic-39874-unsplash-(1)-by2om1.jpg" alt=""></div>' +
+        '<div class="img-circular" style="width:270px;height:270px"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/kris-atomic-39874-unsplash-(1)-by2om1.jpg" alt=""></div>' +
         '</div>' +
         '</div>',
     },
@@ -2650,7 +2654,7 @@ var data_basic = {
         '<div class="column half">' +
         '<div style="text-align: center;">' +
         _tabs(1) +
-        '<div class="img-circular" style="width:270px;height:270px"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/vashishtha-jogi-101218-unsplash-(1)-qLaZ61.jpg" alt=""></div>' +
+        '<div class="img-circular" style="width:270px;height:270px"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/vashishtha-jogi-101218-unsplash-(1)-qLaZ61.jpg" alt=""></div>' +
         _tabs(1) +
         '<div class="spacer height-20"></div>' +
         _tabs(1) +
@@ -2662,7 +2666,7 @@ var data_basic = {
         '<div class="column half">' +
         '<div style="text-align: center;">' +
         _tabs(1) +
-        '<div class="img-circular" style="width:270px;height:270px"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/karl-jk-hedin-614069-unsplash-wq2fh2.jpg" alt=""></div>' +
+        '<div class="img-circular" style="width:270px;height:270px"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/karl-jk-hedin-614069-unsplash-wq2fh2.jpg" alt=""></div>' +
         _tabs(1) +
         '<div class="spacer height-20"></div>' +
         _tabs(1) +
@@ -2680,7 +2684,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half center">' +
-        '<div class="img-circular" style="margin:25px 0;width:270px;height:270px"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/mae-mu-1634728-unsplash-YfIdG1.jpg" alt=""></div>' +
+        '<div class="img-circular" style="margin:25px 0;width:270px;height:270px"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/mae-mu-1634728-unsplash-YfIdG1.jpg" alt=""></div>' +
         '</div>' +
         '<div class="column half">' +
         '<div class="spacer height-20"></div>' +
@@ -2702,7 +2706,7 @@ var data_basic = {
         "\n<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>" +
         '</div>' +
         '<div class="column half center">' +
-        '<div class="img-circular" style="margin:25px 0;width:270px;height:270px"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/mae-mu-1675094-unsplash-mIDqg2.jpg" alt=""></div>' +
+        '<div class="img-circular" style="margin:25px 0;width:270px;height:270px"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/mae-mu-1675094-unsplash-mIDqg2.jpg" alt=""></div>' +
         '</div>' +
         '</div>',
     },
@@ -2713,7 +2717,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column two-fourth">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/inside-weather-dbh_vy7vice-unsplash-DALMx1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/inside-weather-dbh_vy7vice-unsplash-DALMx1.jpg" alt="">' +
         '</div>' +
         '<div class="column fourth">' +
         '<h4 style="font-style: italic; letter-spacing: 2px;">Caption</h4>' +
@@ -2732,7 +2736,7 @@ var data_basic = {
         '\n<p>Lorem Ipsum is simply dummy text</p>' +
         '</div>' +
         '<div class="column two-fourth">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/inside-weather-bayizhkkjm4-unsplash-VhybU2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/inside-weather-bayizhkkjm4-unsplash-VhybU2.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -2743,12 +2747,12 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/phil-desforges-kp7p0-drgbg-unsplash-uoCld1.jpg" alt="">' +
-        '\n<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/carl-revell-woxtqpbubpu-unsplash-qDOYv1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/phil-desforges-kp7p0-drgbg-unsplash-uoCld1.jpg" alt="">' +
+        '\n<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/carl-revell-woxtqpbubpu-unsplash-qDOYv1.jpg" alt="">' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/bibarys-ibatolla-xotjdtjyfws-unsplash-qDOYv2.jpg" alt="">' +
-        '\n<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/bruno-abatti-xzer0sqkpee-unsplash-rfD4g3.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/bibarys-ibatolla-xotjdtjyfws-unsplash-qDOYv2.jpg" alt="">' +
+        '\n<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/bruno-abatti-xzer0sqkpee-unsplash-rfD4g3.jpg" alt="">' +
         '</div>' +
         '<div class="column third">' +
         '<h3 class="size-24" style="letter-spacing: 2px;">Caption</h3>' +
@@ -2767,12 +2771,12 @@ var data_basic = {
         '\n<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/kelly-sikkema-mdadgzyxcve-unsplash-HLpZE1.jpg" alt="">' +
-        '\n<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/drew-patrick-miller-15omq1s9de0-unsplash-mWuF91.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/kelly-sikkema-mdadgzyxcve-unsplash-HLpZE1.jpg" alt="">' +
+        '\n<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/drew-patrick-miller-15omq1s9de0-unsplash-mWuF91.jpg" alt="">' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/fabrice-villard-du41jiai5ww-unsplash-RmVMS2.jpg" alt="">' +
-        '\n<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/yusuf-evli-djqx057gbc0-unsplash-Vx3x11.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/fabrice-villard-du41jiai5ww-unsplash-RmVMS2.jpg" alt="">' +
+        '\n<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/yusuf-evli-djqx057gbc0-unsplash-Vx3x11.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -2793,29 +2797,29 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/ruben-bagues-vpqfc4nidh0-unsplash-9uqtu2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/ruben-bagues-vpqfc4nidh0-unsplash-9uqtu2.jpg" alt="">' +
         '\n<p style="text-align: center; color: rgb(149, 149, 149);margin-top:0">Image Caption</p>' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/mitch-lensink-hx_dy7xeszo-unsplash-xpg6d1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/mitch-lensink-hx_dy7xeszo-unsplash-xpg6d1.jpg" alt="">' +
         '\n<p style="text-align: center; color: rgb(149, 149, 149);margin-top:0">Image Caption</p>' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-IlCYO1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-IlCYO1.jpg" alt="">' +
         '\n<p style="text-align: center; color: rgb(149, 149, 149);margin-top:0">Image Caption</p>' +
         '</div>' +
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/annie-spratt-e82beol6l2y-unsplash-eItnZ2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/annie-spratt-e82beol6l2y-unsplash-eItnZ2.jpg" alt="">' +
         '\n<p style="text-align: center; color: rgb(149, 149, 149);margin-top:0">Image Caption</p>' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/davide-ragusa-atutapqj4zw-unsplash-sQQiM1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/davide-ragusa-atutapqj4zw-unsplash-sQQiM1.jpg" alt="">' +
         '\n<p style="text-align: center; color: rgb(149, 149, 149);margin-top:0">Image Caption</p>' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/julie-kwak-fry-tptmjrk-unsplash-3Rlxu2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/julie-kwak-fry-tptmjrk-unsplash-3Rlxu2.jpg" alt="">' +
         '\n<p style="text-align: center; color: rgb(149, 149, 149);margin-top:0">Image Caption</p>' +
         '</div>' +
         '</div>',
@@ -2837,11 +2841,11 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/silvia-agrasar-227575-21Sbp1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/silvia-agrasar-227575-21Sbp1.jpg" alt="">' +
         '\n<p style="color: rgb(149, 149, 149);">Lorem Ipsum is simply dummy text of the printing industry.</p>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/silvia-agrasar-227135-unsplash-EPxWp2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/silvia-agrasar-227135-unsplash-EPxWp2.jpg" alt="">' +
         '\n<p style="color: rgb(149, 149, 149);">Lorem Ipsum is simply dummy text of the printing industry.</p>' +
         '</div>' +
         '</div>',
@@ -2863,7 +2867,7 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/snapbythree-my-yif5f2kao_y-unsplash-2G89F1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/snapbythree-my-yif5f2kao_y-unsplash-2G89F1.jpg" alt="">' +
         '</div>' +
         '<div class="column two-third">' +
         '<p style="text-align: justify; color: rgb(149, 149, 149);"><b>Caption</b><br>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s.</p>' +
@@ -2874,7 +2878,7 @@ var data_basic = {
         '<p style="text-align: justify; color: rgb(149, 149, 149);"><b>Caption</b><br>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s.</p>' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/daniel-schludi-mbgxz7pt0jm-unsplash-2G89F2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/daniel-schludi-mbgxz7pt0jm-unsplash-2G89F2.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -2896,13 +2900,13 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/luke-southern-hyvittjtkpi-unsplash-tXBIU1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/luke-southern-hyvittjtkpi-unsplash-tXBIU1.jpg" alt="">' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/luke-southern-k5o-cuu9e6g-unsplash-zop4J2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/luke-southern-k5o-cuu9e6g-unsplash-zop4J2.jpg" alt="">' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/liliana-olivares-g56o5l0zvmg-unsplash-yieQU3.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/liliana-olivares-g56o5l0zvmg-unsplash-yieQU3.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -2913,11 +2917,11 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/herdian-indraputra-6knvj1fr3ug-unsplash-3aMS13.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/herdian-indraputra-6knvj1fr3ug-unsplash-3aMS13.jpg" alt="">' +
         '\n<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/yi-sk-u7yek0lrzmg-unsplash-KNpU64.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/yi-sk-u7yek0lrzmg-unsplash-KNpU64.jpg" alt="">' +
         '\n<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>' +
         '</div>' +
         '</div>',
@@ -2941,17 +2945,17 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column third center">' +
-        '<div class="img-circular"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/bangkit-ristant-395541-e0mhz1.jpg" alt=""></div>' +
+        '<div class="img-circular"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/bangkit-ristant-395541-e0mhz1.jpg" alt=""></div>' +
         '\n<h3 class="size-21" style="letter-spacing: 2px;">VINCENT NELSON</h3>' +
         '\n<p style="color: #b7b7b7">WEB DESIGNER</p>' +
         '</div>' +
         '<div class="column third center">' +
-        '<div class="img-circular"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/redd-angelo-427759-33bDf2.jpg" alt=""></div>' +
+        '<div class="img-circular"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/redd-angelo-427759-33bDf2.jpg" alt=""></div>' +
         '\n<h3 class="size-21" style="letter-spacing: 2px;">NATHAN WILLIAMS</h3>' +
         '\n<p style="color: #b7b7b7">WEB DEVELOPER</p>' +
         '</div>' +
         '<div class="column third center">' +
-        '<div class="img-circular"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/mads-schmidt-rasmussen-186319-8AVbA1.jpg" alt=""></div>' +
+        '<div class="img-circular"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/mads-schmidt-rasmussen-186319-8AVbA1.jpg" alt=""></div>' +
         '\n<h3 class="size-21" style="letter-spacing: 2px;">THOMAS CALVIN</h3>' +
         '\n<p style="color: #b7b7b7">ACCOUNT MANAGER</p>' +
         '</div>' +
@@ -2975,7 +2979,7 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column third center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/samuel-zeller-413072-Tx4ai1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/samuel-zeller-413072-Tx4ai1.jpg" alt="">' +
         '\n<h3 class="size-21 is-title-lite">JENNIFER ASH</h3>' +
         '\n<div class="size-14 is-social edit">' +
         _tabs(1) +
@@ -2987,7 +2991,7 @@ var data_basic = {
         '\n</div>' +
         '</div>' +
         '<div class="column third center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/michael-236683-Tx4ai2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/michael-236683-Tx4ai2.jpg" alt="">' +
         '\n<h3 class="size-21 is-title-lite">MICHAEL ISON</h3>' +
         '\n<div class="size-14 is-social edit">' +
         _tabs(1) +
@@ -2999,7 +3003,7 @@ var data_basic = {
         '\n</div>' +
         '</div>' +
         '<div class="column third center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/michael-221247-Hspxi3.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/michael-221247-Hspxi3.jpg" alt="">' +
         '\n<h3 class="size-21 is-title-lite">JOHN CONWAY</h3>' +
         '\n<div class="size-14 is-social edit">' +
         _tabs(1) +
@@ -3030,17 +3034,17 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column third center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/working-2618559_1920-kr4Af1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/working-2618559_1920-kr4Af1.jpg" alt="">' +
         '\n<h3 class="size-21" style="letter-spacing: 2px;">Sarah Doe</h3>' +
         '\n<p style="color: rgb(136, 136, 136);">Founder</p>' +
         '</div>' +
         '<div class="column third center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/rawpixel-632454-unsplash-ecHZN1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/rawpixel-632454-unsplash-ecHZN1.jpg" alt="">' +
         '\n<h3 class="size-21" style="letter-spacing: 2px;">David Anderson</h3>' +
         '\n<p style="color: rgb(136, 136, 136);">Programmer</p>' +
         '</div>' +
         '<div class="column third center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/girl-2618562_1920-KAzoZ2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/girl-2618562_1920-KAzoZ2.jpg" alt="">' +
         '\n<h3 class="size-21" style="letter-spacing: 2px;">Jennifer Clarke</h3>' +
         '\n<p style="color: rgb(136, 136, 136);">Web Designer</p>' +
         '</div>' +
@@ -3063,17 +3067,17 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/luke-ellis-craven-365822-wrHAg1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/luke-ellis-craven-365822-wrHAg1.jpg" alt="">' +
         '\n<h5 class="size-21" style="letter-spacing: 2px;">Nathan Williams <span style="color: rgb(136, 136, 136);">/ Founder</span></h5>' +
         '\n<p>Lorem Ipsum is dummy text of the printing and typesetting industry.</p>' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/yoann-boyer-276971-S8TZu2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/yoann-boyer-276971-S8TZu2.jpg" alt="">' +
         '\n<h5 class="size-21" style="letter-spacing: 2px;">Sarah Smith <span style="color: rgb(136, 136, 136);">/ Developer</span></h5>' +
         '\n<p>Lorem Ipsum is dummy text of the printing and typesetting industry.</p>' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/pablo-hermoso-429590-(1)-fP4pI3.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/pablo-hermoso-429590-(1)-fP4pI3.jpg" alt="">' +
         '\n<h5 class="size-21" style="letter-spacing: 2px;">Jane Doe <span style="color: rgb(136, 136, 136);">/ Web Designer</span></h5>' +
         '\n<p>Lorem Ipsum is dummy text of the printing and typesetting industry.</p>' +
         '</div>' +
@@ -3100,22 +3104,22 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column fourth center">' +
-        '<div class="img-circular" style="width:150px;height:150px;"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/adult-1868750_1920-EzivE1.jpg" alt=""></div>' +
+        '<div class="img-circular" style="width:150px;height:150px;"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/adult-1868750_1920-EzivE1.jpg" alt=""></div>' +
         '\n<h3 class="size-21">David Smith</h3>' +
         '\n<p class="size-14" style="color: rgb(136, 136, 136);">CEO & Founder</p>' +
         '</div>' +
         '<div class="column fourth center">' +
-        '<div class="img-circular" style="width:150px;height:150px;"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/noah-buscher-502067-(1)-rT7Vn1.jpg" alt=""></div>' +
+        '<div class="img-circular" style="width:150px;height:150px;"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/noah-buscher-502067-(1)-rT7Vn1.jpg" alt=""></div>' +
         '\n<h3 class="size-21">Milla Clarke</h3>' +
         '\n<p class="size-14" style="color: rgb(136, 136, 136);">Project Manager</p>' +
         '</div>' +
         '<div class="column fourth center">' +
-        '<div class="img-circular" style="width:150px;height:150px;"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/berwin-coroza-495276-tXRrf2.jpg" alt=""></div>' +
+        '<div class="img-circular" style="width:150px;height:150px;"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/berwin-coroza-495276-tXRrf2.jpg" alt=""></div>' +
         '\n<h3 class="size-21">John Rugg</h3>' +
         '\n<p class="size-14" style="color: rgb(136, 136, 136);">Developer</p>' +
         '</div>' +
         '<div class="column fourth center">' +
-        '<div class="img-circular" style="width:150px;height:150px;"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/mark-skeet-537093-6gF113.jpg" alt=""></div>' +
+        '<div class="img-circular" style="width:150px;height:150px;"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/mark-skeet-537093-6gF113.jpg" alt=""></div>' +
         '\n<h3 class="size-21">Sarah Ashley</h3>' +
         '\n<p class="size-14" style="color: rgb(136, 136, 136);">Web Designer</p>' +
         '</div>' +
@@ -3138,7 +3142,7 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/girl-690119-c7s4t1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/girl-690119-c7s4t1.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<h2>Your Name</h2>' +
@@ -3147,7 +3151,7 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/photo-1437915160026-6c59da36ede2-AakHA2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/photo-1437915160026-6c59da36ede2-AakHA2.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<h2>Your Name</h2>' +
@@ -3175,7 +3179,7 @@ var data_basic = {
         '<div class="column third">' +
         '<div class="is-card max-390 is-light-text" style="width:calc(100%);background: #1c93ad;">' +
         _tabs(1) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/bernard-osei-608155-unsplash-BsEPC1.jpg" alt="" class="margin-0">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/bernard-osei-608155-unsplash-BsEPC1.jpg" alt="" class="margin-0">' +
         _tabs(1) +
         '<div style="padding:25px;width:100%;box-sizing:border-box;text-align:center;">' +
         _tabs(2) +
@@ -3199,7 +3203,7 @@ var data_basic = {
         '<div class="column third">' +
         '<div class="is-card max-390 is-light-text" style="width:calc(100%);background: #e0527e;">' +
         _tabs(1) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-HAWqm1.jpg" alt="" class="margin-0">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-HAWqm1.jpg" alt="" class="margin-0">' +
         _tabs(1) +
         '<div style="padding:25px;width:100%;box-sizing:border-box;text-align:center;">' +
         _tabs(2) +
@@ -3223,7 +3227,7 @@ var data_basic = {
         '<div class="column third">' +
         '<div class="is-card max-390 is-light-text" style="width:calc(100%);background: #e17055">' +
         _tabs(1) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/girl-from-behind-1741699-(1)-PqduN2.jpg" alt="" class="margin-0">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/girl-from-behind-1741699-(1)-PqduN2.jpg" alt="" class="margin-0">' +
         _tabs(1) +
         '<div style="padding:25px;width:100%;box-sizing:border-box;text-align:center;">' +
         _tabs(2) +
@@ -3264,7 +3268,7 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column third center">' +
-        '<div class="img-circular" style="width:150px;height:150px;"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/rawpixel-632454-unsplash-oLoHS1.jpg" alt=""></div>' +
+        '<div class="img-circular" style="width:150px;height:150px;"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/rawpixel-632454-unsplash-oLoHS1.jpg" alt=""></div>' +
         '\n<h3 class="size-21 is-title-lite">JOHN ANDERSON</h3>' +
         '\n<div class="size-12 is-social edit">' +
         _tabs(1) +
@@ -3276,7 +3280,7 @@ var data_basic = {
         '\n</div>' +
         '</div>' +
         '<div class="column third center">' +
-        '<div class="img-circular" style="width:150px;height:150px;"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-tfqUv1.jpg" alt=""></div>' +
+        '<div class="img-circular" style="width:150px;height:150px;"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-tfqUv1.jpg" alt=""></div>' +
         '\n<h3 class="size-21 is-title-lite">DAVID CLARK</h3>' +
         '\n<div class="size-12 is-social edit">' +
         _tabs(1) +
@@ -3288,7 +3292,7 @@ var data_basic = {
         '\n</div>' +
         '</div>' +
         '<div class="column third center">' +
-        '<div class="img-circular" style="width:150px;height:150px;"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/rawpixel-1054600-unsplash-PylVl2.jpg" alt=""></div>' +
+        '<div class="img-circular" style="width:150px;height:150px;"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/rawpixel-1054600-unsplash-PylVl2.jpg" alt=""></div>' +
         '\n<h3 class="size-21 is-title-lite">NATASHA KERR</h3>' +
         '\n<div class="size-12 is-social edit">' +
         _tabs(1) +
@@ -3319,7 +3323,7 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/sarah-noltner-687653-unsplash-6Agfw1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/sarah-noltner-687653-unsplash-6Agfw1.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<h3 style="letter-spacing: 1px;">Jeniffer Phillips</h3>' +
@@ -3352,7 +3356,7 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column half center">' +
-        '<div class="img-circular" style="width:270px;height:270px;"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/luke-porter-520986-unsplash-kjuDr1.jpg" alt=""></div>' +
+        '<div class="img-circular" style="width:270px;height:270px;"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/luke-porter-520986-unsplash-kjuDr1.jpg" alt=""></div>' +
         '</div>' +
         '<div class="column half">' +
         '<h3 style="letter-spacing: 1px;">David Stuart</h3>' +
@@ -3385,7 +3389,7 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column half center">' +
-        '<div class="img-circular" style="width:270px;height:270px;"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/nicole-honeywill-546846-unsplash-(1)-84PNj2.jpg" alt=""></div>' +
+        '<div class="img-circular" style="width:270px;height:270px;"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/nicole-honeywill-546846-unsplash-(1)-84PNj2.jpg" alt=""></div>' +
         '</div>' +
         '<div class="column half">' +
         '<h3 style="letter-spacing: 1px;">Laura Clark</h3>' +
@@ -3407,7 +3411,7 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column half center">' +
-        '<div class="img-circular" style="width:270px;height:270px;"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/alex-iby-480498-unsplash-JOL3q3.jpg" alt=""></div>' +
+        '<div class="img-circular" style="width:270px;height:270px;"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/alex-iby-480498-unsplash-JOL3q3.jpg" alt=""></div>' +
         '</div>' +
         '<div class="column half">' +
         '<h3 style="letter-spacing: 1px;">Michael Smith</h3>' +
@@ -3441,7 +3445,7 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column half center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/nordwood-themes-166423-unsplash-(1)-4WJ2H1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/nordwood-themes-166423-unsplash-(1)-4WJ2H1.jpg" alt="">' +
         '\n<h3 class="size-24" style="letter-spacing: 1px;">Roy Krueger</h3>' +
         '\n<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>' +
         '\n<div class="size-14 is-social edit">' +
@@ -3454,7 +3458,7 @@ var data_basic = {
         '\n</div>' +
         '</div>' +
         '<div class="column half center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-9Htn91.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-9Htn91.jpg" alt="">' +
         '\n<h3 class="size-24" style="letter-spacing: 1px;">Amanda Barnet</h3>' +
         '\n<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>' +
         '\n<div class="size-14 is-social edit">' +
@@ -3485,7 +3489,7 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/parker-johnson-1100877-unsplash-(1)-rufBy1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/parker-johnson-1100877-unsplash-(1)-rufBy1.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<h3 style="letter-spacing: 1px;">Patricia Young</h3>' +
@@ -3519,7 +3523,7 @@ var data_basic = {
         '\n</div>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/beautiful-close-up-color-1078058-Qywhs1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/beautiful-close-up-color-1078058-Qywhs1.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -3553,7 +3557,7 @@ var data_basic = {
         '\n</div>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/daniel-apodaca-584113-unsplash-(1)-U9Iby1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/daniel-apodaca-584113-unsplash-(1)-U9Iby1.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -3574,7 +3578,7 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column half center">' +
-        '<div class="img-circular" style="width:270px;height:270px;"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/alex-shaw-1116446-unsplash-JWfd61.jpg" alt=""></div>' +
+        '<div class="img-circular" style="width:270px;height:270px;"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/alex-shaw-1116446-unsplash-JWfd61.jpg" alt=""></div>' +
         '\n<h3 class="size-24" style="letter-spacing: 1px;">Yolanda Ludwig</h3>' +
         '\n<p>Lorem Ipsum is dummy text of the printing and typesetting industry.</p>' +
         '\n<div class="size-14 is-social edit">' +
@@ -3587,7 +3591,7 @@ var data_basic = {
         '\n</div>' +
         '</div>' +
         '<div class="column half center">' +
-        '<div class="img-circular" style="width:270px;height:270px;"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-JMXQP1.jpg" alt=""></div>' +
+        '<div class="img-circular" style="width:270px;height:270px;"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-JMXQP1.jpg" alt=""></div>' +
         '\n<h3 class="size-24" style="letter-spacing: 1px;">Anthony Fales</h3>' +
         '\n<p>Lorem Ipsum is simply text of the printing and typesetting industry.</p>' +
         '\n<div class="size-14 is-social edit">' +
@@ -3630,7 +3634,7 @@ var data_basic = {
         '\n</div>' +
         '</div>' +
         '<div class="column half center">' +
-        '<div class="img-circular" style="width:270px;height:270px;"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/simon-migaj-775713-unsplash-l8oSx1.jpg" alt=""></div>' +
+        '<div class="img-circular" style="width:270px;height:270px;"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/simon-migaj-775713-unsplash-l8oSx1.jpg" alt=""></div>' +
         '</div>' +
         '</div>',
     },
@@ -3641,7 +3645,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-6Q6W91.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-6Q6W91.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<div class="spacer height-80"></div>' +
@@ -3682,7 +3686,7 @@ var data_basic = {
         "\n<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>" +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-ayzzH2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-ayzzH2.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -3693,7 +3697,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-fxBmr1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-fxBmr1.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<p style="border-bottom: 2px solid #c3c2c2;width: 90px;display: inline-block;margin-top:22px;"></p>' +
@@ -3736,7 +3740,7 @@ var data_basic = {
         '\n</div>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-6SDpQ1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-6SDpQ1.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -3747,7 +3751,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-z01lr1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-z01lr1.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<h2 style="text-align: center; letter-spacing: 3px;">Sabrina Watson</h2>' +
@@ -3796,7 +3800,7 @@ var data_basic = {
         '\n</div>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-SRJrq2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-SRJrq2.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -3807,7 +3811,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-otLsK1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-otLsK1.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<div style="padding-left: 40px">' +
@@ -3866,7 +3870,7 @@ var data_basic = {
         '\n</div>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-TUrpQ1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-TUrpQ1.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -3877,7 +3881,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column third center">' +
-        '<div class="img-circular" style="margin:15px 0;width:140px;height:140px;"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-DbQGW1.jpg" alt=""></div>' +
+        '<div class="img-circular" style="margin:15px 0;width:140px;height:140px;"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-DbQGW1.jpg" alt=""></div>' +
         '</div>' +
         '<div class="column two-third">' +
         '<h3 class="size-21">Amanda Davis</h3>' +
@@ -3900,7 +3904,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column third center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-gs7XT1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-gs7XT1.jpg" alt="">' +
         '</div>' +
         '<div class="column two-third">' +
         '<h3 class="size-21">Ronald Evans</h3>' +
@@ -3923,7 +3927,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half center">' +
-        '<div class="img-circular" style="margin:30px 0;width:270px;height:270px;"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-DjWQ71.jpg" alt=""></div>' +
+        '<div class="img-circular" style="margin:30px 0;width:270px;height:270px;"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-DjWQ71.jpg" alt=""></div>' +
         '</div>' +
         '<div class="column half">' +
         '<div style="padding-left:40px">' +
@@ -3994,7 +3998,7 @@ var data_basic = {
         '\n</div>' +
         '</div>' +
         '<div class="column half center">' +
-        '<div class="img-circular" style="margin:30px 0;width:270px;height:270px;"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-c2y4f1.jpg" alt=""></div>' +
+        '<div class="img-circular" style="margin:30px 0;width:270px;height:270px;"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-c2y4f1.jpg" alt=""></div>' +
         '</div>' +
         '</div>',
     },
@@ -4005,7 +4009,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/florian-van-duyn-b66ga6c48he-unsplash-UHsG01.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/florian-van-duyn-b66ga6c48he-unsplash-UHsG01.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<h1 class="size-160" style="line-height: 180px; text-align: right;">A.</h1>' +
@@ -4046,7 +4050,7 @@ var data_basic = {
         '\n</div>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/felipe-giacometti-4i5topi4k_c-unsplash-uRiHa1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/felipe-giacometti-4i5topi4k_c-unsplash-uRiHa1.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -4057,7 +4061,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/ellieelien-y_zbw7s2x3s-unsplash-7fXG32.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/ellieelien-y_zbw7s2x3s-unsplash-7fXG32.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<p style="letter-spacing: 2px; font-style: italic; color: rgb(188, 188, 188); font-family: Georgia, serif;">Hello</p>' +
@@ -4098,7 +4102,7 @@ var data_basic = {
         '\n</div>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/genevieve-rusnac-uv_qxy6hseo-unsplash-qSqg21.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/genevieve-rusnac-uv_qxy6hseo-unsplash-qSqg21.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -4123,7 +4127,7 @@ var data_basic = {
         '<p style="text-align: justify;">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it.</p>' +
         '</div>' +
         '<div class="column two-third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/martin-katler-y15xwiek6ba-unsplash-pWD4T1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/martin-katler-y15xwiek6ba-unsplash-pWD4T1.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -4159,7 +4163,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column full">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/group-of-people-standing-indoors-3184396-cBo871.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/group-of-people-standing-indoors-3184396-cBo871.jpg" alt="">' +
         '</div>' +
         '</div>' +
         '<div class="row clearfix">' +
@@ -4195,7 +4199,7 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/bogomil-mihaylov-irbdbd6h_v8-unsplash-yXHmD1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/bogomil-mihaylov-irbdbd6h_v8-unsplash-yXHmD1.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<h3 class="size-24" style="text-align: right; letter-spacing: 1px;">we\'re a team of passionate <span style="color: rgb(158, 158, 158);">design-thinkers</span></h3>' +
@@ -4221,7 +4225,7 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column full">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/four-people-sitting-beside-wooden-table-3184327-iEien1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/four-people-sitting-beside-wooden-table-3184327-iEien1.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -4238,10 +4242,10 @@ var data_basic = {
         '\n<p style="text-align: justify; color: rgb(158, 158, 158);" class="size-16">Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type.</p>' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/mae-mu-1533437-unsplash-Ti0dU2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/mae-mu-1533437-unsplash-Ti0dU2.jpg" alt="">' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/agata-create-4sbdro9nd5c-unsplash-Ti0dU1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/agata-create-4sbdro9nd5c-unsplash-Ti0dU1.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -4292,7 +4296,7 @@ var data_basic = {
         '\n<p style="text-align: justify;">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries.</p>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/william-daigneault-dmycyllkazq-unsplash-pyPYL1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/william-daigneault-dmycyllkazq-unsplash-pyPYL1.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -4313,7 +4317,7 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/jack-l-smith-ziustaoqndc-unsplash-ToAnR1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/jack-l-smith-ziustaoqndc-unsplash-ToAnR1.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<p style="text-align: justify;">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type.</p>' +
@@ -4371,7 +4375,7 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column full">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/erik-mclean-tn6xocyjy5u-unsplash-0uMCW1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/erik-mclean-tn6xocyjy5u-unsplash-0uMCW1.jpg" alt="">' +
         '</div>	' +
         '</div>',
     },
@@ -4392,7 +4396,7 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/sitepro.png" alt="" style="margin: 0;">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/sitepro.png" alt="" style="margin: 0;">' +
         '</div>' +
         '<div class="column two-third">' +
         '<p style="text-align: justify;margin-top:0">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s.</p>' +
@@ -4419,7 +4423,7 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/photo-1459411552884-841db9b3cc2a-YO89Y1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/photo-1459411552884-841db9b3cc2a-YO89Y1.jpg" alt="">' +
         '\n<h3>Product One, <b>$109</b></h3>' +
         '\n<p>Lorem Ipsum is simply dummy text of the printing industry.</p>' +
         '\n<div style="margin:1.2em 0">' +
@@ -4428,7 +4432,7 @@ var data_basic = {
         '\n</div>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/photo-1471256737566-c7ddd846bee0-small-NBNfZ2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/photo-1471256737566-c7ddd846bee0-small-NBNfZ2.jpg" alt="">' +
         '\n<h3>Product Two, <b>$299</b></h3>' +
         '\n<p>Lorem Ipsum is simply dummy text of the printing industry.</p>' +
         '\n<div style="margin:1.2em 0">' +
@@ -4572,7 +4576,7 @@ var data_basic = {
         _tabs(1) +
         '<div style="padding:25px;width:100%;box-sizing:border-box;">' +
         _tabs(2) +
-        '<div class="img-circular"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/x98sw2520-sh1J31.jpg" alt=""></div>' +
+        '<div class="img-circular"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/x98sw2520-sh1J31.jpg" alt=""></div>' +
         _tabs(2) +
         '<h3 class="size-21" style="letter-spacing: 1px;">Product One</h3>' +
         _tabs(2) +
@@ -4592,7 +4596,7 @@ var data_basic = {
         _tabs(1) +
         '<div style="padding:25px;width:100%;box-sizing:border-box;">' +
         _tabs(2) +
-        '<div class="img-circular"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/georgie-cobbs-467923-unsplash-G9q9p2.jpg" alt=""></div>' +
+        '<div class="img-circular"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/georgie-cobbs-467923-unsplash-G9q9p2.jpg" alt=""></div>' +
         _tabs(2) +
         '<h3 class="size-21" style="letter-spacing: 1px;">Product Two</h3>' +
         _tabs(2) +
@@ -4612,7 +4616,7 @@ var data_basic = {
         _tabs(1) +
         '<div style="padding:25px;width:100%;box-sizing:border-box;">' +
         _tabs(2) +
-        '<div class="img-circular"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/martin-widenka-555176-unsplash-sh1J33.jpg" alt=""></div>' +
+        '<div class="img-circular"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/martin-widenka-555176-unsplash-sh1J33.jpg" alt=""></div>' +
         _tabs(2) +
         '<h3 class="size-21" style="letter-spacing: 1px;">Product Three</h3>' +
         _tabs(2) +
@@ -4691,19 +4695,19 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-7eFyL1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-7eFyL1.jpg" alt="">' +
         '\n<h3 class="size-21">PRODUCT NAME</h3>' +
         '\n<p>Lorem Ipsum is simply dummy text of the printing industry.</p>' +
         '\n<p><a href="#">BUY NOW</a></p>' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-09yZA2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-09yZA2.jpg" alt="">' +
         '\n<h3 class="size-21">PRODUCT NAME</h3>' +
         '\n<p>Lorem Ipsum is simply dummy text of the printing industry.</p>' +
         '\n<p><a href="#">BUY NOW</a></p>' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-Tmg8p2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-Tmg8p2.jpg" alt="">' +
         '\n<h3 class="size-21">PRODUCT NAME</h3>' +
         '\n<p>Lorem Ipsum is simply dummy text of the printing industry.</p>' +
         '\n<p><a href="#">BUY NOW</a></p>' +
@@ -4876,19 +4880,19 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/h-e-n-g-s-t-r-e-a-m-573432-unsplash-xt89A1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/h-e-n-g-s-t-r-e-a-m-573432-unsplash-xt89A1.jpg" alt="">' +
         '\n<h3 class="size-18" style="font-weight: 400;">PRODUCT NAME, <span style="color: rgb(136, 136, 136);">$129</span></h3>' +
         '\n<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>' +
         '\n<p><a href="#" title="">BUY NOW</a></p>' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/sarah-dorweiler-357724-unsplash-4cfGV2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/sarah-dorweiler-357724-unsplash-4cfGV2.jpg" alt="">' +
         '\n<h3 class="size-18" style="font-weight: 400;">PRODUCT NAME, <span style="color: rgb(136, 136, 136);">$79</span></h3>' +
         '\n<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>' +
         '\n<p><a href="#" title="">BUY NOW</a></p>' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/michael-frattaroli-234662-unsplash-QaduA1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/michael-frattaroli-234662-unsplash-QaduA1.jpg" alt="">' +
         '\n<h3 class="size-18" style="font-weight: 400;">PRODUCT NAME, <span style="color: rgb(136, 136, 136);">$49</span></h3>' +
         '\n<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>' +
         '\n<p><a href="#" title="">BUY NOW</a></p>' +
@@ -4952,12 +4956,12 @@ var data_basic = {
         '\n</div>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-5v3uL1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-5v3uL1.jpg" alt="">' +
         '</div>' +
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-C3XHH1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-C3XHH1.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<div style="padding-left: 40px">' +
@@ -5231,7 +5235,7 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column fourth center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-7Vn0R1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-7Vn0R1.jpg" alt="">' +
         '\n<p style="color: rgb(136, 136, 136); font-weight: normal;">' +
         _tabs(1) +
         'PRODUCT NAME' +
@@ -5242,7 +5246,7 @@ var data_basic = {
         '\n</p>' +
         '</div>' +
         '<div class="column fourth center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/nordwood-themes-473050-jFvLM1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/nordwood-themes-473050-jFvLM1.jpg" alt="">' +
         '\n<p style="color: rgb(136, 136, 136); font-weight: normal;">' +
         _tabs(1) +
         'PRODUCT NAME' +
@@ -5253,7 +5257,7 @@ var data_basic = {
         '\n</p>' +
         '</div>' +
         '<div class="column fourth center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/toa-heftiba-448302-(1)-pXDhf1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/toa-heftiba-448302-(1)-pXDhf1.jpg" alt="">' +
         '\n<p style="color: rgb(136, 136, 136); font-weight: normal;">' +
         _tabs(1) +
         'PRODUCT NAME' +
@@ -5264,7 +5268,7 @@ var data_basic = {
         '\n</p>' +
         '</div>' +
         '<div class="column fourth center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-p8OMT2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-p8OMT2.jpg" alt="">' +
         '\n<p style="color: rgb(136, 136, 136); font-weight: normal;">' +
         _tabs(1) +
         'PRODUCT NAME' +
@@ -5316,7 +5320,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/gaelle-marcel-jdxgmqjt1lu-unsplash-0N9uW1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/gaelle-marcel-jdxgmqjt1lu-unsplash-0N9uW1.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<div style="padding-left: 10px;">' +
@@ -5363,7 +5367,7 @@ var data_basic = {
         '\n</div>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/irene-kredenets-8j4diaobamo-unsplash-(1)-7VV9f2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/irene-kredenets-8j4diaobamo-unsplash-(1)-7VV9f2.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -5374,7 +5378,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/luke-southern-r1opyghnbd4-unsplash-MljtW1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/luke-southern-r1opyghnbd4-unsplash-MljtW1.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<p class="size-14">Store Name<br>Perth, Australia</p>' +
@@ -5403,7 +5407,7 @@ var data_basic = {
         '\n<div><a href="#" class="is-btn" style="margin: 3px 0px; display: inline-block; text-decoration: none; transition: all 0.16s ease 0s; border-style: solid; cursor: pointer; background-color: rgb(220, 220, 220); color: rgb(0, 0, 0); border-color: rgb(220, 220, 220); border-width: 2px; border-radius: 0px; padding: 10px 22px; line-height: 1.5; text-transform: uppercase; font-weight: 400; font-size: 12px; letter-spacing: 3px;" title="">Add to Cart</a> &nbsp; <a href="#" class="is-btn is-btn-ghost1 is-upper is-btn-small" style="padding: 10px 22px; font-size: 12px; line-height: 1.5;">Buy Now</a></div>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/wooden-chair-qTO5r1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/wooden-chair-qTO5r1.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -5414,7 +5418,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/mitch-lensink-588486-unsplash-GDz4y1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/mitch-lensink-588486-unsplash-GDz4y1.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<p class="size-14" style="color: rgb(158, 158, 158); margin-bottom: 0px; letter-spacing: 1px;">Bikes</p>' +
@@ -5441,7 +5445,7 @@ var data_basic = {
         '\n<div class="spacer height-40"></div>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/christelle-bourgeois-97314-unsplash-p3tmH2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/christelle-bourgeois-97314-unsplash-p3tmH2.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -5452,7 +5456,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/adam-birkett-6cxznfcd2kq-unsplash-lqmrN1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/adam-birkett-6cxznfcd2kq-unsplash-lqmrN1.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<h2 style="letter-spacing: 1px;">Charge & Sync Cable</h2>' +
@@ -5511,7 +5515,7 @@ var data_basic = {
         '\n</div>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/plush-design-studio-777289-unsplash-tlEBZ1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/plush-design-studio-777289-unsplash-tlEBZ1.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -5522,7 +5526,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/daniel-fontenele-s4kvecxgcdo-unsplash-2XhGF1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/daniel-fontenele-s4kvecxgcdo-unsplash-2XhGF1.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<h2 style="letter-spacing: 2px;" class="size-42">Extra Bass Earphone</h2>' +
@@ -5609,7 +5613,7 @@ var data_basic = {
         '\n</div>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/kara-eads-cxew49dylf4-unsplash-Ej12x2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/kara-eads-cxew49dylf4-unsplash-Ej12x2.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -5620,7 +5624,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column two-third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/barrett-ward-p44rigl9v54-unsplash-vNiki1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/barrett-ward-p44rigl9v54-unsplash-vNiki1.jpg" alt="">' +
         '</div>' +
         '<div class="column third">' +
         '<h1 class="size-28" style="margin-top: 20px; letter-spacing: 1px;">Leather Watch</h1>' +
@@ -5643,7 +5647,7 @@ var data_basic = {
         '\n<div><a href="#" style="margin: 0px; display: inline-block; text-decoration: none; transition: all 0.16s ease 0s; border-style: solid; cursor: pointer; background-color: rgba(0, 0, 0, 0); color: rgb(23, 23, 23); border-color: rgb(23, 23, 23); border-width: 2px; border-radius: 0px; padding: 10px 22px; line-height: 1.5; text-transform: uppercase; font-weight: 400; font-size: 12px; letter-spacing: 3px;" title="">$53 | Buy Now</a></div>' +
         '</div>' +
         '<div class="column two-third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/swabdesign_official-nfkmjfxhqgc-unsplash-KsRhW2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/swabdesign_official-nfkmjfxhqgc-unsplash-KsRhW2.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -5654,7 +5658,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/irene-kredenets-1690829-unsplash-qmqP41.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/irene-kredenets-1690829-unsplash-qmqP41.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<h1 style="letter-spacing: 2px;" class="size-48">Leather Handbag</h1>' +
@@ -5681,7 +5685,7 @@ var data_basic = {
         '\n<p class="size-12" style="color: rgb(158, 158, 158);">Categories: Men, Sport, Shoes</p>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/irene-kredenets-1686187-unsplash-CU0Rc2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/irene-kredenets-1686187-unsplash-CU0Rc2.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -5692,7 +5696,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column two-third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/shop-slo-hkxuhdsbezy-unsplash-CdqN81.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/shop-slo-hkxuhdsbezy-unsplash-CdqN81.jpg" alt="">' +
         '</div>' +
         '<div class="column third">' +
         '<h2 class="size-38" style="text-transform: uppercase; letter-spacing: 2px;">Silk <b>Pillow</b></h2>' +
@@ -5715,7 +5719,7 @@ var data_basic = {
         '\n<div><a href="#" style="margin: 0px; display: inline-block; text-decoration: none; transition: all 0.16s ease 0s; border-style: solid; cursor: pointer; background-color: rgba(0, 0, 0, 0); color: rgb(23, 23, 23); border-color: rgb(23, 23, 23); border-width: 2px; border-radius: 0px; padding: 10px 22px; line-height: 1.5; text-transform: uppercase; font-weight: 400; font-size: 12px; letter-spacing: 3px;" title="">$72 | Buy Now</a></div>' +
         '</div>' +
         '<div class="column two-third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/content-pixie-6cfcrt-7thw-unsplash-pDbf91.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/content-pixie-6cfcrt-7thw-unsplash-pDbf91.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -5726,7 +5730,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/michael-frattaroli-207278-unsplash-3XV7F1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/michael-frattaroli-207278-unsplash-3XV7F1.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<p style="color: rgb(158, 158, 158);" class="size-14">Latest Products / Women / Sunglasses</p>' +
@@ -5753,7 +5757,7 @@ var data_basic = {
         '\n<div class="spacer height-20"></div>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/rocknwool-ujaxqq0tb5a-unsplash-khITm1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/rocknwool-ujaxqq0tb5a-unsplash-khITm1.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -5764,7 +5768,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/sincerely-media-tw917xag0wu-unsplash-c1cdS1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/sincerely-media-tw917xag0wu-unsplash-c1cdS1.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '\n<h1 class="size-42" style="letter-spacing: 1px;">Alexa Earrings</h1>' +
@@ -5789,7 +5793,7 @@ var data_basic = {
         '\n<div><a href="#" class="is-btn" style="margin: 3px 0px; display: inline-block; text-decoration: none; transition: all 0.16s ease 0s; border-style: solid; cursor: pointer; background-color: rgb(220, 220, 220); color: rgb(0, 0, 0); border-color: rgb(220, 220, 220); border-width: 2px; border-radius: 0px; padding: 10px 22px; line-height: 1.5; text-transform: uppercase; font-weight: 400; font-size: 12px; letter-spacing: 3px;" title="">Add to Cart</a> &nbsp; <a href="#" class="is-btn is-btn-ghost1 is-upper is-btn-small" style="padding: 10px 22px; font-size: 12px; line-height: 1.5;">Buy Now</a></div>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/daniil-silantev-1p6ankdw6s8-unsplash-O6mXc2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/daniil-silantev-1p6ankdw6s8-unsplash-O6mXc2.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -5800,7 +5804,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/pizza-3000285_1920-0ccra1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/pizza-3000285_1920-0ccra1.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<h1 class="size-42" style="letter-spacing: 2px;">Roberto Pizza</h1>' +
@@ -5827,7 +5831,7 @@ var data_basic = {
         '\n<div><a href="#" style="margin: 0px; display: inline-block; text-decoration: none; transition: all 0.16s ease 0s; border-style: solid; cursor: pointer; background-color: rgba(0, 0, 0, 0); color: rgb(23, 23, 23); border-color: rgb(23, 23, 23); border-width: 2px; border-radius: 0px; padding: 10px 22px; line-height: 1.5; text-transform: uppercase; font-weight: 400; font-size: 12px; letter-spacing: 3px;" title="">Place Order</a></div>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/sina-piryae-6xmqv6gccyu-unsplash-5lXVR1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/sina-piryae-6xmqv6gccyu-unsplash-5lXVR1.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -5838,7 +5842,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/eiliv-sonas-aceron-0gq8fh1f54k-unsplash-cql6u1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/eiliv-sonas-aceron-0gq8fh1f54k-unsplash-cql6u1.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<h1 class="size-46" style="letter-spacing: 1px;">Rice Noodles</h1>' +
@@ -5865,7 +5869,7 @@ var data_basic = {
         '\n<div><a href="#" style="margin: 0px; display: inline-block; text-decoration: none; transition: all 0.16s ease 0s; border-style: solid; cursor: pointer; background-color: rgba(0, 0, 0, 0); color: rgb(23, 23, 23); border-color: rgb(23, 23, 23); border-width: 2px; border-radius: 0px; padding: 10px 22px; line-height: 1.5; text-transform: uppercase; font-weight: 400; font-size: 12px; letter-spacing: 3px;" title="">Place Order</a></div>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/karly-gomez-lk1q5ryd6tc-unsplash-16U971.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/karly-gomez-lk1q5ryd6tc-unsplash-16U971.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -5876,7 +5880,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/charles-deluvio-271645-unsplash-pNDz81.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/charles-deluvio-271645-unsplash-pNDz81.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<h2 style="letter-spacing: 1px;" class="size-35">Jiaozi Dumplings</h2>' +
@@ -5903,7 +5907,7 @@ var data_basic = {
         '\n<p class="size-14" style="color: rgb(158, 158, 158);">Be the first to review this food</p>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/charles-wr8ze_o-sji-unsplash-YyDs11.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/charles-wr8ze_o-sji-unsplash-YyDs11.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -5914,7 +5918,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/carly-jayne-2vgufemdhem-unsplash-VOUIN1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/carly-jayne-2vgufemdhem-unsplash-VOUIN1.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<h1 class="size-46" style="letter-spacing: 2px;">Monte Cristo Toast&nbsp;<b class="size-24" style="color: rgb(239, 108, 0);letter-spacing: 0;">$13</b></h1>' +
@@ -5941,7 +5945,7 @@ var data_basic = {
         '\n<div><a href="#" style="margin: 0px; display: inline-block; text-decoration: none; transition: all 0.16s ease 0s; border-style: solid; cursor: pointer; background-color: rgba(0, 0, 0, 0); color: rgb(23, 23, 23); border-color: rgb(23, 23, 23); border-width: 2px; border-radius: 0px; padding: 10px 22px; line-height: 1.5; text-transform: uppercase; font-weight: 400; font-size: 12px; letter-spacing: 3px;" title="">Add to Order</a></div>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/mariana-medvedeva-nm1fz-scxne-unsplash-T9wXJ1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/mariana-medvedeva-nm1fz-scxne-unsplash-T9wXJ1.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -6146,7 +6150,7 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/imac-Bz83W1.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/imac-Bz83W1.png" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<div class="list">' +
@@ -6439,7 +6443,7 @@ var data_basic = {
         '\n<p style="text-align: justify;">Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s. Lorem ipsum dolor sit amet vivamus leo ante.</p>' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/kara-michelle-544960-zjkQn1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/kara-michelle-544960-zjkQn1.jpg" alt="">' +
         '</div>' +
         '<div class="column third">' +
         '<p><i class="icon ion-android-options size-24" style="color: #bdc3c7"></i></p>' +
@@ -6528,7 +6532,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/aidan-hancock-440776-unsplash-8u7fo1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/aidan-hancock-440776-unsplash-8u7fo1.jpg" alt="">' +
         '</div>' +
         '<div class="column third">' +
         '<p><i class="icon ion-monitor size-21" style="color: #bdc3c7"></i></p>' +
@@ -6985,12 +6989,12 @@ var data_basic = {
         "\n<p>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. Vivamus leo ante, consectetur sit amet.</p>" +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/workplace-1245776_1280-oxBIU1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/workplace-1245776_1280-oxBIU1.jpg" alt="">' +
         '</div>' +
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/desk-office-hero-workspace-(1)-V8F292.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/desk-office-hero-workspace-(1)-V8F292.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<p class="size-42" style="line-height: 1; font-weight: bold;">02.</p>' +
@@ -7483,7 +7487,7 @@ var data_basic = {
         "\n<p>Lorem Ipsum is simply dummy text of the printing industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>" +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-BwYjC1.jpg" alt=""></div>' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-BwYjC1.jpg" alt=""></div>' +
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column full">' +
@@ -7492,7 +7496,7 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-FrSUb2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-FrSUb2.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<p style="letter-spacing: 2px;">STEP TWO</p>' +
@@ -9335,7 +9339,7 @@ var data_basic = {
         '<div class="column third">' +
         '<div style="padding-right:30px">' +
         _tabs(1) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-sGkY41.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-sGkY41.jpg" alt="">' +
         '\n</div>' +
         '</div>' +
         '<div class="column third">' +
@@ -10682,13 +10686,13 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column half center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-F0dm51.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-F0dm51.jpg" alt="">' +
         '\n<p class="size-21" style="margin-bottom: 4px; letter-spacing: 2px;">MARY PALS</p>' +
         '\n<p style="border-bottom: 1px solid #000; width: 40px; display: inline-block; margin-top: 0"></p>' +
         '\n<p style="color: rgb(119, 119, 119);">Lorem Ipsum is simply dummy text of the printing industry.</p>' +
         '</div>' +
         '<div class="column half center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-x5GRp1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-x5GRp1.jpg" alt="">' +
         '\n<p class="size-21" style="margin-bottom: 4px; letter-spacing: 2px;">WILMA FINN</p>' +
         '\n<p style="border-bottom: 1px solid #000; width: 40px; display: inline-block; margin-top: 0"></p>' +
         '\n<p style="color: rgb(119, 119, 119);">Lorem Ipsum is simply dummy text of the printing industry.</p>' +
@@ -10713,11 +10717,11 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-S0R1k1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-S0R1k1.jpg" alt="">' +
         '\n<p>Lorem Ipsum is simply dummy text of the printing industry. — Nelson Sand</p>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-QqxYJ2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-QqxYJ2.jpg" alt="">' +
         '\n<p>Lorem Ipsum is simply dummy text of the printing industry. — Karin Sparks</p>' +
         '</div>' +
         '</div>',
@@ -10729,7 +10733,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column third center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-F6TCZ1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-F6TCZ1.jpg" alt="">' +
         '</div>' +
         '<div class="column two-third">' +
         '<div style="margin-top:10px"><i class="icon ion-quote size-24" style="color: #888888"></i></div>' +
@@ -10745,7 +10749,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column third center">' +
-        '<div class="img-circular" style="margin:15px 0;width:170px;height:170px;"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-Q1XSO1.jpg" alt=""></div>' +
+        '<div class="img-circular" style="margin:15px 0;width:170px;height:170px;"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-Q1XSO1.jpg" alt=""></div>' +
         '</div>' +
         '<div class="column two-third">' +
         '<div style="margin-top:10px"><i class="icon ion-quote size-24" style="color: #888888"></i></div>' +
@@ -10817,7 +10821,7 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-akB4h1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-akB4h1.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<div class="quote">' +
@@ -10842,7 +10846,7 @@ var data_basic = {
         '\n</div>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-R79NY2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-R79NY2.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -10863,7 +10867,7 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column half center">' +
-        '<div class="img-circular" style="margin:15px 0;width:270px;height:270px;"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-ybeSl1.jpg" alt=""></div>' +
+        '<div class="img-circular" style="margin:15px 0;width:270px;height:270px;"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-ybeSl1.jpg" alt=""></div>' +
         '</div>' +
         '<div class="column half">' +
         '<div class="quote">' +
@@ -10888,7 +10892,7 @@ var data_basic = {
         '\n</div>' +
         '</div>' +
         '<div class="column half">' +
-        '<div class="img-circular" style="margin:15px 0;width:270px;height:270px;"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-KUCDN4.jpg" alt=""></div>' +
+        '<div class="img-circular" style="margin:15px 0;width:270px;height:270px;"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-KUCDN4.jpg" alt=""></div>' +
         '</div>' +
         '</div>',
     },
@@ -10909,21 +10913,21 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column third center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/watch-1663246_1920-8wuCM1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/watch-1663246_1920-8wuCM1.jpg" alt="">' +
         '\n<div class="spacer height-20"></div>' +
         '\n<i class="icon ion-quote size-24"></i>' +
         '\n<p>Lorem Ipsum is simply dummy text of the printing industry.</p>' +
         '\n<p class="size-14">by Your Name</p>' +
         '</div>' +
         '<div class="column third center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-frUlS1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-frUlS1.jpg" alt="">' +
         '\n<div class="spacer height-20"></div>' +
         '\n<i class="icon ion-quote size-24"></i>' +
         '\n<p>Lorem Ipsum is simply dummy text of the printing industry.</p>' +
         '\n<p class="size-14">by Your Name</p>' +
         '</div>' +
         '<div class="column third center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-RXypm2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-RXypm2.jpg" alt="">' +
         '\n<div class="spacer height-20"></div>' +
         '\n<i class="icon ion-quote size-24"></i>' +
         '\n<p>Lorem Ipsum is simply dummy text of the printing industry.</p>' +
@@ -11021,17 +11025,17 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column third center">' +
-        '<div class="img-circular"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/noah-buscher-548633-ExLNF1.jpg" alt=""></div>' +
+        '<div class="img-circular"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/noah-buscher-548633-ExLNF1.jpg" alt=""></div>' +
         '\n<p style="color: #bdc3c7"><i class="icon ion-android-hangout size-32"></i></p>' +
         '\n<p class="size-16">Lorem Ipsum is simply dummy text of the printing industry. — Dave Smith</p>' +
         '</div>' +
         '<div class="column third center">' +
-        '<div class="img-circular"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/icons8-team-355990-Voloz1.jpg" alt=""></div>' +
+        '<div class="img-circular"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/icons8-team-355990-Voloz1.jpg" alt=""></div>' +
         '\n<p style="color: #bdc3c7"><i class="icon ion-android-hangout size-32"></i></p>' +
         '\n<p class="size-16">Lorem Ipsum is simply dummy text of the printing industry. — Clara Wang</p>' +
         '</div>' +
         '<div class="column third center">' +
-        '<div class="img-circular"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/pexels-photo-girl-zZWwv1.jpg" alt=""></div>' +
+        '<div class="img-circular"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/pexels-photo-girl-zZWwv1.jpg" alt=""></div>' +
         '\n<p style="color: #bdc3c7"><i class="icon ion-android-hangout size-32"></i></p>' +
         '\n<p class="size-16">Lorem Ipsum is simply dummy text of the printing industry. — Jane Doe</p>' +
         '</div>' +
@@ -11077,7 +11081,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-6PDKL1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-6PDKL1.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<h1 class="size-32" style="text-align: center; font-weight: bold;">"Incredible services and awesome customer support."</h1>' +
@@ -11098,7 +11102,7 @@ var data_basic = {
         '\n<p style="text-align: center;">BY MARGARET VICKREY<br>Web Developer at Company Name</p>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-OWu2H1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-OWu2H1.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -11109,7 +11113,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column center full">' +
-        '<div class="img-circular" style="width:150px;height:150px;"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-TK4An1.jpg" alt=""></div>' +
+        '<div class="img-circular" style="width:150px;height:150px;"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-TK4An1.jpg" alt=""></div>' +
         '</div>' +
         '</div>' +
         '<div class="row clearfix">' +
@@ -11144,7 +11148,7 @@ var data_basic = {
         '\n</div>' +
         '</div>' +
         '<div class="column two-third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/inside-weather-ybg3jopjas0-unsplash-tDa7p1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/inside-weather-ybg3jopjas0-unsplash-tDa7p1.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -11155,7 +11159,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column two-third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/marek-levak-gnvxujz_cxu-unsplash-ga0Rb1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/marek-levak-gnvxujz_cxu-unsplash-ga0Rb1.jpg" alt="">' +
         '</div>' +
         '<div class="column third">' +
         '<h3 class="size-24">"It\'s easy to use and customizable. A truly amazing features with reasonable prices."</h3>' +
@@ -11180,7 +11184,7 @@ var data_basic = {
         '<div class="row clearfix">' +
         '<div class="column full">' +
         '<div style="text-align: center;">' +
-        '<div class="img-circular" style="width:270px;height:270px;"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/alice-achterhof-4klszvmanme-unsplash-onIRm1.jpg" alt=""></div>' +
+        '<div class="img-circular" style="width:270px;height:270px;"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/alice-achterhof-4klszvmanme-unsplash-onIRm1.jpg" alt=""></div>' +
         '<h3>Mary Andrews</h3>' +
         '<p style="line-height: 1;" class="size-14">Web Designer based in New York</p>' +
         '</div>' +
@@ -11209,7 +11213,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/yang-deng-ydeiwoqhsps-unsplash-A62nL1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/yang-deng-ydeiwoqhsps-unsplash-A62nL1.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<h2 class="size-42" style="letter-spacing: 1px; font-weight: bold;">"All products are awesome with strong attention to details."</h2>' +
@@ -11232,7 +11236,7 @@ var data_basic = {
         '\n<p>Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s. <a href="#" title="">Read the Success Story</a></p>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/jason-blackeye-gdrspeeq7ry-unsplash-IP5Da2.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/jason-blackeye-gdrspeeq7ry-unsplash-IP5Da2.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -11243,7 +11247,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/sincerely-media-zfs8v4ujxa4-unsplash-QuMOb1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/sincerely-media-zfs8v4ujxa4-unsplash-QuMOb1.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<div style="padding-left: 20px;">' +
@@ -11282,7 +11286,7 @@ var data_basic = {
         '\n</div>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/marten-bjork-707746-unsplash-r5u0H1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/marten-bjork-707746-unsplash-r5u0H1.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -11293,7 +11297,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/woman-with-blonde-hair-wearing-blue-3283576-xmKhr2.jpg" alt="" style="margin: 0">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/woman-with-blonde-hair-wearing-blue-3283576-xmKhr2.jpg" alt="" style="margin: 0">' +
         '</div>' +
         '<div class="column half">' +
         '<hr style="border-top: 3px solid rgb(170, 146, 124);margin:0;">' +
@@ -11318,7 +11322,7 @@ var data_basic = {
         '\n<p class="size-16" style="text-align: left; color: rgb(158, 158, 158); font-style: italic;">Stacy  Hildebrand  - Director at Artive</p>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/person-holding-a-big-leaf-covering-his-face-3094224-TL0km3.jpg" alt="" style="margin:0">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/person-holding-a-big-leaf-covering-his-face-3094224-TL0km3.jpg" alt="" style="margin:0">' +
         '</div>' +
         '</div>',
     },
@@ -11329,7 +11333,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/woman-wearing-red-beret-and-gray-long-sleeve-dress-with-wild-3518091-(1)-P27XS1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/woman-wearing-red-beret-and-gray-long-sleeve-dress-with-wild-3518091-(1)-P27XS1.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<div class="spacer height-120"></div>' +
@@ -11352,7 +11356,7 @@ var data_basic = {
         '\n<p class="size-14">Bobby Addison, Director at Artive</p>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/the-bialons-n1hdyt_uyxa-unsplash-20c8T1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/the-bialons-n1hdyt_uyxa-unsplash-20c8T1.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -11431,7 +11435,7 @@ var data_basic = {
       html:
         '<div class="row clearfix center">' +
         '<div class="column half">' +
-        '<div class="img-circular" style="margin:20px 0;width:270px;height:270px;"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/spencer-davis-bqgq2qd3mty-unsplash-CSt9i2.jpg" alt=""></div>' +
+        '<div class="img-circular" style="margin:20px 0;width:270px;height:270px;"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/spencer-davis-bqgq2qd3mty-unsplash-CSt9i2.jpg" alt=""></div>' +
         '</div>' +
         '<div class="column half">' +
         '<div class="spacer height-40"></div>' +
@@ -11456,7 +11460,7 @@ var data_basic = {
         '\n<p style="margin-top: 0; color: rgb(158, 158, 158);" class="size-14">Graphic Designer</p>' +
         '</div>' +
         '<div class="column half center">' +
-        '<div class="img-circular" style="margin:20px 0;width:270px;height:270px;"><img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/photo-1549235377-962f47f40409-wcrYL1.jpg" alt=""></div>' +
+        '<div class="img-circular" style="margin:20px 0;width:270px;height:270px;"><img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/photo-1549235377-962f47f40409-wcrYL1.jpg" alt=""></div>' +
         '</div>' +
         '</div>',
     },
@@ -11467,7 +11471,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/man-using-black-camera-3136161-u9GRr1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/man-using-black-camera-3136161-u9GRr1.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<div style="margin-left: -10px; margin-bottom: -50px; line-height: 1.8" class="margin-left-1024-reset">' +
@@ -11502,7 +11506,7 @@ var data_basic = {
         '\n<p style="text-align: justify;">All products are super awesome with strong attention to details, customizable tools which can help us improve our business.</p>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/photo-of-man-covering-his-face-with-leaf-3754279-OCoFs1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/photo-of-man-covering-his-face-with-leaf-3754279-OCoFs1.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -11566,16 +11570,16 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column fourth center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/creative.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/creative.png" alt="">' +
         '</div>' +
         '<div class="column fourth center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/light-studio.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/light-studio.png" alt="">' +
         '</div>' +
         '<div class="column fourth center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/infinitech.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/infinitech.png" alt="">' +
         '</div>' +
         '<div class="column fourth center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/design-firm.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/design-firm.png" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -11597,19 +11601,19 @@ var data_basic = {
         '<div class="row clearfix">' +
         '<div class="column full center">' +
         '<div class="center" style="display:inline-block;width:18%">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/sitepro.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/sitepro.png" alt="">' +
         '</div>' +
         '<div class="center" style="display:inline-block;width:18%">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/steady.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/steady.png" alt="">' +
         '</div>' +
         '<div class="center" style="display:inline-block;width:18%">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/creative.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/creative.png" alt="">' +
         '</div>' +
         '<div class="center" style="display:inline-block;width:18%">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/light-studio.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/light-studio.png" alt="">' +
         '</div>' +
         '<div class="center" style="display:inline-block;width:18%">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/infinitech.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/infinitech.png" alt="">' +
         '</div>' +
         '</div>' +
         '</div>',
@@ -11632,19 +11636,19 @@ var data_basic = {
         '<div class="row clearfix">' +
         '<div class="column full center">' +
         '<div style="display:inline-block;width:18%">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/creative.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/creative.png" alt="">' +
         '</div>' +
         '<div style="display:inline-block;width:18%">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/steady.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/steady.png" alt="">' +
         '</div>' +
         '<div style="display:inline-block;width:18%">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/light-studio.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/light-studio.png" alt="">' +
         '</div>' +
         '<div style="display:inline-block;width:18%">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/sitepro.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/sitepro.png" alt="">' +
         '</div>' +
         '<div style="display:inline-block;width:18%">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/design-firm.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/design-firm.png" alt="">' +
         '</div>' +
         '</div>' +
         '</div>',
@@ -11667,16 +11671,16 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column fourth">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/creative.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/creative.png" alt="">' +
         '</div>' +
         '<div class="column fourth">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/light-studio.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/light-studio.png" alt="">' +
         '</div>' +
         '<div class="column fourth">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/sitepro.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/sitepro.png" alt="">' +
         '</div>' +
         '<div class="column fourth">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/infinitech.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/infinitech.png" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -11702,7 +11706,7 @@ var data_basic = {
         _tabs(1) +
         '<div style="padding:10px;width:100%;box-sizing:border-box;text-align:center;">' +
         _tabs(2) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/creative.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/creative.png" alt="">' +
         _tabs(1) +
         '</div>' +
         '\n</div>' +
@@ -11712,7 +11716,7 @@ var data_basic = {
         _tabs(1) +
         '<div style="padding:10px;width:100%;box-sizing:border-box;text-align:center;">' +
         _tabs(2) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/steady.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/steady.png" alt="">' +
         _tabs(1) +
         '</div>' +
         '\n</div>' +
@@ -11722,7 +11726,7 @@ var data_basic = {
         _tabs(1) +
         '<div style="padding:10px;width:100%;box-sizing:border-box;text-align:center;">' +
         _tabs(2) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/infinitech.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/infinitech.png" alt="">' +
         _tabs(1) +
         '</div>' +
         '\n</div>' +
@@ -11739,7 +11743,7 @@ var data_basic = {
         _tabs(1) +
         '<div style="padding:10px;width:100%;box-sizing:border-box;text-align:center;">' +
         _tabs(2) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/light-studio.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/light-studio.png" alt="">' +
         _tabs(1) +
         '</div>' +
         '\n</div>' +
@@ -11749,7 +11753,7 @@ var data_basic = {
         _tabs(1) +
         '<div style="padding:10px;width:100%;box-sizing:border-box;text-align:center;">' +
         _tabs(2) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/design-firm.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/design-firm.png" alt="">' +
         _tabs(1) +
         '</div>' +
         '\n</div>' +
@@ -11759,7 +11763,7 @@ var data_basic = {
         _tabs(1) +
         '<div style="padding:10px;width:100%;box-sizing:border-box;text-align:center;">' +
         _tabs(2) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/sitepro.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/sitepro.png" alt="">' +
         _tabs(1) +
         '</div>' +
         '\n</div>' +
@@ -11777,12 +11781,12 @@ var data_basic = {
         '\n<p style="color: rgb(158, 158, 158);">We are globally recognized and trusted by the world\'s best names.</p>' +
         '</div>' +
         '<div class="column fourth">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/creative.png" alt="">' +
-        '\n<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/sitepro.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/creative.png" alt="">' +
+        '\n<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/sitepro.png" alt="">' +
         '</div>' +
         '<div class="column fourth">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/light-studio.png" alt="">' +
-        '\n<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/infinitech.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/light-studio.png" alt="">' +
+        '\n<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/infinitech.png" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -11805,30 +11809,30 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column fourth">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/creative.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/creative.png" alt="">' +
         '</div>' +
         '<div class="column fourth">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/infinitech.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/infinitech.png" alt="">' +
         '</div>' +
         '<div class="column fourth">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/sitepro.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/sitepro.png" alt="">' +
         '</div>' +
         '<div class="column fourth">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/light-studio.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/light-studio.png" alt="">' +
         '</div>' +
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column fourth">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/worldwide.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/worldwide.png" alt="">' +
         '</div>' +
         '<div class="column fourth">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/steady.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/steady.png" alt="">' +
         '</div>' +
         '<div class="column fourth">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/design-firm.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/design-firm.png" alt="">' +
         '</div>' +
         '<div class="column fourth">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/upclick.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/upclick.png" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -11850,19 +11854,19 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column fourth center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/creative.png" alt="" style="margin: 0">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/creative.png" alt="" style="margin: 0">' +
         '\n<hr style="border-top: 1px solid #919191;width: 30px;display: inline-block;margin: 0;">' +
         '</div>' +
         '<div class="column fourth center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/infinitech.png" alt="" style="margin:0">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/infinitech.png" alt="" style="margin:0">' +
         '\n<hr style="border-top: 1px solid #919191;width: 30px;display: inline-block;margin: 0;">' +
         '</div>' +
         '<div class="column fourth center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/light-studio.png" alt="" style="margin:0">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/light-studio.png" alt="" style="margin:0">' +
         '\n<hr style="border-top: 1px solid #919191;width: 30px;display: inline-block; margin: 0;">' +
         '</div>' +
         '<div class="column fourth center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/sitepro.png" alt="" style="margin:0">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/sitepro.png" alt="" style="margin:0">' +
         '\n<hr style="border-top: 1px solid #919191;width: 30px;display: inline-block;margin: 0;">' +
         '</div>' +
         '</div>' +
@@ -11873,19 +11877,19 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column fourth center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/worldwide.png" alt="" style="margin:0">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/worldwide.png" alt="" style="margin:0">' +
         '\n<hr style="border-top: 1px solid #919191;width: 30px;display: inline-block;margin: 0;">' +
         '</div>' +
         '<div class="column fourth center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/steady.png" alt="" style="margin: 0">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/steady.png" alt="" style="margin: 0">' +
         '\n<hr style="border-top: 1px solid #919191;width: 30px;display: inline-block;margin: 0;">' +
         '</div>' +
         '<div class="column fourth center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/upclick.png" alt="" style="margin:0">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/upclick.png" alt="" style="margin:0">' +
         '\n<hr style="border-top: 1px solid #919191;width: 30px;display: inline-block;margin: 0;">' +
         '</div>' +
         '<div class="column fourth center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/design-firm.png" alt="" style="margin:0">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/design-firm.png" alt="" style="margin:0">' +
         '\n<hr style="border-top: 1px solid #919191;width: 30px;display: inline-block; margin: 0;">' +
         '</div>' +
         '</div>',
@@ -11908,15 +11912,15 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="center column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/creative.png" alt="" style="margin: 0">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/creative.png" alt="" style="margin: 0">' +
         '\n<hr style="border-top: 1px solid #919191;width: 30px;display: inline-block;margin: 0;">' +
         '</div>' +
         '<div class="center column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/infinitech.png" alt="" style="margin:0">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/infinitech.png" alt="" style="margin:0">' +
         '\n<hr style="border-top: 1px solid #919191;width: 30px;display: inline-block;margin: 0;">' +
         '</div>' +
         '<div class="center column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/light-studio.png" alt="" style="margin:0">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/light-studio.png" alt="" style="margin:0">' +
         '\n<hr style="border-top: 1px solid #919191;width: 30px;display: inline-block; margin: 0;">' +
         '</div>' +
         '</div>' +
@@ -11927,15 +11931,15 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="center column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/worldwide.png" alt="" style="margin:0">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/worldwide.png" alt="" style="margin:0">' +
         '\n<hr style="border-top: 1px solid #919191;width: 30px;display: inline-block;margin: 0;">' +
         '</div>' +
         '<div class="center column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/steady.png" alt="" style="margin: 0">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/steady.png" alt="" style="margin: 0">' +
         '\n<hr style="border-top: 1px solid #919191;width: 30px;display: inline-block;margin: 0;">' +
         '</div>' +
         '<div class="center column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/upclick.png" alt="" style="margin:0">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/upclick.png" alt="" style="margin:0">' +
         '\n<hr style="border-top: 1px solid #919191;width: 30px;display: inline-block;margin: 0;">' +
         '</div>' +
         '</div>',
@@ -11958,24 +11962,24 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/worldwide.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/worldwide.png" alt="">' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/steady.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/steady.png" alt="">' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/design-firm.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/design-firm.png" alt="">' +
         '</div>' +
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/infinitech.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/infinitech.png" alt="">' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/light-studio.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/light-studio.png" alt="">' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/upclick.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/upclick.png" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -11997,13 +12001,13 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/light-studio.png" alt="" style="margin: 0;">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/light-studio.png" alt="" style="margin: 0;">' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/upclick.png" alt="" style="margin: 0;">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/upclick.png" alt="" style="margin: 0;">' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/design-firm.png" alt="" style="margin: 0;">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/design-firm.png" alt="" style="margin: 0;">' +
         '</div>' +
         '</div>' +
         '<div class="row clearfix">' +
@@ -12013,13 +12017,13 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/infinitech.png" alt="" style="margin: 0">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/infinitech.png" alt="" style="margin: 0">' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/bbuzz.png" alt="" style="margin: 0;">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/bbuzz.png" alt="" style="margin: 0;">' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/sitepro.png" alt="" style="margin: 0;">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/sitepro.png" alt="" style="margin: 0;">' +
         '</div>' +
         '</div>',
     },
@@ -12042,23 +12046,23 @@ var data_basic = {
         '<div class="column full center">' +
         '<div class="center" style="display:inline-block;width:18%">' +
         _tabs(1) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/sitepro.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/sitepro.png" alt="">' +
         '\n</div>' +
         '\n<div class="center" style="display:inline-block;width:18%">' +
         _tabs(1) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/steady.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/steady.png" alt="">' +
         '\n</div>' +
         '\n<div class="center" style="display:inline-block;width:18%">' +
         _tabs(1) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/creative.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/creative.png" alt="">' +
         '\n</div>' +
         '\n<div class="center" style="display:inline-block;width:18%">' +
         _tabs(1) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/light-studio.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/light-studio.png" alt="">' +
         '\n</div>' +
         '\n<div class="center" style="display:inline-block;width:18%">' +
         _tabs(1) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/infinitech.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/infinitech.png" alt="">' +
         '\n</div>' +
         '</div>' +
         '</div>' +
@@ -12066,23 +12070,23 @@ var data_basic = {
         '<div class="column full center">' +
         '<div class="center" style="display:inline-block;width:18%">' +
         _tabs(1) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/design-firm.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/design-firm.png" alt="">' +
         '\n</div>' +
         '\n<div class="center" style="display:inline-block;width:18%">' +
         _tabs(1) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/bbuzz.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/bbuzz.png" alt="">' +
         '\n</div>' +
         '\n<div class="center" style="display:inline-block;width:18%">' +
         _tabs(1) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/upclick.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/upclick.png" alt="">' +
         '\n</div>' +
         '\n<div class="center" style="display:inline-block;width:18%">' +
         _tabs(1) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/onesight.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/onesight.png" alt="">' +
         '\n</div>' +
         '\n<div class="center" style="display:inline-block;width:18%">' +
         _tabs(1) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/worldwide.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/worldwide.png" alt="">' +
         '\n</div>' +
         '</div>' +
         '</div>',
@@ -12097,13 +12101,13 @@ var data_basic = {
         '<h2 class="size-24">AS FEATURED ON</h2>' +
         '</div>' +
         '<div class="column fourth center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/onesight.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/onesight.png" alt="">' +
         '</div>' +
         '<div class="column fourth center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/mmedia.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/mmedia.png" alt="">' +
         '</div>' +
         '<div class="column fourth center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/digitalmag.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/digitalmag.png" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -12124,16 +12128,16 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column fourth">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/digitalmag.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/digitalmag.png" alt="">' +
         '</div>' +
         '<div class="column fourth">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/upclick.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/upclick.png" alt="">' +
         '</div>' +
         '<div class="column fourth">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/onesight.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/onesight.png" alt="">' +
         '</div>' +
         '<div class="column fourth">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/mmedia.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/mmedia.png" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -12155,13 +12159,13 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column third center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/upclick.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/upclick.png" alt="">' +
         '</div>' +
         '<div class="column third center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/mmedia.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/mmedia.png" alt="">' +
         '</div>' +
         '<div class="column third center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/worldwide.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/worldwide.png" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -12182,30 +12186,30 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column fourth center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/upclick.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/upclick.png" alt="">' +
         '</div>' +
         '<div class="column fourth center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/digitalmag.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/digitalmag.png" alt="">' +
         '</div>' +
         '<div class="column fourth center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/mmedia.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/mmedia.png" alt="">' +
         '</div>' +
         '<div class="column fourth center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/bbuzz.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/bbuzz.png" alt="">' +
         '</div>' +
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column fourth center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/prosource.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/prosource.png" alt="">' +
         '</div>' +
         '<div class="column fourth center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/light-studio.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/light-studio.png" alt="">' +
         '</div>' +
         '<div class="column fourth center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/nett.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/nett.png" alt="">' +
         '</div>' +
         '<div class="column fourth center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/worldwide.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/worldwide.png" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -12228,23 +12232,23 @@ var data_basic = {
         '<div class="column full center">' +
         '<div class="center" style="display:inline-block;width:18%">' +
         _tabs(1) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/prosource.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/prosource.png" alt="">' +
         '\n</div>' +
         '\n<div class="center" style="display:inline-block;width:18%">' +
         _tabs(1) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/mmedia.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/mmedia.png" alt="">' +
         '\n</div>' +
         '\n<div class="center" style="display:inline-block;width:18%">' +
         _tabs(1) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/bbuzz.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/bbuzz.png" alt="">' +
         '\n</div>' +
         '\n<div class="center" style="display:inline-block;width:18%">' +
         _tabs(1) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/light-studio.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/light-studio.png" alt="">' +
         '\n</div>' +
         '\n<div class="center" style="display:inline-block;width:18%">' +
         _tabs(1) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/worldwide.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/worldwide.png" alt="">' +
         '\n</div>' +
         '</div>' +
         '</div>' +
@@ -12252,23 +12256,23 @@ var data_basic = {
         '<div class="column full center">' +
         '<div class="center" style="display:inline-block;width:18%">' +
         _tabs(1) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/digitalmag.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/digitalmag.png" alt="">' +
         '\n</div>' +
         '\n<div class="center" style="display:inline-block;width:18%">' +
         _tabs(1) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/upclick.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/upclick.png" alt="">' +
         '\n</div>' +
         '\n<div class="center" style="display:inline-block;width:18%">' +
         _tabs(1) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/nett.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/nett.png" alt="">' +
         '\n</div>' +
         '\n<div class="center" style="display:inline-block;width:18%">' +
         _tabs(1) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/creative.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/creative.png" alt="">' +
         '\n</div>' +
         '\n<div class="center" style="display:inline-block;width:18%">' +
         _tabs(1) +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/onesight.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/onesight.png" alt="">' +
         '\n</div>' +
         '</div>' +
         '</div>',
@@ -12290,19 +12294,19 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column fourth center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/mmedia.png" alt="" style="margin: 0">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/mmedia.png" alt="" style="margin: 0">' +
         '\n<hr style="border-top: 1px solid #919191;width: 30px;display: inline-block;margin: 0;">' +
         '</div>' +
         '<div class="column fourth center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/bbuzz.png" alt="" style="margin:0">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/bbuzz.png" alt="" style="margin:0">' +
         '\n<hr style="border-top: 1px solid #919191;width: 30px;display: inline-block; margin: 0;">' +
         '</div>' +
         '<div class="column fourth center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/upclick.png" alt="" style="margin:0">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/upclick.png" alt="" style="margin:0">' +
         '\n<hr style="border-top: 1px solid #919191;width: 30px;display: inline-block;margin: 0;">' +
         '</div>' +
         '<div class="column fourth center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/digitalmag.png" alt="" style="margin:0">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/digitalmag.png" alt="" style="margin:0">' +
         '\n<hr style="border-top: 1px solid #919191;width: 30px;display: inline-block;margin: 0;">' +
         '</div>' +
         '</div>',
@@ -12324,13 +12328,13 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/mmedia.png" alt="" style="margin: 0;">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/mmedia.png" alt="" style="margin: 0;">' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/onesight.png" alt="" style="margin: 0;">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/onesight.png" alt="" style="margin: 0;">' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/prosource.png" alt="" style="margin: 0;">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/prosource.png" alt="" style="margin: 0;">' +
         '</div>' +
         '</div>' +
         '<div class="row clearfix">' +
@@ -12340,13 +12344,13 @@ var data_basic = {
         '</div>' +
         '<div class="row clearfix">' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/upclick.png" alt="" style="margin: 0;">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/upclick.png" alt="" style="margin: 0;">' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/nett.png" alt="" style="margin: 0;">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/nett.png" alt="" style="margin: 0;">' +
         '</div>' +
         '<div class="column third">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/digitalmag.png" alt="" style="margin: 0;">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/digitalmag.png" alt="" style="margin: 0;">' +
         '</div>' +
         '</div>',
     },
@@ -12424,7 +12428,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column full center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/lost-2747289-ThbrT1.png" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/lost-2747289-ThbrT1.png" alt="">' +
         '\n<p class="size-21" style="letter-spacing: 2px;">Sorry. The page you are looking for could not be found.</p>' +
         '</div>' +
         '</div>' +
@@ -13657,7 +13661,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column full center">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/-5TpV91.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/-5TpV91.jpg" alt="">' +
         '</div>' +
         '</div>' +
         '<div class="row clearfix">' +
@@ -13830,7 +13834,7 @@ var data_basic = {
       html:
         '<div class="row clearfix">' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/annie-spratt-sbdwf4-rlmu-unsplash-XD22V1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/annie-spratt-sbdwf4-rlmu-unsplash-XD22V1.jpg" alt="">' +
         '</div>' +
         '<div class="column half">' +
         '<h1 style="letter-spacing: 1px;" class="size-35">We\'d love to hear from you...</h1>' +
@@ -13869,7 +13873,7 @@ var data_basic = {
         '\n</div>' +
         '</div>' +
         '<div class="column half">' +
-        '<img src="https://codemarket-common-media.s3.amazonaws.com/public/content-builder/assets/minimalist-blocks/images/callum-shaw-1s2rgks4wbm-unsplash-2evzt1.jpg" alt="">' +
+        '<img src="https://contentbox-bucket.s3.amazonaws.com/public/assets/minimalist-blocks/images/callum-shaw-1s2rgks4wbm-unsplash-2evzt1.jpg" alt="">' +
         '</div>' +
         '</div>',
     },
@@ -13901,13 +13905,19 @@ var data_basic = {
     {
       thumbnail: 'preview/button-02.png',
       category: '119',
-      html: '<div>' + '<a href="#" class="is-btn is-btn-ghost2 is-upper">Read More</a>' + '</div>',
+      html:
+        '<div>' +
+        '<a href="#" class="is-btn is-btn-ghost2 is-upper">Read More</a>' +
+        '</div>',
     },
 
     {
       thumbnail: 'preview/button-03.png',
       category: '119',
-      html: '<div>' + '<a href="#" class="is-btn is-btn-ghost1 is-upper">Buy Now</a>' + '</div>',
+      html:
+        '<div>' +
+        '<a href="#" class="is-btn is-btn-ghost1 is-upper">Buy Now</a>' +
+        '</div>',
     },
 
     {
