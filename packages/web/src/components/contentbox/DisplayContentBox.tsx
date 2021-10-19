@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import StyledDiv from '../contentbuilder/StyledDiv';
+import { getSepratorValue } from './seprator';
 
 interface IProps {
-  pageHTML: string;
-  mainCss: string;
-  sectionCss: string;
+  value: string;
 }
 
-export default function Home({ pageHTML, mainCss, sectionCss }: IProps) {
+export default function DisplayContentBox({ value }: IProps) {
   const [state, setState] = useState(`container${uuid()}`);
 
   async function onLoad() {
+    const { pageHTML, mainCss, sectionCss } = getSepratorValue(value);
     if (mainCss) {
       document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', mainCss);
     }
@@ -25,10 +25,10 @@ export default function Home({ pageHTML, mainCss, sectionCss }: IProps) {
   }
 
   useEffect(() => {
-    if (pageHTML && state) {
+    if (value && state) {
       onLoad();
     }
-  }, [pageHTML, state]);
+  }, [value, state]);
 
   return (
     <StyledDiv>

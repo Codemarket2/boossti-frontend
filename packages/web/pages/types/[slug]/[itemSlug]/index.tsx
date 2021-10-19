@@ -1,8 +1,7 @@
 import { useRouter } from 'next/router';
-
 import { GET_LIST_ITEM_BY_SLUG } from '@frontend/shared/graphql/query/list';
-import ItemScreen from '../../../src/screens/ItemScreen';
-import Loading from '../../../src/components/common/Loading';
+import ItemScreen from '../../../../src/screens/ItemScreen';
+import Loading from '../../../../src/components/common/Loading';
 import { guestClient } from '@frontend/shared/graphql';
 
 interface IProps {

@@ -39,10 +39,6 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          {/* <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-          /> */}
           <link rel="manifest" href="/manifest.json" />
           <link rel="apple-touch-icon" href="/icon.png"></link>
           <meta name="theme-color" content="#fff" />
@@ -50,6 +46,7 @@ export default class MyDocument extends Document {
             href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i&display=swap"
             rel="stylesheet"
           />
+          {/* Required css for production */}
           <link href="/box/box.css" rel="stylesheet" type="text/css" />
           <link href="/assets/minimalist-blocks/content.css" rel="stylesheet" type="text/css" />
           <link
@@ -57,8 +54,10 @@ export default class MyDocument extends Document {
             rel="stylesheet"
             type="text/css"
           />
+          {/* Required css for editing (not needed in production) */}
           <link href="/contentbuilder/contentbuilder.css" rel="stylesheet" type="text/css" />
-          <link href="/contentbox/contentbox.css" rel="stylesheet" type="text/css" />
+          {/* ContentBox CSS is causing problem */}
+          {/* <link href="/contentbox/contentbox.css" rel="stylesheet" type="text/css" /> */}
         </Head>
         <body>
           <Main />
@@ -68,9 +67,12 @@ export default class MyDocument extends Document {
             src="/assets/scripts/simplelightbox/simple-lightbox.min.js"
             type="text/javascript"
           />
+          {/* Required js for editing (not needed in production) */}
           <script src="/assets/minimalist-blocks/content.js" type="text/javascript" />
           <script src="/contentbuilder/contentbuilder.min.js" type="text/javascript" />
           <script src="/contentbox/contentbox.min.js" type="text/javascript" />
+
+          {/* Required js for production */}
           <script src="/box/box.js" type="text/javascript" />
         </body>
       </Html>

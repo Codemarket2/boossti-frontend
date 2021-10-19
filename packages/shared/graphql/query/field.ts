@@ -49,3 +49,28 @@ export const GET_FIELD_VALUES_BY_FIELD = gql`
     }
   }
 `;
+export const GET_FIELD_VALUE = gql`
+  query MyQuery($_id: ID!) {
+    getFieldValue(_id: $_id) {
+      _id
+      parentId
+      field
+      value
+      media {
+        url
+        caption
+      }
+      itemId {
+        _id
+        title
+        slug
+      }
+      createdBy {
+        _id
+        picture
+        name
+      }
+      createdAt
+    }
+  }
+`;

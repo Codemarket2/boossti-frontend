@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
-
+import { getSepratorValue } from './seprator';
 const UPLOAD_ENDPOINT = {
   saveimage: '/api/saveimage',
   savecover: '/api/savecover',
@@ -8,26 +8,23 @@ const UPLOAD_ENDPOINT = {
   saveimageModule: '/api/saveimage-module',
 };
 
-// https://contentbox-bucket.s3.amazonaws.com/public/uploads/sample.jpeg
-// https://contentbox-bucket.s3.amazonaws.com/public/assets/designs/imagess/
-// https://contentbox-bucket.s3.amazonaws.com/public/assets/designs/images/design-iPhone.png
-
-export default function Box({ onSave, pageHTML, mainCss, sectionCss, onClose }) {
+export default function Box({ onSave, onClose, data }) {
+  const [init, setInit] = useState(false);
   useEffect(() => {
-    if (mainCss) {
-      document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', mainCss);
-    }
-    if (sectionCss) {
-      document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', sectionCss);
-    }
+    // if (mainCss) {
+    //   document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', mainCss);
+    // }
+    // if (sectionCss) {
+    //   document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', sectionCss);
+    // }
 
     let timeoutId; //Used for Auto Save
 
-    jQuery(document).ready(function ($) {
+    jQuery(document).ready(function ($: any) {
       // Load content from database. In this example we use browser's localStorage. Normally you need to load saved content from database and place it directly inside div.is-wrapper above (not here)
-      if (pageHTML) {
-        $('.is-wrapper').html(pageHTML);
-      }
+      // if (pageHTML) {
+      //   $('.is-wrapper').html(pageHTML);
+      // }
 
       //Enable editing
       $('.is-wrapper').contentbox({
@@ -125,6 +122,24 @@ export default function Box({ onSave, pageHTML, mainCss, sectionCss, onClose }) 
       onClose();
     });
   };
+
+  useEffect(() => {
+    if (data && data.getFieldValue && !init) {
+      setInit(true);
+      const { pageHTML, mainCss, sectionCss } = getSepratorValue(data.getFieldValue.value);
+      if (mainCss) {
+        document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', mainCss);
+      }
+      if (sectionCss) {
+        document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', sectionCss);
+      }
+      jQuery(document).ready(function ($) {
+        if (pageHTML) {
+          $('.is-wrapper').data('contentbox').loadHtml(pageHTML);
+        }
+      });
+    }
+  }, [data]);
 
   return (
     <div>

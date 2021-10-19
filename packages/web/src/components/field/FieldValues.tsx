@@ -21,6 +21,7 @@ import {
   useGetFieldValuesByItem,
   useGetFieldsByType,
   useDeleteFieldValue,
+  useCreateFieldValue,
 } from '@frontend/shared/hooks/field';
 import FieldsSkeleton from './FieldsSkeleton';
 import ErrorLoading from '../common/ErrorLoading';
@@ -53,12 +54,14 @@ function ItemOneFields({
   toggleLeftNavigation,
   showPreview,
 }) {
-  const { query } = useRouter();
+  const router = useRouter();
+  const query = router.query;
   const [state, setState] = useState(initialState);
   const { attributes, admin } = useSelector(({ auth }: any) => auth);
   const currentUserId = attributes['custom:_id'];
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('xs'));
+  const { handleCreateField } = useCreateFieldValue();
 
   const deleteCallback = () => {
     setState({ ...state, showMenu: null, selectedFieldValue: null, edit: false });
@@ -90,9 +93,18 @@ function ItemOneFields({
     }
   }, [data]);
 
-  const onClickAdd = () => {
-    toggleLeftNavigation(true);
-    setState({ ...initialState, showForm: true });
+  const onClickAdd = async () => {
+    if (field.fieldType === 'contentBox') {
+      let payload = { parentId: parentId, field: field._id, value: '' };
+      const response = await handleCreateField(payload);
+      console.log('response', response.data.createFieldValue._id);
+      router.push(`/types/${query.slug}/${query.itemSlug}/${response.data.createFieldValue._id}`);
+    } else {
+      if (field.fieldType === 'contentBuilder') {
+        toggleLeftNavigation(true);
+      }
+      setState({ ...initialState, showForm: true });
+    }
   };
 
   if (!error && (!data || !data.getFieldValuesByItem)) {
@@ -260,10 +272,15 @@ function ItemOneFields({
         onClose={() => setState(initialState)}
         onDelete={() => handleDelete(state.selectedFieldValue._id, deleteCallback)}
         onEdit={() => {
-          if (field.fieldType === 'contentBuilder') {
-            toggleLeftNavigation(true);
+          if (field.fieldType === 'contentBox') {
+            // router.push(`/box/${state.selectedFieldValue._id}`);
+            router.push(`/types/${query.slug}/${query.itemSlug}/${state.selectedFieldValue._id}`);
+          } else {
+            if (field.fieldType === 'contentBuilder') {
+              toggleLeftNavigation(true);
+            }
+            setState({ ...state, edit: true, showMenu: null });
           }
-          setState({ ...state, edit: true, showMenu: null });
         }}
       />
       <Backdrop open={deleteLoading} />
