@@ -220,7 +220,10 @@ export default function Screen({
                     </IconButton>
                   </Tooltip>
                   Publish
-                  <AppSwitch />
+                  <AppSwitch
+                    id={data?.getListItemBySlug?._id}
+                    active={data?.getListItemBySlug?.active}
+                  />
                   Preview
                   <IconButton onClick={handlePreview}>
                     <Visibility />

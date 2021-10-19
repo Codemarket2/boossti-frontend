@@ -3,7 +3,12 @@ import * as yup from 'yup';
 import { v4 as uuid } from 'uuid';
 import { useFormik } from 'formik';
 import { useQuery, useMutation } from '@apollo/client';
-import { CREATE_LIST_ITEM, UPDATE_LIST_ITEM, DELETE_LIST_ITEM } from '../../graphql/mutation/list';
+import {
+  CREATE_LIST_ITEM,
+  UPDATE_LIST_ITEM,
+  DELETE_LIST_ITEM,
+  UPDATE_PUBLISH,
+} from '../../graphql/mutation/list';
 import { GET_LIST_ITEMS_BY_TYPE, GET_LIST_ITEM_BY_SLUG } from '../../graphql/query/list';
 import { IHooksProps } from '../../types/common';
 import { fileUpload } from '../../utils/fileUpload';
@@ -237,6 +242,25 @@ export function useCreateListItem({ onAlert }: IHooksProps) {
     }
   };
   return { handleCreate, createLoading };
+}
+
+export function useUpdatePublish(id: string, isPublish: boolean) {
+  useEffect(() => {
+    setPublish(isPublish);
+  }, [isPublish]);
+  const [publish, setPublish] = useState(isPublish);
+  const [updatePublish, { data }] = useMutation(UPDATE_PUBLISH);
+  const handleChange = (event) => {
+    setPublish(event.target.checked);
+    updatePublish({
+      variables: { _id: id, publish: publish },
+    });
+  };
+  console.log({ data });
+  return {
+    handleChange,
+    publish,
+  };
 }
 
 export function useDeleteListItem({ onAlert }: IHooksProps) {

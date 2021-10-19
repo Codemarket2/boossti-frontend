@@ -1,13 +1,16 @@
-import React from 'react';
-import { Switch, FormControlLabel } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { Switch } from '@material-ui/core';
 
-export default function AppSwitch() {
-  const [checked, setChecked] = React.useState(true);
+import { useUpdatePublish } from '@frontend/shared/hooks/list/listItems';
 
-  const handleChange = (event) => {
-    setChecked(event.target.checked);
-  };
+interface IProps {
+  id: string;
+  active: boolean;
+}
+export default function AppSwitch({ id, active }: IProps) {
+  const { handleChange, publish } = useUpdatePublish(id, active);
+  console.log({ publish });
   return (
-    <Switch checked={checked} onChange={handleChange} inputProps={{ 'aria-label': 'controlled' }} />
+    <Switch checked={active} onChange={handleChange} inputProps={{ 'aria-label': 'controlled' }} />
   );
 }

@@ -74,6 +74,15 @@ export const UPDATE_LIST_ITEM = gql`
   }
 `;
 
+export const UPDATE_PUBLISH = gql`
+  mutation MyMutation($_id: ID!, $publish: Boolean!) {
+    updatePublish(_id: $_id, publish: $publish) {
+      _id
+      active
+    }
+  }
+`;
+
 export const DELETE_LIST_ITEM = gql`
   mutation MyMutation($_id: ID!) {
     deleteListItem(_id: $_id)
