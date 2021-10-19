@@ -1,6 +1,5 @@
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
-import StyledDiv from './StyledDiv';
 import DisplayContent from './DisplayContent';
 
 interface IProps {
@@ -10,7 +9,7 @@ interface IProps {
 
 export default function Home({ value, onClickEdit }: IProps) {
   return (
-    <StyledDiv>
+    <div>
       <div className="position-fixed m-3">
         <Button
           size="small"
@@ -22,6 +21,6 @@ export default function Home({ value, onClickEdit }: IProps) {
         </Button>
       </div>
       <DisplayContent value={value} />
-    </StyledDiv>
+    </div>
   );
 }

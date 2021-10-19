@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { v4 as uuid } from 'uuid';
-import StyledDiv from '../contentbuilder/StyledDiv';
 import { getSepratorValue } from './seprator';
 
 interface IProps {
@@ -30,9 +29,5 @@ export default function DisplayContentBox({ value }: IProps) {
     }
   }, [value, state]);
 
-  return (
-    <StyledDiv>
-      <div className={`${state} is-wrapper`}></div>
-    </StyledDiv>
-  );
+  return <div className={`${state} is-wrapper`}></div>;
 }

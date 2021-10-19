@@ -137,14 +137,21 @@ p {
     Basic Elements
 ***********************************/
 
-a,
-a:hover,
-a:active,
-a:visited,
-a:focus {
+.is-wrapper a,
+.is-wrapper a:hover,
+.is-wrapper a:active,
+.is-wrapper a:visited,
+.is-wrapper a:focus,
+.is-container a,
+.is-container a:hover,
+.is-container a:active,
+.is-container a:visited,
+.is-container a:focus {
   color: #009e91;
 }
-.is-wrapper hr {
+
+.is-wrapper hr,
+.is-container hr {
   background: none;
   background-color: transparent;
   border: none;

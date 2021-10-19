@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { v4 as uuid } from 'uuid';
-import StyledDiv from './StyledDiv';
 
 interface IProps {
   value: string;
@@ -22,9 +21,5 @@ export default function Home({ value }: IProps) {
     }
   }, [value, state]);
 
-  return (
-    <StyledDiv>
-      <div className={`is-container container ${state}`}></div>
-    </StyledDiv>
-  );
+  return <div className={`is-container container ${state}`}></div>;
 }

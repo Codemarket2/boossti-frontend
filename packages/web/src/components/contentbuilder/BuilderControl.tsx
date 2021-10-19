@@ -2,7 +2,7 @@ import { Component } from 'react';
 import axios from 'axios';
 import ContentBuilder from '@innovastudio/contentbuilder';
 import config from '@frontend/shared/aws-exports';
-import { Storage } from 'aws-amplify';
+// import { Storage } from 'aws-amplify';
 import { v4 as uuid } from 'uuid';
 
 const { aws_user_files_s3_bucket_region: region, aws_user_files_s3_bucket: bucket } = config;

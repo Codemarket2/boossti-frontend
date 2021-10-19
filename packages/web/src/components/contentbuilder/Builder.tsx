@@ -1,6 +1,5 @@
 import { Component } from 'react';
 import BuilderControl from './BuilderControl';
-import StyledDiv from './StyledDiv';
 import Button from '@material-ui/core/Button';
 import Backdrop from '../common/Backdrop';
 
@@ -51,7 +50,7 @@ export default class Builder extends Component<TProps, TState> {
 
   render() {
     return (
-      <StyledDiv>
+      <div>
         <Backdrop open={this.state.showBackdrop} />
         <BuilderControl
           value={this.props.value}
@@ -96,7 +95,7 @@ export default class Builder extends Component<TProps, TState> {
             Close
           </Button>
         </div>
-      </StyledDiv>
+      </div>
     );
   }
 }
