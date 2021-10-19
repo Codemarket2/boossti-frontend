@@ -51,6 +51,7 @@ function ItemOneFields({
   guest,
   setFieldValueCount,
   toggleLeftNavigation,
+  showPreview,
 }) {
   const { query } = useRouter();
   const [state, setState] = useState(initialState);
@@ -112,33 +113,35 @@ function ItemOneFields({
 
   return (
     <div key={field._id}>
-      <Menu
-        anchorEl={state.addTarget}
-        keepMounted
-        open={Boolean(state.showAddMenu)}
-        onClose={() => setState({ ...state, showAddMenu: false, addTarget: null })}>
-        <MenuItem onClick={onClickAdd}>
-          <ListItemIcon className="mr-n4">
-            <AddCircle fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Add New Value" />
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon className="mr-n4">
-            <Share itemSlug={convertToSlug(field.label)} />
-          </ListItemIcon>
-          <ListItemText primary="Share" />
-        </MenuItem>
-      </Menu>
-      <Divider />
-      <div className="d-flex justify-content-between align-items-center align-content-center">
-        <Typography
-          style={matches ? { paddingTop: 50 } : {}}
-          variant="h5"
-          className="d-flex align-items-center link-anchor"
-          id={convertToSlug(field.label)}>
-          {field.label}
-          {/* {showAddButton && (
+      {!showPreview && (
+        <>
+          <Menu
+            anchorEl={state.addTarget}
+            keepMounted
+            open={Boolean(state.showAddMenu)}
+            onClose={() => setState({ ...state, showAddMenu: false, addTarget: null })}>
+            <MenuItem onClick={onClickAdd}>
+              <ListItemIcon className="mr-n4">
+                <AddCircle fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Add New Value" />
+            </MenuItem>
+            <MenuItem>
+              <ListItemIcon className="mr-n4">
+                <Share itemSlug={convertToSlug(field.label)} />
+              </ListItemIcon>
+              <ListItemText primary="Share" />
+            </MenuItem>
+          </Menu>
+          <Divider />
+          <div className="d-flex justify-content-between align-items-center align-content-center">
+            <Typography
+              style={matches ? { paddingTop: 50 } : {}}
+              variant="h5"
+              className="d-flex align-items-center link-anchor"
+              id={convertToSlug(field.label)}>
+              {field.label}
+              {/* {showAddButton && (
             <Tooltip title="Add New Value">
               <IconButton
                 color="primary"
@@ -147,18 +150,21 @@ function ItemOneFields({
               </IconButton>
             </Tooltip>
           )} */}
-        </Typography>
-        {showAddButton && (
-          <IconButton
-            color="primary"
-            onClick={(event) =>
-              setState({ ...initialState, showAddMenu: true, addTarget: event.currentTarget })
-            }>
-            <MoreVertIcon />
-          </IconButton>
-        )}
-      </div>
-      {state.showForm && <FieldValueForm {...formProps} />}
+            </Typography>
+            {showAddButton && (
+              <IconButton
+                color="primary"
+                onClick={(event) =>
+                  setState({ ...initialState, showAddMenu: true, addTarget: event.currentTarget })
+                }>
+                <MoreVertIcon />
+              </IconButton>
+            )}
+          </div>
+          {state.showForm && <FieldValueForm {...formProps} />}
+        </>
+      )}
+
       {data.getFieldValuesByItem.data.length > 1 ? (
         <Carousel
           // index={parseInt(query.index)}
@@ -206,6 +212,7 @@ function ItemOneFields({
                   field={field}
                   showAction={currentUserId === fieldValue.createdBy._id || admin}
                   showAuthor={showAuthor || showAddButton}
+                  showPreview={showPreview}
                   onSelect={(target, fieldValue) =>
                     setState({
                       ...state,
@@ -235,6 +242,7 @@ function ItemOneFields({
                 field={field}
                 showAction={currentUserId === fieldValue.createdBy._id || admin}
                 showAuthor={showAuthor || showAddButton}
+                showPreview={showPreview}
                 onSelect={(target, fieldValue) =>
                   setState({
                     ...state,
@@ -268,6 +276,7 @@ interface IProps {
   typeId: string;
   showAuthor?: boolean;
   guest?: boolean;
+  showPreview?: boolean;
   setFields?: (arg: any) => void;
   setFieldValueCount?: (arg: any, arg2: any) => void;
   pushToAnchor?: () => void;
@@ -279,6 +288,7 @@ export default function ItemsFieldsMap({
   typeId,
   showAuthor = true,
   guest = false,
+  showPreview,
   setFields = (arg: any) => {},
   setFieldValueCount = (index: number, value: number) => {},
   pushToAnchor = () => {},
@@ -309,6 +319,7 @@ export default function ItemsFieldsMap({
             }
           }}
           parentId={parentId}
+          showPreview={showPreview}
           field={field}
           key={field._id}
           showAuthor={showAuthor}

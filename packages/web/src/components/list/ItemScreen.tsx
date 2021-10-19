@@ -1,33 +1,39 @@
 import { useState, useEffect } from 'react';
-import { useGetListItemBySlug, useDeleteListItem } from '@frontend/shared/hooks/list';
-import { useCRUDListItems } from '@frontend/shared/hooks/list';
 import Link from 'next/link';
 import parse from 'html-react-parser';
 import { useRouter } from 'next/router';
-import Paper from '@material-ui/core/Paper';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
-import Tooltip from '@material-ui/core/Tooltip';
 import EditIcon from '@material-ui/icons/Edit';
-import Typography from '@material-ui/core/Typography';
+import Visibility from '@material-ui/icons/Visibility';
+import {
+  Typography,
+  Button,
+  SwipeableDrawer,
+  Tooltip,
+  Hidden,
+  Divider,
+  Paper,
+  IconButton,
+  useMediaQuery,
+} from '@material-ui/core';
+import { useSelector, useDispatch } from 'react-redux';
+import { useTheme } from '@material-ui/core/styles';
+
+import { useCRUDListItems } from '@frontend/shared/hooks/list';
+import { useGetListItemBySlug, useDeleteListItem } from '@frontend/shared/hooks/list';
+import { updateSettingAction } from '@frontend/shared/redux/actions/setting';
+import { onAlert } from '../../utils/alert';
+import FieldValues from '../field/FieldValues';
+import ActionButtons from '../list/ActionButtons';
+import InlineForm from '../list/InlineForm';
+import MediaForm from '../list/MediaForm';
+import LeftNavigation from '../field/LeftNavigation';
 import Breadcrumbs from '../common/Breadcrumbs';
 import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
 import ImageList from '../post/ImageList';
 import NotFound from '../common/NotFound';
-import FieldValues from '../field/FieldValues';
-import ActionButtons from '../list/ActionButtons';
-import InlineForm from '../list/InlineForm';
-import MediaForm from '../list/MediaForm';
-import { onAlert } from '../../utils/alert';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
-import LeftNavigation from '../field/LeftNavigation';
-import Hidden from '@material-ui/core/Hidden';
-import { useSelector, useDispatch } from 'react-redux';
-import { updateSettingAction } from '@frontend/shared/redux/actions/setting';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { useTheme } from '@material-ui/core/styles';
+import AppSwitch from '../common/AppSwitch';
 
 interface IProps {
   slug: any;
@@ -53,6 +59,10 @@ export default function Screen({
 
   const [state, setState] = useState({ fieldName: '', fields: [], hideLeftNavigation: false });
   const [fieldValueCount, setFieldValueCount] = useState({});
+  const [showPreview, setShowPreview] = useState(false);
+  const handlePreview = () => {
+    setShowPreview(!showPreview);
+  };
   const deleteCallBack = () => {
     router.push(`/types/${typeSlug}`);
   };
@@ -120,7 +130,18 @@ export default function Screen({
 
   return (
     <>
-      {!hideBreadcrumbs && (
+      {showPreview && (
+        <Button
+          style={{ margin: 0, top: 'auto', right: 20, bottom: 20, left: 'auto', position: 'fixed' }}
+          variant="contained"
+          color="primary"
+          size="medium"
+          endIcon={<EditIcon />}
+          onClick={handlePreview}>
+          Edit
+        </Button>
+      )}
+      {!showPreview && !hideBreadcrumbs && (
         <>
           <div className="d-flex justify-content-between align-content-center align-items-center">
             <Breadcrumbs>
@@ -144,6 +165,7 @@ export default function Screen({
               }}
             />
           </div>
+
           <Hidden smUp>
             <SwipeableDrawer
               anchor="bottom"
@@ -159,7 +181,7 @@ export default function Screen({
           </Hidden>
         </>
       )}
-      {!hideleft && (
+      {!showPreview && !hideleft && (
         <Hidden xsDown>
           <LeftNavigation
             style={{
@@ -174,97 +196,119 @@ export default function Screen({
           />
         </Hidden>
       )}
-      <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-        <Paper
-          style={{ width: matches || hideleft ? '100%' : '84%', border: 'none' }}
-          variant="outlined"
-          className="p-2 pb-5">
-          {state.fieldName === 'title' ? (
-            <InlineForm
-              fieldName={state.fieldName}
-              label="Title"
-              onCancel={onCancel}
-              formik={formik}
-              formLoading={CRUDLoading}
-            />
-          ) : (
-            <>
-              <Typography id="title" style={matches ? { paddingTop: 50 } : {}}>
-                Title
-                <Tooltip title="Edit Title">
-                  <IconButton onClick={() => onEdit('title')}>
-                    <EditIcon fontSize="small" />
+      {!showPreview && (
+        <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+          <Paper
+            style={{ width: matches || hideleft ? '100%' : '84%', border: 'none' }}
+            variant="outlined"
+            className="p-2 pb-5">
+            {state.fieldName === 'title' ? (
+              <InlineForm
+                fieldName={state.fieldName}
+                label="Title"
+                onCancel={onCancel}
+                formik={formik}
+                formLoading={CRUDLoading}
+              />
+            ) : (
+              <>
+                <Typography id="title" style={matches ? { paddingTop: 50 } : {}}>
+                  Title
+                  <Tooltip title="Edit Title">
+                    <IconButton onClick={() => onEdit('title')}>
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                  Publish
+                  <AppSwitch />
+                  Preview
+                  <IconButton onClick={handlePreview}>
+                    <Visibility />
                   </IconButton>
-                </Tooltip>
-              </Typography>
-              <Typography variant="h4" className="d-flex align-items-center">
-                {data.getListItemBySlug.title.includes('-n-e-w')
-                  ? 'Title'
-                  : data.getListItemBySlug.title}
-              </Typography>
-            </>
-          )}
-          <Divider className="my-2" />
-          {state.fieldName === 'description' ? (
-            <InlineForm
-              multiline
-              fieldName={state.fieldName}
-              label="Description"
-              onCancel={onCancel}
-              formik={formik}
-              formLoading={CRUDLoading}
+                </Typography>
+                <Typography variant="h4" className="d-flex align-items-center">
+                  {data.getListItemBySlug.title.includes('-n-e-w')
+                    ? 'Title'
+                    : data.getListItemBySlug.title}
+                </Typography>
+              </>
+            )}
+            <Divider className="my-2" />
+            {state.fieldName === 'description' ? (
+              <InlineForm
+                multiline
+                fieldName={state.fieldName}
+                label="Description"
+                onCancel={onCancel}
+                formik={formik}
+                formLoading={CRUDLoading}
+              />
+            ) : (
+              <>
+                <Typography id="description" style={matches ? { paddingTop: 50 } : {}}>
+                  Description
+                  <Tooltip title="Edit Description">
+                    <IconButton onClick={() => onEdit('description')}>
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </Typography>
+                <div className="ck-content">{parse(data.getListItemBySlug.description)}</div>
+                <CommentLikeShare parentId={data.getListItemBySlug._id} />
+              </>
+            )}
+            <Divider className="my-2" />
+            {state.fieldName === 'media' ? (
+              <MediaForm
+                state={crudState}
+                setState={setCrudState}
+                onCancel={onCancel}
+                onSave={formik.handleSubmit}
+                loading={CRUDLoading}
+              />
+            ) : (
+              <>
+                <Typography
+                  className="d-flex align-items-center"
+                  id="media"
+                  style={matches ? { paddingTop: 50 } : {}}>
+                  Media
+                  <Tooltip title="Edit Media">
+                    <IconButton onClick={() => onEdit('media')}>
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </Typography>
+                <ImageList media={data.getListItemBySlug.media} />
+              </>
+            )}
+            <FieldValues
+              toggleLeftNavigation={(value) => setState({ ...state, hideLeftNavigation: value })}
+              pushToAnchor={pushToAnchor}
+              parentId={data.getListItemBySlug._id}
+              typeId={data.getListItemBySlug.types[0]._id}
+              setFields={(fields) => setState({ ...state, fields })}
+              setFieldValueCount={(index, value) =>
+                setFieldValueCount({ ...fieldValueCount, [index]: value })
+              }
             />
-          ) : (
-            <>
-              <Typography id="description" style={matches ? { paddingTop: 50 } : {}}>
-                Description
-                <Tooltip title="Edit Description">
-                  <IconButton onClick={() => onEdit('description')}>
-                    <EditIcon fontSize="small" />
-                  </IconButton>
-                </Tooltip>
-              </Typography>
-              <div className="ck-content">{parse(data.getListItemBySlug.description)}</div>
-              <CommentLikeShare parentId={data.getListItemBySlug._id} />
-            </>
-          )}
-          <Divider className="my-2" />
-          {state.fieldName === 'media' ? (
-            <MediaForm
-              state={crudState}
-              setState={setCrudState}
-              onCancel={onCancel}
-              onSave={formik.handleSubmit}
-              loading={CRUDLoading}
-            />
-          ) : (
-            <>
-              <Typography
-                className="d-flex align-items-center"
-                id="media"
-                style={matches ? { paddingTop: 50 } : {}}>
-                Media
-                <Tooltip title="Edit Media">
-                  <IconButton onClick={() => onEdit('media')}>
-                    <EditIcon fontSize="small" />
-                  </IconButton>
-                </Tooltip>
-              </Typography>
-              <ImageList media={data.getListItemBySlug.media} />
-            </>
-          )}
-          <FieldValues
-            toggleLeftNavigation={(value) => setState({ ...state, hideLeftNavigation: value })}
-            pushToAnchor={pushToAnchor}
-            parentId={data.getListItemBySlug._id}
-            typeId={data.getListItemBySlug.types[0]._id}
-            setFields={(fields) => setState({ ...state, fields })}
-            setFieldValueCount={(index, value) =>
-              setFieldValueCount({ ...fieldValueCount, [index]: value })
-            }
-          />
-        </Paper>
-      </div>
+          </Paper>
+        </div>
+      )}
+      {showPreview && (
+        <FieldValues
+          toggleLeftNavigation={(value) => setState({ ...state, hideLeftNavigation: value })}
+          pushToAnchor={pushToAnchor}
+          parentId={data.getListItemBySlug._id}
+          typeId={data.getListItemBySlug.types[0]._id}
+          setFields={(fields) => setState({ ...state, fields })}
+          setFieldValueCount={(index, value) =>
+            setFieldValueCount({ ...fieldValueCount, [index]: value })
+          }
+          showPreview={showPreview}
+        />
+      )}
+
       <Backdrop open={deleteLoading || CRUDLoading} />
     </>
   );
