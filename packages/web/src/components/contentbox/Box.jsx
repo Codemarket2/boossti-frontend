@@ -128,7 +128,7 @@ export default function Box({ onSave, pageHTML, mainCss, sectionCss, onClose }) 
 
   return (
     <div>
-      <div className="position-fixed m-3" style={{ zIndex: 1, right: 0 }}>
+      <div className="position-fixed m-3" style={{ zIndex: 999, right: 0 }}>
         <Button size="small" variant="contained" color="primary" onClick={handleClose}>
           Close
         </Button>
