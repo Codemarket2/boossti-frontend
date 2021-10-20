@@ -4,7 +4,8 @@ import { useRouter } from 'next/router';
 import { GET_LIST_ITEM_BY_SLUG } from '@frontend/shared/graphql/query/list';
 import { guestClient } from '@frontend/shared/graphql';
 import Loading from '../../src/components/common/Loading';
-import FieldValues from '../../src/components/field/FieldValues';
+import NotFound from '../../src/components/common/NotFound';
+import DisplayContentBuilder from '../../src/components/displayContentBuilder/DisplayContentBuilder';
 
 function Card({ slug }) {
   const [payload, setPayload] = useState(null);
@@ -23,17 +24,16 @@ function Card({ slug }) {
       console.log(error.message);
     }
   };
-  console.log({ payload });
+
   return (
     <>
       {payload?.getListItemBySlug?.active ? (
-        <FieldValues
+        <DisplayContentBuilder
           parentId={payload?.getListItemBySlug?._id}
           typeId={payload?.getListItemBySlug?.types[0]?._id}
-          showPreview={true}
         />
       ) : (
-        <p>404 not found</p>
+        <NotFound />
       )}
     </>
   );
