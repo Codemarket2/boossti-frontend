@@ -29,6 +29,7 @@ interface IProps {
   onSelect?: (arg1: any, arg2: any) => void;
   index?: any;
   showPreview?: boolean;
+  isPublish?: boolean;
 }
 
 export default function FieldValueCard({
@@ -39,6 +40,7 @@ export default function FieldValueCard({
   index,
   onSelect,
   showPreview,
+  isPublish,
 }: IProps) {
   const [state, setState] = useState({
     expandedItem: false,
@@ -48,7 +50,7 @@ export default function FieldValueCard({
   const [showHideComments, setShowHideComments] = useState(false);
   return (
     <Card variant="outlined" style={{ border: 'none' }}>
-      {!showPreview && (
+      {!isPublish && (
         <div className="d-flex justify-content-end">
           <IconButton
             style={{ zIndex: 9999 }}
@@ -139,7 +141,7 @@ export default function FieldValueCard({
           </Typography>
         )}
       </CardContent>
-      {!showPreview && (
+      {!isPublish && (
         <>
           <CommentLikeShare
             showHideComments={showHideComments}

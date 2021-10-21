@@ -83,6 +83,15 @@ export const UPDATE_PUBLISH = gql`
   }
 `;
 
+export const UPDATE_AUTHENTICATION = gql`
+  mutation MyMutation($_id: ID!, $authenticateUser: Boolean!) {
+    updateAuthentication(_id: $_id, authenticateUser: $authenticateUser) {
+      authenticateUser
+      _id
+    }
+  }
+`;
+
 export const DELETE_LIST_ITEM = gql`
   mutation MyMutation($_id: ID!) {
     deleteListItem(_id: $_id)

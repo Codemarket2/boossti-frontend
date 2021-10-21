@@ -52,7 +52,7 @@ function ItemOneFields({
   guest,
   setFieldValueCount,
   toggleLeftNavigation,
-  showPreview,
+  isPublish,
 }) {
   const router = useRouter();
   const query = router.query;
@@ -122,10 +122,9 @@ function ItemOneFields({
       !guest &&
       !state.showForm &&
       (field.oneUserMultipleValues || !hasAlreadyAdded));
-
   return (
     <div key={field._id}>
-      {!showPreview && (
+      {!isPublish && (
         <>
           <Menu
             anchorEl={state.addTarget}
@@ -224,7 +223,7 @@ function ItemOneFields({
                   field={field}
                   showAction={currentUserId === fieldValue.createdBy._id || admin}
                   showAuthor={showAuthor || showAddButton}
-                  showPreview={showPreview}
+                  isPublish={isPublish}
                   onSelect={(target, fieldValue) =>
                     setState({
                       ...state,
@@ -254,7 +253,7 @@ function ItemOneFields({
                 field={field}
                 showAction={currentUserId === fieldValue.createdBy._id || admin}
                 showAuthor={showAuthor || showAddButton}
-                showPreview={showPreview}
+                isPublish={isPublish}
                 onSelect={(target, fieldValue) =>
                   setState({
                     ...state,
@@ -293,7 +292,7 @@ interface IProps {
   typeId: string;
   showAuthor?: boolean;
   guest?: boolean;
-  showPreview?: boolean;
+  isPublish?: boolean;
   setFields?: (arg: any) => void;
   setFieldValueCount?: (arg: any, arg2: any) => void;
   pushToAnchor?: () => void;
@@ -305,7 +304,7 @@ export default function ItemsFieldsMap({
   typeId,
   showAuthor = true,
   guest = false,
-  showPreview,
+  isPublish,
   setFields = (arg: any) => {},
   setFieldValueCount = (index: number, value: number) => {},
   pushToAnchor = () => {},
@@ -325,7 +324,6 @@ export default function ItemsFieldsMap({
   } else if (error) {
     return <ErrorLoading error={error} />;
   }
-
   return (
     <>
       {data.getFieldsByType.data.map((field, index) => (
@@ -336,10 +334,10 @@ export default function ItemsFieldsMap({
             }
           }}
           parentId={parentId}
-          showPreview={showPreview}
           field={field}
           key={field._id}
           showAuthor={showAuthor}
+          isPublish={isPublish}
           guest={guest}
           setFieldValueCount={(value) => setFieldValueCount(index, value)}
         />

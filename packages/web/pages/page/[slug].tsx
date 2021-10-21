@@ -6,6 +6,7 @@ import { guestClient } from '@frontend/shared/graphql';
 import Loading from '../../src/components/common/Loading';
 import NotFound from '../../src/components/common/NotFound';
 import DisplayContentBuilder from '../../src/components/displayContentBuilder/DisplayContentBuilder';
+import AuthRequired from '../../src/components/common/AuthRequired';
 
 function Card({ slug }) {
   const [payload, setPayload] = useState(null);
@@ -28,10 +29,21 @@ function Card({ slug }) {
   return (
     <>
       {payload?.getListItemBySlug?.active ? (
-        <DisplayContentBuilder
-          parentId={payload?.getListItemBySlug?._id}
-          typeId={payload?.getListItemBySlug?.types[0]?._id}
-        />
+        <>
+          {payload?.getListItemBySlug?.authenticateUser ? (
+            <AuthRequired>
+              <DisplayContentBuilder
+                parentId={payload?.getListItemBySlug?._id}
+                typeId={payload?.getListItemBySlug?.types[0]?._id}
+              />
+            </AuthRequired>
+          ) : (
+            <DisplayContentBuilder
+              parentId={payload?.getListItemBySlug?._id}
+              typeId={payload?.getListItemBySlug?.types[0]?._id}
+            />
+          )}
+        </>
       ) : (
         <NotFound />
       )}
