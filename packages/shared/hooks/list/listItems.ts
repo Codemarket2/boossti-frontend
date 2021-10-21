@@ -249,7 +249,7 @@ export function useUpdatePublish(id: string, isPublish: boolean) {
     setPublish(isPublish);
   }, [isPublish]);
   const [publish, setPublish] = useState(isPublish);
-  const [updatePublish, { data }] = useMutation(UPDATE_PUBLISH);
+  const [updatePublish, { data, loading }] = useMutation(UPDATE_PUBLISH);
   const handleChange = (event) => {
     setPublish(event.target.checked);
     updatePublish({
@@ -260,6 +260,7 @@ export function useUpdatePublish(id: string, isPublish: boolean) {
   return {
     handleChange,
     publish,
+    loading,
   };
 }
 

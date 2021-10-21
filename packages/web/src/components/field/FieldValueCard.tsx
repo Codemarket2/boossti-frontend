@@ -26,7 +26,7 @@ interface IProps {
   field: any;
   showAction?: boolean;
   showAuthor?: boolean;
-  onSelect: (arg1: any, arg2: any) => void;
+  onSelect?: (arg1: any, arg2: any) => void;
   index?: any;
   showPreview?: boolean;
 }
