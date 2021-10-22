@@ -65,6 +65,7 @@ export const GET_LIST_ITEM_BY_SLUG = gql`
     getListItemBySlug(slug: $slug) {
       _id
       active
+      authenticateUser
       slug
       title
       description

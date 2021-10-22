@@ -34,6 +34,8 @@ import ImageList from '../post/ImageList';
 import NotFound from '../common/NotFound';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
 import AppSwitch from '../common/AppSwitch';
+import AppSwitch2 from '../common/AppSwitch2';
+import DisplayContentBuilder from '../displayContentBuilder/DisplayContentBuilder';
 
 interface IProps {
   slug: any;
@@ -228,6 +230,11 @@ export default function Screen({
                   <IconButton onClick={handlePreview}>
                     <Visibility />
                   </IconButton>
+                  Login Required
+                  <AppSwitch2
+                    id={data?.getListItemBySlug?._id}
+                    authUser={data?.getListItemBySlug?.authenticateUser || false}
+                  />
                 </Typography>
                 <Typography variant="h4" className="d-flex align-items-center">
                   {data.getListItemBySlug.title.includes('-n-e-w')
@@ -294,12 +301,18 @@ export default function Screen({
               setFieldValueCount={(index, value) =>
                 setFieldValueCount({ ...fieldValueCount, [index]: value })
               }
+              isPublish={data?.getListItemBySlug?.active}
             />
           </Paper>
         </div>
       )}
       {showPreview && (
-        <FieldValues
+        <>
+          <DisplayContentBuilder
+            parentId={data.getListItemBySlug._id}
+            typeId={data.getListItemBySlug.types[0]._id}
+          />
+          {/* <FieldValues
           toggleLeftNavigation={(value) => setState({ ...state, hideLeftNavigation: value })}
           pushToAnchor={pushToAnchor}
           parentId={data.getListItemBySlug._id}
@@ -309,7 +322,8 @@ export default function Screen({
             setFieldValueCount({ ...fieldValueCount, [index]: value })
           }
           showPreview={showPreview}
-        />
+        /> */}
+        </>
       )}
 
       <Backdrop open={deleteLoading || CRUDLoading} />

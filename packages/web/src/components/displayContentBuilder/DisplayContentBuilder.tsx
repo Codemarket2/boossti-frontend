@@ -11,7 +11,7 @@ import FieldValueCard from '../../components/field/FieldValueCard';
 
 function ItemOneFields({ parentId, field }) {
   const [payload, setPayload] = useState(null);
-  const [showPreview, setShowPreview] = useState(true);
+  const [isPublish, setIsPublish] = useState(true);
   useEffect(() => {
     guestQuery(GET_FIELD_VALUES_BY_FIELD, { parentId, field: field._id }, setPayload);
   }, []);
@@ -25,7 +25,7 @@ function ItemOneFields({ parentId, field }) {
         <FieldValueCard
           field={field}
           fieldValue={fieldValue}
-          showPreview={showPreview}
+          isPublish={isPublish}
           key={fieldValue._id}
         />
       ))}

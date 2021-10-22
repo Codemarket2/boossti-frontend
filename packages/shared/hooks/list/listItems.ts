@@ -8,6 +8,7 @@ import {
   UPDATE_LIST_ITEM,
   DELETE_LIST_ITEM,
   UPDATE_PUBLISH,
+  UPDATE_AUTHENTICATION,
 } from '../../graphql/mutation/list';
 import { GET_LIST_ITEMS_BY_TYPE, GET_LIST_ITEM_BY_SLUG } from '../../graphql/query/list';
 import { IHooksProps } from '../../types/common';
@@ -244,7 +245,7 @@ export function useCreateListItem({ onAlert }: IHooksProps) {
   return { handleCreate, createLoading };
 }
 
-export function useUpdatePublish(id: string, isPublish: boolean) {
+export function useUpdatePublish(_id: string, isPublish: boolean) {
   useEffect(() => {
     setPublish(isPublish);
   }, [isPublish]);
@@ -253,13 +254,32 @@ export function useUpdatePublish(id: string, isPublish: boolean) {
   const handleChange = (event) => {
     setPublish(event.target.checked);
     updatePublish({
-      variables: { _id: id, publish: publish },
+      variables: { _id, publish },
     });
   };
   console.log({ data });
   return {
     handleChange,
     publish,
+    loading,
+  };
+}
+export function useUpdateAuthentication(_id: string, isAuthenticateUser: boolean) {
+  useEffect(() => {
+    setAuthenticateUser(isAuthenticateUser);
+  }, [isAuthenticateUser]);
+  const [authenticateUser, setAuthenticateUser] = useState(isAuthenticateUser);
+  const [updateAuthentication, { data, loading }] = useMutation(UPDATE_AUTHENTICATION);
+  const handleChange = (event) => {
+    setAuthenticateUser(event.target.checked);
+    updateAuthentication({
+      variables: { _id, authenticateUser },
+    });
+  };
+  console.log('authuser', data);
+  return {
+    handleChange,
+    authenticateUser,
     loading,
   };
 }
