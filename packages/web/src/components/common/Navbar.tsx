@@ -2,16 +2,10 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import DehazeIcon from '@material-ui/icons/Dehaze';
 
-import Logo from './Logo';
-
 export const StyledMenuContainer = styled.div`
-  width: 100%;
-  float: left;
   border-top: 1px solid #bdbdbc;
   border-bottom: 1px solid #bdbdbc;
-  margin: 0 0 1px;
   padding: 13px 0;
-  margin-bottom: 0;
 `;
 
 const Styled_ul = styled.ul`
@@ -57,11 +51,18 @@ const Styled_icon = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
 export default function Navbar() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   return (
-    <>
-      <Logo />
+    <div className="container">
+      <div className="d-flex justify-content-center py-3">
+        <img
+          style={{ width: 150 }}
+          alt="logo"
+          src="https://katelesterinteriors.com/wp-content/uploads/2019/10/KL_interiors.svg"
+        />
+      </div>
       <StyledMenuContainer className="d-block d-lg-none">
         <Styled_icon onClick={() => setShowMobileMenu(!showMobileMenu)}>
           <DehazeIcon />
@@ -93,6 +94,6 @@ export default function Navbar() {
           </Styled_li>
         </Styled_ul>
       </StyledMenuContainer>
-    </>
+    </div>
   );
 }
