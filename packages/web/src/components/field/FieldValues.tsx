@@ -337,7 +337,7 @@ export default function ItemsFieldsMap({
           field={field}
           key={field._id}
           showAuthor={showAuthor}
-          isPublish={isPublish}
+          isPublish={false}
           guest={guest}
           setFieldValueCount={(value) => setFieldValueCount(index, value)}
         />

@@ -292,6 +292,7 @@ export default function Screen({
                 <ImageList media={data.getListItemBySlug.media} />
               </>
             )}
+
             <FieldValues
               toggleLeftNavigation={(value) => setState({ ...state, hideLeftNavigation: value })}
               pushToAnchor={pushToAnchor}

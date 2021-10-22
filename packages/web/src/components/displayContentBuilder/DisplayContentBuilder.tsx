@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-
 import {
   GET_FIELDS_BY_TYPE,
   GET_FIELD_VALUES_BY_FIELD,

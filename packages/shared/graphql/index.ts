@@ -7,7 +7,7 @@ import projectConfig from '../index';
 
 let url = projectConfig.appsyncGraphqlEndpoint;
 let region = projectConfig.appsyncRegion;
-let apiKey = projectConfig.appsyncRegion;
+let apiKey = projectConfig.appsyncApiKey;
 
 if (
   process.env.NODE_ENV === 'development' &&
