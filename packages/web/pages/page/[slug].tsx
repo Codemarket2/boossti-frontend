@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-
 import { GET_LIST_ITEM_BY_SLUG } from '@frontend/shared/graphql/query/list';
 import { guestClient } from '@frontend/shared/graphql';
 import Loading from '../../src/components/common/Loading';
 import NotFound from '../../src/components/common/NotFound';
 import DisplayContentBuilder from '../../src/components/displayContentBuilder/DisplayContentBuilder';
 import AuthRequired from '../../src/components/common/AuthRequired';
+import AppBar from '../../src/components/common/AppBar';
 
 function Card({ slug }) {
   const [payload, setPayload] = useState(null);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     getListItemData();
   }, []);
@@ -21,13 +22,16 @@ function Card({ slug }) {
         variables: { slug },
       });
       setPayload(data);
+      setLoading(false);
     } catch (error) {
       console.log(error.message);
+      setLoading(false);
     }
   };
 
   return (
     <>
+      <AppBar />
       {payload?.getListItemBySlug?.active ? (
         <>
           {payload?.getListItemBySlug?.authenticateUser ? (
@@ -44,6 +48,8 @@ function Card({ slug }) {
             />
           )}
         </>
+      ) : loading ? (
+        <Loading />
       ) : (
         <NotFound />
       )}

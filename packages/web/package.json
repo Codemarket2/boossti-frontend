@@ -27,8 +27,6 @@
     "@material-ui/icons": "4.11.2",
     "@material-ui/lab": "4.0.0-alpha.39",
     "@material-ui/pickers": "^3.3.10",
-    "@stripe/react-stripe-js": "1.4.1",
-    "@stripe/stripe-js": "1.16.0",
     "aos": "2.3.4",
     "axios": "^0.22.0",
     "bootstrap": "4.4.1",

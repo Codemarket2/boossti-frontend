@@ -91,7 +91,7 @@ export default function FieldValueCard({
           </IconButton>
         </div>
       )} */}
-      <CardContent className="mb-5">
+      <CardContent className="mb-5 p-0">
         {field.fieldType === 'date' ? (
           moment(fieldValue.value).format('L')
         ) : field.fieldType === 'type' ? (

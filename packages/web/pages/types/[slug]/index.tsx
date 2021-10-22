@@ -1,6 +1,4 @@
 import { useRouter } from 'next/router';
-
-import Head from '../../../src/components/common/Head';
 import { GET_LIST_TYPE_BY_SLUG } from '@frontend/shared/graphql/query/list';
 import TypeScreen from '../../../src/screens/TypeScreen';
 import Loading from '../../../src/components/common/Loading';
