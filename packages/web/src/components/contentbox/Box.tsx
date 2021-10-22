@@ -113,11 +113,11 @@ export default function Box({ onSave, onClose, data }) {
   }, []);
 
   const handleClose = () => {
-    jQuery(document).ready(function ($) {
+    jQuery(document).ready(async function ($) {
       const sHTML = $('.is-wrapper').data('contentbox').html();
       const sMainCss = $('.is-wrapper').data('contentbox').mainCss();
       const sSectionCss = $('.is-wrapper').data('contentbox').sectionCss();
-      onSave(sHTML, sMainCss, sSectionCss);
+      await onSave(sHTML, sMainCss, sSectionCss);
       $('.is-wrapper').data('contentbox').destroy();
       onClose();
     });

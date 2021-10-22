@@ -6,17 +6,29 @@ import { seprator } from './seprator';
 
 export default function FieldContentBox({ _id }: any) {
   const { data, error, loading } = useGetFieldValue(_id);
+  // const [state, setState] = useState()
   const { handleUpdateField } = useUpdateFieldValue();
   const router = useRouter();
 
   const onSave = async (sPageHTML, sMainCss, sSectionCss) => {
-    const value = `${sPageHTML}${seprator}${sMainCss}${seprator}${sSectionCss}`;
-    const payload = {
-      _id,
-      value,
-    };
-    const res = await handleUpdateField(payload);
-    // console.log('Saved', res);
+    try {
+      if (sPageHTML === '') {
+        const anwser = confirm('Are you sure clear');
+        if (!anwser) {
+          return null;
+        }
+      }
+      const value = `${sPageHTML}${seprator}${sMainCss}${seprator}${sSectionCss}`;
+      const payload = {
+        _id,
+        value,
+      };
+      await handleUpdateField(payload);
+      console.log('saved');
+    } catch (error) {
+      console.log('Error while auto save', error);
+      alert('Error while auto save' + error.message);
+    }
   };
 
   if (error) {

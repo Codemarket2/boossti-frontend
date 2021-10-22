@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import { ThemeProvider as StyledProvider } from 'styled-components';
 import { AppProps } from 'next/app';
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
 import Amplify, { Hub } from 'aws-amplify';
 import { useSelector } from 'react-redux';
 import { wrapper } from '../src/utils/store';
@@ -48,8 +46,6 @@ Amplify.configure({
     redirectSignOut: customsSignOutUrl,
   },
 });
-
-const stripePromise = loadStripe(projectConfig.stripePublishableKey);
 
 function App({ Component, pageProps }: AppProps) {
   const { getUser } = useCurrentAuthenticatedUser();
@@ -110,15 +106,13 @@ function App({ Component, pageProps }: AppProps) {
     <ApolloProvider client={client}>
       <MuiThemeProvider theme={theme}>
         <StyledProvider theme={theme}>
-          <Elements stripe={stripePromise}>
-            <Head>
-              <title>{projectConfig.title}</title>
-              <link rel="icon" href="/favicon.ico" />
-            </Head>
-            <LoadingBar />
-            <CssBaseline />
-            <Component {...pageProps} />
-          </Elements>
+          <Head>
+            <title>{projectConfig.title}</title>
+            <link rel="icon" href="/favicon.ico" />
+          </Head>
+          <LoadingBar />
+          <CssBaseline />
+          <Component {...pageProps} />
         </StyledProvider>
       </MuiThemeProvider>
     </ApolloProvider>
