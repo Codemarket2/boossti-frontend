@@ -49,3 +49,4 @@ cypress/videos/*
 sw.js
 sw.js.map
 public/workbox
+public/workbox-*.js

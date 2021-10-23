@@ -20,6 +20,102 @@ var _snippets_path = _path();
 var data_basic = {
   snippets: [
     {
+      thumbnail: 'preview/navbar.png',
+      category: '120',
+      html: `<nav class="container">
+      <div class="d-flex justify-content-center py-3">
+        <img
+          style="width: 150px"
+          alt="logo"
+          src="https://katelesterinteriors.com/wp-content/uploads/2019/10/KL_interiors.svg"
+        />
+      </div>
+      <div
+        style="border: 1px solid #bdbdbc; border-right: none; border-left: none"
+        class="py-2 d-block d-lg-none"
+      >
+        <div class="d-flex justify-content-center align-items-center font-weight-bold">
+          <span class="ml-1">Menu</span>
+        </div>
+      </div>
+      <div
+        style="border: 1px solid #bdbdbc; border-right: none; border-left: none"
+        class="p-2 d-block"
+      >
+        <ul style="list-style-type: none" class="d-flex justify-content-between m-0">
+          <li>
+            <a class="text-dark text-decoration-none" href="#"> HOME </a>
+          </li>
+          <li>
+            <a class="text-dark text-decoration-none" href="#"> ABOUT </a>
+          </li>
+          <li>
+            <a class="text-dark text-decoration-none" href="#"> PROCESS </a>
+          </li>
+          <li>
+            <a class="text-dark text-decoration-none" href="#"> COMPLETED PROJECTS </a>
+          </li>
+          <li>
+            <a class="text-dark text-decoration-none" href="#"> CONTACT </a>
+          </li>
+          <li>
+            <a class="text-dark text-decoration-none" href="#"> BLOG </a>
+          </li>
+          <li>
+            <a class="text-dark text-decoration-none" href="#"> katelesterHOME </a>
+          </li>
+        </ul>
+      </div>
+    </nav>`,
+    },
+    {
+      thumbnail: 'preview/footer.png',
+      category: '120',
+      html: ` <footer class="container">
+      <div class="py-1" style="border: 1px solid #bdbdbc; border-right: none; border-left: none">
+        <div class="d-flex justify-content-center align-items-center align-content-center">
+          <h3 style="font-size: 15px" class="m-0">Follow Us On:</h3>
+          <ul style="list-style-type: none" class="d-flex pl-2 m-0 p-0">
+            <li>
+              <a class="text-dark mx-2" href="https://www.facebook.com/">
+                <i style="font-size: 20px" class="icon ion-social-facebook"></i>
+              </a>
+            </li>
+            <li>
+              <a class="text-dark mx-2" href="https://www.pinterest.com/">
+                <i style="font-size: 20px" class="icon ion-social-pinterest"></i>
+              </a>
+            </li>
+            <li>
+              <a class="text-dark mx-2" href="https://www.instagram.com/">
+                <i style="font-size: 20px" class="icon ion-social-instagram"></i>
+              </a>
+            </li>
+            <li>
+              <a class="text-dark mx-2" href="https://twitter.com/">
+                <i style="font-size: 20px" class="icon ion-social-twitter"></i>
+              </a>
+            </li>
+            <li>
+              <a class="text-dark mx-2" href="#">
+                <img
+                  class="m-0 p-0"
+                  width="14px"
+                  src="https://katelesterinteriors.com/wp-content/uploads/2020/11/houzz-logo.png"
+                />
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <p class="text-center mt-2">
+        KATE LESTER INTERIORS • 837 PACIFIC COAST HIGHWAY • HERMOSA BEACH, CA 90254 • T:
+        310.372.0504 • INFO@KATELESTERINTERIORS.COM <br />
+        © 2011-2019 Kate Lester Interiors | All Rights Reserved
+      </p>
+    </footer>`,
+    },
+    {
       thumbnail: 'preview/basic-01.png',
       category: '120',
       html:
@@ -32,7 +128,6 @@ var data_basic = {
         '</div>' +
         '</div>',
     },
-
     {
       thumbnail: 'preview/basic-02.png',
       category: '120',
@@ -173,11 +268,7 @@ var data_basic = {
       thumbnail: 'preview/basic-13.png',
       category: '120',
       html:
-        '<div class="row clearfix">' +
-        '<div class="column full">' +
-        '<hr>' +
-        '</div>' +
-        '</div>',
+        '<div class="row clearfix">' + '<div class="column full">' + '<hr>' + '</div>' + '</div>',
     },
 
     {
@@ -292,7 +383,7 @@ var data_basic = {
             '});' +
             '</scr' +
             'ipt>' +
-            ''
+            '',
         ) +
         '" data-settings="' +
         encodeURIComponent(
@@ -318,7 +409,7 @@ var data_basic = {
             '"caption": "", "link": "", "width": "450", "align": "", "position": "bottom left"' +
             '}' +
             ']' +
-            '}]'
+            '}]',
         ) +
         '"' +
         '>' +
@@ -394,7 +485,7 @@ var data_basic = {
             '' +
             '</scr' +
             'ipt>' +
-            ''
+            '',
         ) +
         '" data-settings="' +
         encodeURIComponent(
@@ -408,7 +499,7 @@ var data_basic = {
             '"hoverpause":true,' +
             '"arrow":true,' +
             '"dots":false' +
-            '}'
+            '}',
         ) +
         '">' +
         '</div>' +
@@ -438,7 +529,7 @@ var data_basic = {
             "document.querySelector('#{id}').innerHTML ='<b>Hello World..!</b>';" +
             '});' +
             '</scr' +
-            'ipt>'
+            'ipt>',
         ) +
         '">' +
         '</div>' +
@@ -13905,19 +13996,13 @@ var data_basic = {
     {
       thumbnail: 'preview/button-02.png',
       category: '119',
-      html:
-        '<div>' +
-        '<a href="#" class="is-btn is-btn-ghost2 is-upper">Read More</a>' +
-        '</div>',
+      html: '<div>' + '<a href="#" class="is-btn is-btn-ghost2 is-upper">Read More</a>' + '</div>',
     },
 
     {
       thumbnail: 'preview/button-03.png',
       category: '119',
-      html:
-        '<div>' +
-        '<a href="#" class="is-btn is-btn-ghost1 is-upper">Buy Now</a>' +
-        '</div>',
+      html: '<div>' + '<a href="#" class="is-btn is-btn-ghost1 is-upper">Buy Now</a>' + '</div>',
     },
 
     {

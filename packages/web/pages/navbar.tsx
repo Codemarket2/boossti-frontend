@@ -1,7 +1,6 @@
-import React from 'react';
-
 import Navbar from '../src/components/common/Navbar';
 import Footer from '../src/components/common/Footer';
+
 export default function navbar() {
   return (
     <>
