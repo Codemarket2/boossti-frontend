@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import HomeScreen from '../src/screens/HomeScreen';
 import InitialLoading from '../src/components/common/InitialLoading';
 import Head from '../src/components/common/Head';
+import HomePage from '../src/components/displayContentBuilder/HomePage';
 import 'aos/dist/aos.css';
 
 export default function Page() {
@@ -36,7 +37,8 @@ export default function Page() {
   return (
     <>
       <Head />
-      <HomeScreen />
+      {/* <HomeScreen /> */}
+      <HomePage />
     </>
   );
 }
