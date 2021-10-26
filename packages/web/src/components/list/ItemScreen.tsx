@@ -225,6 +225,7 @@ export default function Screen({
                   <AppSwitch
                     id={data?.getListItemBySlug?._id}
                     active={data?.getListItemBySlug?.active}
+                    slug={data?.getListItemBySlug?.slug}
                   />
                   Preview
                   <IconButton onClick={handlePreview}>
