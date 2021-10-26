@@ -3,11 +3,10 @@ import { useSelector } from 'react-redux';
 import { Auth } from 'aws-amplify';
 import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth/lib/types';
 import { useRouter } from 'next/router';
-import HomeScreen from '../src/screens/HomeScreen';
 import InitialLoading from '../src/components/common/InitialLoading';
 import Head from '../src/components/common/Head';
 import HomePage from '../src/components/displayContentBuilder/HomePage';
-import 'aos/dist/aos.css';
+// import 'aos/dist/aos.css';
 
 export default function Page() {
   const router = useRouter();
@@ -37,7 +36,6 @@ export default function Page() {
   return (
     <>
       <Head />
-      {/* <HomeScreen /> */}
       <HomePage />
     </>
   );

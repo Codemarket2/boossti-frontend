@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import Layout2 from '../common/Layout2';
 import { GET_LIST_ITEM_BY_SLUG } from '@frontend/shared/graphql/query/list';
 import { guestClient } from '@frontend/shared/graphql';
 import Loading from '../common/Loading';
 import NotFound from '../common/NotFound';
 import DisplayContentBuilder from './DisplayContentBuilder';
 import AuthRequired from '../common/AuthRequired';
-import Navbar from '../common/Navbar';
-import Footer from '../common/Footer';
 
 export default function Card() {
   const slugName = 'home';
@@ -33,8 +31,7 @@ export default function Card() {
   };
 
   return (
-    <>
-      <Navbar />
+    <Layout2>
       {payload?.getListItemBySlug?.active ? (
         <>
           {payload?.getListItemBySlug?.authenticateUser ? (
@@ -56,7 +53,6 @@ export default function Card() {
       ) : (
         <NotFound />
       )}
-      <Footer />
-    </>
+    </Layout2>
   );
 }
