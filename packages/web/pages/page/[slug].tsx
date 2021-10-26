@@ -6,8 +6,7 @@ import Loading from '../../src/components/common/Loading';
 import NotFound from '../../src/components/common/NotFound';
 import DisplayContentBuilder from '../../src/components/displayContentBuilder/DisplayContentBuilder';
 import AuthRequired from '../../src/components/common/AuthRequired';
-import Navbar from '../../src/components/common/Navbar';
-import Footer from '../../src/components/common/Footer';
+import Layout2 from '../../src/components/common/Layout2';
 
 function Card({ slug }) {
   const [payload, setPayload] = useState(null);
@@ -31,8 +30,8 @@ function Card({ slug }) {
   };
 
   return (
-    <>
-      <Navbar />
+    <Layout2>
+      {/* <Navbar /> */}
       {payload?.getListItemBySlug?.active ? (
         <>
           {payload?.getListItemBySlug?.authenticateUser ? (
@@ -54,8 +53,8 @@ function Card({ slug }) {
       ) : (
         <NotFound />
       )}
-      <Footer />
-    </>
+      {/* <Footer /> */}
+    </Layout2>
   );
 }
 export default function Page() {
