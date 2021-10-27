@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { getSepratorValue } from './seprator';
+import Backdrop from '../common/Backdrop';
+
 const UPLOAD_ENDPOINT = {
   saveimage: '/api/saveimage',
   savecover: '/api/savecover',
@@ -8,8 +11,10 @@ const UPLOAD_ENDPOINT = {
   saveimageModule: '/api/saveimage-module',
 };
 
-export default function Box({ onSave, onClose, data }) {
+export default function Box({ onSave, onClose, data, autoSaveLoading }) {
   const [init, setInit] = useState(false);
+  const [showBackdrop, setShowBackdrop] = useState(false);
+
   useEffect(() => {
     // if (mainCss) {
     //   document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', mainCss);
@@ -114,6 +119,7 @@ export default function Box({ onSave, onClose, data }) {
 
   const handleClose = () => {
     jQuery(document).ready(async function ($) {
+      setShowBackdrop(true);
       const sHTML = $('.is-wrapper').data('contentbox').html();
       const sMainCss = $('.is-wrapper').data('contentbox').mainCss();
       const sSectionCss = $('.is-wrapper').data('contentbox').sectionCss();
@@ -143,9 +149,11 @@ export default function Box({ onSave, onClose, data }) {
 
   return (
     <div>
+      <Backdrop open={showBackdrop || !init} />
       <div className="position-fixed m-3" style={{ zIndex: 999, right: 0 }}>
         <Button size="small" variant="contained" color="primary" onClick={handleClose}>
           Close
+          {autoSaveLoading && <CircularProgress className="ml-2" size={15} color="secondary" />}
         </Button>
       </div>
       <div className="is-wrapper"></div>

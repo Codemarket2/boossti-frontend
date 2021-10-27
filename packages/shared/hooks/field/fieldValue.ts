@@ -27,13 +27,15 @@ export function useCreateFieldValue() {
 }
 
 export function useUpdateFieldValue() {
-  const [updateFieldValueMutation] = useMutation(UPDATE_FIELD_VALUE);
+  const [updateFieldValueMutation, { loading: updateFieldValueLoading }] = useMutation(
+    UPDATE_FIELD_VALUE,
+  );
   const handleUpdateField = async (payload) => {
     return await updateFieldValueMutation({
       variables: payload,
     });
   };
-  return { handleUpdateField };
+  return { handleUpdateField, updateFieldValueLoading };
 }
 
 export function useGetFieldValue(_id) {

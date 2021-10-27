@@ -6,17 +6,17 @@ import { seprator } from './seprator';
 
 export default function FieldContentBox({ _id }: any) {
   const { data, error, loading } = useGetFieldValue(_id);
-  // const [state, setState] = useState()
-  const { handleUpdateField } = useUpdateFieldValue();
+  const { handleUpdateField, updateFieldValueLoading } = useUpdateFieldValue();
   const router = useRouter();
 
   const onSave = async (sPageHTML, sMainCss, sSectionCss) => {
     try {
       if (sPageHTML === '') {
-        const anwser = confirm('Are you sure clear');
-        if (!anwser) {
-          return null;
-        }
+        return null;
+        // const anwser = confirm('Are you sure clear');
+        // if (!anwser) {
+        //   return null;
+        // }
       }
       const value = `${sPageHTML}${seprator}${sMainCss}${seprator}${sSectionCss}`;
       const payload = {
@@ -24,22 +24,25 @@ export default function FieldContentBox({ _id }: any) {
         value,
       };
       await handleUpdateField(payload);
-      console.log('saved');
     } catch (error) {
       console.log('Error while auto save', error);
       alert('Error while auto save' + error.message);
     }
   };
 
-  if (error) {
+  if (!loading && !data) {
+    return <p>Something went wrong try refreshing the page</p>;
+  } else if (error) {
     return <ErrorLoading error={error} />;
   }
 
   return (
     <Box
+      autoSaveLoading={updateFieldValueLoading}
       data={data}
       onClose={() => {
-        router.push(`/types/${router.query.slug}/${router.query.itemSlug}`);
+        window.location.href = `/types/${router.query.slug}/${router.query.itemSlug}`;
+        // router.push(`/types/${router.query.slug}/${router.query.itemSlug}`);
       }}
       onSave={onSave}
     />

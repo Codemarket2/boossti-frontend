@@ -3,8 +3,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import styled from 'styled-components';
 
 const StyledBackdrop = styled(Backdrop)`
-  z-index: ${(props) => props.theme.zIndex.tooltip + 1} !important;
-  color: '#fff';
+  z-index: ${(props) => props.theme.zIndex.tooltip + 9999} !important;
 `;
 
 interface IProps {

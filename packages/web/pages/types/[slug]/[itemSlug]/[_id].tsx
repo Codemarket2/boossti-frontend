@@ -12,6 +12,7 @@ export default function Page() {
         `<link href="/contentbox/contentbox.css" rel="stylesheet" type="text/css" />`,
       );
   }, []);
+
   if (query && query._id) {
     return <FieldContentBox _id={query._id} />;
   } else {

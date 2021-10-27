@@ -97,8 +97,8 @@ function ItemOneFields({
     if (field.fieldType === 'contentBox') {
       let payload = { parentId: parentId, field: field._id, value: '' };
       const response = await handleCreateField(payload);
-      console.log('response', response.data.createFieldValue._id);
-      router.push(`/types/${query.slug}/${query.itemSlug}/${response.data.createFieldValue._id}`);
+      window.location.href = `/types/${query.slug}/${query.itemSlug}/${response.data.createFieldValue._id}`;
+      // router.push(`/types/${query.slug}/${query.itemSlug}/${response.data.createFieldValue._id}`);
     } else {
       if (field.fieldType === 'contentBuilder') {
         toggleLeftNavigation(true);
@@ -272,8 +272,8 @@ function ItemOneFields({
         onDelete={() => handleDelete(state.selectedFieldValue._id, deleteCallback)}
         onEdit={() => {
           if (field.fieldType === 'contentBox') {
-            // router.push(`/box/${state.selectedFieldValue._id}`);
-            router.push(`/types/${query.slug}/${query.itemSlug}/${state.selectedFieldValue._id}`);
+            window.location.href = `/types/${query.slug}/${query.itemSlug}/${state.selectedFieldValue._id}`;
+            // router.push(`/types/${query.slug}/${query.itemSlug}/${state.selectedFieldValue._id}`);
           } else {
             if (field.fieldType === 'contentBuilder') {
               toggleLeftNavigation(true);
