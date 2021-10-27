@@ -3,6 +3,7 @@ import { GET_LIST_TYPE_BY_SLUG } from '@frontend/shared/graphql/query/list';
 import TypeScreen from '../../../src/screens/TypeScreen';
 import Loading from '../../../src/components/common/Loading';
 import { guestClient } from '@frontend/shared/graphql';
+import Head from '../../../src/components/common/Head';
 
 interface IProps {
   metaTags: any;
@@ -11,10 +12,12 @@ export default function Page({ metaTags }: IProps) {
   const router = useRouter();
   const { slug } = router.query;
 
-  if (slug) {
-    return <TypeScreen slug={slug} metaTags={metaTags} />;
-  }
-  return <Loading />;
+  return (
+    <>
+      <Head {...metaTags} />
+      {slug ? <TypeScreen slug={slug} /> : <Loading />}
+    </>
+  );
 }
 
 export async function getServerSideProps(context) {

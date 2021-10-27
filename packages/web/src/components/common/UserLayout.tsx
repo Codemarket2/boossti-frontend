@@ -7,7 +7,6 @@ import Container from './Container';
 import { DivContainer } from './Container';
 import Paper from '@material-ui/core/Paper';
 import styled from 'styled-components';
-import Head from './Head';
 
 const StyledPaper = styled(Paper)`
   background-color: ${(props) => props.theme.palette.background.level2} !important;
@@ -15,10 +14,6 @@ const StyledPaper = styled(Paper)`
 `;
 
 interface IProps {
-  title?: string;
-  description?: string;
-  image?: string;
-  url?: string;
   children: ReactNode;
   authRequired?: boolean;
   mustAdmin?: boolean;
@@ -28,10 +23,6 @@ interface IProps {
 
 const UserLayout = ({
   children,
-  title,
-  description,
-  image,
-  url,
   authRequired = false,
   mustAdmin = false,
   redirectPath,
@@ -40,7 +31,6 @@ const UserLayout = ({
   const authenticated = useSelector(({ auth }: any) => auth.authenticated);
   return (
     <StyledPaper elevation={0}>
-      <Head title={title} description={description} image={image} url={url} />
       <AppBar />
       {container ? (
         <Container>

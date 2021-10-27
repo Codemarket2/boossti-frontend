@@ -13,7 +13,7 @@ import projectConfig from '@frontend/shared';
 import { createMuiTheme, ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import LoadingBar from '../src/components/common/LoadingBar';
-import Head from 'next/head';
+import Head from '../src/components/common/Head';
 import { light, dark } from '../src/components/home/theme/palette';
 
 // // CSS from node modules
@@ -106,10 +106,7 @@ function App({ Component, pageProps }: AppProps) {
     <ApolloProvider client={client}>
       <MuiThemeProvider theme={theme}>
         <StyledProvider theme={theme}>
-          <Head>
-            <title>{projectConfig.title}</title>
-            <link rel="icon" href="/favicon.ico" />
-          </Head>
+          <Head />
           <LoadingBar />
           <CssBaseline />
           <Component {...pageProps} />
