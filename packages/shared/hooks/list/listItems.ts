@@ -246,56 +246,47 @@ export function useCreateListItem({ onAlert }: IHooksProps) {
   return { handleCreate, createLoading };
 }
 
-export function useUpdatePublish(_id: string, active: boolean, slug: string) {
-  const [updatePublish, { data, loading }] = useMutation(UPDATE_PUBLISH);
-  const updateInCache = async () => {
-    const { getListItemBySlug } = await apolloClient.readQuery({
-      query: GET_LIST_ITEM_BY_SLUG,
-      variables: { slug },
-    });
-    const newData = {
-      getListItemBySlug: {
-        ...getListItemBySlug,
-        active: !active,
-      },
-    };
-    apolloClient.writeQuery({
-      query: GET_LIST_ITEM_BY_SLUG,
-      variables: { slug },
-      data: newData,
-    });
+const updateInCache = async (slug, fieldItem) => {
+  const { getListItemBySlug } = await apolloClient.readQuery({
+    query: GET_LIST_ITEM_BY_SLUG,
+    variables: { slug },
+  });
+  const newData = {
+    getListItemBySlug: {
+      ...getListItemBySlug,
+      fieldItem: !fieldItem,
+    },
   };
-
+  apolloClient.writeQuery({
+    query: GET_LIST_ITEM_BY_SLUG,
+    variables: { slug },
+    data: newData,
+  });
+};
+export function useUpdatePublish(_id: string, active: boolean, slug: string) {
+  const [updatePublish, { data }] = useMutation(UPDATE_PUBLISH);
   const handleOnChange = async () => {
-    await updateInCache();
+    await updateInCache(slug, active);
     updatePublish({
       variables: { _id, publish: !active },
     });
   };
   console.log('mutation', data);
-
   return {
     handleOnChange,
-    loading,
   };
 }
-export function useUpdateAuthentication(_id: string, isAuthenticateUser: boolean) {
-  useEffect(() => {
-    setAuthenticateUser(isAuthenticateUser);
-  }, [isAuthenticateUser]);
-  const [authenticateUser, setAuthenticateUser] = useState(isAuthenticateUser);
-  const [updateAuthentication, { data, loading }] = useMutation(UPDATE_AUTHENTICATION);
-  const handleChange = (event) => {
-    setAuthenticateUser(event.target.checked);
+export function useUpdateAuthentication(_id: string, authenticateUser: boolean, slug: string) {
+  const [updateAuthentication, { data }] = useMutation(UPDATE_AUTHENTICATION);
+  const handleOnChange = async () => {
+    await updateInCache(slug, authenticateUser);
     updateAuthentication({
-      variables: { _id, authenticateUser },
+      variables: { _id, authenticateUser: !authenticateUser },
     });
   };
   console.log('authuser', data);
   return {
-    handleChange,
-    authenticateUser,
-    loading,
+    handleOnChange,
   };
 }
 

@@ -34,7 +34,6 @@ import ImageList from '../post/ImageList';
 import NotFound from '../common/NotFound';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
 import AppSwitch from '../common/AppSwitch';
-import AppSwitch2 from '../common/AppSwitch2';
 import DisplayContentBuilder from '../displayContentBuilder/DisplayContentBuilder';
 
 interface IProps {
@@ -226,15 +225,18 @@ export default function Screen({
                     id={data?.getListItemBySlug?._id}
                     active={data?.getListItemBySlug?.active}
                     slug={data?.getListItemBySlug?.slug}
+                    fieldUser="active"
                   />
                   Preview
                   <IconButton onClick={handlePreview}>
                     <Visibility />
                   </IconButton>
                   Login Required
-                  <AppSwitch2
+                  <AppSwitch
                     id={data?.getListItemBySlug?._id}
                     authUser={data?.getListItemBySlug?.authenticateUser || false}
+                    slug={data?.getListItemBySlug?.slug}
+                    fieldUser="authUser"
                   />
                 </Typography>
                 <Typography variant="h4" className="d-flex align-items-center">
