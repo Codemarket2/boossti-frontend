@@ -1,19 +1,35 @@
-import React, { useEffect, useState } from 'react';
-import { Switch } from '@material-ui/core';
+import React from 'react';
+import Switch from '@material-ui/core/Switch';
 
-import { useUpdatePublish } from '@frontend/shared/hooks/list/listItems';
-import Backdrop from './Backdrop';
+import { useUpdateAuthentication, useUpdatePublish } from '@frontend/shared/hooks/list/listItems';
+
 interface IProps {
   id: string;
-  active: boolean;
+  authUser?: boolean;
+  active?: boolean;
+  slug: string;
+  fieldUser: string;
 }
-export default function AppSwitch({ id, active }: IProps) {
-  const { handleChange, publish, loading } = useUpdatePublish(id, active);
-  console.log({ publish });
-  if (loading) {
-    return <Backdrop open={loading} />;
-  }
+export default function AppSwitch2({ id, authUser, slug, active, fieldUser }: IProps) {
+  const { handleOnChange } = useUpdateAuthentication(id, authUser, slug);
+  const { handleOnChange: handleUpdateOnChange } = useUpdatePublish(id, active, slug);
+
   return (
-    <Switch checked={active} onChange={handleChange} inputProps={{ 'aria-label': 'controlled' }} />
+    <>
+      {fieldUser === 'active' && (
+        <Switch
+          checked={active}
+          onChange={handleUpdateOnChange}
+          inputProps={{ 'aria-label': 'controlled' }}
+        />
+      )}
+      {fieldUser === 'authUser' && (
+        <Switch
+          checked={authUser}
+          onChange={handleOnChange}
+          inputProps={{ 'aria-label': 'controlled' }}
+        />
+      )}
+    </>
   );
 }
