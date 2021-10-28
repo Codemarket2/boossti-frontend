@@ -23,6 +23,16 @@ var data_basic = {
       thumbnail: 'preview/navbar.png',
       category: '120',
       html: `<nav class="container">
+      <script>
+      function showMenu() {
+        var x = document.getElementById('myTitle');
+        if (x.className === 'p-2 d-none d-lg-block') {
+          x.className += ' show-navbar-onmobile';
+        } else {
+          x.className = 'p-2 d-none d-lg-block';
+        }
+      }
+    </script>
       <div class="d-flex justify-content-center py-3">
         <img
           style="width: 150px"
@@ -34,13 +44,14 @@ var data_basic = {
         style="border: 1px solid #bdbdbc; border-right: none; border-left: none"
         class="py-2 d-block d-lg-none"
       >
-        <div class="d-flex justify-content-center align-items-center font-weight-bold">
+        <div onclick="showMenu()"  class="d-flex justify-content-center align-items-center font-weight-bold">
           <span class="ml-1">Menu</span>
         </div>
       </div>
       <div
+        id="myTitle"
         style="border: 1px solid #bdbdbc; border-right: none; border-left: none"
-        class="p-2 d-block"
+        class="p-2 d-none d-lg-block"
       >
         <ul style="list-style-type: none" class="d-flex justify-content-between m-0">
           <li>

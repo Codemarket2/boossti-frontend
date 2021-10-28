@@ -8,8 +8,6 @@ import { ApolloProvider } from '@apollo/client/react';
 import { client } from '@frontend/shared/graphql';
 import aws_exports from '@frontend/shared/aws-exports';
 import { useCurrentAuthenticatedUser } from '@frontend/shared/hooks/auth';
-// import palette from '@frontend/shared/config/colors';
-import projectConfig from '@frontend/shared';
 import { createMuiTheme, ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import LoadingBar from '../src/components/common/LoadingBar';
@@ -18,17 +16,11 @@ import { light, dark } from '../src/components/home/theme/palette';
 
 // // CSS from node modules
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import 'aos/dist/aos.css';
-// import 'react-lazy-load-image-component/src/effects/opacity.css';
-// import 'leaflet/dist/leaflet.css';
-// import 'swiper/css/swiper.min.css';
-// import 'semantic-ui-css/semantic.min.css';
 
 import '../src/assets/css/ckeditor.css';
+import '../src/assets/css/common.css';
 
 import '../src/components/contentbuilder/contentbuilder.css';
-// import '../src/components/contentbuilder/assets/minimalist-blocks/content.css';
-// import '../src/components/contentbuilder/assets/ionicons/css/ionicons.min.css';
 
 const customsSignInUrl =
   process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : 'https://www.vijaa.com/';
