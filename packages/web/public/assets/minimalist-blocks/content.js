@@ -22,58 +22,58 @@ var data_basic = {
     {
       thumbnail: 'preview/navbar.png',
       category: '120',
-      html: `<nav class="container">
+      html: `<nav>
       <script>
-      function showMenu() {
-        var x = document.getElementById('myTitle');
-        if (x.className === 'p-2 d-none d-lg-block') {
-          x.className += ' show-navbar-onmobile';
-        } else {
-          x.className = 'p-2 d-none d-lg-block';
+        function showMenu() {
+          var x = document.getElementById('myTitle');
+          if (x.className === 'p-2 d-none d-lg-block') {
+            x.className += ' show-navbar-onmobile';
+          } else {
+            x.className = 'p-2 d-none d-lg-block';
+          }
         }
-      }
-    </script>
+      </script>
       <div class="d-flex justify-content-center py-3">
         <img
-          style="width: 150px"
-          alt="logo"
-          src="https://katelesterinteriors.com/wp-content/uploads/2019/10/KL_interiors.svg"
+          data-filename="vijaa-logo_1.png"
+          src="https://vijaa-content-bucket202938-dev.s3.us-east-1.amazonaws.com/public/media/testing/4c43a089-ee3d-41b2-b38c-3166e6fe80331635471274289.jpeg"
+          alt=""
         />
       </div>
       <div
         style="border: 1px solid #bdbdbc; border-right: none; border-left: none"
         class="py-2 d-block d-lg-none"
       >
-        <div onclick="showMenu()"  class="d-flex justify-content-center align-items-center font-weight-bold">
-          <span class="ml-1">Menu</span>
+        <div
+          onclick="showMenu()"
+          class="d-flex justify-content-center align-items-center font-weight-bold btn"
+        >
+          <i class="icon ion-android-menu"></i>
         </div>
       </div>
       <div
         id="myTitle"
-        style="border: 1px solid #bdbdbc; border-right: none; border-left: none"
+        style="border: 1px solid #bdbdbc; border-right: none; border-left: none; text-align: center"
         class="p-2 d-none d-lg-block"
       >
-        <ul style="list-style-type: none" class="d-flex justify-content-between m-0">
+        <ul style="list-style-type: none" class="d-lg-flex justify-content-between m-0 p-0">
           <li>
-            <a class="text-dark text-decoration-none" href="#"> HOME </a>
+            <a class="text-dark text-decoration-none" href="/" title="">HOME</a>
           </li>
           <li>
-            <a class="text-dark text-decoration-none" href="#"> ABOUT </a>
+            <a class="text-dark text-decoration-none" href="#about" title="">ABOUT</a>
           </li>
           <li>
-            <a class="text-dark text-decoration-none" href="#"> PROCESS </a>
+            <a class="text-dark text-decoration-none" href="/page/process" title="">PARTNERS</a>
           </li>
           <li>
-            <a class="text-dark text-decoration-none" href="#"> COMPLETED PROJECTS </a>
+            <a class="text-dark text-decoration-none" href="/page/events">EVENTS</a>
           </li>
           <li>
-            <a class="text-dark text-decoration-none" href="#"> CONTACT </a>
+            <a class="text-dark text-decoration-none" href="/page/contact" title="">CONTACT</a>
           </li>
           <li>
-            <a class="text-dark text-decoration-none" href="#"> BLOG </a>
-          </li>
-          <li>
-            <a class="text-dark text-decoration-none" href="#"> katelesterHOME </a>
+            <a class="text-dark text-decoration-none" href="/auth" title="">SIGN IN</a>
           </li>
         </ul>
       </div>
@@ -82,7 +82,7 @@ var data_basic = {
     {
       thumbnail: 'preview/footer.png',
       category: '120',
-      html: ` <footer class="container">
+      html: ` <footer>
       <div class="py-1" style="border: 1px solid #bdbdbc; border-right: none; border-left: none">
         <div class="d-flex justify-content-center align-items-center align-content-center">
           <h3 style="font-size: 15px" class="m-0">Follow Us On:</h3>
