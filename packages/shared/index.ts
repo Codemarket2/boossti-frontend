@@ -12,11 +12,11 @@ interface IProjectConfig {
 }
 
 const projectConfig: IProjectConfig = {
-  title: 'Vijaa',
-  description: 'Learn, Share & Get Well Soon, Stories about prevention and survival.',
+  title: 'Boossti',
+  description: 'Dedicated web development team for local businesses.',
   image:
-    'https://vijaa-content-bucket202938-dev.s3.amazonaws.com/public/media/default/vijaalogo.jpeg',
-  url: 'https://vijaa.com',
+    'https://vijaa-content-bucket202938-dev.s3.us-east-1.amazonaws.com/public/media/testing/a7eceae1-6e31-4469-957c-8c020d8292361635602961218.jpeg',
+  url: 'https://boossti.com',
   stripePublishableKey:
     'pk_test_517LnJnDPrb5EfwdRchW3z9AVO6xddwRZtSHqD311B4HW5j9Ouh9dmzU6UDiwH5Hwgh7jWSaqiQn7phQGitMPS0C500jhmK4yHw',
   defaultProfile:
