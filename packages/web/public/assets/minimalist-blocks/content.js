@@ -77,7 +77,7 @@ var data_basic = {
           <li>
             <a
               id="navitem-contact"
-              class="text-danger text-decoration-none"
+              class="text-dark text-decoration-none"
               href="/page/contact"
               title=""
               >CONTACT</a
