@@ -23,16 +23,6 @@ var data_basic = {
       thumbnail: 'preview/navbar.png',
       category: '120',
       html: `<nav>
-      <script>
-        function showMenu() {
-          var x = document.getElementById('myTitle');
-          if (x.className === 'p-2 d-none d-lg-block') {
-            x.className += ' show-navbar-onmobile';
-          } else {
-            x.className = 'p-2 d-none d-lg-block';
-          }
-        }
-      </script>
       <div class="d-flex justify-content-center py-3">
         <img
           data-filename="vijaa-logo_1.png"
@@ -58,25 +48,89 @@ var data_basic = {
       >
         <ul style="list-style-type: none" class="d-lg-flex justify-content-between m-0 p-0">
           <li>
-            <a class="text-dark text-decoration-none" href="/" title="">HOME</a>
+            <a id="navitem-home" class="text-dark text-decoration-none" href="/" title="">HOME</a>
           </li>
           <li>
-            <a class="text-dark text-decoration-none" href="#about" title="">ABOUT</a>
+            <a
+              onclick="removeHighlight('about')"
+              id="navitem-about"
+              class="text-dark text-decoration-none"
+              href="#about"
+              title=""
+              >ABOUT</a
+            >
           </li>
           <li>
-            <a class="text-dark text-decoration-none" href="/page/process" title="">PARTNERS</a>
+            <a
+              id="navitem-partners"
+              class="text-dark text-decoration-none"
+              href="/page/partners"
+              title=""
+              >PARTNERS</a
+            >
           </li>
           <li>
-            <a class="text-dark text-decoration-none" href="/page/events">EVENTS</a>
+            <a id="navitem-events" class="text-dark text-decoration-none" href="/page/events"
+              >EVENTS</a
+            >
           </li>
           <li>
-            <a class="text-dark text-decoration-none" href="/page/contact" title="">CONTACT</a>
+            <a
+              id="navitem-contact"
+              class="text-danger text-decoration-none"
+              href="/page/contact"
+              title=""
+              >CONTACT</a
+            >
           </li>
           <li>
-            <a class="text-dark text-decoration-none" href="/auth" title="">SIGN IN</a>
+            <a id="navitem-signin" class="text-dark text-decoration-none" href="/auth" title=""
+              >SIGN IN</a
+            >
           </li>
         </ul>
       </div>
+      <script>
+        let selector = null;
+        if (window.location.href.includes('#')) {
+          selector = window.location.href.split('#').pop();
+        } else {
+          selector = window.location.href.split('/').pop();
+          if (!selector || selector === '') {
+            selector = 'home';
+          }
+        }
+        if (selector) {
+          const selectedNavItem = document.getElementById('navitem-' + selector);
+          if (selectedNavItem) {
+            selectedNavItem.className = selectedNavItem.className.replace(
+              'text-dark',
+              'text-primary',
+            );
+          }
+        }
+        function removeHighlight(select) {
+          const removeNav = document.querySelector('.text-primary');
+          if (removeNav) {
+            removeNav.className = removeNav.className.replace('text-primary', 'text-dark');
+          }
+          if (select) {
+            const selectedNavItem = document.getElementById('navitem-' + select);
+            selectedNavItem.className = selectedNavItem.className.replace(
+              'text-dark',
+              'text-primary',
+            );
+          }
+        }
+        function showMenu() {
+          var x = document.getElementById('myTitle');
+          if (x.className === 'p-2 d-none d-lg-block') {
+            x.className += ' show-navbar-onmobile';
+          } else {
+            x.className = 'p-2 d-none d-lg-block';
+          }
+        }
+      </script>
     </nav>`,
     },
     {
