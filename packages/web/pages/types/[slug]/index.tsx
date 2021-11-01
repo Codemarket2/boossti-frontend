@@ -29,15 +29,16 @@ export async function getServerSideProps(context) {
       query: GET_LIST_TYPE_BY_SLUG,
       variables: { slug },
     });
-    if (response.data && response.data.getListTypeBySlug) {
-      const description = response.data.getListTypeBySlug.description.replace(regex, '');
+    if (response?.data && response?.data?.getListTypeBySlug) {
+      const description = response?.data?.getListTypeBySlug?.description.replace(regex, '');
       metaTags = {
-        title: response.data.getListTypeBySlug.title,
-        // description: response.data.getListTypeBySlug.description,
-        description: description,
+        title: response?.data?.getListTypeBySlug?.title
+          ? response?.data?.getListTypeBySlug?.title
+          : null,
+        description: description ? description : null,
         image:
-          response.data.getListTypeBySlug.media.length >= 1
-            ? response.data.getListTypeBySlug.media[0].url
+          response?.data?.getListTypeBySlug?.media?.length >= 1
+            ? response?.data?.getListTypeBySlug?.media[0]?.url
             : null,
       };
     }
