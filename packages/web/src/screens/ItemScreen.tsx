@@ -6,10 +6,9 @@ import ItemScreen from '../components/list/ItemScreen';
 interface IProps {
   slug: any;
   typeSlug: any;
-  metaTags?: any;
 }
 
-export default function Screen({ slug, typeSlug, metaTags }: IProps) {
+export default function Screen({ slug, typeSlug }: IProps) {
   const [state, setState] = useState('');
   const router = useRouter();
   const onSlugUpdate = (newSlug) => {
@@ -28,7 +27,7 @@ export default function Screen({ slug, typeSlug, metaTags }: IProps) {
   };
 
   return (
-    <UserLayout container={false} authRequired {...metaTags}>
+    <UserLayout container={false} authRequired>
       <div className="px-3">
         <ItemScreen
           onSlugUpdate={onSlugUpdate}
