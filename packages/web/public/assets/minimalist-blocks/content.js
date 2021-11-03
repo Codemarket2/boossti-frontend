@@ -22,56 +22,121 @@ var data_basic = {
     {
       thumbnail: 'preview/navbar.png',
       category: '120',
-      html: `<nav class="container">
+      html: `<nav>
       <div class="d-flex justify-content-center py-3">
         <img
-          style="width: 150px"
-          alt="logo"
-          src="https://katelesterinteriors.com/wp-content/uploads/2019/10/KL_interiors.svg"
+          data-filename="vijaa-logo_1.png"
+          src="https://vijaa-content-bucket202938-dev.s3.us-east-1.amazonaws.com/public/media/testing/4c43a089-ee3d-41b2-b38c-3166e6fe80331635471274289.jpeg"
+          alt=""
         />
       </div>
       <div
         style="border: 1px solid #bdbdbc; border-right: none; border-left: none"
         class="py-2 d-block d-lg-none"
       >
-        <div class="d-flex justify-content-center align-items-center font-weight-bold">
-          <span class="ml-1">Menu</span>
+        <div
+          onclick="showMenu()"
+          class="d-flex justify-content-center align-items-center font-weight-bold btn"
+        >
+          <i class="icon ion-android-menu"></i>
         </div>
       </div>
       <div
-        style="border: 1px solid #bdbdbc; border-right: none; border-left: none"
-        class="p-2 d-block"
+        id="myTitle"
+        style="border: 1px solid #bdbdbc; border-right: none; border-left: none; text-align: center"
+        class="p-2 d-none d-lg-block"
       >
-        <ul style="list-style-type: none" class="d-flex justify-content-between m-0">
+        <ul style="list-style-type: none" class="d-lg-flex justify-content-between m-0 p-0">
           <li>
-            <a class="text-dark text-decoration-none" href="#"> HOME </a>
+            <a id="navitem-home" class="text-dark text-decoration-none" href="/" title="">HOME</a>
           </li>
           <li>
-            <a class="text-dark text-decoration-none" href="#"> ABOUT </a>
+            <a
+              onclick="removeHighlight('about')"
+              id="navitem-about"
+              class="text-dark text-decoration-none"
+              href="#about"
+              title=""
+              >ABOUT</a
+            >
           </li>
           <li>
-            <a class="text-dark text-decoration-none" href="#"> PROCESS </a>
+            <a
+              id="navitem-partners"
+              class="text-dark text-decoration-none"
+              href="/page/partners"
+              title=""
+              >PARTNERS</a
+            >
           </li>
           <li>
-            <a class="text-dark text-decoration-none" href="#"> COMPLETED PROJECTS </a>
+            <a id="navitem-events" class="text-dark text-decoration-none" href="/page/events"
+              >EVENTS</a
+            >
           </li>
           <li>
-            <a class="text-dark text-decoration-none" href="#"> CONTACT </a>
+            <a
+              id="navitem-contact"
+              class="text-dark text-decoration-none"
+              href="/page/contact"
+              title=""
+              >CONTACT</a
+            >
           </li>
           <li>
-            <a class="text-dark text-decoration-none" href="#"> BLOG </a>
-          </li>
-          <li>
-            <a class="text-dark text-decoration-none" href="#"> katelesterHOME </a>
+            <a id="navitem-signin" class="text-dark text-decoration-none" href="/auth" title=""
+              >SIGN IN</a
+            >
           </li>
         </ul>
       </div>
+      <script>
+        let selector = null;
+        if (window.location.href.includes('#')) {
+          selector = window.location.href.split('#').pop();
+        } else {
+          selector = window.location.href.split('/').pop();
+          if (!selector || selector === '') {
+            selector = 'home';
+          }
+        }
+        if (selector) {
+          const selectedNavItem = document.getElementById('navitem-' + selector);
+          if (selectedNavItem) {
+            selectedNavItem.className = selectedNavItem.className.replace(
+              'text-dark',
+              'text-primary',
+            );
+          }
+        }
+        function removeHighlight(select) {
+          const removeNav = document.querySelector('.text-primary');
+          if (removeNav) {
+            removeNav.className = removeNav.className.replace('text-primary', 'text-dark');
+          }
+          if (select) {
+            const selectedNavItem = document.getElementById('navitem-' + select);
+            selectedNavItem.className = selectedNavItem.className.replace(
+              'text-dark',
+              'text-primary',
+            );
+          }
+        }
+        function showMenu() {
+          var x = document.getElementById('myTitle');
+          if (x.className === 'p-2 d-none d-lg-block') {
+            x.className += ' show-navbar-onmobile';
+          } else {
+            x.className = 'p-2 d-none d-lg-block';
+          }
+        }
+      </script>
     </nav>`,
     },
     {
       thumbnail: 'preview/footer.png',
       category: '120',
-      html: ` <footer class="container">
+      html: ` <footer>
       <div class="py-1" style="border: 1px solid #bdbdbc; border-right: none; border-left: none">
         <div class="d-flex justify-content-center align-items-center align-content-center">
           <h3 style="font-size: 15px" class="m-0">Follow Us On:</h3>
