@@ -27,7 +27,7 @@ export async function getServerSideProps(context) {
   try {
     const response = await guestClient.query({
       query: GET_LIST_TYPE_BY_SLUG,
-      variables: { slug },
+      variables: { slug: 'logo' },
     });
     if (response?.data && response?.data?.getListTypeBySlug) {
       const description = response?.data?.getListTypeBySlug?.description.replace(regex, '');
