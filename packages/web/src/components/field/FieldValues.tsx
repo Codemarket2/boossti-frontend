@@ -116,12 +116,22 @@ function ItemOneFields({
   const hasAlreadyAdded =
     data.getFieldValuesByItem.data.filter((v) => v.createdBy._id === currentUserId).length > 0;
 
-  const showAddButton =
+  let showAddButton =
     data.getFieldValuesByItem.data.length === 0 ||
     (field.multipleValues &&
       !guest &&
       !state.showForm &&
       (field.oneUserMultipleValues || !hasAlreadyAdded));
+
+  if (
+    showAddButton &&
+    !field.multipleValues &&
+    !field.oneUserMultipleValues &&
+    !(currentUserId === field.createdBy._id || admin)
+  ) {
+    showAddButton = false;
+  }
+
   return (
     <div key={field._id}>
       {!isPublish && (

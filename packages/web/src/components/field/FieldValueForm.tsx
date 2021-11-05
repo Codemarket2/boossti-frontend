@@ -92,12 +92,12 @@ export default function ItemFieldForm({
             {formik.values.fieldType === 'date' ? (
               <MuiPickersUtilsProvider libInstance={moment} utils={MomentUtils}>
                 <KeyboardDatePicker
-                  name="value"
+                  name="valueDate"
                   placeholder={moment().format('L')}
-                  value={formik.values.value ? moment(formik.values.value) : null}
-                  onChange={(value) => formik.setFieldValue('value', moment(value))}
-                  error={formik.touched.value && Boolean(formik.errors.value)}
-                  helperText={formik.touched.value && formik.errors.value}
+                  value={formik.values.valueDate ? moment(formik.values.valueDate) : null}
+                  onChange={(value) => formik.setFieldValue('valueDate', moment(value))}
+                  error={formik.touched.valueDate && Boolean(formik.errors.valueDate)}
+                  helperText={formik.touched.valueDate && formik.errors.valueDate}
                   format="MM/DD/YYYY"
                 />
               </MuiPickersUtilsProvider>
@@ -165,15 +165,17 @@ export default function ItemFieldForm({
               <FormControl disabled={formik.isSubmitting} component="fieldset">
                 <FormLabel component="legend">Select {label}</FormLabel>
                 <RadioGroup
-                  aria-label="value"
-                  name="value"
-                  value={formik.values.value}
+                  aria-label="valueBoolean"
+                  name="valueBoolean"
+                  value={formik.values.valueBoolean}
                   onChange={formik.handleChange}>
-                  <FormControlLabel value="yes" control={<Radio color="primary" />} label="Yes" />
-                  <FormControlLabel value="no" control={<Radio color="primary" />} label="No" />
+                  <FormControlLabel value="true" control={<Radio color="primary" />} label="Yes" />
+                  <FormControlLabel value="false" control={<Radio color="primary" />} label="No" />
                 </RadioGroup>
-                {formik.touched.value && formik.errors.value && (
-                  <FormHelperText className="text-danger">{formik.errors.value}</FormHelperText>
+                {formik.touched.valueBoolean && formik.errors.valueBoolean && (
+                  <FormHelperText className="text-danger">
+                    {formik.errors.valueBoolean}
+                  </FormHelperText>
                 )}
               </FormControl>
             ) : formik.values.fieldType === 'media' ? (
@@ -195,6 +197,20 @@ export default function ItemFieldForm({
                 value={formik.values.value}
                 onChange={(value) => formik.setFieldValue('value', value)}
               />
+            ) : formik.values.fieldType === 'number' ? (
+              <TextField
+                fullWidth
+                label={label}
+                variant="outlined"
+                name="valueNumber"
+                type="number"
+                size="small"
+                disabled={formik.isSubmitting}
+                value={formik.values.valueNumber}
+                onChange={formik.handleChange}
+                error={formik.touched.valueNumber && Boolean(formik.errors.valueNumber)}
+                helperText={formik.touched.valueNumber && formik.errors.valueNumber}
+              />
             ) : (
               <TextField
                 fullWidth
@@ -202,7 +218,7 @@ export default function ItemFieldForm({
                 variant="outlined"
                 name="value"
                 size="small"
-                type={formik.values.fieldType === 'number' ? 'number' : 'text'}
+                type="text"
                 disabled={formik.isSubmitting}
                 value={formik.values.value}
                 onChange={formik.handleChange}
