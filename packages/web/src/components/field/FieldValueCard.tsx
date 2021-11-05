@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import parse from 'html-react-parser';
 import Card from '@material-ui/core/Card';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -12,7 +12,6 @@ import moment from 'moment';
 import Link from 'next/link';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import { useRouter } from 'next/router';
-
 import ItemScreen from '../list/ItemScreen';
 import ImageList from '../post/ImageList';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
@@ -20,6 +19,7 @@ import DisplayContent from '../contentbuilder/DisplayContent';
 import DisplayContentBox from '../contentbox/DisplayContentBox';
 import SingleComment from '../comment/SingleComment';
 import { convertToSlug } from './LeftNavigation';
+import { useSelector } from 'react-redux';
 
 interface IProps {
   fieldValue: any;
@@ -48,9 +48,11 @@ export default function FieldValueCard({
   });
   const { query } = useRouter();
   const [showHideComments, setShowHideComments] = useState(false);
+  const auth = useSelector(({ auth }: any) => auth);
+
   return (
     <Card variant="outlined" style={{ border: 'none' }}>
-      {!isPublish && (
+      {!isPublish && (auth.isAdmin || auth.attributes['custom:_id'] === fieldValue.createdBy._id) && (
         <div className="d-flex justify-content-end">
           <IconButton
             style={{ zIndex: 9999 }}
@@ -93,7 +95,11 @@ export default function FieldValueCard({
       )} */}
       <CardContent className="mb-5 p-0">
         {field.fieldType === 'date' ? (
-          moment(fieldValue.value).format('L')
+          moment(fieldValue.valueDate).format('L')
+        ) : field.fieldType === 'number' ? (
+          fieldValue.valueNumber
+        ) : field.fieldType === 'boolean' ? (
+          fieldValue.valueBoolean.toString()
         ) : field.fieldType === 'type' ? (
           <div>
             <Tooltip title="More Details">
@@ -151,7 +157,6 @@ export default function FieldValueCard({
             itemSlug={convertToSlug(field.label)}
             fieldTitle={fieldValue?.itemId?.title?.trim().toLowerCase()}
           />
-          {/* {showSingleComment && <SingleComment _id={query.commentId as string} />} */}
           <SingleComment
             setShowHideComments={setShowHideComments}
             _id={query.commentId as string}

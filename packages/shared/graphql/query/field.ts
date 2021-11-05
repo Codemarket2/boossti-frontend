@@ -16,6 +16,9 @@ export const GET_FIELDS_BY_TYPE = gql`
           title
           slug
         }
+        createdBy {
+          _id
+        }
       }
     }
   }
@@ -30,6 +33,9 @@ export const GET_FIELD_VALUES_BY_FIELD = gql`
         parentId
         field
         value
+        valueDate
+        valueNumber
+        valueBoolean
         media {
           url
           caption
@@ -49,6 +55,7 @@ export const GET_FIELD_VALUES_BY_FIELD = gql`
     }
   }
 `;
+
 export const GET_FIELD_VALUE = gql`
   query MyQuery($_id: ID!) {
     getFieldValue(_id: $_id) {
@@ -56,6 +63,9 @@ export const GET_FIELD_VALUE = gql`
       parentId
       field
       value
+      valueDate
+      valueNumber
+      valueBoolean
       media {
         url
         caption

@@ -95,6 +95,9 @@ export const CREATE_FIELD_VALUE = gql`
     $parentId: ID!
     $field: ID!
     $value: String
+    $valueDate: AWSDateTime
+    $valueNumber: Int
+    $valueBoolean: Boolean
     $itemId: ID
     $media: [MediaInput]
   ) {
@@ -102,6 +105,9 @@ export const CREATE_FIELD_VALUE = gql`
       parentId: $parentId
       field: $field
       value: $value
+      valueNumber: $valueNumber
+      valueBoolean: $valueBoolean
+      valueDate: $valueDate
       itemId: $itemId
       media: $media
     ) {
@@ -109,6 +115,9 @@ export const CREATE_FIELD_VALUE = gql`
       parentId
       field
       value
+      valueDate
+      valueNumber
+      valueBoolean
       media {
         url
         caption
@@ -129,12 +138,31 @@ export const CREATE_FIELD_VALUE = gql`
 `;
 
 export const UPDATE_FIELD_VALUE = gql`
-  mutation MyMutation($_id: ID!, $value: String, $itemId: ID, $media: [MediaInput]) {
-    updateFieldValue(_id: $_id, value: $value, itemId: $itemId, media: $media) {
+  mutation MyMutation(
+    $_id: ID!
+    $value: String
+    $valueDate: AWSDateTime
+    $valueNumber: Int
+    $valueBoolean: Boolean
+    $itemId: ID
+    $media: [MediaInput]
+  ) {
+    updateFieldValue(
+      _id: $_id
+      value: $value
+      valueNumber: $valueNumber
+      valueBoolean: $valueBoolean
+      valueDate: $valueDate
+      itemId: $itemId
+      media: $media
+    ) {
       _id
       parentId
       field
       value
+      valueDate
+      valueNumber
+      valueBoolean
       media {
         url
         caption
