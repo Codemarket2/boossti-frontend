@@ -1,9 +1,10 @@
 import { useRouter } from 'next/router';
+
 import { GET_LIST_ITEM_BY_SLUG } from '@frontend/shared/graphql/query/list';
 import ItemScreen from '../../../../src/screens/ItemScreen';
 import Loading from '../../../../src/components/common/Loading';
 import { guestClient } from '@frontend/shared/graphql';
-
+import Head from '../../../../src/components/common/Head';
 interface IProps {
   metaTags: any;
 }
@@ -11,10 +12,12 @@ interface IProps {
 export default function Page({ metaTags }: IProps) {
   const router = useRouter();
   const { itemSlug, slug } = router.query;
-  if (itemSlug && slug) {
-    return <ItemScreen slug={itemSlug} typeSlug={slug} metaTags={metaTags} />;
-  }
-  return <Loading />;
+  return (
+    <>
+      <Head {...metaTags} />
+      {itemSlug && slug ? <ItemScreen slug={itemSlug} typeSlug={slug} /> : <Loading />}
+    </>
+  );
 }
 
 export async function getServerSideProps(context) {
@@ -26,12 +29,13 @@ export async function getServerSideProps(context) {
       query: GET_LIST_ITEM_BY_SLUG,
       variables: { slug: itemSlug },
     });
-    if (response.data && response.data.getListItemBySlug) {
-      const description = response.data.getListItemBySlug.description.replace(regex, '');
+    if (response?.data && response?.data?.getListItemBySlug) {
+      const description = response?.data?.getListItemBySlug?.description?.replace(regex, '');
 
       metaTags = {
-        title: response.data.getListItemBySlug.title,
-        // description: response.data.getListItemBySlug.description,
+        title: response?.data?.getListItemBySlug?.title
+          ? response?.data?.getListItemBySlug?.title
+          : null,
         description: description,
         image:
           response.data.getListItemBySlug.media.length >= 1
