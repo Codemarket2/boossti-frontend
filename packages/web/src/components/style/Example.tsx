@@ -2,12 +2,11 @@ import { useState } from 'react';
 import StyleDrawer from './StyleDrawer';
 
 export default function StylePage() {
-  const [styles, setStyles] = useState({});
+  const [styles, setStyles] = useState<any>({});
   const [drawer, setDrawer] = useState(false);
-  const removeStyle = (styleKey) => {
+  const removeStyle = (styleKey: string) => {
     const { [styleKey]: removedStyle, ...restStyles } = styles;
     setStyles(restStyles);
-    // let tempStyle = { ...styles };
   };
   return (
     <div className="container p-5">
