@@ -1,4 +1,5 @@
-import { Tooltip, IconButton, Button } from '@material-ui/core';
+import Tooltip from '@material-ui/core/Tooltip';
+import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 
@@ -46,10 +47,14 @@ export default function ActionButtons({
           </Button>
         </Tooltip>
       )}
-
       <div className="ml-1">
-        <Button size="small" variant="outlined" component="span" color="primary">
-          <Share /> share
+        <Button
+          size="small"
+          variant="outlined"
+          component="span"
+          color="primary"
+          startIcon={<Share />}>
+          share
         </Button>
       </div>
     </div>

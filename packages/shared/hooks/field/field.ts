@@ -20,6 +20,7 @@ export function useGetFieldsByType({ parentId }: any) {
     variables: { ...defaultQueryVariables, parentId },
     fetchPolicy: 'cache-and-network',
   });
+
   useEffect(() => {
     subscribeToMore({
       document: ADDED_FIELD,
@@ -74,8 +75,8 @@ const defaultFormValues = {
   label: '',
   fieldType: '',
   typeId: null,
-  multipleValues: true,
-  oneUserMultipleValues: true,
+  multipleValues: false,
+  oneUserMultipleValues: false,
 };
 
 interface ICRUDProps extends IHooksProps {
