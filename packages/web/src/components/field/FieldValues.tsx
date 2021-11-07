@@ -1,12 +1,10 @@
-// import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import IconButton from '@material-ui/core/IconButton';
 import AddCircle from '@material-ui/icons/AddCircle';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, Fragment } from 'react';
 import { useSelector } from 'react-redux';
-import { Fragment } from 'react';
 import { convertToSlug } from './LeftNavigation';
 import Carousel from 'react-material-ui-carousel';
 import { useRouter } from 'next/router';
@@ -16,7 +14,6 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-
 import {
   useGetFieldValuesByItem,
   useGetFieldsByType,
@@ -30,9 +27,8 @@ import CRUDMenu from '../common/CRUDMenu';
 import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
 import FieldValueCard from './FieldValueCard';
-// import DeleteIcon from '@material-ui/icons/Delete';
-// import EditIcon from '@material-ui/icons/Edit';
 import Share from '../share/Share';
+import FormView from '../form/FormView';
 
 const initialState = {
   showForm: false,
@@ -162,15 +158,6 @@ function ItemOneFields({
               className="d-flex align-items-center link-anchor"
               id={convertToSlug(field.label)}>
               {field.label}
-              {/* {showAddButton && (
-            <Tooltip title="Add New Value">
-              <IconButton
-                color="primary"
-                onClick={() => setState({ ...initialState, showForm: true })}>
-                <AddCircle />
-              </IconButton>
-            </Tooltip>
-          )} */}
             </Typography>
             {showAddButton && (
               <IconButton
@@ -337,20 +324,29 @@ export default function ItemsFieldsMap({
   return (
     <>
       {data.getFieldsByType.data.map((field, index) => (
-        <ItemOneFields
-          toggleLeftNavigation={(value) => {
-            if (toggleLeftNavigation) {
-              toggleLeftNavigation(value);
-            }
-          }}
-          parentId={parentId}
-          field={field}
-          key={field._id}
-          showAuthor={showAuthor}
-          isPublish={false}
-          guest={guest}
-          setFieldValueCount={(value) => setFieldValueCount(index, value)}
-        />
+        <Fragment key={field._id}>
+          {field.fieldType === 'form' ? (
+            <div>
+              <Divider />
+              <Typography variant="h5">{field.label}</Typography>
+              <FormView parentId={field._id} />
+            </div>
+          ) : (
+            <ItemOneFields
+              toggleLeftNavigation={(value) => {
+                if (toggleLeftNavigation) {
+                  toggleLeftNavigation(value);
+                }
+              }}
+              parentId={parentId}
+              field={field}
+              showAuthor={showAuthor}
+              isPublish={false}
+              guest={guest}
+              setFieldValueCount={(value) => setFieldValueCount(index, value)}
+            />
+          )}
+        </Fragment>
       ))}
     </>
   );
