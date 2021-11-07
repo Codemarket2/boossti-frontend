@@ -10,7 +10,7 @@ interface IProps {
 }
 
 export default function CreateForm({ parentId }: IProps) {
-  const [state, setState] = useState('form');
+  const [state, setState] = useState('field');
   return (
     <>
       <div className="text-center my-3">
