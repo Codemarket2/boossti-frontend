@@ -7,7 +7,7 @@ export default function FeedsScreen() {
   return (
     <UserLayout authRequired>
       <Breadcrumbs>
-        <Typography color="textPrimary">Types</Typography>
+        <Typography color="textPrimary">Templates</Typography>
       </Breadcrumbs>
       <ListTypes />
     </UserLayout>

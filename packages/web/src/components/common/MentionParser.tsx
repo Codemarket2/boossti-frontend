@@ -1,7 +1,6 @@
 import parse from 'html-react-parser';
 import Typography from '@material-ui/core/Typography';
 import Link from 'next/link';
-import Tooltip from '@material-ui/core/Tooltip';
 import { useCreateBookmark } from '@frontend/shared/hooks/boomark';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';

@@ -3,11 +3,12 @@ import Drawer from '@material-ui/core/Drawer';
 import CreateForm from './CreateForm';
 
 interface IProps {
+  parentId: string;
   open: boolean;
   onClose: () => void;
 }
 
-export default function CreateFormDrawer({ open, onClose }: IProps) {
+export default function CreateFormDrawer({ parentId, open, onClose }: IProps) {
   return (
     <Drawer anchor="right" open={open}>
       <div style={{ width: '75vw' }} className="p-2">
@@ -19,7 +20,7 @@ export default function CreateFormDrawer({ open, onClose }: IProps) {
           className="position-absolute m-3">
           Close
         </Button>
-        <CreateForm parentId="6187c0932baaf1000917bf3b" />
+        <CreateForm parentId={parentId} />
       </div>
     </Drawer>
   );

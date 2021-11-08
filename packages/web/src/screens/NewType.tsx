@@ -8,7 +8,7 @@ export default function Screen() {
   return (
     <UserLayout authRequired mustAdmin>
       <Breadcrumbs>
-        <Link href="/types">Types</Link>
+        <Link href="/types">Template</Link>
         <Typography color="textPrimary">New</Typography>
       </Breadcrumbs>
       <ListTypeForm />

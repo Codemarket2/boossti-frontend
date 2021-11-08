@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   GET_FIELDS_BY_TYPE,
   GET_FIELD_VALUES_BY_FIELD,
 } from '@frontend/shared/graphql/query/field';
 import { guestQuery } from './guestQuery';
-import ErrorLoading from '../../components/common/ErrorLoading';
 import FieldsSkeleton from '../../components/field/FieldsSkeleton';
 import FieldValueCard from '../../components/field/FieldValueCard';
 
