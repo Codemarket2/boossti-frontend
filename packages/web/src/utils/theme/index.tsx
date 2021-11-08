@@ -5,9 +5,6 @@ const getTheme = (mode) =>
   responsiveFontSizes(
     createMuiTheme({
       palette: mode === 'light' ? light : dark,
-      layout: {
-        contentWidth: 1236,
-      },
       typography: {
         fontFamily: 'Lato',
       },

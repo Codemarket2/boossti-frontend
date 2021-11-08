@@ -3,25 +3,23 @@ import { ThemeProvider as StyledProvider } from 'styled-components';
 import { AppProps } from 'next/app';
 import Amplify, { Hub } from 'aws-amplify';
 import { useSelector } from 'react-redux';
-import { wrapper } from '../src/utils/store';
 import { ApolloProvider } from '@apollo/client/react';
 import { client } from '@frontend/shared/graphql';
 import aws_exports from '@frontend/shared/aws-exports';
+import { useLogoHook } from '@frontend/shared';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import { useCurrentAuthenticatedUser } from '@frontend/shared/hooks/auth';
 import { createMuiTheme, ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-
+import { wrapper } from '../src/utils/store';
 import LoadingBar from '../src/components/common/LoadingBar';
 import Head from '../src/components/common/Head';
-import { light, dark } from '../src/components/home/theme/palette';
-import { useLogoHook } from '@frontend/shared';
+import { light, dark } from '../src/utils/theme/palette';
 
 // // CSS from node modules
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import '../src/assets/css/ckeditor.css';
 import '../src/assets/css/common.css';
-
 import '../src/components/contentbuilder/contentbuilder.css';
 
 const customsSignInUrl =
@@ -47,9 +45,6 @@ function App({ Component, pageProps }: AppProps) {
   useLogoHook();
   const theme = createMuiTheme({
     palette: darkMode ? dark : light,
-    layout: {
-      contentWidth: 1236,
-    },
     typography: {
       fontFamily: [
         '-apple-system',
@@ -68,10 +63,6 @@ function App({ Component, pageProps }: AppProps) {
       appBar: 1200,
       drawer: 1100,
     },
-    // palette: {
-    //   ...palette,
-    //   type: darkMode ? 'dark' : 'light',
-    // },
   });
 
   useEffect(() => {
