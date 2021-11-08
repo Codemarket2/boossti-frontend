@@ -10,14 +10,13 @@ import {
   DELETE_FIELD_VALUE,
 } from '../../graphql/mutation/field';
 import { fileUpload } from '../../utils/fileUpload';
-// import { client as apolloClient } from '../../graphql';
 import { ADDED_FIELD_VALUE } from '../../graphql/subscription/field';
 import { omitTypename } from '../../utils/omitTypename';
 
 const defaultQueryVariables = { limit: 1000, page: 1 };
 
 export function useCreateFieldValue() {
-  const [createFieldValueMutation, { loading: createLoading }] = useMutation(CREATE_FIELD_VALUE);
+  const [createFieldValueMutation] = useMutation(CREATE_FIELD_VALUE);
   const handleCreateField = async (payload) => {
     return await createFieldValueMutation({
       variables: payload,

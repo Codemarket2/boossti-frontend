@@ -205,8 +205,9 @@ export default function Fields({
           show={state.showMenu}
           onClose={() => setState(initialState)}
           onDelete={() => {
-            let anwser = confirm('Are you sure you want delete this field?');
+            const anwser = confirm('Are you sure you want delete this field?');
             if (anwser) {
+              setState({ ...state, showMenu: null });
               handleDelete(state.selectedField._id, deleteCallback);
             }
           }}

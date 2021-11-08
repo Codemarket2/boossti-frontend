@@ -17,14 +17,16 @@ export default function FormView({ parentId }: IProps): any {
 
   return (
     <div>
-      {data?.getFieldsByType.data.map((field) => (
+      {data?.getFieldsByType?.data.map((field) => (
         <InputGroup key={field._id}>
           <FormField {...field} />
         </InputGroup>
       ))}
-      <Button variant="contained" color="primary" size="small">
-        Submit
-      </Button>
+      {data?.getFieldsByType?.count > 0 && (
+        <Button variant="contained" color="primary" size="small">
+          Submit
+        </Button>
+      )}
     </div>
   );
 }

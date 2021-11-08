@@ -17,6 +17,7 @@ import FormView from './FormView';
 interface IProps {
   field: any;
   parentId: string;
+  hide3Dots?: boolean;
 }
 
 const initialState = {
@@ -25,24 +26,27 @@ const initialState = {
   backdrop: false,
 };
 
-export default function Form({ field, parentId }: IProps): any {
+export default function Form({ field, parentId, hide3Dots = false }: IProps): any {
   const [state, setState] = useState(initialState);
   const { data, error } = useGetFieldValuesByItem({ parentId, field: field._id });
   const { handleCreateField } = useCreateFieldValue();
 
   const handleEditForm = async () => {
-    let fieldId = '';
-    if (data?.getFieldValuesByItem?.count > 0) {
-      const fieldValue = data?.getFieldValuesByItem?.data[0];
-      fieldId = fieldValue._id;
-    } else {
-      setState({ ...initialState, backdrop: true });
-      const payload = { parentId, field: field._id, value: '' };
-      const response = await handleCreateField(payload);
-      const fieldValue = response?.data?.createFieldValue?.data[0];
-      fieldId = fieldValue._id;
+    try {
+      let fieldId = '';
+      if (data?.getFieldValuesByItem?.count > 0) {
+        const fieldValue = data?.getFieldValuesByItem?.data[0];
+        fieldId = fieldValue._id;
+      } else {
+        setState({ ...initialState, backdrop: true });
+        const payload = { parentId, field: field._id, value: '' };
+        const response = await handleCreateField(payload);
+        fieldId = response?.data?.createFieldValue?._id;
+      }
+      setState({ ...initialState, fieldId });
+    } catch (err) {
+      alert(`Error ${err.message}`);
     }
-    setState({ ...initialState, fieldId });
   };
 
   if (error || !data || !data.getFieldValuesByItem) {
@@ -53,9 +57,11 @@ export default function Form({ field, parentId }: IProps): any {
       <Divider />
       <div className="d-flex justify-content-between align-items-center">
         <Typography variant="h5">{field.label}</Typography>
-        <IconButton onClick={(event) => setState({ ...state, show: event.currentTarget })}>
-          <MoreVert />
-        </IconButton>
+        {!hide3Dots && (
+          <IconButton onClick={(event) => setState({ ...state, show: event.currentTarget })}>
+            <MoreVert />
+          </IconButton>
+        )}
       </div>
       <Menu
         anchorEl={state.show}
