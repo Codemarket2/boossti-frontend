@@ -12,8 +12,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Link from 'next/link';
 
-import ImageUpload from '../common/ImageUpload';
-
 const checkActiveRoute = (activeRoute, linkPathname) => {
   return activeRoute.pathname === linkPathname;
 };
@@ -54,22 +52,6 @@ export default function AdminDrawerList() {
           <ListItemText primary="Types" />
         </ListItem>
       </Link>
-
-      <ImageUpload name="Logo Upload" uploadId="upload-logo" />
-      <ImageUpload name="Fav Icon" uploadId="upload-fav" />
-      <ImageUpload name="Menu Logo Upload" uploadId="Menu-icon" />
-      <Container style={{ display: 'flex', flexDirection: 'column' }}>
-        <TextField
-          multiline
-          rows={4}
-          id="outlined-basic"
-          label="App Description"
-          variant="outlined"
-        />
-        <Button color="primary" variant="contained">
-          submit
-        </Button>
-      </Container>
       <Divider />
     </>
   );

@@ -10,11 +10,11 @@ import aws_exports from '@frontend/shared/aws-exports';
 import { useCurrentAuthenticatedUser } from '@frontend/shared/hooks/auth';
 import { createMuiTheme, ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+
 import LoadingBar from '../src/components/common/LoadingBar';
 import Head from '../src/components/common/Head';
 import { light, dark } from '../src/components/home/theme/palette';
-import { guestClient } from '@frontend/shared/graphql';
-import { GET_LIST_TYPE_BY_SLUG } from '@frontend/shared/graphql/query/list';
+import { useLogoHook } from '@frontend/shared';
 
 // // CSS from node modules
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -41,36 +41,10 @@ Amplify.configure({
   },
 });
 
-async function useLogoHook() {
-  let metaTags = null;
-  const regex = /(<([^>]+)>)/gi;
-  try {
-    const response = await guestClient.query({
-      query: GET_LIST_TYPE_BY_SLUG,
-      variables: { slug: 'logo' },
-    });
-    if (response?.data && response?.data?.getListTypeBySlug) {
-      const description = response?.data?.getListTypeBySlug?.description.replace(regex, '');
-      metaTags = {
-        title: response?.data?.getListTypeBySlug?.title
-          ? response?.data?.getListTypeBySlug?.title
-          : null,
-        description: description ? description : null,
-        image:
-          response?.data?.getListTypeBySlug?.media?.length >= 1
-            ? response?.data?.getListTypeBySlug?.media[0]?.url
-            : null,
-      };
-    }
-  } catch (error) {
-    console.log(error);
-  }
-}
-
 function App({ Component, pageProps }: AppProps) {
   const { getUser } = useCurrentAuthenticatedUser();
   const darkMode = useSelector(({ auth }: any) => auth.darkMode);
-
+  useLogoHook();
   const theme = createMuiTheme({
     palette: darkMode ? dark : light,
     layout: {
