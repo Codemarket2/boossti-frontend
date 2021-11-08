@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { ThemeProvider as StyledProvider } from 'styled-components';
 import { AppProps } from 'next/app';
 import Amplify, { Hub } from 'aws-amplify';

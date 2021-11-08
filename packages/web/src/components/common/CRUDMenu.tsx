@@ -4,15 +4,17 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import { ReactNode } from 'react';
 
 interface IProps {
   show: any;
   onClose: () => void;
   onEdit?: () => void;
   onDelete?: () => void;
+  children?: ReactNode;
 }
 
-export default function CRUDMenu({ show, onDelete, onEdit, onClose }: IProps) {
+export default function CRUDMenu({ show, onDelete, onEdit, onClose, children }: IProps) {
   return (
     <Menu anchorEl={show} keepMounted open={Boolean(show)} onClose={onClose}>
       <MenuItem onClick={onEdit}>
@@ -27,6 +29,7 @@ export default function CRUDMenu({ show, onDelete, onEdit, onClose }: IProps) {
         </ListItemIcon>
         <ListItemText primary="Delete" />
       </MenuItem>
+      {children}
     </Menu>
   );
 }
