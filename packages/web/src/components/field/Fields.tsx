@@ -219,7 +219,13 @@ export default function Fields({
         </CRUDMenu>
       </Paper>
       <Backdrop open={deleteLoading} />
-      {state.editForm && <CreateFormDrawer open={true} onClose={() => setState(initialState)} />}
+      {state.editForm && (
+        <CreateFormDrawer
+          open={true}
+          onClose={() => setState(initialState)}
+          parentId={state?.selectedField?._id}
+        />
+      )}
     </>
   );
 }
