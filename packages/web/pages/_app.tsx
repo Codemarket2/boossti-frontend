@@ -10,9 +10,11 @@ import aws_exports from '@frontend/shared/aws-exports';
 import { useCurrentAuthenticatedUser } from '@frontend/shared/hooks/auth';
 import { createMuiTheme, ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+
 import LoadingBar from '../src/components/common/LoadingBar';
 import Head from '../src/components/common/Head';
 import { light, dark } from '../src/components/home/theme/palette';
+import { useLogoHook } from '@frontend/shared';
 
 // // CSS from node modules
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -42,7 +44,7 @@ Amplify.configure({
 function App({ Component, pageProps }: AppProps) {
   const { getUser } = useCurrentAuthenticatedUser();
   const darkMode = useSelector(({ auth }: any) => auth.darkMode);
-
+  useLogoHook();
   const theme = createMuiTheme({
     palette: darkMode ? dark : light,
     layout: {
