@@ -5,7 +5,7 @@ import Amplify, { Hub } from 'aws-amplify';
 import { useSelector } from 'react-redux';
 import { ApolloProvider } from '@apollo/client/react';
 import { client } from '@frontend/shared/graphql';
-import aws_exports from '@frontend/shared/aws-exports';
+import awsExports from '@frontend/shared/aws-exports';
 import { useLogoHook } from '@frontend/shared';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { useCurrentAuthenticatedUser } from '@frontend/shared/hooks/auth';
@@ -30,10 +30,10 @@ const customsSignOutUrl =
     : 'https://www.vijaa.com/auth/';
 
 Amplify.configure({
-  ...aws_exports,
+  ...awsExports,
   ssr: true,
   oauth: {
-    ...aws_exports.oauth,
+    ...awsExports.oauth,
     redirectSignIn: customsSignInUrl,
     redirectSignOut: customsSignOutUrl,
   },
@@ -70,7 +70,7 @@ function App({ Component, pageProps }: AppProps) {
     if (jssStyles && jssStyles.parentNode) {
       jssStyles.parentNode.removeChild(jssStyles);
     }
-    Hub.listen('auth', ({ payload: { event, data } }) => {
+    Hub.listen('auth', ({ payload: { event } }) => {
       switch (event) {
         case 'signIn':
         case 'cognitoHostedUI':
@@ -83,6 +83,8 @@ function App({ Component, pageProps }: AppProps) {
         case 'cognitoHostedUI_failure':
           // console.log('Sign in failure', data);
           break;
+        default:
+          return null;
       }
     });
   }, []);
