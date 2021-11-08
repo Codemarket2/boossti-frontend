@@ -58,6 +58,9 @@ const MenuWrapper = styled.div`
 
 export default function AppBarComponent() {
   const { authenticated, darkMode, admin, attributes } = useSelector(({ auth }: any) => auth);
+  const { setting } = useSelector(({ setting }: any) => ({
+    setting,
+  }));
   const { handleLogout } = useHandleLogout();
   const [anchorEl, setAnchorEl] = useState(null);
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -104,11 +107,9 @@ export default function AppBarComponent() {
           {/* <StyledTitle variant="h5" color="textPrimary">
             {projectConfig.title}
           </StyledTitle> */}
+          {/* src="https://res.cloudinary.com/dzo2ufh6a/image/upload/v1633449974/vijaa-logo_np6z16.png" */}
           <StyledImageContainer>
-            <img
-              src="https://res.cloudinary.com/dzo2ufh6a/image/upload/v1633449974/vijaa-logo_np6z16.png"
-              alt=""
-            />
+            <img src={setting.metaTags.image} alt={setting.metaTags.title} />
           </StyledImageContainer>
         </Link>
         {authenticated ? (
