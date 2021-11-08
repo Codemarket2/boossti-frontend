@@ -54,6 +54,8 @@ module.exports = {
       },
     ],
     // 'import/no-extraneous-dependencies': ['error', { ignore: 'styled-components/' }],
+    'object-curly-newline': 0,
+    'react/require-default-props': 'off',
   },
   settings: {
     'import/resolver': {

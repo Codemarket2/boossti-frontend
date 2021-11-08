@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import parse from 'html-react-parser';
 import Card from '@material-ui/core/Card';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -19,7 +20,6 @@ import DisplayContent from '../contentbuilder/DisplayContent';
 import DisplayContentBox from '../contentbox/DisplayContentBox';
 import SingleComment from '../comment/SingleComment';
 import { convertToSlug } from './LeftNavigation';
-import { useSelector } from 'react-redux';
 
 interface IProps {
   fieldValue: any;
@@ -58,7 +58,8 @@ export default function FieldValueCard({
             style={{ zIndex: 9999 }}
             className="position-absolute"
             aria-label="settings"
-            onClick={(event) => onSelect(event.target, fieldValue)}>
+            onClick={(event) => onSelect(event.target, fieldValue)}
+          >
             <MoreVertIcon />
           </IconButton>
         </div>
@@ -93,6 +94,7 @@ export default function FieldValueCard({
           </IconButton>
         </div>
       )} */}
+
       <CardContent className="mb-5 p-0">
         {field.fieldType === 'date' ? (
           moment(fieldValue.valueDate).format('L')
@@ -111,7 +113,8 @@ export default function FieldValueCard({
                     expandedItem: !state.expandedItem,
                     itemId: fieldValue._id,
                   })
-                }>
+                }
+              >
                 {state.expandedItem ? <ExpandLessIcon /> : <ExpandMoreIcon />}
               </IconButton>
             </Tooltip>
@@ -121,7 +124,8 @@ export default function FieldValueCard({
             <Collapse
               in={state.expandedItem && state.itemId === fieldValue._id}
               timeout="auto"
-              unmountOnExit>
+              unmountOnExit
+            >
               <ItemScreen
                 hideBreadcrumbs
                 typeSlug={field.typeId.slug}
@@ -130,6 +134,7 @@ export default function FieldValueCard({
             </Collapse>
           </div>
         ) : field.fieldType === 'url' ? (
+          // eslint-disable-next-line react/jsx-no-target-blank
           <a target="_blank" href={fieldValue.value}>
             {fieldValue.value}
           </a>

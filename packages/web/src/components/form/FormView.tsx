@@ -8,8 +8,8 @@ interface IProps {
   parentId: string;
 }
 
-export default function FormView({ parentId }: IProps) {
-  const { data, loading, error } = useGetFieldsByType({ parentId });
+export default function FormView({ parentId }: IProps): any {
+  const { data, error } = useGetFieldsByType({ parentId });
 
   if (error || !data || !data.getFieldsByType) {
     return <ErrorLoading error={error} />;

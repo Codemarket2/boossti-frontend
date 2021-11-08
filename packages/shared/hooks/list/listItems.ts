@@ -271,7 +271,7 @@ export function useUpdatePublish(_id: string, active: boolean, slug: string) {
       variables: { _id, publish: !active },
     });
   };
-  console.log('mutation', data);
+
   return {
     handleOnChange,
   };
@@ -284,7 +284,7 @@ export function useUpdateAuthentication(_id: string, authenticateUser: boolean, 
       variables: { _id, authenticateUser: !authenticateUser },
     });
   };
-  console.log('authuser', data);
+
   return {
     handleOnChange,
   };

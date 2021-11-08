@@ -16,16 +16,16 @@ import {
   useDeleteField,
   useUpdateFieldPosition,
 } from '@frontend/shared/hooks/field';
+import { useState, memo, useEffect } from 'react';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+// import MenuItem from '@material-ui/core/MenuItem';
+// import TuneIcon from '@material-ui/icons/Tune';
 import FieldForm from './FieldForm';
 import CRUDMenu from '../common/CRUDMenu';
-import { useState, memo, useEffect } from 'react';
 import FieldsSkeleton from './FieldsSkeleton';
 import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import MenuItem from '@material-ui/core/MenuItem';
-import TuneIcon from '@material-ui/icons/Tune';
 import CreateFormDrawer from '../form/CreateFormDrawer';
 
 const reorder = (list, startIndex, endIndex) => {
@@ -42,7 +42,8 @@ function Quote({ field, index, onClick }: any) {
         <ListItem
           ref={provided.innerRef}
           {...provided.draggableProps}
-          {...provided.dragHandleProps}>
+          {...provided.dragHandleProps}
+        >
           <ListItemIcon>
             <DragIndicatorIcon />
           </ListItemIcon>
@@ -88,13 +89,13 @@ export default function Fields({
   setFields,
   title = 'Fields',
   formBuilder = false,
-}: IProps) {
+}: IProps): any {
   const [state, setState] = useState(initialState);
 
   const deleteCallback = () => {
     setState({ ...state, showMenu: null, selectedField: null, edit: false });
   };
-  const { data, loading, error } = useGetFieldsByType({ parentId });
+  const { data, error } = useGetFieldsByType({ parentId });
 
   const { handleDelete, deleteLoading } = useDeleteField({ onAlert, parentId });
   const { handleUpdatePosition, updateLoading, updatePositionInCache } = useUpdateFieldPosition({
@@ -159,7 +160,8 @@ export default function Fields({
 
   if (!error && (!data || !data.getFieldsByType)) {
     return <FieldsSkeleton />;
-  } else if (error) {
+  }
+  if (error) {
     return <ErrorLoading error={error} />;
   }
 
@@ -173,7 +175,8 @@ export default function Fields({
               <IconButton
                 disabled={updateLoading}
                 color="primary"
-                onClick={() => setState({ ...initialState, showForm: true })}>
+                onClick={() => setState({ ...initialState, showForm: true })}
+              >
                 <AddCircle />
               </IconButton>
             </Tooltip>
@@ -207,21 +210,22 @@ export default function Fields({
               handleDelete(state.selectedField._id, deleteCallback);
             }
           }}
-          onEdit={() => setState({ ...state, edit: true, showMenu: null })}>
-          {state?.selectedField?.fieldType === 'form' && (
+          onEdit={() => setState({ ...state, edit: true, showMenu: null })}
+        >
+          {/* {state?.selectedField?.fieldType === 'form' && (
             <MenuItem onClick={() => setState({ ...state, editForm: true, showMenu: null })}>
               <ListItemIcon className="mr-n4">
                 <TuneIcon fontSize="small" />
               </ListItemIcon>
               <ListItemText primary="Edit Form" />
             </MenuItem>
-          )}
+          )} */}
         </CRUDMenu>
       </Paper>
       <Backdrop open={deleteLoading} />
       {state.editForm && (
         <CreateFormDrawer
-          open={true}
+          open
           onClose={() => setState(initialState)}
           parentId={state?.selectedField?._id}
         />
