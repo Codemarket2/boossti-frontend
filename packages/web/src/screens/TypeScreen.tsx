@@ -90,7 +90,7 @@ export default function Screen({ slug }: IProps) {
       <div className="px-3">
         <div className="d-flex justify-content-between align-content-center align-items-center">
           <Breadcrumbs>
-            <Link href="/types">Types</Link>
+            <Link href="/types">Template</Link>
             <Typography color="textPrimary">
               {data.getListTypeBySlug.title.includes('-n-e-w')
                 ? 'Title'
@@ -201,7 +201,7 @@ export default function Screen({ slug }: IProps) {
                 </>
               )}
             </Paper>
-            <Fields setFields={setFields} parentId={data.getListTypeBySlug._id} />
+            <Fields title="Sections" setFields={setFields} parentId={data.getListTypeBySlug._id} />
           </Grid>
           <Grid item xs>
             {state.view === 'Form View' ? (

@@ -1,13 +1,10 @@
-// import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import IconButton from '@material-ui/core/IconButton';
 import AddCircle from '@material-ui/icons/AddCircle';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, Fragment } from 'react';
 import { useSelector } from 'react-redux';
-import { Fragment } from 'react';
-import { convertToSlug } from './LeftNavigation';
 import Carousel from 'react-material-ui-carousel';
 import { useRouter } from 'next/router';
 import { useTheme } from '@material-ui/core/styles';
@@ -16,13 +13,13 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-
 import {
   useGetFieldValuesByItem,
   useGetFieldsByType,
   useDeleteFieldValue,
   useCreateFieldValue,
 } from '@frontend/shared/hooks/field';
+import { convertToSlug } from './LeftNavigation';
 import FieldsSkeleton from './FieldsSkeleton';
 import ErrorLoading from '../common/ErrorLoading';
 import FieldValueForm from './FieldValueForm';
@@ -30,9 +27,8 @@ import CRUDMenu from '../common/CRUDMenu';
 import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
 import FieldValueCard from './FieldValueCard';
-// import DeleteIcon from '@material-ui/icons/Delete';
-// import EditIcon from '@material-ui/icons/Edit';
 import Share from '../share/Share';
+import Form from '../form/Form';
 
 const initialState = {
   showForm: false,
@@ -53,9 +49,9 @@ function ItemOneFields({
   setFieldValueCount,
   toggleLeftNavigation,
   isPublish,
-}) {
+}: any) {
   const router = useRouter();
-  const query = router.query;
+  const { query } = router;
   const [state, setState] = useState(initialState);
   const { attributes, admin } = useSelector(({ auth }: any) => auth);
   const currentUserId = attributes['custom:_id'];
@@ -67,7 +63,7 @@ function ItemOneFields({
     setState({ ...state, showMenu: null, selectedFieldValue: null, edit: false });
   };
 
-  const { data, error, loading } = useGetFieldValuesByItem({ parentId, field: field._id });
+  const { data, error } = useGetFieldValuesByItem({ parentId, field: field._id });
   const { handleDelete, deleteLoading } = useDeleteFieldValue({
     onAlert,
     parentId,
@@ -76,7 +72,7 @@ function ItemOneFields({
 
   const formProps = {
     field: field._id,
-    parentId: parentId,
+    parentId,
     typeId: field.typeId ? field.typeId._id : null,
     typeSlug: field.typeId ? field.typeId.slug : null,
     fieldType: field.fieldType,
@@ -95,7 +91,7 @@ function ItemOneFields({
 
   const onClickAdd = async () => {
     if (field.fieldType === 'contentBox') {
-      let payload = { parentId: parentId, field: field._id, value: '' };
+      const payload = { parentId, field: field._id, value: '' };
       const response = await handleCreateField(payload);
       window.location.href = `/types/${query.slug}/${query.itemSlug}/${response.data.createFieldValue._id}`;
       // router.push(`/types/${query.slug}/${query.itemSlug}/${response.data.createFieldValue._id}`);
@@ -109,19 +105,30 @@ function ItemOneFields({
 
   if (!error && (!data || !data.getFieldValuesByItem)) {
     return <FieldsSkeleton />;
-  } else if (error) {
+  }
+  if (error) {
     return <ErrorLoading error={error} />;
   }
 
   const hasAlreadyAdded =
     data.getFieldValuesByItem.data.filter((v) => v.createdBy._id === currentUserId).length > 0;
 
-  const showAddButton =
+  let showAddButton =
     data.getFieldValuesByItem.data.length === 0 ||
     (field.multipleValues &&
       !guest &&
       !state.showForm &&
       (field.oneUserMultipleValues || !hasAlreadyAdded));
+
+  if (
+    showAddButton &&
+    !field.multipleValues &&
+    !field.oneUserMultipleValues &&
+    !(currentUserId === field.createdBy._id || admin)
+  ) {
+    showAddButton = false;
+  }
+
   return (
     <div key={field._id}>
       {!isPublish && (
@@ -130,7 +137,8 @@ function ItemOneFields({
             anchorEl={state.addTarget}
             keepMounted
             open={Boolean(state.showAddMenu)}
-            onClose={() => setState({ ...state, showAddMenu: false, addTarget: null })}>
+            onClose={() => setState({ ...state, showAddMenu: false, addTarget: null })}
+          >
             <MenuItem onClick={onClickAdd}>
               <ListItemIcon className="mr-n4">
                 <AddCircle fontSize="small" />
@@ -150,24 +158,17 @@ function ItemOneFields({
               style={matches ? { paddingTop: 50 } : {}}
               variant="h5"
               className="d-flex align-items-center link-anchor"
-              id={convertToSlug(field.label)}>
+              id={convertToSlug(field.label)}
+            >
               {field.label}
-              {/* {showAddButton && (
-            <Tooltip title="Add New Value">
-              <IconButton
-                color="primary"
-                onClick={() => setState({ ...initialState, showForm: true })}>
-                <AddCircle />
-              </IconButton>
-            </Tooltip>
-          )} */}
             </Typography>
             {showAddButton && (
               <IconButton
                 color="primary"
                 onClick={(event) =>
                   setState({ ...initialState, showAddMenu: true, addTarget: event.currentTarget })
-                }>
+                }
+              >
                 <MoreVertIcon />
               </IconButton>
             )}
@@ -209,7 +210,8 @@ function ItemOneFields({
           fullHeightHover={false}
           autoPlay={false}
           animation="slide"
-          navButtonsAlwaysVisible={true}>
+          navButtonsAlwaysVisible={true}
+        >
           {data.getFieldValuesByItem.data.map((fieldValue, index) => (
             <div className="px-" key={fieldValue._id}>
               {state.selectedFieldValue &&
@@ -309,8 +311,8 @@ export default function ItemsFieldsMap({
   setFieldValueCount = (index: number, value: number) => {},
   pushToAnchor = () => {},
   toggleLeftNavigation,
-}: IProps) {
-  const { data, loading, error } = useGetFieldsByType({ parentId: typeId });
+}: IProps): any {
+  const { data, error } = useGetFieldsByType({ parentId: typeId });
 
   useEffect(() => {
     if (data && data.getFieldsByType) {
@@ -321,26 +323,32 @@ export default function ItemsFieldsMap({
 
   if (!error && (!data || !data.getFieldsByType)) {
     return <FieldsSkeleton />;
-  } else if (error) {
+  }
+  if (error) {
     return <ErrorLoading error={error} />;
   }
   return (
     <>
       {data.getFieldsByType.data.map((field, index) => (
-        <ItemOneFields
-          toggleLeftNavigation={(value) => {
-            if (toggleLeftNavigation) {
-              toggleLeftNavigation(value);
-            }
-          }}
-          parentId={parentId}
-          field={field}
-          key={field._id}
-          showAuthor={showAuthor}
-          isPublish={false}
-          guest={guest}
-          setFieldValueCount={(value) => setFieldValueCount(index, value)}
-        />
+        <Fragment key={field._id}>
+          {field.fieldType === 'form' ? (
+            <Form field={field} parentId={parentId} />
+          ) : (
+            <ItemOneFields
+              toggleLeftNavigation={(value) => {
+                if (toggleLeftNavigation) {
+                  toggleLeftNavigation(value);
+                }
+              }}
+              parentId={parentId}
+              field={field}
+              showAuthor={showAuthor}
+              isPublish={false}
+              guest={guest}
+              setFieldValueCount={(value) => setFieldValueCount(index, value)}
+            />
+          )}
+        </Fragment>
       ))}
     </>
   );

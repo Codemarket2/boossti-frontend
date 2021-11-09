@@ -20,7 +20,6 @@ function Section({ slug }) {
       setPayload(data);
       setLoading(false);
     } catch (error) {
-      console.log(error.message);
       setLoading(false);
     }
   };

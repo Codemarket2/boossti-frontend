@@ -146,7 +146,7 @@ export default function Screen({
         <>
           <div className="d-flex justify-content-between align-content-center align-items-center">
             <Breadcrumbs>
-              <Link href="/types">Types</Link>
+              <Link href="/types">Template</Link>
               <Link href={`/types/${data.getListItemBySlug.types[0].slug}`}>
                 <a>{data.getListItemBySlug.types[0].title}</a>
               </Link>

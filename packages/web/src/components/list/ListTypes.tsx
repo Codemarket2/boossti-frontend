@@ -51,7 +51,7 @@ export default function ListTypes() {
         onHide={() => setState({ ...state, search: '', showSearch: false })}
         onShow={() => setState({ ...state, search: '', showSearch: true })}
         onChange={(value) => setState({ ...state, search: value })}>
-        <Typography variant="h4">Types</Typography>
+        <Typography variant="h4">Templates</Typography>
       </ListHeader>
       <Paper variant="outlined">
         {error || !data ? (

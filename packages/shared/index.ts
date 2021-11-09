@@ -1,3 +1,8 @@
+import { useEffect, useState } from 'react';
+import { GET_LIST_TYPE_BY_SLUG, GET_LIST_ITEM_BY_SLUG } from './graphql/query/list';
+import { guestClient } from './graphql';
+import { updateSettingAction } from '../shared/redux/actions/setting';
+import { useDispatch } from 'react-redux';
 interface IProjectConfig {
   title: string;
   description: string;
@@ -27,5 +32,70 @@ const projectConfig: IProjectConfig = {
   appsyncApiKey: 'da2-g22usoh4dza4zou6qxdyt2cg3q',
   appsyncRegion: 'us-east-1',
 };
+
+export async function getMetaTags(slug) {
+  let metaTags = null;
+
+  const regex = /(<([^>]+)>)/gi;
+  try {
+    const response = await guestClient.query({
+      query: GET_LIST_TYPE_BY_SLUG,
+      variables: { slug },
+    });
+    if (response?.data && response?.data?.getListTypeBySlug) {
+      const description = response?.data?.getListTypeBySlug?.description.replace(regex, '');
+      metaTags = {
+        title: response?.data?.getListTypeBySlug?.title
+          ? response?.data?.getListTypeBySlug?.title
+          : null,
+        description: description ? description : null,
+        image:
+          response?.data?.getListTypeBySlug?.media?.length >= 1
+            ? response?.data?.getListTypeBySlug?.media[0]?.url
+            : null,
+      };
+    }
+  } catch (error) {
+    console.log(error);
+  }
+  return metaTags;
+}
+
+export function useLogoHook() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    getLogo();
+  }, []);
+  const getLogo = async () => {
+    let metaTags = {
+      image: '',
+      description: '',
+      title: '',
+    };
+    const regex = /(<([^>]+)>)/gi;
+    try {
+      const response = await guestClient.query({
+        query: GET_LIST_ITEM_BY_SLUG,
+        variables: { slug: 'logo' },
+      });
+      if (response?.data && response?.data?.getListItemBySlug) {
+        const description = response?.data?.getListItemBySlug?.description.replace(regex, '');
+        metaTags = {
+          title: response?.data?.getListItemBySlug?.title
+            ? response?.data?.getListItemBySlug?.title
+            : null,
+          description: description ? description : null,
+          image:
+            response?.data?.getListItemBySlug?.media?.length >= 1
+              ? response?.data?.getListItemBySlug?.media[0]?.url
+              : null,
+        };
+        dispatch(updateSettingAction({ metaTags }));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+}
 
 export default projectConfig;

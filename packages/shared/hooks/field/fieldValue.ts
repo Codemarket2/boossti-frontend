@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useQuery, useMutation, useSubscription } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { IHooksProps } from '../../types/common';
@@ -10,14 +10,13 @@ import {
   DELETE_FIELD_VALUE,
 } from '../../graphql/mutation/field';
 import { fileUpload } from '../../utils/fileUpload';
-// import { client as apolloClient } from '../../graphql';
 import { ADDED_FIELD_VALUE } from '../../graphql/subscription/field';
 import { omitTypename } from '../../utils/omitTypename';
 
 const defaultQueryVariables = { limit: 1000, page: 1 };
 
 export function useCreateFieldValue() {
-  const [createFieldValueMutation, { loading: createLoading }] = useMutation(CREATE_FIELD_VALUE);
+  const [createFieldValueMutation] = useMutation(CREATE_FIELD_VALUE);
   const handleCreateField = async (payload) => {
     return await createFieldValueMutation({
       variables: payload,
@@ -87,8 +86,28 @@ const validationSchema = yup.object({
     then: yup.object().nullable(true).required('Required'),
     otherwise: yup.object().nullable(true),
   }),
+  valueNumber: yup.number().when('fieldType', {
+    is: (value) => value === 'number',
+    then: yup.number().nullable(true).required('Required'),
+    otherwise: yup.number().nullable(true),
+  }),
+  valueBoolean: yup.boolean().when('fieldType', {
+    is: (value) => value === 'boolean',
+    then: yup.boolean().nullable(true).required('Required'),
+    otherwise: yup.boolean().nullable(true),
+  }),
+  valueDate: yup.date().when('fieldType', {
+    is: (value) => value === 'date',
+    then: yup.date().nullable(true).required('Required'),
+    otherwise: yup.date().nullable(true),
+  }),
   value: yup.string().when('fieldType', {
-    is: (value) => value !== 'type' && value !== 'media',
+    is: (value) =>
+      value !== 'type' &&
+      value !== 'media' &&
+      value !== 'number' &&
+      value !== 'boolean' &&
+      value !== 'date',
     then: yup.string().nullable(true).required('Required'),
     otherwise: yup.string().nullable(true),
   }),
@@ -106,6 +125,9 @@ interface IFormValues {
   parentId: string;
   field: string;
   value: string;
+  valueNumber: number;
+  valueBoolean: boolean;
+  valueDate: Date;
   media: any;
   tempMedia: any;
   tempMediaFiles: any;
@@ -119,6 +141,9 @@ const defaultFormValues = {
   parentId: '',
   field: '',
   value: '',
+  valueNumber: null,
+  valueBoolean: null,
+  valueDate: null,
   media: [],
   tempMedia: [],
   tempMediaFiles: [],

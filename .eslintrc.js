@@ -24,9 +24,9 @@ module.exports = {
   },
   plugins: ['react', '@typescript-eslint'],
   rules: {
-    // 'react/destructuring-assignment': 'never',
     'prettier/prettier': 0,
     'no-console': 'error',
+    'import/prefer-default-export': 'off',
     'no-underscore-dangle': 'off',
     'no-use-before-define': 'off',
     'no-named-as-default': 'off',
@@ -53,7 +53,9 @@ module.exports = {
         tsx: 'never',
       },
     ],
-    'import/no-extraneous-dependencies': ['error', { ignore: 'styled-components/' }],
+    // 'import/no-extraneous-dependencies': ['error', { ignore: 'styled-components/' }],
+    'object-curly-newline': 0,
+    'react/require-default-props': 'off',
   },
   settings: {
     'import/resolver': {

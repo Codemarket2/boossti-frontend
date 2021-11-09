@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-wrap-multilines */
+import { useEffect } from 'react';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -12,17 +14,23 @@ import { useCRUDFields } from '@frontend/shared/hooks/field';
 import { useGetListTypes } from '@frontend/shared/hooks/list';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
+import ErrorLoading from '../common/ErrorLoading';
 import { onAlert } from '../../utils/alert';
-import { useEffect } from 'react';
 
 interface IProps {
   onCancel: () => void;
-  parentId: any;
-  field?: any;
+  parentId: string;
+  field: any;
+  formBuilder: boolean;
 }
 
-export default function FieldForm({ onCancel, parentId, field = null }: IProps) {
-  const { data, error, loading, state, setState } = useGetListTypes({ limit: 10 });
+export default function FieldForm({
+  onCancel,
+  parentId,
+  field = null,
+  formBuilder = false,
+}: IProps): any {
+  const { data, error, state, setState } = useGetListTypes({ limit: 10 });
 
   const { formik, formLoading, setFormValues } = useCRUDFields({
     onAlert,
@@ -60,23 +68,14 @@ export default function FieldForm({ onCancel, parentId, field = null }: IProps) 
               aria-label="fieldType"
               name="fieldType"
               value={formik.values.fieldType}
-              onChange={formik.handleChange}>
+              onChange={formik.handleChange}
+            >
               <FormControlLabel value="string" control={<Radio color="primary" />} label="String" />
               <FormControlLabel value="number" control={<Radio color="primary" />} label="Number" />
               <FormControlLabel
                 value="textarea"
                 control={<Radio color="primary" />}
                 label="Textarea"
-              />
-              <FormControlLabel
-                value="contentBuilder"
-                control={<Radio color="primary" />}
-                label="Content Builder"
-              />
-              <FormControlLabel
-                value="contentBox"
-                control={<Radio color="primary" />}
-                label="Content Box"
               />
               <FormControlLabel
                 value="boolean"
@@ -100,6 +99,21 @@ export default function FieldForm({ onCancel, parentId, field = null }: IProps) 
                 control={<Radio color="primary" />}
                 label="Address"
               />
+              {!formBuilder && (
+                <>
+                  <FormControlLabel
+                    value="contentBuilder"
+                    control={<Radio color="primary" />}
+                    label="Content Builder"
+                  />
+                  <FormControlLabel
+                    value="contentBox"
+                    control={<Radio color="primary" />}
+                    label="Content Box"
+                  />
+                  <FormControlLabel value="form" control={<Radio color="primary" />} label="Form" />
+                </>
+              )}
             </RadioGroup>
             {formik.touched.fieldType && formik.errors.fieldType && (
               <FormHelperText className="text-danger">{formik.errors.fieldType}</FormHelperText>
@@ -109,7 +123,7 @@ export default function FieldForm({ onCancel, parentId, field = null }: IProps) 
         {formik.values.fieldType === 'type' && (
           <InputGroup>
             {error ? (
-              <p>Error - {error.message}</p>
+              <ErrorLoading error={error} />
             ) : (
               <Autocomplete
                 disabled={formik.isSubmitting}
@@ -137,36 +151,47 @@ export default function FieldForm({ onCancel, parentId, field = null }: IProps) 
             )}
           </InputGroup>
         )}
-        <InputGroup>
-          <FormControlLabel
-            disabled={formik.isSubmitting}
-            control={
-              <Checkbox
-                checked={formik.values.multipleValues}
-                onChange={({ target }) => formik.setFieldValue('multipleValues', target.checked)}
-                name="multipleValues"
-                color="primary"
-              />
-            }
-            label="Allow other users to add their own value"
-          />
-        </InputGroup>
-        <InputGroup>
-          <FormControlLabel
-            disabled={formik.isSubmitting}
-            control={
-              <Checkbox
-                checked={formik.values.oneUserMultipleValues}
-                onChange={({ target }) =>
-                  formik.setFieldValue('oneUserMultipleValues', target.checked)
-                }
-                name="oneUserMultipleValues"
-                color="primary"
-              />
-            }
-            label="Each user can add mutiple values"
-          />
-        </InputGroup>
+        {!(formik.values.fieldType === 'form') && (
+          <>
+            {!formBuilder && (
+              <InputGroup>
+                <FormControlLabel
+                  disabled={formik.isSubmitting}
+                  control={
+                    <Checkbox
+                      checked={formik.values.multipleValues}
+                      onChange={({ target }) =>
+                        formik.setFieldValue('multipleValues', target.checked)
+                      }
+                      name="multipleValues"
+                      color="primary"
+                    />
+                  }
+                  label="Allow other users to add their own value"
+                />
+              </InputGroup>
+            )}
+          </>
+        )}
+        {(formik.values.multipleValues || formBuilder) && !(formik.values.fieldType === 'form') && (
+          <InputGroup>
+            <FormControlLabel
+              disabled={formik.isSubmitting}
+              control={
+                <Checkbox
+                  checked={formik.values.oneUserMultipleValues}
+                  onChange={({ target }) =>
+                    formik.setFieldValue('oneUserMultipleValues', target.checked)
+                  }
+                  name="oneUserMultipleValues"
+                  color="primary"
+                />
+              }
+              label="Each user can add mutiple values"
+            />
+          </InputGroup>
+        )}
+
         <InputGroup>
           <LoadingButton type="submit" loading={formLoading} size="small">
             Save
@@ -176,7 +201,8 @@ export default function FieldForm({ onCancel, parentId, field = null }: IProps) 
             disabled={formLoading}
             variant="outlined"
             size="small"
-            onClick={onCancel}>
+            onClick={onCancel}
+          >
             Cancel
           </Button>
         </InputGroup>

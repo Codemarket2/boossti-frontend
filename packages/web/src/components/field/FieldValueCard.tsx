@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import parse from 'html-react-parser';
 import Card from '@material-ui/core/Card';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -12,7 +13,6 @@ import moment from 'moment';
 import Link from 'next/link';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import { useRouter } from 'next/router';
-
 import ItemScreen from '../list/ItemScreen';
 import ImageList from '../post/ImageList';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
@@ -48,15 +48,18 @@ export default function FieldValueCard({
   });
   const { query } = useRouter();
   const [showHideComments, setShowHideComments] = useState(false);
+  const auth = useSelector(({ auth }: any) => auth);
+
   return (
     <Card variant="outlined" style={{ border: 'none' }}>
-      {!isPublish && (
+      {!isPublish && (auth.isAdmin || auth.attributes['custom:_id'] === fieldValue.createdBy._id) && (
         <div className="d-flex justify-content-end">
           <IconButton
             style={{ zIndex: 9999 }}
             className="position-absolute"
             aria-label="settings"
-            onClick={(event) => onSelect(event.target, fieldValue)}>
+            onClick={(event) => onSelect(event.target, fieldValue)}
+          >
             <MoreVertIcon />
           </IconButton>
         </div>
@@ -91,9 +94,14 @@ export default function FieldValueCard({
           </IconButton>
         </div>
       )} */}
+
       <CardContent className="mb-5 p-0">
         {field.fieldType === 'date' ? (
-          moment(fieldValue.value).format('L')
+          moment(fieldValue.valueDate).format('L')
+        ) : field.fieldType === 'number' ? (
+          fieldValue.valueNumber
+        ) : field.fieldType === 'boolean' ? (
+          fieldValue.valueBoolean.toString()
         ) : field.fieldType === 'type' ? (
           <div>
             <Tooltip title="More Details">
@@ -105,7 +113,8 @@ export default function FieldValueCard({
                     expandedItem: !state.expandedItem,
                     itemId: fieldValue._id,
                   })
-                }>
+                }
+              >
                 {state.expandedItem ? <ExpandLessIcon /> : <ExpandMoreIcon />}
               </IconButton>
             </Tooltip>
@@ -115,7 +124,8 @@ export default function FieldValueCard({
             <Collapse
               in={state.expandedItem && state.itemId === fieldValue._id}
               timeout="auto"
-              unmountOnExit>
+              unmountOnExit
+            >
               <ItemScreen
                 hideBreadcrumbs
                 typeSlug={field.typeId.slug}
@@ -124,6 +134,7 @@ export default function FieldValueCard({
             </Collapse>
           </div>
         ) : field.fieldType === 'url' ? (
+          // eslint-disable-next-line react/jsx-no-target-blank
           <a target="_blank" href={fieldValue.value}>
             {fieldValue.value}
           </a>
@@ -151,7 +162,6 @@ export default function FieldValueCard({
             itemSlug={convertToSlug(field.label)}
             fieldTitle={fieldValue?.itemId?.title?.trim().toLowerCase()}
           />
-          {/* {showSingleComment && <SingleComment _id={query.commentId as string} />} */}
           <SingleComment
             setShowHideComments={setShowHideComments}
             _id={query.commentId as string}

@@ -1,6 +1,6 @@
 // New Store with next-redux-wrapper
 import { createStore, Store } from 'redux';
-import { HYDRATE, createWrapper, Context } from 'next-redux-wrapper';
+import { HYDRATE, createWrapper } from 'next-redux-wrapper';
 import reducers from '@frontend/shared/redux/reducers';
 import middleware from '@frontend/shared/redux/middleware';
 
@@ -12,12 +12,11 @@ const reducer = (state, action) => {
     };
     // preserve count value on client side navigation
     return nextState;
-  } else {
-    return reducers(state, action);
   }
+  return reducers(state, action);
 };
 
-const initStore = (context: Context) => {
+const initStore = () => {
   return createStore(reducer, middleware);
 };
 
