@@ -1,12 +1,11 @@
 import { ReactNode } from 'react';
 import { useSelector } from 'react-redux';
+import Paper from '@material-ui/core/Paper';
+import styled from 'styled-components';
 import AuthRequired from './AuthRequired';
 import AppBar from './AppBar';
 import BottomBar from './BottomBar';
-import Container from './Container';
-import { DivContainer } from './Container';
-import Paper from '@material-ui/core/Paper';
-import styled from 'styled-components';
+import Container, { DivContainer } from './Container';
 
 const StyledPaper = styled(Paper)`
   background-color: ${(props) => props.theme.palette.background.level2} !important;
@@ -27,7 +26,7 @@ const UserLayout = ({
   mustAdmin = false,
   redirectPath,
   container = true,
-}: IProps) => {
+}: IProps): any => {
   const authenticated = useSelector(({ auth }: any) => auth.authenticated);
   return (
     <StyledPaper elevation={0}>

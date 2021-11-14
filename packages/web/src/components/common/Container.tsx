@@ -13,10 +13,6 @@ const StyledContainer = styled(Container)`
   }
 `;
 
-styled.div`
-  width: 100px;
-`;
-
 export const DivContainer = styled.div`
   padding-bottom: ${(props) => props.theme.spacing(2)}px;
   padding-top: ${(props) => props.theme.spacing(2)}px;

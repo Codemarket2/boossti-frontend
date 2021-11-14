@@ -1,0 +1,35 @@
+import { useQuery } from '@apollo/client';
+import { useState } from 'react';
+import { GET_FORMS, GET_FORM } from '../../graphql/query/form';
+
+interface IProps {
+  page?: number;
+  limit?: number;
+  search?: string;
+}
+
+// const defaultQueryVariables = { page: 1, limit: 20, search: '' };
+
+export function useGetForms({ page = 1, limit = 20, search = '' }: IProps): any {
+  const [state, setState] = useState({
+    page: 1,
+    limit: 20,
+    search: '',
+    showSearch: false,
+  });
+
+  const { data, error, loading } = useQuery(GET_FORMS, {
+    variables: { ...state },
+    fetchPolicy: 'cache-and-network',
+  });
+
+  return { data, error, loading, state, setState };
+}
+
+export function useGetForm(_id: string): any {
+  const { data, error, loading } = useQuery(GET_FORM, {
+    variables: { _id },
+    fetchPolicy: 'cache-and-network',
+  });
+  return { data, error, loading };
+}

@@ -7,9 +7,9 @@ interface IProps {
   children: ReactNode;
 }
 
-export default function BreadcrumbsComponent({ children }: IProps) {
+export default function BreadcrumbsComponent({ children }: IProps): any {
   return (
-    <Breadcrumbs separator="›" aria-label="breadcrumb" className="my-3">
+    <Breadcrumbs separator="›" aria-label="breadcrumb" className="my-2">
       <Link href="/">{projectConfig.title}</Link>
       {children}
     </Breadcrumbs>
