@@ -30,9 +30,17 @@ export function useGetFieldsByType({ parentId }: any) {
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev;
         const newField = subscriptionData.data.addedField;
-        let newData = { ...prev.getFieldsByType };
-        const isUpdated = prev.getFieldsByType._id === newField._id;
-        newData = isUpdated ? newField : newData;
+        let isNew = true;
+        let newData = prev?.getFieldsByType?.data?.map((t) => {
+          if (t._id === newField._id) {
+            isNew = false;
+            return newField;
+          }
+          return t;
+        });
+        if (isNew) {
+          newData = [...prev?.getFieldsByType?.data, newField];
+        }
         return {
           ...prev,
           getFieldsByType: {
@@ -42,7 +50,7 @@ export function useGetFieldsByType({ parentId }: any) {
         };
       },
     });
-  }, [data]);
+  }, []);
 
   return { data, error, loading };
 }

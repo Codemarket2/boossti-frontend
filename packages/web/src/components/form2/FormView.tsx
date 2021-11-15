@@ -89,7 +89,9 @@ export default function FormView({ form: { _id, name, fields, settings } }: IPro
       )}
       {submitState.showOnSubmitMessage ? (
         <div className="py-5">
-          <div className="ck-content">{parse(settings.onSubmitMessage || 'Thank you')}</div>
+          <div className="ck-content">
+            {parse(settings?.onSubmitMessage || '<h2 class="text-center">Thank you</h2>')}
+          </div>
           <InputGroup className="text-center">
             {settings?.editResponse && (
               <Button onClick={onSubmit} variant="outlined" color="primary" size="small">

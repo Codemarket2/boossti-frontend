@@ -36,6 +36,7 @@ interface IProps {
   parentId: string;
   typeId: string;
 }
+
 export default function DisplayContentBuilder({ parentId, typeId }: IProps) {
   const [payload, setPayload] = useState(null);
   useEffect(() => {

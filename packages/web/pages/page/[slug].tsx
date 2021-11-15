@@ -31,7 +31,6 @@ function Card({ slug }) {
 
   return (
     <Layout2>
-      {/* <Navbar /> */}
       {payload?.getListItemBySlug?.active ? (
         <>
           {payload?.getListItemBySlug?.authenticateUser ? (
@@ -53,7 +52,6 @@ function Card({ slug }) {
       ) : (
         <NotFound />
       )}
-      {/* <Footer /> */}
     </Layout2>
   );
 }

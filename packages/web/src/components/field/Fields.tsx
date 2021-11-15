@@ -1,15 +1,14 @@
 import AddCircle from '@material-ui/icons/AddCircle';
-import MoreHoriz from '@material-ui/icons/MoreHoriz';
-import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Tooltip from '@material-ui/core/Tooltip';
 import Paper from '@material-ui/core/Paper';
+import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import {
   useGetFieldsByType,
@@ -18,15 +17,12 @@ import {
 } from '@frontend/shared/hooks/field';
 import { useState, memo, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-// import MenuItem from '@material-ui/core/MenuItem';
-// import TuneIcon from '@material-ui/icons/Tune';
 import FieldForm from './FieldForm';
 import CRUDMenu from '../common/CRUDMenu';
 import FieldsSkeleton from './FieldsSkeleton';
 import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
-import CreateFormDrawer from '../form/CreateFormDrawer';
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -35,38 +31,29 @@ const reorder = (list, startIndex, endIndex) => {
   return result;
 };
 
-function Quote({ field, index, onClick }: any) {
-  return (
-    <Draggable draggableId={field._id} index={index}>
-      {(provided) => (
+const QuoteList = memo(function QuoteList({ fields, onClick, hideMore }: any) {
+  return fields?.map((field: any, index: number) => (
+    <Draggable draggableId={field._id} index={index} key={field._id}>
+      {(provided, draggableSnapshot) => (
         <ListItem
+          button
+          selected={draggableSnapshot.isDragging}
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <ListItemIcon>
-            <DragIndicatorIcon />
-          </ListItemIcon>
           <ListItemText primary={field.label} secondary={field.fieldType} />
-          <ListItemSecondaryAction>
-            <IconButton edge="end" onClick={(event) => onClick(event.currentTarget, field)}>
-              <MoreHoriz />
-            </IconButton>
-          </ListItemSecondaryAction>
+          {!hideMore && (
+            <ListItemSecondaryAction>
+              <IconButton edge="end" onClick={(event) => onClick(event.currentTarget, field)}>
+                <MoreVertIcon />
+              </IconButton>
+            </ListItemSecondaryAction>
+          )}
         </ListItem>
       )}
     </Draggable>
-  );
-}
-
-const QuoteList = memo(function QuoteList({ fields, onClick }: any) {
-  return (
-    <List>
-      {fields.map((field: any, index: number) => (
-        <Quote field={field} index={index} key={field._id} onClick={onClick} />
-      ))}
-    </List>
-  );
+  ));
 });
 
 interface IProps {
@@ -166,31 +153,33 @@ export default function Fields({
   }
 
   return (
-    <>
-      <Paper variant="outlined" className="p-2 mb-2">
-        <Typography variant="h5" className="d-flex align-items-center">
-          {title}
-          {!state.showForm && (
-            <Tooltip title="Add New Field">
-              <IconButton
-                disabled={updateLoading}
-                color="primary"
-                onClick={() => setState({ ...initialState, showForm: true })}
-              >
-                <AddCircle />
-              </IconButton>
-            </Tooltip>
-          )}
-          {updateLoading && <CircularProgress size={25} />}
-        </Typography>
-        {(state.showForm || (state.selectedField && state.edit)) && (
-          <FieldForm {...formBuilderProps} />
+    <Paper variant="outlined" className="mb-2">
+      <Typography variant="h5" className="d-flex align-items-center pl-2">
+        {title}
+        {!state.showForm && (
+          <Tooltip title="Add New Field">
+            <IconButton
+              disabled={updateLoading}
+              color="primary"
+              onClick={() => setState({ ...initialState, showForm: true })}
+            >
+              <AddCircle />
+            </IconButton>
+          </Tooltip>
         )}
+        {updateLoading && <CircularProgress size={25} />}
+      </Typography>
+      <Divider />
+      {(state.showForm || (state.selectedField && state.edit)) && (
+        <FieldForm {...formBuilderProps} />
+      )}
+      <List>
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="list">
-            {(provided) => (
+            {(provided, snapshot) => (
               <div ref={provided.innerRef} {...provided.droppableProps}>
                 <QuoteList
+                  hideMore={snapshot.isDraggingOver}
                   fields={data.getFieldsByType.data}
                   onClick={(currentTarget, field) =>
                     setState({ ...state, showMenu: currentTarget, selectedField: field })
@@ -201,36 +190,20 @@ export default function Fields({
             )}
           </Droppable>
         </DragDropContext>
-        <CRUDMenu
-          show={state.showMenu}
-          onClose={() => setState(initialState)}
-          onDelete={() => {
-            const anwser = confirm('Are you sure you want delete this field?');
-            if (anwser) {
-              setState({ ...state, showMenu: null });
-              handleDelete(state.selectedField._id, deleteCallback);
-            }
-          }}
-          onEdit={() => setState({ ...state, edit: true, showMenu: null })}
-        >
-          {/* {state?.selectedField?.fieldType === 'form' && (
-            <MenuItem onClick={() => setState({ ...state, editForm: true, showMenu: null })}>
-              <ListItemIcon className="mr-n4">
-                <TuneIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText primary="Edit Form" />
-            </MenuItem>
-          )} */}
-        </CRUDMenu>
-      </Paper>
+      </List>
+      <CRUDMenu
+        show={state.showMenu}
+        onClose={() => setState(initialState)}
+        onDelete={() => {
+          const anwser = confirm('Are you sure you want delete this field?');
+          if (anwser) {
+            setState({ ...state, showMenu: null });
+            handleDelete(state.selectedField._id, deleteCallback);
+          }
+        }}
+        onEdit={() => setState({ ...state, edit: true, showMenu: null })}
+      />
       <Backdrop open={deleteLoading} />
-      {state.editForm && (
-        <CreateFormDrawer
-          open
-          onClose={() => setState(initialState)}
-          parentId={state?.selectedField?._id}
-        />
-      )}
-    </>
+    </Paper>
   );
 }

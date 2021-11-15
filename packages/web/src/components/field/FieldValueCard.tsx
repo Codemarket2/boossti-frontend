@@ -8,7 +8,7 @@ import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import EditIcon from '@material-ui/icons/Edit';
 import moment from 'moment';
 import Link from 'next/link';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
@@ -41,7 +41,7 @@ export default function FieldValueCard({
   onSelect,
   showPreview,
   isPublish,
-}: IProps) {
+}: IProps): any {
   const [state, setState] = useState({
     expandedItem: false,
     itemId: '',
@@ -52,19 +52,13 @@ export default function FieldValueCard({
 
   return (
     <Card variant="outlined" style={{ border: 'none' }}>
-      {!isPublish && (auth.isAdmin || auth.attributes['custom:_id'] === fieldValue.createdBy._id) && (
+      {!isPublish && (auth.admin || auth.attributes['custom:_id'] === fieldValue.createdBy._id) && (
         <div className="d-flex justify-content-end">
-          <IconButton
-            style={{ zIndex: 9999 }}
-            className="position-absolute"
-            aria-label="settings"
-            onClick={(event) => onSelect(event.target, fieldValue)}
-          >
-            <MoreVertIcon />
+          <IconButton aria-label="settings" onClick={(event) => onSelect(event.target, fieldValue)}>
+            <EditIcon />
           </IconButton>
         </div>
       )}
-
       {/* {field.multipleValues ? (
         showAuthor && (
           <CardHeader

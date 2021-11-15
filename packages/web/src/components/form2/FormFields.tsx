@@ -87,14 +87,14 @@ export default function FormFields({ state, setState, onSelectField }: any): any
               <div ref={provided.innerRef} {...provided.droppableProps}>
                 {state?.fields.map((field: any, index: number) => (
                   <Draggable key={field._id} draggableId={field._id} index={index}>
-                    {(draggabelProvided, draggabelSnapshot) => (
+                    {(draggableProvided, draggableSnapshot) => (
                       <ListItem
                         button
                         onClick={() => onSelectField(field._id)}
-                        selected={draggabelSnapshot.isDragging}
-                        ref={draggabelProvided.innerRef}
-                        {...draggabelProvided.draggableProps}
-                        {...draggabelProvided.dragHandleProps}
+                        selected={draggableSnapshot.isDragging}
+                        ref={draggableProvided.innerRef}
+                        {...draggableProvided.draggableProps}
+                        {...draggableProvided.dragHandleProps}
                       >
                         <ListItemText primary={field.label} secondary={field.fieldType} />
                         {!snapshot.isDraggingOver && (

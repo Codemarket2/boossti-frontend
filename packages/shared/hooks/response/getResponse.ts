@@ -2,12 +2,12 @@ import { useQuery } from '@apollo/client';
 import { useState } from 'react';
 import { GET_RESPONSE, GET_RESPONSES } from '../../graphql/query/response';
 
-// const defaultQueryVariables = { page: 1, limit: 20, search: '' };
+export const defaultQueryVariables = { page: 1, limit: 100, search: '' };
 
 export function useGetResponses(formId: string): any {
   const [state, setState] = useState({
-    page: 1,
-    limit: 20,
+    page: defaultQueryVariables.page,
+    limit: defaultQueryVariables.limit,
     search: '',
     showSearch: false,
   });

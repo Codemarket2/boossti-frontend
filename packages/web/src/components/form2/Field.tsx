@@ -94,7 +94,10 @@ IProps): any {
       return (
         <>
           <InputLabel>{label}</InputLabel>
-          <RichTextarea value={value} onChange={(newValue) => onChange(newValue)} />
+          <RichTextarea
+            value={value ? value.value : ''}
+            onChange={(newValue) => onChange({ field: _id, value: newValue })}
+          />
           {validateValue(validate, value, options, fieldType).error && (
             <FormHelperText className="text-danger">
               {validateValue(validate, value, options, fieldType).errorMessage}
@@ -105,7 +108,11 @@ IProps): any {
     }
     case 'address': {
       return (
-        <AddressSearch label={label} value={value} onChange={(newValue) => onChange(newValue)} />
+        <AddressSearch
+          label={label}
+          value={value}
+          onChange={(newValue) => onChange({ field: _id, value: newValue })}
+        />
       );
     }
     case 'type': {

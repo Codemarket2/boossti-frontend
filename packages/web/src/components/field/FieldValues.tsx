@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import Carousel from 'react-material-ui-carousel';
 import { useRouter } from 'next/router';
 import { useTheme } from '@material-ui/core/styles';
+// import Grid from '@material-ui/core/Grid';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -176,7 +177,6 @@ function ItemOneFields({
           {state.showForm && <FieldValueForm {...formProps} />}
         </>
       )}
-
       {data.getFieldValuesByItem.data.length > 1 ? (
         <Carousel
           // index={parseInt(query.index)}
@@ -210,10 +210,10 @@ function ItemOneFields({
           fullHeightHover={false}
           autoPlay={false}
           animation="slide"
-          navButtonsAlwaysVisible={true}
+          navButtonsAlwaysVisible
         >
           {data.getFieldValuesByItem.data.map((fieldValue, index) => (
-            <div className="px-" key={fieldValue._id}>
+            <div key={fieldValue._id}>
               {state.selectedFieldValue &&
               state.selectedFieldValue._id === fieldValue._id &&
               state.edit ? (
@@ -243,7 +243,7 @@ function ItemOneFields({
         </Carousel>
       ) : (
         data.getFieldValuesByItem.data.map((fieldValue, index) => (
-          <Fragment key={fieldValue._id}>
+          <div key={fieldValue._id}>
             {state.selectedFieldValue &&
             state.selectedFieldValue._id === fieldValue._id &&
             state.edit ? (
@@ -265,7 +265,7 @@ function ItemOneFields({
                 }
               />
             )}
-          </Fragment>
+          </div>
         ))
       )}
       <CRUDMenu
@@ -327,29 +327,25 @@ export default function ItemsFieldsMap({
   if (error) {
     return <ErrorLoading error={error} />;
   }
-  return (
-    <>
-      {data.getFieldsByType.data.map((field, index) => (
-        <Fragment key={field._id}>
-          {field.fieldType === 'form' ? (
-            <SectionForm field={field} parentId={parentId} />
-          ) : (
-            <ItemOneFields
-              toggleLeftNavigation={(value) => {
-                if (toggleLeftNavigation) {
-                  toggleLeftNavigation(value);
-                }
-              }}
-              parentId={parentId}
-              field={field}
-              showAuthor={showAuthor}
-              isPublish={false}
-              guest={guest}
-              setFieldValueCount={(value) => setFieldValueCount(index, value)}
-            />
-          )}
-        </Fragment>
-      ))}
-    </>
-  );
+  return data.getFieldsByType.data.map((field, index) => (
+    <Fragment key={field._id}>
+      {field.fieldType === 'form' ? (
+        <SectionForm field={field} parentId={parentId} />
+      ) : (
+        <ItemOneFields
+          toggleLeftNavigation={(value) => {
+            if (toggleLeftNavigation) {
+              toggleLeftNavigation(value);
+            }
+          }}
+          parentId={parentId}
+          field={field}
+          showAuthor={showAuthor}
+          isPublish={false}
+          guest={guest}
+          setFieldValueCount={(value) => setFieldValueCount(index, value)}
+        />
+      )}
+    </Fragment>
+  ));
 }
