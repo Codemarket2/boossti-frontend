@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useGetListItemsByType } from '@frontend/shared/hooks/list';
-import ItemFormDrawer from './ItemFormDrawer';
+import ItemFormDrawer from '../list/ItemFormDrawer';
 import ErrorLoading from '../common/ErrorLoading';
 
 interface IProps {
@@ -56,13 +56,11 @@ export default function ListTypeAutoComplete({
         options={data && data.getListItems ? data.getListItems.data : []}
         renderInput={(params) => (
           <TextField
-            // error={formik.touched.itemId && Boolean(formik.errors.itemId)}
-            // helperText={formik.touched.itemId && formik.errors.itemId}
             error={vError}
             helperText={helperText}
             fullWidth
             {...params}
-            label="Select Value"
+            label={label}
             variant="outlined"
             InputProps={{
               ...params.InputProps,

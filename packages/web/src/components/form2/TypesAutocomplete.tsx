@@ -5,22 +5,33 @@ import { useGetListTypes } from '@frontend/shared/hooks/list';
 import ErrorLoading from '../common/ErrorLoading';
 
 interface IProps {
-  formik: any;
+  disabled?: boolean;
+  value: any;
+  onChange: (newValue: any) => void;
+  error?: boolean;
+  helperText?: string;
 }
 
-export default function TypeAutocomplete({ formik }: IProps): any {
+export default function TypeAutocomplete({
+  disabled,
+  value,
+  onChange,
+  error: isError,
+  helperText,
+}: IProps): any {
   const { data, loading, error, state, setState } = useGetListTypes({ limit: 10 });
 
   if (error) {
     return <ErrorLoading error={error} />;
   }
+
   return (
     <Autocomplete
       size="small"
-      disabled={formik.isSubmitting}
-      value={formik.values.typeId}
+      disabled={disabled}
+      value={value}
       onChange={(event: any, newValue) => {
-        formik.setFieldValue('typeId', newValue);
+        onChange(newValue);
       }}
       getOptionLabel={(option) => option.title}
       inputValue={state.search}
@@ -44,8 +55,8 @@ export default function TypeAutocomplete({ formik }: IProps): any {
               </>
             ),
           }}
-          error={formik.touched.typeId && Boolean(formik.errors.typeId)}
-          helperText={formik.touched.typeId && formik.errors.typeId}
+          error={isError}
+          helperText={helperText}
         />
       )}
     />

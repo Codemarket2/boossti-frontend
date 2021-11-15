@@ -25,16 +25,7 @@ export function useUpdateForm({ onAlert, _id }: IProps): any {
 
   useEffect(() => {
     if (data && data.getForm && !state) {
-      const parsedForm = {
-        ...data.getForm,
-        fields: data.getForm.fields.map((m) => {
-          const field = { ...m };
-          field.options = JSON.parse(field.options);
-          return field;
-        }),
-        settings: JSON.parse(data.getForm.settings),
-      };
-      setState(parsedForm);
+      setState(data.getForm);
     }
   }, [data]);
 
@@ -66,7 +57,7 @@ export function useUpdateForm({ onAlert, _id }: IProps): any {
       fields: payload.fields.map((m) => {
         const field = { ...m };
         if (field.fieldType === 'type') {
-          field.typeId = field.typeId._id;
+          field.typeId = field.typeId ? field.typeId._id : null;
         }
         field.options = JSON.stringify(field.options);
         return field;
@@ -78,7 +69,7 @@ export function useUpdateForm({ onAlert, _id }: IProps): any {
         variables: payload,
         update: updateCache,
       });
-      console.log('update res', res);
+      // console.log('update res', res);
     } catch (error) {
       console.log(error);
       onAlert('Error', error.message);

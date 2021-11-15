@@ -3,17 +3,33 @@ import { useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import Radio from '@material-ui/core/Radio';
 import { useAddFields } from '@frontend/shared/hooks/form';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
 import { onAlert } from '../../utils/alert';
 import TypesAutocomplete from './TypesAutocomplete';
+
+export const fieldTypes = [
+  { label: 'Text', value: 'text' },
+  { label: 'Number', value: 'number' },
+  { label: 'Password', value: 'password' },
+  { label: 'Textarea', value: 'textarea' },
+  { label: 'Checkbox', value: 'checkbox' },
+  { label: 'Select', value: 'select' },
+  { label: 'Email', value: 'email' },
+  { label: 'Phone Number', value: 'phoneNumber' },
+  { label: 'Date', value: 'date' },
+  { label: 'Date & Time', value: 'dateTime' },
+  // { label: 'Media (Images/Video)', value: 'media' },
+  // { label: 'Address', value: 'address' },
+  { label: 'Existing Type', value: 'type' },
+];
 
 interface IProps {
   onCancel: () => void;
@@ -50,52 +66,41 @@ export default function FieldForm({ onCancel, onSave, field = null }: IProps): a
         />
       </InputGroup>
       <InputGroup>
-        <FormControl disabled={formik.isSubmitting} component="fieldset">
-          <FormLabel component="legend">Field Type</FormLabel>
-          <RadioGroup
-            aria-label="fieldType"
+        <FormControl
+          variant="outlined"
+          fullWidth
+          size="small"
+          error={formik.touched.fieldType && formik.errors.fieldType}
+        >
+          <InputLabel id="fieldType-simple-select-outlined-label">Field Type</InputLabel>
+          <Select
+            labelId="fieldType-simple-select-outlined-label"
+            id="fieldType-simple-select-outlined"
             name="fieldType"
             value={formik.values.fieldType}
             onChange={formik.handleChange}
+            label="Field Type"
           >
-            <FormControlLabel value="text" control={<Radio color="primary" />} label="Text" />
-            <FormControlLabel value="number" control={<Radio color="primary" />} label="Number" />
-            <FormControlLabel
-              value="textarea"
-              control={<Radio color="primary" />}
-              label="Textarea"
-            />
-            <FormControlLabel
-              value="boolean"
-              control={<Radio color="primary" />}
-              label="Boolean (Yes/No)"
-            />
-            <FormControlLabel value="email" control={<Radio color="primary" />} label="Email" />
-            <FormControlLabel
-              value="phoneNumber"
-              control={<Radio color="primary" />}
-              label="Phone Number"
-            />
-            <FormControlLabel value="url" control={<Radio color="primary" />} label="URL" />
-            <FormControlLabel value="date" control={<Radio color="primary" />} label="Date" />
-            <FormControlLabel
-              value="media"
-              control={<Radio color="primary" />}
-              label="Media (Images/Video)"
-            />
-            <FormControlLabel
-              value="type"
-              control={<Radio color="primary" />}
-              label="Exisiting Type"
-            />
-            <FormControlLabel value="address" control={<Radio color="primary" />} label="Address" />
-          </RadioGroup>
+            {fieldTypes?.map((option, index) => (
+              <MenuItem value={option.value} key={index}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </Select>
           {formik.touched.fieldType && formik.errors.fieldType && (
             <FormHelperText className="text-danger">{formik.errors.fieldType}</FormHelperText>
           )}
         </FormControl>
       </InputGroup>
-      {formik.values.fieldType === 'type' && <TypesAutocomplete formik={formik} />}
+      {formik.values.fieldType === 'type' && (
+        <TypesAutocomplete
+          disabled={formik.isSubmitting}
+          value={formik.values.typeId}
+          onChange={(newValue) => formik.setFieldValue('typeId', newValue)}
+          error={formik.touched.typeId && Boolean(formik.errors.typeId)}
+          helperText={formik.touched.typeId && formik.errors.typeId}
+        />
+      )}
       <InputGroup>
         <FormControlLabel
           disabled={formik.isSubmitting}

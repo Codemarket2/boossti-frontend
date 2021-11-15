@@ -33,16 +33,16 @@ export default function Form({ field, parentId, hide3Dots = false }: IProps): an
 
   const handleEditForm = async () => {
     try {
-      let fieldId = '';
-      if (data?.getFieldValuesByItem?.count > 0) {
-        const fieldValue = data?.getFieldValuesByItem?.data[0];
-        fieldId = fieldValue._id;
-      } else {
-        setState({ ...initialState, backdrop: true });
-        const payload = { parentId, field: field._id, value: '' };
-        const response = await handleCreateField(payload);
-        fieldId = response?.data?.createFieldValue?._id;
-      }
+      let fieldId = true;
+      // if (data?.getFieldValuesByItem?.count > 0) {
+      //   const fieldValue = data?.getFieldValuesByItem?.data[0];
+      //   fieldId = fieldValue._id;
+      // } else {
+      //   setState({ ...initialState, backdrop: true });
+      //   const payload = { parentId, field: field._id, value: '' };
+      //   const response = await handleCreateField(payload);
+      //   fieldId = response?.data?.createFieldValue?._id;
+      // }
       setState({ ...initialState, fieldId });
     } catch (err) {
       alert(`Error ${err.message}`);

@@ -27,12 +27,10 @@ const reorder = (list, startIndex, endIndex) => {
 const initialState = {
   showMenu: null,
   field: null,
-  fieldIndex: null,
   showForm: false,
-  // edit: false,
 };
 
-export default function FormFields({ state, setState }: any): any {
+export default function FormFields({ state, setState, onSelectField }: any): any {
   const [values, setValues] = useState(initialState);
 
   function onDragEnd(result) {
@@ -91,6 +89,8 @@ export default function FormFields({ state, setState }: any): any {
                   <Draggable key={field._id} draggableId={field._id} index={index}>
                     {(draggabelProvided, draggabelSnapshot) => (
                       <ListItem
+                        button
+                        onClick={() => onSelectField(field._id)}
                         selected={draggabelSnapshot.isDragging}
                         ref={draggabelProvided.innerRef}
                         {...draggabelProvided.draggableProps}
@@ -106,7 +106,6 @@ export default function FormFields({ state, setState }: any): any {
                                   ...initialState,
                                   showMenu: event.currentTarget,
                                   field,
-                                  fieldIndex: index,
                                 })
                               }
                             >
@@ -133,11 +132,15 @@ export default function FormFields({ state, setState }: any): any {
             setValues({ ...values, showMenu: null });
             setState({
               ...state,
-              fields: state.fields.filter((field, index) => index !== values.fieldIndex),
+              fields: state.fields.filter((field) => field._id !== values.field._id),
             });
           }
         }}
-        onEdit={() => setValues({ ...values, showForm: true, showMenu: null })}
+        onEdit={() => {
+          const fieldId = values.field._id;
+          setValues(initialState);
+          onSelectField(fieldId);
+        }}
       />
     </Paper>
   );

@@ -6,7 +6,7 @@ import {
 import { guestQuery } from './guestQuery';
 import FieldsSkeleton from '../field/FieldsSkeleton';
 import FieldValueCard from '../field/FieldValueCard';
-import Form from '../form/Form';
+import SectionForm from '../form2/SectionForm';
 
 function ItemOneFields({ parentId, field }) {
   const [payload, setPayload] = useState(null);
@@ -51,7 +51,7 @@ export default function DisplayContentBuilder({ parentId, typeId }: IProps) {
         <Fragment key={field._id}>
           {field.fieldType === 'form' ? (
             <div className="container">
-              <Form field={field} parentId={parentId} hide3Dots />
+              <SectionForm field={field} parentId={parentId} hide3Dots />
             </div>
           ) : (
             <ItemOneFields parentId={parentId} field={field} />

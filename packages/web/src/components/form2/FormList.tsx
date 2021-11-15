@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-wrap-multilines */
 import Link from 'next/link';
-import { useGetForms } from '@frontend/shared/hooks/form';
+import { useRouter } from 'next/router';
+import { useGetForms, useCreateForm } from '@frontend/shared/hooks/form';
 import AddIcon from '@material-ui/icons/Add';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
@@ -11,12 +12,22 @@ import moment from 'moment';
 import ErrorLoading from '../common/ErrorLoading';
 import ListHeader from '../common/ListHeader';
 import LoadingButton from '../common/LoadingButton';
+import Backdrop from '../common/Backdrop';
+import { onAlert } from '../../utils/alert';
 
 export default function FormList(): any {
   const { data, error, loading, state, setState } = useGetForms({});
+  const { handleCreateForm, createLoading } = useCreateForm({ onAlert });
+  const router = useRouter();
+
+  const handleAddNewForm = async () => {
+    const res = await handleCreateForm(`Form ${Math.floor(1000 + Math.random() * 9000)}`);
+    router.push(`/forms/${res?.data?.createForm?._id}`);
+  };
 
   return (
     <div>
+      <Backdrop open={createLoading} />
       <ListHeader
         loading={loading}
         button={
@@ -27,8 +38,8 @@ export default function FormList(): any {
               variant="contained"
               type="button"
               color="primary"
-              // onClick={() => handleCreate(createCallback)}
-              // loading={createLoading}
+              onClick={handleAddNewForm}
+              loading={createLoading}
               startIcon={<AddIcon />}
             >
               Add New

@@ -28,7 +28,7 @@ import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
 import FieldValueCard from './FieldValueCard';
 import Share from '../share/Share';
-import Form from '../form/Form';
+import SectionForm from '../form2/SectionForm';
 
 const initialState = {
   showForm: false,
@@ -332,7 +332,7 @@ export default function ItemsFieldsMap({
       {data.getFieldsByType.data.map((field, index) => (
         <Fragment key={field._id}>
           {field.fieldType === 'form' ? (
-            <Form field={field} parentId={parentId} />
+            <SectionForm field={field} parentId={parentId} />
           ) : (
             <ItemOneFields
               toggleLeftNavigation={(value) => {

@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GET_FORMS, GET_FORM } from '../../graphql/query/form';
 
 interface IProps {
@@ -27,9 +27,26 @@ export function useGetForms({ page = 1, limit = 20, search = '' }: IProps): any 
 }
 
 export function useGetForm(_id: string): any {
+  const [getForm, setGetForm] = useState(null);
   const { data, error, loading } = useQuery(GET_FORM, {
     variables: { _id },
     fetchPolicy: 'cache-and-network',
   });
-  return { data, error, loading };
+
+  useEffect(() => {
+    if (data && data.getForm) {
+      const parsedForm = {
+        ...data.getForm,
+        fields: data.getForm.fields.map((m) => {
+          const field = { ...m };
+          field.options = JSON.parse(field.options);
+          return field;
+        }),
+        settings: JSON.parse(data.getForm.settings),
+      };
+      setGetForm(parsedForm);
+    }
+  }, [data]);
+
+  return { data: { getForm }, error, loading };
 }
