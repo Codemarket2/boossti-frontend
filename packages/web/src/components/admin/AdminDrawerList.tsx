@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
 import Divider from '@material-ui/core/Divider';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
 import GroupIcon from '@material-ui/icons/Group';
 import ListIcon from '@material-ui/icons/List';
+import TuneIcon from '@material-ui/icons/Tune';
 import { useRouter } from 'next/router';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import ListItem from '@material-ui/core/ListItem';
@@ -19,23 +17,20 @@ const checkActiveRoute = (activeRoute, linkPathname) => {
 export default function AdminDrawerList() {
   const [activeRoute, setActiveRoute] = useState({
     pathname: '/',
-    _id: '',
     showList: true,
   });
   const router = useRouter();
 
   useEffect(() => {
-    if (router.pathname === '/admin/list/[_id]') {
-      const _id = router.asPath.split('/admin/list/')[1];
-      setActiveRoute({ ...activeRoute, pathname: router.pathname, showList: true, _id });
-    } else {
-      setActiveRoute({ ...activeRoute, pathname: router.pathname, _id: '' });
+    if (router.pathname !== activeRoute.pathname) {
+      setActiveRoute({ ...activeRoute, pathname: router.pathname });
     }
   }, [router.asPath]);
+
   return (
     <>
       <ListSubheader>Admin</ListSubheader>
-      <Link href={`/admin/users`}>
+      <Link href="/admin/users">
         <ListItem button selected={checkActiveRoute(activeRoute, '/admin/users')}>
           <ListItemIcon>
             <GroupIcon />
@@ -44,12 +39,20 @@ export default function AdminDrawerList() {
         </ListItem>
       </Link>
       {/* <Divider /> */}
-      <Link href={`/types`}>
+      <Link href="/types">
         <ListItem button selected={checkActiveRoute(activeRoute, '/types')}>
           <ListItemIcon>
             <ListIcon />
           </ListItemIcon>
           <ListItemText primary="Types" />
+        </ListItem>
+      </Link>
+      <Link href="/forms">
+        <ListItem button selected={checkActiveRoute(activeRoute, '/forms')}>
+          <ListItemIcon>
+            <TuneIcon />
+          </ListItemIcon>
+          <ListItemText primary="Forms" />
         </ListItem>
       </Link>
       <Divider />

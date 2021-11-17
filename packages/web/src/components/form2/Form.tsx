@@ -25,9 +25,13 @@ interface IProps {
 export default function Form({ _id, drawerMode = false }: IProps): any {
   const { error, state, setState, updateLoading } = useUpdateForm({ onAlert, _id });
 
-  const [options, setOptions] = useState({ currentTab: 0, fieldId: null });
+  const [options, setOptions] = useState({ currentTab: 2, fieldId: null });
 
-  const NameInput = () => (
+  if (error || !state) {
+    return <ErrorLoading error={error} />;
+  }
+
+  const NameInput = (
     <input
       width="100%"
       placeholder="Form Name"
@@ -36,26 +40,22 @@ export default function Form({ _id, drawerMode = false }: IProps): any {
         border: 'none',
         outline: 'none',
       }}
-      value={state.name.includes('-n-e-w') ? 'Form Name' : state.name}
+      value={state?.name?.includes('-n-e-w') ? 'Form Name' : state?.name}
       onChange={(e) => setState({ ...state, name: e.target.value })}
     />
   );
-
-  if (error || !state) {
-    return <ErrorLoading error={error} />;
-  }
 
   return (
     <div className="px-2">
       {drawerMode ? (
         <Typography variant="h5" className="py-2">
-          <NameInput />
+          {NameInput}
         </Typography>
       ) : (
         <div className="d-flex justify-content-between align-items-center">
           <Breadcrumbs>
             <Link href="/forms">Forms</Link>
-            <NameInput />
+            {NameInput}
           </Breadcrumbs>
           <div className="d-flex  align-items-center">
             {updateLoading && <CircularProgress size={25} className="mr-3" />}
