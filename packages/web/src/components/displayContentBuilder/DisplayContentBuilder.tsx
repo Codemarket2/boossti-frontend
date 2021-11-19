@@ -44,7 +44,8 @@ export default function DisplayContentBuilder({ parentId, typeId }: IProps) {
   }, []);
 
   if (!payload?.data || !payload?.data?.getFieldsByType) {
-    return <FieldsSkeleton />;
+    return null;
+    // return <FieldsSkeleton />;
   }
   return (
     <>

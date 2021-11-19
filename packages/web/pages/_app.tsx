@@ -17,6 +17,9 @@ import { light, dark } from '../src/utils/theme/palette';
 
 // // CSS from node modules
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-grid-layout/css/styles.css';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import 'react-resizable/css/styles.css';
 
 import '../src/assets/css/ckeditor.css';
 import '../src/assets/css/common.css';

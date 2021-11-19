@@ -1,10 +1,10 @@
 import { useState, useEffect, ReactNode } from 'react';
 import { GET_LIST_ITEM_BY_SLUG } from '@frontend/shared/graphql/query/list';
 import { guestClient } from '@frontend/shared/graphql';
-import Loading from './Loading';
+// import Loading from './Loading';
 import DisplayContentBuilder from '../displayContentBuilder/DisplayContentBuilder';
 
-function Section({ slug }) {
+export function Section({ slug }) {
   const [payload, setPayload] = useState(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -31,8 +31,6 @@ function Section({ slug }) {
           parentId={payload?.getListItemBySlug?._id}
           typeId={payload?.getListItemBySlug?.types[0]?._id}
         />
-      ) : loading ? (
-        <Loading />
       ) : null}
     </>
   );
