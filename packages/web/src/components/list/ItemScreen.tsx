@@ -221,7 +221,6 @@ export default function ItemScreen({
           variant="outlined"
           className="p-2 pb-5"
         >
-          layouts - {JSON.stringify(data?.getListItemBySlug?.layouts)}
           {!previewMode && (
             <>
               {state.fieldName === 'title' ? (
