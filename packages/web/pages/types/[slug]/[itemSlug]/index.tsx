@@ -1,17 +1,16 @@
-import { useRouter } from 'next/router';
-
+import { guestClient } from '@frontend/shared/graphql';
 import { GET_LIST_ITEM_BY_SLUG } from '@frontend/shared/graphql/query/list';
 import ItemScreen from '../../../../src/screens/ItemScreen';
 import Loading from '../../../../src/components/common/Loading';
-import { guestClient } from '@frontend/shared/graphql';
 import Head from '../../../../src/components/common/Head';
+
 interface IProps {
   metaTags: any;
+  itemSlug: string;
+  slug: string;
 }
 
-export default function Page({ metaTags }: IProps) {
-  const router = useRouter();
-  const { itemSlug, slug } = router.query;
+export default function Page({ metaTags, itemSlug, slug }: IProps) {
   return (
     <>
       <Head {...metaTags} />
@@ -21,7 +20,7 @@ export default function Page({ metaTags }: IProps) {
 }
 
 export async function getServerSideProps(context) {
-  const { itemSlug } = context.query;
+  const { itemSlug, slug } = context.query;
   let metaTags = null;
   const regex = /(<([^>]+)>)/gi;
   try {
@@ -36,7 +35,7 @@ export async function getServerSideProps(context) {
         title: response?.data?.getListItemBySlug?.title
           ? response?.data?.getListItemBySlug?.title
           : null,
-        description: description,
+        description,
         image:
           response.data.getListItemBySlug.media.length >= 1
             ? response.data.getListItemBySlug.media[0].url
@@ -48,6 +47,6 @@ export async function getServerSideProps(context) {
   }
 
   return {
-    props: { metaTags },
+    props: { metaTags, itemSlug, slug },
   };
 }

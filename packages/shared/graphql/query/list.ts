@@ -73,6 +73,7 @@ export const GET_LIST_ITEM_BY_SLUG = gql`
         url
         caption
       }
+      layouts
       types {
         _id
         title

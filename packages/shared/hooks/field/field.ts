@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
@@ -16,40 +16,44 @@ import { ADDED_FIELD } from '../../graphql/subscription/field';
 const defaultQueryVariables = { limit: 1000, page: 1 };
 
 export function useGetFieldsByType({ parentId }: any) {
+  const [subscribed, setSubscribed] = useState(false);
   const { data, error, loading, subscribeToMore } = useQuery(GET_FIELDS_BY_TYPE, {
     variables: { ...defaultQueryVariables, parentId },
     fetchPolicy: 'cache-and-network',
   });
 
   useEffect(() => {
-    subscribeToMore({
-      document: ADDED_FIELD,
-      variables: {
-        parentId,
-      },
-      updateQuery: (prev, { subscriptionData }) => {
-        if (!subscriptionData.data) return prev;
-        const newField = subscriptionData.data.addedField;
-        let isNew = true;
-        let newData = prev?.getFieldsByType?.data?.map((t) => {
-          if (t._id === newField._id) {
-            isNew = false;
-            return newField;
+    if (!subscribed) {
+      setSubscribed(true);
+      subscribeToMore({
+        document: ADDED_FIELD,
+        variables: {
+          parentId,
+        },
+        updateQuery: (prev, { subscriptionData }) => {
+          if (!subscriptionData.data) return prev;
+          const newField = subscriptionData.data.addedField;
+          let isNew = true;
+          let newData = prev?.getFieldsByType?.data?.map((t) => {
+            if (t._id === newField._id) {
+              isNew = false;
+              return newField;
+            }
+            return t;
+          });
+          if (isNew) {
+            newData = [...prev?.getFieldsByType?.data, newField];
           }
-          return t;
-        });
-        if (isNew) {
-          newData = [...prev?.getFieldsByType?.data, newField];
-        }
-        return {
-          ...prev,
-          getFieldsByType: {
-            ...prev.getFieldsByType,
-            data: newData,
-          },
-        };
-      },
-    });
+          return {
+            ...prev,
+            getFieldsByType: {
+              ...prev.getFieldsByType,
+              data: newData,
+            },
+          };
+        },
+      });
+    }
   }, []);
 
   return { data, error, loading };
@@ -98,7 +102,7 @@ export function useCRUDFields({ onAlert, parentId, createCallback }: ICRUDProps)
 
   const formik = useFormik({
     initialValues: { ...defaultFormValues, parentId },
-    validationSchema: validationSchema,
+    validationSchema,
     onSubmit: async (payload: IFormValues) => {
       try {
         let newPayload = payload;

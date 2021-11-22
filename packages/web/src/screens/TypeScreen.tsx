@@ -32,13 +32,12 @@ import ListItemForm from '../components/list/ListItemForm';
 import ListItemsGrid from '../components/list/ListItemsGrid';
 
 interface IProps {
-  slug: any;
+  slug: string;
 }
 
 const buttonLabels = ['List View', 'Grid View', 'Form View'];
 
 export default function Screen({ slug }: IProps) {
-  // export default function Screen({ slug }: IProps) {
   const router = useRouter();
   const [state, setState] = useState({
     fieldName: '',
@@ -59,7 +58,7 @@ export default function Screen({ slug }: IProps) {
     }
   };
 
-  const { data, loading, error } = useGetListTypeBySlug({ slug });
+  const { data, error } = useGetListTypeBySlug({ slug });
   const { handleDelete, deleteLoading } = useDeleteListType({ onAlert });
 
   const {
@@ -106,6 +105,7 @@ export default function Screen({ slug }: IProps) {
               (buttonLabel) =>
                 buttonLabel !== state.view && (
                   <Button
+                    key={buttonLabel}
                     variant="contained"
                     color="primary"
                     size="small"

@@ -1,5 +1,9 @@
 import Alert from '@material-ui/lab/Alert';
 
-export default function ShowError({ error }: any) {
+interface IProps {
+  error: Error;
+}
+
+export default function ShowError({ error }: IProps): any {
   return <Alert severity="error">{error.message}</Alert>;
 }

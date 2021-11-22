@@ -81,7 +81,7 @@ export default function FormView({ form: { _id, name, fields, settings } }: IPro
   };
 
   return (
-    <div className="pt-2">
+    <div>
       {settings?.showFormTitle && (
         <InputGroup className="text-center">
           <Typography variant="h4">{name}</Typography>

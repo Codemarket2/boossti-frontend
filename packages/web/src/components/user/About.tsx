@@ -9,6 +9,7 @@ export default function About({ userId, guest = false }) {
         parentId={userId}
         showAuthor={false}
         guest={guest}
+        layouts={{}}
       />
     </Paper>
   );

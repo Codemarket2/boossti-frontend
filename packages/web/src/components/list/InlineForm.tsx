@@ -58,7 +58,8 @@ export default function InlineForm({
             disabled={formLoading}
             variant="outlined"
             size="small"
-            onClick={onCancel}>
+            onClick={onCancel}
+          >
             Cancel
           </Button>
         </InputGroup>

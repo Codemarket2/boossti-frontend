@@ -25,7 +25,7 @@ interface IProps {
 export default function Form({ _id, drawerMode = false }: IProps): any {
   const { error, state, setState, updateLoading } = useUpdateForm({ onAlert, _id });
 
-  const [options, setOptions] = useState({ currentTab: 2, fieldId: null });
+  const [options, setOptions] = useState({ currentTab: 0, fieldId: null });
 
   if (error || !state) {
     return <ErrorLoading error={error} />;

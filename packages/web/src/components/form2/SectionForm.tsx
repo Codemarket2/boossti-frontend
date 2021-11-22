@@ -23,7 +23,7 @@ import { onAlert } from '../../utils/alert';
 interface IProps {
   field: any;
   parentId: string;
-  hide3Dots?: boolean;
+  previewMode?: boolean;
 }
 
 const initialState = {
@@ -32,7 +32,7 @@ const initialState = {
   backdrop: false,
 };
 
-export default function FormC({ field, parentId, hide3Dots = false }: IProps): any {
+export default function FormC({ field, parentId, previewMode = false }: IProps): any {
   const [state, setState] = useState(initialState);
   const { data, error } = useGetFieldValuesByItem({ parentId, field: field._id });
   const { handleCreateField } = useCreateFieldValue();
@@ -76,7 +76,7 @@ export default function FormC({ field, parentId, hide3Dots = false }: IProps): a
   }
   return (
     <div>
-      {!hide3Dots && (
+      {!previewMode && (
         <>
           <Divider />
           <div className="d-flex justify-content-between align-items-center">

@@ -17,12 +17,15 @@ import LoadingButton from '../common/LoadingButton';
 import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
 
-export default function ListTypes() {
+export default function ListTypes(): any {
   const { data, loading, error, state, setState } = useGetListTypes();
+
   const router = useRouter();
+
   const createCallback = (slug) => {
     router.push(`/types/${slug}`);
   };
+
   const { handleCreate, createLoading } = useCreateListType({ onAlert });
 
   return (
