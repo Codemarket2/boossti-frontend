@@ -22,6 +22,7 @@ export function useGetListTypes(queryVariables?: IQueryProps) {
     search: '',
     showSearch: false,
   });
+  const [subscribed, setSubscribed] = useState(false);
 
   const limit =
     queryVariables && queryVariables.limit ? queryVariables.limit : defaultQueryVariables.limit;
@@ -32,25 +33,40 @@ export function useGetListTypes(queryVariables?: IQueryProps) {
     variables: { limit, page, search: state.search },
     fetchPolicy: 'cache-and-network',
   });
+
   useEffect(() => {
-    subscribeToMore({
-      document: ADDED_LIST_TYPE,
-      updateQuery: (prev, { subscriptionData }) => {
-        if (!subscriptionData.data) return prev;
-        const newListType = subscriptionData.data.addedListType;
-        let newData = { ...prev.getListTypes };
-        const isUpdated = prev.getListTypes._id === newListType._id;
-        newData = isUpdated ? newListType : newData;
-        return {
-          ...prev,
-          getListTypes: {
-            ...prev.getListTypes,
-            data: newData,
-          },
-        };
-      },
-    });
-  }, [data]);
+    let unsubscribe = () => null;
+    if (!subscribed && subscribeToMore) {
+      setSubscribed(true);
+      unsubscribe = subscribeToMore({
+        document: ADDED_LIST_TYPE,
+        updateQuery: (prev, { subscriptionData }) => {
+          if (!subscriptionData.data) return prev;
+          const newListType = subscriptionData.data.addedListType;
+          let isNew = true;
+          let newData = prev?.getListTypes?.data?.map((t) => {
+            if (t._id === newListType._id) {
+              isNew = false;
+              return newListType;
+            }
+            return t;
+          });
+          if (isNew) {
+            newData = [...prev?.getListTypes?.data, newListType];
+          }
+          return {
+            ...prev,
+            getListTypes: {
+              ...prev.getListTypes,
+              data: newData,
+            },
+          };
+        },
+      });
+    }
+    return () => unsubscribe();
+  }, [subscribeToMore]);
+
   return { data, error, loading, state, setState };
 }
 

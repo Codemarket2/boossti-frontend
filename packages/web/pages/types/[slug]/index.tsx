@@ -1,19 +1,17 @@
-import { useRouter } from 'next/router';
+import { getMetaTags } from '@frontend/shared';
 import TypeScreen from '../../../src/screens/TypeScreen';
 import Loading from '../../../src/components/common/Loading';
 import Head from '../../../src/components/common/Head';
-import { getMetaTags } from '@frontend/shared';
+
 interface IProps {
   metaTags: any;
+  slug: string;
 }
-export default function Page({ metaTags }: IProps) {
-  const router = useRouter();
-  const { slug } = router.query;
-
+export default function Page({ metaTags, slug }: IProps) {
   return (
     <>
       <Head {...metaTags} />
-      {slug ? <TypeScreen slug={slug} /> : <Loading />}
+      {slug ? <TypeScreen slug={slug.toString()} /> : <Loading />}
     </>
   );
 }
@@ -21,8 +19,7 @@ export default function Page({ metaTags }: IProps) {
 export async function getServerSideProps(context) {
   const { slug } = context.query;
   const metaTags = await getMetaTags(slug);
-
   return {
-    props: { metaTags },
+    props: { metaTags, slug },
   };
 }

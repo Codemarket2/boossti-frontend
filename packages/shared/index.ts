@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 import { GET_LIST_TYPE_BY_SLUG, GET_LIST_ITEM_BY_SLUG } from './graphql/query/list';
 import { guestClient } from './graphql';
 import { updateSettingAction } from '../shared/redux/actions/setting';
-import { useDispatch } from 'react-redux';
+
 interface IProjectConfig {
   title: string;
   description: string;
@@ -48,7 +49,7 @@ export async function getMetaTags(slug) {
         title: response?.data?.getListTypeBySlug?.title
           ? response?.data?.getListTypeBySlug?.title
           : null,
-        description: description ? description : null,
+        description: description || null,
         image:
           response?.data?.getListTypeBySlug?.media?.length >= 1
             ? response?.data?.getListTypeBySlug?.media[0]?.url

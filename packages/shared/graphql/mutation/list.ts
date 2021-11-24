@@ -36,8 +36,20 @@ export const DELETE_LIST_TYPE = gql`
 `;
 
 export const CREATE_LIST_ITEM = gql`
-  mutation MyMutation($types: [ID!], $title: String!, $description: String, $media: [MediaInput]) {
-    createListItem(types: $types, title: $title, description: $description, media: $media) {
+  mutation MyMutation(
+    $types: [ID!]
+    $title: String!
+    $description: String
+    $media: [MediaInput]
+    $layouts: AWSJSON
+  ) {
+    createListItem(
+      types: $types
+      title: $title
+      description: $description
+      media: $media
+      layouts: $layouts
+    ) {
       _id
       title
       slug
@@ -51,12 +63,26 @@ export const CREATE_LIST_ITEM = gql`
         url
         caption
       }
+      layouts
     }
   }
 `;
+
 export const UPDATE_LIST_ITEM = gql`
-  mutation MyMutation($_id: ID!, $title: String!, $description: String, $media: [MediaInput]) {
-    updateListItem(_id: $_id, title: $title, description: $description, media: $media) {
+  mutation MyMutation(
+    $_id: ID!
+    $title: String
+    $description: String
+    $media: [MediaInput]
+    $layouts: AWSJSON
+  ) {
+    updateListItem(
+      _id: $_id
+      title: $title
+      description: $description
+      media: $media
+      layouts: $layouts
+    ) {
       _id
       title
       slug
@@ -70,6 +96,27 @@ export const UPDATE_LIST_ITEM = gql`
         url
         caption
       }
+      layouts
+    }
+  }
+`;
+export const UPDATE_LIST_ITEM_LAYOUTS = gql`
+  mutation MyMutation($_id: ID!, $layouts: AWSJSON) {
+    updateListItem(_id: $_id, layouts: $layouts) {
+      _id
+      title
+      slug
+      description
+      types {
+        _id
+        title
+        slug
+      }
+      media {
+        url
+        caption
+      }
+      layouts
     }
   }
 `;

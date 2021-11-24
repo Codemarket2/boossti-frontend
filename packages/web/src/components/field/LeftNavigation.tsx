@@ -5,12 +5,29 @@ import Paper from '@material-ui/core/Paper';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import LinkIcon from '@material-ui/icons/Link';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Divider from '@material-ui/core/Divider';
+import TextField from '@material-ui/core/TextField';
 import Skeleton from '@material-ui/lab/Skeleton';
 import Badge from '@material-ui/core/Badge';
+import { useState } from 'react';
+import { useUpdateItemLayout } from '@frontend/shared/hooks/list';
+import { onAlert } from '../../utils/alert';
 
-export function convertToSlug(text) {
+const breakpoints = [
+  { name: 'xs', label: 'Extra Small' },
+  { name: 'sm', label: 'Small' },
+  { name: 'md', label: 'Medium' },
+  { name: 'lg', label: 'Large' },
+  { name: 'xl', label: 'Extra Large' },
+];
+
+export function convertToSlug(text: string): string {
   return text
     .toLowerCase()
     .replace(/ /g, '-')
@@ -23,6 +40,9 @@ interface IProps {
   fields: any[];
   fieldValueCount: any;
   onClick?: () => void;
+  layouts: any;
+  itemSlug: string;
+  _id: string;
 }
 
 export default function LeftNavigation({
@@ -31,12 +51,67 @@ export default function LeftNavigation({
   fields,
   fieldValueCount,
   onClick = () => {},
-}: IProps) {
-  return (
+  layouts,
+  _id,
+  itemSlug,
+}: IProps): any {
+  const [state, setState] = useState({ selectedField: null });
+  const { handleUpdateLayout } = useUpdateItemLayout({ slug: itemSlug, onAlert, layouts, _id });
+
+  const onChange = ({ target }) => {
+    if (state.selectedField && target?.value < 13 && target?.value > -1) {
+      const otherValues = layouts[state.selectedField?._id] || {};
+      const newLayouts = {
+        ...layouts,
+        [state.selectedField?._id]: { ...otherValues, [target.name]: target.value },
+      };
+      handleUpdateLayout(newLayouts);
+      // setLayouts({
+      //   ...layouts,
+      //   [state.selectedField?._id]: { ...otherValues, [target.name]: target.value },
+      // });
+    }
+  };
+
+  return state.selectedField ? (
+    <Paper variant="outlined" style={style}>
+      <Typography variant="h5" className="d-flex align-items-center">
+        <Tooltip title="Go Back">
+          <IconButton onClick={() => setState({ ...state, selectedField: null })}>
+            <ArrowBackIcon />
+          </IconButton>
+        </Tooltip>
+        {state.selectedField?.label}
+      </Typography>
+      <Divider />
+      <div className="p-2">
+        {breakpoints.map((point) => (
+          <TextField
+            key={point.name}
+            className="my-2"
+            fullWidth
+            size="small"
+            label={point.label}
+            name={point.name}
+            variant="outlined"
+            type="number"
+            value={
+              layouts[state.selectedField?._id] && layouts[state.selectedField?._id][point.name]
+                ? layouts[state.selectedField?._id][point.name]
+                : ''
+            }
+            onChange={onChange}
+          />
+        ))}
+      </div>
+    </Paper>
+  ) : (
     <Paper variant="outlined" style={style}>
       <List component="nav" dense>
         <ListItem>
-          <ListItemIcon className="mr-n4">{<LinkIcon />}</ListItemIcon>
+          <ListItemIcon className="mr-n4">
+            <LinkIcon />
+          </ListItemIcon>
           <ListItemText primary="Fields" />
         </ListItem>
         <Divider />
@@ -63,14 +138,23 @@ export default function LeftNavigation({
         ) : (
           fields.map((fieldType, index) => (
             <ListItem button key={fieldType._id} onClick={onClick}>
+              {fieldValueCount[index] > 0 && (
+                <ListItemIcon className="mr-n5">
+                  <Badge badgeContent={fieldValueCount[index]} color="primary" />
+                </ListItemIcon>
+              )}
               <Link href={`${slug}#${convertToSlug(fieldType.label)}`}>
                 <ListItemText primary={fieldType.label} />
               </Link>
-              {fieldValueCount[index] > 0 && (
-                <ListItemSecondaryAction>
-                  <Badge badgeContent={fieldValueCount[index]} color="primary"></Badge>
-                </ListItemSecondaryAction>
-              )}
+              <ListItemSecondaryAction>
+                <IconButton
+                  edge="end"
+                  aria-label="more"
+                  onClick={() => setState({ ...state, selectedField: fieldType })}
+                >
+                  <MoreVertIcon />
+                </IconButton>
+              </ListItemSecondaryAction>
             </ListItem>
           ))
         )}

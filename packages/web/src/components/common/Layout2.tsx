@@ -1,40 +1,47 @@
-import { useState, useEffect, ReactNode } from 'react';
-import { GET_LIST_ITEM_BY_SLUG } from '@frontend/shared/graphql/query/list';
-import { guestClient } from '@frontend/shared/graphql';
-import Loading from './Loading';
-import DisplayContentBuilder from '../displayContentBuilder/DisplayContentBuilder';
+import { ReactNode } from 'react';
+import { useGetListItemBySlug } from '@frontend/shared/hooks/list';
+import Skeleton from '@material-ui/lab/Skeleton';
+import FieldValues from '../field/FieldValues';
+import ErrorLoading from './ErrorLoading';
+import NotFound from './NotFound';
+import AuthRequired from './AuthRequired';
 
-function Section({ slug }) {
-  const [payload, setPayload] = useState(null);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    getListItemData();
-  }, []);
+interface ISectionProps {
+  slug: string;
+  checkAuth?: boolean;
+}
 
-  const getListItemData = async () => {
-    try {
-      const { data } = await guestClient.query({
-        query: GET_LIST_ITEM_BY_SLUG,
-        variables: { slug },
-      });
-      setPayload(data);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-    }
-  };
+export function Section({ slug, checkAuth = true }: ISectionProps) {
+  const { data, error } = useGetListItemBySlug({ slug });
 
-  return (
-    <>
-      {payload?.getListItemBySlug ? (
-        <DisplayContentBuilder
-          parentId={payload?.getListItemBySlug?._id}
-          typeId={payload?.getListItemBySlug?.types[0]?._id}
-        />
-      ) : loading ? (
-        <Loading />
-      ) : null}
-    </>
+  if (error || !data) {
+    return (
+      <ErrorLoading>
+        <Skeleton variant="text" height={100} />
+      </ErrorLoading>
+    );
+  }
+
+  if (!data?.getListItemBySlug && checkAuth) {
+    return <NotFound />;
+  }
+  if (!data?.getListItemBySlug) {
+    return null;
+  }
+
+  const FV = (
+    <FieldValues
+      parentId={data?.getListItemBySlug?._id}
+      typeId={data?.getListItemBySlug?.types[0]?._id}
+      previewMode
+      layouts={JSON.parse(data?.getListItemBySlug?.layouts) || {}}
+    />
+  );
+
+  return checkAuth && data?.getListItemBySlug?.authenticateUser ? (
+    <AuthRequired>{FV}</AuthRequired>
+  ) : (
+    FV
   );
 }
 
@@ -45,9 +52,9 @@ interface IProps {
 export default function Layout2({ children }: IProps) {
   return (
     <div>
-      <Section slug="menu" />
-      {children}
-      <Section slug="footer" />
+      <Section slug="menu" checkAuth={false} />
+      <div className="container">{children}</div>
+      <Section slug="footer" checkAuth={false} />
     </div>
   );
 }

@@ -1,9 +1,10 @@
+import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import IconButton from '@material-ui/core/IconButton';
 import AddCircle from '@material-ui/icons/AddCircle';
-import { useEffect, useState, Fragment } from 'react';
+import { useEffect, useState, memo } from 'react';
 import { useSelector } from 'react-redux';
 import Carousel from 'react-material-ui-carousel';
 import { useRouter } from 'next/router';
@@ -19,8 +20,9 @@ import {
   useDeleteFieldValue,
   useCreateFieldValue,
 } from '@frontend/shared/hooks/field';
+import Skeleton from '@material-ui/lab/Skeleton';
 import { convertToSlug } from './LeftNavigation';
-import FieldsSkeleton from './FieldsSkeleton';
+// import FieldsSkeleton from './FieldsSkeleton';
 import ErrorLoading from '../common/ErrorLoading';
 import FieldValueForm from './FieldValueForm';
 import CRUDMenu from '../common/CRUDMenu';
@@ -28,7 +30,7 @@ import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
 import FieldValueCard from './FieldValueCard';
 import Share from '../share/Share';
-import Form from '../form/Form';
+import SectionForm from '../form2/SectionForm';
 
 const initialState = {
   showForm: false,
@@ -48,8 +50,9 @@ function ItemOneFields({
   guest,
   setFieldValueCount,
   toggleLeftNavigation,
-  isPublish,
-}: any) {
+  previewMode,
+}: // isPublish,
+any) {
   const router = useRouter();
   const { query } = router;
   const [state, setState] = useState(initialState);
@@ -103,11 +106,12 @@ function ItemOneFields({
     }
   };
 
-  if (!error && (!data || !data.getFieldValuesByItem)) {
-    return <FieldsSkeleton />;
-  }
-  if (error) {
-    return <ErrorLoading error={error} />;
+  if (error || !data || !data.getFieldValuesByItem) {
+    return (
+      <ErrorLoading error={error}>
+        <Skeleton variant="text" height={100} />
+      </ErrorLoading>
+    );
   }
 
   const hasAlreadyAdded =
@@ -131,7 +135,7 @@ function ItemOneFields({
 
   return (
     <div key={field._id}>
-      {!isPublish && (
+      {!previewMode && (
         <>
           <Menu
             anchorEl={state.addTarget}
@@ -176,7 +180,6 @@ function ItemOneFields({
           {state.showForm && <FieldValueForm {...formProps} />}
         </>
       )}
-
       {data.getFieldValuesByItem.data.length > 1 ? (
         <Carousel
           // index={parseInt(query.index)}
@@ -210,10 +213,10 @@ function ItemOneFields({
           fullHeightHover={false}
           autoPlay={false}
           animation="slide"
-          navButtonsAlwaysVisible={true}
+          navButtonsAlwaysVisible
         >
           {data.getFieldValuesByItem.data.map((fieldValue, index) => (
-            <div className="px-" key={fieldValue._id}>
+            <div key={fieldValue._id}>
               {state.selectedFieldValue &&
               state.selectedFieldValue._id === fieldValue._id &&
               state.edit ? (
@@ -223,27 +226,25 @@ function ItemOneFields({
                   index={index}
                   fieldValue={fieldValue}
                   field={field}
-                  showAction={currentUserId === fieldValue.createdBy._id || admin}
-                  showAuthor={showAuthor || showAddButton}
-                  isPublish={isPublish}
-                  onSelect={(target, fieldValue) =>
+                  previewMode={previewMode}
+                  onSelect={(target, sfieldValue) =>
                     setState({
                       ...state,
                       showMenu: target,
-                      selectedFieldValue: fieldValue,
+                      selectedFieldValue: sfieldValue,
                     })
                   }
                 />
               )}
               <p className="text-center w-100">
-                {index + 1}/{data.getFieldValuesByItem.data.length}
+                {index + 1}/{data?.getFieldValuesByItem?.data?.length}
               </p>
             </div>
           ))}
         </Carousel>
       ) : (
         data.getFieldValuesByItem.data.map((fieldValue, index) => (
-          <Fragment key={fieldValue._id}>
+          <div key={fieldValue._id}>
             {state.selectedFieldValue &&
             state.selectedFieldValue._id === fieldValue._id &&
             state.edit ? (
@@ -253,19 +254,17 @@ function ItemOneFields({
                 index={index}
                 fieldValue={fieldValue}
                 field={field}
-                showAction={currentUserId === fieldValue.createdBy._id || admin}
-                showAuthor={showAuthor || showAddButton}
-                isPublish={isPublish}
-                onSelect={(target, fieldValue) =>
+                previewMode={previewMode}
+                onSelect={(target, sfieldValue) =>
                   setState({
                     ...state,
                     showMenu: target,
-                    selectedFieldValue: fieldValue,
+                    selectedFieldValue: sfieldValue,
                   })
                 }
               />
             )}
-          </Fragment>
+          </div>
         ))
       )}
       <CRUDMenu
@@ -299,18 +298,24 @@ interface IProps {
   setFieldValueCount?: (arg: any, arg2: any) => void;
   pushToAnchor?: () => void;
   toggleLeftNavigation?: (value: boolean) => void;
+  layouts: any;
+  previewMode?: boolean;
 }
 
-export default function ItemsFieldsMap({
+export default memo(FieldValues);
+
+function FieldValues({
   parentId,
   typeId,
   showAuthor = true,
   guest = false,
-  isPublish,
+  // isPublish = false,
   setFields = (arg: any) => {},
   setFieldValueCount = (index: number, value: number) => {},
   pushToAnchor = () => {},
   toggleLeftNavigation,
+  layouts,
+  previewMode,
 }: IProps): any {
   const { data, error } = useGetFieldsByType({ parentId: typeId });
 
@@ -321,35 +326,49 @@ export default function ItemsFieldsMap({
     }
   }, [data]);
 
-  if (!error && (!data || !data.getFieldsByType)) {
-    return <FieldsSkeleton />;
+  if (error || !data || !data.getFieldsByType) {
+    return (
+      <ErrorLoading error={error}>
+        <Skeleton variant="text" height={100} />
+      </ErrorLoading>
+    );
   }
-  if (error) {
-    return <ErrorLoading error={error} />;
-  }
+
   return (
-    <>
-      {data.getFieldsByType.data.map((field, index) => (
-        <Fragment key={field._id}>
-          {field.fieldType === 'form' ? (
-            <Form field={field} parentId={parentId} />
-          ) : (
-            <ItemOneFields
-              toggleLeftNavigation={(value) => {
-                if (toggleLeftNavigation) {
-                  toggleLeftNavigation(value);
-                }
-              }}
-              parentId={parentId}
-              field={field}
-              showAuthor={showAuthor}
-              isPublish={false}
-              guest={guest}
-              setFieldValueCount={(value) => setFieldValueCount(index, value)}
-            />
-          )}
-        </Fragment>
-      ))}
-    </>
+    <Grid container direction="row" alignItems="center">
+      {data.getFieldsByType.data.map((field, index) => {
+        let gridProps: any = { xs: 12 };
+        if (layouts && layouts[field._id]) {
+          Object.keys(layouts[field._id]).forEach(function (key) {
+            if (layouts[field._id][key] && layouts[field._id][key] > 0) {
+              const size = layouts[field._id][key];
+              gridProps = { ...gridProps, [key]: size };
+            }
+          });
+        }
+        return (
+          <Grid {...gridProps} item className="bg-primaryy">
+            {field.fieldType === 'form' ? (
+              <SectionForm field={field} parentId={parentId} previewMode={previewMode} />
+            ) : (
+              <ItemOneFields
+                toggleLeftNavigation={(value) => {
+                  if (toggleLeftNavigation) {
+                    toggleLeftNavigation(value);
+                  }
+                }}
+                parentId={parentId}
+                field={field}
+                showAuthor={showAuthor}
+                // isPublish={previewMode || isPublish}
+                previewMode={previewMode}
+                guest={guest}
+                setFieldValueCount={(value) => setFieldValueCount(index, value)}
+              />
+            )}
+          </Grid>
+        );
+      })}
+    </Grid>
   );
 }

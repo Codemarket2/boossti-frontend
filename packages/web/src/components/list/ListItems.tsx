@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -13,7 +14,6 @@ import ErrorLoading from '../common/ErrorLoading';
 import ListHeader from '../common/ListHeader';
 import LoadingButton from '../common/LoadingButton';
 import Backdrop from '../common/Backdrop';
-import { useRouter } from 'next/router';
 import { onAlert } from '../../utils/alert';
 
 export default function ListItems({ types, name, slug }: any) {
@@ -41,7 +41,8 @@ export default function ListItems({ types, name, slug }: any) {
               type="button"
               onClick={() => handleCreate(types, createCallback)}
               loading={createLoading}
-              startIcon={<AddIcon />}>
+              startIcon={<AddIcon />}
+            >
               Add New
             </LoadingButton>
           </Tooltip>

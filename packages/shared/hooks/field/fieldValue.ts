@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
@@ -46,36 +46,49 @@ export function useGetFieldValue(_id) {
 }
 
 export function useGetFieldValuesByItem({ parentId, field }: any) {
+  const [subscribed, setSubscribed] = useState(false);
   const { data, error, loading, subscribeToMore } = useQuery(GET_FIELD_VALUES_BY_FIELD, {
     variables: { ...defaultQueryVariables, parentId, field },
     fetchPolicy: 'cache-and-network',
   });
 
   useEffect(() => {
-    subscribeToMore({
-      document: ADDED_FIELD_VALUE,
-      variables: {
-        parentId,
-      },
-      updateQuery: (prev, { subscriptionData }) => {
-        if (!subscriptionData.data) return prev;
-        const newFieldValue = subscriptionData.data.addedFieldValue;
-        if (field === newFieldValue.field) {
-          return {
-            ...prev,
-            getFieldValuesByItem: {
-              ...prev.getFieldValuesByItem,
-              data: [newFieldValue, ...prev.getFieldValuesByItem.data],
-            },
-          };
-        } else {
+    if (!subscribed) {
+      setSubscribed(true);
+      subscribeToMore({
+        document: ADDED_FIELD_VALUE,
+        variables: {
+          parentId,
+        },
+        updateQuery: (prev, { subscriptionData }) => {
+          if (!subscriptionData.data) return prev;
+          const newFieldValue = subscriptionData.data.addedFieldValue;
+          if (field === newFieldValue.field) {
+            let isNew = true;
+            let newData = prev?.getFieldValuesByItem?.data?.map((t) => {
+              if (t._id === newFieldValue._id) {
+                isNew = false;
+                return newFieldValue;
+              }
+              return t;
+            });
+            if (isNew) {
+              newData = [...prev?.getFieldValuesByItem?.data, newFieldValue];
+            }
+            return {
+              ...prev,
+              getFieldValuesByItem: {
+                ...prev.getFieldValuesByItem,
+                data: newData,
+              },
+            };
+          }
           return prev;
-        }
-      },
-    });
+        },
+      });
+    }
   }, []);
 
-  // console.log('data, error, loading', data, error, loading);
   return { data, error, loading };
 }
 

@@ -17,16 +17,19 @@ interface IProps {
 }
 
 export default function DrawerContent({ openDrawer, setOpenDrawer, darkMode, admin }: IProps) {
-  const { setting } = useSelector(({ setting }: any) => ({
-    setting,
-  }));
+  const { setting } = useSelector((state: any) => state);
 
   return (
     <Drawer anchor="left" open={openDrawer} onClose={() => setOpenDrawer(false)}>
       <div
         style={{ maxWidth: '300px' }}
-        className="d-flex justify-content-between  align-items-center align-content-center">
-        <img style={{ width: '60%' }} src={setting.metaTags.image} alt={setting.metaTags.title} />
+        className="d-flex justify-content-between  align-items-center align-content-center"
+      >
+        <img
+          style={{ width: '60%' }}
+          src={setting?.metaTags?.image}
+          alt={setting?.metaTags?.title}
+        />
         <IconButton onClick={() => setOpenDrawer(false)}>
           <CloseIcon />
         </IconButton>

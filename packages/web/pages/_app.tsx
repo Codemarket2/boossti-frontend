@@ -4,7 +4,7 @@ import { AppProps } from 'next/app';
 import Amplify, { Hub } from 'aws-amplify';
 import { useSelector } from 'react-redux';
 import { ApolloProvider } from '@apollo/client/react';
-import { client } from '@frontend/shared/graphql';
+import { client, guestClient } from '@frontend/shared/graphql';
 import awsExports from '@frontend/shared/aws-exports';
 import { useLogoHook } from '@frontend/shared';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -41,7 +41,8 @@ Amplify.configure({
 
 function App({ Component, pageProps }: AppProps) {
   const { getUser } = useCurrentAuthenticatedUser();
-  const darkMode = useSelector(({ auth }: any) => auth.darkMode);
+  const { darkMode, authenticated } = useSelector(({ auth }: any) => auth);
+
   useLogoHook();
   const theme = createMuiTheme({
     palette: darkMode ? dark : light,
@@ -90,7 +91,7 @@ function App({ Component, pageProps }: AppProps) {
   }, []);
 
   return (
-    <ApolloProvider client={client}>
+    <ApolloProvider client={authenticated ? client : guestClient}>
       <MuiThemeProvider theme={theme}>
         <StyledProvider theme={theme}>
           <Head />

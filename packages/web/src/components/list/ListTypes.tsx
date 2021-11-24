@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
@@ -14,15 +15,17 @@ import ErrorLoading from '../common/ErrorLoading';
 import ListHeader from '../common/ListHeader';
 import LoadingButton from '../common/LoadingButton';
 import Backdrop from '../common/Backdrop';
-import { useRouter } from 'next/router';
 import { onAlert } from '../../utils/alert';
 
-export default function ListTypes() {
+export default function ListTypes(): any {
   const { data, loading, error, state, setState } = useGetListTypes();
+
   const router = useRouter();
+
   const createCallback = (slug) => {
     router.push(`/types/${slug}`);
   };
+
   const { handleCreate, createLoading } = useCreateListType({ onAlert });
 
   return (
@@ -40,7 +43,8 @@ export default function ListTypes() {
                 color="primary"
                 onClick={() => handleCreate(createCallback)}
                 loading={createLoading}
-                startIcon={<AddIcon />}>
+                startIcon={<AddIcon />}
+              >
                 Add New
               </LoadingButton>
             </Tooltip>
@@ -50,7 +54,8 @@ export default function ListTypes() {
         showSearch={state.showSearch}
         onHide={() => setState({ ...state, search: '', showSearch: false })}
         onShow={() => setState({ ...state, search: '', showSearch: true })}
-        onChange={(value) => setState({ ...state, search: value })}>
+        onChange={(value) => setState({ ...state, search: value })}
+      >
         <Typography variant="h4">Templates</Typography>
       </ListHeader>
       <Paper variant="outlined">

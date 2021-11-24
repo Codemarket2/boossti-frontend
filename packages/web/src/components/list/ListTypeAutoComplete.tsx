@@ -1,25 +1,10 @@
+import { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { useCRUDFieldValue } from '@frontend/shared/hooks/field';
 import { useGetListItemsByType } from '@frontend/shared/hooks/list';
-import MomentUtils from '@date-io/moment';
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
-import InputGroup from '../common/InputGroup';
-import LoadingButton from '../common/LoadingButton';
-import ItemFormDrawer from '../list/ItemFormDrawer';
-import ImagePicker from '../common/ImagePicker';
-import { onAlert } from '../../utils/alert';
-import { useEffect, useState } from 'react';
-import moment from 'moment';
-import AddressSearch from '../common/AddressSearch';
+import ItemFormDrawer from './ItemFormDrawer';
 import ErrorLoading from '../common/ErrorLoading';
 
 interface IProps {
@@ -29,6 +14,8 @@ interface IProps {
   disabled?: boolean;
   value: string;
   onChange: (arg: string) => void;
+  vError?: boolean;
+  helperText?: string;
 }
 
 export default function ListTypeAutoComplete({
@@ -38,20 +25,23 @@ export default function ListTypeAutoComplete({
   onChange,
   typeSlug,
   label,
-}: IProps) {
+  vError = false,
+  helperText,
+}: IProps): any {
   const { data, error, loading, state, setState } = useGetListItemsByType({
     limit: 10,
     types: [typeId],
   });
   const [drawer, setDrawer] = useState({ showDrawer: false });
 
-  if (error) {
-    return <ErrorLoading error={error} />;
+  if (error || !typeId) {
+    return <ErrorLoading error={error || { message: 'Please select Existing Type' }} />;
   }
 
   return (
     <>
       <Autocomplete
+        size="small"
         loading={loading}
         disabled={disabled}
         value={value}
@@ -68,9 +58,11 @@ export default function ListTypeAutoComplete({
           <TextField
             // error={formik.touched.itemId && Boolean(formik.errors.itemId)}
             // helperText={formik.touched.itemId && formik.errors.itemId}
+            error={vError}
+            helperText={helperText}
             fullWidth
             {...params}
-            label={`Select Value`}
+            label="Select Value"
             variant="outlined"
             InputProps={{
               ...params.InputProps,
@@ -101,7 +93,8 @@ export default function ListTypeAutoComplete({
         variant="contained"
         color="primary"
         size="small"
-        onClick={() => setDrawer({ ...drawer, showDrawer: true })}>
+        onClick={() => setDrawer({ ...drawer, showDrawer: true })}
+      >
         Add Your New {label}
       </Button>
     </>

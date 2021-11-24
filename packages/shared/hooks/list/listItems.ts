@@ -17,6 +17,7 @@ import { fileUpload } from '../../utils/fileUpload';
 import { omitTypename } from '../../utils/omitTypename';
 import { ADDED_LIST_ITEM, UPDATED_LIST_ITEM } from '../../graphql/subscription/list';
 import { updateLikeInCache } from '../like/createLike';
+
 const defaultGetListItems = { limit: 100, page: 1 };
 
 export function useGetListItemsByType({ types = [] }: any) {
@@ -25,7 +26,7 @@ export function useGetListItemsByType({ types = [] }: any) {
     showSearch: false,
   });
   const { data, error, loading, subscribeToMore } = useQuery(GET_LIST_ITEMS_BY_TYPE, {
-    variables: { ...defaultGetListItems, types: types, search: state.search },
+    variables: { ...defaultGetListItems, types, search: state.search },
     fetchPolicy: 'cache-and-network',
   });
 
@@ -37,11 +38,19 @@ export function useGetListItemsByType({ types = [] }: any) {
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev;
         const newListItem = subscriptionData.data.addedListItem;
-        let newData = { ...prev.getListItems };
         if (types[0] === newListItem.addedListItem.types[0]._id) {
           updateLikeInCache(newListItem._id, 1);
-          const isUpdated = prev.getListItems._id === newListItem._id;
-          newData = isUpdated ? newListItem : newData;
+          let isNew = true;
+          let newData = prev?.getListItems?.data?.map((t) => {
+            if (t._id === newListItem._id) {
+              isNew = false;
+              return newListItem;
+            }
+            return t;
+          });
+          if (isNew) {
+            newData = [...prev?.getListTypes?.data, newListItem];
+          }
           return {
             ...prev,
             getListItems: {
@@ -52,9 +61,7 @@ export function useGetListItemsByType({ types = [] }: any) {
         }
       },
     });
-  }, [data]);
-
-  // console.log('data, error, loading', data, error, loading);
+  }, []);
 
   return { data, error, loading, state, setState };
 }
@@ -66,7 +73,7 @@ export function useGetListItemBySlug({ slug }: any) {
   });
   const [subscribed, setSubscribed] = useState(false);
   useEffect(() => {
-    if (data && data.getListItems && !subscribed) {
+    if (data && data.getListItemBySlug && !subscribed) {
       subscribeToMore({
         document: UPDATED_LIST_ITEM,
         variables: {
@@ -75,20 +82,17 @@ export function useGetListItemBySlug({ slug }: any) {
         updateQuery: (prev, { subscriptionData }) => {
           if (!subscriptionData.data) return prev;
           const newListItem = subscriptionData.data.updatedListItem;
-          let newData = { ...prev.getListItemBySlug };
-          const isUpdated = prev.getListItemBySlug._id === newListItem._id;
-          newData = isUpdated ? newListItem : newData;
           return {
             ...prev,
             getListItemBySlug: {
               ...prev.getListItemBySlug,
-              data: newData,
+              ...newListItem,
             },
           };
         },
       });
+      setSubscribed(true);
     }
-    setSubscribed(true);
   }, [data]);
 
   return { data, error, loading };
