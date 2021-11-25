@@ -15,6 +15,7 @@ import FormView from './FormView';
 import FormSetting from './FormSetting';
 import EditField from './EditField';
 import ResponseList from './ResponseList';
+import Actions from './Actions';
 import { onAlert } from '../../utils/alert';
 
 interface IProps {
@@ -25,7 +26,7 @@ interface IProps {
 export default function Form({ _id, drawerMode = false }: IProps): any {
   const { error, state, setState, updateLoading } = useUpdateForm({ onAlert, _id });
 
-  const [options, setOptions] = useState({ currentTab: 0, fieldId: null });
+  const [options, setOptions] = useState({ currentTab: 'actions', fieldId: null });
 
   if (error || !state) {
     return <ErrorLoading error={error} />;
@@ -98,17 +99,18 @@ export default function Form({ _id, drawerMode = false }: IProps): any {
               textColor="primary"
               onChange={(event, newValue) => setOptions({ ...options, currentTab: newValue })}
             >
-              <Tab label="Preview" />
-              <Tab label="Setting" />
-              <Tab label="Responses" />
+              <Tab label="Preview" value="preview" />
+              <Tab label="Settings" value="settings" />
+              <Tab label="Actions" value="actions" />
+              <Tab label="Responses" value="responses" />
             </Tabs>
           </Paper>
-          {options.currentTab === 0 && (
+          {options.currentTab === 'preview' && (
             <Paper variant="outlined" className="px-2">
               <FormView form={state} />
             </Paper>
           )}
-          {options.currentTab === 1 && (
+          {options.currentTab === 'settings' && (
             <FormSetting
               settings={state.settings}
               onChange={(settings) =>
@@ -116,7 +118,15 @@ export default function Form({ _id, drawerMode = false }: IProps): any {
               }
             />
           )}
-          {options.currentTab === 2 && <ResponseList form={state} />}
+          {options.currentTab === 'responses' && <ResponseList form={state} />}
+          {options.currentTab === 'actions' && (
+            <Actions
+              form={state}
+              onChange={(actions) =>
+                setState({ ...state, settings: { ...state.settings, actions } })
+              }
+            />
+          )}
         </Grid>
       </Grid>
     </div>
