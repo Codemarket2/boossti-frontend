@@ -61,7 +61,7 @@ export default function Actions({ form, onChange }: IProps) {
             (field) => field.fieldType === 'email' && field.options.required,
           )}
           fields={form?.fields}
-          onCancel={() => setState({ ...state, showForm: false })}
+          onCancel={() => setState(initialState)}
           onSave={onSave}
           action={state.selectedItem}
         />
