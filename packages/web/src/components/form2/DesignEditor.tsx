@@ -1,7 +1,11 @@
+import { useUpdateForm } from '@frontend/shared/hooks/form';
 import { useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { getSepratorValue } from './seprator';
+import { getSepratorValue, seprator } from '../contentbox/seprator';
+// import Authorization from '../common/Authorization';
+// import ErrorLoading from '../common/ErrorLoading';
+import { onAlert } from '../../utils/alert';
 import Backdrop from '../common/Backdrop';
 
 const UPLOAD_ENDPOINT = {
@@ -11,26 +15,29 @@ const UPLOAD_ENDPOINT = {
   saveimageModule: '/api/saveimage-module',
 };
 
-export default function Box({ onSave, onClose, data, autoSaveLoading }: any) {
+interface IProps {
+  _id: string;
+}
+
+export default function DesignEditor({ _id }: IProps) {
+  const { error, state, setState, updateLoading } = useUpdateForm({ onAlert, _id });
+
   const [init, setInit] = useState(false);
-  const [showBackdrop, setShowBackdrop] = useState(false);
+  const [showBackdrop, setShowBackdrop] = useState(true);
 
-  useEffect(() => {
-    // if (mainCss) {
-    //   document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', mainCss);
-    // }
-    // if (sectionCss) {
-    //   document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', sectionCss);
-    // }
+  const onSave = (sPageHTML = '', sMainCss = '', sSectionCss = '') => {
+    const value = `${sPageHTML}${seprator}${sMainCss}${seprator}${sSectionCss}`;
+    setState({
+      ...state,
+      settings: { ...state.settings, layout: { ...state.settings.layout, value } },
+    });
+  };
 
-    let timeoutId; //Used for Auto Save
+  //   useEffect(
+  const loadBox = () => {
+    let timeoutId;
 
     jQuery(document).ready(function ($: any) {
-      // Load content from database. In this example we use browser's localStorage. Normally you need to load saved content from database and place it directly inside div.is-wrapper above (not here)
-      // if (pageHTML) {
-      //   $('.is-wrapper').html(pageHTML);
-      // }
-
       //Enable editing
       $('.is-wrapper').contentbox({
         modulePath: '/assets/modules/',
@@ -115,24 +122,34 @@ export default function Box({ onSave, onClose, data, autoSaveLoading }: any) {
           onSave(sHTML, sMainCss, sSectionCss);
         });
     }
-  }, []);
+  };
+  // ,[]);
 
   const handleClose = () => {
     jQuery(document).ready(async function ($) {
       setShowBackdrop(true);
-      const sHTML = $('.is-wrapper').data('contentbox').html();
-      const sMainCss = $('.is-wrapper').data('contentbox').mainCss();
-      const sSectionCss = $('.is-wrapper').data('contentbox').sectionCss();
-      await onSave(sHTML, sMainCss, sSectionCss);
+      //   const sHTML = $('.is-wrapper').data('contentbox').html();
+      //   const sMainCss = $('.is-wrapper').data('contentbox').mainCss();
+      //   const sSectionCss = $('.is-wrapper').data('contentbox').sectionCss();
+      //   onSave(sHTML, sMainCss, sSectionCss);
       $('.is-wrapper').data('contentbox').destroy();
-      onClose();
+      window.location.href = `/forms/${_id}`;
     });
   };
 
   useEffect(() => {
-    if (data && data?.getFieldValue && !init) {
+    if (state && !init) {
       setInit(true);
-      const { pageHTML, mainCss, sectionCss } = getSepratorValue(data.getFieldValue.value);
+      document
+        .getElementsByTagName('head')[0]
+        .insertAdjacentHTML(
+          'beforeend',
+          `<link href="/contentbox/contentbox.css" rel="stylesheet" type="text/css" />`,
+        );
+      loadBox();
+      const { pageHTML, mainCss, sectionCss } = getSepratorValue(
+        state?.settings?.layout?.value || '',
+      );
       if (mainCss) {
         document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', mainCss);
       }
@@ -144,19 +161,26 @@ export default function Box({ onSave, onClose, data, autoSaveLoading }: any) {
           $('.is-wrapper').data('contentbox').loadHtml(pageHTML);
         }
       });
+      setShowBackdrop(false);
     }
-  }, [data]);
+  }, [state]);
+
+  //   if (error || !state) {
+  //     return <ErrorLoading error={error} />;
+  //   }
 
   return (
+    // <Authorization _id={state?.createdBy?._id}>
     <div>
       <Backdrop open={showBackdrop || !init} />
       <div className="position-fixed m-3" style={{ zIndex: 999, right: 0 }}>
         <Button size="small" variant="contained" color="primary" onClick={handleClose}>
           Close
-          {autoSaveLoading && <CircularProgress className="ml-2" size={15} color="secondary" />}
+          {updateLoading && <CircularProgress className="ml-2" size={15} color="secondary" />}
         </Button>
       </div>
       <div className="is-wrapper" />
     </div>
+    // </Authorization>
   );
 }
