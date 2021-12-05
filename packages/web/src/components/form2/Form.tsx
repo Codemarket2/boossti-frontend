@@ -16,7 +16,7 @@ import FormSetting from './FormSetting';
 import EditField from './EditField';
 import ResponseList from './ResponseList';
 import Actions from './Actions';
-import Layout from './Layout';
+import DesignTab from './DesignTab';
 import { onAlert } from '../../utils/alert';
 import Authorization from '../common/Authorization';
 
@@ -28,7 +28,7 @@ interface IProps {
 export default function Form({ _id, drawerMode = false }: IProps): any {
   const { error, state, setState, updateLoading } = useUpdateForm({ onAlert, _id });
 
-  const [options, setOptions] = useState({ currentTab: 'layout', fieldId: null });
+  const [options, setOptions] = useState({ currentTab: 'design', fieldId: null });
 
   if (error || !state) {
     return <ErrorLoading error={error} />;
@@ -106,7 +106,7 @@ export default function Form({ _id, drawerMode = false }: IProps): any {
                 <Tab label="Settings" value="settings" />
                 <Tab label="Actions" value="actions" />
                 <Tab label="Responses" value="responses" />
-                <Tab label="Layout" value="layout" />
+                <Tab label="Design" value="design" />
               </Tabs>
             </Paper>
             {options.currentTab === 'preview' && (
@@ -123,8 +123,8 @@ export default function Form({ _id, drawerMode = false }: IProps): any {
               />
             )}
             {options.currentTab === 'responses' && <ResponseList form={state} />}
-            {options.currentTab === 'layout' && (
-              <Layout
+            {options.currentTab === 'design' && (
+              <DesignTab
                 form={state}
                 onChange={(layout) =>
                   setState({ ...state, settings: { ...state.settings, layout } })

@@ -14,7 +14,7 @@ import InputGroup from '../common/InputGroup';
 
 const defaultVariable = { name: '', field: null };
 
-export default function Layout({
+export default function DesignVariables({
   fields = [],
   variables = [],
   onVariableChange,
@@ -39,7 +39,7 @@ export default function Layout({
           </IconButton>
         </Tooltip>
       </Typography>
-      <InputLabel>Define variables and use it in design layout. example - {`{{email}}`}</InputLabel>{' '}
+      <InputLabel>Define variables and use it in design layout. example - {`{{email}}`}</InputLabel>
       <InputGroup>
         {variables?.map((variable, i) => (
           <div className="d-flex align-items-center" key={i}>

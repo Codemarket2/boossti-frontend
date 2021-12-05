@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import LayoutVariables from './LayoutVariables';
+import DesignVariables from './DesignVariables';
 import Design from './Design';
 import Backdrop from '../common/Backdrop';
 
-export default function Layout({ form, onChange }: any) {
+export default function DesignTab({ form, onChange }: any) {
   const [state, setState] = useState({ showVariables: false, showBackdrop: false });
 
   const onVariableChange = (newVariable) => {
@@ -12,8 +12,8 @@ export default function Layout({ form, onChange }: any) {
 
   if (state.showVariables) {
     return (
-      <LayoutVariables
-        field={form?.fields}
+      <DesignVariables
+        fields={form?.fields}
         variables={form?.settings?.layout?.variables}
         onVariableChange={onVariableChange}
         onClickBack={() => setState({ ...state, showVariables: false })}
