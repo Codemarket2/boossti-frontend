@@ -32,7 +32,8 @@ export default function FieldContentBox({ _id }: any) {
 
   if (!loading && !data) {
     return <p>Something went wrong try refreshing the page</p>;
-  } else if (error) {
+  }
+  if (error) {
     return <ErrorLoading error={error} />;
   }
 

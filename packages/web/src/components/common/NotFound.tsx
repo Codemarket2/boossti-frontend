@@ -1,7 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
 
-const NotFound = () => (
+interface IProps {
+  backUrl?: string;
+}
+
+const NotFound = ({ backUrl = '/' }: IProps) => (
   <div className="container mt-5 pt-5">
     <div className="row">
       <div className="col-lg-6 col-md-9 m-auto text-center">
@@ -13,7 +17,7 @@ const NotFound = () => (
               Sorry but the page you are looking for does not exist, have been removed, name changed
               or is temporarily unavailable.
             </p>
-            <Link href="/">Back To Homepage</Link>
+            <Link href={backUrl}>Back To Homepage</Link>
           </div>
         </div>
       </div>

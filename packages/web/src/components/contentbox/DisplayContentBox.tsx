@@ -17,7 +17,7 @@ export default function DisplayContentBox({ value }: IProps) {
     if (sectionCss) {
       document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', sectionCss);
     }
-    let range = document.createRange();
+    const range = document.createRange();
     const wrapper = document.querySelector(`.${state}`);
     wrapper.innerHTML = '';
     wrapper.appendChild(range.createContextualFragment(pageHTML)); // We use createContextualFragment so that embedded javascript code (code block) will be executed
@@ -29,5 +29,5 @@ export default function DisplayContentBox({ value }: IProps) {
     }
   }, [value, state]);
 
-  return <div className={`${state} is-wrapper`}></div>;
+  return <div className={`${state} is-wrapper`} />;
 }
