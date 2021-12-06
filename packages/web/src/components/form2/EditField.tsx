@@ -11,7 +11,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { useState } from 'react';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControl from '@material-ui/core/FormControl';
@@ -22,17 +21,7 @@ import InputGroup from '../common/InputGroup';
 import { fieldTypes } from './AddField';
 import TypesAutocomplete from './TypesAutocomplete';
 
-const initialState = {
-  showMenu: null,
-  field: null,
-  fieldIndex: null,
-  showForm: false,
-  // edit: false,
-};
-
 export default function FormFields({ onFieldChange, field, onClose }: any): any {
-  const [values, setValues] = useState(initialState);
-
   const onOptionChange = (updatedOption) => {
     onFieldChange({ ...field, options: { ...field.options, ...updatedOption } });
   };

@@ -28,7 +28,7 @@ interface IProps {
 export default function Form({ _id, drawerMode = false }: IProps): any {
   const { error, state, setState, updateLoading } = useUpdateForm({ onAlert, _id });
 
-  const [options, setOptions] = useState({ currentTab: 'design', fieldId: null });
+  const [options, setOptions] = useState({ currentTab: 'preview', fieldId: null });
 
   if (error || !state) {
     return <ErrorLoading error={error} />;
@@ -126,8 +126,8 @@ export default function Form({ _id, drawerMode = false }: IProps): any {
             {options.currentTab === 'design' && (
               <DesignTab
                 form={state}
-                onChange={(layout) =>
-                  setState({ ...state, settings: { ...state.settings, layout } })
+                onChange={(design) =>
+                  setState({ ...state, settings: { ...state.settings, design } })
                 }
               />
             )}

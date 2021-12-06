@@ -11,9 +11,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider, DateTimePicker, DatePicker } from '@material-ui/pickers';
 import PhoneInput from 'react-phone-input-2';
-// import FormLabel from '@material-ui/core/FormLabel';
-// import ImagePicker from '../common/ImagePicker';
-import AddressSearch from '../common/AddressSearch';
+import FormLabel from '@material-ui/core/FormLabel';
+import ImagePicker from '../common/ImagePicker';
+// import AddressSearch from '../common/AddressSearch';
 import ListAutocomplete from './ListAutocomplete';
 import { validateValue } from './validate';
 
@@ -46,16 +46,13 @@ export default function FieldValueForm2({
   options,
   value,
   onChange,
-  mediaState,
-  setMediaState,
-}: // value,
-// itemId,
-IProps): any {
+}: IProps): any {
   switch (fieldType) {
     case 'date': {
       return (
         <MuiPickersUtilsProvider libInstance={moment} utils={MomentUtils}>
           <DatePicker
+            disabled={disabled}
             fullWidth
             size="small"
             inputVariant="outlined"
@@ -75,6 +72,7 @@ IProps): any {
       return (
         <MuiPickersUtilsProvider libInstance={moment} utils={MomentUtils}>
           <DateTimePicker
+            disabled={disabled}
             fullWidth
             size="small"
             inputVariant="outlined"
@@ -106,15 +104,15 @@ IProps): any {
         </>
       );
     }
-    case 'address': {
-      return (
-        <AddressSearch
-          label={label}
-          value={value}
-          onChange={(newValue) => onChange({ field: _id, value: newValue })}
-        />
-      );
-    }
+    // case 'address': {
+    //   return (
+    //     <AddressSearch
+    //       label={label}
+    //       value={value}
+    //       onChange={(newValue) => onChange({ field: _id, value: newValue })}
+    //     />
+    //   );
+    // }
     case 'type': {
       return (
         <ListAutocomplete
@@ -151,6 +149,25 @@ IProps): any {
         </>
       );
     }
+    case 'image': {
+      return (
+        <div>
+          <FormLabel component="legend">{label}</FormLabel>
+          <ImagePicker
+            label="Select Image"
+            fileType="image/*"
+            mutiple={options?.multipleValues}
+            state={value || { tempMedia: [], tempMediaFiles: [] }}
+            setState={(newValue) => onChange({ field: _id, ...newValue })}
+          />
+          {validateValue(validate, value, options, fieldType).error && (
+            <FormHelperText className="text-danger">
+              {validateValue(validate, value, options, fieldType).errorMessage}
+            </FormHelperText>
+          )}
+        </div>
+      );
+    }
     // case 'media': {
     //   return (
     //     <div>
@@ -167,6 +184,7 @@ IProps): any {
     case 'select': {
       return (
         <FormControl
+          disabled={disabled}
           variant="outlined"
           fullWidth
           size="small"

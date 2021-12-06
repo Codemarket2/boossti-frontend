@@ -12,12 +12,15 @@ interface IProps extends IHooksProps {
 
 export function useUpdateForm({ onAlert, _id }: IProps): any {
   const [state, setState] = useState(null);
+  const [saveToServer, setSaveToServer] = useState(false);
   const { data, error } = useGetForm(_id);
   const [updateFormMutation, { loading: updateLoading }] = useMutation(UPDATE_FORM);
 
   useEffect(() => {
     let timeOutId;
-    if (state) {
+    if (state && !saveToServer) {
+      setSaveToServer(true);
+    } else if (state && saveToServer) {
       timeOutId = setTimeout(() => handleUpdateForm(), 1000);
     }
     return () => clearTimeout(timeOutId);
@@ -65,7 +68,8 @@ export function useUpdateForm({ onAlert, _id }: IProps): any {
       settings: JSON.stringify(payload.settings),
     };
     try {
-      const res = await updateFormMutation({
+      // const res =
+      await updateFormMutation({
         variables: payload,
         update: updateCache,
       });
@@ -75,5 +79,6 @@ export function useUpdateForm({ onAlert, _id }: IProps): any {
       onAlert('Error', error.message);
     }
   };
-  return { state, setState, error, updateLoading };
+
+  return { state, setState, error, updateLoading, handleUpdateForm };
 }

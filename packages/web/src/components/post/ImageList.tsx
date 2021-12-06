@@ -25,16 +25,16 @@ export default function MediaList({
   onCaptionChange,
   onTempCaptionChange,
   authenticated,
-}: IProps) {
+}: IProps): any {
   return (
     <Grid container spacing={1}>
       {media.length > 0 &&
-        media.map((media: any, i) => (
+        media.map((m: any, i) => (
           <Media
             key={i}
-            url={media.url}
-            caption={media.caption}
-            isVideo={media.url.toLowerCase().indexOf(`video`) > -1}
+            url={m.url}
+            caption={m.caption}
+            isVideo={m.url.toLowerCase().indexOf(`video`) > -1}
             showIcon={showIcon}
             onClick={() => removeMedia(i)}
             onCaptionChange={(value) => onCaptionChange(value, i)}
@@ -42,12 +42,12 @@ export default function MediaList({
           />
         ))}
       {tempMedia.length > 0 &&
-        tempMedia.map((media, i) => (
+        tempMedia.map((m, i) => (
           <Media
             key={i}
-            url={media.url}
-            caption={media.caption}
-            isVideo={media.type.toLowerCase().indexOf('video') > -1}
+            url={m.url}
+            caption={m.caption}
+            isVideo={m.type.toLowerCase().indexOf('video') > -1}
             showIcon={showIcon}
             onClick={() => removeTempMedia(i)}
             onCaptionChange={(value) => onTempCaptionChange(value, i)}
@@ -76,7 +76,7 @@ export const Media = ({
   onClick,
   onCaptionChange,
   authenticated,
-}: IMediaProps) => {
+}: IMediaProps): any => {
   return (
     <Grid data-testid="media" xs={12} sm={6} item>
       <Paper variant="outlined">
@@ -87,7 +87,8 @@ export const Media = ({
             }}
             onClick={onClick}
             className="position-absolute p-0 bg-danger ml-2 mt-2"
-            edge="end">
+            edge="end"
+          >
             <HighlightOff className="text-light" fontSize="large" />
           </IconButton>
         )}
@@ -96,7 +97,7 @@ export const Media = ({
             Your browser does not support HTML5 video.
           </video>
         ) : (
-          <img src={url} className="w-100" />
+          <img src={url} className="w-100" alt="media-img" />
         )}
         <div className="p-1">
           {showIcon ? (

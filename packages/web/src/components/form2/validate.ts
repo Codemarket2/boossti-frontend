@@ -58,6 +58,12 @@ export const validateValue = (
       }
       break;
     }
+    case 'image': {
+      if (options.required && (!value || !(value?.tempMedia?.length > 0))) {
+        result = { error: true, errorMessage: 'Required' };
+      }
+      break;
+    }
     case 'media': {
       if (options.required && (!value || !value?.valueDate)) {
         result = { error: true, errorMessage: 'Required' };

@@ -1,12 +1,14 @@
 import { useUpdateForm } from '@frontend/shared/hooks/form';
 import { useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { getSepratorValue, seprator } from '../contentbox/seprator';
 // import Authorization from '../common/Authorization';
 // import ErrorLoading from '../common/ErrorLoading';
 import { onAlert } from '../../utils/alert';
 import Backdrop from '../common/Backdrop';
+import DesignVariables from './DesignVariables';
 
 const UPLOAD_ENDPOINT = {
   saveimage: '/api/saveimage',
@@ -20,16 +22,16 @@ interface IProps {
 }
 
 export default function DesignEditor({ _id }: IProps) {
-  const { error, state, setState, updateLoading } = useUpdateForm({ onAlert, _id });
+  const { state, setState, updateLoading, handleUpdateForm } = useUpdateForm({ onAlert, _id });
 
   const [init, setInit] = useState(false);
-  const [showBackdrop, setShowBackdrop] = useState(true);
+  const [values, setValues] = useState({ backdrop: true, showVariables: false });
 
   const onSave = (sPageHTML = '', sMainCss = '', sSectionCss = '') => {
     const value = `${sPageHTML}${seprator}${sMainCss}${seprator}${sSectionCss}`;
     setState({
       ...state,
-      settings: { ...state.settings, layout: { ...state.settings.layout, value } },
+      settings: { ...state?.settings, design: { ...state?.settings?.design, value } },
     });
   };
 
@@ -67,10 +69,11 @@ export default function DesignEditor({ _id }: IProps) {
         },
         onChange: function () {
           //Auto Save
-          clearTimeout(timeoutId);
-          timeoutId = setTimeout(function () {
-            save();
-          }, 1000);
+          save();
+          // clearTimeout(timeoutId);
+          // timeoutId = setTimeout(function () {
+          //   save();
+          // }, 1000);
         },
       });
 
@@ -127,11 +130,12 @@ export default function DesignEditor({ _id }: IProps) {
 
   const handleClose = () => {
     jQuery(document).ready(async function ($) {
-      setShowBackdrop(true);
+      setValues({ ...values, backdrop: true });
       //   const sHTML = $('.is-wrapper').data('contentbox').html();
       //   const sMainCss = $('.is-wrapper').data('contentbox').mainCss();
       //   const sSectionCss = $('.is-wrapper').data('contentbox').sectionCss();
       //   onSave(sHTML, sMainCss, sSectionCss);
+      await handleUpdateForm();
       $('.is-wrapper').data('contentbox').destroy();
       window.location.href = `/forms/${_id}`;
     });
@@ -148,7 +152,7 @@ export default function DesignEditor({ _id }: IProps) {
         );
       loadBox();
       const { pageHTML, mainCss, sectionCss } = getSepratorValue(
-        state?.settings?.layout?.value || '',
+        state?.settings?.design?.value || '',
       );
       if (mainCss) {
         document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', mainCss);
@@ -161,7 +165,7 @@ export default function DesignEditor({ _id }: IProps) {
           $('.is-wrapper').data('contentbox').loadHtml(pageHTML);
         }
       });
-      setShowBackdrop(false);
+      setValues({ ...values, backdrop: false });
     }
   }, [state]);
 
@@ -170,10 +174,33 @@ export default function DesignEditor({ _id }: IProps) {
   //   }
 
   return (
-    // <Authorization _id={state?.createdBy?._id}>
     <div>
-      <Backdrop open={showBackdrop || !init} />
+      <VariablesDialog
+        open={values.showVariables}
+        onClose={() => setValues({ ...values, showVariables: false })}
+        fields={state?.fields}
+        variables={state?.settings?.design?.variables}
+        onVariableChange={(newVariables) =>
+          setState({
+            ...state,
+            settings: {
+              ...state.settings,
+              design: { ...state?.settings?.design, variables: newVariables },
+            },
+          })
+        }
+      />
+      <Backdrop open={values.backdrop || !init} />
       <div className="position-fixed m-3" style={{ zIndex: 999, right: 0 }}>
+        <Button
+          size="small"
+          variant="outlined"
+          color="primary"
+          onClick={() => setValues({ ...values, showVariables: true })}
+          className="mr-2"
+        >
+          Variables
+        </Button>
         <Button size="small" variant="contained" color="primary" onClick={handleClose}>
           Close
           {updateLoading && <CircularProgress className="ml-2" size={15} color="secondary" />}
@@ -181,6 +208,28 @@ export default function DesignEditor({ _id }: IProps) {
       </div>
       <div className="is-wrapper" />
     </div>
-    // </Authorization>
   );
 }
+
+interface IPropsDialog {
+  open: boolean;
+  onClose: () => void;
+  variables: any;
+  onVariableChange: any;
+  fields: any;
+}
+
+const VariablesDialog = ({ open, onClose, variables, onVariableChange, fields }: IPropsDialog) => {
+  return (
+    <Dialog fullScreen open={open} onClose={onClose} style={{ zIndex: 999999 }}>
+      <div>
+        <DesignVariables
+          fields={fields}
+          variables={variables}
+          onVariableChange={onVariableChange}
+          onClickBack={onClose}
+        />
+      </div>
+    </Dialog>
+  );
+};

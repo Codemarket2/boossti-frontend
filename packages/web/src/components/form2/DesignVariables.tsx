@@ -19,15 +19,18 @@ export default function DesignVariables({
   variables = [],
   onVariableChange,
   onClickBack,
-}: any) {
+  hideBackButton = false,
+}) {
   return (
     <Paper variant="outlined" className="px-2">
       <Typography variant="h5" className="d-flex align-items-center">
-        <Tooltip title="Back">
-          <IconButton edge="start" color="primary" onClick={onClickBack}>
-            <ArrowBackIcon />
-          </IconButton>
-        </Tooltip>
+        {!hideBackButton && (
+          <Tooltip title="Back">
+            <IconButton edge="start" color="primary" onClick={onClickBack}>
+              <ArrowBackIcon />
+            </IconButton>
+          </Tooltip>
+        )}
         Variables
         <Tooltip title="Add New Action">
           <IconButton
@@ -73,8 +76,10 @@ export default function DesignVariables({
                 }
                 label="Field"
               >
-                {fields?.map((field) => (
-                  <MenuItem value={field._id}>{field.label}</MenuItem>
+                {fields?.map((field, i) => (
+                  <MenuItem value={field._id} key={i}>
+                    {field.label}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>
