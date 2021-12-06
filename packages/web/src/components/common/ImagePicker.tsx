@@ -4,17 +4,27 @@ import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary';
 import ImageList from '../post/ImageList';
 
 interface IProps {
+  label?: string;
+  fileType?: string;
+  mutiple?: boolean;
   state: any;
   setState: any;
 }
 
-export default function ImagePicker({ state, setState }: IProps) {
+export default function ImagePicker({
+  label = 'Select Image/Video',
+  fileType = 'image/*, video/*',
+  mutiple = false,
+  state,
+  setState,
+}: IProps): any {
   const ref: any = useRef();
+
   const handleFileChange = (event) => {
     if (event.target.files.length > 0) {
-      let newArray = [...state.tempMedia];
+      const newArray = [...state.tempMedia];
       for (let i = 0; i < event.target.files.length; i++) {
-        let item = {
+        const item = {
           url: URL.createObjectURL(event.target.files[i]),
           type: event.target.files[i].type,
           caption: '',
@@ -45,14 +55,14 @@ export default function ImagePicker({ state, setState }: IProps) {
   };
 
   const handleRemoveMedia = (index: number) => {
-    let urlArray = [...state.media];
+    const urlArray = [...state.media];
     urlArray.splice(index, 1);
     setState({ ...state, media: urlArray });
   };
 
   const handleRemoveTempMedia = (index: number) => {
-    let fileArray = [...state.tempMediaFiles];
-    let urlArray = [...state.tempMedia];
+    const fileArray = [...state.tempMediaFiles];
+    const urlArray = [...state.tempMedia];
     fileArray.splice(index, 1);
     urlArray.splice(index, 1);
     setState({ ...state, tempMedia: urlArray, tempMediaFiles: fileArray });
@@ -60,28 +70,33 @@ export default function ImagePicker({ state, setState }: IProps) {
 
   return (
     <>
-      <input
-        id="contained-button-file"
-        type="file"
-        multiple
-        accept="image/*, video/*"
-        hidden
-        onChange={handleFileChange}
-        ref={ref}
-      />
-      <label htmlFor="contained-button-file">
-        <Button
-          size="small"
-          variant="outlined"
-          component="span"
-          color="primary"
-          className="mb-2"
-          startIcon={<PhotoLibraryIcon />}>
-          Select Image/Video
-        </Button>
-      </label>
+      {(mutiple || (!state?.media?.length && !state?.tempMedia?.length)) && (
+        <>
+          <input
+            id="contained-button-file"
+            type="file"
+            multiple={mutiple}
+            accept={fileType}
+            hidden
+            onChange={handleFileChange}
+            ref={ref}
+          />
+          <label htmlFor="contained-button-file">
+            <Button
+              size="small"
+              variant="outlined"
+              component="span"
+              color="primary"
+              className="mb-2"
+              startIcon={<PhotoLibraryIcon />}
+            >
+              {label}
+            </Button>
+          </label>
+        </>
+      )}
       <ImageList
-        showIcon={true}
+        showIcon
         media={state.media}
         tempMedia={state.tempMedia}
         removeTempMedia={handleRemoveTempMedia}

@@ -21,15 +21,18 @@ const defualtValue = {
   valueBoolean: null,
   valueDate: null,
   itemId: null,
+  media: [],
+};
+
+const initialSubmitState = {
+  validate: false,
+  showOnSubmitMessage: false,
+  loading: false,
 };
 
 export default function FormView({ form: { _id, name, fields, settings } }: IProps): any {
   const [values, setValues] = useState([]);
-  const [submitState, setSubmitState] = useState({
-    validate: false,
-    showOnSubmitMessage: false,
-    loading: false,
-  });
+  const [submitState, setSubmitState] = useState(initialSubmitState);
   const { handleCreateResponse, createLoading } = useCreateResponse({ onAlert });
 
   const onChange = (sValue) => {
@@ -71,10 +74,8 @@ export default function FormView({ form: { _id, name, fields, settings } }: IPro
       const payload = { formId: _id, values };
       await handleCreateResponse(payload, fields);
       setSubmitState({
-        ...submitState,
-        validate: false,
+        ...initialSubmitState,
         showOnSubmitMessage: true,
-        loading: false,
       });
       setValues([]);
     }
@@ -94,7 +95,7 @@ export default function FormView({ form: { _id, name, fields, settings } }: IPro
           </div>
           <InputGroup className="text-center">
             {settings?.editResponse && (
-              <Button onClick={onSubmit} variant="outlined" color="primary" size="small">
+              <Button variant="outlined" color="primary" size="small">
                 Edit Response
               </Button>
             )}
@@ -106,6 +107,7 @@ export default function FormView({ form: { _id, name, fields, settings } }: IPro
             <Grid item xs={field?.options?.halfWidth ? 6 : 12}>
               <InputGroup key={field._id} className="px-2">
                 <Field
+                  disabled={submitState.loading}
                   validate={submitState.validate}
                   {...field}
                   onChange={onChange}

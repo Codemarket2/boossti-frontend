@@ -26,6 +26,7 @@ export const fieldTypes = [
   { label: 'Phone Number', value: 'phoneNumber' },
   { label: 'Date', value: 'date' },
   { label: 'Date & Time', value: 'dateTime' },
+  { label: 'Image', value: 'image' },
   // { label: 'Media (Images/Video)', value: 'media' },
   // { label: 'Address', value: 'address' },
   { label: 'Existing Type', value: 'type' },

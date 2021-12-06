@@ -11,6 +11,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import TablePagination from '@material-ui/core/TablePagination';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
+import Avatar from '@material-ui/core/Avatar';
 import Dialog from '@material-ui/core/Dialog';
 import Delete from '@material-ui/icons/Delete';
 import VisibilityIcon from '@material-ui/icons/Visibility';
@@ -24,40 +25,14 @@ interface IProps {
   form: any;
 }
 
-export const getValue = (field, values) => {
-  const value = values.filter((v) => v.field === field._id)[0];
-  if (!value) {
-    return null;
-  }
-  switch (field.fieldType) {
-    case 'text':
-    case 'textarea':
-    case 'url':
-    case 'select':
-    case 'email':
-    case 'password':
-      return value.value;
-    case 'date':
-    case 'dateTime':
-      return value.valueDate;
-    case 'number':
-    case 'phoneNumber':
-      return value.valueNumber;
-    case 'checkbox':
-      return value.valueBoolean;
-    default:
-      return null;
-  }
-};
-
 export default function ResponseList({ form }: IProps): any {
   const { data, error, state, setState } = useGetResponses(form._id);
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
   const [selectedResponse, setSelectedResponse] = useState(null);
 
-  let layout = null;
-  if (form?.settings?.layout?.value) {
-    layout = form?.settings?.layout;
+  let design = null;
+  if (form?.settings?.design?.value) {
+    design = form?.settings?.design;
   }
 
   return (
@@ -111,7 +86,7 @@ export default function ResponseList({ form }: IProps): any {
                     <Tooltip title="Design View">
                       <IconButton
                         onClick={() => {
-                          if (layout && layout?.value) {
+                          if (design && design?.value) {
                             setSelectedResponse(response);
                           } else {
                             alert('Add design to form response');
@@ -127,7 +102,12 @@ export default function ResponseList({ form }: IProps): any {
                     )}`}
                   </TableCell>
                   {form?.fields?.map((field, i) => (
-                    <TableCell key={i}>{getValue(field, response?.values)}</TableCell>
+                    <TableCell key={i}>
+                      <ShowValue
+                        field={field}
+                        value={response?.values?.filter((v) => v.field === field._id)[0]}
+                      />
+                    </TableCell>
                   ))}
                 </TableRow>
               ))}
@@ -136,7 +116,7 @@ export default function ResponseList({ form }: IProps): any {
         )}
       </TableContainer>
       <PreviewDialog
-        layout={layout}
+        design={design}
         open={Boolean(selectedResponse)}
         onClose={() => setSelectedResponse(null)}
         responseValues={selectedResponse?.values}
@@ -146,7 +126,42 @@ export default function ResponseList({ form }: IProps): any {
   );
 }
 
-const PreviewDialog = ({ open, onClose, layout, responseValues, fields }: any) => {
+const ShowValue = ({ field, value }: any) => {
+  // if (!value) {
+  //   return null;
+  // }
+  // return <>hello</>;
+  switch (field.fieldType) {
+    case 'text':
+    case 'textarea':
+    case 'url':
+    case 'select':
+    case 'email':
+    case 'password':
+      return <>{value?.value}</>;
+    case 'date':
+      return <>{value?.valueDate && moment(value?.valueDate).format('L')}</>;
+    case 'dateTime':
+      return <>{value?.valueDate && moment(value?.valueDate).format('lll')}</>;
+    case 'number':
+    case 'phoneNumber':
+      return <>{value?.valueNumber}</>;
+    case 'checkbox':
+      return <>{value?.valueBoolean?.toString()}</>;
+    case 'image':
+      return (
+        <>
+          {value?.media?.map((image, i) => (
+            <Avatar key={i} alt={`image-${i + 1}`} src={image?.url} />
+          ))}
+        </>
+      );
+    default:
+      return <></>;
+  }
+};
+
+const PreviewDialog = ({ open, onClose, design, responseValues, fields }: any) => {
   return (
     <Dialog fullScreen open={open} onClose={onClose}>
       <div>
@@ -161,8 +176,8 @@ const PreviewDialog = ({ open, onClose, layout, responseValues, fields }: any) =
           Close
         </Button>
         <DisplayDesign
-          value={layout?.value}
-          variables={layout?.variables}
+          value={design?.value}
+          variables={design?.variables}
           responseValues={responseValues}
           fields={fields}
         />
