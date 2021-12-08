@@ -2,10 +2,13 @@ import { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import LinkIcon from '@material-ui/icons/FileCopy';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import Tooltip from '@material-ui/core/Tooltip';
 import { useUpdateForm } from '@frontend/shared/hooks/form';
 import Link from 'next/link';
 import ErrorLoading from '../common/ErrorLoading';
@@ -62,7 +65,35 @@ export default function Form({ _id, drawerMode = false }: IProps): any {
               {NameInput}
             </Breadcrumbs>
             <div className="d-flex  align-items-center">
-              {updateLoading && <CircularProgress size={25} className="mr-3" />}
+              {updateLoading && <CircularProgress size={25} />}
+              <Tooltip title="Copy form link">
+                <IconButton
+                  className="ml-2"
+                  onClick={() => {
+                    navigator.clipboard.writeText(window?.location?.href?.replace('forms', 'form'));
+                  }}
+                >
+                  <LinkIcon />
+                </IconButton>
+              </Tooltip>
+              <Button
+                variant="outlined"
+                color="primary"
+                size="small"
+                className="mx-2"
+                onClick={() =>
+                  setState({
+                    ...state,
+                    settings: {
+                      ...state.settings,
+                      published: Boolean(!state?.settings?.published),
+                    },
+                  })
+                }
+              >
+                {state?.settings?.published ? 'Unpublish' : 'Publish'}
+              </Button>
+
               <Button variant="outlined" color="primary" size="small">
                 Delete
               </Button>
@@ -96,7 +127,7 @@ export default function Form({ _id, drawerMode = false }: IProps): any {
           <Grid item xs={8}>
             <Paper variant="outlined">
               <Tabs
-                centered
+                variant="scrollable"
                 value={options.currentTab}
                 indicatorColor="primary"
                 textColor="primary"

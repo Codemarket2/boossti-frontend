@@ -16,7 +16,6 @@ interface IProps {
   children: ReactNode;
   authRequired?: boolean;
   mustAdmin?: boolean;
-  redirectPath?: string;
   container?: boolean;
 }
 
@@ -24,7 +23,6 @@ const UserLayout = ({
   children,
   authRequired = false,
   mustAdmin = false,
-  redirectPath,
   container = true,
 }: IProps): any => {
   const authenticated = useSelector(({ auth }: any) => auth.authenticated);
@@ -33,23 +31,11 @@ const UserLayout = ({
       <AppBar />
       {container ? (
         <Container>
-          {authRequired ? (
-            <AuthRequired redirectPath={redirectPath} mustAdmin={mustAdmin}>
-              {children}
-            </AuthRequired>
-          ) : (
-            children
-          )}
+          {authRequired ? <AuthRequired mustAdmin={mustAdmin}>{children}</AuthRequired> : children}
         </Container>
       ) : (
         <DivContainer>
-          {authRequired ? (
-            <AuthRequired redirectPath={redirectPath} mustAdmin={mustAdmin}>
-              {children}
-            </AuthRequired>
-          ) : (
-            children
-          )}
+          {authRequired ? <AuthRequired mustAdmin={mustAdmin}>{children}</AuthRequired> : children}
         </DivContainer>
       )}
       {authenticated && <BottomBar />}

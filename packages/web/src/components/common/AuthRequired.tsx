@@ -6,11 +6,10 @@ import InitialLoading from './InitialLoading';
 
 interface IProps {
   children: ReactNode;
-  redirectPath?: string;
   mustAdmin?: boolean;
 }
 
-export default function AuthRequired({ children, mustAdmin = false, redirectPath }: IProps) {
+export default function AuthRequired({ children, mustAdmin = false }: IProps) {
   const { initial, authenticated, admin } = useSelector(({ auth }: any) => auth);
   return (
     <>
@@ -22,7 +21,7 @@ export default function AuthRequired({ children, mustAdmin = false, redirectPath
             children
           )
         ) : (
-          <UnAuthorised redirectPath={redirectPath} />
+          <UnAuthorised />
         )
       ) : (
         <InitialLoading />
