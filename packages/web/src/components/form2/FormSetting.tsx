@@ -14,6 +14,19 @@ export default function FormSetting({ settings, onChange }: any): any {
         <FormControlLabel
           control={
             <Checkbox
+              checked={settings?.authRequired}
+              onChange={({ target }) => onChange({ authRequired: target.checked })}
+              name="authRequired"
+              color="primary"
+            />
+          }
+          label="Authentication required to submit form"
+        />
+      </InputGroup>
+      <InputGroup>
+        <FormControlLabel
+          control={
+            <Checkbox
               checked={settings?.multipleResponses}
               onChange={({ target }) => onChange({ multipleResponses: target.checked })}
               name="multipleValues"

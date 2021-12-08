@@ -1,19 +1,24 @@
-import React from 'react';
-import Link from 'next/link';
-import LoadingButton from './LoadingButton';
+import { useState } from 'react';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import AuthScreen from '../../screens/AuthScreen';
 
-interface IProps {
-  redirectPath?: string | undefined;
-}
-
-export default function UnAuthorised({ redirectPath }: IProps) {
+export default function UnAuthorised() {
+  const [showAuthModal, setshowAuthModal] = useState(false);
   return (
     <div className="mt-3 py-5">
       <h2 className="text-center">Please Sign In to access this page!</h2>
       <div className="d-flex justify-content-center errorPageContentWrap">
-        <Link href={`/auth${redirectPath ? `?r=${redirectPath}` : ''}`}>
-          <LoadingButton>Sign In</LoadingButton>
-        </Link>
+        <Button variant="contained" color="primary" onClick={() => setshowAuthModal(true)}>
+          SIGN IN
+        </Button>
+        {showAuthModal && (
+          <Dialog fullScreen open={showAuthModal}>
+            <div className="container pt-2">
+              <AuthScreen />
+            </div>
+          </Dialog>
+        )}
       </div>
     </div>
   );
