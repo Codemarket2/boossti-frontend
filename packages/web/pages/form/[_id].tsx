@@ -4,6 +4,7 @@ import Paper from '@material-ui/core/Paper';
 import FormView from '../../src/components/form2/FormView';
 import ErrorLoading from '../../src/components/common/ErrorLoading';
 import UserLayout from '../../src/components/common/UserLayout';
+import NotFound from '../../src/components/common/NotFound';
 
 export default function Page() {
   const router = useRouter();
@@ -15,9 +16,13 @@ export default function Page() {
   }
   return (
     <UserLayout authRequired={data?.getForm?.settings?.authRequired}>
-      <Paper variant="outlined">
-        <FormView form={data?.getForm} />
-      </Paper>
+      {data?.getForm?.settings?.published ? (
+        <Paper variant="outlined">
+          <FormView form={data?.getForm} />
+        </Paper>
+      ) : (
+        <NotFound />
+      )}
     </UserLayout>
   );
 }

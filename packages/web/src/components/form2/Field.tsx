@@ -33,7 +33,6 @@ interface IProps {
   onChange: (arg: any) => void;
   mediaState: any;
   setMediaState: any;
-  // itemId: any;
 }
 
 export default function FieldValueForm2({

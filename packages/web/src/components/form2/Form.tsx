@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -6,13 +7,16 @@ import IconButton from '@material-ui/core/IconButton';
 import LinkIcon from '@material-ui/icons/FileCopy';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
+import Alert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Tooltip from '@material-ui/core/Tooltip';
-import { useUpdateForm } from '@frontend/shared/hooks/form';
+import { useUpdateForm, useDeleteForm } from '@frontend/shared/hooks/form';
 import Link from 'next/link';
 import ErrorLoading from '../common/ErrorLoading';
 import Breadcrumbs from '../common/Breadcrumbs';
+import Backdrop from '../common/Backdrop';
 import FormFields from './FormFields';
 import FormView from './FormView';
 import FormSetting from './FormSetting';
@@ -29,9 +33,56 @@ interface IProps {
 }
 
 export default function Form({ _id, drawerMode = false }: IProps): any {
-  const { error, state, setState, updateLoading } = useUpdateForm({ onAlert, _id });
+  const { error, state, setState, updateLoading } = useUpdateForm({
+    onAlert,
+    _id,
+  });
+  const { handleDelete } = useDeleteForm({
+    onAlert,
+  });
 
-  const [options, setOptions] = useState({ currentTab: 'preview', fieldId: null });
+  const [options, setOptions] = useState({
+    currentTab: 'preview',
+    fieldId: null,
+    snackBar: '',
+    backdrop: false,
+  });
+
+  const router = useRouter();
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(window?.location?.href?.replace('forms', 'form'));
+    setOptions({
+      ...options,
+      snackBar: 'Link copied to clipboard',
+    });
+  };
+  const handlePublish = () => {
+    setOptions({
+      ...options,
+      snackBar: state?.settings?.published
+        ? 'Successfully unpublished the form'
+        : 'Successfully published the form',
+    });
+    setState({
+      ...state,
+      settings: {
+        ...state.settings,
+        published: Boolean(!state?.settings?.published),
+      },
+    });
+  };
+
+  const onDelete = () => {
+    const anwser = confirm('Are you sure you want to delete this form?');
+    if (anwser) {
+      setOptions({
+        ...options,
+        backdrop: true,
+      });
+      handleDelete(_id, () => router.push('/forms'));
+    }
+  };
 
   if (error || !state) {
     return <ErrorLoading error={error} />;
@@ -53,7 +104,18 @@ export default function Form({ _id, drawerMode = false }: IProps): any {
 
   return (
     <Authorization _id={state?.createdBy?._id} allowAdmin>
+      {options.backdrop && <Backdrop open />}
       <div className="px-2">
+        <Snackbar
+          open={Boolean(options.snackBar)}
+          autoHideDuration={4000}
+          onClose={() => setOptions({ ...options, snackBar: '' })}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        >
+          <Alert onClose={() => setOptions({ ...options, snackBar: '' })} severity="success">
+            {options.snackBar}
+          </Alert>
+        </Snackbar>
         {drawerMode ? (
           <Typography variant="h5" className="py-2">
             {NameInput}
@@ -66,35 +128,24 @@ export default function Form({ _id, drawerMode = false }: IProps): any {
             </Breadcrumbs>
             <div className="d-flex  align-items-center">
               {updateLoading && <CircularProgress size={25} />}
-              <Tooltip title="Copy form link">
-                <IconButton
-                  className="ml-2"
-                  onClick={() => {
-                    navigator.clipboard.writeText(window?.location?.href?.replace('forms', 'form'));
-                  }}
-                >
-                  <LinkIcon />
-                </IconButton>
-              </Tooltip>
+              {state?.settings?.published && (
+                <Tooltip title="Copy form link">
+                  <IconButton className="ml-2" onClick={handleCopyLink}>
+                    <LinkIcon />
+                  </IconButton>
+                </Tooltip>
+              )}
               <Button
                 variant="outlined"
                 color="primary"
                 size="small"
                 className="mx-2"
-                onClick={() =>
-                  setState({
-                    ...state,
-                    settings: {
-                      ...state.settings,
-                      published: Boolean(!state?.settings?.published),
-                    },
-                  })
-                }
+                onClick={handlePublish}
               >
                 {state?.settings?.published ? 'Unpublish' : 'Publish'}
               </Button>
 
-              <Button variant="outlined" color="primary" size="small">
+              <Button variant="outlined" color="primary" size="small" onClick={onDelete}>
                 Delete
               </Button>
             </div>
@@ -149,7 +200,10 @@ export default function Form({ _id, drawerMode = false }: IProps): any {
               <FormSetting
                 settings={state.settings}
                 onChange={(settings) =>
-                  setState({ ...state, settings: { ...state.settings, ...settings } })
+                  setState({
+                    ...state,
+                    settings: { ...state.settings, ...settings },
+                  })
                 }
               />
             )}
@@ -158,7 +212,10 @@ export default function Form({ _id, drawerMode = false }: IProps): any {
               <DesignTab
                 form={state}
                 onChange={(design) =>
-                  setState({ ...state, settings: { ...state.settings, design } })
+                  setState({
+                    ...state,
+                    settings: { ...state.settings, design },
+                  })
                 }
               />
             )}
@@ -166,7 +223,10 @@ export default function Form({ _id, drawerMode = false }: IProps): any {
               <Actions
                 form={state}
                 onChange={(actions) =>
-                  setState({ ...state, settings: { ...state.settings, actions } })
+                  setState({
+                    ...state,
+                    settings: { ...state.settings, actions },
+                  })
                 }
               />
             )}

@@ -110,6 +110,7 @@ export default function FormView({ form: { _id, name, fields, settings } }: IPro
                   disabled={submitState.loading}
                   validate={submitState.validate}
                   {...field}
+                  label={field?.options?.required ? `${field?.label}*` : field?.label}
                   onChange={onChange}
                   value={values.filter((f) => f.field === field._id)[0]}
                 />

@@ -10,7 +10,11 @@ interface IProps {
 
 // const defaultQueryVariables = { page: 1, limit: 20, search: '' };
 
-export function useGetForms({ page = 1, limit = 20, search = '' }: IProps): any {
+export function useGetForms({
+  page = 1,
+  limit = 20,
+  search = '',
+}: IProps): any {
   const [state, setState] = useState({
     page: 1,
     limit: 20,
@@ -37,7 +41,7 @@ export function useGetForm(_id: string): any {
     if (data && data.getForm) {
       const parsedForm = {
         ...data.getForm,
-        fields: data.getForm.fields.map((m) => {
+        fields: data?.getForm?.fields?.map((m) => {
           const field = { ...m };
           field.options = JSON.parse(field.options);
           return field;
