@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import moment from 'moment';
 import Paper from '@material-ui/core/Paper';
@@ -14,7 +15,7 @@ import Button from '@material-ui/core/Button';
 import Avatar from '@material-ui/core/Avatar';
 import Dialog from '@material-ui/core/Dialog';
 import Delete from '@material-ui/icons/Delete';
-import VisibilityIcon from '@material-ui/icons/Visibility';
+import LaunchIcon from '@material-ui/icons/Launch';
 import { useGetResponses, useDeleteResponse } from '@frontend/shared/hooks/response';
 import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
@@ -29,6 +30,7 @@ export default function ResponseList({ form }: IProps): any {
   const { data, error, state, setState } = useGetResponses(form._id);
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
   const [selectedResponse, setSelectedResponse] = useState(null);
+  const router = useRouter();
 
   let design = null;
   if (form?.settings?.design?.value) {
@@ -83,18 +85,14 @@ export default function ResponseList({ form }: IProps): any {
                         <Delete />
                       </IconButton>
                     </Tooltip>
-                    <Tooltip title="Design View">
+                    <Tooltip title="Open Response">
                       <IconButton
                         onClick={() => {
-                          if (design && design?.value) {
-                            setSelectedResponse(response);
-                          } else {
-                            alert('Add design to form response');
-                          }
+                          router.push(`/response/${response._id}`);
                         }}
                         edge="start"
                       >
-                        <VisibilityIcon />
+                        <LaunchIcon />
                       </IconButton>
                     </Tooltip>
                     {`${moment(response.createdAt).format('l')} ${moment(response.createdAt).format(
@@ -126,11 +124,7 @@ export default function ResponseList({ form }: IProps): any {
   );
 }
 
-const ShowValue = ({ field, value }: any) => {
-  // if (!value) {
-  //   return null;
-  // }
-  // return <>hello</>;
+export const ShowValue = ({ field, value }: any) => {
   switch (field.fieldType) {
     case 'text':
     case 'textarea':

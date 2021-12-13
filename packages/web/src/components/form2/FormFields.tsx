@@ -52,7 +52,11 @@ export default function FormFields({ state, setState, onSelectField }: any): any
         ...state,
         fields: state.fields.map((oldField) => {
           if (oldField._id === field._id) {
-            return { ...oldField, ...field, options: { ...oldField.options, ...field.options } };
+            return {
+              ...oldField,
+              ...field,
+              options: { ...oldField.options, ...field.options },
+            };
           }
           return oldField;
         }),
@@ -85,7 +89,7 @@ export default function FormFields({ state, setState, onSelectField }: any): any
           <Droppable droppableId="list">
             {(provided, snapshot) => (
               <div ref={provided.innerRef} {...provided.droppableProps}>
-                {state?.fields.map((field: any, index: number) => (
+                {state?.fields?.map((field: any, index: number) => (
                   <Draggable key={field._id} draggableId={field._id} index={index}>
                     {(draggableProvided, draggableSnapshot) => (
                       <ListItem

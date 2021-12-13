@@ -19,17 +19,6 @@ export function useGetResponses(formId: string) {
     fetchPolicy: 'cache-and-network',
   });
 
-  // const { data: subData, error: subError } = useSubscription(RESPONSE_SUB, {
-  //   variables: { formId },
-  // });
-  // useEffect(() => {
-  //   if (subData && subError) {
-  //     console.log('subData, subError', subData, subError);
-  //   } else {
-  //     console.log('else subData, subError', subData, subError);
-  //   }
-  // }, [subData, subError]);
-
   useEffect(() => {
     if (!subsribed) {
       setSubsribed(true);

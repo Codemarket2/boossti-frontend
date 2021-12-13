@@ -221,8 +221,8 @@ interface IPropsDialog {
 
 const VariablesDialog = ({ open, onClose, variables, onVariableChange, fields }: IPropsDialog) => {
   return (
-    <Dialog fullScreen open={open} onClose={onClose} style={{ zIndex: 999999 }}>
-      <div>
+    <Dialog fullScreen open={open} onClose={onClose}>
+      <div className="pl-5">
         <DesignVariables
           fields={fields}
           variables={variables}
