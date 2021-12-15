@@ -9,6 +9,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Link from 'next/link';
+import AnalyticsIcon from '@material-ui/icons/Announcement';
 
 const checkActiveRoute = (activeRoute, linkPathname) => {
   return activeRoute.pathname === linkPathname;
@@ -53,6 +54,15 @@ export default function AdminDrawerList() {
             <TuneIcon />
           </ListItemIcon>
           <ListItemText primary="Forms" />
+        </ListItem>
+      </Link>
+
+      <Link href="/log">
+        <ListItem button selected={checkActiveRoute(activeRoute, '/log')}>
+          <ListItemIcon>
+            <AnalyticsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Activity Log" />
         </ListItem>
       </Link>
       <Divider />
