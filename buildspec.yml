@@ -7,7 +7,7 @@ phases:
       - yarn install
   pre_build:
     commands:
-      - yarn web:test
+      # - yarn web:test
       - aws s3 sync s3://soozzi-cicd-bucket/vijaa/$STAGE/.serverless packages/web/.serverless --delete
       - echo "STAGE=$STAGE\nNEXT_PUBLIC_GRAPHQL_ENDPOINT=$GRAPHQL_ENDPOINT\nNEXT_PUBLIC_GRAPHQL_APIKEY=$GRAPHQL_APIKEY\nACCESS_KEY=$ACCESS_KEY\nSECRET_KEY=$SECRET_KEY" > ./packages/web/.env.production
       - yarn web:build
