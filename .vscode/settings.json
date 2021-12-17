@@ -14,10 +14,5 @@
   "[typescriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "eslint.codeActionsOnSave.mode": "problems",
   "eslint.workingDirectories": [{ "mode": "auto" }],
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact",
-  ],
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"]
 }

@@ -14,7 +14,9 @@ export function useUpdateForm({ onAlert, _id }: IProps): any {
   const [state, setState] = useState(null);
   const [saveToServer, setSaveToServer] = useState(false);
   const { data, error } = useGetForm(_id);
-  const [updateFormMutation, { loading: updateLoading }] = useMutation(UPDATE_FORM);
+  const [updateFormMutation, { loading: updateLoading }] = useMutation(
+    UPDATE_FORM
+  );
 
   useEffect(() => {
     let timeOutId;
@@ -33,11 +35,11 @@ export function useUpdateForm({ onAlert, _id }: IProps): any {
   }, [data]);
 
   const updateCache = (client, mutationResult) => {
-    const { getForm } = client.readQuery({
+    const oldData = client.readQuery({
       query: GET_FORM,
       variables: { _id },
     });
-    if (getForm) {
+    if (oldData?.getForm) {
       const newData = {
         getForm: mutationResult.data.updateForm,
       };
@@ -53,7 +55,9 @@ export function useUpdateForm({ onAlert, _id }: IProps): any {
     let payload = { ...state };
     payload = {
       ...payload,
-      fields: payload.fields.map((m) => JSON.parse(JSON.stringify(m), omitTypename)),
+      fields: payload.fields.map((m) =>
+        JSON.parse(JSON.stringify(m), omitTypename)
+      ),
     };
     payload = {
       ...payload,
