@@ -75,7 +75,10 @@ export const GET_MY_RESPONSES = gql`
       count
       data {
         _id
-        formId
+        formId {
+          _id
+          name
+        }
         parentId
         values {
           _id

@@ -55,11 +55,3 @@ export function useGetMyResponses() {
 
   return { data, error, loading, state, setState };
 }
-
-export function useGetMyResponse(_id: string): any {
-  const { data, error, loading } = useQuery(GET_MY_RESPONSES, {
-    variables: { _id },
-    fetchPolicy: 'cache-and-network',
-  });
-  return { data, error, loading };
-}
