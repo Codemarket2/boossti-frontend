@@ -45,7 +45,7 @@ function ActivityAccordion({ data }) {
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Typography>{data?._id}</Typography>
+          <Typography>{data?.name}</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Box>
