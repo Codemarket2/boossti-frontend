@@ -83,6 +83,7 @@ export default function FormView({ form: { _id, name, fields, settings } }: IPro
 
   return (
     <div>
+      {/* {JSON.stringify(values)} */}
       {settings?.showFormTitle && (
         <InputGroup className="text-center">
           <Typography variant="h4">{name}</Typography>
@@ -111,7 +112,7 @@ export default function FormView({ form: { _id, name, fields, settings } }: IPro
                   validate={submitState.validate}
                   {...field}
                   label={field?.options?.required ? `${field?.label}*` : field?.label}
-                  onChange={onChange}
+                  onChangeValue={onChange}
                   value={values.filter((f) => f.field === field._id)[0]}
                 />
               </InputGroup>
