@@ -11,11 +11,14 @@ import {
   Grid,
 } from '@material-ui/core';
 import { ExpandMore } from '@material-ui/icons';
+import ErrorLoading from '../common/ErrorLoading';
 
 export default function ActivityList() {
   const { data, error, loading, state, setState } = useGetMyResponses();
 
-  console.log(data?.getMyResponses);
+  if (error || !data) {
+    return <ErrorLoading error={error} />;
+  }
 
   return (
     <>
@@ -45,7 +48,7 @@ function ActivityAccordion({ data }) {
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Typography>{data?.name}</Typography>
+          <Typography>{data?.formId?.name}</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Box>

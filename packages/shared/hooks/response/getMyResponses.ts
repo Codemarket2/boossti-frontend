@@ -18,7 +18,6 @@ export function useGetMyResponses() {
     variables: { ...state },
     fetchPolicy: 'cache-and-network',
   });
-
   // useEffect(() => {
   //   if (!subsribed) {
   //     setSubsribed(true);
