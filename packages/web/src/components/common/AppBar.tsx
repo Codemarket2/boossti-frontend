@@ -8,20 +8,18 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import AccountCircle from '@material-ui/icons/AccountCircle';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-// import ChatBubble from '@material-ui/icons/ChatBubble';
-// import Event from '@material-ui/icons/Event';
-// import Videocam from '@material-ui/icons/Videocam';
+import NotificationsIcon from '@material-ui/icons/Notifications';
 import HomeIcon from '@material-ui/icons/Home';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import Popover from '@material-ui/core/Popover';
 import Tooltip from '@material-ui/core/Tooltip';
 import styled from 'styled-components';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -58,14 +56,13 @@ const MenuWrapper = styled.div`
 
 export default function AppBarComponent() {
   const { authenticated, darkMode, admin, attributes } = useSelector(({ auth }: any) => auth);
-  const { setting } = useSelector(({ setting }: any) => ({
-    setting,
-  }));
+  const { setting } = useSelector((state: any) => state);
   const { handleLogout } = useHandleLogout();
   const [anchorEl, setAnchorEl] = useState(null);
   const [openDrawer, setOpenDrawer] = useState(false);
+  const [notificationState, setNotificationState] = useState({ showNotification: null });
   const router = useRouter();
-  const [activeRoute, setActiveRoute] = useState<String>('/');
+  const [activeRoute, setActiveRoute] = useState<string>('/');
   const open = Boolean(anchorEl);
 
   const theme = useTheme();
@@ -104,13 +101,15 @@ export default function AppBarComponent() {
           </>
         ) : null}
         <Link href="/">
-          {/* <StyledTitle variant="h5" color="textPrimary">
-            {projectConfig.title}
-          </StyledTitle> */}
-          {/* src="https://res.cloudinary.com/dzo2ufh6a/image/upload/v1633449974/vijaa-logo_np6z16.png" */}
-          <StyledImageContainer>
-            <img src={setting.metaTags.image} alt={setting.metaTags.title} />
-          </StyledImageContainer>
+          {setting.metaTags.image ? (
+            <StyledImageContainer>
+              <img src={setting.metaTags.image} alt={setting.metaTags.title} />
+            </StyledImageContainer>
+          ) : (
+            <StyledTitle variant="h5" color="textPrimary">
+              {setting.metaTags.title || projectConfig.title}
+            </StyledTitle>
+          )}
         </Link>
         {authenticated ? (
           <>
@@ -118,42 +117,20 @@ export default function AppBarComponent() {
               <Tooltip title="Home">
                 <IconButton
                   onClick={() => router.push(routes.feeds)}
-                  color={setActiveRouteColor(activeRoute, routes.feeds)}>
+                  color={setActiveRouteColor(activeRoute, routes.feeds)}
+                >
                   <HomeIcon />
                 </IconButton>
               </Tooltip>
-              {/* <Tooltip title="Profile">
-                <IconButton onClick={() => router.push(`/user/${attributes['custom:_id']}`)}>
-                  <AccountCircleIcon />
+              <Tooltip title="Notifications">
+                <IconButton
+                  onClick={(e) =>
+                    setNotificationState({ ...notificationState, showNotification: e.target })
+                  }
+                >
+                  <NotificationsIcon />
                 </IconButton>
               </Tooltip>
-              <Tooltip title="Logout">
-                <IconButton
-                  onClick={() => {
-                    confirm('Are you sure you want to logout?') && handleLogout();
-                  }}>
-                  <ExitToAppIcon />
-                </IconButton>
-              </Tooltip> */}
-              {/* <Tooltip title="Inbox">
-                <IconButton
-                  onClick={() => router.push(routes.inbox)}
-                  color={setActiveRouteColor(activeRoute, routes.inbox)}>
-                  <ChatBubble />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Offerings">
-                <IconButton color={setActiveRouteColor(activeRoute, routes.offerings)}>
-                  <Event onClick={() => router.push(routes.offerings)} />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Sessions">
-                <IconButton
-                  onClick={() => router.push(routes.sessions)}
-                  color={setActiveRouteColor(activeRoute, routes.sessions)}>
-                  <Videocam />
-                </IconButton>
-              </Tooltip> */}
             </MenuWrapper>
             <div>
               <Tooltip title="Profile">
@@ -164,7 +141,7 @@ export default function AppBarComponent() {
                   onClick={handleMenu}
                   // color="inherit"
                 >
-                  <AccountCircle />
+                  <AccountCircleIcon />
                 </IconButton>
               </Tooltip>
               <Menu
@@ -180,7 +157,8 @@ export default function AppBarComponent() {
                   horizontal: 'right',
                 }}
                 open={open}
-                onClose={handleClose}>
+                onClose={handleClose}
+              >
                 <Link href={`/user/${attributes['custom:_id']}`}>
                   <MenuItem>
                     <ListItemIcon className="mr-n4">
@@ -212,6 +190,25 @@ export default function AppBarComponent() {
           </Link>
         )}
       </Toolbar>
+      <Popover
+        className="mt-2"
+        open={Boolean(notificationState.showNotification)}
+        anchorEl={notificationState.showNotification}
+        onClose={() => setNotificationState({ ...notificationState, showNotification: null })}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
+        <div className="p-2" style={{ minWidth: '40vw' }}>
+          <Typography variant="h5">Notifications</Typography>
+          <Typography>You don&apos;t have any notifications</Typography>
+        </div>
+      </Popover>
     </AppBar>
   );
 }
