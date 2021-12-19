@@ -11,16 +11,13 @@ import TableRow from '@material-ui/core/TableRow';
 import Tooltip from '@material-ui/core/Tooltip';
 import TablePagination from '@material-ui/core/TablePagination';
 import IconButton from '@material-ui/core/IconButton';
-import Button from '@material-ui/core/Button';
 import Avatar from '@material-ui/core/Avatar';
-import Dialog from '@material-ui/core/Dialog';
 import Delete from '@material-ui/icons/Delete';
 import LaunchIcon from '@material-ui/icons/Launch';
 import { useGetResponses, useDeleteResponse } from '@frontend/shared/hooks/response';
 import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
-import DisplayDesign from './DisplayDesign';
 
 interface IProps {
   form: any;
@@ -29,7 +26,6 @@ interface IProps {
 export default function ResponseList({ form }: IProps): any {
   const { data, error, state, setState } = useGetResponses(form._id);
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
-  const [selectedResponse, setSelectedResponse] = useState(null);
   const router = useRouter();
 
   let design = null;
@@ -113,13 +109,6 @@ export default function ResponseList({ form }: IProps): any {
           </Table>
         )}
       </TableContainer>
-      <PreviewDialog
-        design={design}
-        open={Boolean(selectedResponse)}
-        onClose={() => setSelectedResponse(null)}
-        responseValues={selectedResponse?.values}
-        fields={form?.fields}
-      />
     </>
   );
 }
@@ -153,29 +142,4 @@ export const ShowValue = ({ field, value }: any) => {
     default:
       return <></>;
   }
-};
-
-const PreviewDialog = ({ open, onClose, design, responseValues, fields }: any) => {
-  return (
-    <Dialog fullScreen open={open} onClose={onClose}>
-      <div>
-        <Button
-          size="small"
-          color="primary"
-          variant="contained"
-          className="position-fixed ml-2 mt-2"
-          style={{ zIndex: 9999 }}
-          onClick={onClose}
-        >
-          Close
-        </Button>
-        <DisplayDesign
-          value={design?.value}
-          variables={design?.variables}
-          responseValues={responseValues}
-          fields={fields}
-        />
-      </div>
-    </Dialog>
-  );
 };
