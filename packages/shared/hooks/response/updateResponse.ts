@@ -10,7 +10,6 @@ interface IProps extends IHooksProps{
 
 export function useUpdateResponse({ onAlert,_id }: IProps): any {
   const [updateMutation, { loading: updateLoading }] = useMutation(UPDATE_RESPONSE);
-
   const handleUpdateResponse = async (tPayload, fields) => {
     try {
       let payload = { ...tPayload };
@@ -34,9 +33,10 @@ export function useUpdateResponse({ onAlert,_id }: IProps): any {
         const { tempMedia, tempMediaFiles, ...finalValue } = value;
         values.push(finalValue);
       }
-      payload = {_id,
+      payload = {
         ...payload,
         values: values.map((m) => JSON.parse(JSON.stringify(m), omitTypename)),
+        _id
       };
       console.log('payload', payload);
       const res = await updateMutation({
