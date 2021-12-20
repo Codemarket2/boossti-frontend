@@ -68,3 +68,42 @@ export const GET_RESPONSES = gql`
     }
   }
 `;
+
+export const GET_MY_RESPONSES = gql`
+  query MyQuery {
+    getMyResponses {
+      count
+      data {
+        _id
+        formId {
+          _id
+          name
+        }
+        parentId
+        values {
+          _id
+          field
+          value
+          valueNumber
+          valueBoolean
+          valueDate
+          itemId {
+            _id
+            title
+            slug
+          }
+          media {
+            url
+            caption
+          }
+        }
+        createdBy {
+          _id
+          picture
+          name
+        }
+        createdAt
+      }
+    }
+  }
+`;
