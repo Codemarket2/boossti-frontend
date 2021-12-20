@@ -30,7 +30,7 @@ interface IProps {
   typeId: any;
   options: any;
   value: any;
-  onChange: (arg: any) => void;
+  onChangeValue: (arg: any) => void;
   mediaState: any;
   setMediaState: any;
 }
@@ -44,8 +44,11 @@ export default function FieldValueForm2({
   typeId,
   options,
   value,
-  onChange,
+  onChangeValue,
 }: IProps): any {
+  const onChange = (payload)=>{
+    onChangeValue({...value,...payload})
+  }
   switch (fieldType) {
     case 'date': {
       return (

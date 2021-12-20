@@ -105,7 +105,8 @@ export default function FormC({ field, parentId, previewMode = false }: IProps):
         <FieldViewWrapper _id={data?.getFieldValuesByItem?.data[0]?.value} />
       )}
       {state.fieldId && (
-        <FormDrawer formId={state.fieldId} open onClose={() => setState(initialState)} />
+        // <FormDrawer formId={state.fieldId} open onClose={() => setState(initialState)} />
+        "form"
       )}
       {state.backdrop && <Backdrop open={state.backdrop} />}
     </div>
