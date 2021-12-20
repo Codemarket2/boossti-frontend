@@ -6,8 +6,8 @@ import { createSubscriptionHandshakeLink } from 'aws-appsync-subscription-link';
 import projectConfig from '../index';
 
 let url = projectConfig.appsyncGraphqlEndpoint;
-let region = projectConfig.appsyncRegion;
 let apiKey = projectConfig.appsyncApiKey;
+const region = projectConfig.appsyncRegion;
 
 if (
   process.env.NODE_ENV === 'development' &&
@@ -39,6 +39,13 @@ const cognitoAuth: AuthOptions = {
   },
 };
 
+// custom domain
+// const realtimeUrl = url;
+// if (realtimeUrl.includes('.com')) {
+//   // if custom domain is used the append /realtime
+//   realtimeUrl = `${url}/realtime`;
+// }
+
 const link = ApolloLink.from([
   createAuthLink({ url, region, auth: cognitoAuth }),
   createSubscriptionHandshakeLink({ url, region, auth: cognitoAuth }),
@@ -51,7 +58,7 @@ export const client = new ApolloClient({
 
 const apiKeyAuth: AuthOptions = {
   type: AUTH_TYPE.API_KEY,
-  apiKey: apiKey,
+  apiKey,
 };
 
 const guestLink = ApolloLink.from([

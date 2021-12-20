@@ -2,7 +2,7 @@ import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { GET_LIST_TYPE_BY_SLUG, GET_LIST_ITEM_BY_SLUG } from './graphql/query/list';
 import { guestClient } from './graphql';
-import { updateSettingAction } from '../shared/redux/actions/setting';
+import { updateSettingAction } from './redux/actions/setting';
 
 interface IProjectConfig {
   title: string;
