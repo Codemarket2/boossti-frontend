@@ -12,10 +12,12 @@ export const useNotificationSub = () => {
     description: 'Sumi commented on your post',
     link: '',
   });
-  //   const state = useSelector((state: any) => state.auth);
+
+  const { attributes } = useSelector((reduxState: any) => reduxState?.auth);
   const { data, error } = useSubscription(NOTIFICATION_SUB, {
-    variables: { userId: '60fc4d29f11b170008d9ec49' },
+    variables: { userId: attributes['custom:_id'] },
   });
+  // 60fc4d29f11b170008d9ec48
 
   //   console.log('NOTIFICATION_SUB data, error ', data, error);
 

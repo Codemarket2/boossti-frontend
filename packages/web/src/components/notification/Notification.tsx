@@ -7,6 +7,7 @@ import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import Badge from '@material-ui/core/Badge';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { useNotificationSub } from '@frontend/shared/hooks/notification';
 
@@ -16,7 +17,9 @@ export default function Notification() {
     <>
       <Tooltip title="Notifications">
         <IconButton onClick={(e) => setState({ ...state, showNotification: e.target })}>
-          <NotificationsIcon />
+          <Badge badgeContent={state.notifications?.length} color="primary">
+            <NotificationsIcon />
+          </Badge>
         </IconButton>
       </Tooltip>
       <Popover
@@ -40,10 +43,10 @@ export default function Notification() {
               <Button
                 size="small"
                 color="primary"
-                variant="contained"
+                variant="outlined"
                 onClick={() => setState({ ...state, notifications: [] })}
               >
-                Clear
+                Clear all
               </Button>
             )}
           </Typography>
@@ -85,6 +88,7 @@ export default function Notification() {
 const NotificationItem = ({ notification, onClose }: any) => {
   return (
     <Alert
+      variant="filled"
       className="mt-1"
       icon={<NotificationsIcon fontSize="inherit" />}
       severity="success"

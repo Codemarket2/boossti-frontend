@@ -7,6 +7,7 @@ import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 import EditIcon from '@material-ui/icons/Edit';
 import DisplayDesign from './DisplayDesign';
 import FormView from './FormView';
+import FormDrawer from './FormDrawer';
 import { ShowValue } from './ResponseList';
 import Authorization from '../common/Authorization';
 
@@ -17,8 +18,10 @@ interface IProps {
 
 export default function Response({ form, response }: IProps) {
   const [state, setState] = useState({ designView: true, edit: false });
+  const [openDrawer, setOpenDrawer] = useState(false)
   return (
     <Authorization _id={response?.createdBy?._id} allowAdmin>
+      {/* {JSON.stringify(response?.values)} */}
       {state.edit ? (
         <FormView form={form} />
       ) : (
@@ -37,20 +40,20 @@ export default function Response({ form, response }: IProps) {
               </Tooltip>
             </Link>
             <div>
-              <Tooltip title="Edit Form">
+              <Tooltip onClick={()=>setOpenDrawer(true)} title="Edit Form">
                 <Button
                   startIcon={<EditIcon />}
                   className="mr-2"
                   variant="contained"
                   size="small"
                   color="primary"
-                  onClick={() => setState({ ...state, edit: true })}
                 >
                   Edit
                 </Button>
               </Tooltip>
-              {form?.settings?.design?.value && (
-                <Tooltip title="Toggle View">
+              <FormDrawer form={form} response={response}  open={openDrawer} onClose={()=>{setOpenDrawer(false)}}/>
+              {/* {form?.settings?.design?.value && (
+                <Tooltip title="Toggle View"> 
                   <Button
                     variant="outlined"
                     size="small"
@@ -60,7 +63,7 @@ export default function Response({ form, response }: IProps) {
                     Toggle View
                   </Button>
                 </Tooltip>
-              )}
+              )} */}
             </div>
           </div>
           {state.designView && form?.settings?.design?.value ? (
