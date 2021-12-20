@@ -64,7 +64,7 @@ export default function FormList(): any {
                 <ListItem button key={form._id}>
                   <ListItemText
                     primary={form.name}
-                    secondary={`${form.createdBy.name} ${
+                    secondary={`${form.createdBy?.name} ${
                       moment(form.createdAt) > moment().subtract(7, 'days')
                         ? moment(form.createdAt).fromNow()
                         : moment(form.createdAt).format('LL')
