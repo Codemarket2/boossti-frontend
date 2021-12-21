@@ -18,7 +18,6 @@ interface IProps {
 
 export default function DrawerContent({ openDrawer, setOpenDrawer, darkMode, admin }: IProps) {
   const { setting } = useSelector((state: any) => state);
-
   return (
     <Drawer anchor="left" open={openDrawer} onClose={() => setOpenDrawer(false)}>
       <div
@@ -38,7 +37,7 @@ export default function DrawerContent({ openDrawer, setOpenDrawer, darkMode, adm
       <List style={{ minWidth: 300 }}>
         <DarkModeToggle darkMode={darkMode} />
         <Divider />
-        {admin && <AdminDrawerList />}
+        <AdminDrawerList admin={admin} />
       </List>
     </Drawer>
   );

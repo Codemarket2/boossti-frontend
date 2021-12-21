@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import UserLayout from '../components/common/UserLayout';
 import ItemScreen from '../components/list/ItemScreen';
 
 interface IProps {
@@ -27,15 +26,13 @@ export default function Screen({ slug, typeSlug }: IProps) {
   };
 
   return (
-    <UserLayout container={false} authRequired>
-      <div className="px-3">
-        <ItemScreen
-          onSlugUpdate={onSlugUpdate}
-          pushToAnchor={pushToAnchor}
-          slug={slug}
-          typeSlug={typeSlug}
-        />
-      </div>
-    </UserLayout>
+    <div className="px-2">
+      <ItemScreen
+        onSlugUpdate={onSlugUpdate}
+        pushToAnchor={pushToAnchor}
+        slug={slug}
+        typeSlug={typeSlug}
+      />
+    </div>
   );
 }

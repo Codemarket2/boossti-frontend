@@ -3,19 +3,18 @@ import Link from 'next/link';
 import parse from 'html-react-parser';
 import { useRouter } from 'next/router';
 import EditIcon from '@material-ui/icons/Edit';
-import {
-  Typography,
-  Button,
-  SwipeableDrawer,
-  Tooltip,
-  Hidden,
-  Divider,
-  Paper,
-  IconButton,
-  useMediaQuery,
-} from '@material-ui/core';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import IconButton from '@material-ui/core/IconButton';
+import Paper from '@material-ui/core/Paper';
+import Divider from '@material-ui/core/Divider';
+import Hidden from '@material-ui/core/Hidden';
+import Tooltip from '@material-ui/core/Tooltip';
+import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTheme } from '@material-ui/core/styles';
+import ShareIcon from '@material-ui/icons/Share';
 import {
   useCRUDListItems,
   useGetListItemBySlug,
@@ -182,6 +181,26 @@ export default function ItemScreen({
                   }
                 }}
               />
+              <Tooltip
+                title="share"
+                onClick={() => {
+                  navigator.clipboard.writeText(`${window?.location?.origin}/page/${slug}`);
+                }}
+              >
+                <IconButton>
+                  <ShareIcon />
+                </IconButton>
+              </Tooltip>
+              {/* <Button
+                size="small"
+                variant="outlined"
+                component="span"
+                color="primary"
+                className="ml-2"
+                startIcon={<ShareIcon />}
+              >
+                share
+              </Button> */}
             </div>
           </div>
           <Hidden smUp>

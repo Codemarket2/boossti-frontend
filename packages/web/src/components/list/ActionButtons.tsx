@@ -29,7 +29,8 @@ export default function ActionButtons({
             variant="outlined"
             component="span"
             color="primary"
-            startIcon={<EditIcon />}>
+            startIcon={<EditIcon />}
+          >
             Edit
           </Button>
         </Tooltip>
@@ -42,21 +43,12 @@ export default function ActionButtons({
             variant="outlined"
             component="span"
             color="primary"
-            startIcon={<DeleteIcon />}>
+            startIcon={<DeleteIcon />}
+          >
             Delete
           </Button>
         </Tooltip>
       )}
-      <div className="ml-1">
-        <Button
-          size="small"
-          variant="outlined"
-          component="span"
-          color="primary"
-          startIcon={<Share />}>
-          share
-        </Button>
-      </div>
     </div>
   );
 }

@@ -9,14 +9,11 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import AddIcon from '@material-ui/icons/Add';
 import Link from 'next/link';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
 import DarkModeToggle from '../common/DarkModeToggle';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -77,7 +74,8 @@ export default function AdminDrawer({ darkMode }: TProps) {
         </Link>
         <ListItem
           button
-          onClick={() => setActiveRoute({ ...activeRoute, showList: !activeRoute.showList })}>
+          onClick={() => setActiveRoute({ ...activeRoute, showList: !activeRoute.showList })}
+        >
           <ListItemIcon>
             <SettingsIcon />
           </ListItemIcon>
