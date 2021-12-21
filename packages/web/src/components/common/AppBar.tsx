@@ -15,15 +15,14 @@ import Menu from '@material-ui/core/Menu';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import HomeIcon from '@material-ui/icons/Home';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import Popover from '@material-ui/core/Popover';
 import Tooltip from '@material-ui/core/Tooltip';
 import styled from 'styled-components';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
+import Notification from '../notification/Notification';
 import Drawer from './Drawer';
 import { routes } from '../../utils/routes';
 
@@ -60,7 +59,7 @@ export default function AppBarComponent() {
   const { handleLogout } = useHandleLogout();
   const [anchorEl, setAnchorEl] = useState(null);
   const [openDrawer, setOpenDrawer] = useState(false);
-  const [notificationState, setNotificationState] = useState({ showNotification: null });
+
   const router = useRouter();
   const [activeRoute, setActiveRoute] = useState<string>('/');
   const open = Boolean(anchorEl);
@@ -122,15 +121,7 @@ export default function AppBarComponent() {
                   <HomeIcon />
                 </IconButton>
               </Tooltip>
-              <Tooltip title="Notifications">
-                <IconButton
-                  onClick={(e) =>
-                    setNotificationState({ ...notificationState, showNotification: e.target })
-                  }
-                >
-                  <NotificationsIcon />
-                </IconButton>
-              </Tooltip>
+              <Notification />
             </MenuWrapper>
             <div>
               <Tooltip title="Profile">
@@ -190,25 +181,6 @@ export default function AppBarComponent() {
           </Link>
         )}
       </Toolbar>
-      <Popover
-        className="mt-2"
-        open={Boolean(notificationState.showNotification)}
-        anchorEl={notificationState.showNotification}
-        onClose={() => setNotificationState({ ...notificationState, showNotification: null })}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
-      >
-        <div className="p-2" style={{ minWidth: '40vw' }}>
-          <Typography variant="h5">Notifications</Typography>
-          <Typography>You don&apos;t have any notifications</Typography>
-        </div>
-      </Popover>
     </AppBar>
   );
 }

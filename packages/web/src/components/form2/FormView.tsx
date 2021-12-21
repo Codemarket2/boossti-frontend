@@ -10,6 +10,8 @@ import Field from './Field';
 import { validateValue } from './validate';
 import { onAlert } from '../../utils/alert';
 
+import { useGetMyResponses } from '@frontend/shared/hooks/response';
+
 interface IProps {
   form: any;
 }
@@ -34,6 +36,9 @@ export default function FormView({ form: { _id, name, fields, settings } }: IPro
   const [values, setValues] = useState([]);
   const [submitState, setSubmitState] = useState(initialSubmitState);
   const { handleCreateResponse, createLoading } = useCreateResponse({ onAlert });
+
+  const { data, error, state, setState } = useGetMyResponses();
+  !error && console.log({ responseData: data });
 
   const onChange = (sValue) => {
     const newValue = { ...defualtValue, ...sValue };
@@ -83,6 +88,7 @@ export default function FormView({ form: { _id, name, fields, settings } }: IPro
 
   return (
     <div>
+      {/* {JSON.stringify(values)} */}
       {settings?.showFormTitle && (
         <InputGroup className="text-center">
           <Typography variant="h4">{name}</Typography>
@@ -111,7 +117,7 @@ export default function FormView({ form: { _id, name, fields, settings } }: IPro
                   validate={submitState.validate}
                   {...field}
                   label={field?.options?.required ? `${field?.label}*` : field?.label}
-                  onChange={onChange}
+                  onChangeValue={onChange}
                   value={values.filter((f) => f.field === field._id)[0]}
                 />
               </InputGroup>
