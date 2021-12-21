@@ -15,7 +15,11 @@ const checkActiveRoute = (activeRoute, linkPathname) => {
   return activeRoute.pathname === linkPathname;
 };
 
-export default function AdminDrawerList() {
+type IProps = {
+  admin: boolean;
+};
+
+export default function AdminDrawerList({ admin }: IProps) {
   const [activeRoute, setActiveRoute] = useState({
     pathname: '/',
     showList: true,
@@ -30,22 +34,12 @@ export default function AdminDrawerList() {
 
   return (
     <>
-      <ListSubheader>Admin</ListSubheader>
-      <Link href="/admin/users">
-        <ListItem button selected={checkActiveRoute(activeRoute, '/admin/users')}>
-          <ListItemIcon>
-            <GroupIcon />
-          </ListItemIcon>
-          <ListItemText primary="Users" />
-        </ListItem>
-      </Link>
-      {/* <Divider /> */}
       <Link href="/types">
         <ListItem button selected={checkActiveRoute(activeRoute, '/types')}>
           <ListItemIcon>
             <ListIcon />
           </ListItemIcon>
-          <ListItemText primary="Types" />
+          <ListItemText primary="Templates" />
         </ListItem>
       </Link>
       <Link href="/forms">
@@ -66,6 +60,20 @@ export default function AdminDrawerList() {
         </ListItem>
       </Link>
       <Divider />
+      {admin && (
+        <>
+          <ListSubheader>Admin</ListSubheader>
+          <Link href="/admin/users">
+            <ListItem button selected={checkActiveRoute(activeRoute, '/admin/users')}>
+              <ListItemIcon>
+                <GroupIcon />
+              </ListItemIcon>
+              <ListItemText primary="Users" />
+            </ListItem>
+          </Link>
+          <Divider />
+        </>
+      )}
     </>
   );
 }

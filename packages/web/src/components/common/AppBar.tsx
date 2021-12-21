@@ -112,6 +112,7 @@ export default function AppBarComponent() {
         </Link>
         {authenticated ? (
           <>
+            <Notification />
             <MenuWrapper>
               <Tooltip title="Home">
                 <IconButton
@@ -121,7 +122,6 @@ export default function AppBarComponent() {
                   <HomeIcon />
                 </IconButton>
               </Tooltip>
-              <Notification />
             </MenuWrapper>
             <div>
               <Tooltip title="Profile">
@@ -158,7 +158,7 @@ export default function AppBarComponent() {
                     <ListItemText primary="Profile" />
                   </MenuItem>
                 </Link>
-                <Link href="/create-post">
+                <Link href="/create-post" passHref>
                   <MenuItem>
                     <ListItemIcon className="mr-n4">
                       <AddIcon fontSize="small" />
