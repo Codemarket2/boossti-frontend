@@ -22,7 +22,6 @@ import {
 } from '@frontend/shared/hooks/field';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { convertToSlug } from './LeftNavigation';
-// import FieldsSkeleton from './FieldsSkeleton';
 import ErrorLoading from '../common/ErrorLoading';
 import FieldValueForm from './FieldValueForm';
 import CRUDMenu from '../common/CRUDMenu';
@@ -46,13 +45,11 @@ const initialState = {
 function ItemOneFields({
   field,
   parentId,
-  showAuthor = true,
   guest,
   setFieldValueCount,
   toggleLeftNavigation,
   previewMode,
-}: // isPublish,
-any) {
+}: any) {
   const router = useRouter();
   const { query } = router;
   const [state, setState] = useState(initialState);
@@ -291,7 +288,6 @@ any) {
 interface IProps {
   parentId: string;
   typeId: string;
-  showAuthor?: boolean;
   guest?: boolean;
   isPublish?: boolean;
   setFields?: (arg: any) => void;
@@ -307,9 +303,7 @@ export default memo(FieldValues);
 function FieldValues({
   parentId,
   typeId,
-  showAuthor = true,
   guest = false,
-  // isPublish = false,
   setFields = (arg: any) => {},
   setFieldValueCount = (index: number, value: number) => {},
   pushToAnchor = () => {},
@@ -347,7 +341,7 @@ function FieldValues({
           });
         }
         return (
-          <Grid {...gridProps} item className="bg-primaryy">
+          <Grid {...gridProps} item>
             {field.fieldType === 'form' ? (
               <SectionForm field={field} parentId={parentId} previewMode={previewMode} />
             ) : (
@@ -359,8 +353,6 @@ function FieldValues({
                 }}
                 parentId={parentId}
                 field={field}
-                showAuthor={showAuthor}
-                // isPublish={previewMode || isPublish}
                 previewMode={previewMode}
                 guest={guest}
                 setFieldValueCount={(value) => setFieldValueCount(index, value)}
