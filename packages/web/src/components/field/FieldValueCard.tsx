@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import parse from 'html-react-parser';
-import Card from '@material-ui/core/Card';
 import Tooltip from '@material-ui/core/Tooltip';
-import CardContent from '@material-ui/core/CardContent';
 import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
@@ -45,7 +43,7 @@ export default function FieldValueCard({
   const auth = useSelector(({ auth }: any) => auth);
 
   return (
-    <Card variant="outlined" style={{ border: 'none' }}>
+    <div>
       {!previewMode && (auth.admin || auth.attributes['custom:_id'] === fieldValue.createdBy._id) && (
         <div className="d-flex justify-content-end">
           <IconButton aria-label="settings" onClick={(event) => onSelect(event.target, fieldValue)}>
@@ -53,7 +51,7 @@ export default function FieldValueCard({
           </IconButton>
         </div>
       )}
-      <CardContent className="mb-5 p-0">
+      <div>
         {field.fieldType === 'date' ? (
           moment(fieldValue.valueDate).format('L')
         ) : field.fieldType === 'number' ? (
@@ -101,15 +99,21 @@ export default function FieldValueCard({
         ) : field.fieldType === 'textarea' ? (
           <div className="ck-content">{parse(fieldValue.value)}</div>
         ) : field.fieldType === 'contentBuilder' ? (
-          <DisplayContent value={fieldValue.value} />
+          <>
+            <DisplayContent value={fieldValue.value} />
+            <span>.</span>
+          </>
         ) : field.fieldType === 'contentBox' ? (
-          <DisplayContentBox value={fieldValue.value} />
+          <>
+            <DisplayContentBox value={fieldValue.value} />
+            <span>.</span>
+          </>
         ) : (
           <Typography variant="body2" color="textSecondary" component="p">
             {fieldValue.value}
           </Typography>
         )}
-      </CardContent>
+      </div>
       {!previewMode && (
         <>
           <CommentLikeShare
@@ -128,6 +132,6 @@ export default function FieldValueCard({
           />
         </>
       )}
-    </Card>
+    </div>
   );
 }

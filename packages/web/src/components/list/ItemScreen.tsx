@@ -191,16 +191,6 @@ export default function ItemScreen({
                   <ShareIcon />
                 </IconButton>
               </Tooltip>
-              {/* <Button
-                size="small"
-                variant="outlined"
-                component="span"
-                color="primary"
-                className="ml-2"
-                startIcon={<ShareIcon />}
-              >
-                share
-              </Button> */}
             </div>
           </div>
           <Hidden smUp>
