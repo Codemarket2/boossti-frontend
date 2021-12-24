@@ -11,27 +11,37 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import MenuItem from '@material-ui/core/MenuItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
+import { generateObjectId } from '@frontend/shared/utils/objectId';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { useState } from 'react';
 import CRUDMenu from '../common/CRUDMenu';
 import AddField from './AddField';
+import EditField from './EditField';
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed);
-
   return result;
 };
 
-const initialState = {
+const initialValues = {
   showMenu: null,
   field: null,
   showForm: false,
 };
 
-export default function FormFields({ state, setState, onSelectField }: any): any {
-  const [values, setValues] = useState(initialState);
+type IProps = {
+  fields: any[];
+  setFields: (newFields: any[]) => void;
+  title?: string;
+};
+
+export default function FormFields({ fields = [], setFields, title = 'Fields' }: IProps): any {
+  const [values, setValues] = useState(initialValues);
 
   function onDragEnd(result) {
     if (!result.destination) {
@@ -40,17 +50,16 @@ export default function FormFields({ state, setState, onSelectField }: any): any
     if (result.destination.index === result.source.index) {
       return;
     }
-    const fields = reorder(state.fields, result.source.index, result.destination.index);
-    setState({ ...state, fields });
+    const newFields = reorder(fields, result.source.index, result.destination.index);
+    setFields(newFields);
   }
 
   const onSave = (field, action) => {
     if (action === 'create') {
-      setState({ ...state, fields: [...state.fields, field] });
+      setFields([...fields, field]);
     } else {
-      setState({
-        ...state,
-        fields: state.fields.map((oldField) => {
+      setFields(
+        fields.map((oldField) => {
           if (oldField._id === field._id) {
             return {
               ...oldField,
@@ -60,92 +69,118 @@ export default function FormFields({ state, setState, onSelectField }: any): any
           }
           return oldField;
         }),
-      });
+      );
     }
-    setValues(initialState);
+    setValues(initialValues);
+  };
+
+  const handleDuplicateField = () => {
+    const newField = { ...values.field, _id: generateObjectId() };
+    setFields([...fields, newField]);
+    setValues(initialValues);
   };
 
   return (
     <Paper variant="outlined">
-      <Typography variant="h5" className="d-flex align-items-center pl-2">
-        Fields
-        {!state.showForm && (
-          <Tooltip title="Add New Field">
-            <IconButton
-              color="primary"
-              onClick={() => setValues({ ...initialState, showForm: true })}
-            >
-              <AddCircleIcon />
-            </IconButton>
-          </Tooltip>
-        )}
-      </Typography>
-      <Divider />
-      {values.showForm && (
-        <AddField field={values.field} onSave={onSave} onCancel={() => setValues(initialState)} />
-      )}
-      <List>
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="list">
-            {(provided, snapshot) => (
-              <div ref={provided.innerRef} {...provided.droppableProps}>
-                {state?.fields?.map((field: any, index: number) => (
-                  <Draggable key={field._id} draggableId={field._id} index={index}>
-                    {(draggableProvided, draggableSnapshot) => (
-                      <ListItem
-                        button
-                        onClick={() => onSelectField(field._id)}
-                        selected={draggableSnapshot.isDragging}
-                        ref={draggableProvided.innerRef}
-                        {...draggableProvided.draggableProps}
-                        {...draggableProvided.dragHandleProps}
-                      >
-                        <ListItemText primary={field.label} secondary={field.fieldType} />
-                        {!snapshot.isDraggingOver && (
-                          <ListItemSecondaryAction>
-                            <IconButton
-                              edge="end"
-                              onClick={(event) =>
-                                setValues({
-                                  ...initialState,
-                                  showMenu: event.currentTarget,
-                                  field,
-                                })
-                              }
-                            >
-                              <MoreVertIcon />
-                            </IconButton>
-                          </ListItemSecondaryAction>
+      {values.showForm && values.field ? (
+        <EditField
+          field={fields.filter((f) => f._id === values.field._id)[0]}
+          onFieldChange={(updatedField) => {
+            setFields(
+              fields?.map((field) => (field._id === updatedField._id ? updatedField : field)),
+            );
+          }}
+          onClose={() => setValues(initialValues)}
+        />
+      ) : (
+        <>
+          <Typography variant="h5" className="d-flex align-items-center pl-2">
+            {title}
+            <Tooltip title="Add New Field">
+              <IconButton
+                color="primary"
+                onClick={() => setValues({ ...initialValues, showForm: true })}
+              >
+                <AddCircleIcon />
+              </IconButton>
+            </Tooltip>
+          </Typography>
+          <Divider />
+          {values.showForm && (
+            <AddField
+              field={values.field}
+              onSave={onSave}
+              onCancel={() => setValues(initialValues)}
+            />
+          )}
+          <List>
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable droppableId="list">
+                {(provided, snapshot) => (
+                  <div ref={provided.innerRef} {...provided.droppableProps}>
+                    {fields?.map((field: any, index: number) => (
+                      <Draggable key={field._id} draggableId={field._id} index={index}>
+                        {(draggableProvided, draggableSnapshot) => (
+                          <ListItem
+                            button
+                            onClick={() => setValues({ ...initialValues, field, showForm: true })}
+                            selected={
+                              draggableSnapshot.isDragging || field?._id === values?.field?._id
+                            }
+                            ref={draggableProvided.innerRef}
+                            {...draggableProvided.draggableProps}
+                            {...draggableProvided.dragHandleProps}
+                          >
+                            <ListItemText primary={field.label} secondary={field.fieldType} />
+                            {!snapshot.isDraggingOver && (
+                              <ListItemSecondaryAction>
+                                <IconButton
+                                  edge="end"
+                                  onClick={(event) =>
+                                    setValues({
+                                      ...initialValues,
+                                      showMenu: event.currentTarget,
+                                      field,
+                                    })
+                                  }
+                                >
+                                  <MoreVertIcon />
+                                </IconButton>
+                              </ListItemSecondaryAction>
+                            )}
+                          </ListItem>
                         )}
-                      </ListItem>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-      </List>
-      <CRUDMenu
-        show={values.showMenu}
-        onClose={() => setValues(initialState)}
-        onDelete={() => {
-          const anwser = confirm('Are you sure you want delete this field?');
-          if (anwser) {
-            setValues({ ...values, showMenu: null });
-            setState({
-              ...state,
-              fields: state.fields.filter((field) => field._id !== values.field._id),
-            });
-          }
-        }}
-        onEdit={() => {
-          const fieldId = values.field._id;
-          setValues(initialState);
-          onSelectField(fieldId);
-        }}
-      />
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
+          </List>
+          <CRUDMenu
+            show={values.showMenu}
+            onClose={() => setValues(initialValues)}
+            onDelete={() => {
+              const anwser = confirm('Are you sure you want delete this field?');
+              if (anwser) {
+                setValues({ ...values, showMenu: null });
+                setFields(fields.filter((field) => field._id !== values.field._id));
+              }
+            }}
+            onEdit={() => {
+              setValues({ ...values, showMenu: null, showForm: true });
+            }}
+          >
+            <MenuItem onClick={handleDuplicateField}>
+              <ListItemIcon className="mr-n4">
+                <FileCopyIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Duplicate" />
+            </MenuItem>
+          </CRUDMenu>
+        </>
+      )}
     </Paper>
   );
 }

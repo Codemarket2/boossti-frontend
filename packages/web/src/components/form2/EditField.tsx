@@ -1,7 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/jsx-props-no-spreading */
 import Divider from '@material-ui/core/Divider';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -17,31 +16,35 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import Input from '@material-ui/core/Input';
+import TextField from '@material-ui/core/TextField';
 import InputGroup from '../common/InputGroup';
 import { fieldTypes } from './AddField';
 import TypesAutocomplete from './TypesAutocomplete';
+import InlineInput from '../common/InlineInput';
 
-export default function FormFields({ onFieldChange, field, onClose }: any): any {
+type TProps = {
+  field: any;
+  onFieldChange: (newValue: any) => void;
+  onClose: () => void;
+};
+
+export default function FormFields({ onFieldChange, field, onClose }: TProps): any {
   const onOptionChange = (updatedOption) => {
     onFieldChange({ ...field, options: { ...field.options, ...updatedOption } });
   };
 
   return (
-    <Paper variant="outlined">
+    <>
       <Typography variant="h5" className="d-flex align-items-center">
         <Tooltip title="Go Back">
           <IconButton onClick={onClose}>
             <ArrowBackIcon />
           </IconButton>
         </Tooltip>
-        <input
+        <InlineInput
           width="100%"
           placeholder="Field Label"
-          style={{
-            background: 'rgba(0, 0, 0, 0)',
-            border: 'none',
-            outline: 'none',
-          }}
           name="label"
           value={field.label}
           onChange={(e) => onFieldChange({ ...field, label: e.target.value })}
@@ -176,6 +179,6 @@ export default function FormFields({ onFieldChange, field, onClose }: any): any 
           </InputGroup>
         )}
       </div>
-    </Paper>
+    </>
   );
 }

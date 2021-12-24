@@ -20,12 +20,12 @@ import Backdrop from '../common/Backdrop';
 import FormFields from './FormFields';
 import FormView from './FormView';
 import FormSetting from './FormSetting';
-import EditField from './EditField';
 import ResponseList from './ResponseList';
 import Actions from './Actions';
 import DesignTab from './DesignTab';
 import { onAlert } from '../../utils/alert';
 import Authorization from '../common/Authorization';
+import InlineInput from '../common/InlineInput';
 
 interface IProps {
   _id: string;
@@ -37,13 +37,13 @@ export default function Form({ _id, drawerMode = false }: IProps): any {
     onAlert,
     _id,
   });
+
   const { handleDelete } = useDeleteForm({
     onAlert,
   });
 
   const [options, setOptions] = useState({
     currentTab: 'preview',
-    fieldId: null,
     snackBar: '',
     backdrop: false,
   });
@@ -89,15 +89,10 @@ export default function Form({ _id, drawerMode = false }: IProps): any {
   }
 
   const NameInput = (
-    <input
+    <InlineInput
       width="100%"
       placeholder="Form Name"
-      style={{
-        background: 'rgba(0, 0, 0, 0)',
-        border: 'none',
-        outline: 'none',
-      }}
-      value={state?.name?.includes('-n-e-w') ? 'Form Name' : state?.name}
+      value={state?.name}
       onChange={(e) => setState({ ...state, name: e.target.value })}
     />
   );
@@ -144,7 +139,6 @@ export default function Form({ _id, drawerMode = false }: IProps): any {
               >
                 {state?.settings?.published ? 'Unpublish' : 'Publish'}
               </Button>
-
               <Button variant="outlined" color="primary" size="small" onClick={onDelete}>
                 Delete
               </Button>
@@ -153,27 +147,10 @@ export default function Form({ _id, drawerMode = false }: IProps): any {
         )}
         <Grid container spacing={1} style={{ minHeight: 'calc(100vh - 130px)' }}>
           <Grid item xs={4}>
-            {options.fieldId ? (
-              <EditField
-                setState={setState}
-                field={state?.fields?.filter((f) => f._id === options.fieldId)[0]}
-                onFieldChange={(updatedField) => {
-                  setState({
-                    ...state,
-                    fields: state?.fields?.map((f) =>
-                      f._id === updatedField._id ? updatedField : f,
-                    ),
-                  });
-                }}
-                onClose={() => setOptions({ ...options, fieldId: null })}
-              />
-            ) : (
-              <FormFields
-                state={state}
-                setState={setState}
-                onSelectField={(fieldId) => setOptions({ ...options, fieldId })}
-              />
-            )}
+            <FormFields
+              fields={state.fields}
+              setFields={(newFields) => setState({ ...state, fields: newFields })}
+            />
           </Grid>
           <Grid item xs={8}>
             <Paper variant="outlined">

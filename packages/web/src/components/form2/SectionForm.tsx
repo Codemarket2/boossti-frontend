@@ -16,7 +16,7 @@ import {
 import { useCreateForm } from '@frontend/shared/hooks/form';
 import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
-import FormDrawer from './FormDrawer';
+import EditFormDrawer from './EditFormDrawer';
 import FieldViewWrapper from './FieldViewWrapper';
 import { onAlert } from '../../utils/alert';
 
@@ -105,8 +105,7 @@ export default function FormC({ field, parentId, previewMode = false }: IProps):
         <FieldViewWrapper _id={data?.getFieldValuesByItem?.data[0]?.value} />
       )}
       {state.fieldId && (
-        // <FormDrawer formId={state.fieldId} open onClose={() => setState(initialState)} />
-        "form"
+        <EditFormDrawer formId={state.fieldId} open onClose={() => setState(initialState)} />
       )}
       {state.backdrop && <Backdrop open={state.backdrop} />}
     </div>
