@@ -15,7 +15,6 @@ import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
-import UserLayout from '../components/common/UserLayout';
 import Breadcrumbs from '../components/common/Breadcrumbs';
 import ErrorLoading from '../components/common/ErrorLoading';
 import ListItems from '../components/list/ListItems';
@@ -30,6 +29,7 @@ import MediaForm from '../components/list/MediaForm';
 import CommentLikeShare from '../components/common/commentLikeShare/CommentLikeShare';
 import ListItemForm from '../components/list/ListItemForm';
 import ListItemsGrid from '../components/list/ListItemsGrid';
+// import ListTypeFields from '../components/list/ListTypeFields';
 
 interface IProps {
   slug: string;
@@ -84,12 +84,13 @@ export default function Screen({ slug }: IProps) {
   if (error || !data) {
     return <ErrorLoading error={error} />;
   }
+
   if (!data.getListTypeBySlug) {
     return <NotFound />;
   }
 
   return (
-    <UserLayout container={false} authRequired>
+    <>
       <div className="px-3">
         <div className="d-flex justify-content-between align-content-center align-items-center">
           <Breadcrumbs>
@@ -207,6 +208,7 @@ export default function Screen({ slug }: IProps) {
               )}
             </Paper>
             <Fields title="Sections" setFields={setFields} parentId={data.getListTypeBySlug._id} />
+            {/* <ListTypeFields /> */}
           </Grid>
           <Grid item xs>
             {state.view === 'Form View' ? (
@@ -228,6 +230,6 @@ export default function Screen({ slug }: IProps) {
         </Grid>
       </div>
       <Backdrop open={deleteLoading || CRUDLoading} />
-    </UserLayout>
+    </>
   );
 }

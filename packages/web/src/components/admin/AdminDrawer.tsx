@@ -123,7 +123,7 @@ export default function AdminDrawer({ darkMode }: TProps) {
           </List>
         </Collapse>
         <Divider />
-        <DarkModeToggle darkMode={darkMode} />
+        <DarkModeToggle />
         <Link href="/">
           <ListItem button>
             <ListItemIcon>

@@ -2,6 +2,7 @@ import { getMetaTags } from '@frontend/shared';
 import TypeScreen from '../../../src/screens/TypeScreen';
 import Loading from '../../../src/components/common/Loading';
 import Head from '../../../src/components/common/Head';
+import UserLayout from '../../../src/components/common/UserLayout';
 
 interface IProps {
   metaTags: any;
@@ -11,7 +12,13 @@ export default function Page({ metaTags, slug }: IProps) {
   return (
     <>
       <Head {...metaTags} />
-      {slug ? <TypeScreen slug={slug.toString()} /> : <Loading />}
+      {slug ? (
+        <UserLayout container={false} authRequired>
+          <TypeScreen slug={slug.toString()} />
+        </UserLayout>
+      ) : (
+        <Loading />
+      )}
     </>
   );
 }

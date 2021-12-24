@@ -25,6 +25,7 @@ import { useTheme } from '@material-ui/core/styles';
 import Notification from '../notification/Notification';
 import Drawer from './Drawer';
 import { routes } from '../../utils/routes';
+import { useDarkMode } from './DarkModeToggle';
 
 const setActiveRouteColor = (activeRoute, linkRoute) => {
   return activeRoute === linkRoute ? 'primary' : 'default';
@@ -54,14 +55,15 @@ const MenuWrapper = styled.div`
 `;
 
 export default function AppBarComponent() {
-  const { authenticated, darkMode, admin, attributes } = useSelector(({ auth }: any) => auth);
+  const { authenticated, admin, attributes } = useSelector(({ auth }: any) => auth);
   const { setting } = useSelector((state: any) => state);
   const { handleLogout } = useHandleLogout();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [openDrawer, setOpenDrawer] = useState(false);
+  const [showDrawer, setShowDrawer] = useState(false);
 
   const router = useRouter();
   const [activeRoute, setActiveRoute] = useState<string>('/');
+  useDarkMode();
   const open = Boolean(anchorEl);
 
   const theme = useTheme();
@@ -87,14 +89,14 @@ export default function AppBarComponent() {
         {authenticated ? (
           <>
             <Tooltip title="Menu">
-              <IconButton onClick={() => setOpenDrawer(true)} color="inherit">
+              <IconButton onClick={() => setShowDrawer(true)} color="inherit">
                 <MenuIcon role="button" className="mr-0" />
               </IconButton>
             </Tooltip>
             <Drawer
-              setOpenDrawer={setOpenDrawer}
-              openDrawer={openDrawer}
-              darkMode={darkMode}
+              toggleDrawer={setShowDrawer}
+              showDrawer={showDrawer}
+              // darkMode={darkMode}
               admin={admin}
             />
           </>

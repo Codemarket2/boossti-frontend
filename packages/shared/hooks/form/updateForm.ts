@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useMutation } from '@apollo/client';
+import { useMutation, useSubscription } from '@apollo/client';
 import { UPDATE_FORM } from '../../graphql/mutation/form';
+// import { UPDATED_FORM } from '../../graphql/subscription/form';
 import { GET_FORM } from '../../graphql/query/form';
 import { IHooksProps } from '../../types/common';
 import { useGetForm } from './index';
@@ -14,9 +15,11 @@ export function useUpdateForm({ onAlert, _id }: IProps): any {
   const [state, setState] = useState(null);
   const [saveToServer, setSaveToServer] = useState(false);
   const { data, error } = useGetForm(_id);
-  const [updateFormMutation, { loading: updateLoading }] = useMutation(
-    UPDATE_FORM
-  );
+  const [updateFormMutation, { loading: updateLoading }] = useMutation(UPDATE_FORM);
+
+  // const { data: subscriptionData, error: subscriptionError } = useSubscription(UPDATED_FORM, {
+  //   variables: { _id },
+  // });
 
   useEffect(() => {
     let timeOutId;
@@ -27,6 +30,13 @@ export function useUpdateForm({ onAlert, _id }: IProps): any {
     }
     return () => clearTimeout(timeOutId);
   }, [state]);
+
+  // useEffect(() => {
+  //   if (subscriptionData?.updatedForm) {
+  //     setState({ ...state, ...subscriptionData?.updatedForm });
+  //     console.log('subscriptionData ', subscriptionData);
+  //   }
+  // }, [subscriptionData]);
 
   useEffect(() => {
     if (data && data.getForm && !state) {
@@ -41,7 +51,8 @@ export function useUpdateForm({ onAlert, _id }: IProps): any {
     });
     if (oldData?.getForm) {
       const newData = {
-        getForm: mutationResult.data.updateForm,
+        ...oldData,
+        getForm: { ...oldData?.getForm, ...mutationResult.data.updateForm },
       };
       client.writeQuery({
         query: GET_FORM,
@@ -55,9 +66,7 @@ export function useUpdateForm({ onAlert, _id }: IProps): any {
     let payload = { ...state };
     payload = {
       ...payload,
-      fields: payload.fields.map((m) =>
-        JSON.parse(JSON.stringify(m), omitTypename)
-      ),
+      fields: payload.fields.map((m) => JSON.parse(JSON.stringify(m), omitTypename)),
     };
     payload = {
       ...payload,
@@ -72,15 +81,14 @@ export function useUpdateForm({ onAlert, _id }: IProps): any {
       settings: JSON.stringify(payload.settings),
     };
     try {
-      // const res =
-      await updateFormMutation({
+      const res = await updateFormMutation({
         variables: payload,
         update: updateCache,
       });
-      // console.log('update res', res);
+      console.log('update res', res);
     } catch (error) {
       console.log(error);
-      onAlert('Error', error.message);
+      onAlert('Error while auto saving', error.message);
     }
   };
 

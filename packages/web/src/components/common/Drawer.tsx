@@ -1,25 +1,47 @@
-import React from 'react';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { useSelector } from 'react-redux';
-
+import { useState, useEffect } from 'react';
+import GroupIcon from '@material-ui/icons/Group';
+import ListIcon from '@material-ui/icons/List';
+import TuneIcon from '@material-ui/icons/Tune';
+import { useRouter } from 'next/router';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Link from 'next/link';
+import AnalyticsIcon from '@material-ui/icons/Announcement';
 import DarkModeToggle from './DarkModeToggle';
-import AdminDrawerList from '../admin/AdminDrawerList';
 
 interface IProps {
-  openDrawer: boolean;
-  setOpenDrawer: (arg: boolean) => void;
-  darkMode: boolean;
+  showDrawer: boolean;
+  toggleDrawer: (arg: boolean) => void;
   admin: boolean;
 }
 
-export default function DrawerContent({ openDrawer, setOpenDrawer, darkMode, admin }: IProps) {
+const checkActiveRoute = (activeRoute, linkPathname) => {
+  return activeRoute.pathname === linkPathname;
+};
+
+export default function DrawerContent({ showDrawer, toggleDrawer, admin }: IProps): any {
   const { setting } = useSelector((state: any) => state);
+  const [activeRoute, setActiveRoute] = useState({
+    pathname: '/',
+    showList: true,
+  });
+  const router = useRouter();
+
+  useEffect(() => {
+    if (router.pathname !== activeRoute.pathname) {
+      setActiveRoute({ ...activeRoute, pathname: router.pathname });
+    }
+  }, [router.asPath]);
   return (
-    <Drawer anchor="left" open={openDrawer} onClose={() => setOpenDrawer(false)}>
+    <Drawer anchor="left" open={showDrawer} onClose={() => toggleDrawer(false)}>
       <div
         style={{ maxWidth: '300px' }}
         className="d-flex justify-content-between  align-items-center align-content-center"
@@ -29,15 +51,53 @@ export default function DrawerContent({ openDrawer, setOpenDrawer, darkMode, adm
           src={setting?.metaTags?.image}
           alt={setting?.metaTags?.title}
         />
-        <IconButton onClick={() => setOpenDrawer(false)}>
+        <IconButton onClick={() => toggleDrawer(false)}>
           <CloseIcon />
         </IconButton>
       </div>
       <Divider />
       <List style={{ minWidth: 300 }}>
-        <DarkModeToggle darkMode={darkMode} />
+        <DarkModeToggle />
         <Divider />
-        <AdminDrawerList admin={admin} />
+        <Link href="/types">
+          <ListItem button selected={checkActiveRoute(activeRoute, '/types')}>
+            <ListItemIcon>
+              <ListIcon />
+            </ListItemIcon>
+            <ListItemText primary="Templates" />
+          </ListItem>
+        </Link>
+        <Link href="/forms">
+          <ListItem button selected={checkActiveRoute(activeRoute, '/forms')}>
+            <ListItemIcon>
+              <TuneIcon />
+            </ListItemIcon>
+            <ListItemText primary="Forms" />
+          </ListItem>
+        </Link>
+        <Link href="/log">
+          <ListItem button selected={checkActiveRoute(activeRoute, '/log')}>
+            <ListItemIcon>
+              <AnalyticsIcon />
+            </ListItemIcon>
+            <ListItemText primary="Activity Log" />
+          </ListItem>
+        </Link>
+        <Divider />
+        {admin && (
+          <>
+            <ListSubheader>Admin</ListSubheader>
+            <Link href="/admin/users">
+              <ListItem button selected={checkActiveRoute(activeRoute, '/admin/users')}>
+                <ListItemIcon>
+                  <GroupIcon />
+                </ListItemIcon>
+                <ListItemText primary="Users" />
+              </ListItem>
+            </Link>
+            <Divider />
+          </>
+        )}
       </List>
     </Drawer>
   );
