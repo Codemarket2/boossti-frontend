@@ -14,10 +14,9 @@ import { useRouter } from 'next/router';
 import ItemScreen from '../list/ItemScreen';
 import ImageList from '../post/ImageList';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
-import DisplayContent from '../contentbuilder/DisplayContent';
-import DisplayContentBox from '../contentbox/DisplayContentBox';
 import SingleComment from '../comment/SingleComment';
 import { convertToSlug } from './LeftNavigation';
+import DisplayRichText from '../common/DisplayRichText';
 
 interface IProps {
   fieldValue: any;
@@ -96,18 +95,8 @@ export default function FieldValueCard({
           </a>
         ) : field.fieldType === 'media' ? (
           <ImageList media={fieldValue.media} />
-        ) : field.fieldType === 'textarea' ? (
-          <div className="ck-content">{parse(fieldValue.value)}</div>
-        ) : field.fieldType === 'contentBuilder' ? (
-          <>
-            <DisplayContent value={fieldValue.value} />
-            <span>.</span>
-          </>
-        ) : field.fieldType === 'contentBox' ? (
-          <>
-            <DisplayContentBox value={fieldValue.value} />
-            <span>.</span>
-          </>
+        ) : field.fieldType === 'textarea' || field.fieldType === 'contentBox' ? (
+          <DisplayRichText value={fieldValue.value} />
         ) : (
           <Typography variant="body2" color="textSecondary" component="p">
             {fieldValue.value}
@@ -126,7 +115,7 @@ export default function FieldValueCard({
           />
           <SingleComment
             setShowHideComments={setShowHideComments}
-            _id={query.commentId as string}
+            _id={query?.commentId?.toString()}
             itemSlug={convertToSlug(field.label)}
             fieldTitle={fieldValue?.itemId?.title?.trim().toLowerCase()}
           />

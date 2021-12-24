@@ -39,14 +39,13 @@ yarn-error.log*
 # vercel
 .vercel
 
-
 cypress/screenshots/*
 cypress/videos/*
 
-
-
-# PWA
-sw.js
-sw.js.map
-public/workbox
-public/workbox-*.js
+# PWA files
+**/public/sw.js
+**/public/workbox-*.js
+**/public/worker-*.js
+**/public/sw.js.map
+**/public/workbox-*.js.map
+**/public/worker-*.js.map

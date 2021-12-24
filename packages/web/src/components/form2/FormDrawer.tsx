@@ -100,7 +100,7 @@ export default function CreateFormDrawer({ form, response, open, onClose }: IPro
           size="small"
           color="primary"
           variant="contained"
-          className="position-absolute m-2"
+          // className="position-absolute m-2"
           style={{ right: 0 }}
         >
           Close

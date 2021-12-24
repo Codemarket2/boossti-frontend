@@ -40,37 +40,12 @@ export default class MyDocument extends Document {
       <Html lang="en">
         <Head>
           <link rel="manifest" href="/manifest.json" />
-          <link rel="apple-touch-icon" href="/icon.png"></link>
+          <link rel="apple-touch-icon" href="/icon.png" />
           <meta name="theme-color" content="#fff" />
-
-          {/* Required css for production */}
-          <link href="/box/box.css" rel="stylesheet" type="text/css" />
-          <link href="/assets/minimalist-blocks/content.css" rel="stylesheet" type="text/css" />
-          <link
-            href="/assets/scripts/simplelightbox/simplelightbox.css"
-            rel="stylesheet"
-            type="text/css"
-          />
-          {/* Required css for editing (not needed in production) */}
-          <link href="/contentbuilder/contentbuilder.css" rel="stylesheet" type="text/css" />
-          {/* ContentBox CSS is causing problem */}
-          {/* <link href="/contentbox/contentbox.css" rel="stylesheet" type="text/css" /> */}
         </Head>
         <body>
           <Main />
           <NextScript />
-          <script src="https://code.jquery.com/jquery-3.4.1.min.js" type="text/javascript" />
-          <script
-            src="/assets/scripts/simplelightbox/simple-lightbox.min.js"
-            type="text/javascript"
-          />
-          {/* Required js for editing (not needed in production) */}
-          <script src="/assets/minimalist-blocks/content.js" type="text/javascript" />
-          <script src="/contentbuilder/contentbuilder.min.js" type="text/javascript" />
-          <script src="/contentbox/contentbox.min.js" type="text/javascript" />
-
-          {/* Required js for production */}
-          <script src="/box/box.js" type="text/javascript" />
         </body>
       </Html>
     );

@@ -26,7 +26,7 @@ export default function Screen({ slug, typeSlug }: IProps) {
   };
 
   return (
-    <div className="px-2">
+    <div>
       <ItemScreen
         onSlugUpdate={onSlugUpdate}
         pushToAnchor={pushToAnchor}

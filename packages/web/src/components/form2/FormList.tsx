@@ -13,6 +13,7 @@ import ErrorLoading from '../common/ErrorLoading';
 import ListHeader from '../common/ListHeader';
 import LoadingButton from '../common/LoadingButton';
 import Backdrop from '../common/Backdrop';
+import Breadcrumbs from '../common/Breadcrumbs';
 import { onAlert } from '../../utils/alert';
 
 export default function FormList(): any {
@@ -27,6 +28,9 @@ export default function FormList(): any {
 
   return (
     <div>
+      <Breadcrumbs>
+        <Typography>Forms</Typography>
+      </Breadcrumbs>
       <Backdrop open={createLoading} />
       <ListHeader
         loading={loading}

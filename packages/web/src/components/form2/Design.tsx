@@ -4,7 +4,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import AddCircleIcon from '@material-ui/icons/Edit';
-import DisplayDesign from './DisplayDesign';
 
 export default function Design({ onClickVariables, onClickEdit, value = '' }) {
   return (
@@ -22,8 +21,6 @@ export default function Design({ onClickVariables, onClickEdit, value = '' }) {
           Variables
         </Button>
       </div>
-      <DisplayDesign value={value} />
-      <span>.</span>
     </Paper>
   );
 }

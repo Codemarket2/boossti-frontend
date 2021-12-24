@@ -4,10 +4,9 @@ import Divider from '@material-ui/core/Divider';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import IconButton from '@material-ui/core/IconButton';
 import AddCircle from '@material-ui/icons/AddCircle';
-import { useEffect, useState, memo } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Carousel from 'react-material-ui-carousel';
-import { useRouter } from 'next/router';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Menu from '@material-ui/core/Menu';
@@ -18,7 +17,6 @@ import {
   useGetFieldValuesByItem,
   useGetFieldsByType,
   useDeleteFieldValue,
-  useCreateFieldValue,
 } from '@frontend/shared/hooks/field';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { convertToSlug } from './LeftNavigation';
@@ -50,15 +48,11 @@ function ItemOneFields({
   toggleLeftNavigation,
   previewMode,
 }: any) {
-  const router = useRouter();
-  const { query } = router;
   const [state, setState] = useState(initialState);
   const { attributes, admin } = useSelector(({ auth }: any) => auth);
   const currentUserId = attributes['custom:_id'];
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('xs'));
-  const { handleCreateField } = useCreateFieldValue();
-
   const deleteCallback = () => {
     setState({ ...state, showMenu: null, selectedFieldValue: null, edit: false });
   };
@@ -89,16 +83,13 @@ function ItemOneFields({
     }
   }, [data]);
 
-  const onClickAdd = async () => {
-    if (field.fieldType === 'contentBox') {
-      const payload = { parentId, field: field._id, value: '' };
-      const response = await handleCreateField(payload);
-      window.location.href = `/types/${query.slug}/${query.itemSlug}/${response.data.createFieldValue._id}`;
-      // router.push(`/types/${query.slug}/${query.itemSlug}/${response.data.createFieldValue._id}`);
+  const onClickAdd = async (edit = false) => {
+    if (field.fieldType === 'contentBox' || field.fieldType === 'contentBuilder') {
+      setState(initialState);
+      alert('Content builder is disabled delete this section or change the type to rich textarea');
+    } else if (edit) {
+      setState({ ...state, edit: true, showMenu: null });
     } else {
-      if (field.fieldType === 'contentBuilder') {
-        toggleLeftNavigation(true);
-      }
       setState({ ...initialState, showForm: true });
     }
   };
@@ -131,7 +122,7 @@ function ItemOneFields({
   }
 
   return (
-    <div key={field._id}>
+    <div>
       {!previewMode && (
         <>
           <Menu
@@ -140,7 +131,7 @@ function ItemOneFields({
             open={Boolean(state.showAddMenu)}
             onClose={() => setState({ ...state, showAddMenu: false, addTarget: null })}
           >
-            <MenuItem onClick={onClickAdd}>
+            <MenuItem onClick={() => onClickAdd(false)}>
               <ListItemIcon className="mr-n4">
                 <AddCircle fontSize="small" />
               </ListItemIcon>
@@ -177,113 +168,110 @@ function ItemOneFields({
           {state.showForm && <FieldValueForm {...formProps} />}
         </>
       )}
-      {data.getFieldValuesByItem.data.length > 1 ? (
-        <Carousel
-          // index={parseInt(query.index)}
-          NextIcon={
-            <img
-              style={{ width: 30, transform: 'rotate(180deg)' }}
-              src="https://images.zerodown.com//website/foyer/static/images/carousel-arrow.png?tr=w-128,h-128,pr-true,f-auto"
-            />
-          }
-          PrevIcon={
-            <img
-              style={{ width: 30 }}
-              src="https://images.zerodown.com//website/foyer/static/images/carousel-arrow.png?tr=w-128,h-128,pr-true,f-auto"
-            />
-          }
-          navButtonsProps={{
-            style: {
-              padding: 0,
-              backgroundColor: 'inherit',
-              width: 30,
-              height: 30,
-              // marginTop: 15,
-            },
-          }}
-          navButtonsWrapperProps={{
-            // Move the buttons to the bottom. Unsetting top here to override default style.
-            style: {
-              top: 50,
-            },
-          }}
-          fullHeightHover={false}
-          autoPlay={false}
-          animation="slide"
-          navButtonsAlwaysVisible
-        >
-          {data.getFieldValuesByItem.data.map((fieldValue, index) => (
-            <div key={fieldValue._id}>
-              {state.selectedFieldValue &&
-              state.selectedFieldValue._id === fieldValue._id &&
-              state.edit ? (
-                <FieldValueForm edit {...formProps} fieldValue={fieldValue} />
-              ) : (
-                <FieldValueCard
-                  index={index}
-                  fieldValue={fieldValue}
-                  field={field}
-                  previewMode={previewMode}
-                  onSelect={(target, sfieldValue) =>
-                    setState({
-                      ...state,
-                      showMenu: target,
-                      selectedFieldValue: sfieldValue,
-                    })
-                  }
-                />
-              )}
-              <p className="text-center w-100">
-                {index + 1}/{data?.getFieldValuesByItem?.data?.length}
-              </p>
-            </div>
-          ))}
-        </Carousel>
-      ) : (
-        data.getFieldValuesByItem.data.map((fieldValue, index) => (
-          <div key={fieldValue._id}>
-            {state.selectedFieldValue &&
-            state.selectedFieldValue._id === fieldValue._id &&
-            state.edit ? (
-              <FieldValueForm edit {...formProps} fieldValue={fieldValue} />
-            ) : (
-              <FieldValueCard
-                index={index}
-                fieldValue={fieldValue}
-                field={field}
-                previewMode={previewMode}
-                onSelect={(target, sfieldValue) =>
-                  setState({
-                    ...state,
-                    showMenu: target,
-                    selectedFieldValue: sfieldValue,
-                  })
-                }
-              />
-            )}
-          </div>
-        ))
-      )}
+      <FieldValueMap
+        values={data.getFieldValuesByItem.data || []}
+        selectedValue={
+          state.selectedFieldValue && state.edit ? state.selectedFieldValue?._id : null
+        }
+        onSelect={(target, sfieldValue) =>
+          setState({
+            ...state,
+            showMenu: target,
+            selectedFieldValue: sfieldValue,
+          })
+        }
+        previewMode={previewMode}
+        field={field}
+        formProps={formProps}
+      />
       <CRUDMenu
         show={state.showMenu}
         onClose={() => setState(initialState)}
         onDelete={() => handleDelete(state.selectedFieldValue._id, deleteCallback)}
-        onEdit={() => {
-          if (field.fieldType === 'contentBox') {
-            window.location.href = `/types/${query.slug}/${query.itemSlug}/${state.selectedFieldValue._id}`;
-            // router.push(`/types/${query.slug}/${query.itemSlug}/${state.selectedFieldValue._id}`);
-          } else {
-            if (field.fieldType === 'contentBuilder') {
-              toggleLeftNavigation(true);
-            }
-            setState({ ...state, edit: true, showMenu: null });
-          }
-        }}
+        onEdit={() => onClickAdd(true)}
       />
       <Backdrop open={deleteLoading} />
     </div>
   );
 }
+
+type Props3 = {
+  values: any[];
+  selectedValue: string;
+  onSelect: (arg1: any, arg2: any) => void;
+  field: any;
+  formProps: any;
+  previewMode: boolean;
+};
+
+const FieldValueMap = ({
+  values = [],
+  selectedValue = '',
+  onSelect,
+  field,
+  previewMode,
+  formProps = {},
+}: Props3) => {
+  const FMap = values.map((fieldValue, index) => (
+    <div key={fieldValue._id}>
+      {selectedValue === fieldValue._id ? (
+        <FieldValueForm edit {...formProps} fieldValue={fieldValue} />
+      ) : (
+        <FieldValueCard
+          index={index}
+          fieldValue={fieldValue}
+          field={field}
+          previewMode={previewMode}
+          onSelect={onSelect}
+        />
+      )}
+      {/* <p className="text-center w-100">
+        {index + 1} / {values?.length}
+      </p> */}
+    </div>
+  ));
+
+  return values?.length > 1 ? (
+    <Carousel
+      // index={parseInt(query.index)}
+      NextIcon={
+        <img
+          style={{ width: 30, transform: 'rotate(180deg)' }}
+          src="https://images.zerodown.com//website/foyer/static/images/carousel-arrow.png?tr=w-128,h-128,pr-true,f-auto"
+        />
+      }
+      PrevIcon={
+        <img
+          style={{ width: 30 }}
+          src="https://images.zerodown.com//website/foyer/static/images/carousel-arrow.png?tr=w-128,h-128,pr-true,f-auto"
+        />
+      }
+      navButtonsProps={{
+        style: {
+          padding: 0,
+          backgroundColor: 'inherit',
+          width: 30,
+          height: 30,
+          // marginTop: 15,
+        },
+      }}
+      navButtonsWrapperProps={{
+        // Move the buttons to the bottom. Unsetting top here to override default style.
+        style: {
+          top: 50,
+        },
+      }}
+      fullHeightHover={false}
+      autoPlay={false}
+      animation="slide"
+      navButtonsAlwaysVisible
+    >
+      {FMap}
+    </Carousel>
+  ) : (
+    <>{FMap}</>
+  );
+};
 
 interface IProps {
   parentId: string;
@@ -298,9 +286,7 @@ interface IProps {
   previewMode?: boolean;
 }
 
-export default memo(FieldValues);
-
-function FieldValues({
+export default function FieldValues({
   parentId,
   typeId,
   guest = false,
@@ -329,7 +315,7 @@ function FieldValues({
   }
 
   return (
-    <Grid container direction="row" alignItems="center">
+    <Grid container>
       {data.getFieldsByType.data.map((field, index) => {
         let gridProps: any = { xs: 12 };
         if (layouts && layouts[field._id]) {
@@ -341,7 +327,7 @@ function FieldValues({
           });
         }
         return (
-          <Grid {...gridProps} item>
+          <Grid key={field._id} {...gridProps} item>
             {field.fieldType === 'form' ? (
               <SectionForm field={field} parentId={parentId} previewMode={previewMode} />
             ) : (

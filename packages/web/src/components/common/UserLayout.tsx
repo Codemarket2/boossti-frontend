@@ -5,11 +5,14 @@ import styled from 'styled-components';
 import AuthRequired from './AuthRequired';
 import AppBar from './AppBar';
 import BottomBar from './BottomBar';
-import Container, { DivContainer } from './Container';
+import Container from './Container';
 
 const StyledPaper = styled(Paper)`
   background-color: ${(props) => props.theme.palette.background.level2} !important;
   min-height: 100vh !important;
+  button {
+    outline: none !important;
+  }
 `;
 
 interface IProps {
@@ -29,15 +32,9 @@ const UserLayout = ({
   return (
     <StyledPaper elevation={0}>
       <AppBar />
-      {container ? (
-        <Container>
-          {authRequired ? <AuthRequired mustAdmin={mustAdmin}>{children}</AuthRequired> : children}
-        </Container>
-      ) : (
-        <DivContainer>
-          {authRequired ? <AuthRequired mustAdmin={mustAdmin}>{children}</AuthRequired> : children}
-        </DivContainer>
-      )}
+      <Container maxWidth={container ? 'lg' : false}>
+        {authRequired ? <AuthRequired mustAdmin={mustAdmin}>{children}</AuthRequired> : children}
+      </Container>
       {authenticated && <BottomBar />}
     </StyledPaper>
   );

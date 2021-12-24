@@ -34,6 +34,7 @@ import ImageList from '../post/ImageList';
 import NotFound from '../common/NotFound';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
 import AppSwitch from '../common/AppSwitch';
+import DisplayRichText from '../common/DisplayRichText';
 
 interface IProps {
   slug: any;
@@ -291,7 +292,7 @@ export default function ItemScreen({
                       </IconButton>
                     </Tooltip>
                   </Typography>
-                  <div className="ck-content">{parse(data.getListItemBySlug.description)}</div>
+                  <DisplayRichText value={data.getListItemBySlug.description} />
                   <CommentLikeShare parentId={data.getListItemBySlug._id} />
                 </>
               )}
