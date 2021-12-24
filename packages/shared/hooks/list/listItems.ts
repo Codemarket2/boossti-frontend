@@ -38,7 +38,7 @@ export function useGetListItemsByType({ types = [] }: any) {
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev;
         const newListItem = subscriptionData.data.addedListItem;
-        if (types[0] === newListItem.addedListItem.types[0]._id) {
+        if (types[0] === newListItem.addedListItem?.types[0]?._id) {
           updateLikeInCache(newListItem._id, 1);
           let isNew = true;
           let newData = prev?.getListItems?.data?.map((t) => {

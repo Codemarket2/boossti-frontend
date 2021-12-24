@@ -1,9 +1,9 @@
 import React from 'react';
 import { Container } from '@material-ui/core';
 import { useGetComment } from '@frontend/shared/hooks/comment/getComment';
-import Comment from '../../src/components/comment/Comment';
-import PostCardSkeleton from '../../src/components/post/PostCardSkeleton';
-import ErrorLoading from '../../src/components/common/ErrorLoading';
+import Comment from '../components/comment/Comment';
+import PostCardSkeleton from '../components/post/PostCardSkeleton';
+import ErrorLoading from '../components/common/ErrorLoading';
 
 export default function CommentScreen({ _id }) {
   const { data, error, loading } = useGetComment(_id);

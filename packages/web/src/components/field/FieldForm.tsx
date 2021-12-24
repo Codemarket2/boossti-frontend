@@ -19,8 +19,6 @@ import { onAlert } from '../../utils/alert';
 
 export const fieldTypes = [
   { label: 'Form', value: 'form' },
-  { label: 'ContentBuilder', value: 'contentBuilder' },
-  { label: 'ContentBox', value: 'contentBox' },
   { label: 'Text', value: 'text' },
   { label: 'Number', value: 'number' },
   { label: 'Password', value: 'password' },

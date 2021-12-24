@@ -4,7 +4,8 @@ import { Auth } from 'aws-amplify';
 import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth/lib/types';
 import { useRouter } from 'next/router';
 import InitialLoading from '../src/components/common/InitialLoading';
-import Layout2, { Section } from '../src/components/common/Layout2';
+import UserLayout from '../src/components/common/UserLayout';
+import HomeScreen from '../src/screens/HomeScreen';
 
 export default function Page() {
   const router = useRouter();
@@ -27,8 +28,8 @@ export default function Page() {
   }
 
   return (
-    <Layout2>
-      <Section slug="home" />
-    </Layout2>
+    <UserLayout container={false}>
+      <HomeScreen />
+    </UserLayout>
   );
 }

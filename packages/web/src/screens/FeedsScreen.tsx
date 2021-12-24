@@ -5,8 +5,10 @@ import TabBar from '../components/common/TabBar';
 export default function FeedsScreen() {
   return (
     <UserLayout authRequired>
-      <TabBar />
-      <FeedsList />
+      <div className="mt-2">
+        <TabBar />
+        <FeedsList />
+      </div>
     </UserLayout>
   );
 }

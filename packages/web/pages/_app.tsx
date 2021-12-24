@@ -2,15 +2,15 @@ import { useEffect } from 'react';
 import { ThemeProvider as StyledProvider } from 'styled-components';
 import { AppProps } from 'next/app';
 import Amplify, { Hub } from 'aws-amplify';
-import { useSelector } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import { ApolloProvider } from '@apollo/client/react';
 import { client, guestClient } from '@frontend/shared/graphql';
 import awsExports from '@frontend/shared/aws-exports';
+import { store } from '@frontend/shared/redux';
 import { useLogoHook } from '@frontend/shared';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { useCurrentAuthenticatedUser } from '@frontend/shared/hooks/auth';
 import { createMuiTheme, ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
-import { wrapper } from '../src/utils/store';
 import LoadingBar from '../src/components/common/LoadingBar';
 import Head from '../src/components/common/Head';
 import { light, dark } from '../src/utils/theme/palette';
@@ -20,7 +20,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import '../src/assets/css/ckeditor.css';
 import '../src/assets/css/common.css';
-import '../src/components/contentbuilder/contentbuilder.css';
 
 const customsSignInUrl =
   process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : 'https://www.vijaa.com/';
@@ -104,4 +103,10 @@ function App({ Component, pageProps }: AppProps) {
   );
 }
 
-export default wrapper.withRedux(App);
+export default function NewApp(props) {
+  return (
+    <Provider store={store}>
+      <App {...props} />
+    </Provider>
+  );
+}

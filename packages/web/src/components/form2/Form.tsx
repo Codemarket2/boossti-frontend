@@ -22,7 +22,7 @@ import FormView from './FormView';
 import FormSetting from './FormSetting';
 import ResponseList from './ResponseList';
 import Actions from './Actions';
-import DesignTab from './DesignTab';
+// import DesignTab from './DesignTab';
 import { onAlert } from '../../utils/alert';
 import Authorization from '../common/Authorization';
 import InlineInput from '../common/InlineInput';
@@ -100,7 +100,7 @@ export default function Form({ _id, drawerMode = false }: IProps): any {
   return (
     <Authorization _id={state?.createdBy?._id} allowAdmin>
       {options.backdrop && <Backdrop open />}
-      <div className="px-2">
+      <div>
         <Snackbar
           open={Boolean(options.snackBar)}
           autoHideDuration={4000}
@@ -116,7 +116,7 @@ export default function Form({ _id, drawerMode = false }: IProps): any {
             {NameInput}
           </Typography>
         ) : (
-          <div className="d-flex justify-content-between align-items-center">
+          <div className="d-flex justify-content-between align-items-center my-1">
             <Breadcrumbs>
               <Link href="/forms">Forms</Link>
               {NameInput}
@@ -165,7 +165,7 @@ export default function Form({ _id, drawerMode = false }: IProps): any {
                 <Tab label="Settings" value="settings" />
                 <Tab label="Actions" value="actions" />
                 <Tab label="Responses" value="responses" />
-                <Tab label="Design" value="design" />
+                {/* <Tab label="Design" value="design" /> */}
               </Tabs>
             </Paper>
             {options.currentTab === 'preview' && (
@@ -185,7 +185,7 @@ export default function Form({ _id, drawerMode = false }: IProps): any {
               />
             )}
             {options.currentTab === 'responses' && <ResponseList form={state} />}
-            {options.currentTab === 'design' && (
+            {/* {options.currentTab === 'design' && (
               <DesignTab
                 form={state}
                 onChange={(design) =>
@@ -195,7 +195,7 @@ export default function Form({ _id, drawerMode = false }: IProps): any {
                   })
                 }
               />
-            )}
+            )} */}
             {options.currentTab === 'actions' && (
               <Actions
                 form={state}

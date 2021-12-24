@@ -29,6 +29,7 @@ import MediaForm from '../components/list/MediaForm';
 import CommentLikeShare from '../components/common/commentLikeShare/CommentLikeShare';
 import ListItemForm from '../components/list/ListItemForm';
 import ListItemsGrid from '../components/list/ListItemsGrid';
+import DisplayRichText from '../components/common/DisplayRichText';
 // import ListTypeFields from '../components/list/ListTypeFields';
 
 interface IProps {
@@ -90,146 +91,144 @@ export default function Screen({ slug }: IProps) {
   }
 
   return (
-    <>
-      <div className="px-3">
-        <div className="d-flex justify-content-between align-content-center align-items-center">
-          <Breadcrumbs>
-            <Link href="/types">Template</Link>
-            <Typography color="textPrimary">
-              {data.getListTypeBySlug.title.includes('-n-e-w')
-                ? 'Title'
-                : data.getListTypeBySlug.title}
-            </Typography>
-          </Breadcrumbs>
-          <div className="d-flex">
-            {buttonLabels.map(
-              (buttonLabel) =>
-                buttonLabel !== state.view && (
-                  <Button
-                    key={buttonLabel}
-                    variant="contained"
-                    color="primary"
-                    size="small"
-                    className="mr-2"
-                    onClick={() => setState({ ...state, view: buttonLabel })}
-                  >
-                    {buttonLabel}
-                  </Button>
-                ),
-            )}
-            <ActionButtons
-              hideEdit
-              onDelete={() => {
-                if (data.getListTypeBySlug.inUse) {
-                  alert("This type is being used in some form, you can't delete");
-                } else {
-                  const answer = confirm('Are you sure you want to delete?');
-                  if (answer) {
-                    handleDelete(data.getListTypeBySlug._id, deleteCallBack);
-                  }
+    <div>
+      <div className="d-flex justify-content-between align-content-center align-items-center my-1">
+        <Breadcrumbs>
+          <Link href="/types">Template</Link>
+          <Typography color="textPrimary">
+            {data.getListTypeBySlug.title.includes('-n-e-w')
+              ? 'Title'
+              : data.getListTypeBySlug.title}
+          </Typography>
+        </Breadcrumbs>
+        <div className="d-flex">
+          {buttonLabels.map(
+            (buttonLabel) =>
+              buttonLabel !== state.view && (
+                <Button
+                  key={buttonLabel}
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  className="mr-2"
+                  onClick={() => setState({ ...state, view: buttonLabel })}
+                >
+                  {buttonLabel}
+                </Button>
+              ),
+          )}
+          <ActionButtons
+            hideEdit
+            onDelete={() => {
+              if (data.getListTypeBySlug.inUse) {
+                alert("This type is being used in some form, you can't delete");
+              } else {
+                const answer = confirm('Are you sure you want to delete?');
+                if (answer) {
+                  handleDelete(data.getListTypeBySlug._id, deleteCallBack);
                 }
-              }}
-            />
-          </div>
+              }
+            }}
+          />
         </div>
-        <Grid container spacing={1}>
-          <Grid item sm={3} xs={12}>
-            <Paper variant="outlined" className="p-2 mb-2">
-              {state.fieldName === 'title' ? (
-                <InlineForm
-                  fieldName={state.fieldName}
-                  label="Title"
-                  onCancel={onCancel}
-                  formik={formik}
-                  formLoading={CRUDLoading}
-                />
-              ) : (
-                <div>
-                  <Typography className="d-flex align-items-center">
-                    Title
-                    <Tooltip title="Edit Title">
-                      <IconButton onClick={() => onEdit('title')}>
-                        <EditIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                  </Typography>
-                  <Typography variant="h4" className="d-flex align-items-center">
-                    {data.getListTypeBySlug.title.includes('-n-e-w')
-                      ? 'Title'
-                      : data.getListTypeBySlug.title}
-                  </Typography>
-                </div>
-              )}
-              <Divider className="my-2" />
-              {state.fieldName === 'description' ? (
-                <InlineForm
-                  label="Description"
-                  onCancel={onCancel}
-                  multiline
-                  fieldName={state.fieldName}
-                  formik={formik}
-                  formLoading={CRUDLoading}
-                />
-              ) : (
-                <div>
-                  <Typography className="d-flex align-items-center">
-                    Description
-                    <Tooltip title="Edit Description">
-                      <IconButton onClick={() => onEdit('description')}>
-                        <EditIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                  </Typography>
-                  <div className="ck-content">{parse(data.getListTypeBySlug.description)}</div>
-                  <CommentLikeShare parentId={data.getListTypeBySlug._id} />
-                </div>
-              )}
-              <Divider className="my-2" />
-              {state.fieldName === 'media' ? (
-                <MediaForm
-                  state={crudState}
-                  setState={setCrudState}
-                  onCancel={onCancel}
-                  onSave={formik.handleSubmit}
-                  loading={CRUDLoading}
-                />
-              ) : (
-                <>
-                  <Typography className="d-flex align-items-center">
-                    Media
-                    <Tooltip title="Edit Media">
-                      <IconButton onClick={() => onEdit('media')}>
-                        <EditIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                  </Typography>
-                  <ImageList media={data.getListTypeBySlug.media} />
-                </>
-              )}
-            </Paper>
-            <Fields title="Sections" setFields={setFields} parentId={data.getListTypeBySlug._id} />
-            {/* <ListTypeFields /> */}
-          </Grid>
-          <Grid item xs>
-            {state.view === 'Form View' ? (
-              <ListItemForm
-                typeSlug={data.getListTypeBySlug.slug}
-                types={[data.getListTypeBySlug._id]}
-                parentId={data.getListTypeBySlug._id}
-              />
-            ) : state.view === 'Grid View' ? (
-              <ListItemsGrid fields={fields} types={[data.getListTypeBySlug._id]} />
-            ) : (
-              <ListItems
-                types={[data.getListTypeBySlug._id]}
-                name={data.getListTypeBySlug.title}
-                slug={data.getListTypeBySlug.slug}
-              />
-            )}
-          </Grid>
-        </Grid>
       </div>
+      <Grid container spacing={1}>
+        <Grid item sm={3} xs={12}>
+          <Paper variant="outlined" className="p-2 mb-2">
+            {state.fieldName === 'title' ? (
+              <InlineForm
+                fieldName={state.fieldName}
+                label="Title"
+                onCancel={onCancel}
+                formik={formik}
+                formLoading={CRUDLoading}
+              />
+            ) : (
+              <div>
+                <Typography className="d-flex align-items-center">
+                  Title
+                  <Tooltip title="Edit Title">
+                    <IconButton onClick={() => onEdit('title')}>
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </Typography>
+                <Typography variant="h4" className="d-flex align-items-center">
+                  {data.getListTypeBySlug.title.includes('-n-e-w')
+                    ? 'Title'
+                    : data.getListTypeBySlug.title}
+                </Typography>
+              </div>
+            )}
+            <Divider className="my-2" />
+            {state.fieldName === 'description' ? (
+              <InlineForm
+                label="Description"
+                onCancel={onCancel}
+                multiline
+                fieldName={state.fieldName}
+                formik={formik}
+                formLoading={CRUDLoading}
+              />
+            ) : (
+              <div>
+                <Typography className="d-flex align-items-center">
+                  Description
+                  <Tooltip title="Edit Description">
+                    <IconButton onClick={() => onEdit('description')}>
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </Typography>
+                <DisplayRichText value={data.getListTypeBySlug.description} />
+                <CommentLikeShare parentId={data.getListTypeBySlug._id} />
+              </div>
+            )}
+            <Divider className="my-2" />
+            {state.fieldName === 'media' ? (
+              <MediaForm
+                state={crudState}
+                setState={setCrudState}
+                onCancel={onCancel}
+                onSave={formik.handleSubmit}
+                loading={CRUDLoading}
+              />
+            ) : (
+              <>
+                <Typography className="d-flex align-items-center">
+                  Media
+                  <Tooltip title="Edit Media">
+                    <IconButton onClick={() => onEdit('media')}>
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </Typography>
+                <ImageList media={data.getListTypeBySlug.media} />
+              </>
+            )}
+          </Paper>
+          <Fields title="Sections" setFields={setFields} parentId={data.getListTypeBySlug._id} />
+          {/* <ListTypeFields /> */}
+        </Grid>
+        <Grid item xs>
+          {state.view === 'Form View' ? (
+            <ListItemForm
+              typeSlug={data.getListTypeBySlug.slug}
+              types={[data.getListTypeBySlug._id]}
+              parentId={data.getListTypeBySlug._id}
+            />
+          ) : state.view === 'Grid View' ? (
+            <ListItemsGrid fields={fields} types={[data.getListTypeBySlug._id]} />
+          ) : (
+            <ListItems
+              types={[data.getListTypeBySlug._id]}
+              name={data.getListTypeBySlug.title}
+              slug={data.getListTypeBySlug.slug}
+            />
+          )}
+        </Grid>
+      </Grid>
       <Backdrop open={deleteLoading || CRUDLoading} />
-    </>
+    </div>
   );
 }

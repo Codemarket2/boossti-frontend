@@ -1,7 +1,8 @@
 import { guestClient } from '@frontend/shared/graphql';
 import { GET_LIST_ITEM_BY_SLUG } from '@frontend/shared/graphql/query/list';
-import Layout2, { Section } from '../../src/components/common/Layout2';
+import UserLayout from '../../src/components/common/UserLayout';
 import Head from '../../src/components/common/Head';
+import DisplayFields from '../../src/components/field/DisplayFields';
 
 interface IProps {
   metaTags: any;
@@ -12,7 +13,7 @@ export default function Page({ slug, metaTags = {} }: IProps) {
   return (
     <>
       <Head {...metaTags} />
-      <Layout2>{slug && <Section slug={slug.toString()} />}</Layout2>
+      <UserLayout>{slug && <DisplayFields slug={slug.toString()} />}</UserLayout>
     </>
   );
 }

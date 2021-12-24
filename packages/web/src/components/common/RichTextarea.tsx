@@ -41,7 +41,9 @@ const editorConfiguration = {
     toolbar: [
       'imageStyle:inline',
       'imageStyle:block',
-      'imageStyle:side',
+      // 'imageStyle:side',
+      'imageStyle:alignLeft',
+      'imageStyle:alignRight',
       '|',
       'toggleImageCaption',
       'imageTextAlternative',

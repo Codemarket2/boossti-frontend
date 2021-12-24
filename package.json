@@ -54,7 +54,6 @@
     "eslint-plugin-react-hooks": "4.2.0",
     "husky": "6.0.0",
     "jetifier": "1.6.6",
-    "lerna": "4.0.0",
     "prettier": "2.2.1"
   }
 }

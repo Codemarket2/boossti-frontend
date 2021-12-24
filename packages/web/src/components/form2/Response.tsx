@@ -5,8 +5,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Button from '@material-ui/core/Button';
 import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 import EditIcon from '@material-ui/icons/Edit';
-import DisplayDesign from './DisplayDesign';
-import FormView from './FormView';
 import FormDrawer from './FormDrawer';
 import { ShowValue } from './ResponseList';
 import Authorization from '../common/Authorization';
@@ -17,82 +15,58 @@ interface IProps {
 }
 
 export default function Response({ form, response }: IProps) {
-  const [state, setState] = useState({ designView: true, edit: false });
-  const [openDrawer, setOpenDrawer] = useState(false)
+  const [openDrawer, setOpenDrawer] = useState(false);
   return (
     <Authorization _id={response?.createdBy?._id} allowAdmin>
-      {/* {JSON.stringify(response?.values)} */}
-      {state.edit ? (
-        <FormView form={form} />
-      ) : (
-        <>
-          <div className="d-flex justify-content-between align-items-center">
-            <Link href={`/forms/${form?._id}`}>
-              <Tooltip title="Open form">
-                <Typography
-                  variant="h4"
-                  style={{ cursor: 'pointer' }}
-                  className="d-flex align-items-center"
-                >
-                  {form?.name}
-                  <OpenInNewIcon className="ml-2" />
-                </Typography>
-              </Tooltip>
-            </Link>
-            <div>
-              <Tooltip onClick={()=>setOpenDrawer(true)} title="Edit Form">
-                <Button
-                  startIcon={<EditIcon />}
-                  className="mr-2"
-                  variant="contained"
-                  size="small"
-                  color="primary"
-                >
-                  Edit
-                </Button>
-              </Tooltip>
-              <FormDrawer form={form} response={response}  open={openDrawer} onClose={()=>{setOpenDrawer(false)}}/>
-              {/* {form?.settings?.design?.value && (
-                <Tooltip title="Toggle View"> 
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    color="primary"
-                    onClick={() => setState({ ...state, designView: !state.designView })}
-                  >
-                    Toggle View
-                  </Button>
-                </Tooltip>
-              )} */}
-            </div>
+      <div className="d-flex justify-content-between align-items-center">
+        <Link href={`/forms/${form?._id}`}>
+          <Tooltip title="Open form">
+            <Typography
+              variant="h4"
+              style={{ cursor: 'pointer' }}
+              className="d-flex align-items-center"
+            >
+              {form?.name}
+              <OpenInNewIcon className="ml-2" />
+            </Typography>
+          </Tooltip>
+        </Link>
+        <div>
+          <Tooltip onClick={() => setOpenDrawer(true)} title="Edit Form">
+            <Button
+              startIcon={<EditIcon />}
+              className="mr-2"
+              variant="contained"
+              size="small"
+              color="primary"
+            >
+              Edit
+            </Button>
+          </Tooltip>
+          <FormDrawer
+            form={form}
+            response={response}
+            open={openDrawer}
+            onClose={() => {
+              setOpenDrawer(false);
+            }}
+          />
+        </div>
+      </div>
+      {form?.fields?.map((field) => {
+        return (
+          <div key={field?._id}>
+            <Typography>
+              <b>{field?.label}</b>
+              {' - '}
+              <ShowValue
+                field={field}
+                value={response?.values?.filter((v) => v.field === field._id)[0]}
+              />
+            </Typography>
           </div>
-          {state.designView && form?.settings?.design?.value ? (
-            <DisplayDesign
-              value={form?.settings?.design?.value}
-              fields={form?.fields}
-              variables={form?.settings?.design?.variables}
-              responseValues={response?.values}
-            />
-          ) : (
-            <div>
-              {form?.fields?.map((field) => {
-                return (
-                  <div key={field?._id}>
-                    <Typography>
-                      <b>{field?.label}</b>
-                      {' - '}
-                      <ShowValue
-                        field={field}
-                        value={response?.values?.filter((v) => v.field === field._id)[0]}
-                      />
-                    </Typography>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </>
-      )}
+        );
+      })}
     </Authorization>
   );
 }
