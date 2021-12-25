@@ -104,7 +104,7 @@ export default function FormView({ form: { _id, name, fields, settings } }: IPro
       ) : (
         <Grid container spacing={0}>
           {fields?.map((field) => (
-            <Grid item xs={field?.options?.halfWidth ? 6 : 12}>
+            <Grid item xs={field?.options?.halfWidth ? 6 : 12} key={field._id}>
               <InputGroup key={field._id} className="px-2">
                 <Field
                   disabled={submitState.loading}
