@@ -33,7 +33,7 @@ interface IProps {
 }
 
 export default function Form({ _id, drawerMode = false }: IProps): any {
-  const { error, state, setState, updateLoading } = useUpdateForm({
+  const { error, state, handleOnChange, updateLoading } = useUpdateForm({
     onAlert,
     _id,
   });
@@ -64,8 +64,7 @@ export default function Form({ _id, drawerMode = false }: IProps): any {
         ? 'Successfully unpublished the form'
         : 'Successfully published the form',
     });
-    setState({
-      ...state,
+    handleOnChange({
       settings: {
         ...state.settings,
         published: Boolean(!state?.settings?.published),
@@ -93,7 +92,7 @@ export default function Form({ _id, drawerMode = false }: IProps): any {
       width="100%"
       placeholder="Form Name"
       value={state?.name}
-      onChange={(e) => setState({ ...state, name: e.target.value })}
+      onChange={(e) => handleOnChange({ name: e.target.value })}
     />
   );
 
@@ -149,7 +148,7 @@ export default function Form({ _id, drawerMode = false }: IProps): any {
           <Grid item xs={4}>
             <FormFields
               fields={state.fields}
-              setFields={(newFields) => setState({ ...state, fields: newFields })}
+              setFields={(newFields) => handleOnChange({ fields: newFields })}
             />
           </Grid>
           <Grid item xs={8}>
@@ -177,8 +176,7 @@ export default function Form({ _id, drawerMode = false }: IProps): any {
               <FormSetting
                 settings={state.settings}
                 onChange={(settings) =>
-                  setState({
-                    ...state,
+                  handleOnChange({
                     settings: { ...state.settings, ...settings },
                   })
                 }
@@ -200,8 +198,7 @@ export default function Form({ _id, drawerMode = false }: IProps): any {
               <Actions
                 form={state}
                 onChange={(actions) =>
-                  setState({
-                    ...state,
+                  handleOnChange({
                     settings: { ...state.settings, actions },
                   })
                 }
