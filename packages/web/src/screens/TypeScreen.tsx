@@ -30,7 +30,7 @@ import CommentLikeShare from '../components/common/commentLikeShare/CommentLikeS
 import ListItemForm from '../components/list/ListItemForm';
 import ListItemsGrid from '../components/list/ListItemsGrid';
 import DisplayRichText from '../components/common/DisplayRichText';
-import ListTypeFields from '../components/list/ListTypeFields';
+// import ListTypeFields from '../components/list/ListTypeFields';
 
 interface IProps {
   slug: string;
@@ -208,7 +208,7 @@ export default function Screen({ slug }: IProps) {
             )}
           </Paper>
           <Fields title="Sections" setFields={setFields} parentId={data.getListTypeBySlug._id} />
-          <ListTypeFields listType={data.getListTypeBySlug} />
+          {/* <ListTypeFields listType={data.getListTypeBySlug} /> */}
         </Grid>
         <Grid item xs>
           {state.view === 'Form View' ? (

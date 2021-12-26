@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import parse from 'html-react-parser';
 import Tooltip from '@material-ui/core/Tooltip';
 import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
@@ -103,24 +102,24 @@ export default function FieldValueCard({
           </Typography>
         )}
       </div>
-      {!previewMode && (
-        <>
-          <CommentLikeShare
-            showHideComments={showHideComments}
-            setShowHideComments={setShowHideComments}
-            parentId={fieldValue._id}
-            index={index}
-            itemSlug={convertToSlug(field.label)}
-            fieldTitle={fieldValue?.itemId?.title?.trim().toLowerCase()}
-          />
-          <SingleComment
-            setShowHideComments={setShowHideComments}
-            _id={query?.commentId?.toString()}
-            itemSlug={convertToSlug(field.label)}
-            fieldTitle={fieldValue?.itemId?.title?.trim().toLowerCase()}
-          />
-        </>
-      )}
+      {/* {!previewMode && (
+        <> */}
+      <CommentLikeShare
+        showHideComments={showHideComments}
+        setShowHideComments={setShowHideComments}
+        parentId={fieldValue._id}
+        index={index}
+        itemSlug={convertToSlug(field.label)}
+        fieldTitle={fieldValue?.itemId?.title?.trim().toLowerCase()}
+      />
+      <SingleComment
+        setShowHideComments={setShowHideComments}
+        _id={query?.commentId?.toString()}
+        itemSlug={convertToSlug(field.label)}
+        fieldTitle={fieldValue?.itemId?.title?.trim().toLowerCase()}
+      />
+      {/* </>
+      )} */}
     </div>
   );
 }
