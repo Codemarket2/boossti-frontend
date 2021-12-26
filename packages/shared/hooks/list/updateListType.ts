@@ -49,7 +49,7 @@ export const useUpdateListType = ({ listType, onAlert }: IProps) => {
 
   const handleUpdateForm = async () => {
     try {
-      const payload = stringifyListType(listType);
+      const payload = stringifyListType(listType, true);
       const res = await updateMutation({
         variables: payload,
       });
@@ -63,7 +63,7 @@ export const useUpdateListType = ({ listType, onAlert }: IProps) => {
   return { onFieldsChange };
 };
 
-export const stringifyListType = (lisType) => {
+export const stringifyListType = (lisType: any, removeTypeId: boolean = false) => {
   let payload = { ...lisType };
   payload = {
     ...payload,
@@ -73,7 +73,7 @@ export const stringifyListType = (lisType) => {
     ...payload,
     fields: payload.fields.map((m) => {
       const field = { ...m };
-      if (field.fieldType === 'type') {
+      if (removeTypeId && field.fieldType === 'type') {
         field.typeId = field.typeId ? field.typeId._id : null;
       }
       field.options = JSON.stringify(field.options);
