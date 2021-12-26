@@ -1,18 +1,13 @@
-import { Fragment, useState, useEffect } from 'react';
-import Divider from '@material-ui/core/Divider';
+import { useState } from 'react';
 import IconButton from '@material-ui/core/IconButton';
-import ShareIcon from '@material-ui/icons/Share';
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
-import { useSelector } from 'react-redux';
-import { useRouter } from 'next/router';
-
 import { useGetActionCounts } from '@frontend/shared/hooks/comment/getComment';
 import ErrorLoading from '../ErrorLoading';
 import LikeModal from '../../like/LikeModal';
 import Like from '../../like/Like';
 import Comment from '../../comment/Comment';
 import Share from '../../share/Share';
-import { AnyStyledComponent } from 'styled-components';
+import Overlay from '../Overlay';
 
 interface ICommentLikeShare {
   parentId: string;
@@ -21,7 +16,6 @@ interface ICommentLikeShare {
   index?: any;
   itemSlug?: string;
   commentId?: string;
-  setShowSingleComment?: any;
   fieldTitle?: string;
   showHideComments?: boolean;
   setShowHideComments?: any;
@@ -38,26 +32,16 @@ export default function CommentLikeShare({
   showHideComments,
   setShowHideComments,
 }: ICommentLikeShare) {
-  const { attributes } = useSelector(({ auth }: any) => auth);
-  const currentUserId = attributes['custom:_id'];
   const { data, error } = useGetActionCounts(parentId);
   // like modal state & effect
   const [open, setOpen] = useState(false);
+  const [showComment, setShowComment] = useState(false);
   const handleOpenLikeModal = () => {
     setOpen(true);
   };
 
   const handleCloseLikeModal = () => {
     setOpen(false);
-  };
-  //comment state
-
-  const [showCommentSection, setShowCommentSection] = useState(false);
-  const toggleCommentSection = () => {
-    setShowCommentSection(!showCommentSection);
-    if (fieldTitle) {
-      setShowHideComments(!showHideComments);
-    }
   };
 
   return (
@@ -82,15 +66,13 @@ export default function CommentLikeShare({
               )}
             </>
           ) : null}
-          <IconButton onClick={toggleCommentSection}>
+          <IconButton onClick={() => setShowComment(!showComment)}>
             <ChatBubbleIcon />
           </IconButton>
           {data?.getActionCounts?.commentCount && data.getActionCounts.commentCount > 0 ? (
             <span className="mr-2">{data.getActionCounts.commentCount}</span>
           ) : null}
-
           <IconButton>
-            {/* <ShareIcon /> */}
             <Share
               index={index}
               itemSlug={itemSlug}
@@ -101,9 +83,13 @@ export default function CommentLikeShare({
           {children}
         </div>
       </div>
-      {(showHideComments || showCommentSection) && (
+      {/* {(showHideComments || showCommentSection) && (
         <Fragment>
           {showDivider && <Divider />}
+        </Fragment>
+      )} */}
+      <Overlay open={showComment} onClose={() => setShowComment(false)} title="Comments">
+        <div className="p-2">
           <Comment
             postId={parentId}
             threadId={parentId}
@@ -111,8 +97,8 @@ export default function CommentLikeShare({
             shareIndex={index}
             fieldTitle={fieldTitle}
           />
-        </Fragment>
-      )}
+        </div>
+      </Overlay>
     </div>
   );
 }
