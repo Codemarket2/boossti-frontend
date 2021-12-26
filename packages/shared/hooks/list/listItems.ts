@@ -25,6 +25,7 @@ export function useGetListItemsByType({ types = [] }: any) {
     search: '',
     showSearch: false,
   });
+  const [subscribed, setSubscribed] = useState(false);
   const { data, error, loading, subscribeToMore } = useQuery(GET_LIST_ITEMS_BY_TYPE, {
     variables: { ...defaultGetListItems, types, search: state.search },
     fetchPolicy: 'cache-and-network',
@@ -33,34 +34,37 @@ export function useGetListItemsByType({ types = [] }: any) {
   // console.log('data, loading, error', data, loading, error);
 
   useEffect(() => {
-    subscribeToMore({
-      document: ADDED_LIST_ITEM,
-      updateQuery: (prev, { subscriptionData }) => {
-        if (!subscriptionData.data) return prev;
-        const newListItem = subscriptionData.data.addedListItem;
-        if (types[0] === newListItem.addedListItem?.types[0]?._id) {
-          updateLikeInCache(newListItem._id, 1);
-          let isNew = true;
-          let newData = prev?.getListItems?.data?.map((t) => {
-            if (t._id === newListItem._id) {
-              isNew = false;
-              return newListItem;
+    if (!subscribed) {
+      setSubscribed(true);
+      subscribeToMore({
+        document: ADDED_LIST_ITEM,
+        updateQuery: (prev, { subscriptionData }) => {
+          if (!subscriptionData.data) return prev;
+          const newListItem = subscriptionData.data.addedListItem;
+          if (types[0] === newListItem.addedListItem?.types[0]?._id) {
+            updateLikeInCache(newListItem._id, 1);
+            let isNew = true;
+            let newData = prev?.getListItems?.data?.map((t) => {
+              if (t._id === newListItem._id) {
+                isNew = false;
+                return newListItem;
+              }
+              return t;
+            });
+            if (isNew) {
+              newData = [...prev?.getListTypes?.data, newListItem];
             }
-            return t;
-          });
-          if (isNew) {
-            newData = [...prev?.getListTypes?.data, newListItem];
+            return {
+              ...prev,
+              getListItems: {
+                ...prev.getListItems,
+                data: newData,
+              },
+            };
           }
-          return {
-            ...prev,
-            getListItems: {
-              ...prev.getListItems,
-              data: newData,
-            },
-          };
-        }
-      },
-    });
+        },
+      });
+    }
   }, []);
 
   return { data, error, loading, state, setState };

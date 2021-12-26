@@ -208,7 +208,7 @@ export default function Screen({ slug }: IProps) {
             )}
           </Paper>
           <Fields title="Sections" setFields={setFields} parentId={data.getListTypeBySlug._id} />
-          <ListTypeFields />
+          <ListTypeFields listType={data.getListTypeBySlug} />
         </Grid>
         <Grid item xs>
           {state.view === 'Form View' ? (

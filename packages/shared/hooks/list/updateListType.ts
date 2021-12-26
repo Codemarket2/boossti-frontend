@@ -1,73 +1,70 @@
 import { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { UPDATE_FORM } from '../../graphql/mutation/form';
-import { GET_FORM } from '../../graphql/query/form';
+import { UPDATE_LIST_TYPE_FIELDS } from '../../graphql/mutation/list';
+import { GET_LIST_TYPE_BY_SLUG } from '../../graphql/query/list';
+import { client as apolloClient } from '../../graphql';
 import { IHooksProps } from '../../types/common';
-import { useGetForm } from './index';
 import { omitTypename } from '../../utils/omitTypename';
-import { client as apolloClient } from '../../graphql/index';
 
 interface IProps extends IHooksProps {
-  _id: string;
+  listType: any;
 }
 
-const updateCache = (_id, newFormData) => {
+const updateCache = (slug, newListType) => {
   const oldData = apolloClient.readQuery({
-    query: GET_FORM,
-    variables: { _id },
+    query: GET_LIST_TYPE_BY_SLUG,
+    variables: { slug },
   });
-  if (oldData?.getForm) {
+  if (oldData?.getListTypeBySlug) {
     const newData = {
       ...oldData,
-      getForm: { ...oldData?.getForm, ...newFormData },
+      getListTypeBySlug: { ...oldData?.getListTypeBySlug, ...newListType },
     };
     apolloClient.writeQuery({
-      query: GET_FORM,
-      variables: { _id },
+      query: GET_LIST_TYPE_BY_SLUG,
+      variables: { slug },
       data: newData,
     });
   }
 };
 
-export function useUpdateForm({ onAlert, _id }: IProps): any {
-  const {
-    data: { getForm: form },
-    error,
-  } = useGetForm(_id);
+export const useUpdateListType = ({ listType, onAlert }: IProps) => {
+  const [updateMutation] = useMutation(UPDATE_LIST_TYPE_FIELDS);
   const [saveToServer, setSaveToServer] = useState(false);
-  const [updateFormMutation, { loading: updateLoading }] = useMutation(UPDATE_FORM);
 
   useEffect(() => {
     let timeOutId;
-    if (saveToServer && form) {
+    if (saveToServer && listType) {
       setSaveToServer(false);
-      timeOutId = setTimeout(() => handleUpdateForm(), 1500);
+      timeOutId = setTimeout(() => handleUpdateForm(), 1000);
     }
     return () => clearTimeout(timeOutId);
-  }, [form]);
+  }, [listType]);
 
-  const handleOnChange = (newState) => {
-    updateCache(_id, stringifyForm({ ...form, ...newState }));
+  const onFieldsChange = (fields) => {
+    const payload = stringifyListType({ fields });
+    updateCache(listType.slug, payload);
     setSaveToServer(true);
   };
 
   const handleUpdateForm = async () => {
     try {
-      const payload = stringifyForm(form);
-      await updateFormMutation({
+      const payload = stringifyListType(listType);
+      const res = await updateMutation({
         variables: payload,
       });
+      console.log('res', res);
     } catch (error) {
       console.log(error);
       onAlert('Error while auto saving', error.message);
     }
   };
 
-  return { state: form, handleOnChange, error, updateLoading, handleUpdateForm };
-}
+  return { onFieldsChange };
+};
 
-export const stringifyForm = (form) => {
-  let payload = { ...form };
+export const stringifyListType = (lisType) => {
+  let payload = { ...lisType };
   payload = {
     ...payload,
     fields: payload.fields.map((m) => JSON.parse(JSON.stringify(m), omitTypename)),
@@ -82,7 +79,6 @@ export const stringifyForm = (form) => {
       field.options = JSON.stringify(field.options);
       return field;
     }),
-    settings: JSON.stringify(payload?.settings),
   };
   return payload;
 };

@@ -20,6 +20,7 @@ export const fieldTypes = [
   { label: 'Number', value: 'number' },
   { label: 'Password', value: 'password' },
   { label: 'Textarea', value: 'textarea' },
+  { label: 'Rich Textarea', value: 'richTextarea' },
   { label: 'Checkbox', value: 'checkbox' },
   { label: 'Select', value: 'select' },
   { label: 'Email', value: 'email' },

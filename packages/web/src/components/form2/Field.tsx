@@ -46,9 +46,9 @@ export default function FieldValueForm2({
   value,
   onChangeValue,
 }: IProps): any {
-  const onChange = (payload)=>{
-    onChangeValue({...value,...payload})
-  }
+  const onChange = (payload) => {
+    onChangeValue({ ...value, ...payload });
+  };
   switch (fieldType) {
     case 'date': {
       return (
@@ -90,7 +90,7 @@ export default function FieldValueForm2({
         </MuiPickersUtilsProvider>
       );
     }
-    case 'textarea': {
+    case 'richTextarea': {
       return (
         <>
           <InputLabel>{label}</InputLabel>
@@ -257,6 +257,8 @@ export default function FieldValueForm2({
     default: {
       return (
         <TextField
+          multiline={fieldType === 'textarea'}
+          rows={fieldType === 'textarea' && 6}
           fullWidth
           label={label}
           variant="outlined"
