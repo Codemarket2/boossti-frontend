@@ -4,19 +4,61 @@ export const CREATE_LIST_TYPE = gql`
   mutation MyMutation($title: String!, $description: String, $media: [MediaInput]) {
     createListType(title: $title, description: $description, media: $media) {
       _id
-      title
       slug
+      title
       description
       media {
         url
         caption
       }
+      inUse
+      active
+      fields {
+        _id
+        label
+        fieldType
+        options
+        typeId {
+          _id
+          title
+          slug
+        }
+      }
     }
   }
 `;
+
 export const UPDATE_LIST_TYPE = gql`
   mutation MyMutation($_id: ID!, $title: String, $description: String, $media: [MediaInput]) {
     updateListType(_id: $_id, title: $title, description: $description, media: $media) {
+      _id
+      slug
+      title
+      description
+      media {
+        url
+        caption
+      }
+      inUse
+      active
+      fields {
+        _id
+        label
+        fieldType
+        options
+        typeId {
+          _id
+          title
+          slug
+        }
+      }
+    }
+  }
+`;
+
+export const UPDATE_LIST_TYPE_FIELDS = gql`
+  mutation MyMutation($_id: ID!, $fields: [Field2Input]) {
+    updateListType(_id: $_id, fields: $fields) {
       _id
       title
       slug
@@ -24,6 +66,17 @@ export const UPDATE_LIST_TYPE = gql`
       media {
         url
         caption
+      }
+      fields {
+        _id
+        label
+        fieldType
+        options
+        typeId {
+          _id
+          title
+          slug
+        }
       }
     }
   }

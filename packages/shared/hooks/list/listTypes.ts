@@ -10,7 +10,7 @@ import { fileUpload } from '../../utils/fileUpload';
 import { omitTypename } from '../../utils/omitTypename';
 import { ADDED_LIST_TYPE, UPDATED_LIST_TYPE } from '../../graphql/subscription/list';
 
-const defaultQueryVariables = { limit: 100, page: 1 };
+const defaultQueryVariables = { limit: 25, page: 1 };
 
 interface IQueryProps {
   limit?: number;
@@ -36,7 +36,7 @@ export function useGetListTypes(queryVariables?: IQueryProps) {
 
   useEffect(() => {
     let unsubscribe = () => null;
-    if (!subscribed && subscribeToMore) {
+    if (!subscribed) {
       setSubscribed(true);
       unsubscribe = subscribeToMore({
         document: ADDED_LIST_TYPE,
@@ -65,44 +65,60 @@ export function useGetListTypes(queryVariables?: IQueryProps) {
       });
     }
     return () => unsubscribe();
-  }, [subscribeToMore]);
+  }, []);
 
   return { data, error, loading, state, setState };
 }
 
+const parseListType = (lisType) => {
+  return {
+    ...lisType,
+    fields: lisType?.fields?.map((m) => {
+      const field = { ...m };
+      field.options = JSON.parse(field.options);
+      return field;
+    }),
+  };
+};
+
 export function useGetListTypeBySlug({ slug }: any) {
   const { data, error, loading, subscribeToMore } = useQuery(GET_LIST_TYPE_BY_SLUG, {
     variables: { slug },
-    fetchPolicy: 'cache-and-network',
   });
   const [subscribed, setSubscribed] = useState(false);
+  const [lisType, setListType] = useState(null);
 
   useEffect(() => {
-    if (data && data.getListItemBySlug && !subscribed) {
+    if (data && data?.getListTypeBySlug) {
+      setListType(parseListType(data.getListTypeBySlug));
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (data && data.getListTypeBySlug && !subscribed) {
+      setSubscribed(true);
       subscribeToMore({
         document: UPDATED_LIST_TYPE,
         variables: {
-          _id: data.getListTypeBySlug._id,
+          _id: data.getListTypeBySlug?._id,
         },
         updateQuery: (prev, { subscriptionData }) => {
           if (!subscriptionData.data) return prev;
           const newListType = subscriptionData.data.updatedListType;
-          let newData = { ...prev.getListTypeBySlug };
-          const isUpdated = prev.getListTypeBySlug._id === newListType._id;
-          newData = isUpdated ? newListType : newData;
+          console.log({ newListType });
           return {
             ...prev,
             getListTypeBySlug: {
               ...prev.getListTypeBySlug,
-              data: newData,
+              ...newListType,
             },
           };
         },
       });
-      setSubscribed(true);
     }
   }, [data]);
-  return { data, error, loading };
+
+  return { data: lisType ? { getListTypeBySlug: lisType } : null, error, loading };
 }
 
 const listTypesValidationSchema = yup.object({

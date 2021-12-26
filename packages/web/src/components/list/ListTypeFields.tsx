@@ -1,11 +1,16 @@
-import { useState } from 'react';
+import { useUpdateListType } from '@frontend/shared/hooks/list';
+import { onAlert } from '../../utils/alert';
 import FormFields from '../form2/FormFields';
 
-export default function ListTypeFields() {
-  const [fields, setFields] = useState([]);
+interface IProps {
+  listType: any;
+}
+
+export default function ListTypeFields({ listType }: IProps) {
+  const { onFieldsChange } = useUpdateListType({ listType, onAlert });
   return (
     <div>
-      <FormFields fields={fields} setFields={setFields} title="Sections" />
+      <FormFields fields={listType?.fields} setFields={onFieldsChange} title="Sections" />
     </div>
   );
 }

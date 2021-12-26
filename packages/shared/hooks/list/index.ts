@@ -14,3 +14,4 @@ export {
 } from './listItems';
 export { useMentionList } from './mentionList';
 export { useUpdateItemLayout } from './itemLayout';
+export { useUpdateListType } from './updateListType';
