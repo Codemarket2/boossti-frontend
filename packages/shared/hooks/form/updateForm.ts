@@ -53,7 +53,7 @@ export function useUpdateForm({ onAlert, _id }: IProps): any {
 
   const handleUpdateForm = async () => {
     try {
-      const payload = stringifyForm(form);
+      const payload = stringifyForm(form, true);
       await updateFormMutation({
         variables: payload,
       });
@@ -66,7 +66,7 @@ export function useUpdateForm({ onAlert, _id }: IProps): any {
   return { state: form, handleOnChange, error, updateLoading, handleUpdateForm };
 }
 
-export const stringifyForm = (form) => {
+export const stringifyForm = (form: any, removeTypeId: boolean = false) => {
   let payload = { ...form };
   payload = {
     ...payload,
@@ -76,7 +76,7 @@ export const stringifyForm = (form) => {
     ...payload,
     fields: payload.fields.map((m) => {
       const field = { ...m };
-      if (field.fieldType === 'type') {
+      if (removeTypeId && field.fieldType === 'type') {
         field.typeId = field.typeId ? field.typeId._id : null;
       }
       field.options = JSON.stringify(field.options);

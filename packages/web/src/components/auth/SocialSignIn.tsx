@@ -26,9 +26,10 @@ export default function SocialSignIn({ signIn = true }: { signIn?: boolean }) {
   const [disableSocial, setDisableSocial] = useState(true);
 
   useEffect(() => {
-    console.log('window.location.hostname', window.location.host);
-    console.log('window.location.hostname', window.location.hostname);
-    if (window.location.hostname === 'localhost' || window.location.host.split('.')[0] === 'www') {
+    if (
+      window.location.origin === 'http://localhost:3000' ||
+      window.location.origin === 'https://www.boossti.com'
+    ) {
       setDisableSocial(false);
     }
   }, []);
@@ -48,11 +49,12 @@ export default function SocialSignIn({ signIn = true }: { signIn?: boolean }) {
           variant="contained"
           onClick={() => {
             if (disableSocial) {
-              alert('Go to www.vijaa.com to test social signin');
+              alert('Social signin is disabled for this URL');
             } else {
               Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Google });
             }
-          }}>
+          }}
+        >
           Sign {signIn ? 'in' : 'up'} with Google
         </Button>
       </InputGroup>
@@ -66,11 +68,12 @@ export default function SocialSignIn({ signIn = true }: { signIn?: boolean }) {
           variant="contained"
           onClick={() => {
             if (disableSocial) {
-              alert('Go to www.vijaa.com to test social signin');
+              alert('Social signin is disabled for this URL');
             } else {
               Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Facebook });
             }
-          }}>
+          }}
+        >
           Sign {signIn ? 'in' : 'up'} with Facebook
         </Button>
       </InputGroup>

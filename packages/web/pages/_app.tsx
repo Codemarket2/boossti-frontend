@@ -22,11 +22,11 @@ import '../src/assets/css/ckeditor.css';
 import '../src/assets/css/common.css';
 
 const customsSignInUrl =
-  process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : 'https://www.vijaa.com/';
+  process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : 'https://www.boossti.com/';
 const customsSignOutUrl =
   process.env.NODE_ENV === 'development'
     ? 'http://localhost:3000/auth/'
-    : 'https://www.vijaa.com/auth/';
+    : 'https://www.boossti.com/auth/';
 
 Amplify.configure({
   ...awsExports,
