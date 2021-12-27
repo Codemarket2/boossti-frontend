@@ -2,16 +2,18 @@
 
 # Next.js + React Native
 
+## You have to only use Yarn don't use npm
+
 Install Dependencies:
 
 ```sh
-$ yarn install (if yarn didn't work try npm install)
+$ yarn install 
 ```
 
-Install Pod Dependencies (Only on Mac OS):
+If you want to install package from npm:
 
 ```sh
-$ yarn pod:install (if yarn didn't work try npm install pod-install)
+$ yarn workspace @frontend/web add <package name>
 ```
 
 # Next.js Web
@@ -66,6 +68,12 @@ $ yarn web:deploy
 ```
 
 # React Native
+
+Install Pod Dependencies (Only on Mac OS):
+
+```sh
+$ yarn pod:install (if yarn didn't work try npm install pod-install)
+```
 
 Start metro server:
 

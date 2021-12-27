@@ -21,6 +21,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../src/assets/css/ckeditor.css';
 import '../src/assets/css/common.css';
 
+import { useOneSignal } from '../src/components/notification/onesignal';
+
 const customsSignInUrl =
   process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : 'https://www.boossti.com/';
 const customsSignOutUrl =
@@ -42,7 +44,9 @@ function App({ Component, pageProps }: AppProps) {
   const { getUser } = useCurrentAuthenticatedUser();
   const { darkMode, authenticated } = useSelector(({ auth }: any) => auth);
 
+  useOneSignal();
   useLogoHook();
+
   const theme = createMuiTheme({
     palette: darkMode ? dark : light,
     typography: {

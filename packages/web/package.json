@@ -46,6 +46,7 @@
     "react-dom": "17.0.1",
     "react-material-ui-carousel": "^2.3.5",
     "react-mentions": "^4.3.0",
+    "react-onesignal": "^2.0.2",
     "react-phone-input-2": "^2.14.0",
     "react-redux": "7.2.4",
     "react-share": "4.3.1",
