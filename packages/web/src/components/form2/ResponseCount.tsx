@@ -1,6 +1,6 @@
 import { useUpdateForm } from '@frontend/shared/hooks/form';
 import { useGetResponses } from '@frontend/shared/hooks/response';
-import { Backdrop, Button, Fade, Modal, Typography } from '@material-ui/core';
+import { Backdrop, Button, Fade, Modal } from '@material-ui/core';
 import { useState } from 'react';
 import { onAlert } from '../../utils/alert';
 import ErrorLoading from '../common/ErrorLoading';
@@ -25,12 +25,11 @@ export default function ResponseCount({ formId }: IProps): any {
 
   return (
     <>
-      {data?.getResponses?.count && (
-        <Button
-          variant="outlined"
-          onClick={handleOpen}
-        >{`${data?.getResponses?.count} Response`}</Button>
-      )}
+      <div className="text-center mt-2">
+        <Button variant="outlined" onClick={handleOpen}>
+          {`${data?.getResponses?.count || 0} Responses`}
+        </Button>
+      </div>
       {state && !error && (
         <>
           <Modal
@@ -45,7 +44,7 @@ export default function ResponseCount({ formId }: IProps): any {
             }}
           >
             <Fade in={open}>
-              <ResponseList form={state} />
+              <ResponseList form={state} hideDelete />
             </Fade>
           </Modal>
         </>

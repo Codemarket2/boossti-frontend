@@ -21,9 +21,10 @@ import { onAlert } from '../../utils/alert';
 
 interface IProps {
   form: any;
+  hideDelete?: boolean;
 }
 
-export default function ResponseList({ form }: IProps): any {
+export default function ResponseList({ form, hideDelete = false }: IProps): any {
   const { data, error, state, setState } = useGetResponses(form._id);
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
   const router = useRouter();
@@ -68,19 +69,21 @@ export default function ResponseList({ form }: IProps): any {
               {data?.getResponses?.data?.map((response) => (
                 <TableRow key={response._id}>
                   <TableCell>
-                    <Tooltip title="Delete response">
-                      <IconButton
-                        onClick={() => {
-                          const anwser = confirm('Are you sure you want to delete this response');
-                          if (anwser) {
-                            handleDelete(response._id, form._id);
-                          }
-                        }}
-                        edge="start"
-                      >
-                        <Delete />
-                      </IconButton>
-                    </Tooltip>
+                    {!hideDelete && (
+                      <Tooltip title="Delete response">
+                        <IconButton
+                          onClick={() => {
+                            const anwser = confirm('Are you sure you want to delete this response');
+                            if (anwser) {
+                              handleDelete(response._id, form._id);
+                            }
+                          }}
+                          edge="start"
+                        >
+                          <Delete />
+                        </IconButton>
+                      </Tooltip>
+                    )}
                     <Tooltip title="Open Response">
                       <IconButton
                         onClick={() => {
