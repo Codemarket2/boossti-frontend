@@ -19,6 +19,7 @@ import Backdrop from '../common/Backdrop';
 import EditFormDrawer from './EditFormDrawer';
 import FieldViewWrapper from './FieldViewWrapper';
 import { onAlert } from '../../utils/alert';
+import ResponseCount from './ResponseCount';
 
 interface IProps {
   field: any;
@@ -102,7 +103,10 @@ export default function FormC({ field, parentId, previewMode = false }: IProps):
         </MenuItem>
       </Menu>
       {data?.getFieldValuesByItem?.data[0]?.value && (
-        <FieldViewWrapper _id={data?.getFieldValuesByItem?.data[0]?.value} />
+        <>
+          <ResponseCount formId={data?.getFieldValuesByItem?.data[0]?.value} />
+          <FieldViewWrapper _id={data?.getFieldValuesByItem?.data[0]?.value} />
+        </>
       )}
       {state.fieldId && (
         <EditFormDrawer formId={state.fieldId} open onClose={() => setState(initialState)} />

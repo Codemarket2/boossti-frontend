@@ -37,7 +37,8 @@
     "nohoist": []
   },
   "dependencies": {
-    "react-native": "0.64.1"
+    "react-native": "0.64.1",
+    "react-onesignal": "^2.0.2"
   },
   "author": "vivekvt",
   "license": "MIT",
