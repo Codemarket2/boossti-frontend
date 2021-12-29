@@ -17,6 +17,7 @@ import { fileUpload } from '../../utils/fileUpload';
 import { omitTypename } from '../../utils/omitTypename';
 import { ADDED_LIST_ITEM, UPDATED_LIST_ITEM } from '../../graphql/subscription/list';
 import { updateLikeInCache } from '../like/createLike';
+import { parseListType } from './listTypes';
 
 const defaultGetListItems = { limit: 100, page: 1 };
 
@@ -73,15 +74,24 @@ export function useGetListItemsByType({ types = [] }: any) {
 export function useGetListItemBySlug({ slug }: any) {
   const { data, error, loading, subscribeToMore } = useQuery(GET_LIST_ITEM_BY_SLUG, {
     variables: { slug },
-    fetchPolicy: 'cache-and-network',
+    // fetchPolicy: 'cache-only',
   });
   const [subscribed, setSubscribed] = useState(false);
+  const [lisItem, setListItem] = useState(null);
+
+  useEffect(() => {
+    if (data && data?.getListItemBySlug) {
+      setListItem(parseListType(data.getListItemBySlug));
+    }
+  }, [data]);
+
   useEffect(() => {
     if (data && data.getListItemBySlug && !subscribed) {
+      setSubscribed(true);
       subscribeToMore({
         document: UPDATED_LIST_ITEM,
         variables: {
-          _id: data.getListItemBySlug._id,
+          _id: data.getListItemBySlug?._id,
         },
         updateQuery: (prev, { subscriptionData }) => {
           if (!subscriptionData.data) return prev;
@@ -95,11 +105,10 @@ export function useGetListItemBySlug({ slug }: any) {
           };
         },
       });
-      setSubscribed(true);
     }
   }, [data]);
 
-  return { data, error, loading };
+  return { data: lisItem ? { getListItemBySlug: lisItem } : null, error, loading };
 }
 
 const listItemsValidationSchema = yup.object({

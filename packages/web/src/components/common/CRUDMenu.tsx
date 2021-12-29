@@ -12,23 +12,37 @@ interface IProps {
   onEdit?: () => void;
   onDelete?: () => void;
   children?: ReactNode;
+  hideEdit?: boolean;
+  hideDelete?: boolean;
 }
 
-export default function CRUDMenu({ show, onDelete, onEdit, onClose, children }: IProps) {
+export default function CRUDMenu({
+  show,
+  onDelete,
+  onEdit,
+  onClose,
+  children,
+  hideEdit = false,
+  hideDelete = false,
+}: IProps) {
   return (
     <Menu anchorEl={show} keepMounted open={Boolean(show)} onClose={onClose}>
-      <MenuItem onClick={onEdit}>
-        <ListItemIcon className="mr-n4">
-          <EditIcon fontSize="small" />
-        </ListItemIcon>
-        <ListItemText primary="Edit" />
-      </MenuItem>
-      <MenuItem onClick={onDelete}>
-        <ListItemIcon className="mr-n4">
-          <DeleteIcon fontSize="small" />
-        </ListItemIcon>
-        <ListItemText primary="Delete" />
-      </MenuItem>
+      {!hideEdit && (
+        <MenuItem onClick={onEdit}>
+          <ListItemIcon className="mr-n4">
+            <EditIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary="Edit" />
+        </MenuItem>
+      )}
+      {!hideDelete && (
+        <MenuItem onClick={onDelete}>
+          <ListItemIcon className="mr-n4">
+            <DeleteIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary="Delete" />
+        </MenuItem>
+      )}
       {children}
     </Menu>
   );

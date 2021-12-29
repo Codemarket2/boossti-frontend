@@ -8,7 +8,7 @@ import { ReactNode } from 'react';
 interface IProps {
   open: boolean;
   onClose: () => void;
-  title: string;
+  title?: string;
   children: ReactNode;
 }
 
@@ -18,9 +18,11 @@ export default function ItemFormDrawer({ open, onClose, title, children }: IProp
       <div style={{ width: '75vw' }}>
         <AppBar color="transparent" position="static" elevation={1}>
           <Toolbar>
-            <Typography variant="h6" className="flex-grow-1">
-              {title}
-            </Typography>
+            {title && (
+              <Typography variant="h6" className="flex-grow-1">
+                {title}
+              </Typography>
+            )}
             <Button className="ml-2" onClick={onClose} color="primary" variant="outlined">
               Close
             </Button>

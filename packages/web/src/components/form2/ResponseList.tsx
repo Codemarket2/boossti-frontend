@@ -143,6 +143,6 @@ export const ShowValue = ({ field, value }: any) => {
         </>
       );
     default:
-      return <></>;
+      return <>{value?.value}</>;
   }
 };

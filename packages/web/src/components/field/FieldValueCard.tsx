@@ -16,6 +16,7 @@ import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
 import SingleComment from '../comment/SingleComment';
 import { convertToSlug } from './LeftNavigation';
 import DisplayRichText from '../common/DisplayRichText';
+import Overlay from '../common/Overlay';
 
 interface IProps {
   fieldValue: any;
@@ -75,17 +76,18 @@ export default function FieldValueCard({
             <Link href={`/types/${field.typeId.slug}/${fieldValue.itemId.slug}`}>
               {fieldValue.itemId.title}
             </Link>
-            <Collapse
-              in={state.expandedItem && state.itemId === fieldValue._id}
-              timeout="auto"
-              unmountOnExit
+            <Overlay
+              open={state.expandedItem && state.itemId === fieldValue._id}
+              onClose={() =>
+                setState({
+                  ...state,
+                  expandedItem: false,
+                  itemId: '',
+                })
+              }
             >
-              <ItemScreen
-                hideBreadcrumbs
-                typeSlug={field.typeId.slug}
-                slug={fieldValue.itemId.slug}
-              />
-            </Collapse>
+              <ItemScreen hideBreadcrumbs slug={fieldValue.itemId.slug} noTogglePreviewMode />
+            </Overlay>
           </div>
         ) : field.fieldType === 'url' ? (
           // eslint-disable-next-line react/jsx-no-target-blank

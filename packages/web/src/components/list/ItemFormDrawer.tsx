@@ -64,7 +64,8 @@ export default function ItemFormDrawer({
                 disabled={deleteLoading}
                 onClick={handleSelect}
                 color="primary"
-                variant="contained">
+                variant="contained"
+              >
                 Select
               </Button>
             )}
@@ -73,7 +74,8 @@ export default function ItemFormDrawer({
               className="ml-2"
               onClick={async () => await handleDelete(state.item._id, onClose)}
               color="primary"
-              variant="outlined">
+              variant="outlined"
+            >
               Cancel
             </LoadingButton>
           </Toolbar>
@@ -81,7 +83,6 @@ export default function ItemFormDrawer({
         {state.slug ? (
           <ItemScreen
             hideBreadcrumbs
-            typeSlug={typeSlug}
             slug={state.slug}
             setItem={(item) => setState({ ...state, item })}
             onSlugUpdate={onSlugUpdate}

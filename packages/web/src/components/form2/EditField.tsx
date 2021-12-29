@@ -16,8 +16,6 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import Input from '@material-ui/core/Input';
-import TextField from '@material-ui/core/TextField';
 import InputGroup from '../common/InputGroup';
 import { fieldTypes } from './AddField';
 import TypesAutocomplete from './TypesAutocomplete';
@@ -118,6 +116,19 @@ export default function FormFields({ onFieldChange, field, onClose }: TProps): a
               />
             }
             label="Half Width"
+          />
+        </InputGroup>
+        <InputGroup>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={field?.options?.showCommentBox}
+                onChange={({ target }) => onOptionChange({ showCommentBox: target.checked })}
+                name="showCommentBox"
+                color="primary"
+              />
+            }
+            label="Show CommentBox"
           />
         </InputGroup>
         {field.fieldType === 'select' && (
