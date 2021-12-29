@@ -2,7 +2,7 @@ import { guestClient } from '@frontend/shared/graphql';
 import { GET_LIST_ITEM_BY_SLUG } from '@frontend/shared/graphql/query/list';
 import UserLayout from '../../src/components/common/UserLayout';
 import Head from '../../src/components/common/Head';
-import DisplayFields from '../../src/components/field/DisplayFields';
+import PublishedPage from '../../src/screens/PublishedPage';
 
 interface IProps {
   metaTags: any;
@@ -13,7 +13,7 @@ export default function Page({ slug, metaTags = {} }: IProps) {
   return (
     <>
       <Head {...metaTags} />
-      <UserLayout>{slug && <DisplayFields slug={slug.toString()} />}</UserLayout>
+      <UserLayout>{slug && <PublishedPage slug={slug.toString()} />}</UserLayout>
     </>
   );
 }

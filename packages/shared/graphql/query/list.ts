@@ -91,6 +91,17 @@ export const GET_LIST_ITEM_BY_SLUG = gql`
         slug
       }
       createdBy
+      fields {
+        _id
+        label
+        fieldType
+        options
+        typeId {
+          _id
+          title
+          slug
+        }
+      }
     }
   }
 `;

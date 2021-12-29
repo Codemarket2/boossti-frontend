@@ -117,6 +117,49 @@ export const CREATE_LIST_ITEM = gql`
         caption
       }
       layouts
+      fields {
+        _id
+        label
+        fieldType
+        options
+        typeId {
+          _id
+          title
+          slug
+        }
+      }
+    }
+  }
+`;
+
+export const UPDATE_LIST_ITEM_FIELDS = gql`
+  mutation MyMutation($_id: ID!, $fields: [Field2Input]) {
+    updateListItem(_id: $_id, fields: $fields) {
+      _id
+      title
+      slug
+      description
+      types {
+        _id
+        title
+        slug
+      }
+      media {
+        url
+        caption
+      }
+      layouts
+      fields {
+        _id
+        label
+        fieldType
+        options
+        typeId {
+          _id
+          title
+          slug
+        }
+      }
     }
   }
 `;
@@ -150,9 +193,21 @@ export const UPDATE_LIST_ITEM = gql`
         caption
       }
       layouts
+      fields {
+        _id
+        label
+        fieldType
+        options
+        typeId {
+          _id
+          title
+          slug
+        }
+      }
     }
   }
 `;
+
 export const UPDATE_LIST_ITEM_LAYOUTS = gql`
   mutation MyMutation($_id: ID!, $layouts: AWSJSON) {
     updateListItem(_id: $_id, layouts: $layouts) {
@@ -170,6 +225,17 @@ export const UPDATE_LIST_ITEM_LAYOUTS = gql`
         caption
       }
       layouts
+      fields {
+        _id
+        label
+        fieldType
+        options
+        typeId {
+          _id
+          title
+          slug
+        }
+      }
     }
   }
 `;

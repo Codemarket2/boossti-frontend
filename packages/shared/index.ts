@@ -85,7 +85,7 @@ export function useLogoHook() {
           title: response?.data?.getListItemBySlug?.title
             ? response?.data?.getListItemBySlug?.title
             : null,
-          description: description ? description : null,
+          description: description || null,
           image:
             response?.data?.getListItemBySlug?.media?.length >= 1
               ? response?.data?.getListItemBySlug?.media[0]?.url

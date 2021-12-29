@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -24,16 +24,71 @@ const defualtValue = {
   media: [],
 };
 
+export default function FormViewWrapper({ form: { _id, name, fields, settings } }: IProps): any {
+  const { handleCreateResponse, createLoading } = useCreateResponse({ onAlert });
+  const [showMessage, setShowMessage] = useState(false);
+
+  const handleSubmit = async (values) => {
+    const payload = { formId: _id, values };
+    await handleCreateResponse(payload, fields);
+    setShowMessage(true);
+  };
+  return (
+    <div>
+      {settings?.showFormTitle && (
+        <InputGroup className="text-center">
+          <Typography variant="h4">{name}</Typography>
+        </InputGroup>
+      )}
+      {showMessage ? (
+        <div className="py-5">
+          <div className="ck-content">
+            {parse(settings?.onSubmitMessage || '<h2 class="text-center">Thank you</h2>')}
+          </div>
+          <InputGroup className="text-center">
+            {settings?.editResponse && (
+              <Button variant="outlined" color="primary" size="small">
+                Edit Response
+              </Button>
+            )}
+          </InputGroup>
+        </div>
+      ) : (
+        <FormView fields={fields} handleSubmit={handleSubmit} loading={createLoading} />
+      )}
+    </div>
+  );
+}
+
+interface IProps2 {
+  fields: any;
+  handleSubmit: (payload: any) => void;
+  loading?: boolean;
+  onCancel?: () => void;
+  initialValues?: any[];
+}
+
 const initialSubmitState = {
   validate: false,
-  showOnSubmitMessage: false,
+  // showOnSubmitMessage: false,
   loading: false,
 };
 
-export default function FormView({ form: { _id, name, fields, settings } }: IProps): any {
+export function FormView({
+  fields,
+  handleSubmit,
+  loading,
+  onCancel,
+  initialValues = [],
+}: IProps2): any {
   const [values, setValues] = useState([]);
   const [submitState, setSubmitState] = useState(initialSubmitState);
-  const { handleCreateResponse, createLoading } = useCreateResponse({ onAlert });
+
+  useEffect(() => {
+    if (initialValues?.length > 0 && values?.length === 0) {
+      setValues(initialValues);
+    }
+  }, [initialValues]);
 
   const onChange = (sValue) => {
     const newValue = { ...defualtValue, ...sValue };
@@ -71,11 +126,9 @@ export default function FormView({ form: { _id, name, fields, settings } }: IPro
     if (validate) {
       setSubmitState({ ...submitState, validate, loading: false });
     } else {
-      const payload = { formId: _id, values };
-      await handleCreateResponse(payload, fields);
+      await handleSubmit(values);
       setSubmitState({
         ...initialSubmitState,
-        showOnSubmitMessage: true,
       });
       setValues([]);
     }
@@ -83,57 +136,42 @@ export default function FormView({ form: { _id, name, fields, settings } }: IPro
 
   return (
     <div>
-      {settings?.showFormTitle && (
-        <InputGroup className="text-center">
-          <Typography variant="h4">{name}</Typography>
-        </InputGroup>
-      )}
-      {submitState.showOnSubmitMessage ? (
-        <div className="py-5">
-          <div className="ck-content">
-            {parse(settings?.onSubmitMessage || '<h2 class="text-center">Thank you</h2>')}
-          </div>
-          <InputGroup className="text-center">
-            {settings?.editResponse && (
-              <Button variant="outlined" color="primary" size="small">
-                Edit Response
-              </Button>
-            )}
-          </InputGroup>
-        </div>
-      ) : (
-        <Grid container spacing={0}>
-          {fields?.map((field) => (
-            <Grid item xs={field?.options?.halfWidth ? 6 : 12} key={field._id}>
-              <InputGroup key={field._id} className="px-2">
-                <Field
-                  disabled={submitState.loading}
-                  validate={submitState.validate}
-                  {...field}
-                  label={field?.options?.required ? `${field?.label}*` : field?.label}
-                  onChangeValue={onChange}
-                  value={values.filter((f) => f.field === field._id)[0]}
-                />
-              </InputGroup>
-            </Grid>
-          ))}
-          {fields?.length > 0 && (
-            <Grid item xs={12}>
-              <InputGroup className="px-2">
-                <LoadingButton
-                  loading={submitState.loading || createLoading}
-                  onClick={onSubmit}
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                >
-                  Submit
-                </LoadingButton>
-              </InputGroup>
-            </Grid>
-          )}
-        </Grid>
-      )}
+      <Grid container spacing={0}>
+        {fields?.map((field) => (
+          <Grid item xs={field?.options?.halfWidth ? 6 : 12} key={field._id}>
+            <InputGroup key={field._id} className="px-2">
+              <Field
+                disabled={submitState.loading}
+                validate={submitState.validate}
+                {...field}
+                label={field?.options?.required ? `${field?.label}*` : field?.label}
+                onChangeValue={onChange}
+                value={values.filter((f) => f.field === field._id)[0]}
+              />
+            </InputGroup>
+          </Grid>
+        ))}
+        {fields?.length > 0 && (
+          <Grid item xs={12}>
+            <InputGroup className="px-2">
+              <LoadingButton
+                loading={submitState.loading || loading}
+                onClick={onSubmit}
+                variant="contained"
+                color="primary"
+                size="small"
+              >
+                Submit
+              </LoadingButton>
+              {onCancel && (
+                <Button variant="outlined" size="small" className="ml-2" onClick={onCancel}>
+                  Cancel
+                </Button>
+              )}
+            </InputGroup>
+          </Grid>
+        )}
+      </Grid>
     </div>
   );
 }

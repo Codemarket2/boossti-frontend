@@ -43,6 +43,7 @@ interface IProps {
   layouts: any;
   itemSlug: string;
   _id: string;
+  children: any;
 }
 
 export default function LeftNavigation({
@@ -54,6 +55,7 @@ export default function LeftNavigation({
   layouts,
   _id,
   itemSlug,
+  children,
 }: IProps): any {
   const [state, setState] = useState({ selectedField: null });
   const { handleUpdateLayout } = useUpdateItemLayout({ slug: itemSlug, onAlert, layouts, _id });
@@ -73,92 +75,97 @@ export default function LeftNavigation({
     }
   };
 
-  return state.selectedField ? (
-    <Paper variant="outlined" style={style}>
-      <Typography variant="h5" className="d-flex align-items-center">
-        <Tooltip title="Go Back">
-          <IconButton onClick={() => setState({ ...state, selectedField: null })}>
-            <ArrowBackIcon />
-          </IconButton>
-        </Tooltip>
-        {state.selectedField?.label}
-      </Typography>
-      <Divider />
-      <div className="p-2">
-        {breakpoints.map((point) => (
-          <TextField
-            key={point.name}
-            className="my-2"
-            fullWidth
-            size="small"
-            label={point.label}
-            name={point.name}
-            variant="outlined"
-            type="number"
-            value={
-              layouts[state.selectedField?._id] && layouts[state.selectedField?._id][point.name]
-                ? layouts[state.selectedField?._id][point.name]
-                : ''
-            }
-            onChange={onChange}
-          />
-        ))}
-      </div>
-    </Paper>
-  ) : (
-    <Paper variant="outlined" style={style}>
-      <List component="nav" dense>
-        <ListItem>
-          <ListItemIcon className="mr-n4">
-            <LinkIcon />
-          </ListItemIcon>
-          <ListItemText primary="Fields" />
-        </ListItem>
-        <Divider />
-        <ListItem button>
-          <Link href={`${slug}#title`}>
-            <ListItemText primary="Title" />
-          </Link>
-        </ListItem>
-        <ListItem button>
-          <Link href={`${slug}#description`}>
-            <ListItemText primary="Description" />
-          </Link>
-        </ListItem>
-        <ListItem button>
-          <Link href={`${slug}#media`}>
-            <ListItemText primary="Media" />
-          </Link>
-        </ListItem>
-        {fields.length < 1 ? (
-          <div className="px-3">
-            <Skeleton height={70} />
-            <Skeleton height={70} />
+  return (
+    <div style={style}>
+      {state.selectedField ? (
+        <Paper variant="outlined">
+          <Typography variant="h5" className="d-flex align-items-center">
+            <Tooltip title="Go Back">
+              <IconButton onClick={() => setState({ ...state, selectedField: null })}>
+                <ArrowBackIcon />
+              </IconButton>
+            </Tooltip>
+            {state.selectedField?.label}
+          </Typography>
+          <Divider />
+          <div className="p-2">
+            {breakpoints.map((point) => (
+              <TextField
+                key={point.name}
+                className="my-2"
+                fullWidth
+                size="small"
+                label={point.label}
+                name={point.name}
+                variant="outlined"
+                type="number"
+                value={
+                  layouts[state.selectedField?._id] && layouts[state.selectedField?._id][point.name]
+                    ? layouts[state.selectedField?._id][point.name]
+                    : ''
+                }
+                onChange={onChange}
+              />
+            ))}
           </div>
-        ) : (
-          fields.map((fieldType, index) => (
-            <ListItem button key={fieldType._id} onClick={onClick}>
-              {fieldValueCount[index] > 0 && (
-                <ListItemIcon className="mr-n5">
-                  <Badge badgeContent={fieldValueCount[index]} color="primary" />
-                </ListItemIcon>
-              )}
-              <Link href={`${slug}#${convertToSlug(fieldType.label)}`}>
-                <ListItemText primary={fieldType.label} />
+        </Paper>
+      ) : (
+        <Paper variant="outlined">
+          <List component="nav" dense>
+            {/* <ListItem>
+              <ListItemIcon className="mr-n4">
+                <LinkIcon />
+              </ListItemIcon>
+              <ListItemText primary="Sections" />
+            </ListItem> 
+            <Divider /> */}
+            <ListItem button>
+              <Link href={`${slug}#title`}>
+                <ListItemText primary="Title" />
               </Link>
-              <ListItemSecondaryAction>
-                <IconButton
-                  edge="end"
-                  aria-label="more"
-                  onClick={() => setState({ ...state, selectedField: fieldType })}
-                >
-                  <MoreVertIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
             </ListItem>
-          ))
-        )}
-      </List>
-    </Paper>
+            <ListItem button>
+              <Link href={`${slug}#description`}>
+                <ListItemText primary="Description" />
+              </Link>
+            </ListItem>
+            <ListItem button>
+              <Link href={`${slug}#media`}>
+                <ListItemText primary="Media" />
+              </Link>
+            </ListItem>
+            {fields.length < 1 ? (
+              <div className="px-3">
+                <Skeleton height={70} />
+                <Skeleton height={70} />
+              </div>
+            ) : (
+              fields.map((fieldType, index) => (
+                <ListItem button key={fieldType._id} onClick={onClick}>
+                  {fieldValueCount[index] > 0 && (
+                    <ListItemIcon className="mr-n5">
+                      <Badge badgeContent={fieldValueCount[index]} color="primary" />
+                    </ListItemIcon>
+                  )}
+                  <Link href={`${slug}#${convertToSlug(fieldType.label)}`}>
+                    <ListItemText primary={fieldType.label} />
+                  </Link>
+                  <ListItemSecondaryAction>
+                    <IconButton
+                      edge="end"
+                      aria-label="more"
+                      onClick={() => setState({ ...state, selectedField: fieldType })}
+                    >
+                      <MoreVertIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              ))
+            )}
+          </List>
+        </Paper>
+      )}
+      {children}
+    </div>
   );
 }

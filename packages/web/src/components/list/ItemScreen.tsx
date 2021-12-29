@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import parse from 'html-react-parser';
 import { useRouter } from 'next/router';
 import EditIcon from '@material-ui/icons/Edit';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -35,23 +34,25 @@ import NotFound from '../common/NotFound';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
 import AppSwitch from '../common/AppSwitch';
 import DisplayRichText from '../common/DisplayRichText';
+import ListItemsFields from './ListItemsFields';
+import ListItemsFieldsValue from './ListItemsFieldsValue';
 
 interface IProps {
-  slug: any;
-  typeSlug: any;
+  slug: string;
   hideBreadcrumbs?: boolean;
   setItem?: any;
   onSlugUpdate?: (arg: string) => void;
   pushToAnchor?: () => void;
+  noTogglePreviewMode?: boolean;
 }
 
 export default function ItemScreen({
   slug,
-  typeSlug,
   hideBreadcrumbs = false,
   setItem,
   onSlugUpdate,
   pushToAnchor,
+  noTogglePreviewMode = false,
 }: IProps): any {
   const router = useRouter();
   const theme = useTheme();
@@ -59,10 +60,13 @@ export default function ItemScreen({
   const setting = useSelector((state: any) => state.setting);
   const [state, setState] = useState({ fieldName: '', fields: [], hideLeftNavigation: false });
   const [fieldValueCount, setFieldValueCount] = useState({});
-  const [previewMode, setPreviewMode] = useState(false);
+  const [previewMode, setPreviewMode] = useState(noTogglePreviewMode);
+  const { data, error } = useGetListItemBySlug({ slug });
 
   const deleteCallBack = () => {
-    router.push(`/types/${typeSlug}`);
+    router.push(
+      `/types/${data?.getListItemBySlug?.types && data?.getListItemBySlug?.types[0]?.slug}`,
+    );
   };
 
   const updateCallBack = (newSlug) => {
@@ -73,8 +77,6 @@ export default function ItemScreen({
   };
 
   const { handleDelete, deleteLoading } = useDeleteListItem({ onAlert });
-
-  const { data, error } = useGetListItemBySlug({ slug });
 
   const dispatch = useDispatch();
 
@@ -131,8 +133,8 @@ export default function ItemScreen({
   const hideleft = hideBreadcrumbs || state.hideLeftNavigation || previewMode;
 
   return (
-    <>
-      {previewMode && (
+    <div className={previewMode && 'mt-2'}>
+      {!hideBreadcrumbs && previewMode && (
         <Button
           style={{
             right: 50,
@@ -205,7 +207,9 @@ export default function ItemScreen({
                 style={{ maxHeight: '40vh' }}
                 onClick={handleHideBottomSheet}
                 {...leftNavigationProps}
-              />
+              >
+                <ListItemsFields listItem={data.getListItemBySlug} />
+              </LeftNavigation>
             </SwipeableDrawer>
           </Hidden>
         </>
@@ -222,7 +226,9 @@ export default function ItemScreen({
               overflowY: 'auto',
             }}
             {...leftNavigationProps}
-          />
+          >
+            <ListItemsFields listItem={data.getListItemBySlug} />
+          </LeftNavigation>
         </Hidden>
       )}
       <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
@@ -231,7 +237,13 @@ export default function ItemScreen({
           variant="outlined"
           className="p-2 pb-5"
         >
-          {!previewMode && (
+          {previewMode ? (
+            <Typography variant="h3" align="center" variantMapping={{ h3: 'h1' }}>
+              {data.getListItemBySlug.title.includes('-n-e-w')
+                ? 'Title'
+                : data.getListItemBySlug.title}
+            </Typography>
+          ) : (
             <>
               {state.fieldName === 'title' ? (
                 <InlineForm
@@ -272,7 +284,7 @@ export default function ItemScreen({
                   </Typography>
                 </>
               )}
-              <Divider className="my-2" />
+              {/* <Divider className="my-2" /> */}
               {state.fieldName === 'description' ? (
                 <InlineForm
                   multiline
@@ -296,7 +308,7 @@ export default function ItemScreen({
                   <CommentLikeShare parentId={data.getListItemBySlug._id} />
                 </>
               )}
-              <Divider className="my-2" />
+              {/* <Divider className="my-2" /> */}
               {state.fieldName === 'media' ? (
                 <MediaForm
                   state={crudState}
@@ -337,9 +349,10 @@ export default function ItemScreen({
             isPublish={data?.getListItemBySlug?.active}
             previewMode={previewMode}
           />
+          <ListItemsFieldsValue listItem={data?.getListItemBySlug} previewMode={previewMode} />
         </Paper>
       </div>
       <Backdrop open={deleteLoading || CRUDLoading} />
-    </>
+    </div>
   );
 }

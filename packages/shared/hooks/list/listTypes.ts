@@ -70,7 +70,7 @@ export function useGetListTypes(queryVariables?: IQueryProps) {
   return { data, error, loading, state, setState };
 }
 
-const parseListType = (lisType) => {
+export const parseListType = (lisType) => {
   return {
     ...lisType,
     fields: lisType?.fields?.map((m) => {
@@ -105,7 +105,6 @@ export function useGetListTypeBySlug({ slug }: any) {
         updateQuery: (prev, { subscriptionData }) => {
           if (!subscriptionData.data) return prev;
           const newListType = subscriptionData.data.updatedListType;
-          console.log({ newListType });
           return {
             ...prev,
             getListTypeBySlug: {
