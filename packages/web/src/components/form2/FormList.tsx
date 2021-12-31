@@ -66,13 +66,13 @@ export default function FormList(): any {
             {data.getForms.data.map((form) => (
               <Link href={`/forms/${form._id}`}>
                 <ListItem button key={form._id}>
+                  {console.log(form._id)}
                   <ListItemText
                     primary={form.name}
-                    secondary={`${form.createdBy?.name} ${
-                      moment(form.createdAt) > moment().subtract(7, 'days')
-                        ? moment(form.createdAt).fromNow()
-                        : moment(form.createdAt).format('LL')
-                    }`}
+                    secondary={`${form.createdBy?.name} ${moment(form.createdAt) > moment().subtract(7, 'days')
+                      ? moment(form.createdAt).fromNow()
+                      : moment(form.createdAt).format('LL')
+                      }`}
                   />
                 </ListItem>
               </Link>
