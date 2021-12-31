@@ -16,6 +16,8 @@ import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
 import ImageList from '../post/ImageList';
 import { FormView } from '../form2/FormView';
 import { onAlert } from '../../utils/alert';
+import StyleDrawer from '../style/StyleDrawer';
+import EditIcon from '@material-ui/icons/Edit';
 
 interface IProps {
   listItem: any;
@@ -26,12 +28,17 @@ const initialState = {
   showMenu: null,
   showForm: false,
   field: null,
+  drawer: false,
 };
 
 export default function ListItemsFieldsValue({ listItem, previewMode = false }: IProps) {
   const { onFieldsChange } = useUpdateListItemFields({ listItem, onAlert });
   const [state, setState] = useState(initialState);
-
+  const [styles, setStyles] = useState<any>({});
+  const removeStyle = (styleKey: string) => {
+    const { [styleKey]: removedStyle, ...restStyles } = styles;
+    setStyles(restStyles);
+  };
   const handleSubmit = (fieldId: string, values: any) => {
     onFieldsChange(
       listItem?.fields.map((field) =>
@@ -41,6 +48,14 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
     setState(initialState);
   };
 
+  const handleEditStyle = (fieldId: string, style: any) => {
+    onFieldsChange(
+      listItem?.fields.map((field) =>
+        field._id === fieldId ? { ...field, options: { ...field?.options, style } } : field,
+      ),
+    );
+    setState(initialState);
+  };
   return (
     <Grid container>
       {listItem?.fields?.map((field) => (
@@ -66,22 +81,50 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
               </Tooltip>
             </Typography>
           )}
-          {/* {JSON.stringify(field?.options?.grid)} */}
-          {state.showForm && field._id === state.field?._id ? (
+          {/* {JSON.stringify(field?.options)} */}
+          {state.field?._id != null ? (
+            state.drawer && field._id === state.field?._id ? (
+              <StyleDrawer
+                onClose={() => {
+                  if (Object.keys(styles).length != 0) {
+                    handleEditStyle(field._id, styles);
+                    setState({ ...state, drawer: false });
+                  } else {
+                    setState({ ...state, drawer: false });
+                  }
+                }}
+                open={state.drawer}
+                styles={styles}
+                onStyleChange={(value) => setStyles({ ...styles, ...value })}
+                removeStyle={removeStyle}
+              />
+            ) : null
+          ) : null}
+          {state.showForm && field._id === state.field?._id && (
             <FormView
               fields={[field]}
-              handleSubmit={(values) => handleSubmit(field._id, values)}
+              handleSubmit={(values) => {
+                handleSubmit(field._id, values);
+                console.log(field._id);
+              }}
               onCancel={() => setState(initialState)}
               initialValues={field?.options?.values || []}
             />
+          )}
+
+          {field.options.style ? (
+            <div style={{ cursor: 'pointer', ...field.options.style }}>
+              <ShowValue
+                field={field}
+                value={field?.options?.values && field?.options?.values[0]}
+              />
+            </div>
           ) : (
-            <div>
-              {field?.options?.values && (
-                <ShowValue
-                  field={field}
-                  value={field?.options?.values && field?.options?.values[0]}
-                />
-              )}
+            <div style={{ cursor: 'pointer', ...styles }}>
+              <ShowValue
+                field={field}
+                value={field?.options?.values && field?.options?.values[0]}
+              />
             </div>
           )}
           {field?.options?.showCommentBox && <CommentLikeShare parentId={field._id} />}
@@ -105,6 +148,12 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
             <ListItemText primary="Add Value" />
           </MenuItem>
         )}
+        <MenuItem onClick={() => setState({ ...state, showMenu: false, drawer: true })}>
+          <ListItemIcon className="mr-n4">
+            <EditIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary="Edit style" />
+        </MenuItem>
       </CRUDMenu>
     </Grid>
   );
