@@ -14,7 +14,7 @@ import CRUDMenu from '../common/CRUDMenu';
 import DisplayRichText from '../common/DisplayRichText';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
 import ImageList from '../post/ImageList';
-import { FormView } from '../form2/FormView';
+import { filterValues, FormView } from '../form2/FormView';
 import { onAlert } from '../../utils/alert';
 
 interface IProps {
@@ -66,7 +66,6 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
               </Tooltip>
             </Typography>
           )}
-          {/* {JSON.stringify(field?.options?.grid)} */}
           {state.showForm && field._id === state.field?._id ? (
             <FormView
               fields={[field]}
@@ -76,12 +75,12 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
             />
           ) : (
             <div>
-              {field?.options?.values && (
-                <ShowValue
-                  field={field}
-                  value={field?.options?.values && field?.options?.values[0]}
-                />
-              )}
+              {field?.options?.values &&
+                filterValues(field?.options?.values, field).map((value, i) => (
+                  <div key={i}>
+                    <ShowValue field={field} value={value} />
+                  </div>
+                ))}
             </div>
           )}
           {field?.options?.showCommentBox && <CommentLikeShare parentId={field._id} />}
