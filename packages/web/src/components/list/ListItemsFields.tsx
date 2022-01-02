@@ -9,8 +9,11 @@ interface IProps {
 export default function ListTypeFields({ listItem }: IProps) {
   const { onFieldsChange } = useUpdateListItemFields({ listItem, onAlert });
   return (
-    <div>
-      <FormFields fields={listItem?.fields || []} setFields={onFieldsChange} title="Sections" />
-    </div>
+    <FormFields
+      fields={listItem?.fields || []}
+      setFields={onFieldsChange}
+      title="Sections"
+      isSection
+    />
   );
 }

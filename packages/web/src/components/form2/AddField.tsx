@@ -15,6 +15,8 @@ import LoadingButton from '../common/LoadingButton';
 import { onAlert } from '../../utils/alert';
 import TypesAutocomplete from './TypesAutocomplete';
 
+export const sectionFieldTypes = [{ label: 'Form', value: 'form' }];
+
 export const fieldTypes = [
   { label: 'Text', value: 'text' },
   { label: 'Number', value: 'number' },
@@ -37,9 +39,15 @@ interface IProps {
   onCancel: () => void;
   onSave: (field: any, action: string) => void;
   field: any;
+  isSection?: boolean;
 }
 
-export default function FieldForm({ onCancel, onSave, field = null }: IProps): any {
+export default function FieldForm({
+  onCancel,
+  onSave,
+  field = null,
+  isSection = false,
+}: IProps): any {
   const { formik, formLoading, setFormValues } = useAddFields({
     onAlert,
     onSave,
@@ -83,11 +91,13 @@ export default function FieldForm({ onCancel, onSave, field = null }: IProps): a
             onChange={formik.handleChange}
             label="Field Type"
           >
-            {fieldTypes?.map((option, index) => (
-              <MenuItem value={option.value} key={index}>
-                {option.label}
-              </MenuItem>
-            ))}
+            {(isSection ? [...fieldTypes, ...sectionFieldTypes] : fieldTypes)?.map(
+              (option, index) => (
+                <MenuItem value={option.value} key={index}>
+                  {option.label}
+                </MenuItem>
+              ),
+            )}
           </Select>
           {formik.touched.fieldType && formik.errors.fieldType && (
             <FormHelperText className="text-danger">{formik.errors.fieldType}</FormHelperText>

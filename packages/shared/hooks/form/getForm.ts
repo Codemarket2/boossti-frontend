@@ -6,15 +6,15 @@ import { GET_FORMS, GET_FORM } from '../../graphql/query/form';
 interface IProps {
   page?: number;
   limit?: number;
-  search?: string;
+  // search?: string;
 }
 
 // const defaultQueryVariables = { page: 1, limit: 20, search: '' };
 
-export function useGetForms({ page = 1, limit = 20, search = '' }: IProps): any {
+export function useGetForms({ page = 1, limit = 20 }: IProps) {
   const [state, setState] = useState({
-    page: 1,
-    limit: 20,
+    page,
+    limit,
     search: '',
     showSearch: false,
   });
