@@ -1,3 +1,4 @@
+import EditIcon from '@material-ui/icons/Edit';
 import moment from 'moment';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -16,6 +17,7 @@ import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
 import ImageList from '../post/ImageList';
 import { filterValues, FormView } from '../form2/FormView';
 import { onAlert } from '../../utils/alert';
+import StyleDrawer from '../style/StyleDrawer';
 
 interface IProps {
   listItem: any;
@@ -26,11 +28,19 @@ const initialState = {
   showMenu: null,
   showForm: false,
   field: null,
+  drawer: false,
 };
 
 export default function ListItemsFieldsValue({ listItem, previewMode = false }: IProps) {
   const { onFieldsChange } = useUpdateListItemFields({ listItem, onAlert });
   const [state, setState] = useState(initialState);
+
+  const handleRemoveStyle = (field: any, styleKey: string) => {
+    if (field?.options?.style) {
+      const { [styleKey]: removedStyle, ...restStyles } = field?.options?.style;
+      handleEditStyle(field._id, restStyles);
+    }
+  };
 
   const handleSubmit = (fieldId: string, values: any) => {
     onFieldsChange(
@@ -39,6 +49,14 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
       ),
     );
     setState(initialState);
+  };
+
+  const handleEditStyle = (fieldId: string, style: any) => {
+    onFieldsChange(
+      listItem?.fields.map((field) =>
+        field._id === fieldId ? { ...field, options: { ...field?.options, style } } : field,
+      ),
+    );
   };
 
   return (
@@ -66,6 +84,21 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
               </Tooltip>
             </Typography>
           )}
+          {state.drawer && field._id === state.field?._id ? (
+            <StyleDrawer
+              onClose={() => setState(initialState)}
+              open={state.drawer}
+              styles={field?.options?.style || {}}
+              handleResetStyle={() => handleEditStyle(field._id, {})}
+              onStyleChange={(value) =>
+                handleEditStyle(
+                  field._id,
+                  field?.options?.style ? { ...field?.options?.style, ...value } : value,
+                )
+              }
+              removeStyle={(styleKey) => handleRemoveStyle(field, styleKey)}
+            />
+          ) : null}
           {state.showForm && field._id === state.field?._id ? (
             <FormView
               fields={[field]}
@@ -77,7 +110,7 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
             <div>
               {field?.options?.values &&
                 filterValues(field?.options?.values, field).map((value, i) => (
-                  <div key={i}>
+                  <div key={i} style={field?.options?.style ? field?.options?.style : {}}>
                     <ShowValue field={field} value={value} />
                   </div>
                 ))}
@@ -104,6 +137,12 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
             <ListItemText primary="Add Value" />
           </MenuItem>
         )}
+        <MenuItem onClick={() => setState({ ...state, showMenu: false, drawer: true })}>
+          <ListItemIcon className="mr-n4">
+            <EditIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary="Edit style" />
+        </MenuItem>
       </CRUDMenu>
     </Grid>
   );
