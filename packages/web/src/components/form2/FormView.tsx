@@ -18,7 +18,7 @@ interface IProps {
   form: any;
 }
 
-const defualtValue = {
+export const defualtValue = {
   field: '',
   value: '',
   valueNumber: null,

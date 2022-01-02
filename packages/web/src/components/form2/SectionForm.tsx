@@ -22,7 +22,6 @@ import { onAlert } from '../../utils/alert';
 import SelectFormDrawer from './SelectFormDrawer';
 import ResponseCount from './ResponseCount';
 
-
 interface IProps {
   field: any;
   parentId: string;
@@ -40,7 +39,7 @@ const initialState = {
 export default function FormC({ field, parentId, previewMode = false }: IProps): any {
   const [state, setState] = useState(initialState);
   const { data, error } = useGetFieldValuesByItem({ parentId, field: field._id });
-  console.log(data)
+
   const { handleCreateField } = useCreateFieldValue();
   const { handleUpdateField } = useUpdateFieldValue();
   const { handleCreateForm } = useCreateForm({ onAlert });
@@ -80,10 +79,9 @@ export default function FormC({ field, parentId, previewMode = false }: IProps):
   const handleSelectForm = async () => {
     try {
       setState({ ...initialState, backdrop: true });
-      const fieldId = data?.getFieldValuesByItem?.data[0]?.value
+      const fieldId = data?.getFieldValuesByItem?.data[0]?.value;
       setState({ ...initialState, select: true, fieldId });
-    }
-    catch (err) {
+    } catch (err) {
       alert(`Error ${err.message}`);
       setState({ ...state, backdrop: false });
     }
@@ -94,7 +92,6 @@ export default function FormC({ field, parentId, previewMode = false }: IProps):
   }
   return (
     <div>
-
       {!previewMode && (
         <>
           <Divider />
@@ -132,8 +129,18 @@ export default function FormC({ field, parentId, previewMode = false }: IProps):
           <FieldViewWrapper _id={data?.getFieldValuesByItem?.data[0]?.value} />
         </>
       )}
-      {state.fieldId && state.edit && (<EditFormDrawer formId={state.fieldId} open onClose={() => setState(initialState)} />)}
-      {state.select && (<SelectFormDrawer formData={data} field={field._id} parentId={parentId} open onClose={() => setState(initialState)} />)}
+      {state.fieldId && state.edit && (
+        <EditFormDrawer formId={state.fieldId} open onClose={() => setState(initialState)} />
+      )}
+      {state.select && (
+        <SelectFormDrawer
+          formData={data}
+          field={field._id}
+          parentId={parentId}
+          open
+          onClose={() => setState(initialState)}
+        />
+      )}
       {state.backdrop && <Backdrop open={state.backdrop} />}
     </div>
   );

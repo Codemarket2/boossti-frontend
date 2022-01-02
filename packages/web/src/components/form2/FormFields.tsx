@@ -41,9 +41,15 @@ type IProps = {
   fields: any[];
   setFields: (newFields: any[]) => void;
   title?: string;
+  isSection?: boolean;
 };
 
-export default function FormFields({ fields = [], setFields, title = 'Fields' }: IProps): any {
+export default function FormFields({
+  fields = [],
+  setFields,
+  title = 'Fields',
+  isSection = false,
+}: IProps): any {
   const [values, setValues] = useState(initialValues);
 
   function onDragEnd(result) {
@@ -104,6 +110,7 @@ export default function FormFields({ fields = [], setFields, title = 'Fields' }:
             );
           }}
           onClose={() => setValues(initialValues)}
+          isSection
         />
       ) : (
         <>
@@ -124,6 +131,7 @@ export default function FormFields({ fields = [], setFields, title = 'Fields' }:
               field={values.field}
               onSave={onSave}
               onCancel={() => setValues(initialValues)}
+              isSection={isSection}
             />
           )}
           <List dense>
