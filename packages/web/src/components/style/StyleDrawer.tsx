@@ -4,6 +4,7 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import IconButton from '@material-ui/core/IconButton';
 import Close from '@material-ui/icons/Close';
+import Refresh from '@material-ui/icons/Refresh';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputGroup from '../common/InputGroup';
@@ -15,6 +16,7 @@ interface IProps {
   styles: any;
   onStyleChange: (value: any) => void;
   removeStyle: (styleKey: any) => void;
+  handleResetStyle: () => void;
 }
 
 // const appendPx = (value) => `${value}px`;
@@ -26,17 +28,30 @@ const removePx = (value) => {
   }
 };
 
-export default function StyleDrawer({ open, onClose, styles, onStyleChange, removeStyle }: IProps) {
+export default function StyleDrawer({
+  open,
+  onClose,
+  styles,
+  onStyleChange,
+  removeStyle,
+  handleResetStyle,
+}: IProps) {
   return (
     <Drawer
       ModalProps={{ BackdropProps: { invisible: true } }}
       elevation={5}
       anchor="right"
       open={open}
-      onClose={onClose}>
+      onClose={onClose}
+    >
       <div style={{ minWidth: 300 }} className="p-2">
         <div className="d-flex justify-content-between align-items-center">
-          <span>Styles</span>
+          <div>
+            <span>Styles</span>
+            <IconButton onClick={handleResetStyle} size="small" edge="end">
+              <Refresh />
+            </IconButton>
+          </div>
           <IconButton onClick={onClose} size="small" edge="end">
             <Close />
           </IconButton>
@@ -85,7 +100,8 @@ export default function StyleDrawer({ open, onClose, styles, onStyleChange, remo
               onChange={(e) => {
                 onStyleChange({ textAlign: e.target.value });
               }}
-              label="Text Align">
+              label="Text Align"
+            >
               <MenuItem value="left">Left</MenuItem>
               <MenuItem value="center">Center</MenuItem>
               <MenuItem value="right">Right</MenuItem>
@@ -108,7 +124,8 @@ export default function StyleDrawer({ open, onClose, styles, onStyleChange, remo
                   removeStyle('fontFamily');
                 }
               }}
-              label="Font Family">
+              label="Font Family"
+            >
               <MenuItem value="systemDefault">System Default</MenuItem>
               <MenuItem value="serif">Serif</MenuItem>
               <MenuItem value="sans-serif">Sans-serif</MenuItem>

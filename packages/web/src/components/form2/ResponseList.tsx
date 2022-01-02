@@ -100,10 +100,13 @@ export default function ResponseList({ form, hideDelete = false }: IProps): any 
                   </TableCell>
                   {form?.fields?.map((field, i) => (
                     <TableCell key={i}>
-                      <ShowValue
-                        field={field}
-                        value={response?.values?.filter((v) => v.field === field._id)[0]}
-                      />
+                      {response?.values
+                        ?.filter((v) => v.field === field._id)
+                        ?.map((value) => (
+                          <div key={value?._id}>
+                            <ShowValue field={field} value={value} />
+                          </div>
+                        ))}
                     </TableCell>
                   ))}
                 </TableRow>

@@ -1,3 +1,4 @@
+import EditIcon from '@material-ui/icons/Edit';
 import moment from 'moment';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -14,10 +15,9 @@ import CRUDMenu from '../common/CRUDMenu';
 import DisplayRichText from '../common/DisplayRichText';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
 import ImageList from '../post/ImageList';
-import { FormView } from '../form2/FormView';
+import { filterValues, FormView } from '../form2/FormView';
 import { onAlert } from '../../utils/alert';
 import StyleDrawer from '../style/StyleDrawer';
-import EditIcon from '@material-ui/icons/Edit';
 
 interface IProps {
   listItem: any;
@@ -34,11 +34,14 @@ const initialState = {
 export default function ListItemsFieldsValue({ listItem, previewMode = false }: IProps) {
   const { onFieldsChange } = useUpdateListItemFields({ listItem, onAlert });
   const [state, setState] = useState(initialState);
-  const [styles, setStyles] = useState<any>({});
-  const removeStyle = (styleKey: string) => {
-    const { [styleKey]: removedStyle, ...restStyles } = styles;
-    setStyles(restStyles);
+
+  const handleRemoveStyle = (field: any, styleKey: string) => {
+    if (field?.options?.style) {
+      const { [styleKey]: removedStyle, ...restStyles } = field?.options?.style;
+      handleEditStyle(field._id, restStyles);
+    }
   };
+
   const handleSubmit = (fieldId: string, values: any) => {
     onFieldsChange(
       listItem?.fields.map((field) =>
@@ -54,8 +57,8 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
         field._id === fieldId ? { ...field, options: { ...field?.options, style } } : field,
       ),
     );
-    setState(initialState);
   };
+
   return (
     <Grid container>
       {listItem?.fields?.map((field) => (
@@ -81,50 +84,36 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
               </Tooltip>
             </Typography>
           )}
-          {/* {JSON.stringify(field?.options)} */}
-          {state.field?._id != null ? (
-            state.drawer && field._id === state.field?._id ? (
-              <StyleDrawer
-                onClose={() => {
-                  if (Object.keys(styles).length != 0) {
-                    handleEditStyle(field._id, styles);
-                    setState({ ...state, drawer: false });
-                  } else {
-                    setState({ ...state, drawer: false });
-                  }
-                }}
-                open={state.drawer}
-                styles={styles}
-                onStyleChange={(value) => setStyles({ ...styles, ...value })}
-                removeStyle={removeStyle}
-              />
-            ) : null
+          {state.drawer && field._id === state.field?._id ? (
+            <StyleDrawer
+              onClose={() => setState(initialState)}
+              open={state.drawer}
+              styles={field?.options?.style || {}}
+              handleResetStyle={() => handleEditStyle(field._id, {})}
+              onStyleChange={(value) =>
+                handleEditStyle(
+                  field._id,
+                  field?.options?.style ? { ...field?.options?.style, ...value } : value,
+                )
+              }
+              removeStyle={(styleKey) => handleRemoveStyle(field, styleKey)}
+            />
           ) : null}
-          {state.showForm && field._id === state.field?._id && (
+          {state.showForm && field._id === state.field?._id ? (
             <FormView
               fields={[field]}
-              handleSubmit={(values) => {
-                handleSubmit(field._id, values);
-                console.log(field._id);
-              }}
+              handleSubmit={(values) => handleSubmit(field._id, values)}
               onCancel={() => setState(initialState)}
               initialValues={field?.options?.values || []}
             />
-          )}
-
-          {field.options.style ? (
-            <div style={{ cursor: 'pointer', ...field.options.style }}>
-              <ShowValue
-                field={field}
-                value={field?.options?.values && field?.options?.values[0]}
-              />
-            </div>
           ) : (
-            <div style={{ cursor: 'pointer', ...styles }}>
-              <ShowValue
-                field={field}
-                value={field?.options?.values && field?.options?.values[0]}
-              />
+            <div>
+              {field?.options?.values &&
+                filterValues(field?.options?.values, field).map((value, i) => (
+                  <div key={i} style={field?.options?.style ? field?.options?.style : {}}>
+                    <ShowValue field={field} value={value} />
+                  </div>
+                ))}
             </div>
           )}
           {field?.options?.showCommentBox && <CommentLikeShare parentId={field._id} />}
