@@ -128,10 +128,10 @@ export default function Album() {
             </Typography>
             <div className="text-center">
               <Button variant="contained" color="primary" className="m-2">
-                Main call to action
+                805-300-7217
               </Button>
               <Button variant="outlined" color="primary" className="m-2">
-                Secondary action
+                info@boossti.com
               </Button>
             </div>
           </Container>
