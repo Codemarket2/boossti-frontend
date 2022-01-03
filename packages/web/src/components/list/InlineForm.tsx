@@ -1,10 +1,8 @@
-import dynamic from 'next/dynamic';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
-
-const RichTextarea = dynamic(() => import('../common/RichTextarea'), { ssr: false });
+import RichTextarea from '../common/RichTextarea2';
 
 interface IProps {
   label: string;

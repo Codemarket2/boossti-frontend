@@ -1,30 +1,17 @@
+import moment from 'moment';
 import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
-import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import { useCRUDFieldValue } from '@frontend/shared/hooks/field';
-import { useGetListItemsByType } from '@frontend/shared/hooks/list';
 import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
-import InputGroup from '../common/InputGroup';
-import LoadingButton from '../common/LoadingButton';
-import ItemFormDrawer from '../list/ItemFormDrawer';
 import ImagePicker from '../common/ImagePicker';
-import { onAlert } from '../../utils/alert';
-import { useEffect, useState } from 'react';
-import moment from 'moment';
 import AddressSearch from '../common/AddressSearch';
 import ListTypeAutoComplete from '../list/ListTypeAutoComplete';
-import dynamic from 'next/dynamic';
-
-const RichTextarea = dynamic(() => import('../common/RichTextarea'), { ssr: false });
+import RichTextarea from '../common/RichTextarea2';
 
 interface IProps {
   label: string;
@@ -97,7 +84,8 @@ export default function FieldValueForm2({
           aria-label="value"
           name="value"
           value={value}
-          onChange={({ target }) => onChange(target.value)}>
+          onChange={({ target }) => onChange(target.value)}
+        >
           <FormControlLabel value="yes" control={<Radio color="primary" />} label="Yes" />
           <FormControlLabel value="no" control={<Radio color="primary" />} label="No" />
         </RadioGroup>
