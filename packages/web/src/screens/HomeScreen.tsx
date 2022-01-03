@@ -115,12 +115,11 @@ export default function Album() {
         <div className={classes.heroContent}>
           <Container maxWidth="sm">
             <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-              Album layout
+              Full Service Marketing Agency
             </Typography>
             <Typography variant="h5" align="center" color="textSecondary" paragraph>
-              Something short and leading about the collection below—its contents, the creator, etc.
-              Make it short and sweet, but not too short so folks don&apos;t simply skip over it
-              entirely.
+              End-to-end marketing services for all channels to help your business grow and thrive
+              in the marketplace.
             </Typography>
             <div className="text-center">
               <Button variant="contained" color="primary" className="m-2">
