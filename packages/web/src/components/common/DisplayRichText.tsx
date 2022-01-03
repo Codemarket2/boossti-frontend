@@ -21,7 +21,7 @@ const StyledDiv = styled.div`
   }
 `;
 
-export default function DisplayRichText({ value = 'dd' }: IProps) {
+export default function DisplayRichText({ value = '' }: IProps) {
   return <StyledDiv className="ck-content">{parse(transform(value))}</StyledDiv>;
 }
 

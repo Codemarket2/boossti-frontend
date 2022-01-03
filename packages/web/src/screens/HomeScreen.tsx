@@ -1,4 +1,3 @@
-import { Fragment } from 'react';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -10,8 +9,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import StarIcon from '@material-ui/icons/Star';
-import AppBar from '../components/common/AppBar';
 import CardHeader from '@material-ui/core/CardHeader';
+import AppBar from '../components/common/AppBar';
 
 function Copyright() {
   return (
@@ -68,7 +67,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+const cards = [
+  {
+    image: require('../assets/images/vijaalogo.jpeg'),
+    title: 'Heading',
+    description: 'This is a media card. You can use this section to describe the content.',
+  },
+  {
+    image: 'https://source.unsplash.com/random',
+    title: 'Heading',
+    description: 'This is a media card. You can use this section to describe the content.',
+  },
+  {
+    image: 'https://source.unsplash.com/random',
+    title: 'Heading',
+    description: 'This is a media card. You can use this section to describe the content.',
+  },
+];
 
 const tiers = [
   {
@@ -109,7 +124,7 @@ export default function Album() {
   const classes = useStyles();
 
   return (
-    <Fragment>
+    <>
       <AppBar />
       <main>
         <div className={classes.heroContent}>
@@ -134,21 +149,15 @@ export default function Album() {
         <Container className={classes.cardGrid} maxWidth="md">
           {/* End hero unit */}
           <Grid container spacing={4}>
-            {cards.map((card) => (
-              <Grid item key={card} xs={12} sm={6} md={4}>
+            {cards.map((card, i) => (
+              <Grid item key={i} xs={12} sm={6} md={4}>
                 <Card className={classes.card}>
-                  <CardMedia
-                    className={classes.cardMedia}
-                    image="https://source.unsplash.com/random"
-                    title="Image title"
-                  />
+                  <CardMedia className={classes.cardMedia} image={card.image} title={card.title} />
                   <CardContent className={classes.cardContent}>
                     <Typography gutterBottom variant="h5" component="h2">
-                      Heading
+                      {card.title}
                     </Typography>
-                    <Typography>
-                      This is a media card. You can use this section to describe the content.
-                    </Typography>
+                    <Typography>{card.description}</Typography>
                   </CardContent>
                   <CardActions>
                     <Button size="small" color="primary">
@@ -231,6 +240,6 @@ export default function Album() {
         <Copyright />
       </footer>
       {/* End footer */}
-    </Fragment>
+    </>
   );
 }

@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Comment } from 'semantic-ui-react';
-import parse from 'html-react-parser';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { IconButton } from '@material-ui/core';
-
 import { useGetLikes } from '@frontend/shared/hooks/like/getLike';
 import { useGetActionCounts } from '@frontend/shared/hooks/comment/getComment';
 import CommentUI from './Comment';
-import Like from '../like/Like';
-import LikeModal from '../like/LikeModal';
+import DisplayRichText from '../common/DisplayRichText';
 import 'semantic-ui-css/semantic.min.css';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
 
@@ -92,7 +89,7 @@ export default function DisplayCard({
             </div>
           </Comment.Metadata>
           <Comment.Text data-testid="comment-body">
-            <div className="ck-content">{parse(commentedUser?.body)}</div>
+            <DisplayRichText value={commentedUser?.body} />
           </Comment.Text>
           {/* {open && (
             <LikeModal
@@ -187,7 +184,8 @@ export default function DisplayCard({
                 commentId={commentedUser._id}
                 itemSlug={itemSlug}
                 index={shareIndex}
-                fieldTitle={fieldTitle}>
+                fieldTitle={fieldTitle}
+              >
                 {currentUserId === commentedUser!.createdBy!._id && (
                   <>
                     <IconButton onClick={() => setEdit(true)}>

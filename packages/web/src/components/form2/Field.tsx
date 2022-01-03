@@ -1,4 +1,3 @@
-import dynamic from 'next/dynamic';
 import moment from 'moment';
 import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -13,13 +12,12 @@ import { MuiPickersUtilsProvider, DateTimePicker, DatePicker } from '@material-u
 import PhoneInput from 'react-phone-input-2';
 import FormLabel from '@material-ui/core/FormLabel';
 import ImagePicker from '../common/ImagePicker';
+import RichTextarea from '../common/RichTextarea2';
 // import AddressSearch from '../common/AddressSearch';
 import ListAutocomplete from './ListAutocomplete';
 import { validateValue } from './validate';
 
 import 'react-phone-input-2/lib/style.css';
-
-const RichTextarea = dynamic(() => import('../common/RichTextarea'), { ssr: false });
 
 interface IProps {
   disabled?: boolean;
