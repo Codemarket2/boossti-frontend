@@ -104,7 +104,11 @@ export default function AppBarComponent() {
         <Link href="/">
           {setting.metaTags.image ? (
             <StyledImageContainer>
-              <img src={setting.metaTags.image} alt={setting.metaTags.title} />
+              <img
+                style={{ maxHeight: 60 }}
+                src={setting.metaTags.image}
+                alt={setting.metaTags.title}
+              />
             </StyledImageContainer>
           ) : (
             <StyledTitle variant="h5" color="textPrimary">
