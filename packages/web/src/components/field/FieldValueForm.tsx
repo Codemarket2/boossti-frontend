@@ -1,4 +1,3 @@
-import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import moment from 'moment';
 import Button from '@material-ui/core/Button';
@@ -21,8 +20,7 @@ import ItemFormDrawer from '../list/ItemFormDrawer';
 import ImagePicker from '../common/ImagePicker';
 import { onAlert } from '../../utils/alert';
 import AddressSearch from '../common/AddressSearch';
-
-const RichTextarea = dynamic(() => import('../common/RichTextarea'), { ssr: false });
+import RichTextarea from '../common/RichTextarea2';
 
 interface IProps {
   onCancel: () => void;

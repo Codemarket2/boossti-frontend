@@ -1,7 +1,5 @@
 import Button from '@material-ui/core/Button';
-import dynamic from 'next/dynamic';
-
-const RichTextarea = dynamic(() => import('../common/RichTextarea'), { ssr: false });
+import RichTextarea from '../common/RichTextarea2';
 
 interface IComment {
   inputVal: string;
@@ -27,7 +25,8 @@ export default function CommentInput({
         onClick={onClick}
         data-testid="add-comment"
         variant="contained"
-        color="primary">
+        color="primary"
+      >
         add comment
       </Button>
     </div>

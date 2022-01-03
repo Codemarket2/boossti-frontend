@@ -113,7 +113,7 @@ export default function FormFields({
             label="Required"
           />
         </InputGroup>
-        <InputGroup>
+        {/* <InputGroup>
           <FormControlLabel
             control={
               <Checkbox
@@ -125,7 +125,7 @@ export default function FormFields({
             }
             label="Half Width"
           />
-        </InputGroup>
+        </InputGroup> */}
         <InputGroup>
           <FormControlLabel
             control={

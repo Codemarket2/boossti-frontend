@@ -1,4 +1,3 @@
-import dynamic from 'next/dynamic';
 import { useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -18,7 +17,7 @@ import { useFormActions } from '@frontend/shared/hooks/form';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
 import { onAlert } from '../../utils/alert';
-const RichTextarea = dynamic(() => import('../common/RichTextarea'), { ssr: false });
+import RichTextarea from '../common/RichTextarea2';
 
 interface IProps {
   onCancel: () => void;

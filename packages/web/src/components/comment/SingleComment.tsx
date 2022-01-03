@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Comment, Segment } from 'semantic-ui-react';
 import moment from 'moment';
-import parse from 'html-react-parser';
-import { Container } from '@material-ui/core';
 import { useRouter } from 'next/router';
-
 import { useGetComment } from '@frontend/shared/hooks/comment/getComment';
 import ErrorLoading from '../common/ErrorLoading';
+import DisplayRichText from '../common/DisplayRichText';
 
 interface IProps {
   _id: string;
@@ -70,14 +68,15 @@ export default function SingleComment({ _id, itemSlug, fieldTitle, setShowHideCo
                       )}
                     </Comment.Metadata>
                     <Comment.Text data-testid="comment-body">
-                      <div className="ck-content">{parse(data?.getComment?.body)}</div>
+                      <DisplayRichText value={data?.getComment?.body} />
                     </Comment.Text>
                     <Comment.Actions>
                       <Comment.Action
                         onClick={() => {
                           setShowHideComments(true);
                           setShowSingleComment(false);
-                        }}>
+                        }}
+                      >
                         Show all comments
                       </Comment.Action>
                     </Comment.Actions>

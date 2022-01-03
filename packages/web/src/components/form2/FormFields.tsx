@@ -144,7 +144,7 @@ export default function FormFields({
                         {(draggableProvided, draggableSnapshot) => (
                           <ListItem
                             button
-                            onClick={() => setValues({ ...initialValues, field, showForm: true })}
+                            // onClick={() => setValues({ ...initialValues, field, showForm: true })}
                             selected={
                               draggableSnapshot.isDragging || field?._id === values?.field?._id
                             }

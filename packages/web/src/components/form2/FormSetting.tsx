@@ -1,11 +1,9 @@
-import dynamic from 'next/dynamic';
 import Paper from '@material-ui/core/Paper';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import InputLabel from '@material-ui/core/InputLabel';
 import InputGroup from '../common/InputGroup';
-
-const RichTextarea = dynamic(() => import('../common/RichTextarea'), { ssr: false });
+import RichTextarea from '../common/RichTextarea2';
 
 export default function FormSetting({ settings, onChange }: any): any {
   return (

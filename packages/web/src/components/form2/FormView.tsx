@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import parse from 'html-react-parser';
 import FormLabel from '@material-ui/core/FormLabel';
 import IconButton from '@material-ui/core/IconButton';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
@@ -13,6 +12,7 @@ import LoadingButton from '../common/LoadingButton';
 import Field from './Field';
 import { validateValue } from './validate';
 import { onAlert } from '../../utils/alert';
+import DisplayRichText from '../common/DisplayRichText';
 
 interface IProps {
   form: any;
@@ -46,9 +46,9 @@ export default function FormViewWrapper({ form: { _id, name, fields, settings } 
       )}
       {showMessage ? (
         <div className="py-5">
-          <div className="ck-content">
-            {parse(settings?.onSubmitMessage || '<h2 class="text-center">Thank you</h2>')}
-          </div>
+          <DisplayRichText
+            value={settings?.onSubmitMessage || '<h2 class="text-center">Thank you</h2>'}
+          />
           <InputGroup className="text-center">
             {settings?.editResponse && (
               <Button variant="outlined" color="primary" size="small">
@@ -177,18 +177,19 @@ export function FormView({
     setValues([...oldValues, ...newValues]);
   };
 
-  // let newValues = values;
-
-  // (values.filter((f) => f.field === field._id).length
-  //               ? values.filter((f) => f.field === field._id)
-  //               : [{ ...defualtValue, field: field._id }]
-  //             )
-
   return (
     <div>
       <Grid container spacing={0}>
         {fields?.map((field) => (
-          <Grid item xs={field?.options?.halfWidth ? 6 : 12} key={field._id}>
+          <Grid
+            item
+            xs={field?.options?.grid?.xs || 12}
+            sm={field?.options?.grid?.sm}
+            md={field?.options?.grid?.md}
+            lg={field?.options?.grid?.lg}
+            xl={field?.options?.grid?.xl}
+            key={field._id}
+          >
             <InputGroup key={field._id} className="">
               {field?.options?.multipleValues && (
                 <>

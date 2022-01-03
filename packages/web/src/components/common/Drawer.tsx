@@ -46,11 +46,13 @@ export default function DrawerContent({ showDrawer, toggleDrawer, admin }: IProp
         style={{ maxWidth: '300px' }}
         className="d-flex justify-content-between  align-items-center align-content-center"
       >
-        <img
-          style={{ width: '60%' }}
-          src={setting?.metaTags?.image}
-          alt={setting?.metaTags?.title}
-        />
+        <div className="w-100 text-center">
+          <img
+            style={{ maxHeight: 60 }}
+            src={setting?.metaTags?.image}
+            alt={setting?.metaTags?.title}
+          />
+        </div>
         <IconButton onClick={() => toggleDrawer(false)}>
           <CloseIcon />
         </IconButton>
