@@ -17,7 +17,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        Boossti Inc.
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -69,53 +69,43 @@ const useStyles = makeStyles((theme) => ({
 
 const cards = [
   {
-    image: require('../assets/images/vijaalogo.jpeg'),
-    title: 'Heading',
-    description: 'This is a media card. You can use this section to describe the content.',
+    image: require('../assets/images/web-design.png'),
+    title: 'Website Design',
+    description: 'Best responsive websites along with SEO and paid Google Ads',
   },
   {
-    image: 'https://source.unsplash.com/random',
-    title: 'Heading',
-    description: 'This is a media card. You can use this section to describe the content.',
+    image: require('../assets/images/instagram.png'),
+    title: 'Social Media',
+    description: 'Content for social media posts tailor made to your brand.',
   },
   {
-    image: 'https://source.unsplash.com/random',
-    title: 'Heading',
-    description: 'This is a media card. You can use this section to describe the content.',
+    image: require('../assets/images/shopify.png'),
+    title: 'E-Commerce',
+    description: 'Setup product pages with media and optemization',
   },
 ];
 
 const tiers = [
   {
-    title: 'Free',
-    price: '0',
-    description: ['10 users included', '2 GB of storage', 'Help center access', 'Email support'],
-    buttonText: 'Sign up for free',
+    title: 'Basic',
+    price: '499',
+    description: ['3 page website', '1 social media channel', '1 post/week', '1 newsletter/month'],
+    buttonText: '805-300-7217',
     buttonVariant: 'outlined',
   },
   {
     title: 'Pro',
     subheader: 'Most popular',
-    price: '15',
-    description: [
-      '20 users included',
-      '10 GB of storage',
-      'Help center access',
-      'Priority email support',
-    ],
-    buttonText: 'Get started',
+    price: '799',
+    description: ['5 page website', '2 social media channel', '2 post/week', '1 newsletter/month'],
+    buttonText: 'info@boossti.com',
     buttonVariant: 'contained',
   },
   {
-    title: 'Enterprise',
-    price: '30',
-    description: [
-      '50 users included',
-      '30 GB of storage',
-      'Help center access',
-      'Phone & email support',
-    ],
-    buttonText: 'Contact us',
+    title: 'Grow',
+    price: '1,249',
+    description: ['10 page website', '3 social media channel', '4 post/week', '1 newsletter/month'],
+    buttonText: '805-300-7217',
     buttonVariant: 'outlined',
   },
 ];
@@ -161,10 +151,10 @@ export default function Album() {
                   </CardContent>
                   <CardActions>
                     <Button size="small" color="primary">
-                      View
+                      805-300-7217
                     </Button>
                     <Button size="small" color="primary">
-                      Edit
+                      info@boossti.com
                     </Button>
                   </CardActions>
                 </Card>
@@ -177,8 +167,7 @@ export default function Album() {
             Pricing
           </Typography>
           <Typography variant="h5" align="center" color="textSecondary" component="p">
-            Quickly build an effective pricing table for your potential customers with this layout.
-            It&apos;s built with default Material-UI components with little customization.
+            Boost your marketing today. Pick a Plan.
           </Typography>
         </Container>
         {/* End hero unit */}
@@ -232,10 +221,10 @@ export default function Album() {
       {/* Footer */}
       <footer className={classes.footer}>
         <Typography variant="h6" align="center" gutterBottom>
-          Footer
+          {/* Footer */}
         </Typography>
         <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
-          Something here to give the footer a purpose!
+          {/* Something here to give the footer a purpose! */}
         </Typography>
         <Copyright />
       </footer>
