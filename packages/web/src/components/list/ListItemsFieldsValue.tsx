@@ -23,6 +23,7 @@ import SectionSelectForm from './SectionSelectForm';
 import ResponseCount from '../form2/ResponseCount';
 import FieldViewWrapper from '../form2/FieldViewWrapper';
 import EditFormDrawer from '../form2/EditFormDrawer';
+import { convertToSlug } from '../field/LeftNavigation';
 
 interface IProps {
   listItem: any;
@@ -97,9 +98,9 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
             xl={field?.options?.grid?.xl}
             item
           >
-            {!previewMode && (
-              <Typography className="d-flex align-items-center">
-                {field?.label}
+            <Typography className="d-flex align-items-center" id={convertToSlug(field?.label)}>
+              {field?.label}
+              {!previewMode && (
                 <Tooltip title="Actions">
                   <IconButton
                     color="primary"
@@ -108,8 +109,8 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
                     <MoreHorizIcon />
                   </IconButton>
                 </Tooltip>
-              </Typography>
-            )}
+              )}
+            </Typography>
             {state.drawer && field._id === state.field?._id ? (
               <StyleDrawer
                 onClose={() => setState(initialState)}

@@ -33,6 +33,7 @@ export const fieldTypes = [
   // { label: 'Media (Images/Video)', value: 'media' },
   // { label: 'Address', value: 'address' },
   { label: 'Existing Type', value: 'type' },
+  { label: 'label', value: 'label' },
 ];
 
 interface IProps {

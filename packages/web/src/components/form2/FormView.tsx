@@ -191,33 +191,31 @@ export function FormView({
             key={field._id}
           >
             <InputGroup key={field._id} className="">
-              {field?.options?.multipleValues && (
-                <>
-                  <FormLabel>
-                    {field?.options?.required ? `${field?.label}*` : field?.label}
-                  </FormLabel>
-                  {field?.options?.multipleValues && (
-                    <>
+              <>
+                <FormLabel>
+                  {field?.options?.required ? `${field?.label}*` : field?.label}
+                </FormLabel>
+                {field?.options?.multipleValues && (
+                  <>
+                    <IconButton
+                      edge="end"
+                      color="primary"
+                      onClick={() => onAddOneMoreValue(field._id)}
+                    >
+                      <AddCircleIcon fontSize="small" />
+                    </IconButton>
+                    {values.filter((f) => f.field === field._id).length > 1 && (
                       <IconButton
                         edge="end"
-                        color="primary"
-                        onClick={() => onAddOneMoreValue(field._id)}
+                        className="text-danger"
+                        onClick={() => onRemoveOneValue(field._id)}
                       >
-                        <AddCircleIcon fontSize="small" />
+                        <DeleteIcon fontSize="small" />
                       </IconButton>
-                      {values.filter((f) => f.field === field._id).length > 1 && (
-                        <IconButton
-                          edge="end"
-                          className="text-danger"
-                          onClick={() => onRemoveOneValue(field._id)}
-                        >
-                          <DeleteIcon fontSize="small" />
-                        </IconButton>
-                      )}
-                    </>
-                  )}
-                </>
-              )}
+                    )}
+                  </>
+                )}
+              </>
               {filterValues(values, field).map((value, valueIndex) => (
                 <div className="mb-2">
                   <Field

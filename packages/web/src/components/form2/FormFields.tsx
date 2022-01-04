@@ -14,14 +14,17 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import GridIcon from '@material-ui/icons/GridOn';
+import ShareIcon from '@material-ui/icons/Share';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import { generateObjectId } from '@frontend/shared/utils/objectId';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import CRUDMenu from '../common/CRUDMenu';
 import AddField from './AddField';
 import EditField from './EditField';
 import EditFieldGrid from './EditFieldGrid';
+import { convertToSlug } from '../field/LeftNavigation';
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -42,6 +45,7 @@ type IProps = {
   setFields: (newFields: any[]) => void;
   title?: string;
   isSection?: boolean;
+  previewMode?: boolean;
 };
 
 export default function FormFields({
@@ -49,8 +53,10 @@ export default function FormFields({
   setFields,
   title = 'Fields',
   isSection = false,
+  previewMode = false,
 }: IProps): any {
   const [values, setValues] = useState(initialValues);
+  const router = useRouter();
 
   function onDragEnd(result) {
     if (!result.destination) {
@@ -89,6 +95,32 @@ export default function FormFields({
     setValues(initialValues);
   };
 
+  const handleNavigate = (fieldLabel) => {
+    if (isSection) {
+      // console.log(window.location);
+      const url = `${window.location.origin}${window.location.pathname}#${convertToSlug(
+        fieldLabel,
+      )}`;
+      // console.log(url);
+      router.push(url);
+    }
+  };
+
+  const handleShareSection = (fieldLabel) => {
+    if (isSection && fieldLabel) {
+      const url = `${window.location.origin}/page/${router.query?.itemSlug}#${convertToSlug(
+        fieldLabel,
+      )}`;
+      if ('clipboard' in navigator) {
+        navigator.clipboard.writeText(url);
+      } else {
+        document?.execCommand('copy', true, url);
+      }
+      // console.log(url);
+      setValues(initialValues);
+    }
+  };
+
   return (
     <Paper variant="outlined">
       {values.editGrid ? (
@@ -110,22 +142,26 @@ export default function FormFields({
             );
           }}
           onClose={() => setValues(initialValues)}
-          isSection
+          isSection={isSection}
         />
       ) : (
         <>
-          <Typography variant="h5" className="d-flex align-items-center pl-2">
-            {title}
-            <Tooltip title="Add New Field">
-              <IconButton
-                color="primary"
-                onClick={() => setValues({ ...initialValues, showForm: true })}
-              >
-                <AddCircleIcon />
-              </IconButton>
-            </Tooltip>
-          </Typography>
-          <Divider />
+          {!previewMode && (
+            <>
+              <Typography variant="h5" className="d-flex align-items-center pl-2">
+                {title}
+                <Tooltip title="Add New Field">
+                  <IconButton
+                    color="primary"
+                    onClick={() => setValues({ ...initialValues, showForm: true })}
+                  >
+                    <AddCircleIcon />
+                  </IconButton>
+                </Tooltip>
+              </Typography>
+              <Divider />
+            </>
+          )}
           {values.showForm && (
             <AddField
               field={values.field}
@@ -144,7 +180,7 @@ export default function FormFields({
                         {(draggableProvided, draggableSnapshot) => (
                           <ListItem
                             button
-                            // onClick={() => setValues({ ...initialValues, field, showForm: true })}
+                            onClick={() => handleNavigate(field.label)}
                             selected={
                               draggableSnapshot.isDragging || field?._id === values?.field?._id
                             }
@@ -152,8 +188,11 @@ export default function FormFields({
                             {...draggableProvided.draggableProps}
                             {...draggableProvided.dragHandleProps}
                           >
-                            <ListItemText primary={field.label} secondary={field.fieldType} />
-                            {!snapshot.isDraggingOver && (
+                            <ListItemText
+                              primary={field.label}
+                              secondary={!previewMode && field.fieldType}
+                            />
+                            {!(previewMode || snapshot.isDraggingOver) && (
                               <ListItemSecondaryAction>
                                 <IconButton
                                   edge="end"
@@ -205,6 +244,14 @@ export default function FormFields({
               </ListItemIcon>
               <ListItemText primary="Grid" />
             </MenuItem>
+            {isSection && (
+              <MenuItem onClick={() => handleShareSection(values?.field?.label)}>
+                <ListItemIcon className="mr-n4">
+                  <ShareIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText primary="Share" />
+              </MenuItem>
+            )}
           </CRUDMenu>
         </>
       )}
