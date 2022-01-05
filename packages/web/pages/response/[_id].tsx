@@ -14,8 +14,6 @@ export default function Page() {
 function Display({ responseId }) {
   const { data, error } = useGetResponse(responseId);
   const { data: formData, error: formError } = useGetForm(data?.getResponse?.formId);
-  console.log('response', data, error);
-  console.log('Form ', formData, formError);
   if (error || !data || !data?.getResponse || formError || !formData) {
     return <ErrorLoading error={error} />;
   }

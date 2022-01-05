@@ -1,13 +1,13 @@
+import { useUpdateResponse } from '@frontend/shared/hooks/response';
+import { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Drawer from '@material-ui/core/Drawer';
 import CloseIcon from '@material-ui/icons/Close';
 import Grid from '@material-ui/core/Grid';
 import Field from './Field';
 import LoadingButton from '../common/LoadingButton';
-import { useUpdateResponse } from '@frontend/shared/hooks/response';
 import InputGroup from '../common/InputGroup';
 import { validateValue } from './validate';
-import { useState } from 'react';
 import { onAlert } from '../../utils/alert';
 
 interface IProps {
@@ -43,7 +43,6 @@ export default function CreateFormDrawer({ form, response, open, onClose }: IPro
 
   const onChange = (sValue) => {
     const newValue = { ...defualtValue, ...sValue };
-    console.log(newValue);
     let newValues = [];
     let changed = false;
     newValues = values.map((oldValue) => {
@@ -85,6 +84,7 @@ export default function CreateFormDrawer({ form, response, open, onClose }: IPro
         showOnSubmitMessage: true,
       });
       setValues([]);
+      onClose();
     }
   };
 
@@ -127,9 +127,6 @@ export default function CreateFormDrawer({ form, response, open, onClose }: IPro
             loading={submitState.loading || createLoading}
             onClick={() => {
               onSubmit();
-              // alert("updated successfully")
-              // onClose()
-              // setValues(response?.values)
             }}
             variant="contained"
             color="primary"
