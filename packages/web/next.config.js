@@ -12,5 +12,5 @@ const withPWA = require('next-pwa')({
 
 const withTM = require('next-transpile-modules')(['@frontend/shared', '@frontend/ckeditor']);
 
-// module.exports = withPlugins([withTM, withImages]);
-module.exports = withPlugins([withPWA, withTM, withImages]);
+module.exports = withPlugins([withTM, withImages]);
+// module.exports = withPlugins([withPWA, withTM, withImages]);

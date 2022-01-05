@@ -9,10 +9,17 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Badge from '@material-ui/core/Badge';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import { useNotificationSub } from '@frontend/shared/hooks/notification';
+import { useGetMyNotifications, useNotificationSub } from '@frontend/shared/hooks/notification';
+import { useEffect } from 'react';
 
 export default function Notification() {
   const { state, setState } = useNotificationSub();
+  const { notifications } = useGetMyNotifications();
+
+  useEffect(() => {
+    notifications && setState({ ...state, notifications: notifications });
+  }, [notifications]);
+
   return (
     <>
       <Tooltip title="Notifications">
@@ -44,7 +51,7 @@ export default function Notification() {
                 size="small"
                 color="primary"
                 variant="outlined"
-                onClick={() => setState({ ...state, notifications: [] })}
+                onClick={() => setState({ ...state })}
               >
                 Clear all
               </Button>
@@ -59,7 +66,6 @@ export default function Notification() {
                   onClose={() =>
                     setState({
                       ...state,
-                      notifications: state.notifications?.filter((n, ni) => ni !== i),
                     })
                   }
                 />
