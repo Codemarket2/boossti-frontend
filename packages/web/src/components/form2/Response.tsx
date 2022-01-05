@@ -6,8 +6,9 @@ import Button from '@material-ui/core/Button';
 import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 import EditIcon from '@material-ui/icons/Edit';
 import FormDrawer from './FormDrawer';
-import { ShowValue } from './ResponseList';
+import { ShowValue } from '../list/ListItemsFieldsValue';
 import Authorization from '../common/Authorization';
+import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
 
 interface IProps {
   form: any;
@@ -17,7 +18,7 @@ interface IProps {
 export default function Response({ form, response }: IProps) {
   const [openDrawer, setOpenDrawer] = useState(false);
   return (
-    <Authorization _id={response?.createdBy?._id} allowAdmin>
+    <Authorization _id={[response?.createdBy?._id, form?.createdBy?._id]} allowAdmin>
       <div className="d-flex justify-content-between align-items-center">
         <Link href={`/forms/${form?._id}`}>
           <Tooltip title="Open form">
@@ -56,14 +57,15 @@ export default function Response({ form, response }: IProps) {
       {form?.fields?.map((field) => {
         return (
           <div key={field?._id}>
-            <Typography>
-              <b>{field?.label}</b>
-              {' - '}
-              <ShowValue
-                field={field}
-                value={response?.values?.filter((v) => v.field === field._id)[0]}
-              />
-            </Typography>
+            <Typography>{field?.label}</Typography>
+            {response?.values
+              ?.filter((v) => v.field === field._id)
+              .map((value) => (
+                <div key={value?._id}>
+                  <ShowValue field={field} value={value} />
+                  <CommentLikeShare parentId={value?._id} />
+                </div>
+              ))}
           </div>
         );
       })}

@@ -1,8 +1,10 @@
-import { useUpdateForm } from '@frontend/shared/hooks/form';
 import { useGetResponses } from '@frontend/shared/hooks/response';
-import { Backdrop, Button, Fade, Modal } from '@material-ui/core';
+import { useGetForm } from '@frontend/shared/hooks/form';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import Typography from '@material-ui/core/Typography';
+import CloseIcon from '@material-ui/icons/Close';
 import { useState } from 'react';
-import { onAlert } from '../../utils/alert';
 import ErrorLoading from '../common/ErrorLoading';
 import ResponseList from './ResponseList';
 
@@ -15,12 +17,10 @@ export default function ResponseCount({ formId }: IProps): any {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const { data, error, loading } = useGetResponses(formId);
-  const { state } = useUpdateForm({
-    onAlert,
-    _id: formId,
-  });
-  if (error || !data || loading) {
-    return <ErrorLoading error={error} />;
+  const { data: formData, error: errorData } = useGetForm(formId);
+
+  if (error || !data || loading || !formData?.getForm) {
+    return <ErrorLoading error={error || errorData} />;
   }
 
   return (
@@ -30,24 +30,27 @@ export default function ResponseCount({ formId }: IProps): any {
           {`${data?.getResponses?.count || 0} Responses`}
         </Button>
       </div>
-      {state && !error && (
-        <>
-          <Modal
-            aria-labelledby="transition-modal-title"
-            aria-describedby="transition-modal-description"
-            open={open}
-            onClose={handleClose}
-            closeAfterTransition
-            BackdropComponent={Backdrop}
-            BackdropProps={{
-              timeout: 700,
-            }}
-          >
-            <Fade in={open}>
-              <ResponseList form={state} hideDelete />
-            </Fade>
-          </Modal>
-        </>
+      {open && (
+        <Dialog fullScreen open={open} onClose={handleClose}>
+          <div className="p-2">
+            <div className="d-flex mb-2">
+              <Typography variant="h5" className="flex-grow-1">
+                Responses
+              </Typography>
+              <Button
+                startIcon={<CloseIcon />}
+                onClick={handleClose}
+                size="small"
+                color="primary"
+                variant="contained"
+                style={{ right: 0 }}
+              >
+                Close
+              </Button>
+            </div>
+            <ResponseList form={formData?.getForm} hideDelete />
+          </div>
+        </Dialog>
       )}
     </>
   );
