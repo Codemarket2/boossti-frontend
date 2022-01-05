@@ -10,6 +10,7 @@ interface IProps {
 export default function Screen({ slug, typeSlug }: IProps) {
   const [state, setState] = useState('');
   const router = useRouter();
+
   const onSlugUpdate = (newSlug) => {
     router.push(`/types/${typeSlug}/${newSlug}`);
   };
@@ -25,9 +26,5 @@ export default function Screen({ slug, typeSlug }: IProps) {
     }
   };
 
-  return (
-    <div>
-      <ItemScreen onSlugUpdate={onSlugUpdate} pushToAnchor={pushToAnchor} slug={slug} />
-    </div>
-  );
+  return <ItemScreen onSlugUpdate={onSlugUpdate} pushToAnchor={pushToAnchor} slug={slug} />;
 }

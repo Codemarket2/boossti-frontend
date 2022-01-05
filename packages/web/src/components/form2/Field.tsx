@@ -10,7 +10,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider, DateTimePicker, DatePicker } from '@material-ui/pickers';
 import PhoneInput from 'react-phone-input-2';
-import FormLabel from '@material-ui/core/FormLabel';
 import ImagePicker from '../common/ImagePicker';
 import RichTextarea from '../common/RichTextarea2';
 // import AddressSearch from '../common/AddressSearch';
@@ -48,6 +47,9 @@ export default function FieldValueForm2({
     onChangeValue({ ...value, ...payload });
   };
   switch (fieldType) {
+    case 'label': {
+      return null;
+    }
     case 'date': {
       return (
         <MuiPickersUtilsProvider libInstance={moment} utils={MomentUtils}>
@@ -58,7 +60,7 @@ export default function FieldValueForm2({
             inputVariant="outlined"
             placeholder={moment().format('L')}
             format="MM/DD/YYYY"
-            label={label}
+            // label={label}
             value={value && value?.valueDate ? moment(value.valueDate) : null}
             onChange={(newValue) => onChange({ field: _id, valueDate: moment(newValue) })}
             animateYearScrolling
@@ -78,7 +80,7 @@ export default function FieldValueForm2({
             inputVariant="outlined"
             placeholder={moment().format('L')}
             format="lll"
-            label={label}
+            // label={label}
             value={value && value?.valueDate ? moment(value.valueDate) : null}
             onChange={(newValue) => onChange({ field: _id, valueDate: moment(newValue) })}
             animateYearScrolling
@@ -91,7 +93,7 @@ export default function FieldValueForm2({
     case 'richTextarea': {
       return (
         <>
-          <InputLabel>{label}</InputLabel>
+          {/* <InputLabel>{label}</InputLabel> */}
           <RichTextarea
             value={value ? value.value : ''}
             onChange={(newValue) => onChange({ field: _id, value: newValue })}
@@ -152,7 +154,7 @@ export default function FieldValueForm2({
     case 'image': {
       return (
         <div>
-          <FormLabel component="legend">{label}</FormLabel>
+          {/* <InputLabel component="legend">{label}</InputLabel> */}
           <ImagePicker
             label="Select Image"
             fileType="image/*"
@@ -190,13 +192,13 @@ export default function FieldValueForm2({
           size="small"
           error={validateValue(validate, value, options, 'text').error}
         >
-          <InputLabel id="demo-simple-select-outlined-label">{label}</InputLabel>
+          {!value?.value && <InputLabel id="demo-simple-select-outlined-label">{label}</InputLabel>}
           <Select
             labelId="demo-simple-select-outlined-label"
             id="demo-simple-select-outlined"
-            value={value ? value.value : ''}
+            value={value ? value?.value : ''}
             onChange={({ target }) => onChange({ field: _id, value: target.value })}
-            label={label}
+            placeholder={label}
           >
             {options?.selectOptions?.map((option, index) => (
               <MenuItem value={option} key={index}>
@@ -215,7 +217,7 @@ export default function FieldValueForm2({
     case 'phoneNumber': {
       return (
         <>
-          <InputLabel>{label}</InputLabel>
+          {/* <InputLabel>{label}</InputLabel> */}
           <PhoneInput
             countryCodeEditable={false}
             country="us"
@@ -239,7 +241,7 @@ export default function FieldValueForm2({
       return (
         <TextField
           fullWidth
-          label={label}
+          placeholder={label}
           variant="outlined"
           name="valueNumber"
           size="small"
@@ -258,7 +260,7 @@ export default function FieldValueForm2({
           multiline={fieldType === 'textarea'}
           rows={fieldType === 'textarea' && 6}
           fullWidth
-          label={label}
+          placeholder={label}
           variant="outlined"
           name="value"
           size="small"
