@@ -86,6 +86,7 @@ export default function ItemFormDrawer({
             slug={state.slug}
             setItem={(item) => setState({ ...state, item })}
             onSlugUpdate={onSlugUpdate}
+            hideleft
           />
         ) : (
           <Loading />

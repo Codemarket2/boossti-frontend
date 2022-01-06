@@ -44,6 +44,7 @@ interface IProps {
   onSlugUpdate?: (arg: string) => void;
   pushToAnchor?: () => void;
   noTogglePreviewMode?: boolean;
+  hideleft?: boolean;
 }
 
 export default function ItemScreen({
@@ -53,6 +54,7 @@ export default function ItemScreen({
   onSlugUpdate,
   pushToAnchor,
   noTogglePreviewMode = false,
+  hideleft = false,
 }: IProps): any {
   const router = useRouter();
   const theme = useTheme();
@@ -133,7 +135,7 @@ export default function ItemScreen({
     previewMode,
   };
 
-  const hideleft = false;
+  // const hideleft = false;
   // const hideleft = hideBreadcrumbs || state.hideLeftNavigation || previewMode;
 
   return (
