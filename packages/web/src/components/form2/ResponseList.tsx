@@ -18,6 +18,7 @@ import { useGetResponses, useDeleteResponse } from '@frontend/shared/hooks/respo
 import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
+import DisplayRichText from '../common/DisplayRichText';
 
 interface IProps {
   form: any;
@@ -128,6 +129,10 @@ export const ShowValue = ({ field, value }: any) => {
     case 'email':
     case 'password':
       return <>{value?.value}</>;
+    case 'type':
+      return <>{value?.itemId?.title}</>;
+    case 'richTextarea':
+      return <DisplayRichText value={value?.value} />;
     case 'date':
       return <>{value?.valueDate && moment(value?.valueDate).format('L')}</>;
     case 'dateTime':

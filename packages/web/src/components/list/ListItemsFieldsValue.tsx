@@ -229,6 +229,8 @@ export const ShowValue = ({ field, value }: IProps2) => {
     case 'email':
     case 'password':
       return <>{value?.value}</>;
+    case 'type':
+      return <>{value?.itemId?.title}</>;
     case 'url':
       return <a href={value?.value}>{value?.value}</a>;
     case 'richTextarea':
