@@ -10,13 +10,14 @@ import ResponseList from './ResponseList';
 
 interface IProps {
   formId: any;
+  parentId?: string;
 }
 
-export default function ResponseCount({ formId }: IProps): any {
+export default function ResponseCount({ formId, parentId }: IProps): any {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const { data, error, loading } = useGetResponses(formId);
+  const { data, error, loading } = useGetResponses(formId, parentId);
   const { data: formData, error: errorData } = useGetForm(formId);
 
   if (error || !data || loading || !formData?.getForm) {
@@ -48,7 +49,7 @@ export default function ResponseCount({ formId }: IProps): any {
                 Close
               </Button>
             </div>
-            <ResponseList form={formData?.getForm} hideDelete />
+            <ResponseList form={formData?.getForm} hideDelete parentId={parentId} />
           </div>
         </Dialog>
       )}

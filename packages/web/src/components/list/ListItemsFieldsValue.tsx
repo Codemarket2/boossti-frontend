@@ -140,8 +140,8 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
                     <div key={i} style={field?.options?.style ? field?.options?.style : {}}>
                       {field?.fieldType === 'form' ? (
                         <>
-                          <ResponseCount formId={value?.value} />
-                          <FieldViewWrapper _id={value?.value} />
+                          <ResponseCount formId={value?.value} parentId={listItem?._id} />
+                          <FieldViewWrapper _id={value?.value} parentId={listItem?._id} />
                         </>
                       ) : (
                         <ShowValue field={field} value={value} />

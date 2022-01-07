@@ -5,7 +5,10 @@ export const GET_RESPONSE = gql`
     getResponse(_id: $_id) {
       _id
       formId
-      parentId
+      parentId {
+        _id
+        title
+      }
       values {
         _id
         field
@@ -34,13 +37,16 @@ export const GET_RESPONSE = gql`
 `;
 
 export const GET_RESPONSES = gql`
-  query MyQuery($formId: ID!, $page: Int, $limit: Int) {
-    getResponses(formId: $formId, page: $page, limit: $limit) {
+  query MyQuery($formId: ID!, $parentId: ID, $page: Int, $limit: Int) {
+    getResponses(formId: $formId, parentId: $parentId, page: $page, limit: $limit) {
       count
       data {
         _id
         formId
-        parentId
+        parentId {
+          _id
+          title
+        }
         values {
           _id
           field
@@ -79,7 +85,10 @@ export const GET_MY_RESPONSES = gql`
           _id
           name
         }
-        parentId
+        parentId {
+          _id
+          title
+        }
         values {
           _id
           field

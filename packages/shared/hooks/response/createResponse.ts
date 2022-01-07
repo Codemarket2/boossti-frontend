@@ -4,7 +4,7 @@ import { IHooksProps } from '../../types/common';
 import { omitTypename } from '../../utils/omitTypename';
 import { fileUpload } from '../../utils/fileUpload';
 
-export function useCreateResponse({ onAlert }: IHooksProps): any {
+export function useCreateResponse({ onAlert }: IHooksProps, parentId): any {
   const [createMutation, { loading: createLoading }] = useMutation(CREATE_RESPONSE);
 
   const handleCreateResponse = async (tPayload, fields) => {
@@ -32,9 +32,10 @@ export function useCreateResponse({ onAlert }: IHooksProps): any {
       }
       payload = {
         ...payload,
+        parentId,
         values: values.map((m) => JSON.parse(JSON.stringify(m), omitTypename)),
       };
-      // console.log('payload', payload);
+      console.log('payload from useCreateResponse', payload);
       const res = await createMutation({
         variables: payload,
       });
