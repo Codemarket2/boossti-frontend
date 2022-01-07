@@ -19,7 +19,7 @@ import ImageList from '../post/ImageList';
 import { defualtValue, filterValues, FormView } from '../form2/FormView';
 import { onAlert } from '../../utils/alert';
 import StyleDrawer from '../style/StyleDrawer';
-import SectionSelectForm from './SectionSelectForm';
+import SelectFormDrawer2 from '../form2/SelectFormDrawer2';
 import ResponseCount from '../form2/ResponseCount';
 import FieldViewWrapper from '../form2/FieldViewWrapper';
 import EditFormDrawer from '../form2/EditFormDrawer';
@@ -140,8 +140,8 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
                     <div key={i} style={field?.options?.style ? field?.options?.style : {}}>
                       {field?.fieldType === 'form' ? (
                         <>
-                          <ResponseCount formId={value?.value} />
-                          <FieldViewWrapper _id={value?.value} />
+                          <ResponseCount formId={value?.value} parentId={listItem?._id} />
+                          <FieldViewWrapper _id={value?.value} parentId={listItem?._id} />
                         </>
                       ) : (
                         <ShowValue field={field} value={value} />
@@ -199,7 +199,7 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
         </CRUDMenu>
       </Grid>
       {state.selectForm && (
-        <SectionSelectForm
+        <SelectFormDrawer2
           open={state.selectForm}
           onClose={() => setState(initialState)}
           onSelect={(formId) => handleSelectForm(state.field?._id, formId)}

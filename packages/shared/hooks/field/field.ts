@@ -13,7 +13,7 @@ import {
 import { IHooksProps } from '../../types/common';
 import { ADDED_FIELD } from '../../graphql/subscription/field';
 
-const defaultQueryVariables = { limit: 1000, page: 1 };
+export const defaultQueryVariables = { limit: 1000, page: 1 };
 
 export function useGetFieldsByType({ parentId }: any) {
   const [subscribed, setSubscribed] = useState(false);
@@ -157,7 +157,9 @@ export function useCRUDFields({ onAlert, parentId, createCallback }: ICRUDProps)
         getFieldsByType: {
           ...getFieldsByType,
           data: getFieldsByType.data.map((f) =>
-            f._id === mutationResult.data.updateField._id ? mutationResult.data.updateField : f,
+            f._id === mutationResult.data.updateField._id
+              ? { ...f, ...mutationResult.data.updateField }
+              : f,
           ),
         },
       };

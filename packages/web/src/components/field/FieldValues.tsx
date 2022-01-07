@@ -8,7 +8,6 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Carousel from 'react-material-ui-carousel';
 import { useTheme } from '@material-ui/core/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -28,6 +27,7 @@ import { onAlert } from '../../utils/alert';
 import FieldValueCard from './FieldValueCard';
 import Share from '../share/Share';
 import SectionForm from '../form2/SectionForm';
+import FieldViewWrapper from '../form2/FieldViewWrapper';
 
 const initialState = {
   showForm: false,
@@ -51,8 +51,6 @@ function ItemOneFields({
   const [state, setState] = useState(initialState);
   const { attributes, admin } = useSelector(({ auth }: any) => auth);
   const currentUserId = attributes['custom:_id'];
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.down('xs'));
   const deleteCallback = () => {
     setState({ ...state, showMenu: null, selectedFieldValue: null, edit: false });
   };
@@ -146,12 +144,7 @@ function ItemOneFields({
           </Menu>
           <Divider />
           <div className="d-flex justify-content-between align-items-center align-content-center">
-            <Typography
-              style={matches ? { paddingTop: 50 } : {}}
-              variant="h5"
-              className="d-flex align-items-center link-anchor"
-              id={convertToSlug(field.label)}
-            >
+            <Typography variant="h5" id={convertToSlug(field.label)}>
               {field.label}
             </Typography>
             {showAddButton && (
@@ -328,7 +321,14 @@ export default function FieldValues({
         }
         return (
           <Grid key={field._id} {...gridProps} item>
-            {field.fieldType === 'form' ? (
+            {field.fieldType === 'form2' ? (
+              <>
+                <Typography variant="h5" id={convertToSlug(field.label)}>
+                  {field.label}
+                </Typography>
+                <FieldViewWrapper _id={JSON.parse(field?.options)?.formId} />
+              </>
+            ) : field.fieldType === 'form' ? (
               <SectionForm field={field} parentId={parentId} previewMode={previewMode} />
             ) : (
               <ItemOneFields

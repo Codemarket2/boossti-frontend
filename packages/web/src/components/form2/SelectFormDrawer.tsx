@@ -1,7 +1,7 @@
 import Button from '@material-ui/core/Button';
 import Drawer from '@material-ui/core/Drawer';
 import CloseIcon from '@material-ui/icons/Close';
-import { useGetForms, useCreateForm } from '@frontend/shared/hooks/form';
+import { useGetForms } from '@frontend/shared/hooks/form';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -30,7 +30,7 @@ export default function SelectFormDrawer({
   const { handleCreateField } = useCreateFieldValue();
   const [formId, setFormId] = useState('');
   const [save, setSave] = useState(false);
-  console.log(formData?.getFieldValuesByItem?.data[0]);
+
   const onSave = async () => {
     if (formData?.getFieldValuesByItem?.data[0]) {
       const payload = {

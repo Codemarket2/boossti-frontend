@@ -5,7 +5,10 @@ export const CREATE_RESPONSE = gql`
     createResponse(formId: $formId, parentId: $parentId, values: $values) {
       _id
       formId
-      parentId
+      parentId {
+        _id
+        title
+      }
       values {
         _id
         field

@@ -23,10 +23,11 @@ import DisplayRichText from '../common/DisplayRichText';
 interface IProps {
   form: any;
   hideDelete?: boolean;
+  parentId?: string;
 }
 
-export default function ResponseList({ form, hideDelete = false }: IProps): any {
-  const { data, error, state, setState } = useGetResponses(form._id);
+export default function ResponseList({ form, hideDelete = false, parentId }: IProps): any {
+  const { data, error, state, setState } = useGetResponses(form._id, parentId);
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
   const router = useRouter();
 
