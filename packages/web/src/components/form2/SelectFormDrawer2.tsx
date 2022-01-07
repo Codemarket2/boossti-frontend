@@ -16,7 +16,7 @@ interface IProps {
   onSelect: (formId: string) => void;
 }
 
-export default function FormDialog({ open, onClose, onSelect }: IProps) {
+export default function SelectFormDrawer2({ open, onClose, onSelect }: IProps) {
   const { data, error, loading, state, setState } = useGetForms({ page: 1, limit: 10 });
   const [values, setValues] = useState({ form: null, validate: false });
 

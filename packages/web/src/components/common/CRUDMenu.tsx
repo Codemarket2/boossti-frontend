@@ -36,7 +36,14 @@ export default function CRUDMenu({
         </MenuItem>
       )}
       {!hideDelete && (
-        <MenuItem onClick={onDelete}>
+        <MenuItem
+          onClick={() => {
+            const anwser = confirm('Are you sure you want delete this field?');
+            if (anwser) {
+              onDelete();
+            }
+          }}
+        >
           <ListItemIcon className="mr-n4">
             <DeleteIcon fontSize="small" />
           </ListItemIcon>

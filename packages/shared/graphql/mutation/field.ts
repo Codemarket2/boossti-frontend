@@ -29,6 +29,7 @@ export const CREATE_FIELD = gql`
       }
       multipleValues
       oneUserMultipleValues
+      options
     }
   }
 `;
@@ -62,6 +63,16 @@ export const UPDATE_FIELD = gql`
       }
       multipleValues
       oneUserMultipleValues
+      options
+    }
+  }
+`;
+
+export const UPDATE_FIELD_OPTIONS = gql`
+  mutation MyMutation($_id: ID!, $options: AWSJSON) {
+    updateField(_id: $_id, options: $options) {
+      _id
+      options
     }
   }
 `;

@@ -19,10 +19,11 @@ import { onAlert } from '../../utils/alert';
 
 export const fieldTypes = [
   { label: 'Form', value: 'form' },
+  { label: 'Form2', value: 'form2' },
   { label: 'Text', value: 'text' },
   { label: 'Number', value: 'number' },
   { label: 'Password', value: 'password' },
-  { label: 'Textarea', value: 'textarea' },
+  { label: 'Rich Textarea', value: 'textarea' },
   { label: 'Checkbox', value: 'checkbox' },
   { label: 'Select', value: 'select' },
   { label: 'Email', value: 'email' },

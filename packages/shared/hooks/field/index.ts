@@ -7,3 +7,4 @@ export {
   useGetFieldValue,
   useUpdateFieldValue,
 } from './fieldValue';
+export { useUpdateFieldOptions } from './updateFieldOptions';

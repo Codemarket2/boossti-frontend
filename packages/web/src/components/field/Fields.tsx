@@ -1,3 +1,7 @@
+import MenuItem from '@material-ui/core/MenuItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import EditIcon from '@material-ui/icons/Edit';
+import ListIcon from '@material-ui/icons/List';
 import AddCircle from '@material-ui/icons/AddCircle';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import List from '@material-ui/core/List';
@@ -14,6 +18,7 @@ import {
   useGetFieldsByType,
   useDeleteField,
   useUpdateFieldPosition,
+  useUpdateFieldOptions,
 } from '@frontend/shared/hooks/field';
 import { useState, memo, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
@@ -21,8 +26,10 @@ import FieldForm from './FieldForm';
 import CRUDMenu from '../common/CRUDMenu';
 import FieldsSkeleton from './FieldsSkeleton';
 import ErrorLoading from '../common/ErrorLoading';
-import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
+import Backdrop from '../common/Backdrop';
+import SelectFormDrawer2 from '../form2/SelectFormDrawer2';
+import EditFormDrawer from '../form2/EditFormDrawer';
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -69,6 +76,8 @@ const initialState = {
   selectedField: null,
   edit: false,
   editForm: false,
+  selectForm: false,
+  editSelectedForm: false,
 };
 
 export default function Fields({
@@ -85,10 +94,24 @@ export default function Fields({
   const { data, error } = useGetFieldsByType({ parentId });
 
   const { handleDelete, deleteLoading } = useDeleteField({ onAlert, parentId });
+  const { handleUpdateFieldOptions, updateOptionsLoading } = useUpdateFieldOptions({
+    onAlert,
+    parentId,
+  });
   const { handleUpdatePosition, updateLoading, updatePositionInCache } = useUpdateFieldPosition({
     onAlert,
     parentId,
   });
+
+  const handleSelectForm = async (formId: string) => {
+    let options = {};
+    if (JSON.parse(state.selectedField?.options)) {
+      options = JSON.parse(state.selectedField?.options);
+    }
+    options = JSON.stringify({ ...options, formId });
+    await handleUpdateFieldOptions(state.selectedField?._id, options);
+    setState(initialState);
+  };
 
   async function onDragEnd(result) {
     if (!result.destination) {
@@ -195,15 +218,47 @@ export default function Fields({
         show={state.showMenu}
         onClose={() => setState(initialState)}
         onDelete={() => {
-          const anwser = confirm('Are you sure you want delete this field?');
-          if (anwser) {
-            setState({ ...state, showMenu: null });
-            handleDelete(state.selectedField._id, deleteCallback);
-          }
+          setState({ ...state, showMenu: null });
+          handleDelete(state.selectedField._id, deleteCallback);
         }}
         onEdit={() => setState({ ...state, edit: true, showMenu: null })}
-      />
-      <Backdrop open={deleteLoading} />
+      >
+        {state.selectedField?.fieldType === 'form2' && (
+          <>
+            {JSON.parse(state.selectedField?.options)?.formId && (
+              <MenuItem
+                onClick={() => setState({ ...state, showMenu: false, editSelectedForm: true })}
+              >
+                <ListItemIcon className="mr-n4">
+                  <EditIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText primary="Edit Form" />
+              </MenuItem>
+            )}
+            <MenuItem onClick={() => setState({ ...state, showMenu: false, selectForm: true })}>
+              <ListItemIcon className="mr-n4">
+                <ListIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Select Form" />
+            </MenuItem>
+          </>
+        )}
+      </CRUDMenu>
+      <Backdrop open={deleteLoading || updateOptionsLoading} />
+      {state.selectForm && (
+        <SelectFormDrawer2
+          open={state.selectForm}
+          onClose={() => setState(initialState)}
+          onSelect={handleSelectForm}
+        />
+      )}
+      {state.editSelectedForm && (
+        <EditFormDrawer
+          open={state.editSelectedForm}
+          formId={JSON.parse(state.selectedField?.options)?.formId}
+          onClose={() => setState(initialState)}
+        />
+      )}
     </Paper>
   );
 }
