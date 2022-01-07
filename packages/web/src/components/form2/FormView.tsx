@@ -16,6 +16,7 @@ import DisplayRichText from '../common/DisplayRichText';
 
 interface IProps {
   form: any;
+  parentId?: string;
 }
 
 export const defualtValue = {
@@ -28,8 +29,11 @@ export const defualtValue = {
   media: [],
 };
 
-export default function FormViewWrapper({ form: { _id, name, fields, settings } }: IProps): any {
-  const { handleCreateResponse, createLoading } = useCreateResponse({ onAlert });
+export default function FormViewWrapper({
+  form: { _id, name, fields, settings },
+  parentId,
+}: IProps): any {
+  const { handleCreateResponse, createLoading } = useCreateResponse({ onAlert }, parentId);
   const [showMessage, setShowMessage] = useState(false);
 
   const handleSubmit = async (values) => {

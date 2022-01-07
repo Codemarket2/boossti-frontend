@@ -5,7 +5,10 @@ export const RESPONSE_SUB = gql`
     responseSub(formId: $formId) {
       _id
       formId
-      parentId
+      parentId {
+        _id
+        title
+      }
       values {
         _id
         field
