@@ -28,7 +28,7 @@ import FieldsSkeleton from './FieldsSkeleton';
 import ErrorLoading from '../common/ErrorLoading';
 import { onAlert } from '../../utils/alert';
 import Backdrop from '../common/Backdrop';
-import SelectFormDrawer2 from '../form2/SelectFormDrawer2';
+import { SelectFormDrawer } from '../form2/SelectForm';
 import EditFormDrawer from '../form2/EditFormDrawer';
 
 const reorder = (list, startIndex, endIndex) => {
@@ -246,7 +246,7 @@ export default function Fields({
       </CRUDMenu>
       <Backdrop open={deleteLoading || updateOptionsLoading} />
       {state.selectForm && (
-        <SelectFormDrawer2
+        <SelectFormDrawer
           open={state.selectForm}
           onClose={() => setState(initialState)}
           onSelect={handleSelectForm}

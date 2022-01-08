@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import AddIcon from '@material-ui/icons/Add';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useGetListItemsByType } from '@frontend/shared/hooks/list';
@@ -88,12 +89,13 @@ export default function ListTypeAutoComplete({
       <Button
         className="mt-2"
         disabled={disabled}
-        variant="contained"
+        variant="outlined"
         color="primary"
         size="small"
         onClick={() => setDrawer({ ...drawer, showDrawer: true })}
+        startIcon={<AddIcon />}
       >
-        Add Your New {label}
+        Add New {label}
       </Button>
     </>
   );

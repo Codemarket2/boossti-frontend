@@ -19,7 +19,7 @@ import ImageList from '../post/ImageList';
 import { defualtValue, filterValues, FormView } from '../form2/FormView';
 import { onAlert } from '../../utils/alert';
 import StyleDrawer from '../style/StyleDrawer';
-import SelectFormDrawer2 from '../form2/SelectFormDrawer2';
+import { SelectFormDrawer } from '../form2/SelectForm';
 import ResponseCount from '../form2/ResponseCount';
 import FieldViewWrapper from '../form2/FieldViewWrapper';
 import EditFormDrawer from '../form2/EditFormDrawer';
@@ -68,7 +68,6 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
   };
 
   const handleSelectForm = (fieldId: string, formId: string) => {
-    console.log('fieldId , formId', fieldId, formId);
     onFieldsChange(
       listItem?.fields.map((field) =>
         field._id === fieldId
@@ -199,7 +198,7 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
         </CRUDMenu>
       </Grid>
       {state.selectForm && (
-        <SelectFormDrawer2
+        <SelectFormDrawer
           open={state.selectForm}
           onClose={() => setState(initialState)}
           onSelect={(formId) => handleSelectForm(state.field?._id, formId)}

@@ -5,11 +5,21 @@ import { generateObjectId } from '../../utils/objectId';
 
 const validationSchema = yup.object({
   label: yup.string().required('Label is required'),
-  fieldType: yup.string().required('Select Field Type'),
+  fieldType: yup.string().required('Field Type is required'),
   typeId: yup.object().when('fieldType', {
     is: (value) => value === 'type',
     then: yup.object().nullable(true).required('Type is required'),
     otherwise: yup.object().nullable(true),
+  }),
+  existingForm: yup.object().when('fieldType', {
+    is: (value) => value === 'existingForm',
+    then: yup.object().nullable(true).required('Select Form is required'),
+    otherwise: yup.object().nullable(true),
+  }),
+  formField: yup.string().when('fieldType', {
+    is: (value) => value === 'existingForm',
+    then: yup.string().required('Form Field is required'),
+    otherwise: yup.string(),
   }),
 });
 
@@ -22,6 +32,8 @@ interface IFormValues {
   typeId: any;
   multipleValues: boolean;
   required: boolean;
+  existingForm: any;
+  formField: string;
 }
 
 const defaultFormValues = {
@@ -33,6 +45,8 @@ const defaultFormValues = {
   typeId: null,
   multipleValues: false,
   required: false,
+  existingForm: null,
+  formField: '',
 };
 
 interface ICRUDProps extends IHooksProps {

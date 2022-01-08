@@ -222,11 +222,8 @@ export default function FormFields({
             show={values.showMenu}
             onClose={() => setValues(initialValues)}
             onDelete={() => {
-              const anwser = confirm('Are you sure you want delete this field?');
-              if (anwser) {
-                setValues({ ...values, showMenu: null });
-                setFields(fields.filter((field) => field._id !== values.field._id));
-              }
+              setValues({ ...values, showMenu: null });
+              setFields(fields.filter((field) => field._id !== values.field._id));
             }}
             onEdit={() => {
               setValues({ ...values, showMenu: null, showForm: true });

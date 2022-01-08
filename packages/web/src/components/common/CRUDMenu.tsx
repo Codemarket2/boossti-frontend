@@ -38,7 +38,7 @@ export default function CRUDMenu({
       {!hideDelete && (
         <MenuItem
           onClick={() => {
-            const anwser = confirm('Are you sure you want delete this field?');
+            const anwser = confirm('Are you sure you want delete?');
             if (anwser) {
               onDelete();
             }

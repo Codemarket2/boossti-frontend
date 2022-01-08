@@ -14,8 +14,10 @@ import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
 import { onAlert } from '../../utils/alert';
 import TypesAutocomplete from './TypesAutocomplete';
+import SelectForm from './SelectForm';
 
 export const sectionFieldTypes = [{ label: 'Form', value: 'form' }];
+export const formTypes = [{ label: 'Existing Form', value: 'existingForm' }];
 
 export const fieldTypes = [
   { label: 'Text', value: 'text' },
@@ -92,13 +94,14 @@ export default function FieldForm({
             onChange={formik.handleChange}
             label="Field Type"
           >
-            {(isSection ? [...fieldTypes, ...sectionFieldTypes] : fieldTypes)?.map(
-              (option, index) => (
-                <MenuItem value={option.value} key={index}>
-                  {option.label}
-                </MenuItem>
-              ),
-            )}
+            {(isSection
+              ? [...fieldTypes, ...sectionFieldTypes]
+              : [...fieldTypes, ...formTypes]
+            )?.map((option, index) => (
+              <MenuItem value={option.value} key={index}>
+                {option.label}
+              </MenuItem>
+            ))}
           </Select>
           {formik.touched.fieldType && formik.errors.fieldType && (
             <FormHelperText className="text-danger">{formik.errors.fieldType}</FormHelperText>
@@ -106,13 +109,50 @@ export default function FieldForm({
         </FormControl>
       </InputGroup>
       {formik.values.fieldType === 'type' && (
-        <TypesAutocomplete
-          disabled={formik.isSubmitting}
-          value={formik.values.typeId}
-          onChange={(newValue) => formik.setFieldValue('typeId', newValue)}
-          error={formik.touched.typeId && Boolean(formik.errors.typeId)}
-          helperText={formik.touched.typeId && formik.errors.typeId}
-        />
+        <InputGroup>
+          <TypesAutocomplete
+            disabled={formik.isSubmitting}
+            value={formik.values.typeId}
+            onChange={(newValue) => formik.setFieldValue('typeId', newValue)}
+            error={formik.touched.typeId && Boolean(formik.errors.typeId)}
+            helperText={formik.touched.typeId && formik.errors.typeId}
+          />
+        </InputGroup>
+      )}
+      {formik.values.fieldType === 'existingForm' && (
+        <>
+          <InputGroup>
+            <SelectForm
+              disabled={formik.isSubmitting}
+              value={formik.values.existingForm}
+              onChange={(newValue) => formik.setFieldValue('existingForm', newValue)}
+              error={formik.touched.existingForm && Boolean(formik.errors.existingForm)}
+              helperText={formik.touched.existingForm && formik.errors.existingForm}
+            />
+          </InputGroup>
+          <InputGroup>
+            <FormControl
+              fullWidth
+              size="small"
+              variant="outlined"
+              disabled={formik.isSubmitting}
+              error={formik.touched.formField && Boolean(formik.errors.formField)}
+            >
+              <InputLabel id="select-form-field">Select form field</InputLabel>
+              <Select
+                labelId="select-form-field"
+                name="formField"
+                // value={formik.values.formField}
+                // onChange={(newValue) => formik.setFieldValue('formField', newValue)}
+              >
+                <MenuItem>Loading fields</MenuItem>
+              </Select>
+              {formik.touched.formField && formik.errors.formField && (
+                <FormHelperText className="text-danger">{formik.errors.formField}</FormHelperText>
+              )}
+            </FormControl>
+          </InputGroup>
+        </>
       )}
       <InputGroup>
         <FormControlLabel
