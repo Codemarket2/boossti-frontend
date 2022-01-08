@@ -13,12 +13,13 @@ export const CREATE_COMMENT = gql`
 `;
 
 export const UPDATE_COMMENT = gql`
-  mutation MyMutation($parentId: ID!, $_id: ID!, $body: String!) {
-    updateComment(parentId: $parentId, _id: $_id, body: $body) {
+  mutation MyMutation($_id: ID!, $body: String!) {
+    updateComment(_id: $_id, body: $body) {
       _id
       body
       createdAt
       updatedAt
+      threadId
       createdBy {
         name
         picture

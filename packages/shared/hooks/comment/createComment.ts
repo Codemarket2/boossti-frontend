@@ -54,7 +54,7 @@ export function useCreateComment(postId: string, threadId: string) {
   };
 }
 
-export function useUpdateComment(postId: string, id: string, setEdit: any) {
+export function useUpdateComment(id: string, setEdit: any) {
   const [updateCommentMutation] = useMutation(UPDATE_COMMENT);
   const [updateInputVal, setUpdateInputVal] = useState('');
   const handleUpdate = () => {
@@ -64,7 +64,6 @@ export function useUpdateComment(postId: string, id: string, setEdit: any) {
     if (updateInputVal !== '') {
       updateCommentMutation({
         variables: {
-          parentId: postId,
           _id: id,
           body: updateInputVal,
         },

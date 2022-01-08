@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
+import Divider from '@material-ui/core/Divider';
 import { useGetActionCounts } from '@frontend/shared/hooks/comment/getComment';
 import ErrorLoading from '../ErrorLoading';
 import LikeModal from '../../like/LikeModal';
@@ -19,6 +20,7 @@ interface ICommentLikeShare {
   fieldTitle?: string;
   showHideComments?: boolean;
   setShowHideComments?: any;
+  showOverlayOnce?: boolean;
 }
 
 export default function CommentLikeShare({
@@ -31,6 +33,7 @@ export default function CommentLikeShare({
   fieldTitle,
   showHideComments,
   setShowHideComments,
+  showOverlayOnce,
 }: ICommentLikeShare) {
   const { data, error } = useGetActionCounts(parentId);
   // like modal state & effect
@@ -83,22 +86,33 @@ export default function CommentLikeShare({
           {children}
         </div>
       </div>
-      {/* {(showHideComments || showCommentSection) && (
-        <Fragment>
-          {showDivider && <Divider />}
-        </Fragment>
-      )} */}
-      <Overlay open={showComment} onClose={() => setShowComment(false)} title="Comments">
-        <div className="p-2">
-          <Comment
-            postId={parentId}
-            threadId={parentId}
-            itemSlug={itemSlug}
-            shareIndex={index}
-            fieldTitle={fieldTitle}
-          />
-        </div>
-      </Overlay>
+
+      {showOverlayOnce ? (
+        (showHideComments || showComment) && (
+          <>
+            {showDivider && <Divider />}
+            <Comment
+              postId={parentId}
+              threadId={parentId}
+              itemSlug={itemSlug}
+              shareIndex={index}
+              fieldTitle={fieldTitle}
+            />
+          </>
+        )
+      ) : (
+        <Overlay open={showComment} onClose={() => setShowComment(false)} title="Comments">
+          <div className="p-2">
+            <Comment
+              postId={parentId}
+              threadId={parentId}
+              itemSlug={itemSlug}
+              shareIndex={index}
+              fieldTitle={fieldTitle}
+            />
+          </div>
+        </Overlay>
+      )}
     </div>
   );
 }
