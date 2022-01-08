@@ -12,10 +12,10 @@ interface IProps {
   children: ReactNode;
 }
 
-export default function ItemFormDrawer({ open, onClose, title, children }: IProps) {
+export default function Overlay({ open, onClose, title, children }: IProps) {
   return (
     <Drawer anchor="right" open={open}>
-      <div style={{ width: '75vw' }}>
+      <div style={{ minWidth: '50vw', maxWidth: '75vw' }}>
         <AppBar color="transparent" position="static" elevation={1}>
           <Toolbar>
             {title && (

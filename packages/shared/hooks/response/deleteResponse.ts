@@ -13,20 +13,20 @@ export function useDeleteResponse({ onAlert }: IDeleteProps) {
   const handleDelete = async (_id: string, formId: string, deleteCallBack?: any) => {
     try {
       const deleteInCache = (client) => {
-        const { getResponses } = client.readQuery({
+        const oldData = client.readQuery({
           query: GET_RESPONSES,
-          variables: { ...defaultQueryVariables, formId },
+          variables: { ...defaultQueryVariables, formId, parentId: null },
         });
-        if (getResponses) {
+        if (oldData?.getResponses) {
           const newData = {
             getResponses: {
-              ...getResponses,
-              data: getResponses.data.filter((f) => f._id !== _id),
+              ...oldData?.getResponses,
+              data: oldData?.getResponses.data.filter((f) => f._id !== _id),
             },
           };
           client.writeQuery({
             query: GET_RESPONSES,
-            variables: { ...defaultQueryVariables, formId },
+            variables: { ...defaultQueryVariables, formId, parentId: null },
             data: newData,
           });
         }
@@ -39,7 +39,7 @@ export function useDeleteResponse({ onAlert }: IDeleteProps) {
         deleteCallBack();
       }
     } catch (error) {
-      onAlert('Error', error.message);
+      onAlert('Error delete', error.message);
     }
   };
 

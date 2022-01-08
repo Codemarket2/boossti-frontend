@@ -7,7 +7,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import TuneIcon from '@material-ui/icons/Tune';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   useGetFieldValuesByItem,
   useCreateFieldValue,
@@ -16,11 +16,11 @@ import {
 import { useCreateForm } from '@frontend/shared/hooks/form';
 import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
-import EditFormDrawer from './EditFormDrawer';
-import FieldViewWrapper from './FieldViewWrapper';
+import EditFormDrawer from '../form2/EditFormDrawer';
+import FieldViewWrapper from '../form2/FieldViewWrapper';
 import { onAlert } from '../../utils/alert';
-import SelectFormDrawer from './SelectFormDrawer';
-import ResponseCount from './ResponseCount';
+import SelectFormSection from './SelectFormSection';
+import ResponseCount from '../form2/ResponseCount';
 
 interface IProps {
   field: any;
@@ -133,7 +133,7 @@ export default function FormC({ field, parentId, previewMode = false }: IProps):
         <EditFormDrawer formId={state.fieldId} open onClose={() => setState(initialState)} />
       )}
       {state.select && (
-        <SelectFormDrawer
+        <SelectFormSection
           formData={data}
           field={field._id}
           parentId={parentId}

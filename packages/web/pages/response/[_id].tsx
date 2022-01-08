@@ -8,18 +8,22 @@ import UserLayout from '../../src/components/common/UserLayout';
 export default function Page() {
   const router = useRouter();
   const { _id } = router.query;
+  const { data, error } = useGetResponse(_id?.toString());
 
-  return <UserLayout authRequired>{_id && <Display responseId={_id} />}</UserLayout>;
-}
-function Display({ responseId }) {
-  const { data, error } = useGetResponse(responseId);
-  const { data: formData, error: formError } = useGetForm(data?.getResponse?.formId);
-  if (error || !data || !data?.getResponse || formError || !formData) {
-    return <ErrorLoading error={error} />;
-  }
   return (
-    <>
-      <Response form={formData?.getForm} response={data?.getResponse} />
-    </>
+    <UserLayout authRequired>
+      {error || !data?.getResponse ? (
+        <ErrorLoading error={error} />
+      ) : (
+        <Display response={data?.getResponse} />
+      )}
+    </UserLayout>
   );
+}
+function Display({ response }: any) {
+  const { data: formData, error: formError } = useGetForm(response?.formId);
+  if (formError || !formData?.getForm) {
+    return <ErrorLoading error={formError} />;
+  }
+  return <Response form={formData?.getForm} response={response} />;
 }

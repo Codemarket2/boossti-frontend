@@ -7,7 +7,6 @@ import AddCircle from '@material-ui/icons/AddCircle';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Carousel from 'react-material-ui-carousel';
-import { useTheme } from '@material-ui/core/styles';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -26,8 +25,9 @@ import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
 import FieldValueCard from './FieldValueCard';
 import Share from '../share/Share';
-import SectionForm from '../form2/SectionForm';
+import FormSection from './FormSection';
 import FieldViewWrapper from '../form2/FieldViewWrapper';
+import ResponseCount from '../form2/ResponseCount';
 
 const initialState = {
   showForm: false,
@@ -326,10 +326,11 @@ export default function FieldValues({
                 <Typography variant="h5" id={convertToSlug(field.label)}>
                   {field.label}
                 </Typography>
-                <FieldViewWrapper _id={JSON.parse(field?.options)?.formId} />
+                <ResponseCount formId={JSON.parse(field?.options)?.formId} parentId={parentId} />
+                <FieldViewWrapper _id={JSON.parse(field?.options)?.formId} parentId={parentId} />
               </>
             ) : field.fieldType === 'form' ? (
-              <SectionForm field={field} parentId={parentId} previewMode={previewMode} />
+              <FormSection field={field} parentId={parentId} previewMode={previewMode} />
             ) : (
               <ItemOneFields
                 toggleLeftNavigation={(value) => {
