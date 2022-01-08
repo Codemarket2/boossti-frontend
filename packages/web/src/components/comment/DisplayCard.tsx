@@ -185,6 +185,7 @@ export default function DisplayCard({
                 itemSlug={itemSlug}
                 index={shareIndex}
                 fieldTitle={fieldTitle}
+                showOverlayOnce={true}
               >
                 {currentUserId === commentedUser!.createdBy!._id && (
                   <>

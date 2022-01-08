@@ -31,7 +31,6 @@ export default function DisplayComment({
   const [edit, setEdit] = useState(false);
 
   const { handleUpdate, setUpdateInputVal, updateInputVal } = useUpdateComment(
-    postId,
     commentedUser._id,
     setEdit,
   );
