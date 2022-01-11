@@ -18,6 +18,9 @@ export function useCreateUpdateResponse({ onAlert }: IHooksProps, parentId) {
         if (field.fieldType === 'type' || value?.itemId?._id) {
           value = { ...value, itemId: value?.itemId?._id ? value?.itemId?._id : null };
         }
+        if (field.fieldType === 'existingForm' || value?.response?._id) {
+          value = { ...value, response: value?.response?._id ? value?.response?._id : null };
+        }
         if (field.fieldType === 'image' && value?.tempMedia?.length > 0) {
           let newMedia = [];
           if (value.tempMediaFiles.length > 0) {

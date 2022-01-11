@@ -19,6 +19,7 @@ import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
 import DisplayRichText from '../common/DisplayRichText';
+import { ShowResponseLabel } from './ResponseDrawer';
 
 interface IProps {
   form: any;
@@ -132,6 +133,8 @@ export const ShowValue = ({ field, value }: any) => {
       return <>{value?.value}</>;
     case 'type':
       return <>{value?.itemId?.title}</>;
+    case 'existingForm':
+      return <ShowResponseLabel formField={field?.options?.formField} response={value?.response} />;
     case 'richTextarea':
       return <DisplayRichText value={value?.value} />;
     case 'date':

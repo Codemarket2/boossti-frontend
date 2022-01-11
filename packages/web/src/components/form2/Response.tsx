@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useGetForm } from '@frontend/shared/hooks/form';
+import { useGetResponse } from '@frontend/shared/hooks/response';
 import Link from 'next/link';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -11,44 +13,76 @@ import { ShowValue } from '../list/ListItemsFieldsValue';
 import Breadcrumbs from '../common/Breadcrumbs';
 import Authorization from '../common/Authorization';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
+import ErrorLoading from '../common/ErrorLoading';
 
 interface IProps {
-  form: any;
-  response: any;
+  responseId: string;
+  hideBreadcrumbs?: boolean;
 }
 
-export default function Response({ form, response }: IProps) {
+export default function Response({ responseId, hideBreadcrumbs }: IProps) {
+  const { data, error } = useGetResponse(responseId);
+
+  return error || !data?.getResponse ? (
+    <ErrorLoading error={error} />
+  ) : (
+    <ResponseChild response={data?.getResponse} hideBreadcrumbs={hideBreadcrumbs} />
+  );
+}
+
+interface IProps2 {
+  response: any;
+  hideBreadcrumbs?: boolean;
+}
+
+export function ResponseChild({ response, hideBreadcrumbs }: IProps2) {
   const [openDrawer, setOpenDrawer] = useState(false);
+  const { data: formData, error: formError } = useGetForm(response?.formId);
+
+  if (formError || !formData?.getForm) {
+    return <ErrorLoading error={formError} />;
+  }
+
+  const form = formData?.getForm;
+
   return (
-    <Authorization _id={[response?.createdBy?._id, form?.createdBy?._id]} allowAdmin>
-      <div className="d-flex justify-content-between align-items-center">
-        <Breadcrumbs>
-          <Link href="/forms">Forms</Link>
-          <Link href={`/forms/${form?._id}`}>{form?.name}</Link>
-          <Typography>Response</Typography>
-        </Breadcrumbs>
-        <div>
-          <Button
-            onClick={() => setOpenDrawer(true)}
-            startIcon={<EditIcon />}
-            variant="contained"
-            size="small"
-            color="primary"
+    <>
+      {!hideBreadcrumbs && (
+        <div className="d-flex justify-content-between align-items-center">
+          <Breadcrumbs>
+            <Link href="/forms">Forms</Link>
+            <Link href={`/forms/${form?._id}`}>{form?.name}</Link>
+            <Typography>Response</Typography>
+          </Breadcrumbs>
+          <Authorization
+            returnNull
+            _id={[response?.createdBy?._id, form?.createdBy?._id]}
+            allowAdmin
           >
-            Edit
-          </Button>
-          {openDrawer && (
-            <EditResponseDrawer
-              form={form}
-              response={response}
-              open={openDrawer}
-              onClose={() => {
-                setOpenDrawer(false);
-              }}
-            />
-          )}
+            <div>
+              <Button
+                onClick={() => setOpenDrawer(true)}
+                startIcon={<EditIcon />}
+                variant="contained"
+                size="small"
+                color="primary"
+              >
+                Edit
+              </Button>
+              {openDrawer && (
+                <EditResponseDrawer
+                  form={form}
+                  response={response}
+                  open={openDrawer}
+                  onClose={() => {
+                    setOpenDrawer(false);
+                  }}
+                />
+              )}
+            </div>
+          </Authorization>
         </div>
-      </div>
+      )}
       <Paper variant="outlined">
         <div className="p-2">
           <ListItemText
@@ -78,6 +112,6 @@ export default function Response({ form, response }: IProps) {
           })}
         </div>
       </Paper>
-    </Authorization>
+    </>
   );
 }

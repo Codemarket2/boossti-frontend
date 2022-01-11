@@ -1,0 +1,33 @@
+export const getFormFieldTypes = (isSection: boolean): FieldType[] => {
+  if (isSection) {
+    return [...fieldTypes, ...sectionFieldTypes];
+  }
+  return [...fieldTypes, ...formTypes];
+};
+
+type FieldType = {
+  label: string;
+  value: string;
+};
+
+export const sectionFieldTypes: FieldType[] = [{ label: 'Form', value: 'form' }];
+export const formTypes: FieldType[] = [{ label: 'Existing Form', value: 'existingForm' }];
+
+export const fieldTypes: FieldType[] = [
+  { label: 'Text', value: 'text' },
+  { label: 'Number', value: 'number' },
+  { label: 'Password', value: 'password' },
+  { label: 'Textarea', value: 'textarea' },
+  { label: 'Rich Textarea', value: 'richTextarea' },
+  { label: 'Checkbox', value: 'checkbox' },
+  { label: 'Select', value: 'select' },
+  { label: 'Email', value: 'email' },
+  { label: 'Phone Number', value: 'phoneNumber' },
+  { label: 'Date', value: 'date' },
+  { label: 'Date & Time', value: 'dateTime' },
+  { label: 'Image', value: 'image' },
+  // { label: 'Media (Images/Video)', value: 'media' },
+  // { label: 'Address', value: 'address' },
+  { label: 'Existing Type', value: 'type' },
+  { label: 'label', value: 'label' },
+];

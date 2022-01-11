@@ -17,9 +17,11 @@ import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import InputGroup from '../common/InputGroup';
-import { fieldTypes, sectionFieldTypes } from './AddField';
+import { getFormFieldTypes } from './fieldTypes';
 import TypesAutocomplete from './TypesAutocomplete';
 import InlineInput from '../common/InlineInput';
+import SelectForm from './SelectForm';
+import SelectFormFields from './SelectFormFields';
 
 type TProps = {
   field: any;
@@ -67,13 +69,11 @@ export default function FormFields({
               onChange={(e) => onFieldChange({ ...field, fieldType: e.target.value })}
               label="Field Type"
             >
-              {(isSection ? [...fieldTypes, ...sectionFieldTypes] : fieldTypes)?.map(
-                (option, index) => (
-                  <MenuItem value={option.value} key={index}>
-                    {option.label}
-                  </MenuItem>
-                ),
-              )}
+              {getFormFieldTypes(isSection)?.map((option, index) => (
+                <MenuItem value={option.value} key={index}>
+                  {option.label}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </InputGroup>
@@ -86,6 +86,33 @@ export default function FormFields({
               helperText="Required"
             />
           </InputGroup>
+        )}
+        {field.fieldType === 'existingForm' && (
+          <>
+            <InputGroup>
+              <SelectForm
+                value={field.form}
+                onChange={(newValue) =>
+                  onFieldChange({
+                    ...field,
+                    form: newValue,
+                    options: { ...field.options, formField: '' },
+                  })
+                }
+                error={!field.form}
+                helperText={!field.form && 'required'}
+              />
+            </InputGroup>
+            {field.form && (
+              <SelectFormFields
+                formId={field.form?._id}
+                value={field?.options?.formField}
+                onChange={(newValue) => onOptionChange({ formField: newValue })}
+                error={!field?.options?.formField}
+                helperText={!field?.options?.formField && 'required'}
+              />
+            )}
+          </>
         )}
         <InputGroup>
           <FormControlLabel

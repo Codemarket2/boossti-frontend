@@ -16,6 +16,10 @@ export const CREATE_FORM = gql`
           title
           slug
         }
+        form {
+          _id
+          name
+        }
       }
       settings
       published
@@ -50,6 +54,10 @@ export const UPDATE_FORM = gql`
           _id
           title
           slug
+        }
+        form {
+          _id
+          name
         }
       }
       settings

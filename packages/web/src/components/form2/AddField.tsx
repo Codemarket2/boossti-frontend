@@ -15,28 +15,8 @@ import LoadingButton from '../common/LoadingButton';
 import { onAlert } from '../../utils/alert';
 import TypesAutocomplete from './TypesAutocomplete';
 import SelectForm from './SelectForm';
-
-export const sectionFieldTypes = [{ label: 'Form', value: 'form' }];
-export const formTypes = [{ label: 'Existing Form', value: 'existingForm' }];
-
-export const fieldTypes = [
-  { label: 'Text', value: 'text' },
-  { label: 'Number', value: 'number' },
-  { label: 'Password', value: 'password' },
-  { label: 'Textarea', value: 'textarea' },
-  { label: 'Rich Textarea', value: 'richTextarea' },
-  { label: 'Checkbox', value: 'checkbox' },
-  { label: 'Select', value: 'select' },
-  { label: 'Email', value: 'email' },
-  { label: 'Phone Number', value: 'phoneNumber' },
-  { label: 'Date', value: 'date' },
-  { label: 'Date & Time', value: 'dateTime' },
-  { label: 'Image', value: 'image' },
-  // { label: 'Media (Images/Video)', value: 'media' },
-  // { label: 'Address', value: 'address' },
-  { label: 'Existing Type', value: 'type' },
-  { label: 'label', value: 'label' },
-];
+import SelectFormFields from './SelectFormFields';
+import { getFormFieldTypes } from './fieldTypes';
 
 interface IProps {
   onCancel: () => void;
@@ -94,10 +74,7 @@ export default function FieldForm({
             onChange={formik.handleChange}
             label="Field Type"
           >
-            {(isSection
-              ? [...fieldTypes, ...sectionFieldTypes]
-              : [...fieldTypes, ...formTypes]
-            )?.map((option, index) => (
+            {getFormFieldTypes(isSection)?.map((option, index) => (
               <MenuItem value={option.value} key={index}>
                 {option.label}
               </MenuItem>
@@ -124,34 +101,25 @@ export default function FieldForm({
           <InputGroup>
             <SelectForm
               disabled={formik.isSubmitting}
-              value={formik.values.existingForm}
-              onChange={(newValue) => formik.setFieldValue('existingForm', newValue)}
-              error={formik.touched.existingForm && Boolean(formik.errors.existingForm)}
-              helperText={formik.touched.existingForm && formik.errors.existingForm}
+              value={formik.values.form}
+              onChange={(newValue) => {
+                formik.setFieldValue('form', newValue);
+                formik.setFieldValue('formField', '');
+              }}
+              error={formik.touched.form && Boolean(formik.errors.form)}
+              helperText={formik.touched.form && formik.errors.form}
             />
           </InputGroup>
-          <InputGroup>
-            <FormControl
-              fullWidth
-              size="small"
-              variant="outlined"
+          {formik.values.form && (
+            <SelectFormFields
+              formId={formik.values.form?._id}
+              value={formik.values.formField}
+              onChange={(newValue) => formik.setFieldValue('formField', newValue)}
               disabled={formik.isSubmitting}
               error={formik.touched.formField && Boolean(formik.errors.formField)}
-            >
-              <InputLabel id="select-form-field">Select form field</InputLabel>
-              <Select
-                labelId="select-form-field"
-                name="formField"
-                // value={formik.values.formField}
-                // onChange={(newValue) => formik.setFieldValue('formField', newValue)}
-              >
-                <MenuItem>Loading fields</MenuItem>
-              </Select>
-              {formik.touched.formField && formik.errors.formField && (
-                <FormHelperText className="text-danger">{formik.errors.formField}</FormHelperText>
-              )}
-            </FormControl>
-          </InputGroup>
+              helperText={formik.errors.formField}
+            />
+          )}
         </>
       )}
       <InputGroup>

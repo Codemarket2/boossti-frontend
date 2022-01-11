@@ -1,5 +1,6 @@
 import { useCreateUpdateResponse } from '@frontend/shared/hooks/response';
 import { onAlert } from '../../utils/alert';
+import Authorization from '../common/Authorization';
 import Overlay from '../common/Overlay';
 import { FormView } from './FormView';
 
@@ -25,12 +26,14 @@ export default function EditResponseDrawer({ form, response, open, onClose }: IP
   return (
     <Overlay open={open} onClose={onClose} title="Edit Response">
       <div className="p-2">
-        <FormView
-          fields={form?.fields}
-          initialValues={response?.values}
-          handleSubmit={handleSubmit}
-          loading={updateLoading}
-        />
+        <Authorization _id={[response?.createdBy?._id, form?.createdBy?._id]} allowAdmin>
+          <FormView
+            fields={form?.fields}
+            initialValues={response?.values}
+            handleSubmit={handleSubmit}
+            loading={updateLoading}
+          />
+        </Authorization>
       </div>
     </Overlay>
   );

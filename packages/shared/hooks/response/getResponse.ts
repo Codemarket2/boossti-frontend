@@ -5,13 +5,14 @@ import { RESPONSE_SUB } from '../../graphql/subscription/response';
 
 export const defaultQueryVariables = { page: 1, limit: 10, search: '' };
 
-export function useGetResponses(formId: string, parentId: string = null) {
+export function useGetResponses(formId: string, parentId: string = null, formField = null) {
   const [subsribed, setSubsribed] = useState(false);
   const [state, setState] = useState({
     page: defaultQueryVariables.page,
     limit: defaultQueryVariables.limit,
     search: '',
     showSearch: false,
+    formField,
   });
 
   const { data, error, loading, subscribeToMore } = useQuery(GET_RESPONSES, {
