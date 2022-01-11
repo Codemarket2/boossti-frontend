@@ -2,19 +2,13 @@
 import Typography from '@material-ui/core/Typography';
 import { useGetMyResponses } from '@frontend/shared/hooks/response';
 import Link from 'next/link';
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Box,
-  Button,
-  Grid,
-} from '@material-ui/core';
+import { Accordion, AccordionDetails, AccordionSummary, Button } from '@material-ui/core';
 import { ExpandMore } from '@material-ui/icons';
 import ErrorLoading from '../common/ErrorLoading';
+import { ResponseChild } from '../form2/Response';
 
 export default function ActivityList() {
-  const { data, error, loading, state, setState } = useGetMyResponses();
+  const { data, error, loading } = useGetMyResponses();
 
   if (error || !data) {
     return <ErrorLoading error={error} />;
@@ -29,8 +23,8 @@ export default function ActivityList() {
         </>
       ) : (
         <>
-          {data?.getMyResponses?.data?.map((d) => (
-            <ActivityAccordion data={d} />
+          {data?.getMyResponses?.data?.map((d, i) => (
+            <ActivityAccordion data={d} key={i} />
           ))}
         </>
       )}
@@ -38,34 +32,24 @@ export default function ActivityList() {
   );
 }
 
-function ActivityAccordion({ data }) {
-  console.log(data);
+function ActivityAccordion({ data }: any) {
   return (
-    <div>
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMore />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography>{data?.formId?.name}</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Box>
-            {data?.values?.map((v) => (
-              <Grid container spacing={2} key={v._id}>
-                <Grid item xs={12} sm={12} md={12} lg={12}>
-                  <span style={{ margin: '0px 20px' }}>Field Id : {v.field} </span>{' '}
-                  <span>Value : {v.value}</span>
-                </Grid>
-              </Grid>
-            ))}
-            <Link href={`response/${data._id}`}>
-              <Button variant="outlined">Edit</Button>
-            </Link>
-          </Box>
-        </AccordionDetails>
-      </Accordion>
-    </div>
+    <Accordion>
+      <AccordionSummary
+        expandIcon={<ExpandMore />}
+        aria-controls="panel1a-content"
+        id="panel1a-header"
+      >
+        <Typography>{data?.formId?.name}</Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        <div className="w-100">
+          <ResponseChild response={{ ...data, formId: data?.formId?._id }} hideBreadcrumbs />
+          <Link href={`response/${data._id}`}>
+            <Button variant="outlined">Edit</Button>
+          </Link>
+        </div>
+      </AccordionDetails>
+    </Accordion>
   );
 }

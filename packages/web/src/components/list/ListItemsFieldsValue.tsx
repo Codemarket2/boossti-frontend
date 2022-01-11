@@ -24,6 +24,8 @@ import ResponseCount from '../form2/ResponseCount';
 import FieldViewWrapper from '../form2/FieldViewWrapper';
 import EditFormDrawer from '../form2/EditFormDrawer';
 import { convertToSlug } from '../field/LeftNavigation';
+import { getLabel } from '../form2/SelectResponse';
+import { ShowResponseLabel } from '../form2/ResponseDrawer';
 
 interface IProps {
   listItem: any;
@@ -230,6 +232,8 @@ export const ShowValue = ({ field, value }: IProps2) => {
       return <>{value?.value}</>;
     case 'type':
       return <>{value?.itemId?.title}</>;
+    case 'existingForm':
+      return <ShowResponseLabel formField={field?.options?.formField} response={value?.response} />;
     case 'url':
       return <a href={value?.value}>{value?.value}</a>;
     case 'richTextarea':

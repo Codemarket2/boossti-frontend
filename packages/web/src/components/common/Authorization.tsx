@@ -6,9 +6,10 @@ interface IProps {
   children: ReactNode;
   _id: string | string[];
   allowAdmin?: boolean;
+  returnNull?: boolean;
 }
 
-export default function Authorization({ children, _id, allowAdmin = false }: IProps) {
+export default function Authorization({ children, _id, allowAdmin = false, returnNull }: IProps) {
   const { attributes, admin = false } = useSelector(({ auth }: any) => auth);
 
   let allow = false;
@@ -20,6 +21,10 @@ export default function Authorization({ children, _id, allowAdmin = false }: IPr
 
   if (allow || (allowAdmin && admin)) {
     return <>{children}</>;
+  }
+
+  if (returnNull) {
+    return null;
   }
   return <NotFound />;
 }

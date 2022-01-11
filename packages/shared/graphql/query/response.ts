@@ -25,6 +25,13 @@ export const GET_RESPONSE = gql`
           url
           caption
         }
+        response {
+          _id
+          values {
+            field
+            value
+          }
+        }
       }
       createdBy {
         _id
@@ -37,8 +44,22 @@ export const GET_RESPONSE = gql`
 `;
 
 export const GET_RESPONSES = gql`
-  query MyQuery($formId: ID!, $parentId: ID, $page: Int, $limit: Int) {
-    getResponses(formId: $formId, parentId: $parentId, page: $page, limit: $limit) {
+  query MyQuery(
+    $formId: ID!
+    $parentId: ID
+    $page: Int
+    $limit: Int
+    $search: String
+    $formField: ID
+  ) {
+    getResponses(
+      formId: $formId
+      parentId: $parentId
+      page: $page
+      limit: $limit
+      search: $search
+      formField: $formField
+    ) {
       count
       data {
         _id
@@ -62,6 +83,13 @@ export const GET_RESPONSES = gql`
           media {
             url
             caption
+          }
+          response {
+            _id
+            values {
+              field
+              value
+            }
           }
         }
         createdBy {
@@ -104,6 +132,13 @@ export const GET_MY_RESPONSES = gql`
           media {
             url
             caption
+          }
+          response {
+            _id
+            values {
+              field
+              value
+            }
           }
         }
         createdBy {

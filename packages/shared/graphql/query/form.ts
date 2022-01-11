@@ -16,6 +16,10 @@ export const GET_FORM = gql`
           title
           slug
         }
+        form {
+          _id
+          name
+        }
       }
       settings
       published

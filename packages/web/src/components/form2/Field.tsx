@@ -15,6 +15,7 @@ import RichTextarea from '../common/RichTextarea2';
 // import AddressSearch from '../common/AddressSearch';
 import ListAutocomplete from './ListAutocomplete';
 import { validateValue } from './validate';
+import SelectResponse from './SelectResponse';
 
 import 'react-phone-input-2/lib/style.css';
 
@@ -30,6 +31,7 @@ interface IProps {
   onChangeValue: (arg: any) => void;
   mediaState: any;
   setMediaState: any;
+  form: any;
 }
 
 export default function FieldValueForm2({
@@ -42,6 +44,7 @@ export default function FieldValueForm2({
   options,
   value,
   onChangeValue,
+  form,
 }: IProps): any {
   const onChange = (payload) => {
     onChangeValue({ ...value, ...payload });
@@ -125,6 +128,19 @@ export default function FieldValueForm2({
           helperText={validateValue(validate, value, options, fieldType).errorMessage}
           value={value ? value.itemId : null}
           onChange={(newValue) => onChange({ field: _id, itemId: newValue })}
+        />
+      );
+    }
+    case 'existingForm': {
+      return (
+        <SelectResponse
+          label={label}
+          formId={form?._id}
+          formField={options?.formField}
+          value={value?.response}
+          onChange={(newValue) => onChange({ field: _id, response: newValue })}
+          error={validateValue(validate, value, options, fieldType).error}
+          helperText={validateValue(validate, value, options, fieldType).errorMessage}
         />
       );
     }

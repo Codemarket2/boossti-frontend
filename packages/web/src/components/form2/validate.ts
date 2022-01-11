@@ -76,6 +76,12 @@ export const validateValue = (
       }
       break;
     }
+    case 'existingForm': {
+      if (options.required && (!value || !value?.response)) {
+        result = { error: true, errorMessage: 'Required' };
+      }
+      break;
+    }
     default: {
       if (options.required && (!value || !value?.value)) {
         result = { error: true, errorMessage: 'Required' };

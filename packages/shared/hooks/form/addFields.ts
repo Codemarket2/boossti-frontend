@@ -11,7 +11,7 @@ const validationSchema = yup.object({
     then: yup.object().nullable(true).required('Type is required'),
     otherwise: yup.object().nullable(true),
   }),
-  existingForm: yup.object().when('fieldType', {
+  form: yup.object().when('fieldType', {
     is: (value) => value === 'existingForm',
     then: yup.object().nullable(true).required('Select Form is required'),
     otherwise: yup.object().nullable(true),
@@ -32,7 +32,7 @@ interface IFormValues {
   typeId: any;
   multipleValues: boolean;
   required: boolean;
-  existingForm: any;
+  form: any;
   formField: string;
 }
 
@@ -45,7 +45,7 @@ const defaultFormValues = {
   typeId: null,
   multipleValues: false,
   required: false,
-  existingForm: null,
+  form: null,
   formField: '',
 };
 
@@ -63,12 +63,15 @@ export function useAddFields({ onAlert, onSave }: ICRUDProps): any {
           _id: payload.edit ? payload._id : generateObjectId(),
           label: payload.label,
           fieldType: payload.fieldType,
+          typeId: payload.typeId,
+          form: payload.form,
           options: {
             multipleValues: payload.multipleValues,
             required: payload.required,
+            formField: payload.formField,
           },
-          typeId: payload.typeId,
         };
+
         let action = 'create';
         if (payload.edit) {
           action = 'update';
@@ -86,9 +89,11 @@ export function useAddFields({ onAlert, onSave }: ICRUDProps): any {
     formik.setFieldValue('label', field.label, false);
     formik.setFieldValue('fieldType', field.fieldType, false);
     formik.setFieldValue('multipleValues', field.options.multipleValues, false);
-    formik.setFieldValue('required', field.options.required, false);
+    formik.setFieldValue('required', field.options?.required, false);
     formik.setFieldValue('typeId', field.typeId, false);
     formik.setFieldValue('_id', field._id, false);
+    formik.setFieldValue('form', field?.form, false);
+    formik.setFieldValue('formField', field.options?.formField, false);
   };
 
   const formLoading = formik.isSubmitting;
