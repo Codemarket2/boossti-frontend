@@ -40,15 +40,19 @@ export function useCreateUpdateResponse({ onAlert }: IHooksProps, parentId) {
         parentId,
         values: values.map((m) => JSON.parse(JSON.stringify(m), omitTypename)),
       };
+      let response = null;
       if (edit) {
-        await updateMutation({
+        response = await updateMutation({
           variables: payload,
         });
+        response = response?.data?.updateResponse;
       } else {
-        await createMutation({
+        response = await createMutation({
           variables: payload,
         });
+        response = response?.data?.createResponse;
       }
+      return response;
     } catch (error) {
       console.log(error);
       onAlert('Error', error.message);

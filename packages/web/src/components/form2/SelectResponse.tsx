@@ -1,9 +1,10 @@
+import { useEffect, useState } from 'react';
 import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import { useGetResponses } from '@frontend/shared/hooks/response';
 import CircularProgress from '@material-ui/core/CircularProgress';
-// import { useGetForm } from '@frontend/shared/hooks/form';
 import ErrorLoading from '../common/ErrorLoading';
+import CreateResponseDrawer from './CreateResponseDrawer';
 
 interface IProps {
   label: string;
@@ -15,6 +16,8 @@ interface IProps {
   disabled?: boolean;
   formField?: string;
 }
+
+const filter = createFilterOptions();
 
 export default function SelectResponse({
   label,
@@ -31,10 +34,19 @@ export default function SelectResponse({
     null,
     formField,
   );
+  const [addOption, setAddOption] = useState({ showDrawer: false });
 
-  return queryError ? (
-    <ErrorLoading error={queryError} />
-  ) : (
+  useEffect(() => {
+    if (!value?.label && value?.values) {
+      onChange(getLabels(formField, [value])?.pop());
+    }
+  }, [value]);
+
+  if (queryError) {
+    return <ErrorLoading error={queryError} />;
+  }
+
+  return (
     <>
       <Autocomplete
         disabled={disabled}
@@ -42,7 +54,12 @@ export default function SelectResponse({
         loading={loading}
         value={value}
         onChange={(event: any, newValue) => {
-          onChange(newValue);
+          if (newValue?.openDrawer) {
+            onChange(null);
+            setAddOption({ ...addOption, showDrawer: true });
+          } else {
+            onChange(newValue);
+          }
         }}
         getOptionLabel={(option) => option?.label}
         inputValue={state.search}
@@ -50,6 +67,17 @@ export default function SelectResponse({
           setState({ ...state, search: newInputValue });
         }}
         options={getLabels(formField, data?.getResponses?.data) || []}
+        filterOptions={(options, params) => {
+          const filtered = filter(options, params);
+          if (params.inputValue !== '' && !loading) {
+            filtered.push({
+              inputValue: params.inputValue,
+              label: `Add "${params.inputValue}"`,
+              openDrawer: true,
+            });
+          }
+          return filtered;
+        }}
         renderInput={(params) => (
           <TextField
             error={error}
@@ -70,6 +98,18 @@ export default function SelectResponse({
           />
         )}
       />
+      {addOption?.showDrawer && (
+        <CreateResponseDrawer
+          open={addOption?.showDrawer}
+          onClose={() => setAddOption({ ...addOption, showDrawer: false })}
+          title={label}
+          formId={formId}
+          createCallback={(newResponse) => {
+            onChange(getLabels(formField, [newResponse])?.pop());
+            setAddOption({ ...addOption, showDrawer: false });
+          }}
+        />
+      )}
     </>
   );
 }
@@ -79,9 +119,9 @@ const getLabels = (formField: string, responses: any[]) => {
   responses?.forEach((response) => {
     const fieldValues = response?.values?.filter((value) => value?.field === formField);
     let label = '';
-    fieldValues?.forEach((f) => {
+    fieldValues?.forEach((f, i) => {
       if (f?.value) {
-        label += `${f?.value} `;
+        label += i > 0 ? `${f?.value}` : f?.value;
       }
     });
     if (label) {
@@ -94,9 +134,9 @@ const getLabels = (formField: string, responses: any[]) => {
 export const getLabel = (formField: string, response: any): string => {
   let label = '';
   const fieldValues = response?.values?.filter((value) => value?.field === formField);
-  fieldValues?.forEach((f) => {
+  fieldValues?.forEach((f, i) => {
     if (f?.value) {
-      label += `${f?.value} `;
+      label += i > 0 ? `${f?.value}` : f?.value;
     }
   });
   return label;

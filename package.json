@@ -14,6 +14,7 @@
     "ios:clean": "yarn workspace @frontend/mobile run ios:clean",
     "pod:install": "yarn workspace @frontend/mobile run pod:install",
     "web": "yarn workspace @frontend/web run dev",
+    "web:unix": "yarn workspace @frontend/web run dev:unix",
     "web:ssl": "local-ssl-proxy --source 3001 --target 3000",
     "web:debug": "yarn workspace @frontend/web run debug",
     "web:build": "yarn workspace @frontend/web run build",

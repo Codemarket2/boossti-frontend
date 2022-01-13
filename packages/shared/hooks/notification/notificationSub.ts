@@ -17,13 +17,9 @@ export const useNotificationSub = () => {
   const { data, error } = useSubscription(NOTIFICATION_SUB, {
     variables: { userId: attributes['custom:_id'] },
   });
-  // 60fc4d29f11b170008d9ec48
-
-  //   console.log('NOTIFICATION_SUB data, error ', data, error);
 
   useEffect(() => {
     if (data?.notificationSub) {
-      console.log(data?.notificationSub);
       setState({
         ...state,
         notifications: [...state.notifications, data.notificationSub],

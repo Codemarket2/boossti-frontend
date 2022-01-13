@@ -17,7 +17,7 @@ export default function Notification() {
   const { notifications } = useGetMyNotifications();
 
   useEffect(() => {
-    notifications && setState({ ...state, notifications: notifications });
+    if (notifications) setState({ ...state, notifications });
   }, [notifications]);
 
   return (
