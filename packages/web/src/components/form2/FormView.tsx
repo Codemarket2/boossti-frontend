@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -17,6 +17,7 @@ import DisplayRichText from '../common/DisplayRichText';
 interface IProps {
   form: any;
   parentId?: string;
+  createCallback?: (response: any) => void;
 }
 
 export const defualtValue = {
@@ -32,6 +33,7 @@ export const defualtValue = {
 export default function FormViewWrapper({
   form: { _id, name, fields, settings },
   parentId,
+  createCallback,
 }: IProps): any {
   const { handleCreateUpdateResponse, createLoading } = useCreateUpdateResponse(
     { onAlert },
@@ -41,8 +43,11 @@ export default function FormViewWrapper({
 
   const handleSubmit = async (values) => {
     const payload = { formId: _id, values };
-    await handleCreateUpdateResponse(payload, fields);
+    const response = await handleCreateUpdateResponse(payload, fields);
     setShowMessage(true);
+    if (createCallback) {
+      createCallback(response);
+    }
   };
   return (
     <div>
@@ -104,14 +109,8 @@ export function FormView({
   onCancel,
   initialValues = [],
 }: IProps2): any {
-  const [values, setValues] = useState([]);
+  const [values, setValues] = useState(initialValues);
   const [submitState, setSubmitState] = useState(initialSubmitState);
-
-  useEffect(() => {
-    if (initialValues?.length > 0 && values?.length === 0) {
-      setValues(initialValues);
-    }
-  }, [initialValues]);
 
   const onChange = (sValue, valueIndex) => {
     const newValue = { ...defualtValue, ...sValue };
