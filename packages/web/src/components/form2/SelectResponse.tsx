@@ -22,7 +22,7 @@ const filter = createFilterOptions();
 export default function SelectResponse({
   label,
   formId,
-  value,
+  value = null,
   onChange,
   error = false,
   helperText,
@@ -52,7 +52,7 @@ export default function SelectResponse({
         disabled={disabled}
         size="small"
         loading={loading}
-        value={value || null}
+        value={value}
         onChange={(event: any, newValue) => {
           if (newValue?.openDrawer) {
             onChange(null);
@@ -61,12 +61,12 @@ export default function SelectResponse({
             onChange(newValue);
           }
         }}
+        options={getLabels(formField, data?.getResponses?.data) || []}
         getOptionLabel={(option) => option?.label}
         inputValue={state.search}
         onInputChange={(event, newInputValue) => {
           setState({ ...state, search: newInputValue });
         }}
-        options={getLabels(formField, data?.getResponses?.data) || []}
         filterOptions={(options, params) => {
           const filtered = filter(options, params);
           if (params.inputValue !== '' && !loading) {
@@ -80,11 +80,11 @@ export default function SelectResponse({
         }}
         renderInput={(params) => (
           <TextField
+            {...params}
             error={error}
             helperText={helperText}
             fullWidth
-            {...params}
-            label={label || 'Select'}
+            placeholder={label || 'Select'}
             variant="outlined"
             InputProps={{
               ...params.InputProps,

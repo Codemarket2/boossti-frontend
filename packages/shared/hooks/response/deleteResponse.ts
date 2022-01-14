@@ -15,7 +15,7 @@ export function useDeleteResponse({ onAlert }: IDeleteProps) {
       const deleteInCache = (client) => {
         const oldData = client.readQuery({
           query: GET_RESPONSES,
-          variables: { ...defaultQueryVariables, formId, parentId: null },
+          variables: { ...defaultQueryVariables, formId },
         });
         if (oldData?.getResponses) {
           const newData = {
@@ -26,7 +26,7 @@ export function useDeleteResponse({ onAlert }: IDeleteProps) {
           };
           client.writeQuery({
             query: GET_RESPONSES,
-            variables: { ...defaultQueryVariables, formId, parentId: null },
+            variables: { ...defaultQueryVariables, formId },
             data: newData,
           });
         }

@@ -2,7 +2,7 @@ export const getFormFieldTypes = (isSection: boolean): FieldType[] => {
   if (isSection) {
     return [...fieldTypes, ...sectionFieldTypes];
   }
-  return [...fieldTypes, ...formTypes];
+  return [...fieldTypes];
 };
 
 type FieldType = {
@@ -11,7 +11,6 @@ type FieldType = {
 };
 
 export const sectionFieldTypes: FieldType[] = [{ label: 'Form', value: 'form' }];
-export const formTypes: FieldType[] = [{ label: 'Existing Form', value: 'existingForm' }];
 
 export const fieldTypes: FieldType[] = [
   { label: 'Text', value: 'text' },
@@ -28,6 +27,5 @@ export const fieldTypes: FieldType[] = [
   { label: 'Image', value: 'image' },
   // { label: 'Media (Images/Video)', value: 'media' },
   // { label: 'Address', value: 'address' },
-  { label: 'Existing Type', value: 'type' },
-  { label: 'label', value: 'label' },
+  { label: 'Static Text', value: 'label' },
 ];

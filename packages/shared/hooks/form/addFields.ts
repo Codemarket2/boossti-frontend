@@ -6,21 +6,21 @@ import { generateObjectId } from '../../utils/objectId';
 const validationSchema = yup.object({
   label: yup.string().required('Label is required'),
   fieldType: yup.string().required('Field Type is required'),
-  typeId: yup.object().when('fieldType', {
-    is: (value) => value === 'type',
-    then: yup.object().nullable(true).required('Type is required'),
-    otherwise: yup.object().nullable(true),
-  }),
-  form: yup.object().when('fieldType', {
-    is: (value) => value === 'existingForm',
-    then: yup.object().nullable(true).required('Select Form is required'),
-    otherwise: yup.object().nullable(true),
-  }),
-  formField: yup.string().when('fieldType', {
-    is: (value) => value === 'existingForm',
-    then: yup.string().required('Form Field is required'),
-    otherwise: yup.string(),
-  }),
+  // typeId: yup.object().when('fieldType', {
+  //   is: (value) => value === 'type',
+  //   then: yup.object().nullable(true).required('Type is required'),
+  //   otherwise: yup.object().nullable(true),
+  // }),
+  // form: yup.object().when('fieldType', {
+  //   is: (value) => value === 'existingForm',
+  //   then: yup.object().nullable(true).required('Select Form is required'),
+  //   otherwise: yup.object().nullable(true),
+  // }),
+  // formField: yup.string().when('fieldType', {
+  //   is: (value) => value === 'existingForm',
+  //   then: yup.string().required('Form Field is required'),
+  //   otherwise: yup.string(),
+  // }),
 });
 
 interface IFormValues {
@@ -29,9 +29,9 @@ interface IFormValues {
   parentId: string;
   label: string;
   fieldType: string;
-  typeId: any;
   multipleValues: boolean;
   required: boolean;
+  typeId: any;
   form: any;
   formField: string;
 }
@@ -42,9 +42,9 @@ const defaultFormValues = {
   parentId: '',
   label: '',
   fieldType: '',
-  typeId: null,
   multipleValues: false,
   required: false,
+  typeId: null,
   form: null,
   formField: '',
 };
@@ -90,10 +90,10 @@ export function useAddFields({ onAlert, onSave }: ICRUDProps): any {
     formik.setFieldValue('fieldType', field.fieldType, false);
     formik.setFieldValue('multipleValues', field.options.multipleValues, false);
     formik.setFieldValue('required', field.options?.required, false);
-    formik.setFieldValue('typeId', field.typeId, false);
     formik.setFieldValue('_id', field._id, false);
-    formik.setFieldValue('form', field?.form, false);
-    formik.setFieldValue('formField', field.options?.formField, false);
+    // formik.setFieldValue('typeId', field.typeId, false);
+    // formik.setFieldValue('form', field?.form, false);
+    // formik.setFieldValue('formField', field.options?.formField, false);
   };
 
   const formLoading = formik.isSubmitting;

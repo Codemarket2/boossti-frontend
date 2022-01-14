@@ -16,13 +16,6 @@ export const validateValue = (
   }
 
   switch (fieldType) {
-    // case 'text':
-    // case 'textarea': {
-    //   if (options.required && (!value || !value?.value)) {
-    //     result = { error: true, errorMessage: 'Required' };
-    //   }
-    //   break;
-    // }
     case 'number': {
       if (options.required && (!value || !value?.valueNumber)) {
         result = { error: true, errorMessage: 'Required' };
@@ -70,14 +63,20 @@ export const validateValue = (
       }
       break;
     }
-    case 'type': {
-      if (options.required && (!value || !value?.itemId)) {
+    case 'select': {
+      if (options?.optionsListType === 'type' && options.required && (!value || !value?.itemId)) {
         result = { error: true, errorMessage: 'Required' };
-      }
-      break;
-    }
-    case 'existingForm': {
-      if (options.required && (!value || !value?.response)) {
+      } else if (
+        options?.optionsListType === 'existingForm' &&
+        options.required &&
+        (!value || !value?.response)
+      ) {
+        result = { error: true, errorMessage: 'Required' };
+      } else if (
+        !(options?.optionsListType === 'type' || options?.optionsListType === 'existingForm') &&
+        options.required &&
+        (!value || !value?.value)
+      ) {
         result = { error: true, errorMessage: 'Required' };
       }
       break;

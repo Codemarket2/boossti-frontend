@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router';
-import { useState } from 'react';
 import moment from 'moment';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -127,14 +126,19 @@ export const ShowValue = ({ field, value }: any) => {
     case 'text':
     case 'textarea':
     case 'url':
-    case 'select':
     case 'email':
     case 'password':
       return <>{value?.value}</>;
-    case 'type':
-      return <>{value?.itemId?.title}</>;
-    case 'existingForm':
-      return <ShowResponseLabel formField={field?.options?.formField} response={value?.response} />;
+    case 'select':
+      if (field?.options?.optionsListType === 'type') {
+        return <>{value?.itemId?.title}</>;
+      }
+      if (field?.options?.optionsListType === 'existingForm') {
+        return (
+          <ShowResponseLabel formField={field?.options?.formField} response={value?.response} />
+        );
+      }
+      return <>{value?.value}</>;
     case 'richTextarea':
       return <DisplayRichText value={value?.value} />;
     case 'date':

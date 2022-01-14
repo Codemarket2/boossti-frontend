@@ -3,14 +3,19 @@ import { useEffect, useState } from 'react';
 import { GET_RESPONSE, GET_RESPONSES } from '../../graphql/query/response';
 import { RESPONSE_SUB } from '../../graphql/subscription/response';
 
-export const defaultQueryVariables = { page: 1, limit: 10, search: '' };
+export const defaultQueryVariables = {
+  formId: null,
+  parentId: null,
+  page: 1,
+  limit: 10,
+  search: '',
+  formField: null,
+};
 
 export function useGetResponses(formId: string, parentId: string = null, formField = null) {
   const [subsribed, setSubsribed] = useState(false);
   const [state, setState] = useState({
-    page: defaultQueryVariables.page,
-    limit: defaultQueryVariables.limit,
-    search: '',
+    ...defaultQueryVariables,
     showSearch: false,
     formField,
   });

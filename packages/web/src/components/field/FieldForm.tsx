@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-wrap-multilines */
-import { useEffect, useState } from 'react';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import { useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
@@ -11,14 +10,10 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import { useCRUDFields } from '@frontend/shared/hooks/field';
-import { useGetListTypes } from '@frontend/shared/hooks/list';
-import { useGetFieldByRelationId } from '@frontend/shared/hooks/field';
-
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
-import ErrorLoading from '../common/ErrorLoading';
 import { onAlert } from '../../utils/alert';
-import FieldsSkeleton from './FieldsSkeleton';
+import SelectListType from '../form2/SelectListType';
 
 export const fieldTypes = [
   { label: 'Form', value: 'form' },
@@ -91,7 +86,6 @@ export default function FieldForm({
   edit = false,
   formBuilder = false,
 }: IProps): any {
-  const { data, error, state, setState } = useGetListTypes({ limit: 10 });
   const { formik, formLoading, setFormValues } = useCRUDFields({
     onAlert,
     parentId,
@@ -151,33 +145,15 @@ export default function FieldForm({
       {formik.values.fieldType === 'type' && (
         <>
           <InputGroup>
-            {error ? (
-              <ErrorLoading error={error} />
-            ) : (
-              <Autocomplete
-                disabled={formik.isSubmitting}
-                value={formik.values.typeId}
-                onChange={(event: any, newValue) => {
-                  formik.setFieldValue('typeId', newValue);
-                }}
-                getOptionLabel={(option) => option.title}
-                inputValue={state.search}
-                onInputChange={(event, newInputValue) => {
-                  setState({ ...state, search: newInputValue });
-                }}
-                options={data && data.getListTypes ? data.getListTypes.data : []}
-                renderInput={(params) => (
-                  <TextField
-                    fullWidth
-                    {...params}
-                    label="Select Type"
-                    variant="outlined"
-                    error={formik.touched.typeId && Boolean(formik.errors.typeId)}
-                    helperText={formik.touched.typeId && formik.errors.typeId}
-                  />
-                )}
-              />
-            )}
+            <SelectListType
+              disabled={formik.isSubmitting}
+              value={formik.values.typeId}
+              onChange={(newValue) => {
+                formik.setFieldValue('typeId', newValue);
+              }}
+              error={formik.touched.typeId && Boolean(formik.errors.typeId)}
+              helperText={formik.touched.typeId && formik.errors.typeId}
+            />
           </InputGroup>
           {edit ? (
             <UpdateFieldInput formik={formik} />

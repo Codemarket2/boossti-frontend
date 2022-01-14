@@ -1,14 +1,10 @@
 import { useState, useEffect } from 'react';
-import Typography from '@material-ui/core/Typography';
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
-import Toolbar from '@material-ui/core/Toolbar';
 import { useCreateListItem, useDeleteListItem } from '@frontend/shared/hooks/list';
 import ItemScreen from './ItemScreen';
 import Loading from '../common/Loading';
-import LoadingButton from '../common/LoadingButton';
 import { onAlert } from '../../utils/alert';
+import Overlay from '../common/Overlay';
 
 interface IProps {
   open: boolean;
@@ -27,71 +23,67 @@ export default function ItemFormDrawer({
   onSelect,
   typeId,
 }: IProps) {
-  const [state, setState] = useState({ item: null, slug: null });
+  const [item, setItem] = useState(null);
+  const [slug, setSlug] = useState(null);
   const { handleCreate, createLoading } = useCreateListItem({ onAlert });
   const { handleDelete, deleteLoading } = useDeleteListItem({ onAlert });
-  const createCallback = (slug) => {
-    setState({ ...state, slug });
+
+  const createCallback = (newSlug) => {
+    setSlug(newSlug);
   };
+
   useEffect(() => {
     if (open) {
       handleCreate([typeId], createCallback);
     }
   }, [open]);
 
-  const onSlugUpdate = (newSlug) => {
-    setState({ ...state, slug: newSlug });
-  };
-
   const handleSelect = () => {
-    if (state.item.title.includes('-n-e-w')) {
+    if (item?.title?.includes('-n-e-w')) {
       alert('Atleast add your title');
     } else {
-      onSelect(state.item);
+      onSelect(item);
+    }
+  };
+
+  const onClickClose = async () => {
+    if (item?._id) {
+      await handleDelete(item?._id, onClose);
+    } else {
+      onClose();
     }
   };
 
   return (
-    <Drawer anchor="right" open={open}>
-      <div style={{ width: '75vw' }}>
-        <AppBar color="transparent" position="static" elevation={1}>
-          <Toolbar>
-            <Typography variant="h6" className="flex-grow-1">
-              Add New {typeTitle}
-            </Typography>
-            {state.item && (
-              <Button
-                disabled={deleteLoading}
-                onClick={handleSelect}
-                color="primary"
-                variant="contained"
-              >
-                Select
-              </Button>
-            )}
-            <LoadingButton
-              loading={deleteLoading}
-              className="ml-2"
-              onClick={async () => await handleDelete(state.item._id, onClose)}
+    <>
+      <Overlay
+        title={`Add new ${typeTitle}`}
+        open={open}
+        secondButton={
+          item && (
+            <Button
+              disabled={deleteLoading}
+              onClick={handleSelect}
               color="primary"
-              variant="outlined"
+              variant="contained"
             >
-              Cancel
-            </LoadingButton>
-          </Toolbar>
-        </AppBar>
-        {state.slug ? (
+              Select
+            </Button>
+          )
+        }
+        onClose={onClickClose}
+      >
+        {slug ? (
           <ItemScreen
             hideBreadcrumbs
-            slug={state.slug}
-            setItem={(item) => setState({ ...state, item })}
-            onSlugUpdate={onSlugUpdate}
+            slug={item?.slug || slug}
+            setItem={(newItem) => setItem(newItem)}
             hideleft
           />
         ) : (
           <Loading />
         )}
-      </div>
-    </Drawer>
+      </Overlay>
+    </>
   );
 }
