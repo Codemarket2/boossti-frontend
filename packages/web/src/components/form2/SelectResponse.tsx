@@ -52,7 +52,7 @@ export default function SelectResponse({
         disabled={disabled}
         size="small"
         loading={loading}
-        value={value}
+        value={value || null}
         onChange={(event: any, newValue) => {
           if (newValue?.openDrawer) {
             onChange(null);
