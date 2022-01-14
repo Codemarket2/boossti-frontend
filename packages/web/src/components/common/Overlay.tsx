@@ -10,9 +10,10 @@ interface IProps {
   onClose: () => void;
   title?: string;
   children: ReactNode;
+  secondButton?: ReactNode;
 }
 
-export default function Overlay({ open, onClose, title, children }: IProps) {
+export default function Overlay({ open, onClose, title, children, secondButton = null }: IProps) {
   return (
     <Drawer anchor="right" open={open}>
       <div style={{ minWidth: '50vw', maxWidth: '75vw' }}>
@@ -23,6 +24,7 @@ export default function Overlay({ open, onClose, title, children }: IProps) {
                 {title}
               </Typography>
             )}
+            {secondButton}
             <Button className="ml-2" onClick={onClose} color="primary" variant="outlined">
               Close
             </Button>

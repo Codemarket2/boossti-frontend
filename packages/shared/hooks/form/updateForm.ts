@@ -76,11 +76,11 @@ export const stringifyForm = (form: any, removeTypeId: boolean = false) => {
     ...payload,
     fields: payload.fields.map((m) => {
       const field = { ...m };
-      if (removeTypeId && field.fieldType === 'type') {
-        field.typeId = field.typeId ? field.typeId._id : null;
+      if (removeTypeId && field?.typeId) {
+        field.typeId = field?.typeId?._id ? field?.typeId?._id : null;
       }
-      if (removeTypeId && field.fieldType === 'existingForm') {
-        field.form = field.form ? field.form._id : null;
+      if (removeTypeId && field?.form) {
+        field.form = field?.form?._id ? field?.form?._id : null;
       }
       field.options = JSON.stringify(field.options);
       return field;

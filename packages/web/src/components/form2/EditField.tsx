@@ -18,7 +18,7 @@ import OutlinedInput from '@material-ui/core/OutlinedInput';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import InputGroup from '../common/InputGroup';
 import { getFormFieldTypes } from './fieldTypes';
-import TypesAutocomplete from './TypesAutocomplete';
+import SelectListType from './SelectListType';
 import InlineInput from '../common/InlineInput';
 import SelectForm from './SelectForm';
 import SelectFormFields from './SelectFormFields';
@@ -77,43 +77,6 @@ export default function FormFields({
             </Select>
           </FormControl>
         </InputGroup>
-        {field.fieldType === 'type' && (
-          <InputGroup>
-            <TypesAutocomplete
-              value={field.typeId}
-              onChange={(newValue) => onFieldChange({ ...field, typeId: newValue })}
-              error={!field.typeId}
-              helperText="Required"
-            />
-          </InputGroup>
-        )}
-        {field.fieldType === 'existingForm' && (
-          <>
-            <InputGroup>
-              <SelectForm
-                value={field.form}
-                onChange={(newValue) =>
-                  onFieldChange({
-                    ...field,
-                    form: newValue,
-                    options: { ...field.options, formField: '' },
-                  })
-                }
-                error={!field.form}
-                helperText={!field.form && 'required'}
-              />
-            </InputGroup>
-            {field.form && (
-              <SelectFormFields
-                formId={field.form?._id}
-                value={field?.options?.formField}
-                onChange={(newValue) => onOptionChange({ formField: newValue })}
-                error={!field?.options?.formField}
-                helperText={!field?.options?.formField && 'required'}
-              />
-            )}
-          </>
-        )}
         <InputGroup>
           <FormControlLabel
             control={
@@ -140,19 +103,6 @@ export default function FormFields({
             label="Required"
           />
         </InputGroup>
-        {/* <InputGroup>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={field?.options?.halfWidth}
-                onChange={({ target }) => onOptionChange({ halfWidth: target.checked })}
-                name="halfWidth"
-                color="primary"
-              />
-            }
-            label="Half Width"
-          />
-        </InputGroup> */}
         <InputGroup>
           <FormControlLabel
             control={
@@ -167,64 +117,150 @@ export default function FormFields({
           />
         </InputGroup>
         {field.fieldType === 'select' && (
-          <InputGroup>
-            <FormLabel>
-              Select Options
-              <Tooltip title="Add New Option">
-                <IconButton
-                  color="primary"
-                  onClick={() =>
-                    onOptionChange({
-                      selectOptions: field?.options?.selectOptions
-                        ? [...field?.options?.selectOptions, '']
-                        : [''],
-                    })
-                  }
-                >
-                  <AddCircleIcon />
-                </IconButton>
-              </Tooltip>
-            </FormLabel>
-            {field?.options?.selectOptions?.map((option, index) => (
-              <FormControl variant="outlined" fullWidth size="small" key={index} className="my-2">
-                <InputLabel htmlFor={`outlined-adornment-${index + 1}`}>
-                  Option {index + 1}
+          <>
+            <InputGroup>
+              <FormControl variant="outlined" fullWidth size="small">
+                <InputLabel id="fieldType-simple-select-outlined-label">
+                  Options list type
                 </InputLabel>
-                <OutlinedInput
-                  id={`outlined-adornment-${index + 1}`}
-                  type="text"
-                  value={option}
-                  onChange={({ target }) =>
-                    onOptionChange({
-                      selectOptions: field?.options?.selectOptions?.map((m, i) =>
-                        i === index ? target.value : m,
-                      ),
-                    })
-                  }
-                  endAdornment={
-                    <InputAdornment position="end">
+                <Select
+                  labelId="fieldType-simple-select-outlined-label"
+                  id="fieldType-simple-select-outlined"
+                  name="fieldType"
+                  value={field?.options?.optionsListType}
+                  defaultValue="text"
+                  onChange={({ target }) => onOptionChange({ optionsListType: target.value })}
+                  label="Options list type"
+                >
+                  {optionsListTypes?.map((option, index) => (
+                    <MenuItem key={index} value={option?.value}>
+                      {option?.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </InputGroup>
+            <div className="bg-dangers">
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={field?.options?.selectAllowCreate}
+                    onChange={({ target }) => onOptionChange({ selectAllowCreate: target.checked })}
+                    name="selectAllowCreate"
+                    color="primary"
+                  />
+                }
+                label="Allow user to create new option"
+              />
+            </div>
+            <InputGroup>
+              {field?.options?.optionsListType === 'type' ? (
+                <SelectListType
+                  value={field.typeId}
+                  onChange={(newValue) => onFieldChange({ ...field, typeId: newValue })}
+                  error={!field.typeId}
+                  helperText={!field.typeId && 'Required'}
+                />
+              ) : field?.options?.optionsListType === 'existingForm' ? (
+                <>
+                  <SelectForm
+                    value={field.form}
+                    onChange={(newValue) =>
+                      onFieldChange({
+                        ...field,
+                        form: newValue,
+                        options: { ...field.options, formField: '' },
+                      })
+                    }
+                    error={!field.form}
+                    helperText={!field.form && 'required'}
+                  />
+                  {field.form && (
+                    <div className="mt-3">
+                      <SelectFormFields
+                        formId={field.form?._id}
+                        value={field?.options?.formField}
+                        onChange={(newValue) => onOptionChange({ formField: newValue })}
+                        error={!field?.options?.formField}
+                        helperText={!field?.options?.formField && 'required'}
+                      />
+                    </div>
+                  )}
+                </>
+              ) : (
+                <>
+                  <FormLabel>
+                    Select Options
+                    <Tooltip title="Add New Option">
                       <IconButton
-                        aria-label="toggle password visibility"
+                        color="primary"
                         onClick={() =>
                           onOptionChange({
-                            selectOptions: field?.options?.selectOptions?.filter(
-                              (m, i) => i !== index,
+                            selectOptions: field?.options?.selectOptions
+                              ? [...field?.options?.selectOptions, '']
+                              : [''],
+                          })
+                        }
+                      >
+                        <AddCircleIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </FormLabel>
+                  {field?.options?.selectOptions?.map((option, index) => (
+                    <FormControl
+                      variant="outlined"
+                      fullWidth
+                      size="small"
+                      key={index}
+                      className="mt-2"
+                    >
+                      <InputLabel htmlFor={`outlined-adornment-${index + 1}`}>
+                        Option {index + 1}
+                      </InputLabel>
+                      <OutlinedInput
+                        id={`outlined-adornment-${index + 1}`}
+                        type="text"
+                        value={option}
+                        onChange={({ target }) =>
+                          onOptionChange({
+                            selectOptions: field?.options?.selectOptions?.map((m, i) =>
+                              i === index ? target.value : m,
                             ),
                           })
                         }
-                        edge="end"
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                  labelWidth={65}
-                />
-              </FormControl>
-            ))}
-          </InputGroup>
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={() =>
+                                onOptionChange({
+                                  selectOptions: field?.options?.selectOptions?.filter(
+                                    (m, i) => i !== index,
+                                  ),
+                                })
+                              }
+                              edge="end"
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </InputAdornment>
+                        }
+                        labelWidth={65}
+                      />
+                    </FormControl>
+                  ))}
+                </>
+              )}
+            </InputGroup>
+          </>
         )}
       </div>
     </>
   );
 }
+
+const optionsListTypes = [
+  { label: 'Text', value: 'text' },
+  { label: 'Existing Type', value: 'type' },
+  { label: 'Existing Form', value: 'existingForm' },
+];

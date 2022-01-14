@@ -72,7 +72,7 @@ export const stringifyListType = (lisType: any, removeTypeId: boolean = false) =
     ...payload,
     fields: payload.fields.map((m) => {
       const field = { ...m };
-      if (removeTypeId && field.fieldType === 'type') {
+      if (removeTypeId) {
         field.typeId = field.typeId ? field.typeId._id : null;
       }
       field.options = JSON.stringify(field.options);

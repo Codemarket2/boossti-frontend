@@ -13,9 +13,6 @@ import { useAddFields } from '@frontend/shared/hooks/form';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
 import { onAlert } from '../../utils/alert';
-import TypesAutocomplete from './TypesAutocomplete';
-import SelectForm from './SelectForm';
-import SelectFormFields from './SelectFormFields';
 import { getFormFieldTypes } from './fieldTypes';
 
 interface IProps {
@@ -85,43 +82,6 @@ export default function FieldForm({
           )}
         </FormControl>
       </InputGroup>
-      {formik.values.fieldType === 'type' && (
-        <InputGroup>
-          <TypesAutocomplete
-            disabled={formik.isSubmitting}
-            value={formik.values.typeId}
-            onChange={(newValue) => formik.setFieldValue('typeId', newValue)}
-            error={formik.touched.typeId && Boolean(formik.errors.typeId)}
-            helperText={formik.touched.typeId && formik.errors.typeId}
-          />
-        </InputGroup>
-      )}
-      {formik.values.fieldType === 'existingForm' && (
-        <>
-          <InputGroup>
-            <SelectForm
-              disabled={formik.isSubmitting}
-              value={formik.values.form}
-              onChange={(newValue) => {
-                formik.setFieldValue('form', newValue);
-                formik.setFieldValue('formField', '');
-              }}
-              error={formik.touched.form && Boolean(formik.errors.form)}
-              helperText={formik.touched.form && formik.errors.form}
-            />
-          </InputGroup>
-          {formik.values.form && (
-            <SelectFormFields
-              formId={formik.values.form?._id}
-              value={formik.values.formField}
-              onChange={(newValue) => formik.setFieldValue('formField', newValue)}
-              disabled={formik.isSubmitting}
-              error={formik.touched.formField && Boolean(formik.errors.formField)}
-              helperText={formik.errors.formField}
-            />
-          )}
-        </>
-      )}
       <InputGroup>
         <FormControlLabel
           disabled={formik.isSubmitting}

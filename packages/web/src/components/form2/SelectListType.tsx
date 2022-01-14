@@ -9,10 +9,10 @@ interface IProps {
   value: any;
   onChange: (newValue: any) => void;
   error?: boolean;
-  helperText?: string;
+  helperText?: any;
 }
 
-export default function TypeAutocomplete({
+export default function SelectListType({
   disabled,
   value,
   onChange,

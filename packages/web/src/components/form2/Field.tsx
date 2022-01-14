@@ -1,21 +1,18 @@
 import moment from 'moment';
 import TextField from '@material-ui/core/TextField';
-import InputLabel from '@material-ui/core/InputLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Select from '@material-ui/core/Select';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import MenuItem from '@material-ui/core/MenuItem';
 import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider, DateTimePicker, DatePicker } from '@material-ui/pickers';
 import PhoneInput from 'react-phone-input-2';
 import ImagePicker from '../common/ImagePicker';
 import RichTextarea from '../common/RichTextarea2';
 // import AddressSearch from '../common/AddressSearch';
-import ListAutocomplete from './ListAutocomplete';
+import SelectListItem from './SelectListItem';
 import { validateValue } from './validate';
 import SelectResponse from './SelectResponse';
+import Select from './Select';
 
 import 'react-phone-input-2/lib/style.css';
 
@@ -118,32 +115,6 @@ export default function FieldValueForm2({
     //     />
     //   );
     // }
-    case 'type': {
-      return (
-        <ListAutocomplete
-          typeSlug={typeId?.slug || null}
-          typeId={typeId?._id || null}
-          label={label}
-          vError={validateValue(validate, value, options, fieldType).error}
-          helperText={validateValue(validate, value, options, fieldType).errorMessage}
-          value={value ? value.itemId : null}
-          onChange={(newValue) => onChange({ field: _id, itemId: newValue })}
-        />
-      );
-    }
-    case 'existingForm': {
-      return (
-        <SelectResponse
-          label={label}
-          formId={form?._id}
-          formField={options?.formField}
-          value={value?.response}
-          onChange={(newValue) => onChange({ field: _id, response: newValue })}
-          error={validateValue(validate, value, options, fieldType).error}
-          helperText={validateValue(validate, value, options, fieldType).errorMessage}
-        />
-      );
-    }
     case 'checkbox': {
       return (
         <>
@@ -201,39 +172,45 @@ export default function FieldValueForm2({
     // }
     case 'select': {
       return (
-        <FormControl
-          disabled={disabled}
-          variant="outlined"
-          fullWidth
-          size="small"
-          error={validateValue(validate, value, options, 'text').error}
-        >
-          {!value?.value && <InputLabel id="demo-simple-select-outlined-label">{label}</InputLabel>}
-          <Select
-            labelId="demo-simple-select-outlined-label"
-            id="demo-simple-select-outlined"
-            value={value ? value?.value : ''}
-            onChange={({ target }) => onChange({ field: _id, value: target.value })}
-            placeholder={label}
-          >
-            {options?.selectOptions?.map((option, index) => (
-              <MenuItem value={option} key={index}>
-                {option}
-              </MenuItem>
-            ))}
-          </Select>
-          {validateValue(validate, value, options, fieldType).error && (
-            <FormHelperText className="text-danger">
-              {validateValue(validate, value, options, fieldType).errorMessage}
-            </FormHelperText>
+        <>
+          {options?.optionsListType === 'type' ? (
+            <SelectListItem
+              typeSlug={typeId?.slug || null}
+              typeId={typeId?._id || null}
+              label={label}
+              vError={validateValue(validate, value, options, fieldType).error}
+              helperText={validateValue(validate, value, options, fieldType).errorMessage}
+              value={value ? value.itemId : null}
+              onChange={(newValue) => onChange({ field: _id, itemId: newValue })}
+              allowCreate={options?.selectAllowCreate}
+            />
+          ) : options?.optionsListType === 'existingForm' ? (
+            <SelectResponse
+              label={label}
+              formId={form?._id}
+              formField={options?.formField}
+              value={value?.response}
+              onChange={(newValue) => onChange({ field: _id, response: newValue })}
+              error={validateValue(validate, value, options, fieldType).error}
+              helperText={validateValue(validate, value, options, fieldType).errorMessage}
+            />
+          ) : (
+            <Select
+              label={label}
+              options={options?.selectOptions}
+              value={value ? value?.value : ''}
+              onChange={(newValue) => onChange({ field: _id, value: newValue })}
+              selectAllowCreate={options?.selectAllowCreate}
+              error={validateValue(validate, value, options, fieldType).error}
+              helperText={validateValue(validate, value, options, fieldType).errorMessage}
+            />
           )}
-        </FormControl>
+        </>
       );
     }
     case 'phoneNumber': {
       return (
         <>
-          {/* <InputLabel>{label}</InputLabel> */}
           <PhoneInput
             countryCodeEditable={false}
             country="us"
