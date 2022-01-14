@@ -12,7 +12,7 @@ import {
 } from '../../graphql/mutation/field';
 import { IHooksProps } from '../../types/common';
 import { ADDED_FIELD } from '../../graphql/subscription/field';
-import { generateObjectId } from '@frontend/shared/utils/objectId';
+import { generateObjectId } from '../../utils/objectId';
 
 export const defaultQueryVariables = { limit: 1000, page: 1 };
 
@@ -119,6 +119,7 @@ export function useGetFieldByRelationId(relationId) {
 export function useCRUDFields({ onAlert, parentId, createCallback }: ICRUDProps) {
   const [createFieldMutation, { loading: createLoading }] = useMutation(CREATE_FIELD);
   const [updateFieldMutation, { loading: updateLoading }] = useMutation(UPDATE_FIELD);
+
   const formik = useFormik({
     initialValues: { ...defaultFormValues, parentId },
     validationSchema,
@@ -144,10 +145,14 @@ export function useCRUDFields({ onAlert, parentId, createCallback }: ICRUDProps)
 
   const onCreate = async (payload) => {
     const updateCache = (client, mutationResult) => {
-      const { getFieldsByType } = client.readQuery({
+      const oldData = client.readQuery({
         query: GET_FIELDS_BY_TYPE,
         variables: { ...defaultQueryVariables, parentId },
       });
+      let getFieldsByType = { data: [] };
+      if (oldData?.getFieldsByType) {
+        getFieldsByType = oldData?.getFieldsByType;
+      }
       const newData = {
         getFieldsByType: {
           ...getFieldsByType,
@@ -160,7 +165,7 @@ export function useCRUDFields({ onAlert, parentId, createCallback }: ICRUDProps)
         data: newData,
       });
     };
-    let newPayload = { ...payload };
+    const newPayload = { ...payload };
     newPayload._id = generateObjectId();
     if (newPayload.fieldType === 'type') {
       const relationPayload: any = {
