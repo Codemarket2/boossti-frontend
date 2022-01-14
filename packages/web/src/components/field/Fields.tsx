@@ -163,6 +163,7 @@ export default function Fields({
 
   const formBuilderProps = {
     parentId,
+    edit: state.edit,
     formBuilder,
     onCancel: () => setState(initialState),
     field: state.selectedField,
@@ -219,7 +220,7 @@ export default function Fields({
         onClose={() => setState(initialState)}
         onDelete={() => {
           setState({ ...state, showMenu: null });
-          handleDelete(state.selectedField._id, deleteCallback);
+          handleDelete(state.selectedField._id, state.selectedField.relationId, deleteCallback);
         }}
         onEdit={() => setState({ ...state, edit: true, showMenu: null })}
       >

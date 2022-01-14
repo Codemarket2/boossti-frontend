@@ -26,6 +26,7 @@ interface IProps {
   onCancel: () => void;
   parentId: any;
   field: any;
+  relationId: string;
   fieldValue?: any;
   label: string;
   fieldType: string;
@@ -38,6 +39,7 @@ export default function ItemFieldForm({
   onCancel,
   parentId = null,
   field = null,
+  relationId = null,
   fieldValue = null,
   fieldType,
   label = 'Value',
@@ -56,6 +58,7 @@ export default function ItemFieldForm({
     onAlert,
     parentId,
     field,
+    relationId,
     createCallback: onCancel,
     fieldType,
   });
@@ -215,11 +218,12 @@ export default function ItemFieldForm({
           )}
         </InputGroup>
         <InputGroup>
-          <LoadingButton type="submit" loading={formLoading} size="small">
+          <LoadingButton type="submit" loading={formLoading} data-testid="save-button" size="small">
             Save
           </LoadingButton>
           <Button
             className="ml-2"
+            data-testid="cancel-button"
             disabled={formLoading}
             variant="outlined"
             size="small"

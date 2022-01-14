@@ -1,10 +1,11 @@
 import { gql } from '@apollo/client';
 
 export const ADDED_FIELD = gql`
-  subscription MySubscription($parentId: ID!) {
-    addedField(parentId: $parentId) {
+  subscription MySubscription {
+    addedField {
       _id
       parentId
+      relationId
       position
       label
       fieldType
@@ -20,10 +21,11 @@ export const ADDED_FIELD = gql`
 `;
 
 export const ADDED_FIELD_VALUE = gql`
-  subscription MySubscription($parentId: ID!) {
-    addedFieldValue(parentId: $parentId) {
+  subscription MySubscription {
+    addedFieldValue {
       _id
       parentId
+      relationId
       field
       value
       media {
