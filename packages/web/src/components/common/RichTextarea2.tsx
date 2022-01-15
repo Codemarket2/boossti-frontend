@@ -1,6 +1,75 @@
 import { fileUpload } from '@frontend/shared/utils/fileUpload';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { useEffect, useRef, useState } from 'react';
+import { client } from '@frontend/shared/graphql';
+import { GET_LIST_ITEMS } from '@frontend/shared/graphql/query/list';
+
+export async function getListItems(queryText) {
+  try {
+    const response = await client.query({
+      query: GET_LIST_ITEMS,
+      variables: { types: [], search: queryText },
+    });
+    return new Promise((resolve) => {
+      let itemsToDisplay = response?.data?.getListItems?.data.slice(0, 10);
+      itemsToDisplay = itemsToDisplay?.map(
+        (val) =>
+          (val = {
+            ...val,
+            id: `@${val?.title} | ${val.types && val?.types[0]?.title}`,
+          }),
+      );
+      resolve(itemsToDisplay);
+    });
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+function mentionCustomization(editor) {
+  editor.conversion.for('upcast').elementToAttribute({
+    view: {
+      name: 'a',
+      key: 'data-mention',
+      classes: 'mention',
+      attributes: {
+        'data-user-id': true,
+      },
+    },
+    model: {
+      key: 'mention',
+      value: (viewItem) => {
+        const mentionAttribute = editor.plugins.get('Mention').toMentionAttribute(viewItem, {
+          _id: viewItem.getAttribute('data-user-id'),
+        });
+        return mentionAttribute;
+      },
+    },
+    converterPriority: 'high',
+  });
+  editor.conversion.for('downcast').attributeToElement({
+    model: 'mention',
+    view: (modelAttributeValue, { writer }) => {
+      if (!modelAttributeValue) {
+        return;
+      }
+
+      return writer.createAttributeElement(
+        'a',
+        {
+          class: 'mention',
+          'data-mention': modelAttributeValue.id,
+          'data-user-id': modelAttributeValue._id,
+        },
+        {
+          priority: 20,
+          id: modelAttributeValue.uid,
+        },
+      );
+    },
+    converterPriority: 'high',
+  });
+}
 
 const editorConfiguration = {
   toolbar: [
@@ -55,11 +124,11 @@ const editorConfiguration = {
     feeds: [
       {
         marker: '@',
-        feed: ['@Sumi', '@Vivek', '@Muzzamil', '@Robin', '@Ted'],
+        feed: getListItems,
       },
     ],
   },
-  extraPlugins: [uploadPlugin],
+  extraPlugins: [mentionCustomization, uploadPlugin],
 };
 
 class MyUploadAdapter {
@@ -81,7 +150,9 @@ class MyUploadAdapter {
 
 function uploadPlugin(editor) {
   // eslint-disable-next-line no-param-reassign
+
   editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+    console.log(loader);
     return new MyUploadAdapter(loader);
   };
   editor.editing.view.change((writer) => {
