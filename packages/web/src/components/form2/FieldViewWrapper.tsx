@@ -6,13 +6,26 @@ interface IProps {
   _id: string;
   parentId?: string;
   createCallback?: (response: any) => void;
+  customSettings: any;
 }
 
-export default function FieldViewWrapper({ _id, parentId, createCallback }: IProps): any {
+export default function FieldViewWrapper({
+  _id,
+  parentId,
+  createCallback,
+  customSettings,
+}: IProps): any {
   const { error, data } = useGetForm(_id);
 
   if (error || !data || !data.getForm) {
     return <ErrorLoading error={error} />;
   }
-  return <FormView form={data.getForm} parentId={parentId} createCallback={createCallback} />;
+
+  return (
+    <FormView
+      form={{ ...data.getForm, settings: customSettings ? customSettings : data.getForm.settings }}
+      parentId={parentId}
+      createCallback={createCallback}
+    />
+  );
 }

@@ -126,7 +126,11 @@ export default function FormC({ field, parentId, previewMode = false }: IProps):
       {data?.getFieldValuesByItem?.data[0]?.value && (
         <>
           <ResponseCount formId={data?.getFieldValuesByItem?.data[0]?.value} parentId={parentId} />
-          <FieldViewWrapper _id={data?.getFieldValuesByItem?.data[0]?.value} parentId={parentId} />
+          <FieldViewWrapper
+            _id={data?.getFieldValuesByItem?.data[0]?.value}
+            parentId={parentId}
+            customSettings={null}
+          />
         </>
       )}
       {state.fieldId && state.edit && (
