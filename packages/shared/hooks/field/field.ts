@@ -131,7 +131,7 @@ export function useCRUDFields({ onAlert, parentId, createCallback }: ICRUDProps)
         }
         if (newPayload.edit) {
           const updateRes = await onUpdate(newPayload);
-          console.log('updateRes', updateRes);
+          // console.log('updateRes', updateRes);
         } else {
           await onCreate(newPayload);
         }
@@ -165,7 +165,7 @@ export function useCRUDFields({ onAlert, parentId, createCallback }: ICRUDProps)
         data: newData,
       });
     };
-    const newPayload = { ...payload };
+    const newPayload = { ...payload, relationId: null };
     newPayload._id = generateObjectId();
     if (newPayload.fieldType === 'type') {
       const relationPayload: any = {
@@ -210,7 +210,7 @@ export function useCRUDFields({ onAlert, parentId, createCallback }: ICRUDProps)
         data: newData,
       });
     };
-    let newPayload = { ...payload };
+    const newPayload = { ...payload, relationId: null };
 
     if (newPayload.fieldType === 'type') {
       const relationPayload: any = {
@@ -229,7 +229,6 @@ export function useCRUDFields({ onAlert, parentId, createCallback }: ICRUDProps)
       });
       newPayload.relationId = response?.data?.updateField?._id;
     }
-
     return await updateFieldMutation({
       variables: newPayload,
       update: updateInCache,
