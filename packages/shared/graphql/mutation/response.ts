@@ -66,3 +66,21 @@ export const DELETE_RESPONSE = gql`
     deleteResponse(_id: $_id)
   }
 `;
+
+export const CREATE_BULK_RESPONSE = gql`
+  mutation MyMutation(
+    $formId: ID!
+    $fileUrl: String!
+    $map: AWSJSON!
+    $parentId: ID
+    $fileData: AWSJSON
+  ) {
+    createBulkResponses(
+      formId: $formId
+      fileUrl: $fileUrl
+      map: $map
+      parentId: $parentId
+      fileData: $fileData
+    )
+  }
+`;

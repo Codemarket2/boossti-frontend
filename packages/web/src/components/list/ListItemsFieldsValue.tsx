@@ -4,7 +4,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useUpdateListItemFields } from '@frontend/shared/hooks/list';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -12,6 +12,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Grid from '@material-ui/core/Grid';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import ListIcon from '@material-ui/icons/List';
+import SettingsIcon from '@material-ui/icons/Settings';
 import CRUDMenu from '../common/CRUDMenu';
 import DisplayRichText from '../common/DisplayRichText';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
@@ -26,6 +27,8 @@ import EditFormDrawer from '../form2/EditFormDrawer';
 import { convertToSlug } from '../field/LeftNavigation';
 import { getLabel } from '../form2/SelectResponse';
 import { ShowResponseLabel } from '../form2/ResponseDrawer';
+import Overlay from '../common/Overlay';
+import CustomFormSettings from '../form2/CustomFormSettings';
 
 interface IProps {
   listItem: any;
@@ -39,6 +42,7 @@ const initialState = {
   drawer: false,
   selectForm: false,
   editForm: false,
+  showFormSettings: false,
 };
 
 export default function ListItemsFieldsValue({ listItem, previewMode = false }: IProps) {
@@ -84,6 +88,28 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
       ),
     );
     setState(initialState);
+  };
+
+  const handleEditFormSettings = (fieldId: string, settings: any) => {
+    onFieldsChange(
+      listItem?.fields.map((field) =>
+        field._id === fieldId ? { ...field, options: { ...field?.options, settings } } : field,
+      ),
+    );
+
+    console.log(listItem.fields);
+  };
+
+  const handleToggleCustomSettings = (fieldId: string, customSettings: boolean) => {
+    onFieldsChange(
+      listItem?.fields.map((field) =>
+        field._id === fieldId
+          ? { ...field, options: { ...field?.options, customSettings } }
+          : field,
+      ),
+    );
+
+    console.log(listItem.fields);
   };
 
   return (
@@ -142,7 +168,13 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
                       {field?.fieldType === 'form' ? (
                         <>
                           <ResponseCount formId={value?.value} parentId={listItem?._id} />
-                          <FieldViewWrapper _id={value?.value} parentId={listItem?._id} />
+                          <FieldViewWrapper
+                            _id={value?.value}
+                            parentId={listItem?._id}
+                            customSettings={
+                              field?.options?.customSettings ? field?.options?.settings : null
+                            }
+                          />
                         </>
                       ) : (
                         <ShowValue field={field} value={value} />
@@ -180,6 +212,21 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
                 </ListItemIcon>
                 <ListItemText primary="Select Form" />
               </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  setState({
+                    ...state,
+                    showFormSettings: true,
+                    showMenu: false,
+                  });
+                  console.log(state.field);
+                }}
+              >
+                <ListItemIcon className="mr-n4">
+                  <SettingsIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText primary="Form Settings" />
+              </MenuItem>
             </>
           ) : (
             !state.field?.options?.values && (
@@ -213,6 +260,24 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
           onClose={() => setState(initialState)}
         />
       )}
+      <Overlay
+        open={state.showFormSettings}
+        title={`Form Settings - ${state.field?.label ? state.field.label : ''}`}
+        onClose={() => {
+          setState({ ...state, showFormSettings: false });
+        }}
+      >
+        <CustomFormSettings
+          settings={state.field?.options?.settings}
+          customSettings={state.field?.options?.customSettings}
+          toggleCustomSettings={(value) => {
+            handleToggleCustomSettings(state.field?._id, value);
+          }}
+          onSettingsChange={(value) => {
+            handleEditFormSettings(state.field?._id, value);
+          }}
+        />
+      </Overlay>
     </>
   );
 }

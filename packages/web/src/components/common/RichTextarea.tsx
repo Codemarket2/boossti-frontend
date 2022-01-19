@@ -3,6 +3,32 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import { fileUpload } from '@frontend/shared/utils/fileUpload';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { useState } from 'react';
+import { client } from '@frontend/shared/graphql';
+import { GET_LIST_ITEMS_BY_TYPE } from '@frontend/shared/graphql/query/list';
+
+export async function getListItems(queryText) {
+  try {
+    const response = await client.query({
+      query: GET_LIST_ITEMS_BY_TYPE,
+      variables: { search: queryText },
+    });
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        let itemsToDisplay = response?.data?.getListItems?.data;
+        itemsToDisplay = itemsToDisplay?.map(
+          (val) =>
+            (val = {
+              ...val,
+              id: `@${val?.title} | ${val.types && val?.types[0]?.title}`,
+            }),
+        );
+        resolve(itemsToDisplay);
+      }, 100);
+    });
+  } catch (e) {
+    console.log(e);
+  }
+}
 
 const editorConfiguration = {
   toolbar: [
@@ -56,7 +82,7 @@ const editorConfiguration = {
     feeds: [
       {
         marker: '@',
-        feed: ['@Sumi', '@Vivek', '@Muzzamil', '@Robin', '@Ted'],
+        feed: getListItems,
       },
     ],
   },

@@ -49,6 +49,8 @@ export default function FormViewWrapper({
       createCallback(response);
     }
   };
+
+  console.log(settings);
   return (
     <div>
       {settings?.showFormTitle && (

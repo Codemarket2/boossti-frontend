@@ -13,6 +13,7 @@ import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { useState } from 'react';
 import ActionForm from './ActionForm';
 import CRUDMenu from '../common/CRUDMenu';
+import BulkUploadAction from './BulkUploadAction';
 
 interface IProps {
   form: any;
@@ -111,6 +112,7 @@ export default function Actions({ form, onChange }: IProps) {
           />
         </List>
       )}
+      <BulkUploadAction form={form} />
     </Paper>
   );
 }

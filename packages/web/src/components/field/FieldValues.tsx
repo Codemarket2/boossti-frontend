@@ -334,7 +334,11 @@ export default function FieldValues({
                   {field.label}
                 </Typography>
                 <ResponseCount formId={JSON.parse(field?.options)?.formId} parentId={parentId} />
-                <FieldViewWrapper _id={JSON.parse(field?.options)?.formId} parentId={parentId} />
+                <FieldViewWrapper
+                  _id={JSON.parse(field?.options)?.formId}
+                  parentId={parentId}
+                  customSettings={null}
+                />
               </>
             ) : field.fieldType === 'form' ? (
               <FormSection field={field} parentId={parentId} previewMode={previewMode} />

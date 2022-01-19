@@ -42,6 +42,28 @@ export const GET_LIST_ITEMS_BY_TYPE = gql`
     }
   }
 `;
+export const GET_LIST_ITEMS = gql`
+  query MyQuery($limit: Int, $page: Int, $types: [ID], $search: String) {
+    getListItems(limit: $limit, page: $page, types: $types, search: $search) {
+      count
+      data {
+        _id
+        slug
+        title
+        description
+        types {
+          _id
+          title
+          slug
+        }
+        media {
+          url
+          caption
+        }
+      }
+    }
+  }
+`;
 
 export const GET_LIST_TYPE_BY_SLUG = gql`
   query MyQuery($slug: String!) {
@@ -101,6 +123,17 @@ export const GET_LIST_ITEM_BY_SLUG = gql`
           title
           slug
         }
+      }
+    }
+  }
+`;
+
+export const GET_LIST_ITEM_BY_ID = gql`
+  query MyQuery($_id: ID!) {
+    getListItem(_id: $_id) {
+      slug
+      types {
+        slug
       }
     }
   }
