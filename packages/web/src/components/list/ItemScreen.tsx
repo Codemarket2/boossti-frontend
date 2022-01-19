@@ -5,7 +5,6 @@ import EditIcon from '@material-ui/icons/Edit';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
-import Divider from '@material-ui/core/Divider';
 import Hidden from '@material-ui/core/Hidden';
 import Tooltip from '@material-ui/core/Tooltip';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
@@ -134,9 +133,6 @@ export default function ItemScreen({
     _id: data.getListItemBySlug._id,
     previewMode,
   };
-
-  // const hideleft = false;
-  // const hideleft = hideBreadcrumbs || state.hideLeftNavigation || previewMode;
 
   return (
     <div className={previewMode && 'mt-2'}>
@@ -342,19 +338,21 @@ export default function ItemScreen({
               )}
             </>
           )}
-          <FieldValues
-            toggleLeftNavigation={(value) => setState({ ...state, hideLeftNavigation: value })}
-            pushToAnchor={pushToAnchor}
-            parentId={data.getListItemBySlug._id}
-            typeId={data.getListItemBySlug.types[0]._id}
-            setFields={(fields) => setState({ ...state, fields })}
-            setFieldValueCount={(index, value) =>
-              setFieldValueCount({ ...fieldValueCount, [index]: value })
-            }
-            layouts={JSON.parse(data?.getListItemBySlug?.layouts) || {}}
-            isPublish={data?.getListItemBySlug?.active}
-            previewMode={previewMode}
-          />
+          {data.getListItemBySlug?.types[0]?._id && (
+            <FieldValues
+              toggleLeftNavigation={(value) => setState({ ...state, hideLeftNavigation: value })}
+              pushToAnchor={pushToAnchor}
+              parentId={data.getListItemBySlug._id}
+              typeId={data.getListItemBySlug?.types[0]?._id}
+              setFields={(fields) => setState({ ...state, fields })}
+              setFieldValueCount={(index, value) =>
+                setFieldValueCount({ ...fieldValueCount, [index]: value })
+              }
+              layouts={JSON.parse(data?.getListItemBySlug?.layouts) || {}}
+              isPublish={data?.getListItemBySlug?.active}
+              previewMode={previewMode}
+            />
+          )}
           <ListItemsFieldsValue listItem={data?.getListItemBySlug} previewMode={previewMode} />
         </Paper>
       </div>

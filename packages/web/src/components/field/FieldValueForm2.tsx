@@ -10,7 +10,7 @@ import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import ImagePicker from '../common/ImagePicker';
 import AddressSearch from '../common/AddressSearch';
-import ListTypeAutoComplete from '../list/ListTypeAutoComplete';
+import SelectListItem from '../form2/SelectListItem';
 import RichTextarea from '../common/RichTextarea2';
 
 interface IProps {
@@ -68,12 +68,13 @@ export default function FieldValueForm2({
     );
   } else if (fieldType === 'type') {
     return (
-      <ListTypeAutoComplete
+      <SelectListItem
         typeSlug={typeSlug}
         typeId={typeId}
         label={label}
         value={itemId}
         onChange={(newValue) => onChange(newValue)}
+        allowCreate
       />
     );
   } else if (fieldType === 'boolean') {

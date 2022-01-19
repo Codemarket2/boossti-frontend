@@ -1,20 +1,13 @@
-import { useEffect, useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { IHooksProps } from '../../types/common';
-import { GET_FIELD_VALUES_BY_FIELD, GET_FIELD_VALUE } from '../../graphql/query/field';
-import {
-  CREATE_FIELD_VALUE,
-  UPDATE_FIELD_VALUE,
-  DELETE_FIELD_VALUE,
-} from '../../graphql/mutation/field';
+import { GET_FIELD_VALUES, GET_FIELD_VALUE } from '../../graphql/query/field';
+import { CREATE_FIELD_VALUE, UPDATE_FIELD_VALUE } from '../../graphql/mutation/field';
 import { fileUpload } from '../../utils/fileUpload';
-import { ADDED_FIELD_VALUE } from '../../graphql/subscription/field';
 import { omitTypename } from '../../utils/omitTypename';
-import { generateObjectId } from '@frontend/shared/utils/objectId';
-
-const defaultQueryVariables = { limit: 1000, page: 1 };
+import { generateObjectId } from '../../utils/objectId';
+import { defaultQueryVariables } from './getFieldValues';
 
 export function useCreateFieldValue() {
   const [createFieldValueMutation, { loading: createLoading }] = useMutation(CREATE_FIELD_VALUE);
@@ -43,54 +36,6 @@ export function useGetFieldValue(_id) {
     variables: { _id },
     fetchPolicy: 'cache-and-network',
   });
-  return { data, error, loading };
-}
-
-export function useGetFieldValuesByItem({ parentId, field }: any) {
-  const [subscribed, setSubscribed] = useState(false);
-  const { data, error, loading, subscribeToMore } = useQuery(GET_FIELD_VALUES_BY_FIELD, {
-    variables: { ...defaultQueryVariables, parentId, field },
-    fetchPolicy: 'cache-and-network',
-  });
-
-  useEffect(() => {
-    if (!subscribed) {
-      setSubscribed(true);
-      subscribeToMore({
-        document: ADDED_FIELD_VALUE,
-        variables: {
-          parentId,
-        },
-        updateQuery: (prev, { subscriptionData }) => {
-          if (!subscriptionData.data) return prev;
-          const newFieldValue = subscriptionData.data.addedFieldValue;
-          if (field === newFieldValue.field) {
-            let isNew = true;
-            let newData = prev?.getFieldValuesByItem?.data?.map((t) => {
-              if (t._id === newFieldValue._id) {
-                isNew = false;
-                return newFieldValue;
-              }
-              return t;
-            });
-            if (isNew) {
-              newData = [...prev?.getFieldValuesByItem?.data, newFieldValue];
-            }
-            newData = newData.filter((d) => d.parentId !== parentId);
-            return {
-              ...prev,
-              getFieldValuesByItem: {
-                ...prev.getFieldValuesByItem,
-                data: newData,
-              },
-            };
-          }
-          return prev;
-        },
-      });
-    }
-  }, []);
-
   return { data, error, loading };
 }
 
@@ -164,7 +109,7 @@ const defaultFormValues = {
   tempMedia: [],
   tempMediaFiles: [],
   itemId: null,
-  relationId: '',
+  relationId: null,
 };
 
 interface ICRUDProps extends IHooksProps {
@@ -190,7 +135,7 @@ export function useCRUDFieldValue({
 
   const formik = useFormik({
     initialValues: { ...defaultFormValues, parentId, field, fieldType },
-    validationSchema: validationSchema,
+    validationSchema,
     onSubmit: async (payload: IFormValues) => {
       try {
         let newPayload = { ...payload };
@@ -210,8 +155,8 @@ export function useCRUDFieldValue({
         } else {
           await onCreate(newPayload);
         }
-        createCallback();
         formik.handleReset('');
+        createCallback();
       } catch (error) {
         onAlert('Error', error.message);
       }
@@ -220,24 +165,27 @@ export function useCRUDFieldValue({
 
   const onCreate = async (payload) => {
     const updateCache = (client, mutationResult) => {
-      const { getFieldValuesByItem } = client.readQuery({
-        query: GET_FIELD_VALUES_BY_FIELD,
+      const oldData = client.readQuery({
+        query: GET_FIELD_VALUES,
         variables: queryVariables,
       });
+      let getFieldValues = { data: [], count: 0 };
+      if (oldData?.getFieldValues) {
+        getFieldValues = oldData?.getFieldValues;
+      }
       const newData = {
-        getFieldValuesByItem: {
-          ...getFieldValuesByItem,
-          data: [...getFieldValuesByItem.data, mutationResult.data.createFieldValue],
+        getFieldValues: {
+          ...getFieldValues,
+          data: [...getFieldValues.data, mutationResult.data.createFieldValue],
         },
       };
       client.writeQuery({
-        query: GET_FIELD_VALUES_BY_FIELD,
+        query: GET_FIELD_VALUES,
         variables: queryVariables,
         data: newData,
       });
     };
-
-    let newPayload = { ...payload };
+    const newPayload = { ...payload };
     newPayload._id = generateObjectId();
     if (fieldId && newPayload.itemId) {
       const relationPayload: any = {
@@ -246,31 +194,33 @@ export function useCRUDFieldValue({
         relationId: newPayload._id,
         itemId: payload.parentId,
       };
-
       relationPayload._id = generateObjectId();
-
       newPayload.relationId = relationPayload._id;
-
       await createFieldValueMutation({
         variables: relationPayload,
       });
     }
-    return await createFieldValueMutation({
+    const response = await createFieldValueMutation({
       variables: newPayload,
       update: updateCache,
     });
+    return response;
   };
 
   const onUpdate = async (payload) => {
     const updateInCache = (client, mutationResult) => {
-      const { getFieldValuesByItem } = client.readQuery({
-        query: GET_FIELD_VALUES_BY_FIELD,
+      const oldData = client.readQuery({
+        query: GET_FIELD_VALUES,
         variables: queryVariables,
       });
+      let getFieldValues = { data: [], count: 0 };
+      if (oldData?.getFieldValues) {
+        getFieldValues = oldData?.getFieldValues;
+      }
       const newData = {
-        getFieldValuesByItem: {
-          ...getFieldValuesByItem,
-          data: getFieldValuesByItem.data.map((f) =>
+        getFieldValues: {
+          ...getFieldValues,
+          data: getFieldValues.data.map((f) =>
             f._id === mutationResult.data.updateFieldValue._id
               ? mutationResult.data.updateFieldValue
               : f,
@@ -278,12 +228,12 @@ export function useCRUDFieldValue({
         },
       };
       client.writeQuery({
-        query: GET_FIELD_VALUES_BY_FIELD,
+        query: GET_FIELD_VALUES,
         variables: queryVariables,
         data: newData,
       });
     };
-    let newPayload = { ...payload };
+    const newPayload = { ...payload };
     if (fieldId && newPayload.itemId) {
       const relationPayload: any = {
         _id: newPayload.relationId,
@@ -331,49 +281,4 @@ export function useCRUDFieldValue({
   const formLoading = createLoading || updateLoading || formik.isSubmitting;
 
   return { formik, formLoading, setFormValues, mediaState, setMediaState };
-}
-
-interface IDeleteProps extends IHooksProps {
-  parentId: string;
-  field: string;
-  state?: any;
-}
-
-export function useDeleteFieldValue({ onAlert, parentId, field }: IDeleteProps) {
-  const [deleteFieldMutation, { loading: deleteLoading }] = useMutation(DELETE_FIELD_VALUE);
-  const queryVariables = { ...defaultQueryVariables, parentId, field };
-  const handleDelete = async (_id: any, relationId: any, deleteCallBack: any) => {
-    try {
-      const deleteInCache = (client) => {
-        const { getFieldValuesByItem } = client.readQuery({
-          query: GET_FIELD_VALUES_BY_FIELD,
-          variables: queryVariables,
-        });
-        const newData = {
-          getFieldValuesByItem: {
-            ...getFieldValuesByItem,
-            data: getFieldValuesByItem.data.filter((f) => f._id !== _id),
-          },
-        };
-        client.writeQuery({
-          query: GET_FIELD_VALUES_BY_FIELD,
-          variables: queryVariables,
-          data: newData,
-        });
-      };
-      await deleteFieldMutation({
-        variables: { _id: relationId },
-        update: deleteInCache,
-      });
-      await deleteFieldMutation({
-        variables: { _id },
-        update: deleteInCache,
-      });
-      deleteCallBack();
-    } catch (error) {
-      onAlert('Error', error.message);
-    }
-  };
-
-  return { handleDelete, deleteLoading };
 }

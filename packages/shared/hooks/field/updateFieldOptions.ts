@@ -1,8 +1,7 @@
 import { useMutation } from '@apollo/client';
-import { GET_FIELDS_BY_TYPE } from '../../graphql/query/field';
+import { GET_FIELDS } from '../../graphql/query/field';
 import { UPDATE_FIELD_OPTIONS } from '../../graphql/mutation/field';
 import { IHooksProps } from '../../types/common';
-import { defaultQueryVariables } from './field';
 
 interface IProps extends IHooksProps {
   parentId: string;
@@ -15,8 +14,8 @@ export const useUpdateFieldOptions = ({ onAlert, parentId }: IProps) => {
     try {
       const updateCache = (client, mutationResult) => {
         const { getFieldsByType } = client.readQuery({
-          query: GET_FIELDS_BY_TYPE,
-          variables: { ...defaultQueryVariables, parentId },
+          query: GET_FIELDS,
+          variables: { parentId },
         });
         const newData = {
           getFieldsByType: {
@@ -29,8 +28,8 @@ export const useUpdateFieldOptions = ({ onAlert, parentId }: IProps) => {
           },
         };
         client.writeQuery({
-          query: GET_FIELDS_BY_TYPE,
-          variables: { ...defaultQueryVariables, parentId },
+          query: GET_FIELDS,
+          variables: { parentId },
           data: newData,
         });
       };

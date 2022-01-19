@@ -9,7 +9,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import TuneIcon from '@material-ui/icons/Tune';
 import { useState } from 'react';
 import {
-  useGetFieldValuesByItem,
+  useGetFieldValues,
   useCreateFieldValue,
   useUpdateFieldValue,
 } from '@frontend/shared/hooks/field';
@@ -38,7 +38,7 @@ const initialState = {
 
 export default function FormC({ field, parentId, previewMode = false }: IProps): any {
   const [state, setState] = useState(initialState);
-  const { data, error } = useGetFieldValuesByItem({ parentId, field: field._id });
+  const { data, error } = useGetFieldValues({ parentId, field: field._id });
 
   const { handleCreateField } = useCreateFieldValue();
   const { handleUpdateField } = useUpdateFieldValue();
@@ -48,16 +48,13 @@ export default function FormC({ field, parentId, previewMode = false }: IProps):
     try {
       setState({ ...initialState, backdrop: true });
       let fieldId = null;
-      if (data?.getFieldValuesByItem?.count > 0) {
-        if (
-          data?.getFieldValuesByItem?.data[0]?.value &&
-          data?.getFieldValuesByItem?.data[0]?.value !== ''
-        ) {
-          fieldId = data?.getFieldValuesByItem?.data[0]?.value;
+      if (data?.getFieldValues?.count > 0) {
+        if (data?.getFieldValues?.data[0]?.value && data?.getFieldValues?.data[0]?.value !== '') {
+          fieldId = data?.getFieldValues?.data[0]?.value;
         } else {
           const formRes = await handleCreateForm('Form Name');
           const payload = {
-            ...data?.getFieldValuesByItem?.data[0],
+            ...data?.getFieldValues?.data[0],
             value: formRes?.data?.createForm?._id,
           };
           const updateRes = await handleUpdateField(payload);
@@ -79,7 +76,7 @@ export default function FormC({ field, parentId, previewMode = false }: IProps):
   const handleSelectForm = async () => {
     try {
       setState({ ...initialState, backdrop: true });
-      const fieldId = data?.getFieldValuesByItem?.data[0]?.value;
+      const fieldId = data?.getFieldValues?.data[0]?.value;
       setState({ ...initialState, select: true, fieldId });
     } catch (err) {
       alert(`Error ${err.message}`);
@@ -87,7 +84,7 @@ export default function FormC({ field, parentId, previewMode = false }: IProps):
     }
   };
 
-  if (error || !data || !data.getFieldValuesByItem) {
+  if (error || !data || !data.getFieldValues) {
     return <ErrorLoading error={error} />;
   }
   return (
@@ -123,10 +120,10 @@ export default function FormC({ field, parentId, previewMode = false }: IProps):
           <ListItemText primary="Select Form" />
         </MenuItem>
       </Menu>
-      {data?.getFieldValuesByItem?.data[0]?.value && (
+      {data?.getFieldValues?.data[0]?.value && (
         <>
-          <ResponseCount formId={data?.getFieldValuesByItem?.data[0]?.value} parentId={parentId} />
-          <FieldViewWrapper _id={data?.getFieldValuesByItem?.data[0]?.value} parentId={parentId} />
+          <ResponseCount formId={data?.getFieldValues?.data[0]?.value} parentId={parentId} />
+          <FieldViewWrapper _id={data?.getFieldValues?.data[0]?.value} parentId={parentId} />
         </>
       )}
       {state.fieldId && state.edit && (

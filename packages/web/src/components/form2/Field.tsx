@@ -178,7 +178,7 @@ export default function FieldValueForm2({
               typeSlug={typeId?.slug || null}
               typeId={typeId?._id || null}
               label={label}
-              vError={validateValue(validate, value, options, fieldType).error}
+              error={validateValue(validate, value, options, fieldType).error}
               helperText={validateValue(validate, value, options, fieldType).errorMessage}
               value={value ? value.itemId : null}
               onChange={(newValue) => onChange({ field: _id, itemId: newValue })}

@@ -75,7 +75,7 @@ export default function CommentLikeShare({
           {data?.getActionCounts?.commentCount && data.getActionCounts.commentCount > 0 ? (
             <span className="mr-2">{data.getActionCounts.commentCount}</span>
           ) : null}
-          <IconButton>
+          <IconButton edge="end">
             <Share
               index={index}
               itemSlug={itemSlug}
@@ -86,7 +86,6 @@ export default function CommentLikeShare({
           {children}
         </div>
       </div>
-
       {showOverlayOnce ? (
         (showHideComments || showComment) && (
           <>

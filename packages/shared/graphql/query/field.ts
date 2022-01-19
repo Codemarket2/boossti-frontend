@@ -1,13 +1,13 @@
 import { gql } from '@apollo/client';
 
-export const GET_FIELD_BY_RELATION_ID = gql`
-  query MyQuery($relationId: ID!) {
-    getFieldByRelationId(relationId: $relationId) {
+export const GET_FIELD = gql`
+  query GetFieldQuery($_id: ID!) {
+    getField(_id: $_id) {
       _id
+      parentId
       position
       relationId
       label
-      fieldLabel
       fieldType
       multipleValues
       oneUserMultipleValues
@@ -19,40 +19,38 @@ export const GET_FIELD_BY_RELATION_ID = gql`
       createdBy {
         _id
       }
+      options
     }
   }
 `;
 
-export const GET_FIELDS_BY_TYPE = gql`
-  query MyQuery($limit: Int, $page: Int, $parentId: ID!) {
-    getFieldsByType(limit: $limit, page: $page, parentId: $parentId) {
-      count
-      data {
+export const GET_FIELDS = gql`
+  query GetFieldsQuery($parentId: ID!) {
+    getFields(parentId: $parentId) {
+      _id
+      parentId
+      position
+      relationId
+      label
+      fieldType
+      multipleValues
+      oneUserMultipleValues
+      typeId {
         _id
-        position
-        relationId
-        label
-        fieldLabel
-        fieldType
-        multipleValues
-        oneUserMultipleValues
-        typeId {
-          _id
-          title
-          slug
-        }
-        createdBy {
-          _id
-        }
-        options
+        title
+        slug
       }
+      createdBy {
+        _id
+      }
+      options
     }
   }
 `;
 
-export const GET_FIELD_VALUES_BY_FIELD = gql`
-  query MyQuery($parentId: ID!, $field: ID!, $limit: Int, $page: Int) {
-    getFieldValuesByItem(parentId: $parentId, field: $field, limit: $limit, page: $page) {
+export const GET_FIELD_VALUES = gql`
+  query getFieldValues($parentId: ID!, $field: ID!, $limit: Int, $page: Int) {
+    getFieldValues(parentId: $parentId, field: $field, limit: $limit, page: $page) {
       count
       data {
         _id
