@@ -15,7 +15,7 @@ import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import {
-  useGetFieldsByType,
+  useGetFields,
   useDeleteField,
   useUpdateFieldPosition,
   useUpdateFieldOptions,
@@ -49,6 +49,7 @@ const QuoteList = memo(function QuoteList({ fields, onClick, hideMore }: any) {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
+          {/* <ListItemText primary={field._id} secondary={field.relationId} /> */}
           <ListItemText primary={field.label} secondary={field.fieldType} />
           {!hideMore && (
             <ListItemSecondaryAction>
@@ -91,7 +92,7 @@ export default function Fields({
   const deleteCallback = () => {
     setState({ ...state, showMenu: null, selectedField: null, edit: false });
   };
-  const { data, error } = useGetFieldsByType({ parentId });
+  const { data, error } = useGetFields(parentId);
 
   const { handleDelete, deleteLoading } = useDeleteField({ onAlert, parentId });
   const { handleUpdateFieldOptions, updateOptionsLoading } = useUpdateFieldOptions({
@@ -122,7 +123,7 @@ export default function Fields({
       return;
     }
 
-    let fields = [...data.getFieldsByType.data];
+    const fields = [...data.getFields];
 
     let position = 1010;
 
@@ -145,7 +146,7 @@ export default function Fields({
       position = (endPosition - startPosition) / 2 + startPosition;
     }
     // console.log('new position', position);
-    let updateId = fields[result.source.index]._id;
+    const updateId = fields[result.source.index]._id;
 
     let tempField = fields.map((f, i) => (i === result.source.index ? { ...f, position } : f));
 
@@ -156,8 +157,8 @@ export default function Fields({
   }
 
   useEffect(() => {
-    if (data && data.getFieldsByType && setFields) {
-      setFields(data.getFieldsByType.data);
+    if (data && data.getFields && setFields) {
+      setFields(data.getFields);
     }
   }, [data]);
 
@@ -169,7 +170,7 @@ export default function Fields({
     field: state.selectedField,
   };
 
-  if (!error && (!data || !data.getFieldsByType)) {
+  if (!error && (!data || !data.getFields)) {
     return <FieldsSkeleton />;
   }
   if (error) {
@@ -204,7 +205,7 @@ export default function Fields({
               <div ref={provided.innerRef} {...provided.droppableProps}>
                 <QuoteList
                   hideMore={snapshot.isDraggingOver}
-                  fields={data.getFieldsByType.data}
+                  fields={data.getFields}
                   onClick={(currentTarget, field) =>
                     setState({ ...state, showMenu: currentTarget, selectedField: field })
                   }
@@ -220,7 +221,7 @@ export default function Fields({
         onClose={() => setState(initialState)}
         onDelete={() => {
           setState({ ...state, showMenu: null });
-          handleDelete(state.selectedField._id, state.selectedField.relationId, deleteCallback);
+          handleDelete(state.selectedField._id, state.selectedField?.relationId, deleteCallback);
         }}
         onEdit={() => setState({ ...state, edit: true, showMenu: null })}
       >

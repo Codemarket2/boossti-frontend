@@ -19,6 +19,7 @@ import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
 import DisplayRichText from '../common/DisplayRichText';
 import { ShowResponseLabel } from './ResponseDrawer';
+import ListItemDrawer from '../list/ListItemDrawer';
 
 interface IProps {
   form: any;
@@ -131,7 +132,7 @@ export const ShowValue = ({ field, value }: any) => {
       return <>{value?.value}</>;
     case 'select':
       if (field?.options?.optionsListType === 'type') {
-        return <>{value?.itemId?.title}</>;
+        return <ListItemDrawer title={value.itemId.title} slug={value.itemId.slug} />;
       }
       if (field?.options?.optionsListType === 'existingForm') {
         return (

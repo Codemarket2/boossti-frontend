@@ -5,7 +5,6 @@ export const CREATE_FIELD = gql`
     $parentId: ID!
     $_id: ID
     $label: String!
-    $fieldLabel: String
     $fieldType: String!
     $typeId: ID
     $multipleValues: Boolean
@@ -16,7 +15,6 @@ export const CREATE_FIELD = gql`
       _id: $_id
       parentId: $parentId
       label: $label
-      fieldLabel: $fieldLabel
       fieldType: $fieldType
       typeId: $typeId
       multipleValues: $multipleValues
@@ -25,18 +23,20 @@ export const CREATE_FIELD = gql`
     ) {
       _id
       parentId
-      relationId
       position
+      relationId
       label
-      fieldLabel
       fieldType
+      multipleValues
+      oneUserMultipleValues
       typeId {
         _id
         title
         slug
       }
-      multipleValues
-      oneUserMultipleValues
+      createdBy {
+        _id
+      }
       options
     }
   }
@@ -47,7 +47,6 @@ export const UPDATE_FIELD = gql`
     $_id: ID!
     $relationId: ID
     $label: String
-    $fieldLabel: String
     $parentId: ID
     $fieldType: String
     $typeId: ID
@@ -59,26 +58,27 @@ export const UPDATE_FIELD = gql`
       relationId: $relationId
       parentId: $parentId
       label: $label
-      fieldLabel: $fieldLabel
       fieldType: $fieldType
       typeId: $typeId
       multipleValues: $multipleValues
       oneUserMultipleValues: $oneUserMultipleValues
     ) {
       _id
-      relationId
       parentId
       position
+      relationId
       label
-      fieldLabel
       fieldType
+      multipleValues
+      oneUserMultipleValues
       typeId {
         _id
         title
         slug
       }
-      multipleValues
-      oneUserMultipleValues
+      createdBy {
+        _id
+      }
       options
     }
   }
@@ -88,6 +88,21 @@ export const UPDATE_FIELD_OPTIONS = gql`
   mutation MyMutation($_id: ID!, $options: AWSJSON) {
     updateField(_id: $_id, options: $options) {
       _id
+      parentId
+      position
+      relationId
+      label
+      fieldType
+      multipleValues
+      oneUserMultipleValues
+      typeId {
+        _id
+        title
+        slug
+      }
+      createdBy {
+        _id
+      }
       options
     }
   }
@@ -97,16 +112,22 @@ export const UPDATE_FIELD_POSITION = gql`
   mutation MyMutation($_id: ID!, $position: Float!) {
     updateFieldPosition(_id: $_id, position: $position) {
       _id
+      parentId
       position
+      relationId
       label
       fieldType
+      multipleValues
+      oneUserMultipleValues
       typeId {
         _id
         title
         slug
       }
-      multipleValues
-      oneUserMultipleValues
+      createdBy {
+        _id
+      }
+      options
     }
   }
 `;
@@ -122,7 +143,7 @@ export const CREATE_FIELD_VALUE = gql`
     $_id: ID!
     $parentId: ID!
     $field: ID!
-    $relationId: ID!
+    $relationId: ID
     $value: String
     $valueDate: AWSDateTime
     $valueNumber: Int

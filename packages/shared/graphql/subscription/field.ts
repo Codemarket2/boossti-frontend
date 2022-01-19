@@ -5,18 +5,28 @@ export const ADDED_FIELD = gql`
     addedField {
       _id
       parentId
-      relationId
       position
+      relationId
       label
       fieldType
+      multipleValues
+      oneUserMultipleValues
       typeId {
         _id
         title
         slug
       }
-      multipleValues
-      oneUserMultipleValues
+      createdBy {
+        _id
+      }
+      options
     }
+  }
+`;
+
+export const DELETE_FIELD_SUB = gql`
+  subscription deleteFieldSub {
+    deleteFieldSub
   }
 `;
 
@@ -44,5 +54,11 @@ export const ADDED_FIELD_VALUE = gql`
       }
       createdAt
     }
+  }
+`;
+
+export const DELETE_FIELD_VALUE_SUB = gql`
+  subscription deleteFieldValueSub {
+    deleteFieldValueSub
   }
 `;

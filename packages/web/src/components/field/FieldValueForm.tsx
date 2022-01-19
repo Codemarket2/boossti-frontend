@@ -1,26 +1,24 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import moment from 'moment';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useCRUDFieldValue } from '@frontend/shared/hooks/field';
-import { useGetListItemsByType } from '@frontend/shared/hooks/list';
 import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
-import ItemFormDrawer from '../list/ItemFormDrawer';
 import ImagePicker from '../common/ImagePicker';
 import { onAlert } from '../../utils/alert';
 import AddressSearch from '../common/AddressSearch';
 import RichTextarea from '../common/RichTextarea2';
+import SelectListItem from '../form2/SelectListItem';
+import ErrorLoading from '../common/ErrorLoading';
 
 interface IProps {
   onCancel: () => void;
@@ -47,13 +45,6 @@ export default function ItemFieldForm({
   typeSlug,
   edit = false,
 }: IProps) {
-  const { data, error, loading, state, setState } = useGetListItemsByType({
-    limit: 10,
-    types: [typeId],
-  });
-
-  const [drawer, setDrawer] = useState({ showDrawer: false });
-
   const { formik, formLoading, setFormValues, mediaState, setMediaState } = useCRUDFieldValue({
     onAlert,
     parentId,
@@ -70,7 +61,7 @@ export default function ItemFieldForm({
   }, [fieldValue]);
 
   if (edit && formik.values._id === '') {
-    return <p>Loading</p>;
+    return <ErrorLoading />;
   }
 
   return (
@@ -90,66 +81,18 @@ export default function ItemFieldForm({
               />
             </MuiPickersUtilsProvider>
           ) : formik.values.fieldType === 'type' ? (
-            error ? (
-              <p>Error - {error.message}</p>
-            ) : (
-              <>
-                <Autocomplete
-                  loading={loading}
-                  disabled={formik.isSubmitting}
-                  value={formik.values.itemId}
-                  onChange={(event: any, newValue) => {
-                    formik.setFieldValue('itemId', newValue);
-                  }}
-                  getOptionLabel={(option) => option.title}
-                  inputValue={state.search}
-                  onInputChange={(event, newInputValue) => {
-                    setState({ ...state, search: newInputValue });
-                  }}
-                  options={data && data.getListItems ? data.getListItems.data : []}
-                  renderInput={(params) => (
-                    <TextField
-                      error={formik.touched.itemId && Boolean(formik.errors.itemId)}
-                      helperText={formik.touched.itemId && formik.errors.itemId}
-                      fullWidth
-                      {...params}
-                      label={`Select Value`}
-                      variant="outlined"
-                      InputProps={{
-                        ...params.InputProps,
-                        endAdornment: (
-                          <>
-                            {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                            {params.InputProps.endAdornment}
-                          </>
-                        ),
-                      }}
-                    />
-                  )}
-                />
-                <ItemFormDrawer
-                  open={drawer.showDrawer}
-                  onClose={() => setDrawer({ showDrawer: false })}
-                  typeTitle={label}
-                  typeSlug={typeSlug}
-                  typeId={typeId}
-                  onSelect={(newValue) => {
-                    formik.setFieldValue('itemId', newValue);
-                    setDrawer({ showDrawer: false });
-                  }}
-                />
-                <Button
-                  className="mt-2"
-                  disabled={formLoading}
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                  onClick={() => setDrawer({ ...drawer, showDrawer: true })}
-                >
-                  Add Your New {label}
-                </Button>
-              </>
-            )
+            <SelectListItem
+              typeSlug={typeSlug}
+              typeId={typeId}
+              label={label}
+              error={formik.touched.itemId && Boolean(formik.errors.itemId)}
+              helperText={formik.touched.itemId && formik.errors.itemId}
+              value={formik.values.itemId}
+              onChange={(newValue) => {
+                formik.setFieldValue('itemId', newValue);
+              }}
+              allowCreate
+            />
           ) : formik.values.fieldType === 'boolean' ? (
             <FormControl disabled={formik.isSubmitting} component="fieldset">
               <FormLabel component="legend">Select {label}</FormLabel>

@@ -14,7 +14,7 @@ export const useGetComments = (postId: string) => {
     variables: {
       parentId: postId,
     },
-    fetchPolicy: 'cache-and-network',
+    // fetchPolicy: 'cache-and-network',
   });
 
   useEffect(() => {
@@ -60,7 +60,7 @@ export const useGetComment = (_id) => {
     variables: {
       _id,
     },
-    fetchPolicy: 'cache-and-network',
+    // fetchPolicy: 'cache-and-network',
   });
   useLikeSubscription();
   return { data, error, loading };
@@ -69,9 +69,9 @@ export const useGetComment = (_id) => {
 export const useGetActionCounts = (parentId: string) => {
   const { data, error, loading } = useQuery(GET_ACTION_COUNTS, {
     variables: {
-      parentId: parentId,
+      parentId,
     },
-    fetchPolicy: 'cache-and-network',
+    // fetchPolicy: 'cache-and-network',
   });
   return {
     data,

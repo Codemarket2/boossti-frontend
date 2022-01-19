@@ -5,9 +5,10 @@ import { useGetListTypes } from '@frontend/shared/hooks/list';
 import ErrorLoading from '../common/ErrorLoading';
 
 interface IProps {
-  disabled?: boolean;
   value: any;
   onChange: (newValue: any) => void;
+  filterId?: string;
+  disabled?: boolean;
   error?: boolean;
   helperText?: any;
 }
@@ -18,6 +19,7 @@ export default function SelectListType({
   onChange,
   error: isError,
   helperText,
+  filterId,
 }: IProps): any {
   const { data, loading, error, state, setState } = useGetListTypes({ limit: 10 });
 
@@ -38,7 +40,7 @@ export default function SelectListType({
       onInputChange={(event, newInputValue) => {
         setState({ ...state, search: newInputValue });
       }}
-      options={data && data.getListTypes ? data.getListTypes.data : []}
+      options={data?.getListTypes?.data?.filter((f) => f._id !== filterId) || []}
       loading={loading}
       renderInput={(params) => (
         <TextField

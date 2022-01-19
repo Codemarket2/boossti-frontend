@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-wrap-multilines */
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
@@ -9,11 +9,13 @@ import Checkbox from '@material-ui/core/Checkbox';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
-import { useCRUDFields } from '@frontend/shared/hooks/field';
+import Skeleton from '@material-ui/lab/Skeleton';
+import { useCRUDFields, useGetField } from '@frontend/shared/hooks/field';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
 import { onAlert } from '../../utils/alert';
 import SelectListType from '../form2/SelectListType';
+import ErrorLoading from '../common/ErrorLoading';
 
 export const fieldTypes = [
   { label: 'Form', value: 'form' },
@@ -41,20 +43,24 @@ interface IProps {
   edit?: boolean;
 }
 
-function UpdateFieldInput({ formik }) {
-  // const { data: data2, error: error2 } = useGetFieldByRelationId(formik.values._id);
-  // if (!error2 && (!data2 || !data2.getFieldByRelationId)) {
-  //   return <FieldsSkeleton />;
-  // }
-  // if (error2) {
-  //   return <ErrorLoading error={error2} />;
-  // }
+function UpdateFieldInput({ formik }: any) {
+  const { data, error } = useGetField(formik.values.relationId);
+  const [init, setInit] = useState(false);
 
-  // useEffect(() => {
-  //   if (data2?.getFieldByRelationId?.Label) {
-  //     formik.setFieldValue('fieldLabel', data2?.getFieldByRelationId?.label, false);
-  //   }
-  // }, [data2]);
+  useEffect(() => {
+    if (data?.getField?.label && !init) {
+      setInit(true);
+      formik.setFieldValue('relationLabel', data?.getField?.label, false);
+    }
+  }, [data]);
+
+  if (error) {
+    return <ErrorLoading error={error} />;
+  }
+
+  if (!data?.getField) {
+    return <Skeleton variant="rect" height={50} />;
+  }
 
   return (
     <InputGroup>
@@ -62,18 +68,13 @@ function UpdateFieldInput({ formik }) {
         fullWidth
         label="Field Label"
         variant="outlined"
-        name="fieldLabel"
+        name="relationLabel"
         size="small"
         disabled={formik.isSubmitting}
-        value={
-          // formik.values.relationId
-          //   ? data2.getFieldByRelationId.label
-          //   : data2.getFieldByRelationId.fieldLabel
-          formik.values.fieldLabel
-        }
+        value={formik.values.relationLabel}
         onChange={formik.handleChange}
-        error={formik.touched.fieldLabel && Boolean(formik.errors.fieldLabel)}
-        helperText={formik.touched.fieldLabel && formik.errors.fieldLabel}
+        error={formik.touched.relationLabel && Boolean(formik.errors.relationLabel)}
+        helperText={formik.touched.relationLabel && formik.errors.relationLabel}
       />
     </InputGroup>
   );
@@ -153,9 +154,10 @@ export default function FieldForm({
               }}
               error={formik.touched.typeId && Boolean(formik.errors.typeId)}
               helperText={formik.touched.typeId && formik.errors.typeId}
+              filterId={parentId}
             />
           </InputGroup>
-          {edit ? (
+          {edit && formik.values.relationId ? (
             <UpdateFieldInput formik={formik} />
           ) : (
             <InputGroup>
@@ -163,13 +165,13 @@ export default function FieldForm({
                 fullWidth
                 label="Field Label"
                 variant="outlined"
-                name="fieldLabel"
+                name="relationLabel"
                 size="small"
                 disabled={formik.isSubmitting}
-                value={formik.values.fieldLabel}
+                value={formik.values.relationLabel}
                 onChange={formik.handleChange}
-                error={formik.touched.fieldLabel && Boolean(formik.errors.fieldLabel)}
-                helperText={formik.touched.fieldLabel && formik.errors.fieldLabel}
+                error={formik.touched.relationLabel && Boolean(formik.errors.relationLabel)}
+                helperText={formik.touched.relationLabel && formik.errors.relationLabel}
               />
             </InputGroup>
           )}
