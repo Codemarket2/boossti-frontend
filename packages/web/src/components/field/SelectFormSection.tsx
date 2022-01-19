@@ -20,9 +20,9 @@ export default function SelectFormSection({
   const { handleCreateField, createLoading } = useCreateFieldValue();
 
   const onSelect = async (formId: string) => {
-    if (formData?.getFieldValuesByItem?.data[0]) {
+    if (formData?.getFieldValues?.data[0]) {
       const payload = {
-        ...formData?.getFieldValuesByItem?.data[0],
+        ...formData?.getFieldValues?.data[0],
         value: formId,
       };
       await handleUpdateField(payload);

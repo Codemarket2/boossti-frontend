@@ -13,8 +13,8 @@ interface IProps {
   disabled?: boolean;
   value: string;
   onChange: (arg: string) => void;
-  vError?: boolean;
-  helperText?: string;
+  error?: boolean;
+  helperText?: any;
   allowCreate?: boolean;
 }
 
@@ -27,18 +27,18 @@ export default function SelectListItem({
   onChange,
   typeSlug,
   label,
-  vError = false,
+  error = false,
   helperText,
   allowCreate,
 }: IProps): any {
-  const { data, error, loading, state, setState } = useGetListItemsByType({
+  const { data, error: queryError, loading, state, setState } = useGetListItemsByType({
     limit: 10,
     types: [typeId],
   });
   const [drawer, setDrawer] = useState({ showDrawer: false });
 
-  if (error || !typeId) {
-    return <ErrorLoading error={error || { message: 'Please select Existing Type' }} />;
+  if (queryError || !typeId) {
+    return <ErrorLoading error={queryError || { message: 'Please select Existing Type' }} />;
   }
 
   return (
@@ -75,7 +75,7 @@ export default function SelectListItem({
         }}
         renderInput={(params) => (
           <TextField
-            error={vError}
+            error={error}
             helperText={helperText}
             fullWidth
             {...params}

@@ -10,7 +10,6 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
-import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
@@ -159,7 +158,6 @@ export default function Screen({ slug }: IProps) {
                 </Typography>
               </div>
             )}
-            <Divider className="my-2" />
             {state.fieldName === 'description' ? (
               <InlineForm
                 label="Description"
@@ -183,7 +181,6 @@ export default function Screen({ slug }: IProps) {
                 <CommentLikeShare parentId={data.getListTypeBySlug._id} />
               </div>
             )}
-            <Divider className="my-2" />
             {state.fieldName === 'media' ? (
               <MediaForm
                 state={crudState}

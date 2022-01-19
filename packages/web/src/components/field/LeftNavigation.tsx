@@ -16,6 +16,9 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import Badge from '@material-ui/core/Badge';
 import { useState } from 'react';
 import { useUpdateItemLayout } from '@frontend/shared/hooks/list';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import GridIcon from '@material-ui/icons/GridOn';
 import { onAlert } from '../../utils/alert';
 
 const breakpoints = [
@@ -46,6 +49,8 @@ interface IProps {
   previewMode?: boolean;
 }
 
+const initialState = { selectedField: null, showMenu: null, showGrid: false };
+
 export default function LeftNavigation({
   style,
   slug,
@@ -58,7 +63,7 @@ export default function LeftNavigation({
   children,
   previewMode = false,
 }: IProps): any {
-  const [state, setState] = useState({ selectedField: null });
+  const [state, setState] = useState(initialState);
   const { handleUpdateLayout } = useUpdateItemLayout({ slug: itemSlug, onAlert, layouts, _id });
 
   const onChange = ({ target }) => {
@@ -69,49 +74,46 @@ export default function LeftNavigation({
         [state.selectedField?._id]: { ...otherValues, [target.name]: target.value },
       };
       handleUpdateLayout(newLayouts);
-      // setLayouts({
-      //   ...layouts,
-      //   [state.selectedField?._id]: { ...otherValues, [target.name]: target.value },
-      // });
     }
   };
 
   return (
     <div style={style}>
-      {state.selectedField ? (
-        <Paper variant="outlined">
-          <Typography variant="h5" className="d-flex align-items-center">
-            <Tooltip title="Go Back">
-              <IconButton onClick={() => setState({ ...state, selectedField: null })}>
-                <ArrowBackIcon />
-              </IconButton>
-            </Tooltip>
-            {state.selectedField?.label}
-          </Typography>
-          <Divider />
-          <div className="p-2">
-            {breakpoints.map((point) => (
-              <TextField
-                key={point.name}
-                className="my-2"
-                fullWidth
-                size="small"
-                label={point.label}
-                name={point.name}
-                variant="outlined"
-                type="number"
-                value={
-                  layouts[state.selectedField?._id] && layouts[state.selectedField?._id][point.name]
-                    ? layouts[state.selectedField?._id][point.name]
-                    : ''
-                }
-                onChange={onChange}
-              />
-            ))}
-          </div>
-        </Paper>
-      ) : (
-        <Paper variant="outlined">
+      <Paper variant="outlined">
+        {state.showGrid ? (
+          <>
+            <Typography variant="h5" className="d-flex align-items-center">
+              <Tooltip title="Go Back">
+                <IconButton onClick={() => setState(initialState)}>
+                  <ArrowBackIcon />
+                </IconButton>
+              </Tooltip>
+              {state.selectedField?.label}
+            </Typography>
+            <Divider />
+            <div className="p-2">
+              {breakpoints.map((point) => (
+                <TextField
+                  key={point.name}
+                  className="my-2"
+                  fullWidth
+                  size="small"
+                  label={point.label}
+                  name={point.name}
+                  variant="outlined"
+                  type="number"
+                  value={
+                    layouts[state.selectedField?._id] &&
+                    layouts[state.selectedField?._id][point.name]
+                      ? layouts[state.selectedField?._id][point.name]
+                      : ''
+                  }
+                  onChange={onChange}
+                />
+              ))}
+            </div>
+          </>
+        ) : (
           <List component="nav" dense>
             <ListItem button>
               <Link href={`${slug}#title`}>
@@ -135,7 +137,6 @@ export default function LeftNavigation({
             {fields.length < 1 ? (
               <div className="px-3">
                 <Skeleton height={70} />
-                <Skeleton height={70} />
               </div>
             ) : (
               fields.map((fieldType, index) => (
@@ -153,7 +154,9 @@ export default function LeftNavigation({
                       <IconButton
                         edge="end"
                         aria-label="more"
-                        onClick={() => setState({ ...state, selectedField: fieldType })}
+                        onClick={({ currentTarget }) =>
+                          setState({ ...state, selectedField: fieldType, showMenu: currentTarget })
+                        }
                       >
                         <MoreVertIcon />
                       </IconButton>
@@ -163,9 +166,22 @@ export default function LeftNavigation({
               ))
             )}
           </List>
-        </Paper>
-      )}
+        )}
+      </Paper>
       {children}
+      <Menu
+        id="simple-menu"
+        anchorEl={state.showMenu}
+        open={Boolean(state.showMenu)}
+        onClose={() => setState(initialState)}
+      >
+        <MenuItem onClick={() => setState({ ...state, showMenu: false, showGrid: true })}>
+          <ListItemIcon className="mr-n4">
+            <GridIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary=" Edit Grid" />
+        </MenuItem>
+      </Menu>
     </div>
   );
 }

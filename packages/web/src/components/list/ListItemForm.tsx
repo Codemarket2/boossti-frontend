@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import { useRouter } from 'next/router';
 import Button from '@material-ui/core/Button';
 import InputLabel from '@material-ui/core/InputLabel';
-import { useGetFieldsByType } from '@frontend/shared/hooks/field';
+import { useGetFields } from '@frontend/shared/hooks/field';
 import { useCRUDListItems } from '@frontend/shared/hooks/list';
 import LoadingButton from '../common/LoadingButton';
 import InputGroup from '../common/InputGroup';
@@ -43,7 +43,7 @@ export default function ListItemForm({
     updateCallBack,
   });
 
-  const { data, loading, error } = useGetFieldsByType({ parentId });
+  const { data, loading, error } = useGetFields(parentId);
 
   useEffect(() => {
     if (item) {
@@ -56,8 +56,8 @@ export default function ListItemForm({
   };
 
   useEffect(() => {
-    if (data && data.getFieldsByType) {
-      const newFields = data.getFieldsByType.data.map((field) => ({
+    if (data && data.getFields) {
+      const newFields = data.getFields.map((field) => ({
         value: '',
         media: [],
         tempMedia: [],
@@ -73,11 +73,9 @@ export default function ListItemForm({
     }
   }, [data]);
 
-  if (error || !data || !data.getFieldsByType) {
+  if (error || !data || !data.getFields) {
     return <ErrorLoading error={error} />;
   }
-
-  console.log('extra', extraFields);
 
   return (
     <>
@@ -164,7 +162,8 @@ export default function ListItemForm({
               className="ml-2"
               disabled={formik.isSubmitting}
               color="primary"
-              variant="outlined">
+              variant="outlined"
+            >
               Cancel
             </Button>
           </InputGroup>
