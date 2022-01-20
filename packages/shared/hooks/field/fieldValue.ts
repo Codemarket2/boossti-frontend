@@ -13,7 +13,7 @@ export function useCreateFieldValue() {
   const [createFieldValueMutation, { loading: createLoading }] = useMutation(CREATE_FIELD_VALUE);
   const handleCreateField = async (payload) => {
     return await createFieldValueMutation({
-      variables: payload,
+      variables: { ...payload, _id: generateObjectId() },
     });
   };
   return { handleCreateField, createLoading };
