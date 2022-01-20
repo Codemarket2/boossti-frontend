@@ -20,6 +20,10 @@ export default function ResponseCount({ formId, parentId }: IProps): any {
   const { data, error, loading } = useGetResponses(formId, parentId);
   const { data: formData, error: errorData } = useGetForm(formId);
 
+  if (error?.message?.includes("has coerced Null value for NonNull type 'ID!'")) {
+    return null;
+  }
+
   if (error || !data || loading || !formData?.getForm) {
     return <ErrorLoading error={error || errorData} />;
   }

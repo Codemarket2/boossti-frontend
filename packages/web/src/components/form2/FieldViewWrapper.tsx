@@ -17,6 +17,10 @@ export default function FieldViewWrapper({
 }: IProps): any {
   const { error, data } = useGetForm(_id);
 
+  if (error?.message?.includes("has coerced Null value for NonNull type 'ID!'")) {
+    return null;
+  }
+
   if (error || !data || !data.getForm) {
     return <ErrorLoading error={error} />;
   }

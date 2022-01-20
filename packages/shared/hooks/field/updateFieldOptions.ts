@@ -13,24 +13,23 @@ export const useUpdateFieldOptions = ({ onAlert, parentId }: IProps) => {
   const handleUpdateFieldOptions = async (_id, options) => {
     try {
       const updateCache = (client, mutationResult) => {
-        const { getFieldsByType } = client.readQuery({
+        const oldData = client.readQuery({
           query: GET_FIELDS,
           variables: { parentId },
         });
-        const newData = {
-          getFieldsByType: {
-            ...getFieldsByType,
-            data: getFieldsByType.data.map((f) =>
-              f._id === mutationResult.data.updateField._id
-                ? { ...f, ...mutationResult.data.updateField }
-                : f,
-            ),
-          },
-        };
+        let getFields = [];
+        if (oldData?.getFields) {
+          getFields = oldData?.getFields;
+        }
+        getFields = getFields?.map((f) =>
+          f._id === mutationResult.data.updateField._id
+            ? { ...f, ...mutationResult.data.updateField }
+            : f,
+        );
         client.writeQuery({
           query: GET_FIELDS,
           variables: { parentId },
-          data: newData,
+          data: { getFields },
         });
       };
 
@@ -39,7 +38,7 @@ export const useUpdateFieldOptions = ({ onAlert, parentId }: IProps) => {
         update: updateCache,
       });
     } catch (error) {
-      onAlert(`Error`, error.message);
+      onAlert(`Error form`, error.message);
     }
   };
   return { handleUpdateFieldOptions, updateOptionsLoading };
