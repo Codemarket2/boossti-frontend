@@ -26,7 +26,6 @@ export default function SelectFormSection({
         value: formId,
       };
       await handleUpdateField(payload);
-      onClose();
     } else {
       const payload = {
         parentId,
@@ -34,8 +33,8 @@ export default function SelectFormSection({
         value: formId,
       };
       await handleCreateField(payload);
-      onClose();
     }
+    onClose();
   };
 
   return (
