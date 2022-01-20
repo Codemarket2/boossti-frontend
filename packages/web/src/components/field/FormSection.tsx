@@ -1,6 +1,6 @@
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import MoreVert from '@material-ui/icons/MoreVert';
+import MoreIcon from '@material-ui/icons/MoreHoriz';
 import Divider from '@material-ui/core/Divider';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -68,8 +68,8 @@ export default function FormC({ field, parentId, previewMode = false }: IProps):
       }
       setState({ ...initialState, edit: true, fieldId });
     } catch (err) {
-      alert(`Error ${err.message}`);
       setState({ ...state, backdrop: false });
+      alert(`Error ${err.message}`);
     }
   };
 
@@ -87,16 +87,16 @@ export default function FormC({ field, parentId, previewMode = false }: IProps):
   if (error || !data || !data.getFieldValues) {
     return <ErrorLoading error={error} />;
   }
+
   return (
     <div>
       {!previewMode && (
         <>
           <Divider />
-          <div className="d-flex justify-content-between align-items-center">
-            <Typography variant="h5">{field.label}</Typography>
-
+          <div className="d-flex align-items-center">
+            <Typography>{field.label}</Typography>
             <IconButton onClick={(event) => setState({ ...state, show: event.currentTarget })}>
-              <MoreVert />
+              <MoreIcon />
             </IconButton>
           </div>
         </>
@@ -120,11 +120,12 @@ export default function FormC({ field, parentId, previewMode = false }: IProps):
           <ListItemText primary="Select Form" />
         </MenuItem>
       </Menu>
+      {data?.getFieldValues?.data[0]?.value}
       {data?.getFieldValues?.data[0]?.value && (
         <>
-          <ResponseCount formId={data?.getFieldValuesByItem?.data[0]?.value} parentId={parentId} />
+          <ResponseCount formId={data?.getFieldValues?.data[0]?.value} parentId={parentId} />
           <FieldViewWrapper
-            _id={data?.getFieldValuesByItem?.data[0]?.value}
+            _id={data?.getFieldValues?.data[0]?.value}
             parentId={parentId}
             customSettings={null}
           />

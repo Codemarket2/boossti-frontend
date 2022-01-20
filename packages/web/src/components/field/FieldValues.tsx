@@ -11,6 +11,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { useGetFieldValues, useGetFields, useDeleteFieldValue } from '@frontend/shared/hooks/field';
+import Info from '@material-ui/icons/Info';
 import Tooltip from '@material-ui/core/Tooltip';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { convertToSlug } from './LeftNavigation';
@@ -325,7 +326,12 @@ export default function FieldValues({
           <Grid key={field._id} {...gridProps} item>
             {field.fieldType === 'form2' ? (
               <>
-                <Typography id={convertToSlug(field.label)}>{field.label}</Typography>
+                <Typography id={convertToSlug(field.label)}>
+                  {field.label}
+                  <Tooltip title="You can edit this field from template">
+                    <Info className="ml-1" fontSize="small" />
+                  </Tooltip>
+                </Typography>
                 <ResponseCount formId={JSON.parse(field?.options)?.formId} parentId={parentId} />
                 <FieldViewWrapper
                   _id={JSON.parse(field?.options)?.formId}
