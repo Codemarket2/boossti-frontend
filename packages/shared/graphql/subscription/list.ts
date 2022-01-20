@@ -11,6 +11,11 @@ export const ADDED_LIST_TYPE = gql`
         url
         caption
       }
+      createdAt
+      createdBy {
+        _id
+        name
+      }
     }
   }
 `;
@@ -19,19 +24,15 @@ export const UPDATED_LIST_TYPE = gql`
   subscription MySubscription($_id: ID!) {
     updatedListType(_id: $_id) {
       _id
-      title
       slug
+      title
       description
-      types {
-        _id
-        title
-        slug
-      }
       media {
         url
         caption
       }
-      layouts
+      inUse
+      active
       fields {
         _id
         label
@@ -42,6 +43,11 @@ export const UPDATED_LIST_TYPE = gql`
           title
           slug
         }
+      }
+      createdAt
+      createdBy {
+        _id
+        name
       }
     }
   }

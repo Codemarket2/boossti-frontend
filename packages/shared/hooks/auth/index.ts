@@ -48,3 +48,5 @@ export function useCurrentAuthenticatedUser() {
   }, []);
   return { getUser };
 }
+
+export { useAuthorization } from './useAuthorization';

@@ -1,25 +1,23 @@
+import { useAuthorization } from '@frontend/shared/hooks/auth';
 import { ReactNode } from 'react';
-import { useSelector } from 'react-redux';
 import NotFound from './NotFound';
 
 interface IProps {
   children: ReactNode;
-  _id: string | string[];
+  _id: string[];
   allowAdmin?: boolean;
   returnNull?: boolean;
 }
 
-export default function Authorization({ children, _id, allowAdmin = false, returnNull }: IProps) {
-  const { attributes, admin = false } = useSelector(({ auth }: any) => auth);
+export default function Authorization({
+  children,
+  _id = [],
+  allowAdmin = false,
+  returnNull,
+}: IProps) {
+  const authorized = useAuthorization(_id, allowAdmin);
 
-  let allow = false;
-  if (typeof _id === 'string') {
-    allow = attributes['custom:_id'] === _id;
-  } else if (typeof _id === 'object') {
-    allow = _id?.includes(attributes['custom:_id']);
-  }
-
-  if (allow || (allowAdmin && admin)) {
+  if (authorized) {
     return <>{children}</>;
   }
 

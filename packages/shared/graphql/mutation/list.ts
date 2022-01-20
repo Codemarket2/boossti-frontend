@@ -24,6 +24,11 @@ export const CREATE_LIST_TYPE = gql`
           slug
         }
       }
+      createdAt
+      createdBy {
+        _id
+        name
+      }
     }
   }
 `;
@@ -52,21 +57,28 @@ export const UPDATE_LIST_TYPE = gql`
           slug
         }
       }
+      createdAt
+      createdBy {
+        _id
+        name
+      }
     }
   }
 `;
 
-export const UPDATE_LIST_TYPE_FIELDS = gql`
-  mutation MyMutation($_id: ID!, $fields: [Field2Input]) {
-    updateListType(_id: $_id, fields: $fields) {
+export const PUBLISH_LIST_TYPE = gql`
+  mutation MyMutation($_id: ID!, $active: Boolean) {
+    updateListType(_id: $_id, active: $active) {
       _id
-      title
       slug
+      title
       description
       media {
         url
         caption
       }
+      inUse
+      active
       fields {
         _id
         label
@@ -77,6 +89,44 @@ export const UPDATE_LIST_TYPE_FIELDS = gql`
           title
           slug
         }
+      }
+      createdAt
+      createdBy {
+        _id
+        name
+      }
+    }
+  }
+`;
+
+export const UPDATE_LIST_TYPE_FIELDS = gql`
+  mutation MyMutation($_id: ID!, $fields: [Field2Input]) {
+    updateListType(_id: $_id, fields: $fields) {
+      _id
+      slug
+      title
+      description
+      media {
+        url
+        caption
+      }
+      inUse
+      active
+      fields {
+        _id
+        label
+        fieldType
+        options
+        typeId {
+          _id
+          title
+          slug
+        }
+      }
+      createdAt
+      createdBy {
+        _id
+        name
       }
     }
   }
@@ -104,19 +154,21 @@ export const CREATE_LIST_ITEM = gql`
       layouts: $layouts
     ) {
       _id
-      title
+      active
+      authenticateUser
       slug
+      title
       description
-      types {
-        _id
-        title
-        slug
-      }
       media {
         url
         caption
       }
       layouts
+      types {
+        _id
+        title
+        slug
+      }
       fields {
         _id
         label
@@ -127,6 +179,11 @@ export const CREATE_LIST_ITEM = gql`
           title
           slug
         }
+      }
+      createdAt
+      createdBy {
+        _id
+        name
       }
     }
   }
@@ -136,19 +193,21 @@ export const UPDATE_LIST_ITEM_FIELDS = gql`
   mutation MyMutation($_id: ID!, $fields: [Field2Input]) {
     updateListItem(_id: $_id, fields: $fields) {
       _id
-      title
+      active
+      authenticateUser
       slug
+      title
       description
-      types {
-        _id
-        title
-        slug
-      }
       media {
         url
         caption
       }
       layouts
+      types {
+        _id
+        title
+        slug
+      }
       fields {
         _id
         label
@@ -159,6 +218,11 @@ export const UPDATE_LIST_ITEM_FIELDS = gql`
           title
           slug
         }
+      }
+      createdAt
+      createdBy {
+        _id
+        name
       }
     }
   }
@@ -180,19 +244,21 @@ export const UPDATE_LIST_ITEM = gql`
       layouts: $layouts
     ) {
       _id
-      title
+      active
+      authenticateUser
       slug
+      title
       description
-      types {
-        _id
-        title
-        slug
-      }
       media {
         url
         caption
       }
       layouts
+      types {
+        _id
+        title
+        slug
+      }
       fields {
         _id
         label
@@ -203,6 +269,11 @@ export const UPDATE_LIST_ITEM = gql`
           title
           slug
         }
+      }
+      createdAt
+      createdBy {
+        _id
+        name
       }
     }
   }
@@ -212,19 +283,21 @@ export const UPDATE_LIST_ITEM_LAYOUTS = gql`
   mutation MyMutation($_id: ID!, $layouts: AWSJSON) {
     updateListItem(_id: $_id, layouts: $layouts) {
       _id
-      title
+      active
+      authenticateUser
       slug
+      title
       description
-      types {
-        _id
-        title
-        slug
-      }
       media {
         url
         caption
       }
       layouts
+      types {
+        _id
+        title
+        slug
+      }
       fields {
         _id
         label
@@ -235,6 +308,11 @@ export const UPDATE_LIST_ITEM_LAYOUTS = gql`
           title
           slug
         }
+      }
+      createdAt
+      createdBy {
+        _id
+        name
       }
     }
   }

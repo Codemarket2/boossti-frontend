@@ -97,7 +97,7 @@ export default function Form({ _id, drawerMode = false }: IProps): any {
   );
 
   return (
-    <Authorization _id={state?.createdBy?._id} allowAdmin>
+    <Authorization _id={[state?.createdBy?._id]} allowAdmin>
       {options.backdrop && <Backdrop open />}
       <div>
         <Snackbar

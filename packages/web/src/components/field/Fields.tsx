@@ -38,9 +38,14 @@ const reorder = (list, startIndex, endIndex) => {
   return result;
 };
 
-const QuoteList = memo(function QuoteList({ fields, onClick, hideMore }: any) {
+const QuoteList = memo(function QuoteList({ fields, onClick, hideMore, isDragDisabled }: any) {
   return fields?.map((field: any, index: number) => (
-    <Draggable draggableId={field._id} index={index} key={field._id}>
+    <Draggable
+      draggableId={field._id}
+      index={index}
+      key={field._id}
+      isDragDisabled={isDragDisabled}
+    >
       {(provided, draggableSnapshot) => (
         <ListItem
           button
@@ -69,6 +74,7 @@ interface IProps {
   parentId: any;
   setFields?: (args: any) => void;
   formBuilder?: boolean;
+  guestMode?: boolean;
 }
 
 const initialState = {
@@ -86,6 +92,7 @@ export default function Fields({
   setFields,
   title = 'Fields',
   formBuilder = false,
+  guestMode = false,
 }: IProps): any {
   const [state, setState] = useState(initialState);
 
@@ -181,7 +188,7 @@ export default function Fields({
     <Paper variant="outlined" className="mb-2">
       <Typography variant="h5" className="d-flex align-items-center pl-2">
         {title}
-        {!state.showForm && (
+        {!guestMode && !state.showForm && (
           <Tooltip title="Add New Field">
             <IconButton
               disabled={updateLoading}
@@ -198,17 +205,18 @@ export default function Fields({
       {(state.showForm || (state.selectedField && state.edit)) && (
         <FieldForm {...formBuilderProps} />
       )}
-      <List>
+      <List dense>
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="list">
             {(provided, snapshot) => (
               <div ref={provided.innerRef} {...provided.droppableProps}>
                 <QuoteList
-                  hideMore={snapshot.isDraggingOver}
+                  hideMore={snapshot.isDraggingOver || guestMode}
                   fields={data.getFields}
                   onClick={(currentTarget, field) =>
                     setState({ ...state, showMenu: currentTarget, selectedField: field })
                   }
+                  isDragDisabled={guestMode}
                 />
                 {provided.placeholder}
               </div>

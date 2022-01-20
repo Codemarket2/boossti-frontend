@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import { useRouter } from 'next/router';
 import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
@@ -9,6 +10,7 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Link from 'next/link';
 import AddIcon from '@material-ui/icons/Add';
+import { getCreatedAtDate } from '@frontend/shared/utils/date';
 import { useGetListItemsByType, useCreateListItem } from '@frontend/shared/hooks/list';
 import ErrorLoading from '../common/ErrorLoading';
 import ListHeader from '../common/ListHeader';
@@ -16,7 +18,7 @@ import LoadingButton from '../common/LoadingButton';
 import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
 
-export default function ListItems({ types, name, slug }: any) {
+export default function ListItems({ types, slug }: any) {
   const { data, loading, error, state, setState } = useGetListItemsByType({ types });
   const router = useRouter();
 
@@ -57,22 +59,24 @@ export default function ListItems({ types, name, slug }: any) {
         {error || !data ? (
           <ErrorLoading error={error} />
         ) : (
-          <List>
-            {data.getListItems.data.map((t, i) => (
-              <>
+          <List dense>
+            {data.getListItems.data.map((lisItem, i) => (
+              <Fragment key={lisItem._id}>
                 {i > 0 && <Divider />}
-                <Link href={`/types/${t.types[0].slug}/${t.slug}`}>
-                  <ListItem button key={t._id}>
+                <Link href={`/types/${lisItem.types[0].slug}/${lisItem.slug}`}>
+                  <ListItem button>
                     <ListItemAvatar>
-                      <Avatar alt={t.title} src={t.media[0] && t.media[0].url} />
+                      <Avatar alt={lisItem.title} src={lisItem.media[0] && lisItem.media[0].url} />
                     </ListItemAvatar>
                     <ListItemText
-                      primary={t.title.includes('-n-e-w') ? 'Title' : t.title}
-                      // secondary={t.description}
+                      primary={lisItem.title.includes('-n-e-w') ? 'Title' : lisItem.title}
+                      secondary={`By ${lisItem.createdBy?.name} ${getCreatedAtDate(
+                        lisItem.createdAt,
+                      )}`}
                     />
                   </ListItem>
                 </Link>
-              </>
+              </Fragment>
             ))}
           </List>
         )}

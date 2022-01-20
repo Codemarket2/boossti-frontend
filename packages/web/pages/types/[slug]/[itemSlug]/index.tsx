@@ -18,7 +18,7 @@ export default function Page({ metaTags, itemSlug, slug, createdBy }: IProps) {
     <>
       <Head {...metaTags} />
       <UserLayout container={false} authRequired>
-        <Authorization _id={createdBy} allowAdmin>
+        <Authorization _id={[createdBy]} allowAdmin>
           {itemSlug && slug ? <ItemScreen slug={itemSlug} typeSlug={slug} /> : <Loading />}
         </Authorization>
       </UserLayout>
