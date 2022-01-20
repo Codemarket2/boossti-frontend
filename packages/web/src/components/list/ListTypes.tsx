@@ -1,88 +1,74 @@
+import { useState, Fragment } from 'react';
 import { useRouter } from 'next/router';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import Tooltip from '@material-ui/core/Tooltip';
 import List from '@material-ui/core/List';
 import Link from 'next/link';
 import ListItem from '@material-ui/core/ListItem';
+import { getCreatedAtDate } from '@frontend/shared/utils/date';
 import ListItemText from '@material-ui/core/ListItemText';
-import AddIcon from '@material-ui/icons/Add';
 import Avatar from '@material-ui/core/Avatar';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import { useGetListTypes, useCreateListType } from '@frontend/shared/hooks/list';
 import ErrorLoading from '../common/ErrorLoading';
-import ListHeader from '../common/ListHeader';
-import LoadingButton from '../common/LoadingButton';
 import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
+import ListHeader2 from '../common/ListHeader2';
 
 export default function ListTypes(): any {
   const { data, loading, error, state, setState } = useGetListTypes();
+  const [showBackdrop, setShowBackdrop] = useState(false);
 
   const router = useRouter();
+  const { handleCreate, createLoading } = useCreateListType({ onAlert });
 
   const createCallback = (slug) => {
+    setShowBackdrop(true);
     router.push(`/types/${slug}`);
   };
 
-  const { handleCreate, createLoading } = useCreateListType({ onAlert });
-
   return (
     <>
-      <ListHeader
-        loading={loading}
-        button={
-          <Link href="/types/new">
-            <Tooltip title="Add New Types">
-              <LoadingButton
-                className="ml-2"
-                size="small"
-                variant="contained"
-                type="button"
-                color="primary"
-                onClick={() => handleCreate(createCallback)}
-                loading={createLoading}
-                startIcon={<AddIcon />}
-              >
-                Add New
-              </LoadingButton>
-            </Tooltip>
-          </Link>
-        }
+      <ListHeader2
         search={state.search}
-        showSearch={state.showSearch}
-        onHide={() => setState({ ...state, search: '', showSearch: false })}
-        onShow={() => setState({ ...state, search: '', showSearch: true })}
-        onChange={(value) => setState({ ...state, search: value })}
+        onSearchChange={(newSearch) => setState({ ...state, search: newSearch })}
+        searchLoading={loading}
+        handleAddNew={() => handleCreate(createCallback)}
+        addNewLoading={createLoading}
       >
-        <Typography variant="h4">Templates</Typography>
-      </ListHeader>
+        <Typography color="textPrimary">Templates</Typography>
+      </ListHeader2>
       <Paper variant="outlined">
         {error || !data ? (
           <ErrorLoading error={error} />
         ) : (
-          <List>
-            {data.getListTypes.data.map((t, i) => (
-              <>
+          <List dense>
+            {data.getListTypes.data.map((listType, i) => (
+              <Fragment key={listType._id}>
                 {i > 0 && <Divider />}
-                <Link href={`types/${t.slug}`}>
-                  <ListItem button key={t._id}>
+                <Link href={`types/${listType.slug}`}>
+                  <ListItem button>
                     <ListItemAvatar>
-                      <Avatar alt={t.title} src={t.media[0] && t.media[0].url} />
+                      <Avatar
+                        alt={listType.title}
+                        src={listType.media[0] && listType.media[0].url}
+                      />
                     </ListItemAvatar>
                     <ListItemText
-                      primary={t.title.includes('-n-e-w') ? 'Title' : t.title}
-                      // secondary={t.description}
+                      primary={listType.title.includes('-n-e-w') ? 'Title' : listType.title}
+                      secondary={`By ${listType.createdBy?.name} ${getCreatedAtDate(
+                        listType.createdAt,
+                      )}`}
                     />
                   </ListItem>
                 </Link>
-              </>
+              </Fragment>
             ))}
           </List>
         )}
       </Paper>
-      <Backdrop open={createLoading} />
+      <Backdrop open={createLoading || showBackdrop} />
     </>
   );
 }

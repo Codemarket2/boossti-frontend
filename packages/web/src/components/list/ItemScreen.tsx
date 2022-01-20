@@ -178,7 +178,6 @@ export default function ItemScreen({
                 Preview
               </Button>
               <ActionButtons
-                hideEdit
                 onDelete={() => {
                   const answer = confirm('Are you sure you want to delete?');
                   if (answer) {
@@ -186,13 +185,12 @@ export default function ItemScreen({
                   }
                 }}
               />
-              <Tooltip
-                title="share"
-                onClick={() => {
-                  navigator.clipboard.writeText(`${window?.location?.origin}/page/${slug}`);
-                }}
-              >
-                <IconButton>
+              <Tooltip title="share">
+                <IconButton
+                  onClick={() =>
+                    navigator.clipboard.writeText(`${window?.location?.origin}/page/${slug}`)
+                  }
+                >
                   <ShareIcon />
                 </IconButton>
               </Tooltip>

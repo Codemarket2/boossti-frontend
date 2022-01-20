@@ -15,50 +15,10 @@ export const GET_LIST_TYPES = gql`
         }
         inUse
         active
-      }
-    }
-  }
-`;
-
-export const GET_LIST_ITEMS_BY_TYPE = gql`
-  query MyQuery($limit: Int, $page: Int, $types: [ID], $search: String) {
-    getListItems(limit: $limit, page: $page, types: $types, search: $search) {
-      count
-      data {
-        _id
-        slug
-        title
-        description
-        types {
+        createdAt
+        createdBy {
           _id
-          title
-          slug
-        }
-        media {
-          url
-          caption
-        }
-      }
-    }
-  }
-`;
-export const GET_LIST_ITEMS = gql`
-  query MyQuery($limit: Int, $page: Int, $types: [ID], $search: String) {
-    getListItems(limit: $limit, page: $page, types: $types, search: $search) {
-      count
-      data {
-        _id
-        slug
-        title
-        description
-        types {
-          _id
-          title
-          slug
-        }
-        media {
-          url
-          caption
+          name
         }
       }
     }
@@ -89,6 +49,58 @@ export const GET_LIST_TYPE_BY_SLUG = gql`
           slug
         }
       }
+      createdAt
+      createdBy {
+        _id
+        name
+      }
+    }
+  }
+`;
+
+export const GET_LIST_ITEMS_BY_TYPE = gql`
+  query MyQuery($limit: Int, $page: Int, $types: [ID], $search: String) {
+    getListItems(limit: $limit, page: $page, types: $types, search: $search) {
+      count
+      data {
+        _id
+        slug
+        title
+        description
+        types {
+          _id
+          title
+          slug
+        }
+        media {
+          url
+          caption
+        }
+        createdAt
+        createdBy {
+          _id
+          name
+        }
+      }
+    }
+  }
+`;
+
+export const GET_LIST_ITEMS = gql`
+  query MyQuery($limit: Int, $page: Int, $types: [ID], $search: String) {
+    getListItems(limit: $limit, page: $page, types: $types, search: $search) {
+      count
+      data {
+        _id
+        slug
+        title
+        description
+        types {
+          _id
+          title
+          slug
+        }
+      }
     }
   }
 `;
@@ -112,7 +124,6 @@ export const GET_LIST_ITEM_BY_SLUG = gql`
         title
         slug
       }
-      createdBy
       fields {
         _id
         label
@@ -123,6 +134,11 @@ export const GET_LIST_ITEM_BY_SLUG = gql`
           title
           slug
         }
+      }
+      createdAt
+      createdBy {
+        _id
+        name
       }
     }
   }
