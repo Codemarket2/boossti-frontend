@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import EditIcon from '@material-ui/icons/Edit';
@@ -17,7 +16,7 @@ interface IProps {
   field: any;
   onSelect?: (arg1: any, arg2: any) => void;
   index?: any;
-  previewMode?: boolean;
+  authorized: boolean;
 }
 
 export default function FieldValueCard({
@@ -25,15 +24,14 @@ export default function FieldValueCard({
   field,
   index,
   onSelect,
-  previewMode = false,
+  authorized = false,
 }: IProps): any {
   const { query } = useRouter();
   const [showHideComments, setShowHideComments] = useState(false);
-  const { auth } = useSelector((state: any) => state);
 
   return (
     <div>
-      {!previewMode && (auth.admin || auth.attributes['custom:_id'] === fieldValue.createdBy._id) && (
+      {authorized && (
         <div className="d-flex justify-content-end">
           <IconButton aria-label="settings" onClick={(event) => onSelect(event.target, fieldValue)}>
             <EditIcon />

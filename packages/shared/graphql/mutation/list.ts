@@ -279,6 +279,45 @@ export const UPDATE_LIST_ITEM = gql`
   }
 `;
 
+export const PUBLISH_LIST_ITEM = gql`
+  mutation MyMutation($_id: ID!, $active: Boolean, $authenticateUser: Boolean) {
+    updateListItem(_id: $_id, active: $active, authenticateUser: $authenticateUser) {
+      _id
+      active
+      authenticateUser
+      slug
+      title
+      description
+      media {
+        url
+        caption
+      }
+      layouts
+      types {
+        _id
+        title
+        slug
+      }
+      fields {
+        _id
+        label
+        fieldType
+        options
+        typeId {
+          _id
+          title
+          slug
+        }
+      }
+      createdAt
+      createdBy {
+        _id
+        name
+      }
+    }
+  }
+`;
+
 export const UPDATE_LIST_ITEM_LAYOUTS = gql`
   mutation MyMutation($_id: ID!, $layouts: AWSJSON) {
     updateListItem(_id: $_id, layouts: $layouts) {
@@ -318,23 +357,23 @@ export const UPDATE_LIST_ITEM_LAYOUTS = gql`
   }
 `;
 
-export const UPDATE_PUBLISH = gql`
-  mutation MyMutation($_id: ID!, $publish: Boolean!) {
-    updatePublish(_id: $_id, publish: $publish) {
-      _id
-      active
-    }
-  }
-`;
+// export const UPDATE_PUBLISH = gql`
+//   mutation MyMutation($_id: ID!, $publish: Boolean!) {
+//     updatePublish(_id: $_id, publish: $publish) {
+//       _id
+//       active
+//     }
+//   }
+// `;
 
-export const UPDATE_AUTHENTICATION = gql`
-  mutation MyMutation($_id: ID!, $authenticateUser: Boolean!) {
-    updateAuthentication(_id: $_id, authenticateUser: $authenticateUser) {
-      authenticateUser
-      _id
-    }
-  }
-`;
+// export const UPDATE_AUTHENTICATION = gql`
+//   mutation MyMutation($_id: ID!, $authenticateUser: Boolean!) {
+//     updateAuthentication(_id: $_id, authenticateUser: $authenticateUser) {
+//       authenticateUser
+//       _id
+//     }
+//   }
+// `;
 
 export const DELETE_LIST_ITEM = gql`
   mutation MyMutation($_id: ID!) {

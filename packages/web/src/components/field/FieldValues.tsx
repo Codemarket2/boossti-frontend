@@ -2,9 +2,9 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import MoreIcon from '@material-ui/icons/MoreHoriz';
 import IconButton from '@material-ui/core/IconButton';
+import { useSelector } from 'react-redux';
 import AddCircle from '@material-ui/icons/AddCircle';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import Carousel from 'react-material-ui-carousel';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -37,16 +37,9 @@ const initialState = {
   addTarget: null,
 };
 
-function ItemOneFields({
-  field,
-  parentId,
-  guest,
-  setFieldValueCount,
-  toggleLeftNavigation,
-  previewMode,
-}: any) {
+function ItemOneFields({ field, parentId, setFieldValueCount, authorized }: any) {
   const [state, setState] = useState(initialState);
-  const { attributes, admin } = useSelector(({ auth }: any) => auth);
+  const { attributes } = useSelector(({ auth }: any) => auth);
   const currentUserId = attributes['custom:_id'];
   const deleteCallback = () => {
     setState({ ...state, showMenu: null, selectedFieldValue: null, edit: false });
@@ -68,7 +61,6 @@ function ItemOneFields({
     fieldType: field.fieldType,
     label: field.label,
     onCancel: () => {
-      toggleLeftNavigation(false);
       setState(initialState);
     },
   };
@@ -98,65 +90,51 @@ function ItemOneFields({
     );
   }
 
-  const hasAlreadyAdded =
+  const hasValue =
     data.getFieldValues.data.filter((v) => v.createdBy._id === currentUserId).length > 0;
 
-  let showAddButton =
-    data.getFieldValues.data.length === 0 ||
-    (field.multipleValues &&
-      !guest &&
-      !state.showForm &&
-      (field.oneUserMultipleValues || !hasAlreadyAdded));
-
-  if (
-    showAddButton &&
-    !field.multipleValues &&
-    !field.oneUserMultipleValues &&
-    !(currentUserId === field.createdBy._id || admin)
-  ) {
-    showAddButton = false;
-  }
+  const showAddButton =
+    (!hasValue && (authorized || field.multipleValues)) ||
+    (hasValue && (authorized || field.multipleValues) && field.multipleValues);
 
   return (
     <div>
-      {!previewMode && (
-        <>
-          <Menu
-            anchorEl={state.addTarget}
-            keepMounted
-            open={Boolean(state.showAddMenu)}
-            onClose={() => setState({ ...state, showAddMenu: false, addTarget: null })}
-          >
-            <MenuItem onClick={() => onClickAdd(false)}>
-              <ListItemIcon className="mr-n4">
-                <AddCircle fontSize="small" />
-              </ListItemIcon>
-              <ListItemText primary="Add New Value" />
-            </MenuItem>
-            <MenuItem>
-              <ListItemIcon className="mr-n4">
-                <Share itemSlug={convertToSlug(field.label)} />
-              </ListItemIcon>
-              <ListItemText primary="Share" />
-            </MenuItem>
-          </Menu>
-          <div className="d-flex align-items-center">
-            <Typography id={convertToSlug(field.label)}>{field.label}</Typography>
-            {showAddButton && (
-              <Tooltip title="More Actions">
-                <IconButton
-                  onClick={(event) =>
-                    setState({ ...initialState, showAddMenu: true, addTarget: event.currentTarget })
-                  }
-                >
-                  <MoreIcon />
-                </IconButton>
-              </Tooltip>
-            )}
-          </div>
-          {state.showForm && <FieldValueForm {...formProps} />}
-        </>
-      )}
+      <Menu
+        anchorEl={state.addTarget}
+        keepMounted
+        open={Boolean(state.showAddMenu)}
+        onClose={() => setState({ ...state, showAddMenu: false, addTarget: null })}
+      >
+        {showAddButton && (
+          <MenuItem onClick={() => onClickAdd(false)}>
+            <ListItemIcon className="mr-n4">
+              <AddCircle fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary="Add New Value" />
+          </MenuItem>
+        )}
+        <MenuItem>
+          <ListItemIcon className="mr-n4">
+            <Share itemSlug={convertToSlug(field.label)} />
+          </ListItemIcon>
+          <ListItemText primary="Share" />
+        </MenuItem>
+      </Menu>
+      <Typography id={convertToSlug(field.label)} className="d-flex align-items-center mt-2 mb-1">
+        {field.label}
+        {showAddButton && (
+          <Tooltip title="More Actions">
+            <IconButton
+              onClick={(event) =>
+                setState({ ...initialState, showAddMenu: true, addTarget: event.currentTarget })
+              }
+            >
+              <MoreIcon />
+            </IconButton>
+          </Tooltip>
+        )}
+      </Typography>
+      {state.showForm && <FieldValueForm {...formProps} />}
       <FieldValueMap
         values={data.getFieldValues.data || []}
         selectedValue={
@@ -169,7 +147,7 @@ function ItemOneFields({
             selectedFieldValue: sfieldValue,
           })
         }
-        previewMode={previewMode}
+        authorized={authorized}
         field={field}
         formProps={formProps}
       />
@@ -197,7 +175,7 @@ type Props3 = {
   onSelect: (arg1: any, arg2: any) => void;
   field: any;
   formProps: any;
-  previewMode: boolean;
+  authorized: boolean;
 };
 
 const FieldValueMap = ({
@@ -205,7 +183,7 @@ const FieldValueMap = ({
   selectedValue = '',
   onSelect,
   field,
-  previewMode,
+  authorized,
   formProps = {},
 }: Props3) => {
   const FMap = values.map((fieldValue, index) => (
@@ -217,7 +195,7 @@ const FieldValueMap = ({
           index={index}
           fieldValue={fieldValue}
           field={field}
-          previewMode={previewMode}
+          authorized={authorized}
           onSelect={onSelect}
         />
       )}
@@ -272,26 +250,22 @@ const FieldValueMap = ({
 interface IProps {
   parentId: string;
   typeId: string;
-  guest?: boolean;
   isPublish?: boolean;
   setFields?: (arg: any) => void;
   setFieldValueCount?: (arg: any, arg2: any) => void;
   pushToAnchor?: () => void;
-  toggleLeftNavigation?: (value: boolean) => void;
   layouts: any;
-  previewMode?: boolean;
+  authorized: boolean;
 }
 
 export default function FieldValues({
   parentId,
   typeId,
-  guest = false,
   setFields = (arg: any) => {},
   setFieldValueCount = (index: number, value: number) => {},
   pushToAnchor = () => {},
-  toggleLeftNavigation,
   layouts,
-  previewMode,
+  authorized,
 }: IProps): any {
   const { data, error } = useGetFields(typeId);
 
@@ -340,18 +314,12 @@ export default function FieldValues({
                 />
               </>
             ) : field.fieldType === 'form' ? (
-              <FormSection field={field} parentId={parentId} previewMode={previewMode} />
+              <FormSection field={field} parentId={parentId} authorized={authorized} />
             ) : (
               <ItemOneFields
-                toggleLeftNavigation={(value) => {
-                  if (toggleLeftNavigation) {
-                    toggleLeftNavigation(value);
-                  }
-                }}
                 parentId={parentId}
                 field={field}
-                previewMode={previewMode}
-                guest={guest}
+                authorized={authorized}
                 setFieldValueCount={(value) => setFieldValueCount(index, value)}
               />
             )}

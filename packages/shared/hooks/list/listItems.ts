@@ -4,13 +4,7 @@ import { v4 as uuid } from 'uuid';
 import { useFormik } from 'formik';
 import { useQuery, useMutation } from '@apollo/client';
 import { client as apolloClient } from '../../graphql';
-import {
-  CREATE_LIST_ITEM,
-  UPDATE_LIST_ITEM,
-  DELETE_LIST_ITEM,
-  UPDATE_PUBLISH,
-  UPDATE_AUTHENTICATION,
-} from '../../graphql/mutation/list';
+import { CREATE_LIST_ITEM, UPDATE_LIST_ITEM, DELETE_LIST_ITEM } from '../../graphql/mutation/list';
 import { GET_LIST_ITEMS_BY_TYPE, GET_LIST_ITEM_BY_SLUG } from '../../graphql/query/list';
 import { IHooksProps } from '../../types/common';
 import { fileUpload } from '../../utils/fileUpload';
@@ -280,32 +274,6 @@ const updateInCache = async (slug, fieldItem) => {
     data: newData,
   });
 };
-export function useUpdatePublish(_id: string, active: boolean, slug: string) {
-  const [updatePublish, { data }] = useMutation(UPDATE_PUBLISH);
-  const handleOnChange = async () => {
-    await updateInCache(slug, active);
-    updatePublish({
-      variables: { _id, publish: !active },
-    });
-  };
-
-  return {
-    handleOnChange,
-  };
-}
-export function useUpdateAuthentication(_id: string, authenticateUser: boolean, slug: string) {
-  const [updateAuthentication, { data }] = useMutation(UPDATE_AUTHENTICATION);
-  const handleOnChange = async () => {
-    await updateInCache(slug, authenticateUser);
-    updateAuthentication({
-      variables: { _id, authenticateUser: !authenticateUser },
-    });
-  };
-
-  return {
-    handleOnChange,
-  };
-}
 
 export function useDeleteListItem({ onAlert }: IHooksProps) {
   const [deleteListItemMutation, { loading: deleteLoading }] = useMutation(DELETE_LIST_ITEM);

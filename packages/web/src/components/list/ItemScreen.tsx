@@ -7,8 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import Hidden from '@material-ui/core/Hidden';
 import Tooltip from '@material-ui/core/Tooltip';
-import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
-import Button from '@material-ui/core/Button';
+import Drawer from '@material-ui/core/Drawer';
 import Typography from '@material-ui/core/Typography';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTheme } from '@material-ui/core/styles';
@@ -17,7 +16,11 @@ import {
   useCRUDListItems,
   useGetListItemBySlug,
   useDeleteListItem,
+  usePublishListItem,
 } from '@frontend/shared/hooks/list';
+import { useAuthorization } from '@frontend/shared/hooks/auth';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 import { updateSettingAction } from '@frontend/shared/redux/actions/setting';
 import { onAlert } from '../../utils/alert';
 import FieldValues from '../field/FieldValues';
@@ -30,19 +33,16 @@ import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
 import ImageList from '../post/ImageList';
 import NotFound from '../common/NotFound';
-import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
-import AppSwitch from '../common/AppSwitch';
 import DisplayRichText from '../common/DisplayRichText';
 import ListItemsFields from './ListItemsFields';
 import ListItemsFieldsValue from './ListItemsFieldsValue';
 
 interface IProps {
   slug: string;
-  hideBreadcrumbs?: boolean;
   setItem?: any;
   onSlugUpdate?: (arg: string) => void;
   pushToAnchor?: () => void;
-  noTogglePreviewMode?: boolean;
+  hideBreadcrumbs?: boolean;
   hideleft?: boolean;
 }
 
@@ -52,7 +52,6 @@ export default function ItemScreen({
   setItem,
   onSlugUpdate,
   pushToAnchor,
-  noTogglePreviewMode = false,
   hideleft = false,
 }: IProps): any {
   const router = useRouter();
@@ -61,8 +60,8 @@ export default function ItemScreen({
   const setting = useSelector((state: any) => state.setting);
   const [state, setState] = useState({ fieldName: '', fields: [], hideLeftNavigation: false });
   const [fieldValueCount, setFieldValueCount] = useState({});
-  const [previewMode, setPreviewMode] = useState(noTogglePreviewMode);
   const { data, error } = useGetListItemBySlug({ slug });
+  const authorized = useAuthorization([data?.getListItemBySlug?.createdBy?._id], true);
 
   const deleteCallBack = () => {
     router.push(
@@ -78,6 +77,7 @@ export default function ItemScreen({
   };
 
   const { handleDelete, deleteLoading } = useDeleteListItem({ onAlert });
+  const { handlePublish } = usePublishListItem();
 
   const dispatch = useDispatch();
 
@@ -92,9 +92,6 @@ export default function ItemScreen({
     updateCallBack,
   });
 
-  const handleShowBottomSheet = () => {
-    dispatch(updateSettingAction({ bottomDrawer: true }));
-  };
   const handleHideBottomSheet = () => {
     dispatch(updateSettingAction({ bottomDrawer: false }));
   };
@@ -117,119 +114,130 @@ export default function ItemScreen({
   if (error || !data) {
     return <ErrorLoading error={error} />;
   }
-  if (!data.getListItemBySlug) {
+
+  if (!data?.getListItemBySlug || (!authorized && !data?.getListItemBySlug?.active)) {
     return <NotFound />;
   }
 
   const leftNavigationProps = {
     parentId: data.getListItemBySlug?.types[0]?._id,
-    slug: previewMode
-      ? `/page/${data?.getListItemBySlug?.slug}`
-      : `/types/${data?.getListItemBySlug?.types[0]?.slug}/${data?.getListItemBySlug?.slug}`,
+    slug: `/types/${data?.getListItemBySlug?.types[0]?.slug}/${data?.getListItemBySlug?.slug}`,
+    // slug: previewMode
+    //   ? `/page/${data?.getListItemBySlug?.slug}`
+    //   : `/types/${data?.getListItemBySlug?.types[0]?.slug}/${data?.getListItemBySlug?.slug}`,
     fields: state.fields,
     fieldValueCount,
     layouts: JSON.parse(data.getListItemBySlug?.layouts) || {},
     itemSlug: data.getListItemBySlug.slug,
     _id: data.getListItemBySlug._id,
-    previewMode,
+    previewMode: !authorized,
   };
 
   return (
-    <div className={previewMode && 'mt-2'}>
-      {!hideBreadcrumbs && previewMode && (
-        <Button
-          style={{
-            right: 50,
-            top: 100,
-            position: 'fixed',
-            zIndex: 99999,
-          }}
-          variant="contained"
-          color="primary"
-          size="small"
-          endIcon={<EditIcon />}
-          onClick={() => setPreviewMode(false)}
-        >
-          Edit
-        </Button>
-      )}
-      {!previewMode && !hideBreadcrumbs && (
-        <>
-          <div className="d-flex justify-content-between align-content-center align-items-center">
-            <Breadcrumbs>
-              <Link href="/types">Template</Link>
-              <Link href={`/types/${data.getListItemBySlug.types[0].slug}`}>
-                <a>{data.getListItemBySlug.types[0].title}</a>
-              </Link>
-              <Typography color="textPrimary">
-                {data.getListItemBySlug.title.includes('-n-e-w')
-                  ? 'Title'
-                  : data.getListItemBySlug.title}
-              </Typography>
-            </Breadcrumbs>
-            <div className="d-flex align-items-center">
-              <Button
-                variant="contained"
-                color="primary"
-                size="small"
-                className="mr-2"
-                onClick={() => setPreviewMode(true)}
+    <div>
+      {!hideBreadcrumbs && (
+        <div className="d-flex justify-content-between align-content-center align-items-center">
+          <Breadcrumbs>
+            <Link href="/types">Template</Link>
+            <Link href={`/types/${data.getListItemBySlug.types[0].slug}`}>
+              <a>{data.getListItemBySlug.types[0].title}</a>
+            </Link>
+            <Typography color="textPrimary">
+              {data.getListItemBySlug.title.includes('-n-e-w')
+                ? 'Title'
+                : data.getListItemBySlug.title}
+            </Typography>
+          </Breadcrumbs>
+          <div className="d-flex align-items-center">
+            {authorized && (
+              <>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      color="primary"
+                      checked={data.getListItemBySlug?.active}
+                      onChange={() =>
+                        handlePublish(
+                          data.getListItemBySlug?._id,
+                          slug,
+                          !data.getListItemBySlug?.active,
+                          data.getListItemBySlug?.authenticateUser,
+                        )
+                      }
+                    />
+                  }
+                  label="Publish"
+                />
+                {data.getListItemBySlug?.active && (
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        color="primary"
+                        checked={data.getListItemBySlug?.authenticateUser}
+                        onChange={() =>
+                          handlePublish(
+                            data.getListItemBySlug?._id,
+                            slug,
+                            data.getListItemBySlug?.active,
+                            !data.getListItemBySlug?.authenticateUser,
+                          )
+                        }
+                      />
+                    }
+                    label="Auth Required"
+                  />
+                )}
+                <ActionButtons
+                  onDelete={() => {
+                    const answer = confirm('Are you sure you want to delete?');
+                    if (answer) {
+                      handleDelete(data.getListItemBySlug._id, deleteCallBack);
+                    }
+                  }}
+                />
+              </>
+            )}
+            <Tooltip title="share">
+              <IconButton
+                onClick={() =>
+                  navigator.clipboard.writeText(`${window?.location?.origin}/page/${slug}`)
+                }
               >
-                Preview
-              </Button>
-              <ActionButtons
-                onDelete={() => {
-                  const answer = confirm('Are you sure you want to delete?');
-                  if (answer) {
-                    handleDelete(data.getListItemBySlug._id, deleteCallBack);
-                  }
-                }}
-              />
-              <Tooltip title="share">
-                <IconButton
-                  onClick={() =>
-                    navigator.clipboard.writeText(`${window?.location?.origin}/page/${slug}`)
-                  }
-                >
-                  <ShareIcon />
-                </IconButton>
-              </Tooltip>
-            </div>
+                <ShareIcon />
+              </IconButton>
+            </Tooltip>
           </div>
+        </div>
+      )}
+      {!hideleft && (
+        <>
           <Hidden smUp>
-            <SwipeableDrawer
-              anchor="bottom"
-              open={setting.bottomDrawer}
-              onClose={handleHideBottomSheet}
-              onOpen={handleShowBottomSheet}
-            >
+            <Drawer anchor="bottom" open={setting.bottomDrawer} onClose={handleHideBottomSheet}>
               <LeftNavigation
-                style={{ maxHeight: '40vh' }}
+                style={{ maxHeight: '50vh' }}
                 onClick={handleHideBottomSheet}
                 {...leftNavigationProps}
               >
-                <ListItemsFields listItem={data.getListItemBySlug} previewMode={previewMode} />
+                <ListItemsFields listItem={data.getListItemBySlug} previewMode={!authorized} />
               </LeftNavigation>
-            </SwipeableDrawer>
+            </Drawer>
+          </Hidden>
+          <Hidden xsDown>
+            <LeftNavigation
+              style={{
+                position: 'fixed',
+                width: '15%',
+                maxHeight: '80vh',
+                paddingBottom: 10,
+                overflowX: 'hidden',
+                overflowY: 'auto',
+              }}
+              {...leftNavigationProps}
+            >
+              <ListItemsFields listItem={data.getListItemBySlug} previewMode={!authorized} />
+            </LeftNavigation>
           </Hidden>
         </>
-      )}
-      {!hideleft && (
-        <Hidden xsDown>
-          <LeftNavigation
-            style={{
-              position: 'fixed',
-              width: '15%',
-              maxHeight: '80vh',
-              paddingBottom: 10,
-              overflowX: 'hidden',
-              overflowY: 'auto',
-            }}
-            {...leftNavigationProps}
-          >
-            <ListItemsFields listItem={data.getListItemBySlug} previewMode={previewMode} />
-          </LeftNavigation>
-        </Hidden>
       )}
       <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
         <Paper
@@ -237,108 +245,88 @@ export default function ItemScreen({
           variant="outlined"
           className="p-2 pb-5"
         >
-          {previewMode ? (
-            <Typography variant="h3" align="center" variantMapping={{ h3: 'h1' }} id="title">
-              {data.getListItemBySlug.title.includes('-n-e-w')
-                ? 'Title'
-                : data.getListItemBySlug.title}
-            </Typography>
-          ) : (
-            <>
-              {state.fieldName === 'title' ? (
-                <InlineForm
-                  fieldName={state.fieldName}
-                  label="Title"
-                  onCancel={onCancel}
-                  formik={formik}
-                  formLoading={CRUDLoading}
-                />
-              ) : (
-                <>
-                  <Typography id="title" style={matches ? { paddingTop: 50 } : {}}>
-                    Title
+          <>
+            {state.fieldName === 'title' ? (
+              <InlineForm
+                fieldName={state.fieldName}
+                label="Title"
+                onCancel={onCancel}
+                formik={formik}
+                formLoading={CRUDLoading}
+              />
+            ) : (
+              <>
+                <Typography id="title" className="d-flex align-items-center">
+                  Title
+                  {authorized && (
                     <Tooltip title="Edit Title">
-                      <IconButton onClick={() => onEdit('title')}>
+                      <IconButton onClick={() => onEdit('title')} size="small">
                         <EditIcon fontSize="small" />
                       </IconButton>
                     </Tooltip>
-                    Publish
-                    <AppSwitch
-                      id={data?.getListItemBySlug?._id}
-                      active={data?.getListItemBySlug?.active}
-                      slug={data?.getListItemBySlug?.slug}
-                      fieldUser="active"
-                    />
-                    Login Required
-                    <AppSwitch
-                      id={data?.getListItemBySlug?._id}
-                      authUser={data?.getListItemBySlug?.authenticateUser || false}
-                      slug={data?.getListItemBySlug?.slug}
-                      fieldUser="authUser"
-                    />
-                  </Typography>
-                  <Typography variant="h4" className="d-flex align-items-center">
-                    {data.getListItemBySlug.title.includes('-n-e-w')
-                      ? 'Title'
-                      : data.getListItemBySlug.title}
-                  </Typography>
-                </>
-              )}
-              {/* <Divider className="my-2" /> */}
-              {state.fieldName === 'description' ? (
-                <InlineForm
-                  multiline
-                  fieldName={state.fieldName}
-                  label="Description"
-                  onCancel={onCancel}
-                  formik={formik}
-                  formLoading={CRUDLoading}
-                />
-              ) : (
-                <>
-                  <Typography id="description" style={matches ? { paddingTop: 50 } : {}}>
-                    Description
+                  )}
+                </Typography>
+                <Typography
+                  variant="h4"
+                  variantMapping={{ h4: 'h1' }}
+                  className="d-flex align-items-center"
+                >
+                  {data.getListItemBySlug.title.includes('-n-e-w')
+                    ? 'Title'
+                    : data.getListItemBySlug.title}
+                </Typography>
+              </>
+            )}
+            {state.fieldName === 'description' ? (
+              <InlineForm
+                multiline
+                fieldName={state.fieldName}
+                label="Description"
+                onCancel={onCancel}
+                formik={formik}
+                formLoading={CRUDLoading}
+              />
+            ) : (
+              <>
+                <Typography id="description" className="d-flex align-items-center mt-2 mb-1">
+                  Description
+                  {authorized && (
                     <Tooltip title="Edit Description">
-                      <IconButton onClick={() => onEdit('description')}>
+                      <IconButton onClick={() => onEdit('description')} size="small">
                         <EditIcon fontSize="small" />
                       </IconButton>
                     </Tooltip>
-                  </Typography>
-                  <DisplayRichText value={data.getListItemBySlug.description} />
-                  <CommentLikeShare parentId={data.getListItemBySlug._id} />
-                </>
-              )}
-              {/* <Divider className="my-2" /> */}
-              {state.fieldName === 'media' ? (
-                <MediaForm
-                  state={crudState}
-                  setState={setCrudState}
-                  onCancel={onCancel}
-                  onSave={formik.handleSubmit}
-                  loading={CRUDLoading}
-                />
-              ) : (
-                <>
-                  <Typography
-                    className="d-flex align-items-center"
-                    id="media"
-                    style={matches ? { paddingTop: 50 } : {}}
-                  >
-                    Media
+                  )}
+                </Typography>
+                <DisplayRichText value={data.getListItemBySlug.description} />
+              </>
+            )}
+            {state.fieldName === 'media' ? (
+              <MediaForm
+                state={crudState}
+                setState={setCrudState}
+                onCancel={onCancel}
+                onSave={formik.handleSubmit}
+                loading={CRUDLoading}
+              />
+            ) : (
+              <>
+                <Typography className="d-flex align-items-center mt-2 mb-1" id="media">
+                  Media
+                  {authorized && (
                     <Tooltip title="Edit Media">
-                      <IconButton onClick={() => onEdit('media')}>
+                      <IconButton onClick={() => onEdit('media')} size="small">
                         <EditIcon fontSize="small" />
                       </IconButton>
                     </Tooltip>
-                  </Typography>
-                  <ImageList media={data.getListItemBySlug.media} />
-                </>
-              )}
-            </>
-          )}
+                  )}
+                </Typography>
+                <ImageList media={data.getListItemBySlug.media} />
+              </>
+            )}
+          </>
           {data.getListItemBySlug?.types[0]?._id && (
             <FieldValues
-              toggleLeftNavigation={(value) => setState({ ...state, hideLeftNavigation: value })}
               pushToAnchor={pushToAnchor}
               parentId={data.getListItemBySlug._id}
               typeId={data.getListItemBySlug?.types[0]?._id}
@@ -348,10 +336,10 @@ export default function ItemScreen({
               }
               layouts={JSON.parse(data?.getListItemBySlug?.layouts) || {}}
               isPublish={data?.getListItemBySlug?.active}
-              previewMode={previewMode}
+              authorized={authorized}
             />
           )}
-          <ListItemsFieldsValue listItem={data?.getListItemBySlug} previewMode={previewMode} />
+          <ListItemsFieldsValue listItem={data?.getListItemBySlug} previewMode={!authorized} />
         </Paper>
       </div>
       <Backdrop open={deleteLoading || CRUDLoading} />

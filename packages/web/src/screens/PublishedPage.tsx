@@ -41,9 +41,9 @@ export default function PublishedPage({ slug }: IProps) {
 
   return data?.getListItemBySlug?.authenticateUser ? (
     <AuthRequired>
-      <ItemScreen pushToAnchor={pushToAnchor} slug={slug} hideBreadcrumbs noTogglePreviewMode />
+      <ItemScreen pushToAnchor={pushToAnchor} slug={slug} hideBreadcrumbs />
     </AuthRequired>
   ) : (
-    <ItemScreen pushToAnchor={pushToAnchor} slug={slug} hideBreadcrumbs noTogglePreviewMode />
+    <ItemScreen pushToAnchor={pushToAnchor} slug={slug} hideBreadcrumbs />
   );
 }
