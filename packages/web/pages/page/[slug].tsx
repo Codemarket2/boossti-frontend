@@ -13,7 +13,9 @@ export default function Page({ slug, metaTags = {} }: IProps) {
   return (
     <>
       <Head {...metaTags} />
-      <UserLayout container={false}>{slug && <PublishedPage slug={slug.toString()} />}</UserLayout>
+      <UserLayout container={false}>
+        <div className="pt-2"> {slug && <PublishedPage slug={slug.toString()} />}</div>
+      </UserLayout>
     </>
   );
 }

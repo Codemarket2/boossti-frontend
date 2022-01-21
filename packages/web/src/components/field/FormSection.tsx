@@ -7,24 +7,18 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import TuneIcon from '@material-ui/icons/Tune';
 import { useState } from 'react';
-import {
-  useGetFieldValues,
-  useCreateFieldValue,
-  useUpdateFieldValue,
-} from '@frontend/shared/hooks/field';
-import { useCreateForm } from '@frontend/shared/hooks/form';
+import { useGetFieldValues } from '@frontend/shared/hooks/field';
 import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
 import EditFormDrawer from '../form2/EditFormDrawer';
 import FieldViewWrapper from '../form2/FieldViewWrapper';
-import { onAlert } from '../../utils/alert';
 import SelectFormSection from './SelectFormSection';
 import ResponseCount from '../form2/ResponseCount';
 
 interface IProps {
   field: any;
   parentId: string;
-  previewMode?: boolean;
+  authorized?: boolean;
 }
 
 const initialState = {
@@ -35,42 +29,9 @@ const initialState = {
   backdrop: false,
 };
 
-export default function FormC({ field, parentId, previewMode = false }: IProps): any {
+export default function FormC({ field, parentId, authorized }: IProps): any {
   const [state, setState] = useState(initialState);
   const { data, error } = useGetFieldValues({ parentId, field: field._id });
-
-  const { handleCreateField } = useCreateFieldValue();
-  const { handleUpdateField } = useUpdateFieldValue();
-  const { handleCreateForm } = useCreateForm({ onAlert });
-
-  // const handleEditForm = async () => {
-  //   try {
-  //     setState({ ...initialState, backdrop: true });
-  //     let fieldId = null;
-  //     if (data?.getFieldValues?.count > 0) {
-  //       if (data?.getFieldValues?.data[0]?.value && data?.getFieldValues?.data[0]?.value !== '') {
-  //         fieldId = data?.getFieldValues?.data[0]?.value;
-  //       } else {
-  //         const formRes = await handleCreateForm('Form Name');
-  //         const payload = {
-  //           ...data?.getFieldValues?.data[0],
-  //           value: formRes?.data?.createForm?._id,
-  //         };
-  //         const updateRes = await handleUpdateField(payload);
-  //         fieldId = updateRes?.data?.updateFieldValue?.value;
-  //       }
-  //     } else {
-  //       const formRes = await handleCreateForm('Form Name');
-  //       const payload = { parentId, field: field._id, value: formRes?.data?.createForm?._id };
-  //       const response = await handleCreateField(payload);
-  //       fieldId = response?.data?.createFieldValue?.value;
-  //     }
-  //     setState({ ...initialState, edit: true, fieldId });
-  //   } catch (err) {
-  //     setState({ ...state, backdrop: false });
-  //     alert(`Error ${err.message}`);
-  //   }
-  // };
 
   const handleSelectForm = async () => {
     try {
@@ -89,7 +50,7 @@ export default function FormC({ field, parentId, previewMode = false }: IProps):
 
   return (
     <div>
-      {!previewMode && (
+      {authorized && (
         <div className="d-flex align-items-center">
           <Typography>{field.label}</Typography>
           <IconButton onClick={(event) => setState({ ...state, show: event.currentTarget })}>

@@ -24,13 +24,14 @@ export default function ProfileScreen({ _id }: any) {
           textColor="primary"
           centered
           variant="scrollable"
-          scrollButtons="on">
+          scrollButtons="on"
+        >
           <Tab label="Posts" value="posts" />
           <Tab label="About" value="about" />
         </Tabs>
       </Paper>
       {value === 'posts' && <UserPostList userId={_id} />}
-      {value === 'about' && <About userId={_id} guest={true} />}
+      {value === 'about' && <About userId={_id} authorized={false} />}
     </div>
   );
 }

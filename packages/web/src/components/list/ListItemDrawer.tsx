@@ -22,7 +22,7 @@ export default function ListItemDrawer({ title, slug }: IProps) {
       </Typography>
       {open && (
         <Overlay open={open} onClose={() => setOpen(false)}>
-          <ItemScreen hideBreadcrumbs slug={slug} noTogglePreviewMode hideleft />
+          <ItemScreen hideBreadcrumbs slug={slug} hideleft />
         </Overlay>
       )}
     </div>

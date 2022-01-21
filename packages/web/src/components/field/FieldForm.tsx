@@ -177,45 +177,39 @@ export default function FieldForm({
           )}
         </>
       )}
-      {!(formik.values.fieldType === 'form') && (
+      {!['form', 'form2'].includes(formik.values.fieldType) && (
         <>
-          {!formBuilder && (
-            <InputGroup>
-              <FormControlLabel
-                disabled={formik.isSubmitting}
-                control={
-                  <Checkbox
-                    checked={formik.values.multipleValues}
-                    onChange={({ target }) =>
-                      formik.setFieldValue('multipleValues', target.checked)
-                    }
-                    name="multipleValues"
-                    color="primary"
-                  />
-                }
-                label="Allow other users to add their own value"
-              />
-            </InputGroup>
-          )}
+          <InputGroup>
+            <FormControlLabel
+              disabled={formik.isSubmitting}
+              control={
+                <Checkbox
+                  checked={formik.values.oneUserMultipleValues}
+                  onChange={({ target }) =>
+                    formik.setFieldValue('oneUserMultipleValues', target.checked)
+                  }
+                  name="oneUserMultipleValues"
+                  color="primary"
+                />
+              }
+              label="Mutiple values"
+            />
+          </InputGroup>
+          <InputGroup>
+            <FormControlLabel
+              disabled={formik.isSubmitting}
+              control={
+                <Checkbox
+                  checked={formik.values.multipleValues}
+                  onChange={({ target }) => formik.setFieldValue('multipleValues', target.checked)}
+                  name="multipleValues"
+                  color="primary"
+                />
+              }
+              label="Allow other users to add value"
+            />
+          </InputGroup>
         </>
-      )}
-      {(formik.values.multipleValues || formBuilder) && !(formik.values.fieldType === 'form') && (
-        <InputGroup>
-          <FormControlLabel
-            disabled={formik.isSubmitting}
-            control={
-              <Checkbox
-                checked={formik.values.oneUserMultipleValues}
-                onChange={({ target }) =>
-                  formik.setFieldValue('oneUserMultipleValues', target.checked)
-                }
-                name="oneUserMultipleValues"
-                color="primary"
-              />
-            }
-            label="Each user can add mutiple values"
-          />
-        </InputGroup>
       )}
       <InputGroup>
         <LoadingButton type="submit" data-testid="save-button" loading={formLoading} size="small">
