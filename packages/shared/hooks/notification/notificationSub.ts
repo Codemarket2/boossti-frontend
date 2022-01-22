@@ -6,7 +6,7 @@ import { NOTIFICATION_SUB } from '../../graphql/subscription/notification';
 export const useNotificationSub = () => {
   const [state, setState] = useState({
     showNotification: null,
-    notifications: [],
+    notifications: {},
     showSnack: false,
     title: 'New Notification',
     description: 'Sumi commented on your post',
@@ -20,9 +20,15 @@ export const useNotificationSub = () => {
 
   useEffect(() => {
     if (data?.notificationSub) {
+      let temp = [];
+      if (state.notifications[data.notificationSub.formId]) {
+        temp = [data.notificationSub, ...state.notifications[data.notificationSub.formId]];
+      } else {
+        temp = [data.notificationSub];
+      }
       setState({
         ...state,
-        notifications: [...state.notifications, data.notificationSub],
+        notifications: { ...state.notifications, [data.notificationSub.formId]: temp },
         showSnack: true,
         title: data?.notificationSub?.title,
         description: data?.notificationSub?.description,

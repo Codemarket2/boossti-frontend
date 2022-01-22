@@ -33,7 +33,7 @@ export default function FormList(): any {
         search={state.search}
         onSearchChange={(newSearch) => setState({ ...state, search: newSearch })}
         searchLoading={loading}
-        handleAddNew={() => handleAddNewForm}
+        handleAddNew={handleAddNewForm}
         addNewLoading={createLoading}
       >
         <Typography color="textPrimary">Forms</Typography>
