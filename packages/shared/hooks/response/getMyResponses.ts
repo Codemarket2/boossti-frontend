@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { GET_MY_RESPONSES } from '../../graphql/query/response';
 import { RESPONSE_SUB } from '../../graphql/subscription/response';
 
-export const defaultQueryVariables = { page: 1, limit: 10, search: '' };
+export const defaultQueryVariables = { page: 1, limit: 1000, search: '' };
 
 export function useGetMyResponses() {
   const [subsribed, setSubsribed] = useState(false);
