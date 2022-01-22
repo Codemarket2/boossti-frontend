@@ -194,6 +194,12 @@ export default function FieldValueForm2({
               error={validateValue(validate, value, options, fieldType).error}
               helperText={validateValue(validate, value, options, fieldType).errorMessage}
             />
+          ) : options?.showAsCheckbox ? (
+            <div>
+              {options?.selectOptions?.map((option) => (
+                <FormControlLabel control={<Checkbox name={option} />} label={option} />
+              ))}
+            </div>
           ) : (
             <Select
               label={label}

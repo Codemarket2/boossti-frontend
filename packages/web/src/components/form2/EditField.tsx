@@ -140,19 +140,30 @@ export default function FormFields({
                 </Select>
               </FormControl>
             </InputGroup>
-            <div className="bg-dangers">
+            {!['type', 'existingForm'].includes(field?.options?.optionsListType) && (
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={field?.options?.selectAllowCreate}
-                    onChange={({ target }) => onOptionChange({ selectAllowCreate: target.checked })}
-                    name="selectAllowCreate"
+                    checked={field?.options?.showAsCheckbox}
+                    onChange={({ target }) => onOptionChange({ showAsCheckbox: target.checked })}
+                    name="showAsCheckbox"
                     color="primary"
                   />
                 }
-                label="Allow user to create new option"
+                label="Display options as checkbox"
               />
-            </div>
+            )}
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={field?.options?.selectAllowCreate}
+                  onChange={({ target }) => onOptionChange({ selectAllowCreate: target.checked })}
+                  name="selectAllowCreate"
+                  color="primary"
+                />
+              }
+              label="Allow user to create new option"
+            />
             <InputGroup>
               {field?.options?.optionsListType === 'type' ? (
                 <SelectListType
