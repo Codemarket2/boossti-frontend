@@ -1,10 +1,10 @@
 import { useQuery } from '@apollo/client';
 import { useState } from 'react';
-import { GET_MY_NOTIFICATIONS } from '../../graphql/query/notifications';
+import { GET_NOTIFICATION_LIST } from '../../graphql/query/notifications';
 
 export const defaultQueryVariables = { page: 1, limit: 10, search: '' };
 
-export function useGetMyNotifications({ formId }) {
+export function useGetNotificationList() {
   const [pagenation, setPagenation] = useState({
     page: defaultQueryVariables.page,
     limit: defaultQueryVariables.limit,
@@ -12,11 +12,11 @@ export function useGetMyNotifications({ formId }) {
     showSearch: false,
   });
 
-  const { data, error, loading } = useQuery(GET_MY_NOTIFICATIONS, {
-    variables: { ...pagenation, formId },
+  const { data, error, loading } = useQuery(GET_NOTIFICATION_LIST, {
+    variables: { ...pagenation },
     fetchPolicy: 'cache-and-network',
   });
-  const notifications = data?.getMyNotifications?.data;
+  const notificationList = data?.getNotificationList;
 
-  return { notifications, error, loading, pagenation, setPagenation };
+  return { notificationList, error, loading, pagenation, setPagenation };
 }
