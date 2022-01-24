@@ -14,6 +14,7 @@ import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
 import { onAlert } from '../../utils/alert';
 import { getFormFieldTypes } from './fieldTypes';
+import RichTextarea from '../common/RichTextarea2';
 
 interface IProps {
   onCancel: () => void;
@@ -82,34 +83,47 @@ export default function FieldForm({
           )}
         </FormControl>
       </InputGroup>
-      <InputGroup>
-        <FormControlLabel
-          disabled={formik.isSubmitting}
-          control={
-            <Checkbox
-              checked={formik.values.multipleValues}
-              onChange={({ target }) => formik.setFieldValue('multipleValues', target.checked)}
-              name="multipleValues"
-              color="primary"
-            />
-          }
-          label="Mutiple values"
+      {formik?.values?.fieldType !== 'label' && (
+        <InputGroup>
+          <FormControlLabel
+            disabled={formik.isSubmitting}
+            control={
+              <Checkbox
+                checked={formik.values.multipleValues}
+                onChange={({ target }) => formik.setFieldValue('multipleValues', target.checked)}
+                name="multipleValues"
+                color="primary"
+              />
+            }
+            label="Mutiple values"
+          />
+        </InputGroup>
+      )}
+      {formik?.values?.fieldType !== 'label' && (
+        <InputGroup>
+          <FormControlLabel
+            disabled={formik.isSubmitting}
+            control={
+              <Checkbox
+                checked={formik.values.required}
+                onChange={({ target }) => formik.setFieldValue('required', target.checked)}
+                name="required"
+                color="primary"
+              />
+            }
+            label="Required"
+          />
+        </InputGroup>
+      )}
+      {formik?.values?.fieldType === 'label' && (
+        <RichTextarea
+          value={formik?.values?.staticText}
+          onChange={(val) => {
+            // console.log(val);
+            formik.setFieldValue('staticText', val);
+          }}
         />
-      </InputGroup>
-      <InputGroup>
-        <FormControlLabel
-          disabled={formik.isSubmitting}
-          control={
-            <Checkbox
-              checked={formik.values.required}
-              onChange={({ target }) => formik.setFieldValue('required', target.checked)}
-              name="required"
-              color="primary"
-            />
-          }
-          label="Required"
-        />
-      </InputGroup>
+      )}
       <InputGroup>
         <LoadingButton type="submit" loading={formLoading} size="small">
           Save
