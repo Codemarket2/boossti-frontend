@@ -22,6 +22,7 @@ import SelectListType from './SelectListType';
 import InlineInput from '../common/InlineInput';
 import SelectForm from './SelectForm';
 import SelectFormFields from './SelectFormFields';
+import RichTextarea from '../common/RichTextarea2';
 
 type TProps = {
   field: any;
@@ -39,6 +40,8 @@ export default function FormFields({
   const onOptionChange = (updatedOption) => {
     onFieldChange({ ...field, options: { ...field.options, ...updatedOption } });
   };
+
+  console.log(field);
 
   return (
     <>
@@ -77,32 +80,42 @@ export default function FormFields({
             </Select>
           </FormControl>
         </InputGroup>
-        <InputGroup>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={field?.options?.multipleValues}
-                onChange={({ target }) => onOptionChange({ multipleValues: target.checked })}
-                name="multipleValues"
-                color="primary"
-              />
-            }
-            label="Mutiple values"
+        {field.fieldType !== 'label' && (
+          <InputGroup>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={field?.options?.multipleValues}
+                  onChange={({ target }) => onOptionChange({ multipleValues: target.checked })}
+                  name="multipleValues"
+                  color="primary"
+                />
+              }
+              label="Mutiple values"
+            />
+          </InputGroup>
+        )}
+        {field.fieldType !== 'label' && (
+          <InputGroup>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={field?.options?.required}
+                  onChange={({ target }) => onOptionChange({ required: target.checked })}
+                  name="required"
+                  color="primary"
+                />
+              }
+              label="Required"
+            />
+          </InputGroup>
+        )}
+        {field.fieldType === 'label' && (
+          <RichTextarea
+            value={field.options.staticText}
+            onChange={(val) => onOptionChange({ staticText: val })}
           />
-        </InputGroup>
-        <InputGroup>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={field?.options?.required}
-                onChange={({ target }) => onOptionChange({ required: target.checked })}
-                name="required"
-                color="primary"
-              />
-            }
-            label="Required"
-          />
-        </InputGroup>
+        )}
         <InputGroup>
           <FormControlLabel
             control={

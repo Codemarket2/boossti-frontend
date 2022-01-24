@@ -31,6 +31,7 @@ export const defualtValue = {
   valueDate: null,
   itemId: null,
   media: [],
+  values: [],
 };
 
 export default function FormViewWrapper({

@@ -13,6 +13,7 @@ export const GET_RESPONSE = gql`
         _id
         field
         value
+        values
         valueNumber
         valueBoolean
         valueDate
@@ -72,6 +73,7 @@ export const GET_RESPONSES = gql`
           _id
           field
           value
+          values
           valueNumber
           valueBoolean
           valueDate
@@ -121,6 +123,7 @@ export const GET_MY_RESPONSES = gql`
           _id
           field
           value
+          values
           valueNumber
           valueBoolean
           valueDate

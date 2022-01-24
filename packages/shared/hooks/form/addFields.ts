@@ -21,6 +21,11 @@ const validationSchema = yup.object({
   //   then: yup.string().required('Form Field is required'),
   //   otherwise: yup.string(),
   // }),
+  staticText: yup.string().when('fieldType', {
+    is: (value) => value === 'label',
+    then: yup.string().required('Static text is required'),
+    otherwise: yup.string(),
+  }),
 });
 
 interface IFormValues {
@@ -34,6 +39,7 @@ interface IFormValues {
   typeId: any;
   form: any;
   formField: string;
+  staticText: string;
 }
 
 const defaultFormValues = {
@@ -69,6 +75,7 @@ export function useAddFields({ onAlert, onSave }: ICRUDProps): any {
             multipleValues: payload.multipleValues,
             required: payload.required,
             formField: payload.formField,
+            staticText: payload.staticText,
           },
         };
 
@@ -91,6 +98,7 @@ export function useAddFields({ onAlert, onSave }: ICRUDProps): any {
     formik.setFieldValue('multipleValues', field.options.multipleValues, false);
     formik.setFieldValue('required', field.options?.required, false);
     formik.setFieldValue('_id', field._id, false);
+    formik.setFieldValue('staticText', field.options?.staticText, false);
     // formik.setFieldValue('typeId', field.typeId, false);
     // formik.setFieldValue('form', field?.form, false);
     // formik.setFieldValue('formField', field.options?.formField, false);
