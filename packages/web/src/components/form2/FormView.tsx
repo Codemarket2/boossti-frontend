@@ -47,10 +47,13 @@ export default function FormViewWrapper({
   const handleSubmit = async (values) => {
     const payload = { formId: _id, values };
     const response = await handleCreateUpdateResponse(payload, fields);
-    setShowMessage(true);
-    if (createCallback) {
-      createCallback(response);
+    if (response) {
+      setShowMessage(true);
+      if (createCallback) {
+        createCallback(response);
+      }
     }
+    return response;
   };
 
   return (
@@ -87,7 +90,7 @@ export default function FormViewWrapper({
 
 interface IProps2 {
   fields: any;
-  handleSubmit: (payload: any) => void;
+  handleSubmit: (payload: any) => any;
   loading?: boolean;
   onCancel?: () => void;
   initialValues?: any[];
@@ -170,11 +173,16 @@ export function FormView({
     if (validate) {
       setSubmitState({ ...submitState, validate, loading: false });
     } else if (authRequired && !authenticated) {
+      setSubmitState({ ...submitState, loading: false });
       return setShowAuthModal(true);
     } else {
-      await handleSubmit(values);
-      setSubmitState(initialSubmitState);
-      setValues([]);
+      const response = await handleSubmit(values);
+      if (response) {
+        setSubmitState(initialSubmitState);
+        setValues([]);
+      } else {
+        setSubmitState({ ...submitState, loading: false });
+      }
     }
   };
 
