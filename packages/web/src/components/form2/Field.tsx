@@ -8,6 +8,7 @@ import { MuiPickersUtilsProvider, DateTimePicker, DatePicker } from '@material-u
 import PhoneInput from 'react-phone-input-2';
 import ImagePicker from '../common/ImagePicker';
 import RichTextarea from '../common/RichTextarea2';
+import DisplayRichText from '../common/DisplayRichText';
 // import AddressSearch from '../common/AddressSearch';
 import SelectListItem from './SelectListItem';
 import { validateValue } from './validate';
@@ -48,7 +49,7 @@ export default function FieldValueForm2({
   };
   switch (fieldType) {
     case 'label': {
-      return null;
+      return <DisplayRichText value={options?.staticText} />;
     }
     case 'date': {
       return (
