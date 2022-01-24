@@ -15,9 +15,9 @@ export default function Page() {
     return <ErrorLoading error={error} />;
   }
   return (
-    <UserLayout authRequired={data?.getForm?.settings?.authRequired}>
+    <UserLayout authRequired={!data?.getForm?.settings?.authRequired}>
       {data?.getForm?.settings?.published ? (
-        <Paper variant="outlined">
+        <Paper variant="outlined" className="mt-2 px-2">
           <FormView form={data?.getForm} />
         </Paper>
       ) : (

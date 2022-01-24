@@ -12,8 +12,8 @@ export default function FormSetting({ settings, onChange }: any): any {
         <FormControlLabel
           control={
             <Checkbox
-              checked={settings?.authRequired}
-              onChange={({ target }) => onChange({ authRequired: target.checked })}
+              checked={!settings?.authRequired}
+              onChange={({ target }) => onChange({ authRequired: !target.checked })}
               name="authRequired"
               color="primary"
             />

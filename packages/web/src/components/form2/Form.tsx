@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import LinkIcon from '@material-ui/icons/FileCopy';
+import ShareIcon from '@material-ui/icons/Share';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import Alert from '@material-ui/lab/Alert';
@@ -125,7 +125,7 @@ export default function Form({ _id, drawerMode = false }: IProps): any {
               {state?.settings?.published && (
                 <Tooltip title="Copy form link">
                   <IconButton className="ml-2" onClick={handleCopyLink}>
-                    <LinkIcon />
+                    <ShareIcon />
                   </IconButton>
                 </Tooltip>
               )}

@@ -2,6 +2,8 @@ import { useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import Backdrop from '@material-ui/core/Backdrop';
+import { useSelector } from 'react-redux';
 import FormLabel from '@material-ui/core/FormLabel';
 import IconButton from '@material-ui/core/IconButton';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
@@ -13,6 +15,7 @@ import Field from './Field';
 import { validateValue } from './validate';
 import { onAlert } from '../../utils/alert';
 import DisplayRichText from '../common/DisplayRichText';
+import UnAuthorised from '../common/UnAuthorised';
 
 interface IProps {
   form: any;
@@ -50,7 +53,6 @@ export default function FormViewWrapper({
     }
   };
 
-  console.log(settings);
   return (
     <div>
       {settings?.showFormTitle && (
@@ -72,7 +74,12 @@ export default function FormViewWrapper({
           </InputGroup>
         </div>
       ) : (
-        <FormView fields={fields} handleSubmit={handleSubmit} loading={createLoading} />
+        <FormView
+          authRequired={!settings?.authRequired}
+          fields={fields}
+          handleSubmit={handleSubmit}
+          loading={createLoading}
+        />
       )}
     </div>
   );
@@ -84,6 +91,7 @@ interface IProps2 {
   loading?: boolean;
   onCancel?: () => void;
   initialValues?: any[];
+  authRequired?: boolean;
 }
 
 const initialSubmitState = {
@@ -110,9 +118,11 @@ export function FormView({
   loading,
   onCancel,
   initialValues = [],
+  authRequired = false,
 }: IProps2): any {
   const [values, setValues] = useState(initialValues);
   const [submitState, setSubmitState] = useState(initialSubmitState);
+  const authenticated = useSelector(({ auth }: any) => auth.authenticated);
 
   const onChange = (sValue, valueIndex) => {
     const newValue = { ...defualtValue, ...sValue };
@@ -186,7 +196,12 @@ export function FormView({
   };
 
   return (
-    <div>
+    <div className="position-relative">
+      {authRequired && !authenticated && (
+        <Backdrop open style={{ zIndex: 1, position: 'absolute' }}>
+          <UnAuthorised caption="Please Sign In to access this from" />
+        </Backdrop>
+      )}
       <Grid container spacing={0}>
         {fields?.map((field) => (
           <Grid
