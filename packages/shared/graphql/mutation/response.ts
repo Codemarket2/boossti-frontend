@@ -13,6 +13,7 @@ export const CREATE_RESPONSE = gql`
         _id
         field
         value
+        values
         valueNumber
         valueBoolean
         valueDate
@@ -44,6 +45,7 @@ export const UPDATE_RESPONSE = gql`
         _id
         field
         value
+        values
         valueNumber
         valueBoolean
         valueDate

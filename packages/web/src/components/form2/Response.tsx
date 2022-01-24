@@ -9,8 +9,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import moment from 'moment';
 import Paper from '@material-ui/core/Paper';
 import EditResponseDrawer from './EditResponseDrawer';
-import { ShowValue } from '../list/ListItemsFieldsValue';
 import Breadcrumbs from '../common/Breadcrumbs';
+import DisplayValue from './DisplayValue';
 import Authorization from '../common/Authorization';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
 import ErrorLoading from '../common/ErrorLoading';
@@ -103,7 +103,7 @@ export function ResponseChild({ response, hideBreadcrumbs }: IProps2) {
                   ?.filter((v) => v.field === field._id)
                   .map((value) => (
                     <div key={value?._id}>
-                      <ShowValue field={field} value={value} />
+                      <DisplayValue field={field} value={value} />
                       <CommentLikeShare parentId={value?._id} />
                     </div>
                   ))}

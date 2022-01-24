@@ -8,13 +8,13 @@ import { MuiPickersUtilsProvider, DateTimePicker, DatePicker } from '@material-u
 import PhoneInput from 'react-phone-input-2';
 import ImagePicker from '../common/ImagePicker';
 import RichTextarea from '../common/RichTextarea2';
-// import AddressSearch from '../common/AddressSearch';
 import SelectListItem from './SelectListItem';
 import { validateValue } from './validate';
 import SelectResponse from './SelectResponse';
 import Select from './Select';
 
 import 'react-phone-input-2/lib/style.css';
+import { Fragment } from 'react';
 
 interface IProps {
   disabled?: boolean;
@@ -46,6 +46,20 @@ export default function FieldValueForm2({
   const onChange = (payload) => {
     onChangeValue({ ...value, ...payload });
   };
+
+  const onChangeCheckbox = ({ target }) => {
+    let newValues = [];
+    if (value.values) {
+      newValues = [...value.values];
+    }
+    if (target.checked && !newValues.includes(target.name)) {
+      newValues.push(target.name);
+    } else {
+      newValues.splice(newValues.indexOf(target.name), 1);
+    }
+    onChange({ values: newValues });
+  };
+
   switch (fieldType) {
     case 'label': {
       return null;
@@ -93,7 +107,6 @@ export default function FieldValueForm2({
     case 'richTextarea': {
       return (
         <>
-          {/* <InputLabel>{label}</InputLabel> */}
           <RichTextarea
             value={value ? value.value : ''}
             onChange={(newValue) => onChange({ field: _id, value: newValue })}
@@ -106,15 +119,6 @@ export default function FieldValueForm2({
         </>
       );
     }
-    // case 'address': {
-    //   return (
-    //     <AddressSearch
-    //       label={label}
-    //       value={value}
-    //       onChange={(newValue) => onChange({ field: _id, value: newValue })}
-    //     />
-    //   );
-    // }
     case 'checkbox': {
       return (
         <>
@@ -196,9 +200,25 @@ export default function FieldValueForm2({
             />
           ) : options?.showAsCheckbox ? (
             <div>
-              {options?.selectOptions?.map((option) => (
-                <FormControlLabel control={<Checkbox name={option} />} label={option} />
+              {options?.selectOptions?.map((option, i) => (
+                <FormControlLabel
+                  disabled={disabled}
+                  key={i}
+                  control={
+                    <Checkbox
+                      name={option}
+                      checked={value?.values?.includes(option)}
+                      onChange={onChangeCheckbox}
+                    />
+                  }
+                  label={option}
+                />
               ))}
+              {validateValue(validate, value, options, fieldType).error && (
+                <FormHelperText className="text-danger">
+                  {validateValue(validate, value, options, fieldType).errorMessage}
+                </FormHelperText>
+              )}
             </div>
           ) : (
             <Select

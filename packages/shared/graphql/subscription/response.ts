@@ -13,6 +13,7 @@ export const RESPONSE_SUB = gql`
         _id
         field
         value
+        values
         valueNumber
         valueBoolean
         valueDate

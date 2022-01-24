@@ -10,16 +10,13 @@ import TableRow from '@material-ui/core/TableRow';
 import Tooltip from '@material-ui/core/Tooltip';
 import TablePagination from '@material-ui/core/TablePagination';
 import IconButton from '@material-ui/core/IconButton';
-import Avatar from '@material-ui/core/Avatar';
 import Delete from '@material-ui/icons/Delete';
 import LaunchIcon from '@material-ui/icons/Launch';
 import { useGetResponses, useDeleteResponse } from '@frontend/shared/hooks/response';
 import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
-import DisplayRichText from '../common/DisplayRichText';
-import { ShowResponseLabel } from './ResponseDrawer';
-import ListItemDrawer from '../list/ListItemDrawer';
+import DisplayValue from './DisplayValue';
 
 interface IProps {
   form: any;
@@ -107,7 +104,7 @@ export default function ResponseList({ form, hideDelete = false, parentId }: IPr
                         ?.filter((v) => v.field === field._id)
                         ?.map((value) => (
                           <div key={value?._id}>
-                            <ShowValue field={field} value={value} />
+                            <DisplayValue field={field} value={value} />
                           </div>
                         ))}
                     </TableCell>
@@ -121,45 +118,3 @@ export default function ResponseList({ form, hideDelete = false, parentId }: IPr
     </>
   );
 }
-
-export const ShowValue = ({ field, value }: any) => {
-  switch (field.fieldType) {
-    case 'text':
-    case 'textarea':
-    case 'url':
-    case 'email':
-    case 'password':
-      return <>{value?.value}</>;
-    case 'select':
-      if (field?.options?.optionsListType === 'type') {
-        return <ListItemDrawer title={value.itemId.title} slug={value.itemId.slug} />;
-      }
-      if (field?.options?.optionsListType === 'existingForm') {
-        return (
-          <ShowResponseLabel formField={field?.options?.formField} response={value?.response} />
-        );
-      }
-      return <>{value?.value}</>;
-    case 'richTextarea':
-      return <DisplayRichText value={value?.value} />;
-    case 'date':
-      return <>{value?.valueDate && moment(value?.valueDate).format('L')}</>;
-    case 'dateTime':
-      return <>{value?.valueDate && moment(value?.valueDate).format('lll')}</>;
-    case 'number':
-    case 'phoneNumber':
-      return <>{value?.valueNumber}</>;
-    case 'checkbox':
-      return <>{value?.valueBoolean?.toString()}</>;
-    case 'image':
-      return (
-        <>
-          {value?.media?.map((image, i) => (
-            <Avatar key={i} alt={`image-${i + 1}`} src={image?.url} />
-          ))}
-        </>
-      );
-    default:
-      return <>{value?.value}</>;
-  }
-};

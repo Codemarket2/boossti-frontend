@@ -77,7 +77,11 @@ export const validateValue = (
         options.required &&
         (!value || !value?.value)
       ) {
-        result = { error: true, errorMessage: 'Required' };
+        if (options?.showAsCheckbox && value?.values?.length) {
+          result = { error: false, errorMessage: '' };
+        } else {
+          result = { error: true, errorMessage: 'Required' };
+        }
       }
       break;
     }

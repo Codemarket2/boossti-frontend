@@ -1,10 +1,9 @@
 import EditIcon from '@material-ui/icons/Edit';
-import moment from 'moment';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useUpdateListItemFields } from '@frontend/shared/hooks/list';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -14,9 +13,7 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import ListIcon from '@material-ui/icons/List';
 import SettingsIcon from '@material-ui/icons/Settings';
 import CRUDMenu from '../common/CRUDMenu';
-import DisplayRichText from '../common/DisplayRichText';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
-import ImageList from '../post/ImageList';
 import { defualtValue, filterValues, FormView } from '../form2/FormView';
 import { onAlert } from '../../utils/alert';
 import StyleDrawer from '../style/StyleDrawer';
@@ -25,10 +22,9 @@ import ResponseCount from '../form2/ResponseCount';
 import FieldViewWrapper from '../form2/FieldViewWrapper';
 import EditFormDrawer from '../form2/EditFormDrawer';
 import { convertToSlug } from '../field/LeftNavigation';
-import { getLabel } from '../form2/SelectResponse';
-import { ShowResponseLabel } from '../form2/ResponseDrawer';
 import Overlay from '../common/Overlay';
 import CustomFormSettings from '../form2/CustomFormSettings';
+import DisplayValue from '../form2/DisplayValue';
 
 interface IProps {
   listItem: any;
@@ -96,8 +92,6 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
         field._id === fieldId ? { ...field, options: { ...field?.options, settings } } : field,
       ),
     );
-
-    console.log(listItem.fields);
   };
 
   const handleToggleCustomSettings = (fieldId: string, customSettings: boolean) => {
@@ -108,8 +102,6 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
           : field,
       ),
     );
-
-    console.log(listItem.fields);
   };
 
   return (
@@ -177,7 +169,7 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
                           />
                         </>
                       ) : (
-                        <ShowValue field={field} value={value} />
+                        <DisplayValue field={field} value={value} />
                       )}
                     </div>
                   ))}
@@ -219,7 +211,6 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
                     showFormSettings: true,
                     showMenu: false,
                   });
-                  console.log(state.field);
                 }}
               >
                 <ListItemIcon className="mr-n4">
@@ -281,45 +272,3 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
     </>
   );
 }
-
-interface IProps2 {
-  field: any;
-  value: any;
-}
-
-export const ShowValue = ({ field, value }: IProps2) => {
-  switch (field.fieldType) {
-    case 'text':
-    case 'textarea':
-    case 'email':
-    case 'password':
-      return <>{value?.value}</>;
-    case 'select':
-      if (field?.options?.optionsListType === 'type') {
-        return <>{value?.itemId?.title}</>;
-      }
-      if (field?.options?.optionsListType === 'existingForm') {
-        return (
-          <ShowResponseLabel formField={field?.options?.formField} response={value?.response} />
-        );
-      }
-      return <>{value?.value}</>;
-    case 'url':
-      return <a href={value?.value}>{value?.value}</a>;
-    case 'richTextarea':
-      return <DisplayRichText value={value?.value} />;
-    case 'date':
-      return <>{value?.valueDate && moment(value?.valueDate).format('L')}</>;
-    case 'dateTime':
-      return <>{value?.valueDate && moment(value?.valueDate).format('lll')}</>;
-    case 'number':
-    case 'phoneNumber':
-      return <>{value?.valueNumber}</>;
-    case 'checkbox':
-      return <>{value?.valueBoolean?.toString()}</>;
-    case 'image':
-      return <ImageList media={value?.media} />;
-    default:
-      return <>{value?.value}</>;
-  }
-};
