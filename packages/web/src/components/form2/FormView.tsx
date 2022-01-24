@@ -2,7 +2,6 @@ import { useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import Backdrop from '@material-ui/core/Backdrop';
 import { useSelector } from 'react-redux';
 import FormLabel from '@material-ui/core/FormLabel';
 import IconButton from '@material-ui/core/IconButton';
@@ -15,7 +14,8 @@ import Field from './Field';
 import { validateValue } from './validate';
 import { onAlert } from '../../utils/alert';
 import DisplayRichText from '../common/DisplayRichText';
-import UnAuthorised from '../common/UnAuthorised';
+import Overlay from '../common/Overlay';
+import AuthScreen from '../../screens/AuthScreen';
 
 interface IProps {
   form: any;
@@ -123,6 +123,7 @@ export function FormView({
   const [values, setValues] = useState(initialValues);
   const [submitState, setSubmitState] = useState(initialSubmitState);
   const authenticated = useSelector(({ auth }: any) => auth.authenticated);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   const onChange = (sValue, valueIndex) => {
     const newValue = { ...defualtValue, ...sValue };
@@ -168,6 +169,8 @@ export function FormView({
     });
     if (validate) {
       setSubmitState({ ...submitState, validate, loading: false });
+    } else if (authRequired && !authenticated) {
+      return setShowAuthModal(true);
     } else {
       await handleSubmit(values);
       setSubmitState(initialSubmitState);
@@ -197,10 +200,12 @@ export function FormView({
 
   return (
     <div className="position-relative">
-      {authRequired && !authenticated && (
-        <Backdrop open style={{ zIndex: 1, position: 'absolute' }}>
-          <UnAuthorised caption="Please Sign In to access this from" />
-        </Backdrop>
+      {!authenticated && showAuthModal && (
+        <Overlay onClose={() => setShowAuthModal(false)} open={showAuthModal} minWidth="60vw">
+          <div className="p-2">
+            <AuthScreen />
+          </div>
+        </Overlay>
       )}
       <Grid container spacing={0}>
         {fields?.map((field) => (
