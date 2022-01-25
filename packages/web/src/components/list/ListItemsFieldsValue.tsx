@@ -159,12 +159,22 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
                     <div key={i} style={field?.options?.style ? field?.options?.style : {}}>
                       {field?.fieldType === 'form' ? (
                         <>
-                          <ResponseCount formId={value?.value} parentId={listItem?._id} />
+                          <ResponseCount
+                            settings={field?.options?.settings}
+                            formId={value?.value}
+                            parentId={listItem?._id}
+                          />
                           <FieldViewWrapper
                             _id={value?.value}
                             parentId={listItem?._id}
                             customSettings={
-                              field?.options?.customSettings ? field?.options?.settings : null
+                              field?.options?.customSettings
+                                ? {
+                                    ...field?.options?.settings,
+                                    widgetType: 'button',
+                                    widgetLabel: field?.label,
+                                  }
+                                : null
                             }
                           />
                         </>
@@ -190,6 +200,7 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
         >
           {state.field?.fieldType === 'form' ? (
             <>
+              {console.log(state)}
               {state.field?.options?.values && (
                 <MenuItem onClick={() => setState({ ...state, showMenu: false, editForm: true })}>
                   <ListItemIcon className="mr-n4">
