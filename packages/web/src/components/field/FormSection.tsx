@@ -87,7 +87,6 @@ export default function FormC({ field, parentId, authorized }: IProps): any {
           <ListItemText primary="Select Form" />
         </MenuItem>
       </Menu>
-      {data?.getFieldValues?.data[0]?.value}
       {data?.getFieldValues?.data[0]?.value && (
         <>
           <ResponseCount formId={data?.getFieldValues?.data[0]?.value} parentId={parentId} />

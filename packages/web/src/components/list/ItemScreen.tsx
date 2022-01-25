@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTheme } from '@material-ui/core/styles';
 import ShareIcon from '@material-ui/icons/Share';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 import {
   useCRUDListItems,
   useGetListItemBySlug,
@@ -151,6 +152,11 @@ export default function ItemScreen({
           <div className="d-flex align-items-center">
             {authorized && (
               <>
+                <Tooltip title="Make a copy">
+                  <IconButton onClick={() => alert('Comming soon')}>
+                    <FileCopyIcon />
+                  </IconButton>
+                </Tooltip>
                 <FormControlLabel
                   control={
                     <Switch

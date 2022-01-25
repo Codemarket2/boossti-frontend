@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useGetResponses } from '@frontend/shared/hooks/response';
 import { useGetForm } from '@frontend/shared/hooks/form';
 import Button from '@material-ui/core/Button';
@@ -6,10 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Box from '@material-ui/core/Box';
 import LinearProgress, { LinearProgressProps } from '@material-ui/core/LinearProgress';
-import { useState } from 'react';
 import ErrorLoading from '../common/ErrorLoading';
 import ResponseList from './ResponseList';
-import { useEffect } from 'react';
 
 interface IProps {
   formId: any;
@@ -24,8 +23,7 @@ export default function ResponseCount({ formId, parentId, settings }: IProps): a
   const { data, error, loading } = useGetResponses(formId, parentId);
   const { data: formData, error: errorData } = useGetForm(formId);
   let progress;
-  console.log(settings);
-  if (settings == undefined || settings.minValue == '') {
+  if (settings === undefined || settings.minValue === '') {
     progress = 0;
   } else {
     progress = (data?.getResponses?.count / settings?.minValue) * 100;
