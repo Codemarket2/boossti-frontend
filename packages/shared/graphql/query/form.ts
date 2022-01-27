@@ -6,6 +6,7 @@ export const GET_FORM = gql`
       _id
       parentId
       name
+      slug
       fields {
         _id
         label
@@ -32,6 +33,13 @@ export const GET_FORM = gql`
     }
   }
 `;
+export const GET_FORM_BY_SLUG = gql`
+  query GetFormBySlug($slug: String!) {
+    getFormBySlug(slug: $slug) {
+      _id
+    }
+  }
+`;
 
 export const GET_FORMS = gql`
   query MyQuery($page: Int, $limit: Int, $search: String) {
@@ -41,6 +49,7 @@ export const GET_FORMS = gql`
         _id
         # parentId
         name
+        slug
         # fields {
         #   _id
         #   label

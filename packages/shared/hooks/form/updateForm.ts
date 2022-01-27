@@ -54,16 +54,28 @@ export function useUpdateForm({ onAlert, _id }: IProps): any {
   const handleUpdateForm = async () => {
     try {
       const payload = stringifyForm(form, true);
-      await updateFormMutation({
+      const res = await updateFormMutation({
         variables: payload,
       });
-    } catch (error) {
-      console.log(error);
-      onAlert('Error while auto saving', error.message);
+    } catch (err) {
+      console.log(err);
+      onAlert('Error while auto saving', err.message);
+    }
+  };
+  const handleUpdateName = async (name) => {
+    try {
+      const payload = stringifyForm(form, true);
+      const res = await updateFormMutation({
+        variables: { ...payload, name },
+      });
+      return res?.data?.updateForm?.slug;
+    } catch (err) {
+      console.log(err);
+      onAlert('Error while auto saving', err.message);
     }
   };
 
-  return { state: form, handleOnChange, error, updateLoading, handleUpdateForm };
+  return { state: form, handleOnChange, error, updateLoading, handleUpdateForm, handleUpdateName };
 }
 
 export const stringifyForm = (form: any, removeTypeId: boolean = false) => {

@@ -1,7 +1,7 @@
 import { useQuery, useSubscription } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { UPDATED_FORM } from '../../graphql/subscription/form';
-import { GET_FORMS, GET_FORM } from '../../graphql/query/form';
+import { GET_FORMS, GET_FORM, GET_FORM_BY_SLUG } from '../../graphql/query/form';
 
 interface IProps {
   page?: number;
@@ -64,4 +64,12 @@ export function useGetForm(_id: string): any {
   }, [data]);
 
   return { data: { getForm }, error, loading };
+}
+
+export function useGetFormBySlug(slug: string): any {
+  const { data, error, loading } = useQuery(GET_FORM_BY_SLUG, {
+    variables: { slug },
+  });
+
+  return { data, error, loading };
 }
