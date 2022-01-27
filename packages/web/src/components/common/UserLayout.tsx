@@ -10,9 +10,6 @@ import Container from './Container';
 const StyledPaper = styled(Paper)`
   background-color: ${(props) => props.theme.palette.background.level2} !important;
   min-height: 100vh !important;
-  button {
-    outline: none !important;
-  }
 `;
 
 interface IProps {

@@ -41,8 +41,6 @@ export default function FormFields({
     onFieldChange({ ...field, options: { ...field.options, ...updatedOption } });
   };
 
-  console.log(field);
-
   return (
     <>
       <Typography variant="h5" className="d-flex align-items-center">
@@ -52,9 +50,7 @@ export default function FormFields({
           </IconButton>
         </Tooltip>
         <InlineInput
-          width="100%"
           placeholder="Field Label"
-          name="label"
           value={field.label}
           onChange={(e) => onFieldChange({ ...field, label: e.target.value })}
         />

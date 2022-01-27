@@ -14,6 +14,7 @@ import { createMuiTheme, ThemeProvider as MuiThemeProvider } from '@material-ui/
 import LoadingBar from '../src/components/common/LoadingBar';
 import Head from '../src/components/common/Head';
 import { light, dark } from '../src/utils/theme/palette';
+import GlobalStyle from '../src/utils/GlobalStyle';
 
 // // CSS from node modules
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -100,6 +101,7 @@ function App({ Component, pageProps }: AppProps) {
           <Head />
           <LoadingBar />
           <CssBaseline />
+          <GlobalStyle />
           <Component {...pageProps} />
         </StyledProvider>
       </MuiThemeProvider>

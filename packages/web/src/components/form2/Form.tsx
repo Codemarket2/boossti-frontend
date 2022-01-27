@@ -30,10 +30,11 @@ import InlineInput from '../common/InlineInput';
 interface IProps {
   _id: string;
   drawerMode?: boolean;
+  onSlugChange?: (newSlug: string) => void;
 }
 
-export default function Form({ _id, drawerMode = false }: IProps): any {
-  const { error, state, handleOnChange, updateLoading } = useUpdateForm({
+export default function Form({ _id, drawerMode = false, onSlugChange }: IProps): any {
+  const { error, state, handleOnChange, updateLoading, handleUpdateName } = useUpdateForm({
     onAlert,
     _id,
   });
@@ -87,15 +88,6 @@ export default function Form({ _id, drawerMode = false }: IProps): any {
     return <ErrorLoading error={error} />;
   }
 
-  const NameInput = (
-    <InlineInput
-      width="100%"
-      placeholder="Form Name"
-      value={state?.name}
-      onChange={(e) => handleOnChange({ name: e.target.value })}
-    />
-  );
-
   return (
     <Authorization _id={[state?.createdBy?._id]} allowAdmin>
       {options.backdrop && <Backdrop open />}
@@ -112,13 +104,28 @@ export default function Form({ _id, drawerMode = false }: IProps): any {
         </Snackbar>
         {drawerMode ? (
           <Typography variant="h5" className="py-2">
-            {NameInput}
+            <InlineInput
+              placeholder="Form Name"
+              value={state?.name}
+              onChange={(e) => handleOnChange({ name: e.target.value })}
+            />
           </Typography>
         ) : (
-          <div className="d-flex justify-content-between align-items-center my-1">
+          <div className="d-flex justify-content-between align-items-center">
             <Breadcrumbs>
               <Link href="/forms">Forms</Link>
-              {NameInput}
+              <InlineInput
+                placeholder="Form Name"
+                value={state?.name}
+                onChange={async (e) => {
+                  setOptions({ ...options, backdrop: true });
+                  const newSlug = await handleUpdateName(e.target.value);
+                  setOptions({ ...options, backdrop: false });
+                  if (onSlugChange) {
+                    onSlugChange(newSlug);
+                  }
+                }}
+              />
             </Breadcrumbs>
             <div className="d-flex  align-items-center">
               {updateLoading && <CircularProgress size={25} />}

@@ -6,6 +6,7 @@ export const UPDATED_FORM = gql`
       _id
       parentId
       name
+      slug
       fields {
         _id
         label
@@ -38,6 +39,7 @@ export const FORM_SUB = gql`
       _id
       parentId
       name
+      slug
       fields {
         _id
         label
