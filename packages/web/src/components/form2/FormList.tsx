@@ -29,7 +29,7 @@ export default function FormList(): any {
   const handleAddNewForm = async () => {
     const res = await handleCreateForm(`Form ${Math.floor(1000 + Math.random() * 9000)}`);
     setShowBackdrop(true);
-    router.push(`/forms/${res?.data?.createForm?._id}`);
+    router.push(`/forms/${res?.data?.createForm?.slug}`);
   };
 
   return (
