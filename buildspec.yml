@@ -3,7 +3,7 @@ phases:
   install:
     commands:
       - npm install -g yarn
-      - npm install -g serverless
+      - npm install -g serverless@2.72.2
       - yarn install
   pre_build:
     commands:
