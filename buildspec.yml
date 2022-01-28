@@ -9,7 +9,7 @@ phases:
     commands:
       # - yarn web:test
       - aws s3 sync s3://soozzi-cicd-bucket/vijaa/$STAGE/.serverless packages/web/.serverless --delete
-      - echo "STAGE=$STAGE\nNEXT_PUBLIC_GRAPHQL_ENDPOINT=$GRAPHQL_ENDPOINT\nNEXT_PUBLIC_GRAPHQL_APIKEY=$GRAPHQL_APIKEY\nNEXT_PUBLIC_ONE_SIGNAL_APP_ID=$ONE_SIGNAL_APP_ID\NEXT_PUBLIC_REDIRECT_URL=$REDIRECT_URL" > ./packages/web/.env.production
+      - echo "STAGE=$STAGE\nNEXT_PUBLIC_GRAPHQL_ENDPOINT=$GRAPHQL_ENDPOINT\nNEXT_PUBLIC_GRAPHQL_APIKEY=$GRAPHQL_APIKEY\nNEXT_PUBLIC_ONE_SIGNAL_APP_ID=$ONE_SIGNAL_APP_ID\nNEXT_PUBLIC_REDIRECT_URL=$REDIRECT_URL" > ./packages/web/.env.production
       - yarn web:build
       - echo Build completed on `date`
   build:
