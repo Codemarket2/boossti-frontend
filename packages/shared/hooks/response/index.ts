@@ -1,4 +1,4 @@
-export { useGetResponse, useGetResponses } from './getResponse';
+export { useGetResponse, useGetResponses, useGetResponseByCount } from './getResponse';
 export { useCreateUpdateResponse } from './createUpdateResponse';
 export { useDeleteResponse } from './deleteResponse';
 export { useGetMyResponses } from './getMyResponses';

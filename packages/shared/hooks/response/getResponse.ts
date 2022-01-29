@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
-import { GET_RESPONSE, GET_RESPONSES } from '../../graphql/query/response';
+import { GET_RESPONSE_BY_COUNT, GET_RESPONSES, GET_RESPONSE } from '../../graphql/query/response';
 import { RESPONSE_SUB } from '../../graphql/subscription/response';
 
 export const defaultQueryVariables = {
@@ -65,6 +65,14 @@ export function useGetResponses(formId: string, parentId: string = null, formFie
 export function useGetResponse(_id: string): any {
   const { data, error, loading } = useQuery(GET_RESPONSE, {
     variables: { _id },
+    fetchPolicy: 'cache-and-network',
+  });
+  return { data, error, loading };
+}
+
+export function useGetResponseByCount(formId: string, count: number): any {
+  const { data, error, loading } = useQuery(GET_RESPONSE_BY_COUNT, {
+    variables: { formId, count },
     fetchPolicy: 'cache-and-network',
   });
   return { data, error, loading };

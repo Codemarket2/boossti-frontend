@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Fragment, useState } from 'react';
 import { useGetForms, useCreateForm } from '@frontend/shared/hooks/form';
+import { generateObjectId } from '@frontend/shared/utils/objectId';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
@@ -27,7 +28,7 @@ export default function FormList(): any {
   const [showBackdrop, setShowBackdrop] = useState(false);
 
   const handleAddNewForm = async () => {
-    const res = await handleCreateForm(`Form ${Math.floor(1000 + Math.random() * 9000)}`);
+    const res = await handleCreateForm(`Form ${generateObjectId()}`);
     setShowBackdrop(true);
     router.push(`/forms/${res?.data?.createForm?.slug}`);
   };

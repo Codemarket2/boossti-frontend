@@ -5,6 +5,7 @@ export const CREATE_RESPONSE = gql`
     createResponse(formId: $formId, parentId: $parentId, values: $values) {
       _id
       formId
+      count
       parentId {
         _id
         title

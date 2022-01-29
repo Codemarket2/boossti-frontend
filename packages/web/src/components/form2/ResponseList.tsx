@@ -8,6 +8,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Tooltip from '@material-ui/core/Tooltip';
+import ListItemText from '@material-ui/core/ListItemText';
 import TablePagination from '@material-ui/core/TablePagination';
 import IconButton from '@material-ui/core/IconButton';
 import Delete from '@material-ui/icons/Delete';
@@ -69,34 +70,42 @@ export default function ResponseList({ form, hideDelete = false, parentId }: IPr
               {data?.getResponses?.data?.map((response) => (
                 <TableRow key={response._id}>
                   <TableCell>
-                    {!hideDelete && (
-                      <Tooltip title="Delete response">
+                    <div className="d-flex">
+                      {!hideDelete && (
+                        <Tooltip title="Delete response">
+                          <IconButton
+                            onClick={() => {
+                              const anwser = confirm(
+                                'Are you sure you want to delete this response',
+                              );
+                              if (anwser) {
+                                handleDelete(response._id, form._id);
+                              }
+                            }}
+                            edge="start"
+                          >
+                            <Delete />
+                          </IconButton>
+                        </Tooltip>
+                      )}
+                      <Tooltip title="Open Response">
                         <IconButton
                           onClick={() => {
-                            const anwser = confirm('Are you sure you want to delete this response');
-                            if (anwser) {
-                              handleDelete(response._id, form._id);
-                            }
+                            router.push(`/forms/${form.slug}/response/${response.count}`);
                           }}
                           edge="start"
                         >
-                          <Delete />
+                          <LaunchIcon />
                         </IconButton>
                       </Tooltip>
-                    )}
-                    <Tooltip title="Open Response">
-                      <IconButton
-                        onClick={() => {
-                          router.push(`/response/${response._id}`);
-                        }}
-                        edge="start"
-                      >
-                        <LaunchIcon />
-                      </IconButton>
-                    </Tooltip>
-                    {`${moment(response.createdAt).format('l')} ${moment(response.createdAt).format(
-                      'LT',
-                    )}`}
+                      <ListItemText
+                        className="m-0 p-0"
+                        primary={response?.createdBy?.name}
+                        secondary={`${moment(response.createdAt).format('l')} ${moment(
+                          response.createdAt,
+                        ).format('LT')}`}
+                      />
+                    </div>
                   </TableCell>
                   {form?.fields?.map((field, i) => (
                     <TableCell key={i}>
