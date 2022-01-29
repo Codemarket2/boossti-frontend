@@ -5,6 +5,7 @@ export const RESPONSE_SUB = gql`
     responseSub(formId: $formId) {
       _id
       formId
+      count
       parentId {
         _id
         title

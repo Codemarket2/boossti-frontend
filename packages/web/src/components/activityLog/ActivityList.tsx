@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Accordion, AccordionDetails, AccordionSummary, Button } from '@material-ui/core';
 import { ExpandMore } from '@material-ui/icons';
 import ErrorLoading from '../common/ErrorLoading';
-import { ResponseChild } from '../form2/Response';
+import { ResponseChild2 } from '../form2/Response';
 
 export default function ActivityList() {
   const { data, error, loading } = useGetMyResponses();
@@ -44,7 +44,7 @@ function ActivityAccordion({ data }: any) {
       </AccordionSummary>
       <AccordionDetails>
         <div className="w-100">
-          <ResponseChild response={{ ...data, formId: data?.formId?._id }} hideBreadcrumbs />
+          <ResponseChild2 formId={data?.formId?._id} response={data} hideBreadcrumbs />
           <Link href={`response/${data._id}`}>
             <Button variant="outlined">Edit</Button>
           </Link>

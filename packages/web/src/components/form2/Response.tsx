@@ -12,6 +12,7 @@ import EditResponseDrawer from './EditResponseDrawer';
 import Breadcrumbs from '../common/Breadcrumbs';
 import DisplayValue from './DisplayValue';
 import Authorization from '../common/Authorization';
+import NotFound from '../common/NotFound';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
 import ErrorLoading from '../common/ErrorLoading';
 
@@ -23,27 +24,53 @@ interface IProps {
 export default function Response({ responseId, hideBreadcrumbs }: IProps) {
   const { data, error } = useGetResponse(responseId);
 
-  return error || !data?.getResponse ? (
-    <ErrorLoading error={error} />
-  ) : (
-    <ResponseChild response={data?.getResponse} hideBreadcrumbs={hideBreadcrumbs} />
+  if (error || !data) {
+    return <ErrorLoading error={error} />;
+  }
+
+  if (!data?.getResponse) {
+    return <NotFound />;
+  }
+
+  return (
+    <ResponseChild2
+      response={data?.getResponse}
+      formId={data?.getResponse?._id}
+      hideBreadcrumbs={hideBreadcrumbs}
+    />
   );
 }
 
 interface IProps2 {
+  formId: any;
   response: any;
   hideBreadcrumbs?: boolean;
 }
 
-export function ResponseChild({ response, hideBreadcrumbs }: IProps2) {
-  const [openDrawer, setOpenDrawer] = useState(false);
-  const { data: formData, error: formError } = useGetForm(response?.formId);
+export function ResponseChild2({ formId, response, hideBreadcrumbs }: IProps2) {
+  const { data, error } = useGetForm(formId);
 
-  if (formError || !formData?.getForm) {
-    return <ErrorLoading error={formError} />;
+  if (error || !data) {
+    return <ErrorLoading error={error} />;
   }
 
-  const form = formData?.getForm;
+  if (!data?.getForm) {
+    return <NotFound />;
+  }
+
+  return (
+    <ResponseChild3 response={response} form={data?.getForm} hideBreadcrumbs={hideBreadcrumbs} />
+  );
+}
+
+interface IProps3 {
+  form: any;
+  response: any;
+  hideBreadcrumbs: boolean;
+}
+
+export function ResponseChild3({ form, response, hideBreadcrumbs }: IProps3) {
+  const [openDrawer, setOpenDrawer] = useState(false);
 
   return (
     <>
@@ -51,7 +78,7 @@ export function ResponseChild({ response, hideBreadcrumbs }: IProps2) {
         <div className="d-flex justify-content-between align-items-center">
           <Breadcrumbs>
             <Link href="/forms">Forms</Link>
-            <Link href={`/forms/${form?._id}`}>{form?.name}</Link>
+            <Link href={`/forms/${form.slug}`}>{form?.name}</Link>
             <Typography>Response</Typography>
           </Breadcrumbs>
           <Authorization

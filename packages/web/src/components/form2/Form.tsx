@@ -121,7 +121,7 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
                   setOptions({ ...options, backdrop: true });
                   const newSlug = await handleUpdateName(e.target.value);
                   setOptions({ ...options, backdrop: false });
-                  if (onSlugChange) {
+                  if (newSlug && onSlugChange) {
                     onSlugChange(newSlug);
                   }
                 }}

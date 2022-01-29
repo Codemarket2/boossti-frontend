@@ -37,6 +37,23 @@ export const GET_FORM_BY_SLUG = gql`
   query GetFormBySlug($slug: String!) {
     getFormBySlug(slug: $slug) {
       _id
+      name
+      slug
+      fields {
+        _id
+        label
+        fieldType
+        options
+        typeId {
+          _id
+          title
+          slug
+        }
+        form {
+          _id
+          name
+        }
+      }
     }
   }
 `;
