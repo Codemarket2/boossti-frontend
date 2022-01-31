@@ -2,21 +2,22 @@ import { fileUpload } from '@frontend/shared/utils/fileUpload';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { useEffect, useRef, useState } from 'react';
 import { client } from '@frontend/shared/graphql';
-import { GET_LIST_ITEMS } from '@frontend/shared/graphql/query/list';
+import { GET_MENTION_ITEMS } from '@frontend/shared/graphql/query/list';
 
 export async function getListItems(queryText) {
   try {
     const response = await client.query({
-      query: GET_LIST_ITEMS,
-      variables: { types: [], search: queryText },
+      query: GET_MENTION_ITEMS,
+      variables: {search: queryText },
     });
     return new Promise((resolve) => {
-      let itemsToDisplay = response?.data?.getListItems?.data.slice(0, 10);
+      let itemsToDisplay = response?.data?.getMentionItems
+      console.log(itemsToDisplay)
       itemsToDisplay = itemsToDisplay?.map(
         (val) =>
           (val = {
             ...val,
-            id: `@${val?.title} | ${val.types && val?.types[0]?.title}`,
+            id: `@${val?.title} | ${val.category}`,
           }),
       );
       resolve(itemsToDisplay);
@@ -34,6 +35,7 @@ function mentionCustomization(editor) {
       classes: 'mention',
       attributes: {
         'data-user-id': true,
+        'data-type':true
       },
     },
     model: {
@@ -41,6 +43,7 @@ function mentionCustomization(editor) {
       value: (viewItem) => {
         const mentionAttribute = editor.plugins.get('Mention').toMentionAttribute(viewItem, {
           _id: viewItem.getAttribute('data-user-id'),
+          type: viewItem.getAttribute('data-type')
         });
         return mentionAttribute;
       },
@@ -60,6 +63,7 @@ function mentionCustomization(editor) {
           class: 'mention',
           'data-mention': modelAttributeValue.id,
           'data-user-id': modelAttributeValue._id,
+          'data-type': modelAttributeValue.type
         },
         {
           priority: 20,

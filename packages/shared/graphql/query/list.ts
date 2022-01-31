@@ -105,6 +105,17 @@ export const GET_LIST_ITEMS = gql`
   }
 `;
 
+export const GET_MENTION_ITEMS = gql`
+  query MyQuery($search: String) {
+    getMentionItems(search: $search) {
+      title
+      _id
+      category
+      type
+    }
+  }
+`;
+
 export const GET_LIST_ITEM_BY_SLUG = gql`
   query MyQuery($slug: String!) {
     getListItemBySlug(slug: $slug) {
