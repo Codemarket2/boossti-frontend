@@ -13,7 +13,7 @@ export function useGetMyNotifications({ formId }) {
   });
 
   const { data, error, loading } = useQuery(GET_MY_NOTIFICATIONS, {
-    variables: { ...pagenation, formId },
+    variables: { ...pagenation, threadId: formId },
     fetchPolicy: 'cache-and-network',
   });
   const notifications = data?.getMyNotifications?.data;

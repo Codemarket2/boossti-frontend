@@ -18,6 +18,7 @@ import {
 import { useEffect, useState } from 'react';
 import { Accordion, AccordionDetails, AccordionSummary } from '@material-ui/core';
 import { ExpandMore } from '@material-ui/icons';
+import CommentModel from './CommentModel';
 
 export default function Notification() {
   const { state, setState } = useNotificationSub();
@@ -136,12 +137,15 @@ const NotificationItem = ({ notification, onClose }: any) => {
     handleNotificationClicked(notification._id);
     setVariant(true);
   };
+  const background = {
+    backgroundColor: variant ? '#fff' : '#e2f0fe',
+  };
   return (
     <Alert
-      variant={variant ? 'outlined' : 'filled'}
+      variant="outlined"
       className="mt-1"
+      style={background}
       icon={<NotificationsIcon fontSize="inherit" />}
-      severity="success"
       onClose={onClose}
     >
       <AlertTitle>
@@ -152,7 +156,9 @@ const NotificationItem = ({ notification, onClose }: any) => {
             </div>
           </Link>
         ) : (
-          notification.title || 'New Notification'
+          <div style={{ cursor: 'pointer' }} onClick={handleClick}>
+            <CommentModel notification={notification} />
+          </div>
         )}
       </AlertTitle>
       {notification.description}
