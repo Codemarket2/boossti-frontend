@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const GET_MY_NOTIFICATIONS = gql`
-  query MyQuery($formId: ID!) {
-    getMyNotifications(formId: $formId) {
+  query MyQuery($threadId: ID!) {
+    getMyNotifications(threadId: $threadId) {
       count
       data {
         _id
@@ -11,6 +11,7 @@ export const GET_MY_NOTIFICATIONS = gql`
         description
         link
         formId
+        threadId
         parentId
         isClicked
       }
@@ -28,6 +29,7 @@ export const GET_NOTIFICATION_LIST = gql`
         description
         link
         formId
+        threadId
         parentId
         isClicked
       }
