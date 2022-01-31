@@ -27,12 +27,9 @@ export default function FieldViewWrapper({
   const { error, data } = useGetForm(_id);
   const [state, setstate] = useState(initialState);
   let settings;
-  console.log(customSettings);
   if (customSettings) {
     settings = customSettings;
-    console.log(111);
   } else {
-    console.log(111);
     settings = data?.getForm?.settings;
   }
 
@@ -43,7 +40,7 @@ export default function FieldViewWrapper({
   if (error || !data || !data.getForm) {
     return <ErrorLoading error={error} />;
   }
-  if (settings.widgetType == 'button') {
+  if (settings?.widgetType === 'button') {
     return (
       <>
         <div className="text-center my-5">
@@ -79,7 +76,7 @@ export default function FieldViewWrapper({
     );
   }
 
-  // if(settings.widgetType == 'leaderBoard'){
+  // if(settings?.widgetType == 'leaderBoard'){
 
   //   return(
 

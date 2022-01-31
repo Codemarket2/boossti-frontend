@@ -40,6 +40,7 @@
     "next-images": "1.7.0",
     "next-pwa": "^5.4.4",
     "next-transpile-modules": "7.3.0",
+    "qrcode.react": "^1.0.1",
     "react": "17.0.1",
     "react-app-polyfill": "1.0.5",
     "react-beautiful-dnd": "^13.1.0",

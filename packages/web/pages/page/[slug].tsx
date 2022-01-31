@@ -3,6 +3,8 @@ import { GET_LIST_ITEM_BY_SLUG } from '@frontend/shared/graphql/query/list';
 import UserLayout from '../../src/components/common/UserLayout';
 import Head from '../../src/components/common/Head';
 import PublishedPage from '../../src/screens/PublishedPage';
+import { QRCodeGenerator } from '../../src/components/qrcode/QRCode';
+import { useEffect, useState } from 'react';
 
 interface IProps {
   metaTags: any;
@@ -10,10 +12,16 @@ interface IProps {
 }
 
 export default function Page({ slug, metaTags = {} }: IProps) {
+  const [currUrl, setCurrUrl] = useState('');
+  useEffect(() => {
+    setCurrUrl(window.location.href);
+  }, []);
   return (
     <>
       <Head {...metaTags} />
       <UserLayout container={false}>
+        <QRCodeGenerator url={currUrl} />
+
         <div className="pt-2"> {slug && <PublishedPage slug={slug.toString()} />}</div>
       </UserLayout>
     </>
