@@ -19,7 +19,8 @@ export default function FeedsList() {
         showSearch={postsState.showSearch}
         onHide={() => postsSetState({ ...postsState, search: '', showSearch: false })}
         onShow={() => postsSetState({ ...postsState, search: '', showSearch: true })}
-        onChange={(value) => postsSetState({ ...postsState, search: value })}>
+        onChange={(value) => postsSetState({ ...postsState, search: value })}
+      >
         <Typography variant="h4">Feeds</Typography>
       </ListHeader>
       {!postsState.search && (
