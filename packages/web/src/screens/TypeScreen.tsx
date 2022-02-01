@@ -13,6 +13,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import Grid from '@material-ui/core/Grid';
 import EditIcon from '@material-ui/icons/Edit';
+import StarOutlineIcon from '@material-ui/icons/StarOutline';
+import StarIcon from '@material-ui/icons/Star';
 import Share from '@material-ui/icons/Share';
 import { useAuthorization } from '@frontend/shared/hooks/auth';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -29,8 +31,8 @@ import Fields from '../components/field/Fields';
 import InlineForm from '../components/list/InlineForm';
 import MediaForm from '../components/list/MediaForm';
 // import CommentLikeShare from '../components/common/commentLikeShare/CommentLikeShare';
-import ListItemForm from '../components/list/ListItemForm';
-import ListItemsGrid from '../components/list/ListItemsGrid';
+// import ListItemForm from '../components/list/ListItemForm';
+// import ListItemsGrid from '../components/list/ListItemsGrid';
 import DisplayRichText from '../components/common/DisplayRichText';
 // import ListTypeFields from '../components/list/ListTypeFields';
 
@@ -38,18 +40,18 @@ interface IProps {
   slug: string;
 }
 
-const buttonLabels = ['List View', 'Grid View', 'Form View'];
+// const buttonLabels = ['List View', 'Grid View', 'Form View'];
 
 export default function Screen({ slug }: IProps) {
   const router = useRouter();
   const [state, setState] = useState({
     fieldName: '',
-    view: buttonLabels[0],
+    // view: buttonLabels[0],
     showMenu: false,
     selectedIndex: 0,
   });
   const [fields, setFields] = useState([]);
-  const { handlePublish } = usePublishListType();
+  const { handlePublish } = usePublishListType({ onAlert });
 
   const deleteCallBack = () => {
     router.push(`/types`);
@@ -121,15 +123,35 @@ export default function Screen({ slug }: IProps) {
                 </Button>
               ),
           )} */}
+
           {data.getListTypeBySlug?.active && (
-            <Tooltip title="Copy link">
-              <IconButton
-                edge="start"
-                onClick={() => navigator.clipboard.writeText(window?.location?.href)}
+            <>
+              <Tooltip
+                title={data.getListTypeBySlug?.showInMenu ? 'Remove from menu' : 'Add to menu'}
               >
-                <Share />
-              </IconButton>
-            </Tooltip>
+                <IconButton
+                  edge="start"
+                  onClick={() =>
+                    handlePublish({
+                      _id: data.getListTypeBySlug?._id,
+                      slug,
+                      active: data.getListTypeBySlug?.active,
+                      showInMenu: !data.getListTypeBySlug?.showInMenu,
+                    })
+                  }
+                >
+                  {data.getListTypeBySlug?.showInMenu ? <StarIcon /> : <StarOutlineIcon />}
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Copy link">
+                <IconButton
+                  edge="start"
+                  onClick={() => navigator.clipboard.writeText(window?.location?.href)}
+                >
+                  <Share />
+                </IconButton>
+              </Tooltip>
+            </>
           )}
           {authorized && (
             <>
@@ -139,11 +161,12 @@ export default function Screen({ slug }: IProps) {
                     color="primary"
                     checked={data.getListTypeBySlug?.active}
                     onChange={() =>
-                      handlePublish(
-                        data.getListTypeBySlug?._id,
+                      handlePublish({
+                        _id: data.getListTypeBySlug?._id,
                         slug,
-                        !data.getListTypeBySlug?.active,
-                      )
+                        active: !data.getListTypeBySlug?.active,
+                        showInMenu: data.getListTypeBySlug?.showInMenu,
+                      })
                     }
                   />
                 }
@@ -253,7 +276,7 @@ export default function Screen({ slug }: IProps) {
           {/* <ListTypeFields listType={data.getListTypeBySlug} /> */}
         </Grid>
         <Grid item xs>
-          {state.view === 'Form View' ? (
+          {/* {state.view === 'Form View' ? (
             <ListItemForm
               typeSlug={data.getListTypeBySlug.slug}
               types={[data.getListTypeBySlug._id]}
@@ -262,12 +285,13 @@ export default function Screen({ slug }: IProps) {
           ) : state.view === 'Grid View' ? (
             <ListItemsGrid fields={fields} types={[data.getListTypeBySlug._id]} />
           ) : (
-            <ListItems
-              types={[data.getListTypeBySlug._id]}
-              name={data.getListTypeBySlug.title}
-              slug={data.getListTypeBySlug.slug}
-            />
-          )}
+            
+          )} */}
+          <ListItems
+            types={[data.getListTypeBySlug._id]}
+            name={data.getListTypeBySlug.title}
+            slug={data.getListTypeBySlug.slug}
+          />
         </Grid>
       </Grid>
       <Backdrop open={deleteLoading || CRUDLoading} />

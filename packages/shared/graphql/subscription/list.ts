@@ -33,6 +33,7 @@ export const UPDATED_LIST_TYPE = gql`
       }
       inUse
       active
+      showInMenu
       fields {
         _id
         label
