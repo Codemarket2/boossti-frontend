@@ -13,6 +13,7 @@ export const CREATE_LIST_TYPE = gql`
       }
       inUse
       active
+      showInMenu
       fields {
         _id
         label
@@ -46,6 +47,7 @@ export const UPDATE_LIST_TYPE = gql`
       }
       inUse
       active
+      showInMenu
       fields {
         _id
         label
@@ -67,8 +69,8 @@ export const UPDATE_LIST_TYPE = gql`
 `;
 
 export const PUBLISH_LIST_TYPE = gql`
-  mutation MyMutation($_id: ID!, $active: Boolean) {
-    updateListType(_id: $_id, active: $active) {
+  mutation MyMutation($_id: ID!, $active: Boolean, $showInMenu: Boolean) {
+    updateListType(_id: $_id, active: $active, showInMenu: $showInMenu) {
       _id
       slug
       title
@@ -79,6 +81,7 @@ export const PUBLISH_LIST_TYPE = gql`
       }
       inUse
       active
+      showInMenu
       fields {
         _id
         label
@@ -112,6 +115,7 @@ export const UPDATE_LIST_TYPE_FIELDS = gql`
       }
       inUse
       active
+      showInMenu
       fields {
         _id
         label

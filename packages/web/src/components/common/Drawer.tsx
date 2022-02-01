@@ -16,6 +16,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Link from 'next/link';
 import AnalyticsIcon from '@material-ui/icons/Announcement';
 import DarkModeToggle from './DarkModeToggle';
+import { useMenuListTypes } from '@frontend/shared/hooks/list';
 
 interface IProps {
   showDrawer: boolean;
@@ -34,6 +35,7 @@ export default function DrawerContent({ showDrawer, toggleDrawer, admin }: IProp
     showList: true,
   });
   const router = useRouter();
+  const { data } = useMenuListTypes();
 
   useEffect(() => {
     if (router.pathname !== activeRoute.pathname) {
@@ -85,6 +87,16 @@ export default function DrawerContent({ showDrawer, toggleDrawer, admin }: IProp
             <ListItemText primary="Activity Log" />
           </ListItem>
         </Link>
+        {data?.getMenuListTypes?.map((t) => (
+          <Link href={`/types/${t.slug}`} key={t._id}>
+            <ListItem button selected={checkActiveRoute(activeRoute, '/log')}>
+              <ListItemIcon>
+                <ListIcon />
+              </ListItemIcon>
+              <ListItemText primary={t.title} />
+            </ListItem>
+          </Link>
+        ))}
         <Divider />
         {admin && (
           <>

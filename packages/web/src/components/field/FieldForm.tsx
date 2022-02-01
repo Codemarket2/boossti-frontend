@@ -80,13 +80,7 @@ function UpdateFieldInput({ formik }: any) {
   );
 }
 
-export default function FieldForm({
-  onCancel,
-  parentId,
-  field = null,
-  edit = false,
-  formBuilder = false,
-}: IProps): any {
+export default function FieldForm({ onCancel, parentId, field = null, edit = false }: IProps): any {
   const { formik, formLoading, setFormValues } = useCRUDFields({
     onAlert,
     parentId,
@@ -177,7 +171,22 @@ export default function FieldForm({
           )}
         </>
       )}
-      {!['form', 'form2'].includes(formik.values.fieldType) && (
+      {['form', 'form2'].includes(formik.values.fieldType) ? (
+        <InputGroup>
+          <FormControlLabel
+            disabled={formik.isSubmitting}
+            control={
+              <Checkbox
+                checked={formik.values.multipleValues}
+                onChange={({ target }) => formik.setFieldValue('multipleValues', target.checked)}
+                name="multipleValues"
+                color="primary"
+              />
+            }
+            label="Don't allow other user to add value"
+          />
+        </InputGroup>
+      ) : (
         <>
           <InputGroup>
             <FormControlLabel
