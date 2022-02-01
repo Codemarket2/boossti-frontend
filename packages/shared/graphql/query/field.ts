@@ -110,3 +110,13 @@ export const GET_FIELD_VALUE = gql`
     }
   }
 `;
+
+export const GET_PAGE_MENTIONS = gql`
+  query MyQuery($_id: ID!) {
+    getPageMentions(_id: $_id) {
+      data {
+        parentId
+      }
+    }
+  }
+`;

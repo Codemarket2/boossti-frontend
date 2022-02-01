@@ -5,16 +5,42 @@ import { useFormik } from 'formik';
 import { useQuery, useMutation } from '@apollo/client';
 import { client as apolloClient } from '../../graphql';
 import { CREATE_LIST_ITEM, UPDATE_LIST_ITEM, DELETE_LIST_ITEM } from '../../graphql/mutation/list';
-import { GET_LIST_ITEMS_BY_TYPE, GET_LIST_ITEM_BY_SLUG } from '../../graphql/query/list';
+import {
+  GET_LIST_ITEMS_BY_TYPE,
+  GET_LIST_ITEM_BY_ID,
+  GET_LIST_ITEM_BY_SLUG,
+  GET_LIST_PAGE_MENTIONS,
+} from '../../graphql/query/list';
 import { IHooksProps } from '../../types/common';
 import { fileUpload } from '../../utils/fileUpload';
 import { omitTypename } from '../../utils/omitTypename';
 import { ADDED_LIST_ITEM, UPDATED_LIST_ITEM } from '../../graphql/subscription/list';
 import { updateLikeInCache } from '../like/createLike';
 import { parseListType } from './listTypes';
+import { GET_PAGE_MENTIONS } from '../../graphql/query/field';
 
 const defaultGetListItems = { limit: 100, page: 1 };
+export function useGetpageFieldMentions(_id) {
+  const { data } = useQuery(GET_LIST_PAGE_MENTIONS, {
+    variables: { _id },
+  });
+  const pageMentionsField = data?.getListPageMentions?.data.map((val) => (val = val._id));
 
+  return { pageMentionsField };
+}
+export function useGetTemplateFieldMentions(_id) {
+  const { data } = useQuery(GET_PAGE_MENTIONS, {
+    variables: { _id },
+  });
+  const templateMentionsField = data?.getPageMentions?.data.map((val) => (val = val.parentId));
+  return { templateMentionsField };
+}
+export function useGetListItemById(_id) {
+  const { data } = useQuery(GET_LIST_ITEM_BY_ID, {
+    variables: { _id },
+  });
+  return { data };
+}
 export function useGetListItemsByType({ types = [] }: any) {
   const [state, setState] = useState({
     search: '',
@@ -101,7 +127,7 @@ export function useGetListItemBySlug({ slug }: any) {
       });
     }
   }, [data]);
-
+  console.log(data);
   return { data: lisItem ? { getListItemBySlug: lisItem } : null, error, loading };
 }
 

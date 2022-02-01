@@ -43,7 +43,7 @@ function mentionCustomization(editor) {
       value: (viewItem) => {
         const mentionAttribute = editor.plugins.get('Mention').toMentionAttribute(viewItem, {
           _id: viewItem.getAttribute('data-user-id'),
-          type: viewItem.getAttribute('data-type')
+          type: viewItem.getAttribute('data-type'),
         });
         return mentionAttribute;
       },
@@ -62,7 +62,7 @@ function mentionCustomization(editor) {
         {
           class: 'mention',
           'data-mention': modelAttributeValue.id,
-          'data-user-id': modelAttributeValue._id,
+          'data-id': modelAttributeValue._id,
           'data-type': modelAttributeValue.type
         },
         {
