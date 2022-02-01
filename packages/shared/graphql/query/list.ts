@@ -165,3 +165,13 @@ export const GET_LIST_ITEM_BY_ID = gql`
     }
   }
 `;
+
+export const GET_LIST_PAGE_MENTIONS = gql`
+  query MyQuery($_id: ID!) {
+    getListPageMentions(_id: $_id) {
+      data {
+        _id
+      }
+    }
+  }
+`;

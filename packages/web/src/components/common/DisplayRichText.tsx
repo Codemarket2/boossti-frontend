@@ -36,7 +36,7 @@ export default function DisplayRichText({ value = 'dd' }: IProps) {
         replace: (domNode: any) => {
           if (domNode.name == 'a' && domNode.attribs.class == 'mention') {
             return (
-              <p
+                <span
                 style={{ cursor: 'pointer', color: 'blue' }}
                 onClick={() => {
                   if(domNode.attribs['data-type']=="listitem"){
@@ -48,7 +48,7 @@ export default function DisplayRichText({ value = 'dd' }: IProps) {
                 }}
               >
                 {domNode.attribs['data-mention']}
-              </p>
+              </span>
             );
           }
         },

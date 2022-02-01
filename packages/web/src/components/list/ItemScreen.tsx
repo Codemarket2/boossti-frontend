@@ -18,6 +18,9 @@ import {
   useGetListItemBySlug,
   useDeleteListItem,
   usePublishListItem,
+  useGetTemplateFieldMentions,
+  useGetpageFieldMentions,
+  useGetListItemById,
 } from '@frontend/shared/hooks/list';
 import { useAuthorization } from '@frontend/shared/hooks/auth';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -37,6 +40,7 @@ import NotFound from '../common/NotFound';
 import DisplayRichText from '../common/DisplayRichText';
 import ListItemsFields from './ListItemsFields';
 import ListItemsFieldsValue from './ListItemsFieldsValue';
+import Grid from '@material-ui/core/Grid';
 
 interface IProps {
   slug: string;
@@ -45,6 +49,22 @@ interface IProps {
   pushToAnchor?: () => void;
   hideBreadcrumbs?: boolean;
   hideleft?: boolean;
+}
+
+export function DisplayMentions(value) {
+  const { data } = useGetListItemById(value._id);
+  const router = useRouter();
+  return (
+    <span
+      onClick={() => {
+        router.push(`/page/${data?.getListItem?.slug}`);
+      }}
+      style={{ cursor: 'pointer', color: 'blue' }}
+      className="mr-3"
+    >
+      {data?.getListItem?.slug} | {data?.getListItem?.types[0]?.slug}
+    </span>
+  );
 }
 
 export default function ItemScreen({
@@ -63,7 +83,10 @@ export default function ItemScreen({
   const [fieldValueCount, setFieldValueCount] = useState({});
   const { data, error } = useGetListItemBySlug({ slug });
   const authorized = useAuthorization([data?.getListItemBySlug?.createdBy?._id], true);
-
+  const { templateMentionsField } = useGetTemplateFieldMentions(data?.getListItemBySlug?._id);
+  const { pageMentionsField } = useGetpageFieldMentions(data?.getListItemBySlug?._id);
+  const mentions = Array.from(new Set(templateMentionsField?.concat(pageMentionsField)));
+  console.log(mentions);
   const deleteCallBack = () => {
     router.push(
       `/types/${data?.getListItemBySlug?.types && data?.getListItemBySlug?.types[0]?.slug}`,
@@ -346,6 +369,16 @@ export default function ItemScreen({
             />
           )}
           <ListItemsFieldsValue listItem={data?.getListItemBySlug} previewMode={!authorized} />
+          {mentions.length != 0 && (
+            <Grid>
+              <Typography className="my-3">Mentions</Typography>
+              <div className="my-3">
+                {mentions.map((val) => (
+                  <DisplayMentions _id={val} />
+                ))}
+              </div>
+            </Grid>
+          )}
         </Paper>
       </div>
       <Backdrop open={deleteLoading || CRUDLoading} />
