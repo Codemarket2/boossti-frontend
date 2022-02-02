@@ -1,11 +1,9 @@
+import { useState, useEffect } from 'react';
 import { useGetForm } from '@frontend/shared/hooks/form';
+import { Button, Box } from '@material-ui/core';
 import FormView from './FormView';
 import ErrorLoading from '../common/ErrorLoading';
 import Overlay from '../common/Overlay';
-import Box from '@material-ui/core/Box';
-import LinearProgress, { LinearProgressProps } from '@material-ui/core/LinearProgress';
-import Typography from '@material-ui/core/Typography';
-import { useState } from 'react';
 
 interface IProps {
   _id: string;
@@ -26,11 +24,16 @@ export default function FieldViewWrapper({
 }: IProps): any {
   const { error, data } = useGetForm(_id);
   const [state, setstate] = useState(initialState);
+
   let settings;
-  if (customSettings) {
+  if (customSettings?.useCustomSettings) {
     settings = customSettings;
   } else {
-    settings = data?.getForm?.settings;
+    settings = {
+      ...data?.getForm?.settings,
+      widgetType: customSettings?.widgetType,
+      buttonLabel: customSettings?.buttonLabel,
+    };
   }
 
   if (error?.message?.includes("has coerced Null value for NonNull type 'ID!'")) {
@@ -40,31 +43,34 @@ export default function FieldViewWrapper({
   if (error || !data || !data.getForm) {
     return <ErrorLoading error={error} />;
   }
+
   if (settings?.widgetType === 'button') {
     return (
       <>
         <div className="text-center my-5">
-          <button
+          <Button
             onClick={() => {
               setstate({ ...state, showForm: true });
             }}
-            className="btn btn-lg btn-primary"
+            variant="contained"
+            color="primary"
+            size="small"
           >
-            {settings.widgetLabel}
-          </button>
+            {settings?.buttonLabel ?? data.getForm.name}
+          </Button>
         </div>
         <div>
           {state.showForm && (
             <Overlay
               open={state.showForm}
-              title={`Form`}
+              title={data.getForm.name}
               onClose={() => {
                 setstate({ ...state, showForm: false });
               }}
             >
               <div style={{ padding: '20px' }}>
                 <FormView
-                  form={{ ...data.getForm, settings: settings }}
+                  form={{ ...data.getForm, settings }}
                   parentId={parentId}
                   createCallback={createCallback}
                 />
@@ -76,16 +82,13 @@ export default function FieldViewWrapper({
     );
   }
 
-  // if(settings?.widgetType == 'leaderBoard'){
+  if (settings?.widgetType === 'leaderboard') return null;
 
-  //   return(
-
-  //   )
-  // }
+  if (settings?.widgetType === 'oneField') return null;
 
   return (
     <FormView
-      form={{ ...data.getForm, settings: settings }}
+      form={{ ...data.getForm, settings }}
       parentId={parentId}
       createCallback={createCallback}
     />

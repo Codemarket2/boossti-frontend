@@ -104,6 +104,8 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
     );
   };
 
+  console.log(listItem.fields);
+
   return (
     <>
       <Grid container>
@@ -167,15 +169,10 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
                           <FieldViewWrapper
                             _id={value?.value}
                             parentId={listItem?._id}
-                            customSettings={
-                              field?.options?.customSettings
-                                ? {
-                                    ...field?.options?.settings,
-                                    widgetType: 'button',
-                                    widgetLabel: field?.label,
-                                  }
-                                : null
-                            }
+                            customSettings={{
+                              ...field?.options?.settings,
+                              useCustomSettings: field?.options?.customSettings,
+                            }}
                           />
                         </>
                       ) : (

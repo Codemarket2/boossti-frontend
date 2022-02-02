@@ -1,9 +1,11 @@
 import MenuItem from '@material-ui/core/MenuItem';
+import MenuList from '@material-ui/core/MenuList';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import EditIcon from '@material-ui/icons/Edit';
 import ListIcon from '@material-ui/icons/List';
 import AddCircle from '@material-ui/icons/AddCircle';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import SettingsIcon from '@material-ui/icons/Settings';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -20,6 +22,7 @@ import {
   useUpdateFieldPosition,
   useUpdateFieldOptions,
 } from '@frontend/shared/hooks/field';
+import { useUpdateForm } from '@frontend/shared/hooks/form';
 import { useState, memo, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import FieldForm from './FieldForm';
@@ -30,6 +33,8 @@ import { onAlert } from '../../utils/alert';
 import Backdrop from '../common/Backdrop';
 import { SelectFormDrawer } from '../form2/SelectForm';
 import EditFormDrawer from '../form2/EditFormDrawer';
+import Overlay from '../common/Overlay';
+import CustomFormSettings from '../form2/CustomFormSettings';
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -85,6 +90,8 @@ const initialState = {
   editForm: false,
   selectForm: false,
   editSelectedForm: false,
+  formId: null,
+  showFormSettings: false,
 };
 
 export default function Fields({
@@ -96,10 +103,25 @@ export default function Fields({
 }: IProps): any {
   const [state, setState] = useState(initialState);
 
+  const { data, error } = useGetFields(parentId);
+
+  // const { data: form, error: formError } = useGetForm(state.formId);
+  const { handleOnChange } = useUpdateForm({ _id: state.formId, onAlert });
+
+  useEffect(() => {
+    let id = null;
+    if (state.selectedField && state.selectedField.options) {
+      const options = JSON.parse(state.selectedField?.options);
+      id = options?.formId;
+    }
+
+    if (id && id !== state.formId) setState({ ...state, formId: id });
+    else setState({ ...state, formId: null });
+  }, [state.selectedField]);
+
   const deleteCallback = () => {
     setState({ ...state, showMenu: null, selectedField: null, edit: false });
   };
-  const { data, error } = useGetFields(parentId);
 
   const { handleDelete, deleteLoading } = useDeleteField({ onAlert, parentId });
   const { handleUpdateFieldOptions, updateOptionsLoading } = useUpdateFieldOptions({
@@ -234,7 +256,7 @@ export default function Fields({
         onEdit={() => setState({ ...state, edit: true, showMenu: null })}
       >
         {state.selectedField?.fieldType === 'form2' && (
-          <>
+          <MenuList>
             {JSON.parse(state.selectedField?.options)?.formId && (
               <MenuItem
                 onClick={() => setState({ ...state, showMenu: false, editSelectedForm: true })}
@@ -251,7 +273,19 @@ export default function Fields({
               </ListItemIcon>
               <ListItemText primary="Select Form" />
             </MenuItem>
-          </>
+            {JSON.parse(state.selectedField?.options)?.formId && (
+              <MenuItem
+                onClick={() => {
+                  setState({ ...state, showFormSettings: true, showMenu: false });
+                }}
+              >
+                <ListItemIcon className="mr-n4">
+                  <SettingsIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText primary="Form Settings" />
+              </MenuItem>
+            )}
+          </MenuList>
         )}
       </CRUDMenu>
       <Backdrop open={deleteLoading || updateOptionsLoading} />
@@ -269,6 +303,48 @@ export default function Fields({
           onClose={() => setState(initialState)}
         />
       )}
+      <Overlay
+        open={state.showFormSettings}
+        title={`Form Settings `}
+        onClose={() => {
+          setState({ ...state, showFormSettings: false });
+        }}
+      >
+        {state?.selectedField && (
+          <CustomFormSettings
+            settings={JSON.parse(state?.selectedField?.options)?.settings ?? null}
+            customSettings={JSON.parse(state?.selectedField?.options)?.customSettings ?? false}
+            toggleCustomSettings={(value) => {
+              const options = JSON.stringify({
+                ...JSON.parse(state?.selectedField?.options),
+                customSettings: value,
+              });
+              handleUpdateFieldOptions(state.selectedField?._id, options);
+              setState({
+                ...state,
+                selectedField: {
+                  ...state.selectedField,
+                  options,
+                },
+              });
+            }}
+            onSettingsChange={(settings) => {
+              const options = JSON.stringify({
+                ...JSON.parse(state?.selectedField?.options),
+                settings,
+              });
+              handleUpdateFieldOptions(state.selectedField?._id, options);
+              setState({
+                ...state,
+                selectedField: {
+                  ...state.selectedField,
+                  options,
+                },
+              });
+            }}
+          />
+        )}
+      </Overlay>
     </Paper>
   );
 }
