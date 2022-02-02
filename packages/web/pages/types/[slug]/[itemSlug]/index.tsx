@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { guestClient } from '@frontend/shared/graphql';
 import { GET_LIST_ITEM_BY_SLUG } from '@frontend/shared/graphql/query/list';
 import ItemScreen from '../../../../src/screens/ItemScreen';
@@ -5,7 +6,6 @@ import Loading from '../../../../src/components/common/Loading';
 import Head from '../../../../src/components/common/Head';
 import UserLayout from '../../../../src/components/common/UserLayout';
 import Authorization from '../../../../src/components/common/Authorization';
-import { useEffect, useState } from 'react';
 import { QRCodeGenerator } from '../../../../src/components/qrcode/QRCode';
 
 interface IProps {
@@ -25,9 +25,7 @@ export default function Page({ metaTags, itemSlug, slug, createdBy }: IProps) {
       <Head {...metaTags} />
       <UserLayout container={false} authRequired>
         <QRCodeGenerator url={currUrl} />
-        <Authorization _id={[createdBy]} allowAdmin>
-          {itemSlug && slug ? <ItemScreen slug={itemSlug} typeSlug={slug} /> : <Loading />}
-        </Authorization>
+        {itemSlug && slug ? <ItemScreen slug={itemSlug} typeSlug={slug} /> : <Loading />}
       </UserLayout>
     </>
   );

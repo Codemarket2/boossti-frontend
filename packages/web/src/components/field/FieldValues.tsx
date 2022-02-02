@@ -11,7 +11,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { useGetFieldValues, useGetFields, useDeleteFieldValue } from '@frontend/shared/hooks/field';
-import Info from '@material-ui/icons/Info';
 import Tooltip from '@material-ui/core/Tooltip';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { convertToSlug } from './LeftNavigation';
@@ -22,9 +21,7 @@ import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
 import FieldValueCard from './FieldValueCard';
 import Share from '../share/Share';
-import FormSection from './FormSection';
-import FieldViewWrapper from '../form2/FieldViewWrapper';
-import ResponseCount from '../form2/ResponseCount';
+import FormSection, { Form2Section } from './FormSection';
 
 const initialState = {
   showForm: false,
@@ -39,8 +36,7 @@ const initialState = {
 
 function ItemOneFields({ field, parentId, setFieldValueCount, authorized }: any) {
   const [state, setState] = useState(initialState);
-  const { attributes } = useSelector(({ auth }: any) => auth);
-  const currentUserId = attributes['custom:_id'];
+  const { authenticated } = useSelector(({ auth }: any) => auth);
   const deleteCallback = () => {
     setState({ ...state, showMenu: null, selectedFieldValue: null, edit: false });
   };
@@ -90,12 +86,11 @@ function ItemOneFields({ field, parentId, setFieldValueCount, authorized }: any)
     );
   }
 
-  const hasValue =
-    data.getFieldValues.data.filter((v) => v.createdBy._id === currentUserId).length > 0;
+  const hasAdded = data.getFieldValues?.length > 0;
 
   const showAddButton =
-    (!hasValue && (authorized || field.multipleValues)) ||
-    (hasValue && (authorized || field.multipleValues) && field.multipleValues);
+    (!hasAdded || (hasAdded && field.multipleValues)) &&
+    (authorized || (authenticated && field.allowOthers));
 
   return (
     <div>
@@ -135,6 +130,7 @@ function ItemOneFields({ field, parentId, setFieldValueCount, authorized }: any)
         )}
       </Typography>
       {state.showForm && <FieldValueForm {...formProps} />}
+
       <FieldValueMap
         values={data.getFieldValues.data || []}
         selectedValue={
@@ -199,9 +195,6 @@ const FieldValueMap = ({
           onSelect={onSelect}
         />
       )}
-      {/* <p className="text-center w-100">
-        {index + 1} / {values?.length}
-      </p> */}
     </div>
   ));
 
@@ -299,20 +292,7 @@ export default function FieldValues({
         return (
           <Grid key={field._id} {...gridProps} item>
             {field.fieldType === 'form2' ? (
-              <>
-                <Typography id={convertToSlug(field.label)}>
-                  {field.label}
-                  <Tooltip title="You can edit this field from template">
-                    <Info className="ml-1" fontSize="small" />
-                  </Tooltip>
-                </Typography>
-                <ResponseCount formId={JSON.parse(field?.options)?.formId} parentId={parentId} />
-                <FieldViewWrapper
-                  _id={JSON.parse(field?.options)?.formId}
-                  parentId={parentId}
-                  customSettings={null}
-                />
-              </>
+              <Form2Section field={field} parentId={parentId} authorized={authorized} />
             ) : field.fieldType === 'form' ? (
               <FormSection field={field} parentId={parentId} authorized={authorized} />
             ) : (

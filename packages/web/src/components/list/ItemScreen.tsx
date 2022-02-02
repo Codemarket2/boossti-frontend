@@ -62,7 +62,7 @@ export function DisplayMentions(value) {
       style={{ cursor: 'pointer', color: 'blue' }}
       className="mr-3"
     >
-      {data?.getListItem?.slug} | {data?.getListItem?.types[0]?.slug}
+      {`${data?.getListItem?.slug} | ${data?.getListItem?.types[0]?.slug}`}
     </span>
   );
 }
@@ -86,7 +86,7 @@ export default function ItemScreen({
   const { templateMentionsField } = useGetTemplateFieldMentions(data?.getListItemBySlug?._id);
   const { pageMentionsField } = useGetpageFieldMentions(data?.getListItemBySlug?._id);
   const mentions = Array.from(new Set(templateMentionsField?.concat(pageMentionsField)));
-  console.log(mentions);
+
   const deleteCallBack = () => {
     router.push(
       `/types/${data?.getListItemBySlug?.types && data?.getListItemBySlug?.types[0]?.slug}`,

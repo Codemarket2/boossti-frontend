@@ -31,6 +31,7 @@ export default function ResponseCount({ formId, parentId, settings }: IProps): a
   useEffect(() => {
     progress = (data?.getResponses?.count / settings?.minValue) * 100;
   }, [data?.getResponses?.count]);
+
   function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
     return (
       <Box style={{ display: 'flex', alignItems: 'center' }}>

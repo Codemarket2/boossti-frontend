@@ -10,7 +10,7 @@ export const ADDED_FIELD = gql`
       label
       fieldType
       multipleValues
-      oneUserMultipleValues
+      allowOthers
       typeId {
         _id
         title

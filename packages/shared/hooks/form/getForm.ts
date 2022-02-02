@@ -40,7 +40,7 @@ export const parseForm = (form) => {
   return parsedForm;
 };
 
-export function useGetForm(_id: string): any {
+export function useGetForm(_id: string) {
   const [getForm, setGetForm] = useState(null);
   const { data, error, loading } = useQuery(GET_FORM, {
     variables: { _id },
