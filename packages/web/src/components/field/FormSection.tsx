@@ -1,3 +1,4 @@
+import { useGetResponses } from '@frontend/shared/hooks/response';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MoreIcon from '@material-ui/icons/MoreHoriz';
@@ -6,6 +7,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import TuneIcon from '@material-ui/icons/Tune';
+import Tooltip from '@material-ui/core/Tooltip';
+import Info from '@material-ui/icons/Info';
 import { useState } from 'react';
 import { useGetFieldValues } from '@frontend/shared/hooks/field';
 import ErrorLoading from '../common/ErrorLoading';
@@ -14,6 +17,8 @@ import EditFormDrawer from '../form2/EditFormDrawer';
 import FieldViewWrapper from '../form2/FieldViewWrapper';
 import SelectFormSection from './SelectFormSection';
 import ResponseCount from '../form2/ResponseCount';
+import { convertToSlug } from './LeftNavigation';
+import Response from '../form2/Response';
 
 interface IProps {
   field: any;
@@ -29,7 +34,7 @@ const initialState = {
   backdrop: false,
 };
 
-export default function FormC({ field, parentId, authorized }: IProps): any {
+export default function FormSection({ field, parentId, authorized }: IProps): any {
   const [state, setState] = useState(initialState);
   const { data, error } = useGetFieldValues({ parentId, field: field._id });
 
@@ -50,14 +55,15 @@ export default function FormC({ field, parentId, authorized }: IProps): any {
 
   return (
     <div>
-      {authorized && (
-        <div className="d-flex align-items-center">
-          <Typography>{field.label}</Typography>
+      <div className="d-flex align-items-center">
+        <Typography>{field.label}</Typography>
+        {authorized && (
           <IconButton onClick={(event) => setState({ ...state, show: event.currentTarget })}>
             <MoreIcon />
           </IconButton>
-        </div>
-      )}
+        )}
+      </div>
+
       <Menu
         anchorEl={state.show}
         keepMounted
@@ -88,14 +94,12 @@ export default function FormC({ field, parentId, authorized }: IProps): any {
         </MenuItem>
       </Menu>
       {data?.getFieldValues?.data[0]?.value && (
-        <>
-          <ResponseCount formId={data?.getFieldValues?.data[0]?.value} parentId={parentId} />
-          <FieldViewWrapper
-            _id={data?.getFieldValues?.data[0]?.value}
-            parentId={parentId}
-            customSettings={null}
-          />
-        </>
+        <DisplayForm
+          formId={data?.getFieldValues?.data[0]?.value}
+          parentId={parentId}
+          authorized={authorized}
+          allowOthers={field.allowOthers}
+        />
       )}
       {state.formId && state.edit && (
         <EditFormDrawer formId={state.formId} open onClose={() => setState(initialState)} />
@@ -113,3 +117,71 @@ export default function FormC({ field, parentId, authorized }: IProps): any {
     </div>
   );
 }
+
+const DisplayForm = ({
+  formId,
+  parentId,
+  allowOthers,
+  authorized,
+}: {
+  formId: string;
+  parentId: string;
+  allowOthers: boolean;
+  authorized: boolean;
+}) => {
+  const { data, error } = useGetResponses(formId, parentId);
+
+  if (error || !data) {
+    return <ErrorLoading error={error} />;
+  }
+
+  return (
+    <>
+      {allowOthers ? (
+        <>
+          <ResponseCount formId={formId} parentId={parentId} />
+          <FieldViewWrapper _id={formId} parentId={parentId} customSettings={null} />
+        </>
+      ) : authorized && !(data?.getResponses && data?.getResponses?.count > 0) ? (
+        <FieldViewWrapper _id={formId} parentId={parentId} customSettings={null} />
+      ) : (
+        <>
+          {data?.getResponses?.data?.[0]?._id && (
+            <Response hideNavigation hideAuthor responseId={data?.getResponses?.data?.[0]?._id} />
+          )}
+        </>
+      )}
+    </>
+  );
+};
+
+export const Form2Section = ({
+  field,
+  parentId,
+  authorized,
+}: {
+  field: any;
+  parentId: string;
+  authorized: boolean;
+}) => {
+  const formId = JSON.parse(field?.options)?.formId;
+
+  return (
+    <>
+      <Typography id={convertToSlug(field.label)}>
+        {field.label}
+        {authorized && (
+          <Tooltip title="You can edit this field from template">
+            <Info className="ml-1" fontSize="small" />
+          </Tooltip>
+        )}
+      </Typography>
+      <DisplayForm
+        formId={formId}
+        parentId={parentId}
+        authorized={authorized}
+        allowOthers={field.allowOthers}
+      />
+    </>
+  );
+};

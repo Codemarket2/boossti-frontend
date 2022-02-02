@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
@@ -28,10 +29,11 @@ export default function FieldValueCard({
 }: IProps): any {
   const { query } = useRouter();
   const [showHideComments, setShowHideComments] = useState(false);
-
+  const { attributes } = useSelector(({ auth }: any) => auth);
+  const currentUserId = attributes['custom:_id'];
   return (
     <div>
-      {authorized && (
+      {(authorized || fieldValue.createdBy?._id === currentUserId) && (
         <div className="d-flex justify-content-end">
           <IconButton aria-label="settings" onClick={(event) => onSelect(event.target, fieldValue)}>
             <EditIcon />

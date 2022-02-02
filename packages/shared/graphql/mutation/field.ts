@@ -8,7 +8,7 @@ export const CREATE_FIELD = gql`
     $fieldType: String!
     $typeId: ID
     $multipleValues: Boolean
-    $oneUserMultipleValues: Boolean
+    $allowOthers: Boolean
     $relationId: ID
   ) {
     createField(
@@ -18,7 +18,7 @@ export const CREATE_FIELD = gql`
       fieldType: $fieldType
       typeId: $typeId
       multipleValues: $multipleValues
-      oneUserMultipleValues: $oneUserMultipleValues
+      allowOthers: $allowOthers
       relationId: $relationId
     ) {
       _id
@@ -28,7 +28,7 @@ export const CREATE_FIELD = gql`
       label
       fieldType
       multipleValues
-      oneUserMultipleValues
+      allowOthers
       typeId {
         _id
         title
@@ -51,7 +51,7 @@ export const UPDATE_FIELD = gql`
     $fieldType: String
     $typeId: ID
     $multipleValues: Boolean
-    $oneUserMultipleValues: Boolean
+    $allowOthers: Boolean
   ) {
     updateField(
       _id: $_id
@@ -61,7 +61,7 @@ export const UPDATE_FIELD = gql`
       fieldType: $fieldType
       typeId: $typeId
       multipleValues: $multipleValues
-      oneUserMultipleValues: $oneUserMultipleValues
+      allowOthers: $allowOthers
     ) {
       _id
       parentId
@@ -70,7 +70,7 @@ export const UPDATE_FIELD = gql`
       label
       fieldType
       multipleValues
-      oneUserMultipleValues
+      allowOthers
       typeId {
         _id
         title
@@ -94,7 +94,7 @@ export const UPDATE_FIELD_OPTIONS = gql`
       label
       fieldType
       multipleValues
-      oneUserMultipleValues
+      allowOthers
       typeId {
         _id
         title
@@ -118,7 +118,7 @@ export const UPDATE_FIELD_POSITION = gql`
       label
       fieldType
       multipleValues
-      oneUserMultipleValues
+      allowOthers
       typeId {
         _id
         title

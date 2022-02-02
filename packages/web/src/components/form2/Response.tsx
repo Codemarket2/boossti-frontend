@@ -19,9 +19,16 @@ import ErrorLoading from '../common/ErrorLoading';
 interface IProps {
   responseId: string;
   hideBreadcrumbs?: boolean;
+  hideNavigation?: boolean;
+  hideAuthor?: boolean;
 }
 
-export default function Response({ responseId, hideBreadcrumbs }: IProps) {
+export default function Response({
+  responseId,
+  hideBreadcrumbs,
+  hideNavigation,
+  hideAuthor,
+}: IProps) {
   const { data, error } = useGetResponse(responseId);
 
   if (error || !data) {
@@ -37,6 +44,8 @@ export default function Response({ responseId, hideBreadcrumbs }: IProps) {
       response={data?.getResponse}
       formId={data?.getResponse?.formId}
       hideBreadcrumbs={hideBreadcrumbs}
+      hideNavigation={hideNavigation}
+      hideAuthor={hideAuthor}
     />
   );
 }
@@ -45,12 +54,20 @@ interface IProps2 {
   formId: any;
   response: any;
   hideBreadcrumbs?: boolean;
+  hideNavigation?: boolean;
+  hideAuthor?: boolean;
 }
 
-export function ResponseChild2({ formId, response, hideBreadcrumbs }: IProps2) {
-  const { data, error } = useGetForm(formId);
+export function ResponseChild2({
+  formId,
+  response,
+  hideBreadcrumbs,
+  hideNavigation,
+  hideAuthor,
+}: IProps2) {
+  const { data, error, loading } = useGetForm(formId);
 
-  if (error || !data) {
+  if (error || !data || loading) {
     return <ErrorLoading error={error} />;
   }
 
@@ -59,28 +76,44 @@ export function ResponseChild2({ formId, response, hideBreadcrumbs }: IProps2) {
   }
 
   return (
-    <ResponseChild3 response={response} form={data?.getForm} hideBreadcrumbs={hideBreadcrumbs} />
+    <ResponseChild3
+      response={response}
+      form={data?.getForm}
+      hideBreadcrumbs={hideBreadcrumbs}
+      hideNavigation={hideNavigation}
+      hideAuthor={hideAuthor}
+    />
   );
 }
 
 interface IProps3 {
   form: any;
   response: any;
-  hideBreadcrumbs: boolean;
+  hideBreadcrumbs?: boolean;
+  hideNavigation?: boolean;
+  hideAuthor?: boolean;
 }
 
-export function ResponseChild3({ form, response, hideBreadcrumbs }: IProps3) {
+export function ResponseChild3({
+  form,
+  response,
+  hideBreadcrumbs,
+  hideNavigation,
+  hideAuthor,
+}: IProps3) {
   const [openDrawer, setOpenDrawer] = useState(false);
 
   return (
     <>
       {!hideBreadcrumbs && (
         <div className="d-flex justify-content-between align-items-center">
-          <Breadcrumbs>
-            <Link href="/forms">Forms</Link>
-            <Link href={`/forms/${form.slug}`}>{form?.name}</Link>
-            <Typography>Response</Typography>
-          </Breadcrumbs>
+          {!hideNavigation && (
+            <Breadcrumbs>
+              <Link href="/forms">Forms</Link>
+              <Link href={`/forms/${form.slug}`}>{form?.name}</Link>
+              <Typography>Response</Typography>
+            </Breadcrumbs>
+          )}
           <Authorization
             returnNull
             _id={[response?.createdBy?._id, form?.createdBy?._id]}
@@ -110,16 +143,18 @@ export function ResponseChild3({ form, response, hideBreadcrumbs }: IProps3) {
           </Authorization>
         </div>
       )}
-      <Paper variant="outlined">
+      <Paper variant="outlined" style={hideAuthor ? { border: 'none' } : {}}>
         <div className="p-2">
-          <ListItemText
-            primary={`Response submitted by ${
-              response?.createdBy ? response?.createdBy?.name : 'Unauthorised user'
-            }`}
-            secondary={`${moment(response?.createdAt).format('l')} ${moment(
-              response?.createdAt,
-            ).format('LT')}`}
-          />
+          {!hideAuthor && (
+            <ListItemText
+              primary={`Response submitted by ${
+                response?.createdBy ? response?.createdBy?.name : 'Unauthorised user'
+              }`}
+              secondary={`${moment(response?.createdAt).format('l')} ${moment(
+                response?.createdAt,
+              ).format('LT')}`}
+            />
+          )}
           {form?.fields?.map((field, index) => {
             return (
               <div key={field?._id}>

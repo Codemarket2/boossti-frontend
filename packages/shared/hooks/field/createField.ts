@@ -29,7 +29,7 @@ interface IFormValues {
   fieldType: string;
   typeId: any;
   multipleValues: boolean;
-  oneUserMultipleValues: boolean;
+  allowOthers: boolean;
   relationLabel: string;
   relationId?: string;
 }
@@ -42,7 +42,7 @@ const defaultFormValues = {
   fieldType: '',
   typeId: null,
   multipleValues: false,
-  oneUserMultipleValues: false,
+  allowOthers: false,
   relationLabel: '',
   relationId: null,
 };
@@ -188,7 +188,7 @@ export function useCRUDFields({ onAlert, parentId, createCallback }: ICRUDProps)
     formik.setFieldValue('label', field.label, false);
     formik.setFieldValue('fieldType', field.fieldType, false);
     formik.setFieldValue('multipleValues', field.multipleValues, false);
-    formik.setFieldValue('oneUserMultipleValues', field.oneUserMultipleValues, false);
+    formik.setFieldValue('allowOthers', field.allowOthers, false);
     formik.setFieldValue('typeId', field.typeId, false);
     formik.setFieldValue('_id', field._id, false);
     formik.setFieldValue('relationId', field.relationId, false);
