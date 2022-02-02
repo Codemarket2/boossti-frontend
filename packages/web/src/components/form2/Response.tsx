@@ -35,7 +35,7 @@ export default function Response({ responseId, hideBreadcrumbs }: IProps) {
   return (
     <ResponseChild2
       response={data?.getResponse}
-      formId={data?.getResponse?._id}
+      formId={data?.getResponse?.formId}
       hideBreadcrumbs={hideBreadcrumbs}
     />
   );
