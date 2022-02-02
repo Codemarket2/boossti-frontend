@@ -25,7 +25,7 @@ export default function FormSetting({ settings, onChange }: any): any {
         <FormControlLabel
           control={
             <Checkbox
-              checked={settings?.multipleResponses}
+              checked={settings?.multipleResponses ?? false}
               onChange={({ target }) => onChange({ multipleResponses: target.checked })}
               name="multipleValues"
               color="primary"
@@ -38,7 +38,7 @@ export default function FormSetting({ settings, onChange }: any): any {
         <FormControlLabel
           control={
             <Checkbox
-              checked={settings?.editResponse}
+              checked={settings?.editResponse ?? false}
               onChange={({ target }) => onChange({ editResponse: target.checked })}
               name="multipleValues"
               color="primary"
@@ -51,13 +51,26 @@ export default function FormSetting({ settings, onChange }: any): any {
         <FormControlLabel
           control={
             <Checkbox
-              checked={settings?.showFormTitle}
+              checked={settings?.showFormTitle ?? false}
               onChange={({ target }) => onChange({ showFormTitle: target.checked })}
               name="showFormTitle"
               color="primary"
             />
           }
           label="Show form title"
+        />
+      </InputGroup>
+      <InputGroup>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={settings?.showResponses ?? false}
+              onChange={({ target }) => onChange({ showResponses: target.checked })}
+              name="showFormResponses"
+              color="primary"
+            />
+          }
+          label="Allow users to view all form responses"
         />
       </InputGroup>
       <InputGroup>
