@@ -158,15 +158,13 @@ export function ResponseChild3({
           {form?.fields?.map((field, index) => {
             return (
               <div key={field?._id}>
-                <Typography>
-                  {index + 1}) {field?.label}
-                </Typography>
+                <Typography>{field?.label}</Typography>
                 {response?.values
                   ?.filter((v) => v.field === field._id)
                   .map((value) => (
                     <div key={value?._id}>
                       <DisplayValue field={field} value={value} />
-                      <CommentLikeShare parentId={value?._id} />
+                      {field?.options?.showCommentBox && <CommentLikeShare parentId={value?._id} />}
                     </div>
                   ))}
               </div>
