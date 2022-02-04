@@ -31,13 +31,13 @@ export default function Response({
 }: IProps) {
   const { data, error } = useGetResponse(responseId);
 
-  if (error || !data) {
+  if (error || !data?.getResponse) {
     return <ErrorLoading error={error} />;
   }
 
-  if (!data?.getResponse) {
-    return <NotFound />;
-  }
+  // if (!data?.getResponse) {
+  //   return <NotFound />;
+  // }
 
   return (
     <ResponseChild2
@@ -164,9 +164,7 @@ export function ResponseChild3({
                   .map((value) => (
                     <div key={value?._id}>
                       <DisplayValue field={field} value={value} />
-                      {JSON.parse(field?.options)?.showCommentBox && (
-                        <CommentLikeShare parentId={value?._id} />
-                      )}
+                      {field?.options?.showCommentBox && <CommentLikeShare parentId={value?._id} />}
                     </div>
                   ))}
               </div>
