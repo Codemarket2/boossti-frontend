@@ -35,8 +35,10 @@ export const parseForm = (form) => {
       field.options = JSON.parse(field.options);
       return field;
     }),
-    settings: JSON.parse(form?.settings),
   };
+  if (form?.settings) {
+    parsedForm.settings = JSON.parse(form?.settings);
+  }
   return parsedForm;
 };
 
@@ -67,9 +69,18 @@ export function useGetForm(_id: string) {
 }
 
 export function useGetFormBySlug(slug: string): any {
+  const [getFormBySlug, setGetFormBySlug] = useState(null);
   const { data, error, loading } = useQuery(GET_FORM_BY_SLUG, {
     variables: { slug },
   });
 
-  return { data, error, loading };
+  console.log({ data, error, loading });
+  console.log({ getFormBySlug });
+  useEffect(() => {
+    if (data?.getFormBySlug) {
+      setGetFormBySlug(parseForm(data.getFormBySlug));
+    }
+  }, [data]);
+
+  return { data: { getFormBySlug }, error, loading };
 }
