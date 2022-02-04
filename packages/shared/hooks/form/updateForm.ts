@@ -30,12 +30,11 @@ const updateCache = (_id, newFormData) => {
 };
 
 export function useUpdateForm({ onAlert, _id }: IProps): any {
-  const {
-    data: { getForm: form },
-    error,
-  } = useGetForm(_id);
+  const { data, error } = useGetForm(_id);
   const [saveToServer, setSaveToServer] = useState(false);
   const [updateFormMutation, { loading: updateLoading }] = useMutation(UPDATE_FORM);
+
+  const form = data?.getForm;
 
   useEffect(() => {
     let timeOutId;

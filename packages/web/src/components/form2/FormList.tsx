@@ -8,12 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import IconButton from '@material-ui/core/IconButton';
-import ErrorIcon from '@material-ui/icons/ErrorOutline';
-import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 import Paper from '@material-ui/core/Paper';
-import Tooltip from '@material-ui/core/Tooltip';
 import ListItemText from '@material-ui/core/ListItemText';
 import { getCreatedAtDate } from '@frontend/shared/utils/date';
 import ErrorLoading from '../common/ErrorLoading';
@@ -59,28 +54,6 @@ export default function FormList(): any {
                       primary={form.name}
                       secondary={`${form.createdBy?.name} ${getCreatedAtDate(form.createdAt)}`}
                     />
-                    <ListItemSecondaryAction>
-                      {!form.slug && (
-                        <Tooltip title="You need to update the title once to generate slug">
-                          <IconButton
-                            edge="start"
-                            aria-label="warning"
-                            onClick={() => router.push(`/forms-old/${form._id}`)}
-                          >
-                            <ErrorIcon style={{ color: 'red' }} />
-                          </IconButton>
-                        </Tooltip>
-                      )}
-                      <Tooltip title="Open old url with _id">
-                        <IconButton
-                          edge="end"
-                          aria-label="open"
-                          onClick={() => router.push(`/forms-old/${form._id}`)}
-                        >
-                          <OpenInNewIcon />
-                        </IconButton>
-                      </Tooltip>
-                    </ListItemSecondaryAction>
                   </ListItem>
                 </Link>
               </Fragment>

@@ -65,7 +65,7 @@ export function useGetForm(_id: string) {
     }
   }, [data]);
 
-  return { data: { getForm }, error, loading };
+  return { data: getForm ? { getForm } : null, error, loading };
 }
 
 export function useGetFormBySlug(slug: string): any {
@@ -74,13 +74,11 @@ export function useGetFormBySlug(slug: string): any {
     variables: { slug },
   });
 
-  console.log({ data, error, loading });
-  console.log({ getFormBySlug });
   useEffect(() => {
     if (data?.getFormBySlug) {
       setGetFormBySlug(parseForm(data.getFormBySlug));
     }
   }, [data]);
 
-  return { data: { getFormBySlug }, error, loading };
+  return { data: getFormBySlug ? { getFormBySlug } : null, error, loading };
 }

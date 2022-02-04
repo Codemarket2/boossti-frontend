@@ -22,7 +22,6 @@ import FormView from './FormView';
 import FormSetting from './FormSetting';
 import ResponseList from './ResponseList';
 import Actions from './Actions';
-// import DesignTab from './DesignTab';
 import { onAlert } from '../../utils/alert';
 import Authorization from '../common/Authorization';
 import InlineInput from '../common/InlineInput';
