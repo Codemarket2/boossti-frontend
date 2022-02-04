@@ -1,3 +1,4 @@
+import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import { useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -18,6 +19,8 @@ import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
 import { onAlert } from '../../utils/alert';
 import RichTextarea from '../common/RichTextarea2';
+
+const filter = createFilterOptions();
 
 interface IProps {
   onCancel: () => void;
@@ -55,17 +58,15 @@ export default function ActionForm({ onCancel, fields, emailFields, onSave, acti
           variant="outlined"
           fullWidth
           size="small"
-          disabled
           error={Boolean(formik.touched.actionType && formik.errors.actionType)}
         >
-          <InputLabel id="actionType-simple-select-outlined-label">Field Type</InputLabel>
+          <InputLabel id="actionType">Action Type*</InputLabel>
           <Select
-            labelId="actionType-simple-select-outlined-label"
-            id="actionType-simple-select-outlined"
+            labelId="actionType"
             name="actionType"
             value={formik.values.actionType}
             onChange={formik.handleChange}
-            label="Action Type"
+            label="Action Type*"
           >
             <MenuItem value="sendEmail">Send Email</MenuItem>
           </Select>
@@ -77,7 +78,7 @@ export default function ActionForm({ onCancel, fields, emailFields, onSave, acti
       <InputGroup>
         <TextField
           fullWidth
-          label="Action Name"
+          label="Action Name*"
           variant="outlined"
           name="name"
           size="small"
@@ -91,7 +92,7 @@ export default function ActionForm({ onCancel, fields, emailFields, onSave, acti
       <InputGroup>
         <TextField
           fullWidth
-          label="Sender Email"
+          label="Sender Email*"
           variant="outlined"
           name="senderEmail"
           size="small"
@@ -104,24 +105,36 @@ export default function ActionForm({ onCancel, fields, emailFields, onSave, acti
         />
       </InputGroup>
       <InputGroup>
-        {emailFields?.length > 0 ? (
-          <FormControlLabel
-            control={
-              <Switch
-                checked={formik.values.useEmailField}
-                onChange={formik.handleChange}
-                name="useEmailField"
-                color="primary"
-              />
-            }
-            label="Use form field as receiver email"
-          />
-        ) : (
-          <FormHelperText>
-            Add required Email field to form then use it as receiver email
-          </FormHelperText>
-        )}
-        {formik.values.useEmailField ? (
+        <FormControl
+          variant="outlined"
+          fullWidth
+          size="small"
+          error={Boolean(formik.touched.receiverType && formik.errors.receiverType)}
+        >
+          <InputLabel id="receiverType">Receiver*</InputLabel>
+          <Select
+            labelId="receiverType"
+            name="receiverType"
+            value={formik.values.receiverType}
+            onChange={formik.handleChange}
+            label="Receiver*"
+          >
+            <MenuItem value="formOwner">Form owner</MenuItem>
+            <MenuItem value="responseSubmitter">Response submitter</MenuItem>
+            <MenuItem value="customEmail">Custom email</MenuItem>
+            {emailFields?.length > 0 && <MenuItem value="emailField">Form email field</MenuItem>}
+          </Select>
+          {formik.touched.receiverType && formik.errors.receiverType ? (
+            <FormHelperText className="text-danger">{formik.errors.receiverType}</FormHelperText>
+          ) : (
+            <FormHelperText>
+              Add required Email field to form then use it as receiver email
+            </FormHelperText>
+          )}
+        </FormControl>
+      </InputGroup>
+      {formik.values.receiverType === 'emailField' && (
+        <InputGroup>
           <FormControl
             variant="outlined"
             fullWidth
@@ -144,23 +157,39 @@ export default function ActionForm({ onCancel, fields, emailFields, onSave, acti
             {formik.touched.emailFieldId && formik.errors.emailFieldId && (
               <FormHelperText className="text-danger">{formik.errors.emailFieldId}</FormHelperText>
             )}
-          </FormControl>
-        ) : (
-          <TextField
-            fullWidth
-            label="Receiver Email"
-            variant="outlined"
-            name="receiverEmail"
-            size="small"
-            type="email"
-            disabled={formik.isSubmitting}
-            value={formik.values.receiverEmail}
-            onChange={formik.handleChange}
-            error={formik.touched.receiverEmail && Boolean(formik.errors.receiverEmail)}
-            helperText={formik.touched.receiverEmail && formik.errors.receiverEmail}
-          />
-        )}
-      </InputGroup>
+          </FormControl>{' '}
+        </InputGroup>
+      )}
+      {formik.values.receiverType === 'customEmail' && (
+        <Autocomplete
+          size="small"
+          multiple
+          value={formik.values.receiverEmails}
+          onChange={(e, newValue) => {
+            formik.setFieldValue('receiverEmails', newValue);
+          }}
+          filterOptions={(options, params) => {
+            const filtered = filter(options, params);
+            const { inputValue } = params;
+            const isExisting = options.some((option) => inputValue === option);
+            if (inputValue !== '' && !isExisting) {
+              filtered.push(inputValue);
+            }
+            return filtered;
+          }}
+          filterSelectedOptions
+          renderInput={(params) => (
+            <TextField
+              error={formik.touched.receiverEmails && Boolean(formik.errors.receiverEmails)}
+              helperText={formik.touched.receiverEmails && formik.errors.receiverEmails}
+              {...params}
+              variant="outlined"
+              fullWidth
+              label="Receiver Emails*"
+            />
+          )}
+        />
+      )}
       <InputGroup>
         <Typography variant="h6" className="d-flex align-items-center pl-2">
           Variables
@@ -242,7 +271,7 @@ export default function ActionForm({ onCancel, fields, emailFields, onSave, acti
       <InputGroup>
         <TextField
           fullWidth
-          label="Email Subject"
+          label="Email Subject*"
           variant="outlined"
           name="subject"
           size="small"
@@ -254,7 +283,7 @@ export default function ActionForm({ onCancel, fields, emailFields, onSave, acti
         />
       </InputGroup>
       <InputGroup>
-        <InputLabel>Email Body</InputLabel>
+        <InputLabel>Email Body*</InputLabel>
         <RichTextarea
           value={formik.values.body}
           onChange={(newValue) => formik.setFieldValue('body', newValue)}

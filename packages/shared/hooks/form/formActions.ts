@@ -8,16 +8,20 @@ const validationSchema = yup.object({
   actionType: yup.string().label('Action type').required(),
   name: yup.string().label('Action name').required(),
   senderEmail: yup.string().label('Sender email').email().required(),
-  useEmailField: yup.boolean(),
-  emailFieldId: yup.string().when('useEmailField', {
-    is: (value) => value === true,
+  receiverType: yup.string().label('Receiver').required(),
+  emailFieldId: yup.string().when('receiverType', {
+    is: (value) => value === 'emailField',
     then: yup.string().label('Email field').required(),
     otherwise: yup.string(),
   }),
-  receiverEmail: yup.string().when('useEmailField', {
-    is: (value) => value === true,
-    then: yup.string(),
-    otherwise: yup.string().label('Receiver email').email().required(),
+  receiverEmails: yup.array().when('receiverType', {
+    is: (value) => value === 'customEmail',
+    then: yup
+      .array()
+      .label('Receiver emails')
+      .of(yup.string().label(' ').email().required())
+      .min(1),
+    otherwise: yup.array(),
   }),
   variables: yup.array(),
   subject: yup.string().required('Email subject is required'),
@@ -34,9 +38,9 @@ interface IFormValues {
   actionType: string;
   name: string;
   senderEmail: string;
-  useEmailField: boolean;
+  receiverType: string;
   emailFieldId: string;
-  receiverEmail: string;
+  receiverEmails: string[];
   variables: [TVariables];
   subject: string;
   body: string;
@@ -47,9 +51,9 @@ const defaultFormValues = {
   actionType: 'sendEmail',
   name: '',
   senderEmail: '',
-  useEmailField: false,
+  receiverType: 'customEmail',
   emailFieldId: '',
-  receiverEmail: '',
+  receiverEmails: [],
   variables: [{ name: '', field: '' }],
   subject: '',
   body: '',
@@ -84,9 +88,9 @@ export function useFormActions({ onAlert, onSave }: IProps) {
     formik.setFieldValue('active', payload.active, false);
     formik.setFieldValue('name', payload.name, false);
     formik.setFieldValue('senderEmail', payload.senderEmail, false);
-    formik.setFieldValue('useEmailField', payload.useEmailField, false);
+    formik.setFieldValue('receiverType', payload?.receiverType, false);
     formik.setFieldValue('emailFieldId', payload.emailFieldId, false);
-    formik.setFieldValue('receiverEmail', payload.receiverEmail, false);
+    formik.setFieldValue('receiverEmails', payload?.receiverEmails, false);
     formik.setFieldValue('variables', payload.variables, false);
     formik.setFieldValue('subject', payload.subject, false);
     formik.setFieldValue('body', payload.body, false);

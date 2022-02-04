@@ -8,11 +8,10 @@ export async function getListItems(queryText) {
   try {
     const response = await client.query({
       query: GET_MENTION_ITEMS,
-      variables: {search: queryText },
+      variables: { search: queryText },
     });
     return new Promise((resolve) => {
-      let itemsToDisplay = response?.data?.getMentionItems
-      console.log(itemsToDisplay)
+      let itemsToDisplay = response?.data?.getMentionItems;
       itemsToDisplay = itemsToDisplay?.map(
         (val) =>
           (val = {
@@ -35,7 +34,7 @@ function mentionCustomization(editor) {
       classes: 'mention',
       attributes: {
         'data-user-id': true,
-        'data-type':true
+        'data-type': true,
       },
     },
     model: {
@@ -63,7 +62,7 @@ function mentionCustomization(editor) {
           class: 'mention',
           'data-mention': modelAttributeValue.id,
           'data-id': modelAttributeValue._id,
-          'data-type': modelAttributeValue.type
+          'data-type': modelAttributeValue.type,
         },
         {
           priority: 20,
@@ -156,7 +155,6 @@ function uploadPlugin(editor) {
   // eslint-disable-next-line no-param-reassign
 
   editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
-    console.log(loader);
     return new MyUploadAdapter(loader);
   };
   editor.editing.view.change((writer) => {
