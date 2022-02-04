@@ -164,7 +164,9 @@ export function ResponseChild3({
                   .map((value) => (
                     <div key={value?._id}>
                       <DisplayValue field={field} value={value} />
-                      {field?.options?.showCommentBox && <CommentLikeShare parentId={value?._id} />}
+                      {JSON.parse(field?.options)?.showCommentBox && (
+                        <CommentLikeShare parentId={value?._id} />
+                      )}
                     </div>
                   ))}
               </div>
