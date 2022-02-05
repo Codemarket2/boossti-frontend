@@ -12,7 +12,7 @@ export default function Screen({ slug, typeSlug }: IProps) {
   const router = useRouter();
 
   const onSlugUpdate = (newSlug) => {
-    router.push(`/types/${typeSlug}/${newSlug}`);
+    router.push(`/${typeSlug}/${newSlug}`);
   };
 
   const pushToAnchor = () => {

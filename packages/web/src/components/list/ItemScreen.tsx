@@ -5,6 +5,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
+import DeleteIcon from '@material-ui/icons/Delete';
 import Hidden from '@material-ui/core/Hidden';
 import Tooltip from '@material-ui/core/Tooltip';
 import Drawer from '@material-ui/core/Drawer';
@@ -12,7 +13,8 @@ import Typography from '@material-ui/core/Typography';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTheme } from '@material-ui/core/styles';
 import ShareIcon from '@material-ui/icons/Share';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
+// import FileCopyIcon from '@material-ui/icons/FileCopy';
+import Grid from '@material-ui/core/Grid';
 import {
   useCRUDListItems,
   useGetListItemBySlug,
@@ -28,7 +30,6 @@ import Switch from '@material-ui/core/Switch';
 import { updateSettingAction } from '@frontend/shared/redux/actions/setting';
 import { onAlert } from '../../utils/alert';
 import FieldValues from '../field/FieldValues';
-import ActionButtons from './ActionButtons';
 import InlineForm from './InlineForm';
 import MediaForm from './MediaForm';
 import LeftNavigation from '../field/LeftNavigation';
@@ -40,7 +41,7 @@ import NotFound from '../common/NotFound';
 import DisplayRichText from '../common/DisplayRichText';
 import ListItemsFields from './ListItemsFields';
 import ListItemsFieldsValue from './ListItemsFieldsValue';
-import Grid from '@material-ui/core/Grid';
+import UnAuthorised from '../common/UnAuthorised';
 
 interface IProps {
   slug: string;
@@ -78,7 +79,7 @@ export default function ItemScreen({
   const router = useRouter();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('xs'));
-  const setting = useSelector((state: any) => state.setting);
+  const { setting, auth } = useSelector((state: any) => state);
   const [state, setState] = useState({ fieldName: '', fields: [], hideLeftNavigation: false });
   const [fieldValueCount, setFieldValueCount] = useState({});
   const { data, error } = useGetListItemBySlug({ slug });
@@ -88,9 +89,7 @@ export default function ItemScreen({
   const mentions = Array.from(new Set(templateMentionsField?.concat(pageMentionsField)));
 
   const deleteCallBack = () => {
-    router.push(
-      `/types/${data?.getListItemBySlug?.types && data?.getListItemBySlug?.types[0]?.slug}`,
-    );
+    router.push(`/${data?.getListItemBySlug?.types[0]?.slug}`);
   };
 
   const updateCallBack = (newSlug) => {
@@ -143,12 +142,13 @@ export default function ItemScreen({
     return <NotFound />;
   }
 
+  if (!auth.authenticated && data?.getListItemBySlug?.authenticateUser) {
+    return <UnAuthorised />;
+  }
+
   const leftNavigationProps = {
     parentId: data.getListItemBySlug?.types[0]?._id,
-    slug: `/types/${data?.getListItemBySlug?.types[0]?.slug}/${data?.getListItemBySlug?.slug}`,
-    // slug: previewMode
-    //   ? `/page/${data?.getListItemBySlug?.slug}`
-    //   : `/types/${data?.getListItemBySlug?.types[0]?.slug}/${data?.getListItemBySlug?.slug}`,
+    slug: `/${data?.getListItemBySlug?.types[0]?.slug}/${data?.getListItemBySlug?.slug}`,
     fields: state.fields,
     fieldValueCount,
     layouts: JSON.parse(data.getListItemBySlug?.layouts) || {},
@@ -162,8 +162,8 @@ export default function ItemScreen({
       {!hideBreadcrumbs && (
         <div className="d-flex justify-content-between align-content-center align-items-center">
           <Breadcrumbs>
-            <Link href="/types">Template</Link>
-            <Link href={`/types/${data.getListItemBySlug.types[0].slug}`}>
+            {/* <Link href="/types">Template</Link> */}
+            <Link href={`/${data.getListItemBySlug.types[0].slug}`}>
               <a>{data.getListItemBySlug.types[0].title}</a>
             </Link>
             <Typography color="textPrimary">
@@ -173,14 +173,27 @@ export default function ItemScreen({
             </Typography>
           </Breadcrumbs>
           <div className="d-flex align-items-center">
+            <Tooltip title="share">
+              <IconButton
+                edge="start"
+                onClick={() =>
+                  navigator.clipboard.writeText(
+                    `${window?.location?.origin}/${data?.getListItemBySlug?.types[0]?.slug}/${data?.getListItemBySlug?.slug}`,
+                  )
+                }
+              >
+                <ShareIcon />
+              </IconButton>
+            </Tooltip>
             {authorized && (
               <>
-                <Tooltip title="Make a copy">
+                {/* <Tooltip title="Make a copy">
                   <IconButton onClick={() => alert('Comming soon')}>
                     <FileCopyIcon />
                   </IconButton>
-                </Tooltip>
+                </Tooltip> */}
                 <FormControlLabel
+                  className="m-0"
                   control={
                     <Switch
                       color="primary"
@@ -199,6 +212,7 @@ export default function ItemScreen({
                 />
                 {data.getListItemBySlug?.active && (
                   <FormControlLabel
+                    className="m-0"
                     control={
                       <Switch
                         color="primary"
@@ -216,25 +230,21 @@ export default function ItemScreen({
                     label="Auth Required"
                   />
                 )}
-                <ActionButtons
-                  onDelete={() => {
-                    const answer = confirm('Are you sure you want to delete?');
-                    if (answer) {
-                      handleDelete(data.getListItemBySlug._id, deleteCallBack);
-                    }
-                  }}
-                />
+                <Tooltip title="Delete">
+                  <IconButton
+                    edge="end"
+                    onClick={() => {
+                      const answer = confirm('Are you sure you want to delete?');
+                      if (answer) {
+                        handleDelete(data.getListItemBySlug._id, deleteCallBack);
+                      }
+                    }}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Tooltip>
               </>
             )}
-            <Tooltip title="share">
-              <IconButton
-                onClick={() =>
-                  navigator.clipboard.writeText(`${window?.location?.origin}/page/${slug}`)
-                }
-              >
-                <ShareIcon />
-              </IconButton>
-            </Tooltip>
           </div>
         </div>
       )}

@@ -120,8 +120,24 @@ export function useGetListTypeBySlug({ slug }: any) {
   return { data: lisType ? { getListTypeBySlug: lisType } : null, error, loading };
 }
 
+const pagesList = [
+  'admin',
+  'comment',
+  'feeds',
+  'forms',
+  'log',
+  'types',
+  'user',
+  'auth',
+  'create-post',
+  'my-story',
+  'saved',
+  'style',
+  'style33',
+];
+
 const listTypesValidationSchema = yup.object({
-  title: yup.string().required('Title is required'),
+  title: yup.string().required('Title is required').min(3).notOneOf(pagesList),
 });
 
 interface IListTypesFormValues {
@@ -179,8 +195,12 @@ export function useCRUDListTypes({ onAlert, createCallBack, updateCallBack }: IP
   const formik = useFormik({
     initialValues: listTypesDefaultValue,
     validationSchema: listTypesValidationSchema,
-    onSubmit: async (payload: IListTypesFormValues) => {
+    onSubmit: async (payload: IListTypesFormValues, { setFieldError }) => {
       try {
+        const isPage = pagesList.includes(payload.title.toLowerCase());
+        if (isPage) {
+          return setFieldError('title', 'This title is already taken');
+        }
         let newMedia = [];
         let newPayload: any = { ...payload };
         if (state.tempMediaFiles.length > 0) {
@@ -206,6 +226,9 @@ export function useCRUDListTypes({ onAlert, createCallBack, updateCallBack }: IP
           tempMedia: [],
         });
       } catch (error) {
+        if (error?.message?.includes('duplicate key')) {
+          return setFieldError('title', 'This title is already taken');
+        }
         onAlert('Error', error.message);
       }
     },

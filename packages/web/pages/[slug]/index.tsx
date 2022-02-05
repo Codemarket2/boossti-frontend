@@ -1,8 +1,8 @@
 import { getMetaTags } from '@frontend/shared';
-import TypeScreen from '../../../src/screens/TypeScreen';
-import Loading from '../../../src/components/common/Loading';
-import Head from '../../../src/components/common/Head';
-import UserLayout from '../../../src/components/common/UserLayout';
+import TypeScreen from '../../src/screens/TypeScreen';
+import Loading from '../../src/components/common/Loading';
+import Head from '../../src/components/common/Head';
+import UserLayout from '../../src/components/common/UserLayout';
 
 interface IProps {
   metaTags: any;

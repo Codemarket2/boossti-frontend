@@ -6,7 +6,6 @@ import {
 } from '@frontend/shared/hooks/list';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -14,6 +13,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Grid from '@material-ui/core/Grid';
 import EditIcon from '@material-ui/icons/Edit';
 import StarOutlineIcon from '@material-ui/icons/StarOutline';
+import DeleteIcon from '@material-ui/icons/Delete';
 import StarIcon from '@material-ui/icons/Star';
 import Share from '@material-ui/icons/Share';
 import { useAuthorization } from '@frontend/shared/hooks/auth';
@@ -25,32 +25,28 @@ import ListItems from '../components/list/ListItems';
 import ImageList from '../components/post/ImageList';
 import NotFound from '../components/common/NotFound';
 import Backdrop from '../components/common/Backdrop';
-import ActionButtons from '../components/list/ActionButtons';
 import { onAlert } from '../utils/alert';
 import Fields from '../components/field/Fields';
 import InlineForm from '../components/list/InlineForm';
 import MediaForm from '../components/list/MediaForm';
+import DisplayRichText from '../components/common/DisplayRichText';
 // import CommentLikeShare from '../components/common/commentLikeShare/CommentLikeShare';
 // import ListItemForm from '../components/list/ListItemForm';
 // import ListItemsGrid from '../components/list/ListItemsGrid';
-import DisplayRichText from '../components/common/DisplayRichText';
 // import ListTypeFields from '../components/list/ListTypeFields';
 
 interface IProps {
   slug: string;
 }
 
-// const buttonLabels = ['List View', 'Grid View', 'Form View'];
-
 export default function Screen({ slug }: IProps) {
   const router = useRouter();
   const [state, setState] = useState({
     fieldName: '',
-    // view: buttonLabels[0],
     showMenu: false,
     selectedIndex: 0,
   });
-  const [fields, setFields] = useState([]);
+
   const { handlePublish } = usePublishListType({ onAlert });
 
   const deleteCallBack = () => {
@@ -60,7 +56,7 @@ export default function Screen({ slug }: IProps) {
   const updateCallBack = (newSlug) => {
     setState({ ...state, fieldName: '' });
     if (newSlug !== slug) {
-      router.push(`/types/${newSlug}`);
+      router.push(`/${newSlug}`);
     }
   };
 
@@ -100,7 +96,7 @@ export default function Screen({ slug }: IProps) {
     <div>
       <div className="d-flex justify-content-between align-content-center align-items-center my-1">
         <Breadcrumbs>
-          <Link href="/types">Template</Link>
+          {/* <Link href="/types">Template</Link> */}
           <Typography color="textPrimary">
             {data.getListTypeBySlug.title.includes('-n-e-w')
               ? 'Title'
@@ -108,54 +104,40 @@ export default function Screen({ slug }: IProps) {
           </Typography>
         </Breadcrumbs>
         <div className="d-flex align-items-center">
-          {/* {buttonLabels.map(
-            (buttonLabel) =>
-              buttonLabel !== state.view && (
-                <Button
-                  key={buttonLabel}
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                  className="mr-2"
-                  onClick={() => setState({ ...state, view: buttonLabel })}
-                >
-                  {buttonLabel}
-                </Button>
-              ),
-          )} */}
-
+          <Tooltip title="Copy page link">
+            <IconButton
+              edge="start"
+              onClick={() => navigator.clipboard.writeText(window?.location?.href)}
+            >
+              <Share />
+            </IconButton>
+          </Tooltip>
           {data.getListTypeBySlug?.active && (
-            <>
-              <Tooltip
-                title={data.getListTypeBySlug?.showInMenu ? 'Remove from menu' : 'Add to menu'}
+            <Tooltip
+              title={data.getListTypeBySlug?.showInMenu ? 'Remove from menu' : 'Add to menu'}
+            >
+              <IconButton
+                onClick={() =>
+                  handlePublish({
+                    _id: data.getListTypeBySlug?._id,
+                    slug,
+                    active: data.getListTypeBySlug?.active,
+                    showInMenu: !data.getListTypeBySlug?.showInMenu,
+                  })
+                }
               >
-                <IconButton
-                  edge="start"
-                  onClick={() =>
-                    handlePublish({
-                      _id: data.getListTypeBySlug?._id,
-                      slug,
-                      active: data.getListTypeBySlug?.active,
-                      showInMenu: !data.getListTypeBySlug?.showInMenu,
-                    })
-                  }
-                >
-                  {data.getListTypeBySlug?.showInMenu ? <StarIcon /> : <StarOutlineIcon />}
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Copy link">
-                <IconButton
-                  edge="start"
-                  onClick={() => navigator.clipboard.writeText(window?.location?.href)}
-                >
-                  <Share />
-                </IconButton>
-              </Tooltip>
-            </>
+                {data.getListTypeBySlug?.showInMenu ? (
+                  <StarIcon color="primary" />
+                ) : (
+                  <StarOutlineIcon />
+                )}
+              </IconButton>
+            </Tooltip>
           )}
           {authorized && (
             <>
               <FormControlLabel
+                className="m-0"
                 control={
                   <Switch
                     color="primary"
@@ -172,18 +154,23 @@ export default function Screen({ slug }: IProps) {
                 }
                 label="Publish"
               />
-              <ActionButtons
-                onDelete={() => {
-                  if (data.getListTypeBySlug.inUse) {
-                    alert("This type is being used in some form, you can't delete");
-                  } else {
-                    const answer = confirm('Are you sure you want to delete?');
-                    if (answer) {
-                      handleDelete(data.getListTypeBySlug._id, deleteCallBack);
+              <Tooltip title="Delete">
+                <IconButton
+                  edge="end"
+                  onClick={() => {
+                    if (data.getListTypeBySlug.inUse) {
+                      alert("This type is being used in some form, you can't delete");
+                    } else {
+                      const answer = confirm('Are you sure you want to delete?');
+                      if (answer) {
+                        handleDelete(data.getListTypeBySlug._id, deleteCallBack);
+                      }
                     }
-                  }
-                }}
-              />
+                  }}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </Tooltip>
             </>
           )}
         </div>
@@ -240,7 +227,6 @@ export default function Screen({ slug }: IProps) {
                   )}
                 </Typography>
                 <DisplayRichText value={data.getListTypeBySlug.description} />
-                {/* <CommentLikeShare parentId={data.getListTypeBySlug._id} /> */}
               </div>
             )}
             {state.fieldName === 'media' ? (
@@ -267,26 +253,10 @@ export default function Screen({ slug }: IProps) {
               </>
             )}
           </Paper>
-          <Fields
-            title="Sections"
-            setFields={setFields}
-            parentId={data.getListTypeBySlug._id}
-            guestMode={!authorized}
-          />
+          <Fields title="Sections" parentId={data.getListTypeBySlug._id} guestMode={!authorized} />
           {/* <ListTypeFields listType={data.getListTypeBySlug} /> */}
         </Grid>
         <Grid item xs>
-          {/* {state.view === 'Form View' ? (
-            <ListItemForm
-              typeSlug={data.getListTypeBySlug.slug}
-              types={[data.getListTypeBySlug._id]}
-              parentId={data.getListTypeBySlug._id}
-            />
-          ) : state.view === 'Grid View' ? (
-            <ListItemsGrid fields={fields} types={[data.getListTypeBySlug._id]} />
-          ) : (
-            
-          )} */}
           <ListItems
             types={[data.getListTypeBySlug._id]}
             name={data.getListTypeBySlug.title}

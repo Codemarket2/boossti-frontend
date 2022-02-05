@@ -34,7 +34,7 @@ export default function ListItemForm({
   const router = useRouter();
   const [extraFields, setExtraFields] = useState([]);
   const createCallBack = (itemSlug) => {
-    router.push(`/types/${typeSlug}/${itemSlug}`);
+    router.push(`/${typeSlug}/${itemSlug}`);
   };
   const { state, setState, formik, setFormValues, CRUDLoading } = useCRUDListItems({
     onAlert,
@@ -52,7 +52,7 @@ export default function ListItemForm({
   }, [item]);
 
   const defaultOnCancel = () => {
-    router.push(`/types/${typeSlug}`);
+    router.push(`/${typeSlug}`);
   };
 
   useEffect(() => {

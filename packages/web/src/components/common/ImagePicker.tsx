@@ -29,9 +29,7 @@ export default function ImagePicker({
           caption: '',
         };
         newArray.push(item);
-        console.log(item);
       }
-      console.log(newArray);
       setState({
         ...state,
         tempMediaFiles: [...state.tempMediaFiles, ...event.target.files],
@@ -73,7 +71,6 @@ export default function ImagePicker({
     <>
       {(mutiple || (!state?.media?.length && !state?.tempMedia?.length)) && (
         <>
-          {console.log(newArray)}
           <input
             id="contained-button-file"
             type="file"

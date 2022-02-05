@@ -16,7 +16,7 @@ export default function Screen({ slug }: any) {
     <UserLayout authRequired mustAdmin>
       <Breadcrumbs>
         <Link href="/types">Template</Link>
-        <Link href={`/types/${data.getListTypeBySlug.slug}`}>{data.getListTypeBySlug.title}</Link>
+        <Link href={`/${data.getListTypeBySlug.slug}`}>{data.getListTypeBySlug.title}</Link>
         <Typography color="textPrimary">New</Typography>
       </Breadcrumbs>
       <ListItemForm
