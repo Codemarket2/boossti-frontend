@@ -19,10 +19,9 @@ export default function ImagePicker({
   setState,
 }: IProps): any {
   const ref: any = useRef();
-
+  const newArray = [...state.tempMedia];
   const handleFileChange = (event) => {
     if (event.target.files.length > 0) {
-      const newArray = [...state.tempMedia];
       for (let i = 0; i < event.target.files.length; i++) {
         const item = {
           url: URL.createObjectURL(event.target.files[i]),

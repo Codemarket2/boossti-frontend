@@ -1,7 +1,7 @@
 const QRCode = require('qrcode.react');
 
-export const QRCodeGenerator = ({ url }) => {
-  return (
+export const QRCodeGenerator = ({ url }: { url: string }) => {
+  return url ? (
     <div
       style={{
         position: 'absolute',
@@ -12,5 +12,5 @@ export const QRCodeGenerator = ({ url }) => {
     >
       <QRCode value={url} includeMargin="true" size={76} />
     </div>
-  );
+  ) : null;
 };

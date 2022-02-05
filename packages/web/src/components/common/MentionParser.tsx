@@ -44,7 +44,8 @@ export default function MentionParser({
         data-testid="mention-parser"
         variant={variant}
         component={component}
-        className={className}>
+        className={className}
+      >
         {parse(newValue, {
           replace: (domNode: any) => {
             if (domNode.name === 'a') {
@@ -63,21 +64,22 @@ export default function MentionParser({
                       selectedTag &&
                       selectedTag.types &&
                       Object.prototype.hasOwnProperty.call(selectedTag, 'types')
-                        ? `/types/${selectedTag.types[0].slug}/${selectedTag.slug}`
+                        ? `/${selectedTag.types[0].slug}/${selectedTag.slug}`
                         : selectedTag.slug
-                        ? `/types/${selectedTag.slug}`
-                        : `/types/${Date.now()}`;
+                        ? `/${selectedTag.slug}`
+                        : `/${Date.now()}`;
                     bookmarkSetState({
                       ...bookmarkState,
                       showMenu: event.currentTarget,
                       selectedTag: tag,
-                      tag: selectedTag ? selectedTag : null,
-                      url: url,
+                      tag: selectedTag || null,
+                      url,
                     });
                   }}
                   color="primary"
                   variant="body2"
-                  component="span">
+                  component="span"
+                >
                   <u style={{ cursor: 'pointer' }}>{node.data}</u>
                 </Typography>
               );
@@ -88,7 +90,8 @@ export default function MentionParser({
           anchorEl={bookmarkState.showMenu}
           keepMounted
           open={Boolean(bookmarkState.showMenu)}
-          onClose={() => bookmarkSetState({ ...bookmarkState, showMenu: null, selectedTag: null })}>
+          onClose={() => bookmarkSetState({ ...bookmarkState, showMenu: null, selectedTag: null })}
+        >
           <Link href={bookmarkState.url}>
             <MenuItem>
               <ListItemAvatar>
@@ -114,7 +117,8 @@ export default function MentionParser({
               } else {
                 alert('You must be signed in to save the tag');
               }
-            }}>
+            }}
+          >
             <ListItemIcon className="mr-n4">
               <BookmarkIcon fontSize="small" />
             </ListItemIcon>

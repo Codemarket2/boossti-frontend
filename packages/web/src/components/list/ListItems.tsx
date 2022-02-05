@@ -23,7 +23,7 @@ export default function ListItems({ types, slug }: any) {
   const router = useRouter();
 
   const createCallback = (itemSlug) => {
-    router.push(`/types/${slug}/${itemSlug}`);
+    router.push(`/${slug}/${itemSlug}`);
   };
 
   const { handleCreate, createLoading } = useCreateListItem({ onAlert });
@@ -63,7 +63,7 @@ export default function ListItems({ types, slug }: any) {
             {data.getListItems.data.map((lisItem, i) => (
               <Fragment key={lisItem._id}>
                 {i > 0 && <Divider />}
-                <Link href={`/types/${lisItem.types[0].slug}/${lisItem.slug}`}>
+                <Link href={`/${lisItem.types[0].slug}/${lisItem.slug}`}>
                   <ListItem button>
                     <ListItemAvatar>
                       <Avatar alt={lisItem.title} src={lisItem.media[0] && lisItem.media[0].url} />

@@ -1,3 +1,4 @@
+import { useCRUDListTypes } from '@frontend/shared/hooks/list';
 import { useEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
@@ -7,7 +8,6 @@ import InputLabel from '@material-ui/core/InputLabel';
 import LoadingButton from '../common/LoadingButton';
 import InputGroup from '../common/InputGroup';
 import ImagePicker from '../common/ImagePicker';
-import { useCRUDListTypes } from '@frontend/shared/hooks/list';
 import { onAlert } from '../../utils/alert';
 import Backdrop from '../common/Backdrop';
 
@@ -20,7 +20,7 @@ interface IProps {
 export default function ListTypeForm({ vType = null, updateCallBack, onCancel }: IProps) {
   const router = useRouter();
   const createCallBack = (slug) => {
-    router.push(`/types/${slug}`);
+    router.push(`/${slug}`);
   };
 
   const defaultOnCancel = () => {
@@ -86,7 +86,8 @@ export default function ListTypeForm({ vType = null, updateCallBack, onCancel }:
               onClick={onCancel ? onCancel : defaultOnCancel}
               className="ml-2"
               disabled={formik.isSubmitting}
-              color="primary">
+              color="primary"
+            >
               Cancel
             </Button>
           </InputGroup>

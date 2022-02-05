@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
-import NewItem from '../../../src/screens/NewItem';
-import Loading from '../../../src/components/common/Loading';
+import NewItem from '../../src/screens/NewItem';
+import Loading from '../../src/components/common/Loading';
 
 export default function Page() {
   const router = useRouter();

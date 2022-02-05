@@ -88,7 +88,7 @@ export default function DrawerContent({ showDrawer, toggleDrawer, admin }: IProp
           </ListItem>
         </Link>
         {data?.getMenuListTypes?.map((t) => (
-          <Link href={`/types/${t.slug}`} key={t._id}>
+          <Link href={`/${t.slug}`} key={t._id}>
             <ListItem button selected={checkActiveRoute(activeRoute, '/log')}>
               <ListItemIcon>
                 <ListIcon />

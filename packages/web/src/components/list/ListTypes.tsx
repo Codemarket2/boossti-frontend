@@ -25,7 +25,7 @@ export default function ListTypes(): any {
 
   const createCallback = (slug) => {
     setShowBackdrop(true);
-    router.push(`/types/${slug}`);
+    router.push(`/${slug}`);
   };
 
   return (
@@ -47,7 +47,7 @@ export default function ListTypes(): any {
             {data.getListTypes.data.map((listType, i) => (
               <Fragment key={listType._id}>
                 {i > 0 && <Divider />}
-                <Link href={`types/${listType.slug}`}>
+                <Link href={`/${listType.slug}`}>
                   <ListItem button>
                     <ListItemAvatar>
                       <Avatar

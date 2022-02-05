@@ -16,6 +16,7 @@ interface IProps {
 export default function MediaForm({ state, setState, onCancel, onSave, loading = false }: IProps) {
   return (
     <div>
+      {console.log(state)}
       <Typography variant="h6" className="d-flex align-items-center justify-content-betweens">
         Media
         <div className="ml-5 d-flex align-items-center">
@@ -27,7 +28,8 @@ export default function MediaForm({ state, setState, onCancel, onSave, loading =
               size="small"
               variant="contained"
               type="button"
-              color="primary">
+              color="primary"
+            >
               Save
             </LoadingButton>
           </Tooltip>
@@ -38,7 +40,8 @@ export default function MediaForm({ state, setState, onCancel, onSave, loading =
               size="small"
               variant="outlined"
               component="span"
-              color="primary">
+              color="primary"
+            >
               Cancel
             </Button>
           </Tooltip>

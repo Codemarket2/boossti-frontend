@@ -16,15 +16,14 @@ export default function HeadComponent({
 }: IProps) {
   return (
     <Head>
-      <title>{title}</title>
-      <link rel="icon" href="/favicon.ico" />
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image" content={image} />
-      <meta property="og:url" content={url} />
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta property="og:site_name" content={title} />
-      <meta name="twitter:image:alt" content={title} />
+      <title key="title">{title}</title>
+      <meta key="og-title" property="og:title" content={title} />
+      <meta key="description" property="og:description" content={description} />
+      <meta key="image" property="og:image" content={image} />
+      <meta key="url" property="og:url" content={url} />
+      <meta key="twitter-card" name="twitter:card" content="summary_large_image" />
+      <meta key="site-name" property="og:site_name" content={title} />
+      <meta key="twitter-title" name="twitter:image:alt" content={title} />
     </Head>
   );
 }
