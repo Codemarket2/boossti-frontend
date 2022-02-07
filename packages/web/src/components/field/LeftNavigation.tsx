@@ -20,6 +20,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import GridIcon from '@material-ui/icons/GridOn';
 import { onAlert } from '../../utils/alert';
+import EditIcon from '@material-ui/icons/Edit';
 
 const breakpoints = [
   { name: 'xs', label: 'Extra Small' },
@@ -42,6 +43,7 @@ interface IProps {
   fields: any[];
   fieldValueCount: any;
   onClick?: () => void;
+  setEditValue?: (val: string) => void;
   layouts: any;
   itemSlug: string;
   _id: string;
@@ -57,6 +59,7 @@ export default function LeftNavigation({
   fields,
   fieldValueCount,
   onClick = () => {},
+  setEditValue = () => {},
   layouts,
   _id,
   itemSlug,
@@ -126,11 +129,31 @@ export default function LeftNavigation({
                   <Link href={`${slug}#description`}>
                     <ListItemText primary="Description" />
                   </Link>
+                  <Tooltip
+                    onClick={() => {
+                      setEditValue('description');
+                    }}
+                    title="Edit Description"
+                  >
+                    <IconButton size="small">
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
                 </ListItem>
                 <ListItem button>
                   <Link href={`${slug}#media`}>
                     <ListItemText primary="Media" />
                   </Link>
+                  <Tooltip
+                    onClick={() => {
+                      setEditValue('media');
+                    }}
+                    title="Edit Media"
+                  >
+                    <IconButton size="small">
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
                 </ListItem>
               </>
             )}
