@@ -3,7 +3,6 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import { useSelector } from 'react-redux';
-import FormLabel from '@material-ui/core/FormLabel';
 import IconButton from '@material-ui/core/IconButton';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -197,13 +196,12 @@ export function FormView({
     } else {
       newValues = [{ ...defualtValue, field: fieldId }];
     }
-    setValues([...values, ...newValues]);
+    setValues([...newValues, ...values]);
   };
 
-  const onRemoveOneValue = (fieldId) => {
+  const onRemoveOneValue = (fieldId, index) => {
     const oldValues = values.filter((f) => f.field !== fieldId);
-    const newValues = values.filter((f) => f.field === fieldId);
-    newValues.pop();
+    const newValues = values.filter((f) => f.field === fieldId).filter((f, i) => i !== index);
     setValues([...oldValues, ...newValues]);
   };
 
@@ -228,10 +226,8 @@ export function FormView({
             key={field._id}
           >
             <InputGroup key={field._id}>
-              <>
-                <FormLabel>
-                  {field?.options?.required ? `${field?.label}*` : field?.label}
-                </FormLabel>
+              <Typography>
+                {field?.options?.required ? `${field?.label}*` : field?.label}
                 {field?.options?.multipleValues && (
                   <>
                     <IconButton
@@ -241,20 +237,11 @@ export function FormView({
                     >
                       <AddCircleIcon fontSize="small" />
                     </IconButton>
-                    {values.filter((f) => f.field === field._id).length > 1 && (
-                      <IconButton
-                        edge="end"
-                        className="text-danger"
-                        onClick={() => onRemoveOneValue(field._id)}
-                      >
-                        <DeleteIcon fontSize="small" />
-                      </IconButton>
-                    )}
                   </>
                 )}
-              </>
+              </Typography>
               {filterValues(values, field).map((value, valueIndex) => (
-                <div className="mb-2">
+                <div className="mb-2 d-flex bg-dangerr align-items-center">
                   <Field
                     disabled={submitState.loading}
                     validate={submitState.validate}
@@ -265,6 +252,15 @@ export function FormView({
                     }
                     value={value}
                   />
+                  {values?.length > 1 && (
+                    <IconButton
+                      edge="end"
+                      className="text-danger"
+                      onClick={() => onRemoveOneValue(field._id, valueIndex)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  )}
                 </div>
               ))}
             </InputGroup>

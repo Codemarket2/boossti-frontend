@@ -101,7 +101,7 @@ function App({ Component, pageProps }: AppProps) {
     <ApolloProvider client={authenticated ? client : guestClient}>
       <MuiThemeProvider theme={theme}>
         <StyledProvider theme={theme}>
-          <Head />
+          <Head title={null} />
           <LoadingBar />
           <CssBaseline />
           <GlobalStyle />
