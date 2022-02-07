@@ -42,6 +42,7 @@ import DisplayRichText from '../common/DisplayRichText';
 import ListItemsFields from './ListItemsFields';
 import ListItemsFieldsValue from './ListItemsFieldsValue';
 import UnAuthorised from '../common/UnAuthorised';
+import Overlay from '../common/Overlay';
 
 interface IProps {
   slug: string;
@@ -271,6 +272,9 @@ export default function ItemScreen({
                 overflowX: 'hidden',
                 overflowY: 'auto',
               }}
+              setEditValue={(val: string) => {
+                onEdit(val);
+              }}
               {...leftNavigationProps}
             >
               <ListItemsFields listItem={data.getListItemBySlug} previewMode={!authorized} />
@@ -316,53 +320,39 @@ export default function ItemScreen({
                 </Typography>
               </>
             )}
-            {state.fieldName === 'description' ? (
-              <InlineForm
-                multiline
-                fieldName={state.fieldName}
-                label="Description"
-                onCancel={onCancel}
-                formik={formik}
-                formLoading={CRUDLoading}
-              />
-            ) : (
-              <>
-                <Typography id="description" className="d-flex align-items-center mt-2 mb-1">
-                  Description
-                  {authorized && (
-                    <Tooltip title="Edit Description">
-                      <IconButton onClick={() => onEdit('description')} size="small">
-                        <EditIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                  )}
-                </Typography>
-                <DisplayRichText value={data.getListItemBySlug.description} />
-              </>
-            )}
-            {state.fieldName === 'media' ? (
-              <MediaForm
-                state={crudState}
-                setState={setCrudState}
-                onCancel={onCancel}
-                onSave={formik.handleSubmit}
-                loading={CRUDLoading}
-              />
-            ) : (
-              <>
-                <Typography className="d-flex align-items-center mt-2 mb-1" id="media">
-                  Media
-                  {authorized && (
-                    <Tooltip title="Edit Media">
-                      <IconButton onClick={() => onEdit('media')} size="small">
-                        <EditIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                  )}
-                </Typography>
-                <ImageList media={data.getListItemBySlug.media} />
-              </>
-            )}
+            {console.log(state.fieldName)}
+            <Overlay
+              open={state.fieldName === 'description' || state.fieldName === 'media'}
+              title={state.fieldName}
+              onClose={() => {
+                onCancel();
+              }}
+            >
+              <div style={{ padding: '20px' }}>
+                {state.fieldName === 'description' && (
+                  <>
+                    <InlineForm
+                      multiline
+                      fieldName={state.fieldName}
+                      label={state.fieldName}
+                      onCancel={onCancel}
+                      formik={formik}
+                      formLoading={CRUDLoading}
+                    />
+                    <DisplayRichText value={data.getListItemBySlug.description} />
+                  </>
+                )}
+                {state.fieldName === 'media' && (
+                  <MediaForm
+                    state={crudState}
+                    setState={setCrudState}
+                    onCancel={onCancel}
+                    onSave={formik.handleSubmit}
+                    loading={CRUDLoading}
+                  />
+                )}
+              </div>
+            </Overlay>
           </>
           {data.getListItemBySlug?.types[0]?._id && (
             <FieldValues

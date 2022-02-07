@@ -43,7 +43,7 @@ export default function ListTypes(): any {
         {error || !data ? (
           <ErrorLoading error={error} />
         ) : (
-          <List dense>
+          <List dense className="p-0">
             {data.getListTypes.data.map((listType, i) => (
               <Fragment key={listType._id}>
                 {i > 0 && <Divider />}

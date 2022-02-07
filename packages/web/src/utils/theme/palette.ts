@@ -21,15 +21,15 @@ export const light = {
     contrastText: 'rgba(0, 0, 0, 0.87)',
   },
   text: {
-    primary: '#2d3748',
+    primary: '#050505',
     secondary: '#718096',
   },
   divider: 'rgba(0, 0, 0, 0.12)',
   background: {
-    paper: '#fff',
-    default: '#fff',
-    level2: '#f5f5f5',
-    level1: '#fff',
+    paper: '#FFFFFF',
+    default: '#FFFFFF',
+    level2: '#F0F2F5',
+    level1: '#FFFFFF',
     footer: '#1b1642',
   },
 };
