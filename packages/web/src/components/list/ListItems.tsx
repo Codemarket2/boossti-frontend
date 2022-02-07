@@ -59,7 +59,7 @@ export default function ListItems({ types, slug }: any) {
         {error || !data ? (
           <ErrorLoading error={error} />
         ) : (
-          <List dense>
+          <List dense className="p-0">
             {data.getListItems.data.map((lisItem, i) => (
               <Fragment key={lisItem._id}>
                 {i > 0 && <Divider />}
