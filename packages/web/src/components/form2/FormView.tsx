@@ -252,7 +252,7 @@ export function FormView({
                     }
                     value={value}
                   />
-                  {values?.length > 1 && (
+                  {filterValues(values, field)?.length > 1 && (
                     <IconButton
                       edge="end"
                       className="text-danger"
