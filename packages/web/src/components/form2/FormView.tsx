@@ -5,6 +5,8 @@ import Button from '@material-ui/core/Button';
 import { useSelector } from 'react-redux';
 import IconButton from '@material-ui/core/IconButton';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { useCreateUpdateResponse } from '@frontend/shared/hooks/response';
 import InputGroup from '../common/InputGroup';
@@ -15,6 +17,7 @@ import { onAlert } from '../../utils/alert';
 import DisplayRichText from '../common/DisplayRichText';
 import Overlay from '../common/Overlay';
 import AuthScreen from '../../screens/AuthScreen';
+import DisplayValue from './DisplayValue';
 
 interface IProps {
   form: any;
@@ -205,6 +208,24 @@ export function FormView({
     setValues([...oldValues, ...newValues]);
   };
 
+  const onEditOneValue = (fieldId, index) => {
+    let selectedField = null;
+    const oldValues = values.filter((f) => f.field !== fieldId);
+    let newValues = values
+      .filter((f) => f.field === fieldId)
+      .filter((f, i) => {
+        if (i !== index) {
+          return true;
+        }
+        selectedField = f;
+        return false;
+      });
+    if (selectedField) {
+      newValues = [selectedField, ...newValues];
+    }
+    setValues([...oldValues, ...newValues]);
+  };
+
   return (
     <div className="position-relative">
       {!authenticated && showAuthModal && (
@@ -229,37 +250,63 @@ export function FormView({
               <Typography>
                 {field?.options?.required ? `${field?.label}*` : field?.label}
                 {field?.options?.multipleValues && (
-                  <>
-                    <IconButton
-                      edge="end"
-                      color="primary"
-                      onClick={() => onAddOneMoreValue(field._id)}
-                    >
-                      <AddCircleIcon fontSize="small" />
-                    </IconButton>
-                  </>
+                  <IconButton
+                    edge="end"
+                    color="primary"
+                    onClick={() => onAddOneMoreValue(field._id)}
+                  >
+                    <AddCircleIcon fontSize="small" />
+                  </IconButton>
                 )}
               </Typography>
               {filterValues(values, field).map((value, valueIndex) => (
-                <div className="mb-2 d-flex bg-dangerr align-items-center">
-                  <Field
-                    disabled={submitState.loading}
-                    validate={submitState.validate}
-                    {...field}
-                    label={field?.options?.required ? `${field?.label}*` : field?.label}
-                    onChangeValue={(changedValue) =>
-                      onChange({ ...changedValue, field: field._id }, valueIndex)
-                    }
-                    value={value}
-                  />
+                <div key={valueIndex} className="mb-2 d-flex align-items-center">
+                  {valueIndex === 0 ? (
+                    <div className="w-100">
+                      <Field
+                        {...field}
+                        disabled={submitState.loading}
+                        validate={submitState.validate}
+                        label={field?.options?.required ? `${field?.label}*` : field?.label}
+                        onChangeValue={(changedValue) =>
+                          onChange({ ...changedValue, field: field._id }, valueIndex)
+                        }
+                        value={value}
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-100">
+                      <DisplayValue imageAvatar value={value} field={field} />
+                      {validateValue(submitState.validate, value, field.options, field.fieldType)
+                        .error && (
+                        <FormHelperText className="text-danger">
+                          {
+                            validateValue(
+                              submitState.validate,
+                              value,
+                              field.options,
+                              field.fieldType,
+                            ).errorMessage
+                          }
+                        </FormHelperText>
+                      )}
+                    </div>
+                  )}
+
                   {filterValues(values, field)?.length > 1 && (
-                    <IconButton
-                      edge="end"
-                      className="text-danger"
-                      onClick={() => onRemoveOneValue(field._id, valueIndex)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
+                    <>
+                      {!(valueIndex === 0) && (
+                        <IconButton onClick={() => onEditOneValue(field._id, valueIndex)}>
+                          <EditIcon />
+                        </IconButton>
+                      )}
+                      <IconButton
+                        edge="end"
+                        onClick={() => onRemoveOneValue(field._id, valueIndex)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </>
                   )}
                 </div>
               ))}
