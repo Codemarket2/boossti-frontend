@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 import { useSelector } from 'react-redux';
 import IconButton from '@material-ui/core/IconButton';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import Skeleton from '@material-ui/lab/Skeleton';
 import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -276,7 +277,9 @@ export function FormView({
                   {valueIndex === 0 ? (
                     <>
                       <div className="w-100">
-                        {!hideField && (
+                        {hideField ? (
+                          <Skeleton height={200} />
+                        ) : (
                           <Field
                             {...field}
                             disabled={submitState.loading}
@@ -325,8 +328,14 @@ export function FormView({
                           </FormHelperText>
                         )}
                       </div>
-
-                      <IconButton onClick={() => onEditOneValue(field._id, valueIndex)}>
+                      <IconButton
+                        onClick={() => {
+                          if (field?.fieldType === 'richTextarea') {
+                            setHideField(true);
+                          }
+                          onEditOneValue(field._id, valueIndex);
+                        }}
+                      >
                         <EditIcon />
                       </IconButton>
                       <IconButton
@@ -365,7 +374,6 @@ export function FormView({
                 endIcon={<ArrowForwardIosRounded fontSize="small" />}
                 onClick={() => {
                   setSubmitState({ ...submitState, loading: true });
-
                   let validate = false;
                   if (
                     fields[page]?.options?.required &&
