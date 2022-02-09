@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useGetForm } from '@frontend/shared/hooks/form';
+import { useGetResponses } from '@frontend/shared/hooks/response';
 import { Button, Box } from '@material-ui/core';
 import FormView from './FormView';
 import ErrorLoading from '../common/ErrorLoading';
 import Overlay from '../common/Overlay';
+import { ResponseChild2 } from '../form2/Response';
 
 interface IProps {
   _id: string;
@@ -14,6 +17,8 @@ interface IProps {
 
 const initialState = {
   showForm: false,
+  responseIndex: -1,
+  responded: false,
 };
 
 export default function FieldViewWrapper({
@@ -22,8 +27,13 @@ export default function FieldViewWrapper({
   createCallback,
   customSettings,
 }: IProps): any {
+  const { attributes } = useSelector(({ auth }: any) => auth);
+  const currentUserId = attributes['custom:_id'];
+
   const { error, data } = useGetForm(_id);
-  const [state, setstate] = useState(initialState);
+  const [state, setState] = useState(initialState);
+
+  const { data: responses, error: responsesError, loading } = useGetResponses(_id, parentId);
 
   let settings;
   if (customSettings?.useCustomSettings) {
@@ -36,6 +46,13 @@ export default function FieldViewWrapper({
     };
   }
 
+  useEffect(() => {
+    const pos = responses?.getResponses?.data?.findIndex((res) => {
+      return res.createdBy?._id === currentUserId;
+    });
+    setState({ ...state, responseIndex: pos });
+  }, [responses]);
+
   if (error?.message?.includes("has coerced Null value for NonNull type 'ID!'")) {
     return null;
   }
@@ -44,13 +61,23 @@ export default function FieldViewWrapper({
     return <ErrorLoading error={error} />;
   }
 
+  if (!state.responded && !settings?.multipleResponses && state.responseIndex > -1)
+    return (
+      <ResponseChild2
+        formId={_id}
+        response={responses.getResponses.data[state.responseIndex]}
+        hideAuthor
+        hideNavigation
+      />
+    );
+
   if (settings?.widgetType === 'button') {
     return (
       <>
         <div className="text-center my-5">
           <Button
             onClick={() => {
-              setstate({ ...state, showForm: true });
+              setState({ ...state, showForm: true });
             }}
             variant="contained"
             color="primary"
@@ -65,7 +92,7 @@ export default function FieldViewWrapper({
               open={state.showForm}
               title={data.getForm.name}
               onClose={() => {
-                setstate({ ...state, showForm: false });
+                setState({ ...state, showForm: false });
               }}
             >
               <div style={{ padding: '20px' }}>
@@ -84,13 +111,15 @@ export default function FieldViewWrapper({
 
   if (settings?.widgetType === 'leaderboard') return null;
 
-  if (settings?.widgetType === 'oneField') return null;
-
   return (
     <FormView
       form={{ ...data.getForm, settings }}
       parentId={parentId}
       createCallback={createCallback}
+      setResponded={() => {
+        setState({ ...state, responded: true });
+      }}
+      fieldWiseView={settings?.widgetType === 'oneField'}
     />
   );
 }
