@@ -104,8 +104,6 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
     );
   };
 
-  console.log(listItem.fields);
-
   return (
     <>
       <Grid container>
