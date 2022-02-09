@@ -175,7 +175,7 @@ export default function RichTextarea2({ value = '', onChange }: IProps) {
 
   useEffect(() => {
     editorRef.current = {
-      CKEditor: require('@ckeditor/ckeditor5-react').CKEditor, // v3+
+      CKEditor: require('@ckeditor/ckeditor5-react').CKEditor,
       Editor: require('@frontend/ckeditor'),
     };
     setLoading(true);
