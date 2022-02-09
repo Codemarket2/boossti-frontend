@@ -1,4 +1,3 @@
-import { Fragment } from 'react';
 import moment from 'moment';
 import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -109,8 +108,8 @@ export default function FieldValueForm2({
       return (
         <>
           <RichTextarea
-            value={value ? value.value : ''}
-            onChange={(newValue) => onChange({ field: _id, value: newValue })}
+            value={value?.value || ''}
+            onChange={(newValue) => onChange({ value: newValue })}
           />
           {validateValue(validate, value, options, fieldType).error && (
             <FormHelperText className="text-danger">
