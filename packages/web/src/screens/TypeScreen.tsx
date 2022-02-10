@@ -22,40 +22,28 @@ import Switch from '@material-ui/core/Switch';
 import Breadcrumbs from '../components/common/Breadcrumbs';
 import ErrorLoading from '../components/common/ErrorLoading';
 import ListItems from '../components/list/ListItems';
-import ImageList from '../components/post/ImageList';
 import NotFound from '../components/common/NotFound';
 import Backdrop from '../components/common/Backdrop';
 import { onAlert } from '../utils/alert';
 import Fields from '../components/field/Fields';
 import InlineForm from '../components/list/InlineForm';
-import MediaForm from '../components/list/MediaForm';
-import DisplayRichText from '../components/common/DisplayRichText';
-import Overlay from '../components/common/Overlay';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Link from 'next/link';
-import PermaLink from '../components/list/PermaLink';
-// import CommentLikeShare from '../components/common/commentLikeShare/CommentLikeShare';
-// import ListItemForm from '../components/list/ListItemForm';
-// import ListItemsGrid from '../components/list/ListItemsGrid';
-// import ListTypeFields from '../components/list/ListTypeFields';
+import SeoOverlay from '../components/list/SeoOverlay';
 
 interface IProps {
   slug: string;
 }
 
+const initialState = {
+  fieldName: '',
+  showMenu: false,
+  showSeoOverlay: false,
+  selectedIndex: 0,
+};
+
 export default function Screen({ slug }: IProps) {
   const router = useRouter();
-  const [state, setState] = useState({
-    fieldName: '',
-    showMenu: false,
-    selectedIndex: 0,
-  });
-  const [seoFields, setSeoFields] = useState({
-    description: false,
-    permaLink: false,
-    media: false,
-  });
+  const [state, setState] = useState(initialState);
+
   const { handlePublish } = usePublishListType({ onAlert });
 
   const deleteCallBack = () => {
@@ -88,11 +76,6 @@ export default function Screen({ slug }: IProps) {
     setState({ ...state, fieldName: '' });
   };
 
-  const onEdit = (fieldName) => {
-    setFormValues(data.getListTypeBySlug);
-    setState({ ...state, fieldName });
-  };
-
   if (error || !data) {
     return <ErrorLoading error={error} />;
   }
@@ -105,7 +88,6 @@ export default function Screen({ slug }: IProps) {
     <div>
       <div className="d-flex justify-content-between align-content-center align-items-center my-1">
         <Breadcrumbs>
-          {/* <Link href="/types">Template</Link> */}
           <Typography color="textPrimary">
             {data.getListTypeBySlug.title.includes('-n-e-w')
               ? 'Title'
@@ -201,7 +183,7 @@ export default function Screen({ slug }: IProps) {
                   Title
                   {authorized && (
                     <Tooltip title="Edit Title">
-                      <IconButton onClick={() => onEdit('title')}>
+                      <IconButton onClick={() => setState({ ...initialState, fieldName: 'title' })}>
                         <EditIcon fontSize="small" />
                       </IconButton>
                     </Tooltip>
@@ -214,122 +196,32 @@ export default function Screen({ slug }: IProps) {
                 </Typography>
               </div>
             )}
-            <ListItem button>
-              <Link href={`#seo`}>
-                <ListItemText primary="seo" />
-              </Link>
-              <Tooltip
-                onClick={() => {
-                  onEdit('seo');
-                }}
-                title="Edit seo"
-              >
-                <IconButton size="small">
+            <Typography>
+              SEO
+              <Tooltip title="Edit seo">
+                <IconButton
+                  size="small"
+                  onClick={() => setState({ ...initialState, showSeoOverlay: true })}
+                >
                   <EditIcon fontSize="small" />
                 </IconButton>
               </Tooltip>
-            </ListItem>
-            <Overlay
-              open={state.fieldName === 'seo'}
-              title={state.fieldName}
-              onClose={() => {
-                onCancel();
-              }}
-            >
-              <div style={{ padding: '20px' }}>
-                {seoFields.description ? (
-                  <>
-                    <h2>Description</h2>
-                    <InlineForm
-                      multiline
-                      fieldName={'description'}
-                      label={'description'}
-                      seoState={seoFields}
-                      setSeoState={setSeoFields}
-                      onCancel={onCancel}
-                      formik={formik}
-                      formLoading={CRUDLoading}
-                    />
-                  </>
-                ) : (
-                  <ListItem button>
-                    <Link href={`#description`}>
-                      <ListItemText primary="Description" />
-                    </Link>
-                    <Tooltip
-                      onClick={() => {
-                        setSeoFields({ ...seoFields, description: true });
-                      }}
-                      title="Edit description"
-                    >
-                      <IconButton size="small">
-                        <EditIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                  </ListItem>
-                )}
-                {seoFields.media ? (
-                  <>
-                    <h2>Media</h2>
-                    <MediaForm
-                      state={crudState}
-                      setState={setCrudState}
-                      seoState={seoFields}
-                      setSeoState={setSeoFields}
-                      onCancel={onCancel}
-                      onSave={formik.handleSubmit}
-                      loading={CRUDLoading}
-                    />
-                  </>
-                ) : (
-                  <ListItem button>
-                    <Link href={`#media`}>
-                      <ListItemText primary="Media" />
-                    </Link>
-                    <Tooltip
-                      onClick={() => {
-                        setSeoFields({ ...seoFields, media: true });
-                      }}
-                      title="Edit media"
-                    >
-                      <IconButton size="small">
-                        <EditIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                  </ListItem>
-                )}
-                {seoFields.permaLink ? (
-                  <>
-                    <h2>PermaLink</h2>
-                    <PermaLink
-                      multiline
-                      fieldName={'slug'}
-                      seoState={seoFields}
-                      setSeoState={setSeoFields}
-                      onCancel={onCancel}
-                      formik={formik}
-                      formLoading={CRUDLoading}
-                    />
-                  </>
-                ) : (
-                  <ListItem button>
-                    <Link href={`#permaLink`}>
-                      <ListItemText primary="PermaLink" />
-                    </Link>
-                    <Tooltip
-                      onClick={() => {
-                        setSeoFields({ ...seoFields, permaLink: true });
-                      }}
-                      title="Edit permaLink"
-                    >
-                      <IconButton size="small">
-                        <EditIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                  </ListItem>
-                )}
-              </div>
-            </Overlay>
+            </Typography>
+            {state.showSeoOverlay && (
+              <SeoOverlay
+                open={state.showSeoOverlay}
+                onClose={() => setState(initialState)}
+                formik={formik}
+                crudState={crudState}
+                setCrudState={setCrudState}
+                data={data.getListTypeBySlug}
+                setFields={() => setFormValues(data.getListTypeBySlug)}
+                loading={CRUDLoading}
+                state={state}
+                setState={setState}
+                permalinkPrefix={window?.location?.origin}
+              />
+            )}
           </Paper>
           <Fields title="Sections" parentId={data.getListTypeBySlug._id} guestMode={!authorized} />
           {/* <ListTypeFields listType={data.getListTypeBySlug} /> */}

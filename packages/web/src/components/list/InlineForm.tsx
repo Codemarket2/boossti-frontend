@@ -7,8 +7,6 @@ import RichTextarea from '../common/RichTextarea2';
 interface IProps {
   label: string;
   fieldName: string;
-  setSeoState?: any;
-  seoState?: any;
   onCancel: () => void;
   multiline?: boolean;
   formik: any;
@@ -19,8 +17,6 @@ export default function InlineForm({
   label = 'Value',
   onCancel,
   multiline,
-  seoState,
-  setSeoState,
   formik,
   fieldName,
   formLoading = false,
@@ -60,13 +56,7 @@ export default function InlineForm({
             disabled={formLoading}
             variant="outlined"
             size="small"
-            onClick={() => {
-              if (fieldName == 'description') {
-                setSeoState({ ...seoState, [fieldName]: false });
-              } else {
-                onCancel();
-              }
-            }}
+            onClick={onCancel}
           >
             Cancel
           </Button>

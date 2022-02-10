@@ -31,6 +31,7 @@
     "aws-amplify": "4.1.1",
     "axios": "^0.22.0",
     "bootstrap": "4.4.1",
+    "browser-image-compression": "^1.0.17",
     "compress-images": "^2.0.4",
     "graphql": "15.5.0",
     "html-react-parser": "^1.2.7",

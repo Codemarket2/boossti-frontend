@@ -142,37 +142,31 @@ export default function LeftNavigation({
                 </ListItem>
               </>
             )}
-            {fields.length < 1 ? (
-              <div className="px-3">
-                <Skeleton height={70} />
-              </div>
-            ) : (
-              fields.map((fieldType, index) => (
-                <ListItem button key={fieldType._id} onClick={onClick}>
-                  {fieldValueCount[index] > 0 && (
-                    <ListItemIcon className="mr-n5">
-                      <Badge badgeContent={fieldValueCount[index]} color="primary" />
-                    </ListItemIcon>
-                  )}
-                  <Link href={`${slug}#${convertToSlug(fieldType.label)}`}>
-                    <ListItemText primary={fieldType.label} />
-                  </Link>
-                  {!previewMode && (
-                    <ListItemSecondaryAction>
-                      <IconButton
-                        edge="end"
-                        aria-label="more"
-                        onClick={({ currentTarget }) =>
-                          setState({ ...state, selectedField: fieldType, showMenu: currentTarget })
-                        }
-                      >
-                        <MoreVertIcon />
-                      </IconButton>
-                    </ListItemSecondaryAction>
-                  )}
-                </ListItem>
-              ))
-            )}
+            {fields.map((fieldType, index) => (
+              <ListItem button key={fieldType._id} onClick={onClick}>
+                {fieldValueCount[index] > 0 && (
+                  <ListItemIcon className="mr-n5">
+                    <Badge badgeContent={fieldValueCount[index]} color="primary" />
+                  </ListItemIcon>
+                )}
+                <Link href={`${slug}#${convertToSlug(fieldType.label)}`}>
+                  <ListItemText primary={fieldType.label} />
+                </Link>
+                {!previewMode && (
+                  <ListItemSecondaryAction>
+                    <IconButton
+                      edge="end"
+                      aria-label="more"
+                      onClick={({ currentTarget }) =>
+                        setState({ ...state, selectedField: fieldType, showMenu: currentTarget })
+                      }
+                    >
+                      <MoreVertIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                )}
+              </ListItem>
+            ))}
           </List>
         )}
       </Paper>
@@ -187,7 +181,7 @@ export default function LeftNavigation({
           <ListItemIcon className="mr-n4">
             <GridIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText primary=" Edit Grid" />
+          <ListItemText primary="Edit Grid" />
         </MenuItem>
       </Menu>
     </div>

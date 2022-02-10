@@ -9,6 +9,7 @@ import { IHooksProps } from '../../types/common';
 import { fileUpload } from '../../utils/fileUpload';
 import { omitTypename } from '../../utils/omitTypename';
 import { ADDED_LIST_TYPE, UPDATED_LIST_TYPE } from '../../graphql/subscription/list';
+import { compressedFile } from '../../utils/compressFile';
 
 const defaultQueryVariables = { limit: 25, page: 1 };
 
@@ -207,7 +208,7 @@ export function useCRUDListTypes({ onAlert, createCallBack, updateCallBack }: IP
         let newMedia = [];
         let newPayload: any = { ...payload };
         if (state.tempMediaFiles.length > 0) {
-          newMedia = await fileUpload(state.tempMediaFiles, '/list-items');
+          newMedia = await fileUpload(state.tempMediaFiles, '/list-items', compressedFile);
           newMedia = newMedia.map((n, i) => ({ url: n, caption: state.tempMedia[i].caption }));
         }
         let media = [...state.media, ...newMedia];
@@ -229,8 +230,8 @@ export function useCRUDListTypes({ onAlert, createCallBack, updateCallBack }: IP
           tempMedia: [],
         });
       } catch (error) {
-        if (error?.message?.includes('duplicate key')) {
-          return setFieldError('title', 'This title is already taken');
+        if (error?.message?.includes('duplicate key error')) {
+          return setFieldError('slug', 'This slug is already taken');
         }
         onAlert('Error', error.message);
       }
