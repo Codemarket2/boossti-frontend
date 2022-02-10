@@ -34,7 +34,8 @@ export default function LoadingButton({
       color={color}
       disabled={disabled || loading}
       className={className}
-      onClick={onClick}>
+      onClick={onClick}
+    >
       {children}
       {loading && <CircularProgress style={{ position: 'absolute' }} size={25} />}
     </Button>

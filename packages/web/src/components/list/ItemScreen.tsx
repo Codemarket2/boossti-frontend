@@ -320,7 +320,6 @@ export default function ItemScreen({
                 </Typography>
               </>
             )}
-            {console.log(state.fieldName)}
             <Overlay
               open={state.fieldName === 'description' || state.fieldName === 'media'}
               title={state.fieldName}

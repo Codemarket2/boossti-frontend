@@ -36,13 +36,12 @@ export default function DisplayRichText({ value = 'dd' }: IProps) {
         replace: (domNode: any) => {
           if (domNode.name == 'a' && domNode.attribs.class == 'mention') {
             return (
-                <span
+              <span
                 style={{ cursor: 'pointer', color: 'blue' }}
                 onClick={() => {
-                  if(domNode.attribs['data-type']=="listitem"){
-                  getData(domNode.attribs['data-user-id']);
-                  }
-                  else{
+                  if (domNode.attribs['data-type'] == 'listitem') {
+                    getData(domNode.attribs['data-user-id']);
+                  } else {
                     router.push(`/user/${domNode.attribs['data-user-id']}`);
                   }
                 }}

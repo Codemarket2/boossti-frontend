@@ -85,7 +85,8 @@ export default function SignInForm() {
           loading={formik.isSubmitting}
           disabled={formik.isSubmitting}
           mode="contained"
-          onPress={formik.handleSubmit}>
+          onPress={formik.handleSubmit}
+        >
           Sign Up
         </Button>
       </InputGroup>

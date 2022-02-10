@@ -1,4 +1,4 @@
-import { getMetaTags } from '@frontend/shared';
+import { getListTypeMetaTags } from '@frontend/shared/hooks/metaTags';
 import TypeScreen from '../../src/screens/TypeScreen';
 import Loading from '../../src/components/common/Loading';
 import Head from '../../src/components/common/Head';
@@ -25,7 +25,12 @@ export default function Page({ metaTags, slug }: IProps) {
 
 export async function getServerSideProps(context) {
   const { slug } = context.query;
-  const metaTags = await getMetaTags(slug);
+
+  const metaTags = await getListTypeMetaTags(slug);
+  if (metaTags) {
+    metaTags.url = `/${slug}`;
+  }
+
   return {
     props: { metaTags, slug },
   };

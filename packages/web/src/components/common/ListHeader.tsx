@@ -40,7 +40,8 @@ export default function ListHeader({
     <Paper
       className="px-2 d-flex flex-row-reverse justify-content-between align-items-center"
       variant="outlined"
-      style={{ minHeight: 60 }}>
+      style={{ minHeight: 60 }}
+    >
       <div className={`d-flex align-items-center w-100 ${buttonClass}`}>
         {matches && !alwaysHideSearch ? (
           <TextField

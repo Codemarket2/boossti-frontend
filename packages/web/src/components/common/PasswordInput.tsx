@@ -52,7 +52,8 @@ export default function PasswordInput({
       className={className}
       variant={variant}
       size={size}
-      error={error}>
+      error={error}
+    >
       <InputLabel htmlFor={`outlined-adornment-${name}`}>{label}</InputLabel>
       <OutlinedInput
         id={`outlined-adornment-${name}`}
@@ -66,7 +67,8 @@ export default function PasswordInput({
               aria-label="toggle password visibility"
               onClick={handleClickShowPassword}
               onMouseDown={handleMouseDownPassword}
-              edge="end">
+              edge="end"
+            >
               {showPassword ? <Visibility /> : <VisibilityOff />}
             </IconButton>
           </InputAdornment>

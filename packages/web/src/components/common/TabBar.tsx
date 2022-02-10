@@ -33,7 +33,8 @@ export default function CenteredTabs() {
         onChange={handleChange}
         indicatorColor="primary"
         textColor="primary"
-        centered>
+        centered
+      >
         <Tab label="Feeds" value={routes.feeds} />
         <Tab label="My Story" value={routes.myStory} />
         <Tab label="Saved" value={routes.saved} />

@@ -97,11 +97,9 @@ export default function FormFields({
 
   const handleNavigate = (fieldLabel) => {
     if (isSection) {
-      // console.log(window.location);
       const url = `${window.location.origin}${window.location.pathname}#${convertToSlug(
         fieldLabel,
       )}`;
-      // console.log(url);
       router.push(url);
     }
   };
@@ -116,7 +114,6 @@ export default function FormFields({
       } else {
         document?.execCommand('copy', true, url);
       }
-      // console.log(url);
       setValues(initialValues);
     }
   };

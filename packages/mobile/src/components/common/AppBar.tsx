@@ -39,7 +39,8 @@ export default function AppBar({
         <Menu
           visible={visible}
           onDismiss={closeMenu}
-          anchor={<Appbar.Action icon="account-circle" color="white" onPress={openMenu} />}>
+          anchor={<Appbar.Action icon="account-circle" color="white" onPress={openMenu} />}
+        >
           <Menu.Item onPress={() => {}} title="Profile" disabled />
           <Menu.Item onPress={handleLogout} title="Logout" />
         </Menu>

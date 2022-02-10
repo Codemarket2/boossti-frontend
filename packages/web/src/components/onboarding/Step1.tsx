@@ -14,7 +14,8 @@ export default function Step1({ handleSelectRole }: IProps) {
           color="primary"
           className="mb-4"
           size="large"
-          onClick={() => handleSelectRole('coach')}>
+          onClick={() => handleSelectRole('coach')}
+        >
           Are you a coach?
         </Button>
         <br />
@@ -22,7 +23,8 @@ export default function Step1({ handleSelectRole }: IProps) {
           variant="contained"
           color="primary"
           size="large"
-          onClick={() => handleSelectRole('client')}>
+          onClick={() => handleSelectRole('client')}
+        >
           Are you a client?
         </Button>
       </div>

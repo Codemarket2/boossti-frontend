@@ -48,7 +48,8 @@ export default function VerifyEmailForm({
           fullWidth
           data-testid="verify-button"
           type="submit"
-          loading={disabled || formik.isSubmitting}>
+          loading={disabled || formik.isSubmitting}
+        >
           Verify
         </LoadingButton>
       </InputGroup>
@@ -59,7 +60,8 @@ export default function VerifyEmailForm({
           variant="outlined"
           type="button"
           disabled={disabled || formik.isSubmitting}
-          onClick={onLabelClick}>
+          onClick={onLabelClick}
+        >
           Cancel
         </LoadingButton>
       </InputGroup>

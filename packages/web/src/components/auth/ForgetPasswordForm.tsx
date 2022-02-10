@@ -85,7 +85,8 @@ export default function ForgetPasswordForm({ handleShowSignInForm }: IProps) {
             type="button"
             variant="outlined"
             onClick={showSignInForm}
-            loading={formik1.isSubmitting}>
+            loading={formik1.isSubmitting}
+          >
             Cancel
           </LoadingButton>
         </InputGroup>
@@ -116,7 +117,8 @@ export default function ForgetPasswordForm({ handleShowSignInForm }: IProps) {
             fullWidth
             data-testid="reset-code-button"
             type="submit"
-            loading={formik1.isSubmitting}>
+            loading={formik1.isSubmitting}
+          >
             Get Password Reset Code
           </LoadingButton>
         </InputGroup>
@@ -127,7 +129,8 @@ export default function ForgetPasswordForm({ handleShowSignInForm }: IProps) {
             type="button"
             variant="outlined"
             onClick={showSignInForm}
-            disabled={formik1.isSubmitting}>
+            disabled={formik1.isSubmitting}
+          >
             Cancel
           </LoadingButton>
         </InputGroup>

@@ -8,5 +8,5 @@ oneMonthBack = new Date(oneMonthBack.setMonth(oneMonthBack.getMonth() - 1));
 export default {
   oneDayBack,
   oneWeekBack,
-  oneMonthBack
+  oneMonthBack,
 };

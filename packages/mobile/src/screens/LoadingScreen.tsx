@@ -8,7 +8,8 @@ export default function LoadingScreen() {
       style={{ justifyContent: 'center' }}
       safeArea
       barStyle="dark-content"
-      barBackgroundColor="white">
+      barBackgroundColor="white"
+    >
       <ActivityIndicator size="large" />
     </Screen>
   );

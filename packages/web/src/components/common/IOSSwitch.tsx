@@ -37,7 +37,7 @@ const IOSSwitch = withStyles((theme) => ({
   },
   checked: {},
   focusVisible: {},
-}))(({ classes, ...props }:any) => {
+}))(({ classes, ...props }: any) => {
   return (
     <Switch
       focusVisibleClassName={classes.focusVisible}
