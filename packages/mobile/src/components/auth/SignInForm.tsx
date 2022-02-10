@@ -67,14 +67,16 @@ export default function SignInForm() {
             loading={formik.isSubmitting}
             disabled={formik.isSubmitting}
             mode="contained"
-            onPress={formik.handleSubmit}>
+            onPress={formik.handleSubmit}
+          >
             Sign In
           </Button>
         </InputGroup>
         <InputGroup>
           <TouchableOpacity
             disabled={formik.isSubmitting}
-            onPress={() => setState({ ...state, showForgetPasswordForm: true })}>
+            onPress={() => setState({ ...state, showForgetPasswordForm: true })}
+          >
             <Subheading style={{ textAlign: 'center', marginTop: 10 }}>Forgot Password?</Subheading>
           </TouchableOpacity>
         </InputGroup>

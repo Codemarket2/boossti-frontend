@@ -19,7 +19,8 @@ function MainStack() {
     <Stack.Navigator
       screenOptions={{
         header: (props) => <AppBar {...props} authenticated={true} />,
-      }}>
+      }}
+    >
       <Stack.Screen name="FacebookScreen" component={FacebookScreen} />
       <Stack.Screen name="PageFeedFormScreen" component={PageFeedFormScreen} />
       <Stack.Screen name="PagesScreen" component={PagesScreen} />

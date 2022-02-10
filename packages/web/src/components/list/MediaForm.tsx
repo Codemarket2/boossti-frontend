@@ -16,7 +16,6 @@ interface IProps {
 export default function MediaForm({ state, setState, onCancel, onSave, loading = false }: IProps) {
   return (
     <div>
-      {console.log(state)}
       <Typography variant="h6" className="d-flex align-items-center justify-content-betweens">
         Media
         <div className="ml-5 d-flex align-items-center">

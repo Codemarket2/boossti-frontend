@@ -68,7 +68,8 @@ export default function ForgetPasswordForm({ handleShowSignInForm }: IProps) {
             loading={formik2.isSubmitting}
             disabled={formik2.isSubmitting}
             mode="contained"
-            onPress={formik2.handleSubmit}>
+            onPress={formik2.handleSubmit}
+          >
             Reset Password
           </Button>
         </InputGroup>
@@ -104,7 +105,8 @@ export default function ForgetPasswordForm({ handleShowSignInForm }: IProps) {
           loading={formik1.isSubmitting}
           disabled={formik1.isSubmitting}
           mode="contained"
-          onPress={formik1.handleSubmit}>
+          onPress={formik1.handleSubmit}
+        >
           Get Password Reset Code
         </Button>
       </InputGroup>

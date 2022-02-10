@@ -62,7 +62,8 @@ export default function Share({ itemSlug, index, commentId, fieldTitle }: IShare
         open={open}
         onClose={handleClose}
         onOpen={handleOpen}
-        title={isCopied ? 'copied' : 'copy share link'}>
+        title={isCopied ? 'copied' : 'copy share link'}
+      >
         <ShareIcon onClick={handleCopyShareLink} />
       </Tooltip>
     </React.Fragment>

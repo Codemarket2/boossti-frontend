@@ -174,7 +174,6 @@ export default function Fields({
       }
       position = (endPosition - startPosition) / 2 + startPosition;
     }
-    // console.log('new position', position);
     const updateId = fields[result.source.index]._id;
 
     let tempField = fields.map((f, i) => (i === result.source.index ? { ...f, position } : f));

@@ -92,5 +92,5 @@ export default [
   { code: '+84', country: 'Vietnam' },
   { code: '+967', country: 'Yemen' },
   { code: '+260', country: 'Zambia' },
-  { code: '+263', country: 'Zimbabwe' }
+  { code: '+263', country: 'Zimbabwe' },
 ];

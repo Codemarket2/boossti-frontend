@@ -45,7 +45,8 @@ export default function MentionInput({
       value={value}
       onChange={handleChange}
       placeholder={placeholder}
-      classNames={classNames}>
+      classNames={classNames}
+    >
       <Mention
         trigger="@"
         data={suggestions}

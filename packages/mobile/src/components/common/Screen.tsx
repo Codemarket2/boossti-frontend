@@ -47,7 +47,8 @@ export default function Screen({
           style={style}
           barStyle={barStyle}
           barBackgroundColor={barBackgroundColor || defaultColor}
-          loadingColor={theme.colors.accent}>
+          loadingColor={theme.colors.accent}
+        >
           {children}
         </LoadingBarView>
       </StyledSafeAreaView>
@@ -59,7 +60,8 @@ export default function Screen({
       style={style}
       barStyle={barStyle}
       barBackgroundColor={barBackgroundColor}
-      loadingColor={theme.colors.accent}>
+      loadingColor={theme.colors.accent}
+    >
       {children}
     </LoadingBarView>
   );

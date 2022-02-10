@@ -3,7 +3,8 @@ export default function Footer() {
     <div className="container">
       <div
         className="py-1"
-        style={{ border: '1px solid #bdbdbc', borderRight: 'none', borderLeft: 'none' }}>
+        style={{ border: '1px solid #bdbdbc', borderRight: 'none', borderLeft: 'none' }}
+      >
         <div className="d-flex justify-content-center align-items-center align-content-center">
           <h3 style={{ fontSize: '15px' }} className="m-0">
             Follow Us On:

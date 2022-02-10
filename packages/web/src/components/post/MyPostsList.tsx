@@ -44,14 +44,16 @@ export default function MyPostsList() {
         showSearch={postsState.showSearch}
         onHide={() => postsSetState({ ...postsState, search: '', showSearch: false })}
         onShow={() => postsSetState({ ...postsState, search: '', showSearch: true })}
-        onChange={(value) => postsSetState({ ...postsState, search: value })}>
+        onChange={(value) => postsSetState({ ...postsState, search: value })}
+      >
         <Link href="/create-post">
           <Button
             className="inline-block"
             size="small"
             startIcon={<AddIcon />}
             variant="contained"
-            color="primary">
+            color="primary"
+          >
             CreatePost
           </Button>
         </Link>
@@ -77,7 +79,8 @@ export default function MyPostsList() {
         anchorEl={postsState.showMenu}
         keepMounted
         open={Boolean(postsState.showMenu)}
-        onClose={() => postsSetState({ ...postsState, showMenu: null, selectedPost: null })}>
+        onClose={() => postsSetState({ ...postsState, showMenu: null, selectedPost: null })}
+      >
         <MenuItem onClick={() => postsSetState({ ...postsState, showEditModal: true })}>
           <ListItemIcon className="mr-n4">
             <EditIcon fontSize="small" />
@@ -88,7 +91,8 @@ export default function MyPostsList() {
           onClick={async () => {
             await handleDeletePost();
             alert('Post deleted!');
-          }}>
+          }}
+        >
           <ListItemIcon className="mr-n4">
             <DeleteIcon fontSize="small" />
           </ListItemIcon>

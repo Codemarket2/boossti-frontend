@@ -8,9 +8,7 @@ interface IDeleteProps extends IHooksProps {
 }
 
 export function useDeleteForm({ onAlert }: IDeleteProps) {
-  const [deleteFieldMutation, { loading: deleteLoading }] = useMutation(
-    DELETE_FORM
-  );
+  const [deleteFieldMutation, { loading: deleteLoading }] = useMutation(DELETE_FORM);
   const handleDelete = async (_id: string, deleteCallBack?: any) => {
     try {
       const deleteInCache = (client) => {

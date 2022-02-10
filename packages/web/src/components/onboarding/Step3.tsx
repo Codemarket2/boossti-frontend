@@ -49,7 +49,8 @@ export default function Step3({ handleSubscribe }: IProps) {
           variant="contained"
           color="primary"
           size="large"
-          onClick={() => handleSubscribe('annual')}>
+          onClick={() => handleSubscribe('annual')}
+        >
           Annual (Best Value) $315
           <br />
           First 14 days free
@@ -60,7 +61,8 @@ export default function Step3({ handleSubscribe }: IProps) {
           variant="outlined"
           color="primary"
           size="large"
-          onClick={() => handleSubscribe('monthly')}>
+          onClick={() => handleSubscribe('monthly')}
+        >
           Monthly $29
           <br />
           First 7 days free
@@ -78,7 +80,8 @@ export default function Step3({ handleSubscribe }: IProps) {
           variant="contained"
           color="primary"
           size="large"
-          onClick={() => handleSubscribe('trial')}>
+          onClick={() => handleSubscribe('trial')}
+        >
           try free and subscribe
         </Button>
       </div>

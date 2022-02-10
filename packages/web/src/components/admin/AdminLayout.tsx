@@ -91,7 +91,8 @@ export default function ResponsiveDrawer({ window, children }: Props) {
               aria-label="open drawer"
               edge="start"
               onClick={handleDrawerToggle}
-              className={classes.menuButton}>
+              className={classes.menuButton}
+            >
               <MenuIcon />
             </IconButton>
             <Typography className="font-weight-bold" color="textPrimary" variant="h5" noWrap>
@@ -112,7 +113,8 @@ export default function ResponsiveDrawer({ window, children }: Props) {
             }}
             ModalProps={{
               keepMounted: true, // Better open performance on mobile.
-            }}>
+            }}
+          >
             <AdminDrawer darkMode={darkMode} />
           </Drawer>
         </nav>

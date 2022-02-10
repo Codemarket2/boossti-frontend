@@ -35,9 +35,8 @@ export default function SignInForm({ signIn = true }: { signIn?: boolean }) {
           // disabled={false}
           mode="contained"
           icon="google"
-          onPress={() =>
-            Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Google })
-          }>
+          onPress={() => Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Google })}
+        >
           Sign {signIn ? 'in' : 'up'} with Google
         </Button>
       </InputGroup>
@@ -49,7 +48,8 @@ export default function SignInForm({ signIn = true }: { signIn?: boolean }) {
             Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Facebook })
           }
           mode="contained"
-          icon="facebook">
+          icon="facebook"
+        >
           Sign {signIn ? 'in' : 'up'} with Facebook
         </Button>
       </InputGroup>

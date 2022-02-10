@@ -7,7 +7,7 @@ import { ApolloProvider } from '@apollo/client/react';
 import { client, guestClient } from '@frontend/shared/graphql';
 import awsExports from '@frontend/shared/aws-exports';
 import { store } from '@frontend/shared/redux';
-import { useLogoHook } from '@frontend/shared';
+import { useLogoHook } from '@frontend/shared/hooks/metaTags';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { useCurrentAuthenticatedUser } from '@frontend/shared/hooks/auth';
 import { createMuiTheme, ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';

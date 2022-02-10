@@ -13,7 +13,8 @@ export default function LoadingModal() {
           justifyContent: 'center',
           flex: 1,
           backgroundColor: 'rgba(0,0,0,0.7)',
-        }}>
+        }}
+      >
         <ActivityIndicator animating={true} color={colors.secondary.main} size={'large'} />
       </View>
     </Modal>

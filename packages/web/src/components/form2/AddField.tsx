@@ -119,7 +119,6 @@ export default function FieldForm({
         <RichTextarea
           value={formik?.values?.staticText}
           onChange={(val) => {
-            // console.log(val);
             formik.setFieldValue('staticText', val);
           }}
         />

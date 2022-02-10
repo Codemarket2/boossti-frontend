@@ -30,7 +30,8 @@ export default function TagTabs({ handleSelectTag }: any) {
         textColor="primary"
         variant="scrollable"
         scrollButtons="auto"
-        className="mt-n2">
+        className="mt-n2"
+      >
         {data.getListTypes.data.map((listType) => (
           <Chip
             label={listType.title.includes('-n-e-w') ? 'Title' : listType.title}

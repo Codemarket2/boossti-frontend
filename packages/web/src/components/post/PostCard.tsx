@@ -34,7 +34,8 @@ export default function PostCard({ post, onClickMore = () => {}, authenticated =
           action={
             <IconButton
               aria-label="settings"
-              onClick={(event) => onClickMore(event.currentTarget, post)}>
+              onClick={(event) => onClickMore(event.currentTarget, post)}
+            >
               <MoreVertIcon />
             </IconButton>
           }
