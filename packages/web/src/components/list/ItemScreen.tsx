@@ -43,6 +43,9 @@ import ListItemsFields from './ListItemsFields';
 import ListItemsFieldsValue from './ListItemsFieldsValue';
 import UnAuthorised from '../common/UnAuthorised';
 import Overlay from '../common/Overlay';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import PermaLink from './PermaLink';
 
 interface IProps {
   slug: string;
@@ -82,6 +85,11 @@ export default function ItemScreen({
   const matches = useMediaQuery(theme.breakpoints.down('xs'));
   const { setting, auth } = useSelector((state: any) => state);
   const [state, setState] = useState({ fieldName: '', fields: [], hideLeftNavigation: false });
+  const [seoFields, setSeoFields] = useState({
+    description: false,
+    permaLink: false,
+    media: false,
+  });
   const [fieldValueCount, setFieldValueCount] = useState({});
   const { data, error } = useGetListItemBySlug({ slug });
   const authorized = useAuthorization([data?.getListItemBySlug?.createdBy?._id], true);
@@ -321,34 +329,103 @@ export default function ItemScreen({
               </>
             )}
             <Overlay
-              open={state.fieldName === 'description' || state.fieldName === 'media'}
+              open={state.fieldName === 'seo'}
               title={state.fieldName}
               onClose={() => {
                 onCancel();
               }}
             >
               <div style={{ padding: '20px' }}>
-                {state.fieldName === 'description' && (
+                {seoFields.description ? (
                   <>
+                    <h2>Description</h2>
                     <InlineForm
                       multiline
-                      fieldName={state.fieldName}
-                      label={state.fieldName}
+                      fieldName={'description'}
+                      label={'description'}
+                      seoState={seoFields}
+                      setSeoState={setSeoFields}
                       onCancel={onCancel}
                       formik={formik}
                       formLoading={CRUDLoading}
                     />
-                    <DisplayRichText value={data.getListItemBySlug.description} />
                   </>
+                ) : (
+                  <ListItem button>
+                    <Link href={`#description`}>
+                      <ListItemText primary="Description" />
+                    </Link>
+                    <Tooltip
+                      onClick={() => {
+                        setSeoFields({ ...seoFields, description: true });
+                      }}
+                      title="Edit description"
+                    >
+                      <IconButton size="small">
+                        <EditIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  </ListItem>
                 )}
-                {state.fieldName === 'media' && (
-                  <MediaForm
-                    state={crudState}
-                    setState={setCrudState}
-                    onCancel={onCancel}
-                    onSave={formik.handleSubmit}
-                    loading={CRUDLoading}
-                  />
+                {seoFields.media ? (
+                  <>
+                    <h2>Media</h2>
+                    <MediaForm
+                      state={crudState}
+                      setState={setCrudState}
+                      seoState={seoFields}
+                      setSeoState={setSeoFields}
+                      onCancel={onCancel}
+                      onSave={formik.handleSubmit}
+                      loading={CRUDLoading}
+                    />
+                  </>
+                ) : (
+                  <ListItem button>
+                    <Link href={`#media`}>
+                      <ListItemText primary="Media" />
+                    </Link>
+                    <Tooltip
+                      onClick={() => {
+                        setSeoFields({ ...seoFields, media: true });
+                      }}
+                      title="Edit media"
+                    >
+                      <IconButton size="small">
+                        <EditIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  </ListItem>
+                )}
+                {seoFields.permaLink ? (
+                  <>
+                    <h2>PermaLink</h2>
+                    <PermaLink
+                      multiline
+                      fieldName={'slug'}
+                      seoState={seoFields}
+                      setSeoState={setSeoFields}
+                      onCancel={onCancel}
+                      formik={formik}
+                      formLoading={CRUDLoading}
+                    />
+                  </>
+                ) : (
+                  <ListItem button>
+                    <Link href={`#permaLink`}>
+                      <ListItemText primary="PermaLink" />
+                    </Link>
+                    <Tooltip
+                      onClick={() => {
+                        setSeoFields({ ...seoFields, permaLink: true });
+                      }}
+                      title="Edit permaLink"
+                    >
+                      <IconButton size="small">
+                        <EditIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  </ListItem>
                 )}
               </div>
             </Overlay>

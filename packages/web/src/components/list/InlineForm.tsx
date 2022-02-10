@@ -7,6 +7,8 @@ import RichTextarea from '../common/RichTextarea2';
 interface IProps {
   label: string;
   fieldName: string;
+  setSeoState?: any;
+  seoState?: any;
   onCancel: () => void;
   multiline?: boolean;
   formik: any;
@@ -17,6 +19,8 @@ export default function InlineForm({
   label = 'Value',
   onCancel,
   multiline,
+  seoState,
+  setSeoState,
   formik,
   fieldName,
   formLoading = false,
@@ -27,7 +31,7 @@ export default function InlineForm({
         <InputGroup>
           {multiline ? (
             <RichTextarea
-              value={formik.values[fieldName].includes('-n-e-w') ? '' : formik.values[fieldName]}
+              value={formik?.values[fieldName]?.includes('-n-e-w') ? '' : formik?.values[fieldName]}
               onChange={(value) => formik.setFieldValue(fieldName, value)}
             />
           ) : (
@@ -40,10 +44,10 @@ export default function InlineForm({
               multiline={multiline}
               rows={multiline ? 4 : null}
               disabled={formik.isSubmitting}
-              value={formik.values[fieldName].includes('-n-e-w') ? '' : formik.values[fieldName]}
-              onChange={formik.handleChange}
-              error={formik.touched[fieldName] && Boolean(formik.errors[fieldName])}
-              helperText={formik.touched[fieldName] && formik.errors[fieldName]}
+              value={formik?.values[fieldName]?.includes('-n-e-w') ? '' : formik?.values[fieldName]}
+              onChange={formik?.handleChange}
+              error={formik?.touched[fieldName] && Boolean(formik?.errors[fieldName])}
+              helperText={formik?.touched[fieldName] && formik?.errors[fieldName]}
             />
           )}
         </InputGroup>
@@ -56,7 +60,13 @@ export default function InlineForm({
             disabled={formLoading}
             variant="outlined"
             size="small"
-            onClick={onCancel}
+            onClick={() => {
+              if (fieldName == 'description') {
+                setSeoState({ ...seoState, [fieldName]: false });
+              } else {
+                onCancel();
+              }
+            }}
           >
             Cancel
           </Button>

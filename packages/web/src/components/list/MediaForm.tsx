@@ -8,6 +8,8 @@ import LoadingButton from '../common/LoadingButton';
 interface IProps {
   setState: any;
   state: any;
+  setSeoState?: any;
+  seoState?: any;
   onCancel: () => void;
   onSave: () => void;
   loading: boolean;
@@ -35,7 +37,9 @@ export default function MediaForm({ state, setState, onCancel, onSave, loading =
           <Tooltip title="Cancel">
             <Button
               disabled={loading}
-              onClick={onCancel}
+              onClick={() => {
+              setSeoState({ ...seoState, media: false });
+              }}
               size="small"
               variant="outlined"
               component="span"

@@ -145,6 +145,7 @@ interface IListTypesFormValues {
   edit: boolean;
   title: string;
   description: string;
+  slug: string;
 }
 
 const listTypesDefaultValue = {
@@ -152,6 +153,7 @@ const listTypesDefaultValue = {
   edit: false,
   title: '',
   description: '',
+  slug: '',
 };
 
 interface IProps extends IHooksProps {
@@ -166,6 +168,7 @@ export function useCreateListType({ onAlert }: IHooksProps) {
       const payload = {
         title: `${uuid()}-${new Date().getTime()}-n-e-w`,
         description: '',
+        slug: '',
         media: [],
       };
       const res = await createListTypeMutation({
@@ -267,6 +270,7 @@ export function useCRUDListTypes({ onAlert, createCallBack, updateCallBack }: IP
     formik.setFieldValue('edit', true, false);
     formik.setFieldValue('title', vType.title, false);
     formik.setFieldValue('description', vType.description, false);
+    formik.setFieldValue('slug', vType.slug, false);
     formik.setFieldValue('_id', vType._id, false);
     setState({
       ...state,

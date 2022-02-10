@@ -140,6 +140,7 @@ interface IListItemsFormValues {
   edit: boolean;
   title: string;
   description: string;
+  slug: string;
   types: [string];
 }
 
@@ -148,6 +149,7 @@ const listItemsDefaultValue = {
   edit: false,
   title: '',
   description: '',
+  slug: '',
 };
 
 interface IProps extends IHooksProps {
@@ -185,7 +187,7 @@ export function useCRUDListItems({ onAlert, types, createCallBack, updateCallBac
         newPayload = { ...newPayload, media, types };
         if (newPayload.edit) {
           const res = await onUpdate(newPayload);
-          // console.log('onUpdate res', res);
+          console.log('onUpdate res', res);
           updateCallBack(res.data.updateListItem.slug);
         } else {
           let res = await onCreate(newPayload);
@@ -196,7 +198,6 @@ export function useCRUDListItems({ onAlert, types, createCallBack, updateCallBac
       }
     },
   });
-
   const onCreate = async (payload) => {
     // const createInCache = (client, mutationResult) => {
     //   const { getListItems } = client.readQuery({
@@ -247,6 +248,7 @@ export function useCRUDListItems({ onAlert, types, createCallBack, updateCallBac
     formik.setFieldValue('edit', true, false);
     formik.setFieldValue('title', item.title, false);
     formik.setFieldValue('description', item.description, false);
+    formik.setFieldValue('slug', item.slug, false);
     formik.setFieldValue('_id', item._id, false);
 
     setState({
