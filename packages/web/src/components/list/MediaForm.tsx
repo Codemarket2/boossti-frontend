@@ -37,9 +37,7 @@ export default function MediaForm({ state, setState, onCancel, onSave, loading =
           <Tooltip title="Cancel">
             <Button
               disabled={loading}
-              onClick={() => {
-              setSeoState({ ...seoState, media: false });
-              }}
+              onClick={onCancel}
               size="small"
               variant="outlined"
               component="span"
