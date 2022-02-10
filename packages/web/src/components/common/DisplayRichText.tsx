@@ -40,9 +40,9 @@ export default function DisplayRichText({ value = '' }: IProps) {
                 style={{ cursor: 'pointer', color: 'blue' }}
                 onClick={() => {
                   if (domNode.attribs['data-type'] == 'listitem') {
-                    getData(domNode.attribs['data-user-id']);
+                    getData(domNode.attribs['data-id']);
                   } else {
-                    router.push(`/user/${domNode.attribs['data-user-id']}`);
+                    router.push(`/user/${domNode.attribs['data-id']}`);
                   }
                 }}
               >
