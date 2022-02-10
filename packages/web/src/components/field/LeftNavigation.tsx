@@ -19,8 +19,8 @@ import { useUpdateItemLayout } from '@frontend/shared/hooks/list';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import GridIcon from '@material-ui/icons/GridOn';
-import { onAlert } from '../../utils/alert';
 import EditIcon from '@material-ui/icons/Edit';
+import { onAlert } from '../../utils/alert';
 
 const breakpoints = [
   { name: 'xs', label: 'Extra Small' },
@@ -126,29 +126,14 @@ export default function LeftNavigation({
             {!previewMode && (
               <>
                 <ListItem button>
-                  <Link href={`${slug}#description`}>
-                    <ListItemText primary="Description" />
+                  <Link href={`#seo`}>
+                    <ListItemText primary="seo" />
                   </Link>
                   <Tooltip
                     onClick={() => {
-                      setEditValue('description');
+                      setEditValue('seo');
                     }}
-                    title="Edit Description"
-                  >
-                    <IconButton size="small">
-                      <EditIcon fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
-                </ListItem>
-                <ListItem button>
-                  <Link href={`${slug}#media`}>
-                    <ListItemText primary="Media" />
-                  </Link>
-                  <Tooltip
-                    onClick={() => {
-                      setEditValue('media');
-                    }}
-                    title="Edit Media"
+                    title="Edit seo"
                   >
                     <IconButton size="small">
                       <EditIcon fontSize="small" />
@@ -157,37 +142,31 @@ export default function LeftNavigation({
                 </ListItem>
               </>
             )}
-            {fields.length < 1 ? (
-              <div className="px-3">
-                <Skeleton height={70} />
-              </div>
-            ) : (
-              fields.map((fieldType, index) => (
-                <ListItem button key={fieldType._id} onClick={onClick}>
-                  {fieldValueCount[index] > 0 && (
-                    <ListItemIcon className="mr-n5">
-                      <Badge badgeContent={fieldValueCount[index]} color="primary" />
-                    </ListItemIcon>
-                  )}
-                  <Link href={`${slug}#${convertToSlug(fieldType.label)}`}>
-                    <ListItemText primary={fieldType.label} />
-                  </Link>
-                  {!previewMode && (
-                    <ListItemSecondaryAction>
-                      <IconButton
-                        edge="end"
-                        aria-label="more"
-                        onClick={({ currentTarget }) =>
-                          setState({ ...state, selectedField: fieldType, showMenu: currentTarget })
-                        }
-                      >
-                        <MoreVertIcon />
-                      </IconButton>
-                    </ListItemSecondaryAction>
-                  )}
-                </ListItem>
-              ))
-            )}
+            {fields.map((fieldType, index) => (
+              <ListItem button key={fieldType._id} onClick={onClick}>
+                {fieldValueCount[index] > 0 && (
+                  <ListItemIcon className="mr-n5">
+                    <Badge badgeContent={fieldValueCount[index]} color="primary" />
+                  </ListItemIcon>
+                )}
+                <Link href={`${slug}#${convertToSlug(fieldType.label)}`}>
+                  <ListItemText primary={fieldType.label} />
+                </Link>
+                {!previewMode && (
+                  <ListItemSecondaryAction>
+                    <IconButton
+                      edge="end"
+                      aria-label="more"
+                      onClick={({ currentTarget }) =>
+                        setState({ ...state, selectedField: fieldType, showMenu: currentTarget })
+                      }
+                    >
+                      <MoreVertIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                )}
+              </ListItem>
+            ))}
           </List>
         )}
       </Paper>
@@ -202,7 +181,7 @@ export default function LeftNavigation({
           <ListItemIcon className="mr-n4">
             <GridIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText primary=" Edit Grid" />
+          <ListItemText primary="Edit Grid" />
         </MenuItem>
       </Menu>
     </div>

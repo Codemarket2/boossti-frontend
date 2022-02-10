@@ -35,8 +35,20 @@ export const CREATE_LIST_TYPE = gql`
 `;
 
 export const UPDATE_LIST_TYPE = gql`
-  mutation MyMutation($_id: ID!, $title: String, $description: String, $media: [MediaInput]) {
-    updateListType(_id: $_id, title: $title, description: $description, media: $media) {
+  mutation MyMutation(
+    $_id: ID!
+    $title: String
+    $description: String
+    $media: [MediaInput]
+    $slug: String
+  ) {
+    updateListType(
+      _id: $_id
+      title: $title
+      description: $description
+      media: $media
+      slug: $slug
+    ) {
       _id
       slug
       title
@@ -239,6 +251,7 @@ export const UPDATE_LIST_ITEM = gql`
     $description: String
     $media: [MediaInput]
     $layouts: AWSJSON
+    $slug: String
   ) {
     updateListItem(
       _id: $_id
@@ -246,6 +259,7 @@ export const UPDATE_LIST_ITEM = gql`
       description: $description
       media: $media
       layouts: $layouts
+      slug: $slug
     ) {
       _id
       active

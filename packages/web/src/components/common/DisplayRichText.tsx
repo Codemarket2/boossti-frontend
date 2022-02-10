@@ -24,7 +24,7 @@ const StyledDiv = styled.div`
   }
 `;
 
-export default function DisplayRichText({ value = 'dd' }: IProps) {
+export default function DisplayRichText({ value = '' }: IProps) {
   const router = useRouter();
   const getData = async (id) => {
     const listItem = await getListItem(id);

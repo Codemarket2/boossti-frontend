@@ -22,30 +22,27 @@ import Switch from '@material-ui/core/Switch';
 import Breadcrumbs from '../components/common/Breadcrumbs';
 import ErrorLoading from '../components/common/ErrorLoading';
 import ListItems from '../components/list/ListItems';
-import ImageList from '../components/post/ImageList';
 import NotFound from '../components/common/NotFound';
 import Backdrop from '../components/common/Backdrop';
 import { onAlert } from '../utils/alert';
 import Fields from '../components/field/Fields';
 import InlineForm from '../components/list/InlineForm';
-import MediaForm from '../components/list/MediaForm';
-import DisplayRichText from '../components/common/DisplayRichText';
-// import CommentLikeShare from '../components/common/commentLikeShare/CommentLikeShare';
-// import ListItemForm from '../components/list/ListItemForm';
-// import ListItemsGrid from '../components/list/ListItemsGrid';
-// import ListTypeFields from '../components/list/ListTypeFields';
+import SeoOverlay from '../components/list/SeoOverlay';
 
 interface IProps {
   slug: string;
 }
 
+const initialState = {
+  fieldName: '',
+  showMenu: false,
+  showSeoOverlay: false,
+  selectedIndex: 0,
+};
+
 export default function Screen({ slug }: IProps) {
   const router = useRouter();
-  const [state, setState] = useState({
-    fieldName: '',
-    showMenu: false,
-    selectedIndex: 0,
-  });
+  const [state, setState] = useState(initialState);
 
   const { handlePublish } = usePublishListType({ onAlert });
 
@@ -79,11 +76,6 @@ export default function Screen({ slug }: IProps) {
     setState({ ...state, fieldName: '' });
   };
 
-  const onEdit = (fieldName) => {
-    setFormValues(data.getListTypeBySlug);
-    setState({ ...state, fieldName });
-  };
-
   if (error || !data) {
     return <ErrorLoading error={error} />;
   }
@@ -96,7 +88,6 @@ export default function Screen({ slug }: IProps) {
     <div>
       <div className="d-flex justify-content-between align-content-center align-items-center my-1">
         <Breadcrumbs>
-          {/* <Link href="/types">Template</Link> */}
           <Typography color="textPrimary">
             {data.getListTypeBySlug.title.includes('-n-e-w')
               ? 'Title'
@@ -192,7 +183,7 @@ export default function Screen({ slug }: IProps) {
                   Title
                   {authorized && (
                     <Tooltip title="Edit Title">
-                      <IconButton onClick={() => onEdit('title')}>
+                      <IconButton onClick={() => setState({ ...initialState, fieldName: 'title' })}>
                         <EditIcon fontSize="small" />
                       </IconButton>
                     </Tooltip>
@@ -205,52 +196,31 @@ export default function Screen({ slug }: IProps) {
                 </Typography>
               </div>
             )}
-            {state.fieldName === 'description' ? (
-              <InlineForm
-                label="Description"
-                onCancel={onCancel}
-                multiline
-                fieldName={state.fieldName}
+            <Typography>
+              SEO
+              <Tooltip title="Edit seo">
+                <IconButton
+                  size="small"
+                  onClick={() => setState({ ...initialState, showSeoOverlay: true })}
+                >
+                  <EditIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            </Typography>
+            {state.showSeoOverlay && (
+              <SeoOverlay
+                open={state.showSeoOverlay}
+                onClose={() => setState(initialState)}
                 formik={formik}
-                formLoading={CRUDLoading}
-              />
-            ) : (
-              <div>
-                <Typography className="d-flex align-items-center">
-                  Description
-                  {authorized && (
-                    <Tooltip title="Edit Description">
-                      <IconButton onClick={() => onEdit('description')}>
-                        <EditIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                  )}
-                </Typography>
-                <DisplayRichText value={data.getListTypeBySlug.description} />
-              </div>
-            )}
-            {state.fieldName === 'media' ? (
-              <MediaForm
-                state={crudState}
-                setState={setCrudState}
-                onCancel={onCancel}
-                onSave={formik.handleSubmit}
+                crudState={crudState}
+                setCrudState={setCrudState}
+                data={data.getListTypeBySlug}
+                setFields={() => setFormValues(data.getListTypeBySlug)}
                 loading={CRUDLoading}
+                state={state}
+                setState={setState}
+                permalinkPrefix={window?.location?.origin}
               />
-            ) : (
-              <>
-                <Typography className="d-flex align-items-center">
-                  Media
-                  {authorized && (
-                    <Tooltip title="Edit Media">
-                      <IconButton onClick={() => onEdit('media')}>
-                        <EditIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                  )}
-                </Typography>
-                <ImageList media={data.getListTypeBySlug.media} />
-              </>
             )}
           </Paper>
           <Fields title="Sections" parentId={data.getListTypeBySlug._id} guestMode={!authorized} />
