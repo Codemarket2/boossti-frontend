@@ -165,7 +165,7 @@ export default function ItemScreen({
   return (
     <div>
       {!hideBreadcrumbs && (
-        <div className="d-flex justify-content-between align-content-center align-items-center">
+        <div className="d-sm-flex justify-content-between align-content-center align-items-center">
           <Breadcrumbs>
             <Link href={`/${data.getListItemBySlug.types[0].slug}`}>
               <a>{data.getListItemBySlug.types[0].title}</a>
