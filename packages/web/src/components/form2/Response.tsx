@@ -1,9 +1,13 @@
 import { useState } from 'react';
 import { useGetForm } from '@frontend/shared/hooks/form';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
+import Grid from '@material-ui/core/Grid';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
 import { useGetResponse } from '@frontend/shared/hooks/response';
 import Link from 'next/link';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
 import ListItemText from '@material-ui/core/ListItemText';
 import moment from 'moment';
@@ -15,6 +19,7 @@ import Authorization from '../common/Authorization';
 import NotFound from '../common/NotFound';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
 import ErrorLoading from '../common/ErrorLoading';
+import { QRButton } from '../qrcode/QRButton';
 
 interface IProps {
   responseId: string;
@@ -114,64 +119,85 @@ export function ResponseChild3({
               <Typography>Response</Typography>
             </Breadcrumbs>
           )}
-          <Authorization
-            returnNull
-            _id={[response?.createdBy?._id, form?.createdBy?._id]}
-            allowAdmin
-          >
-            <div>
-              <Button
-                onClick={() => setOpenDrawer(true)}
-                startIcon={<EditIcon />}
-                variant="contained"
-                size="small"
-                color="primary"
-              >
-                Edit
-              </Button>
-              {openDrawer && (
-                <EditResponseDrawer
-                  form={form}
-                  response={response}
-                  open={openDrawer}
-                  onClose={() => {
-                    setOpenDrawer(false);
-                  }}
-                />
-              )}
-            </div>
-          </Authorization>
+          <div className="d-flex">
+            <QRButton />
+            <Authorization
+              returnNull
+              _id={[response?.createdBy?._id, form?.createdBy?._id]}
+              allowAdmin
+            >
+              <>
+                <Tooltip title="Edit Response">
+                  <IconButton onClick={() => setOpenDrawer(true)}>
+                    <EditIcon />
+                  </IconButton>
+                </Tooltip>
+                {openDrawer && (
+                  <EditResponseDrawer
+                    form={form}
+                    response={response}
+                    open={openDrawer}
+                    onClose={() => {
+                      setOpenDrawer(false);
+                    }}
+                  />
+                )}
+              </>
+            </Authorization>
+          </div>
         </div>
       )}
-      <Paper variant="outlined" style={hideAuthor ? { border: 'none' } : {}}>
-        <div className="p-2">
-          {!hideAuthor && (
-            <ListItemText
-              primary={`Response submitted by ${
-                response?.createdBy ? response?.createdBy?.name : 'Unauthorised user'
-              }`}
-              secondary={`${moment(response?.createdAt).format('l')} ${moment(
-                response?.createdAt,
-              ).format('LT')}`}
-            />
-          )}
-          {form?.fields?.map((field, index) => {
-            return (
-              <div key={field?._id}>
-                <Typography>{field?.label}</Typography>
-                {response?.values
-                  ?.filter((v) => v.field === field._id)
-                  .map((value) => (
-                    <div key={value?._id}>
-                      <DisplayValue field={field} value={value} />
-                      {field?.options?.showCommentBox && <CommentLikeShare parentId={value?._id} />}
-                    </div>
-                  ))}
-              </div>
-            );
-          })}
-        </div>
-      </Paper>
+      <Grid container spacing={1}>
+        {!hideAuthor && (
+          <Grid item xs={3}>
+            <Paper variant="outlined">
+              <List dense component="nav" aria-label="main mailbox folders">
+                <ListItem button>
+                  <ListItemText primary="Form Fields" />
+                </ListItem>
+                {form?.fields?.map((field) => (
+                  <ListItem button key={field._id}>
+                    <ListItemText primary={field?.label} />
+                  </ListItem>
+                ))}
+              </List>
+            </Paper>
+          </Grid>
+        )}
+        <Grid item xs={hideAuthor ? 12 : 9}>
+          <Paper variant="outlined" style={hideAuthor ? { border: 'none' } : {}}>
+            <div className="p-2">
+              {!hideAuthor && (
+                <ListItemText
+                  primary={`Response submitted by ${
+                    response?.createdBy ? response?.createdBy?.name : 'Unauthorised user'
+                  }`}
+                  secondary={`${moment(response?.createdAt).format('l')} ${moment(
+                    response?.createdAt,
+                  ).format('LT')}`}
+                />
+              )}
+              {form?.fields?.map((field, index) => {
+                return (
+                  <div key={field?._id}>
+                    <Typography>{field?.label}</Typography>
+                    {response?.values
+                      ?.filter((v) => v.field === field._id)
+                      .map((value) => (
+                        <div key={value?._id}>
+                          <DisplayValue field={field} value={value} />
+                          {field?.options?.showCommentBox && (
+                            <CommentLikeShare parentId={value?._id} />
+                          )}
+                        </div>
+                      ))}
+                  </div>
+                );
+              })}
+            </div>
+          </Paper>
+        </Grid>
+      </Grid>
     </>
   );
 }

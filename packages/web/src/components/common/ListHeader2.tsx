@@ -26,7 +26,7 @@ export default function ListHeader2({
   buttons,
 }: IProps): any {
   return (
-    <div className="d-flex justify-content-between align-items-center">
+    <div className="d-sm-flex justify-content-between align-items-center">
       <Breadcrumbs>{children}</Breadcrumbs>
       <div className="d-flex justify-content-between align-items-center my-1">
         <TextField

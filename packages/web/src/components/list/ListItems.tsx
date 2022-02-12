@@ -32,8 +32,13 @@ export default function ListItems({ types, slug }: any) {
     <>
       <ListHeader
         loading={loading}
-        buttonClass="justify-content-between flex-row-reverse"
-        button={
+        search={state.search}
+        showSearch={state.showSearch}
+        onHide={() => setState({ ...state, search: '', showSearch: false })}
+        onShow={() => setState({ ...state, search: '', showSearch: true })}
+        onChange={(value) => setState({ ...state, search: value })}
+      >
+        <div className="w-50">
           <Tooltip title="Add New Types">
             <LoadingButton
               className="ml-2"
@@ -48,13 +53,8 @@ export default function ListItems({ types, slug }: any) {
               Add New
             </LoadingButton>
           </Tooltip>
-        }
-        search={state.search}
-        showSearch={state.showSearch}
-        onHide={() => setState({ ...state, search: '', showSearch: false })}
-        onShow={() => setState({ ...state, search: '', showSearch: true })}
-        onChange={(value) => setState({ ...state, search: value })}
-      />
+        </div>
+      </ListHeader>
       <Paper variant="outlined">
         {error || !data ? (
           <ErrorLoading error={error} />

@@ -86,7 +86,7 @@ export default function Screen({ slug }: IProps) {
 
   return (
     <div>
-      <div className="d-flex justify-content-between align-content-center align-items-center my-1">
+      <div className="d-sm-flex justify-content-between align-items-center">
         <Breadcrumbs>
           <Typography color="textPrimary">
             {data.getListTypeBySlug.title.includes('-n-e-w')
