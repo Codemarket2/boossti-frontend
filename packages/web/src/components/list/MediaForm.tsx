@@ -7,41 +7,54 @@ import LoadingButton from '../common/LoadingButton';
 interface IProps {
   setState: any;
   state: any;
+  setSeoState?: any;
+  seoState?: any;
   onCancel: () => void;
   onSave: () => void;
   loading: boolean;
 }
 
-export default function MediaForm({ state, setState, onCancel, onSave, loading = false }: IProps) {
+export default function MediaForm({
+  state,
+  setState,
+  seoState,
+  setSeoState,
+  onSave,
+  loading = false,
+}: IProps) {
   return (
     <div>
-      <Tooltip title="Save">
-        <LoadingButton
-          loading={loading}
-          onClick={onSave}
-          className="mr-2"
-          size="small"
-          variant="contained"
-          type="button"
-          color="primary"
-        >
-          Save
-        </LoadingButton>
-      </Tooltip>
-      <Tooltip title="Cancel">
-        <Button
-          disabled={loading}
-          onClick={onCancel}
-          size="small"
-          variant="outlined"
-          component="span"
-          color="primary"
-        >
-          Cancel
-        </Button>
-      </Tooltip>
       <InputGroup>
-        <ImagePicker state={state} setState={setState} fileType="image/*" />
+        <ImagePicker state={state} setState={setState} />
+      </InputGroup>
+      <InputGroup>
+        <Tooltip title="Save">
+          <LoadingButton
+            loading={loading}
+            onClick={onSave}
+            className="mr-2"
+            size="small"
+            variant="contained"
+            type="button"
+            color="primary"
+          >
+            Save
+          </LoadingButton>
+        </Tooltip>
+        <Tooltip title="Cancel">
+          <Button
+            disabled={loading}
+            onClick={() => {
+              setSeoState({ ...seoState, media: false });
+            }}
+            size="small"
+            variant="outlined"
+            component="span"
+            color="primary"
+          >
+            Cancel
+          </Button>
+        </Tooltip>
       </InputGroup>
     </div>
   );

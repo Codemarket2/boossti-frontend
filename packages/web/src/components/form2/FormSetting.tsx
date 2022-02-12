@@ -1,13 +1,50 @@
 import Paper from '@material-ui/core/Paper';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import InputLabel from '@material-ui/core/InputLabel';
+import { InputLabel, MenuItem, TextField } from '@material-ui/core';
 import InputGroup from '../common/InputGroup';
 import RichTextarea from '../common/RichTextarea2';
 
 export default function FormSetting({ settings, onChange }: any): any {
+  console.log({ settings });
+
   return (
     <Paper variant="outlined" className="p-2">
+      <div style={{ margin: '20px' }}>
+        <TextField
+          style={{ width: '200px' }}
+          variant="outlined"
+          select
+          id="demo-simple-select"
+          value={settings?.widgetType ?? 'fullForm'}
+          label="Widget type"
+          onChange={({ target }) => onChange({ widgetType: target.value })}
+        >
+          <MenuItem value="fullForm">Full Form</MenuItem>
+          <MenuItem value="leaderboard">Leaderboad</MenuItem>
+          <MenuItem value="oneField">One field at a time</MenuItem>
+          <MenuItem value="button">Button</MenuItem>
+        </TextField>
+      </div>
+      {settings?.widgetType === 'leaderboard' && (
+        <InputGroup>
+          <h3>Leader Board</h3>
+          <div style={{ display: 'flex', marginTop: '10px', width: '50%' }}>
+            <input
+              className="form-control mr-3"
+              value={settings?.minValue}
+              onChange={(e) => onChange({ minValue: e.target.value })}
+              placeholder="min value"
+            />
+            <input
+              className="form-control"
+              value={settings?.maxValue}
+              onChange={(e) => onChange({ maxValue: e.target.value })}
+              placeholder="max value"
+            />
+          </div>
+        </InputGroup>
+      )}
       <InputGroup>
         <FormControlLabel
           control={
@@ -73,23 +110,7 @@ export default function FormSetting({ settings, onChange }: any): any {
           label="Allow users to view all form responses"
         />
       </InputGroup>
-      <InputGroup>
-        <h3>Leader Board</h3>
-        <div style={{ display: 'flex', marginTop: '10px', width: '50%' }}>
-          <input
-            className="form-control mr-3"
-            value={settings?.minValue}
-            onChange={(e) => onChange({ minValue: e.target.value })}
-            placeholder="min value"
-          />
-          <input
-            className="form-control"
-            value={settings?.maxValue}
-            onChange={(e) => onChange({ maxValue: e.target.value })}
-            placeholder="max value"
-          />
-        </div>
-      </InputGroup>
+
       <InputGroup>
         <InputLabel>After Form Submit Message</InputLabel>
         <RichTextarea
