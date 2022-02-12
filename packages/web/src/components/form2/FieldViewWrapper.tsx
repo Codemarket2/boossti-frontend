@@ -39,12 +39,10 @@ export default function FieldViewWrapper({
   if (customSettings?.useCustomSettings) {
     settings = customSettings;
   } else {
-    settings = {
-      ...data?.getForm?.settings,
-      widgetType: customSettings?.widgetType,
-      buttonLabel: customSettings?.buttonLabel,
-    };
+    settings = data?.getForm?.settings;
   }
+
+  console.log(data?.getForm?.settings, customSettings);
 
   useEffect(() => {
     const pos = responses?.getResponses?.data?.findIndex((res) => {
