@@ -40,6 +40,7 @@ import ListItemsFields from './ListItemsFields';
 import ListItemsFieldsValue from './ListItemsFieldsValue';
 import UnAuthorised from '../common/UnAuthorised';
 import SeoOverlay from './SeoOverlay';
+import { QRButton } from '../qrcode/QRButton';
 
 interface IProps {
   slug: string;
@@ -177,9 +178,10 @@ export default function ItemScreen({
             </Typography>
           </Breadcrumbs>
           <div className="d-flex align-items-center">
+            <QRButton />
             <Tooltip title="share">
               <IconButton
-                edge="start"
+                // edge="start"
                 onClick={() =>
                   navigator.clipboard.writeText(
                     `${window?.location?.origin}/${data?.getListItemBySlug?.types[0]?.slug}/${data?.getListItemBySlug?.slug}`,

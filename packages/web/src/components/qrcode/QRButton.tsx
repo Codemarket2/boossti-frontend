@@ -18,7 +18,7 @@ export const QRButton = () => {
           <DialogContent>
             <QRCode value={value} size={250} />
           </DialogContent>
-          <DialogActions className="d-flex justify-content-center">
+          <DialogActions className="justify-content-center">
             <Button onClick={() => setState(false)} color="primary">
               Close
             </Button>
