@@ -28,6 +28,7 @@ import { onAlert } from '../utils/alert';
 import Fields from '../components/field/Fields';
 import InlineForm from '../components/list/InlineForm';
 import SeoOverlay from '../components/list/SeoOverlay';
+import { QRButton } from '../components/qrcode/QRButton';
 
 interface IProps {
   slug: string;
@@ -95,9 +96,10 @@ export default function Screen({ slug }: IProps) {
           </Typography>
         </Breadcrumbs>
         <div className="d-flex align-items-center">
+          <QRButton />
           <Tooltip title="Copy page link">
             <IconButton
-              edge="start"
+              // edge="start"
               onClick={() => navigator.clipboard.writeText(window?.location?.href)}
             >
               <Share />

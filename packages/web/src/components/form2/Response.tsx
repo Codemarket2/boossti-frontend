@@ -120,7 +120,7 @@ export function ResponseChild3({
             </Breadcrumbs>
           )}
           <div className="d-flex">
-            <QRButton />
+            {!hideNavigation && <QRButton />}
             <Authorization
               returnNull
               _id={[response?.createdBy?._id, form?.createdBy?._id]}
