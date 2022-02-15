@@ -8,18 +8,23 @@ import ListItem from '@material-ui/core/ListItem';
 import { useGetResponse } from '@frontend/shared/hooks/response';
 import Link from 'next/link';
 import Typography from '@material-ui/core/Typography';
+import { useUpdateSection } from '@frontend/shared/hooks/section';
 import EditIcon from '@material-ui/icons/Edit';
+import { useAuthorization } from '@frontend/shared/hooks/auth';
 import ListItemText from '@material-ui/core/ListItemText';
 import moment from 'moment';
 import Paper from '@material-ui/core/Paper';
 import EditResponseDrawer from './EditResponseDrawer';
 import Breadcrumbs from '../common/Breadcrumbs';
 import DisplayValue from './DisplayValue';
-import Authorization from '../common/Authorization';
 import NotFound from '../common/NotFound';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
 import ErrorLoading from '../common/ErrorLoading';
 import { QRButton } from '../qrcode/QRButton';
+import ResponseSections from './ResponseSection';
+import FormFieldsValue from './FormFieldsValue';
+import { onAlert } from '../../utils/alert';
+// import ResponseSectionValue from './ResponseSectionValue';
 
 interface IProps {
   responseId: string;
@@ -107,6 +112,13 @@ export function ResponseChild3({
   hideAuthor,
 }: IProps3) {
   const [openDrawer, setOpenDrawer] = useState(false);
+  const authorized = useAuthorization([response?.createdBy?._id, form?.createdBy?._id], true);
+  const { section, onSectionChange, handleUpdateSection } = useUpdateSection({
+    onAlert,
+    _id: form._id,
+  });
+
+  console.log({ form });
 
   return (
     <>
@@ -121,11 +133,7 @@ export function ResponseChild3({
           )}
           <div className="d-flex">
             {!hideNavigation && <QRButton />}
-            <Authorization
-              returnNull
-              _id={[response?.createdBy?._id, form?.createdBy?._id]}
-              allowAdmin
-            >
+            {authorized && (
               <>
                 <Tooltip title="Edit Response">
                   <IconButton onClick={() => setOpenDrawer(true)}>
@@ -143,7 +151,7 @@ export function ResponseChild3({
                   />
                 )}
               </>
-            </Authorization>
+            )}
           </div>
         </div>
       )}
@@ -162,6 +170,11 @@ export function ResponseChild3({
                 ))}
               </List>
             </Paper>
+            <ResponseSections
+              authorized={authorized}
+              section={section}
+              onSectionChange={onSectionChange}
+            />
           </Grid>
         )}
         <Grid item xs={hideAuthor ? 12 : 9}>
@@ -195,6 +208,17 @@ export function ResponseChild3({
                 );
               })}
             </div>
+            {/* <ResponseSectionValue
+              authorized={authorized}
+              section={section}
+              handleUpdateSection={handleUpdateSection}
+            /> */}
+            <FormFieldsValue
+              authorized={authorized}
+              fields={section?.fields}
+              values={section?.values}
+              handleValueChange={handleUpdateSection}
+            />
           </Paper>
         </Grid>
       </Grid>

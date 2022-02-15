@@ -76,35 +76,51 @@ export default function FormFields({
             </Select>
           </FormControl>
         </InputGroup>
-        {field.fieldType !== 'label' && (
+        {/* {field.fieldType === 'form' && (
           <InputGroup>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={field?.options?.multipleValues}
-                  onChange={({ target }) => onOptionChange({ multipleValues: target.checked })}
-                  name="multipleValues"
-                  color="primary"
-                />
+            <SelectForm
+              value={field.form}
+              onChange={(newValue) =>
+                onFieldChange({
+                  ...field,
+                  form: newValue,
+                  options: { ...field.options, formField: '' },
+                })
               }
-              label="Mutiple values"
+              error={!field.form}
+              helperText={!field.form && 'required'}
             />
           </InputGroup>
-        )}
-        {field.fieldType !== 'label' && (
-          <InputGroup>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={field?.options?.required}
-                  onChange={({ target }) => onOptionChange({ required: target.checked })}
-                  name="required"
-                  color="primary"
-                />
-              }
-              label="Required"
-            />
-          </InputGroup>
+        )} */}
+        {!['label', 'form'].includes(field.fieldType) && (
+          <>
+            <InputGroup>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={field?.options?.multipleValues}
+                    onChange={({ target }) => onOptionChange({ multipleValues: target.checked })}
+                    name="multipleValues"
+                    color="primary"
+                  />
+                }
+                label="Mutiple values"
+              />
+            </InputGroup>
+            <InputGroup>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={field?.options?.required}
+                    onChange={({ target }) => onOptionChange({ required: target.checked })}
+                    name="required"
+                    color="primary"
+                  />
+                }
+                label="Required"
+              />
+            </InputGroup>
+          </>
         )}
         {field.fieldType === 'label' && (
           <RichTextarea

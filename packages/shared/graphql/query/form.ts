@@ -33,6 +33,7 @@ export const GET_FORM = gql`
     }
   }
 `;
+
 export const GET_FORM_BY_SLUG = gql`
   query GetFormBySlug($slug: String!) {
     getFormBySlug(slug: $slug) {

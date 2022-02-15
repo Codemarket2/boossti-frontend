@@ -23,6 +23,7 @@ import {
   useGetTemplateFieldMentions,
   useGetpageFieldMentions,
   useGetListItemById,
+  useUpdateListItemFields,
 } from '@frontend/shared/hooks/list';
 import { useAuthorization } from '@frontend/shared/hooks/auth';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -41,6 +42,7 @@ import ListItemsFieldsValue from './ListItemsFieldsValue';
 import UnAuthorised from '../common/UnAuthorised';
 import SeoOverlay from './SeoOverlay';
 import { QRButton } from '../qrcode/QRButton';
+import FormFieldsValue from '../form2/FormFieldsValue';
 
 interface IProps {
   slug: string;
@@ -92,6 +94,10 @@ export default function ItemScreen({
   const authorized = useAuthorization([data?.getListItemBySlug?.createdBy?._id], true);
   const { templateMentionsField } = useGetTemplateFieldMentions(data?.getListItemBySlug?._id);
   const { pageMentionsField } = useGetpageFieldMentions(data?.getListItemBySlug?._id);
+  const { handleUpdate } = useUpdateListItemFields({
+    listItem: data?.getListItemBySlug,
+    onAlert,
+  });
   const mentions = Array.from(new Set(templateMentionsField?.concat(pageMentionsField)));
 
   const deleteCallBack = () => {
@@ -353,8 +359,14 @@ export default function ItemScreen({
               authorized={authorized}
             />
           )}
-          <ListItemsFieldsValue listItem={data?.getListItemBySlug} previewMode={!authorized} />
-          {mentions.length != 0 && (
+          <FormFieldsValue
+            authorized={authorized}
+            fields={data?.getListItemBySlug?.fields}
+            values={data?.getListItemBySlug?.values}
+            handleValueChange={handleUpdate}
+          />
+          {/* <ListItemsFieldsValue listItem={data?.getListItemBySlug} previewMode={!authorized} /> */}
+          {mentions.length !== 0 && (
             <Grid>
               <Typography className="my-3">Mentions</Typography>
               <div className="my-3">
