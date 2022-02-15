@@ -16,38 +16,42 @@ interface IProps {
   settings?: any;
 }
 
+function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
+  return (
+    <Box style={{ display: 'flex', alignItems: 'center' }}>
+      <Box style={{ width: '100%' }}>
+        <LinearProgress variant="determinate" {...props} />
+      </Box>
+      <Box style={{ minWidth: 35 }}>
+        <Typography variant="body2">{`${Math.round(props?.value)}%`}</Typography>
+      </Box>
+    </Box>
+  );
+}
+
 export default function ResponseCount({ formId, parentId, settings }: IProps): any {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const { data, error, loading } = useGetResponses(formId, parentId);
   const { data: formData, error: errorData } = useGetForm(formId);
-  let progress;
-  if (settings === undefined || settings.minValue === '') {
-    progress = 0;
-  } else {
-    progress = (data?.getResponses?.count / settings?.minValue) * 100;
-  }
+  const [progress, setProgress] = useState(0);
+
   useEffect(() => {
-    progress = (data?.getResponses?.count / settings?.minValue) * 100;
+    if (data?.getResponses?.count) {
+      let newProgress = 0;
+      if (!settings || settings.minValue === '') {
+        newProgress = 0;
+      } else {
+        newProgress = (data?.getResponses?.count / settings?.minValue) * 100;
+      }
+      setProgress(newProgress);
+    }
   }, [data?.getResponses?.count]);
 
-  function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
-    return (
-      <Box style={{ display: 'flex', alignItems: 'center' }}>
-        <Box style={{ width: '100%' }}>
-          <LinearProgress variant="determinate" {...props} />
-        </Box>
-        <Box style={{ minWidth: 35 }}>
-          <Typography variant="body2">{`${Math.round(progress)}%`}</Typography>
-        </Box>
-      </Box>
-    );
-  }
-
-  if (error?.message?.includes("has coerced Null value for NonNull type 'ID!'")) {
-    return null;
-  }
+  // if (error?.message?.includes("has coerced Null value for NonNull type 'ID!'")) {
+  //   return null;
+  // }
 
   if (error || !data || loading || !formData?.getForm) {
     return <ErrorLoading error={error || errorData} />;
@@ -56,7 +60,7 @@ export default function ResponseCount({ formId, parentId, settings }: IProps): a
   return (
     <>
       <div className="text-center mt-2">
-        {settings != null && settings?.minValue ? (
+        {progress ? (
           <LinearProgressWithLabel value={progress} />
         ) : (
           <Button variant="outlined" onClick={handleOpen}>

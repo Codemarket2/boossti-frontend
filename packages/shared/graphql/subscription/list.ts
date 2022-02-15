@@ -96,6 +96,35 @@ export const UPDATED_LIST_ITEM = gql`
           title
           slug
         }
+        form {
+          _id
+          name
+        }
+      }
+      values {
+        _id
+        field
+        value
+        values
+        valueNumber
+        valueBoolean
+        valueDate
+        itemId {
+          _id
+          title
+          slug
+        }
+        media {
+          url
+          caption
+        }
+        response {
+          _id
+          values {
+            field
+            value
+          }
+        }
       }
     }
   }

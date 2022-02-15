@@ -124,7 +124,7 @@ export default function FormSection({ field, parentId, authorized }: IProps): an
   );
 }
 
-const DisplayForm = ({
+export const DisplayForm = ({
   formId,
   parentId,
   allowOthers,
