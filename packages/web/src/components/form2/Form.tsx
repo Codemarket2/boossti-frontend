@@ -8,6 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import ShareIcon from '@material-ui/icons/Share';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { useUpdateSection } from '@frontend/shared/hooks/section';
 import Typography from '@material-ui/core/Typography';
 import Alert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -28,6 +29,7 @@ import { onAlert } from '../../utils/alert';
 import Authorization from '../common/Authorization';
 import InlineInput from '../common/InlineInput';
 import { QRButton } from '../qrcode/QRButton';
+import ResponseSections from './ResponseSection';
 
 interface IProps {
   _id: string;
@@ -40,6 +42,7 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
     onAlert,
     _id,
   });
+  const { onSectionChange, section } = useUpdateSection({ onAlert, _id });
 
   const { handleDelete } = useDeleteForm({
     onAlert,
@@ -185,14 +188,22 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
               </Paper>
             )}
             {options.currentTab === 'settings' && (
-              <FormSetting
-                settings={state.settings}
-                onChange={(settings) =>
-                  handleOnChange({
-                    settings: { ...state.settings, ...settings },
-                  })
-                }
-              />
+              <>
+                <FormSetting
+                  settings={state.settings}
+                  onChange={(settings) =>
+                    handleOnChange({
+                      settings: { ...state.settings, ...settings },
+                    })
+                  }
+                />
+                <ResponseSections
+                  section={section}
+                  onSectionChange={onSectionChange}
+                  authorized
+                  title="Response sections"
+                />
+              </>
             )}
             {options.currentTab === 'responses' && <ResponseList form={state} />}
             {/* {options.currentTab === 'design' && (

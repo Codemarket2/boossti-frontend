@@ -34,7 +34,6 @@ export default function ActionForm({ onCancel, fields, emailFields, onSave, acti
   const { formik, setFormValues } = useFormActions({ onAlert, onSave });
   useEffect(() => {
     if (action) {
-      formik.setFieldValue('body', 'newValue');
       setFormValues(action);
     }
   }, [action]);
@@ -54,6 +53,7 @@ export default function ActionForm({ onCancel, fields, emailFields, onSave, acti
         />
       </InputGroup>
       <InputGroup>
+        {formik.values.actionType}
         <FormControl
           variant="outlined"
           fullWidth
@@ -69,9 +69,16 @@ export default function ActionForm({ onCancel, fields, emailFields, onSave, acti
             label="Action Type*"
           >
             <MenuItem value="sendEmail">Send Email</MenuItem>
+            {fields?.some((f) => f.fieldType === 'phoneNumber' && f?.options?.required) && (
+              <MenuItem value="sendSms">Send SMS</MenuItem>
+            )}
           </Select>
-          {formik.touched.actionType && formik.errors.actionType && (
+          {formik.touched.actionType && formik.errors.actionType ? (
             <FormHelperText className="text-danger">{formik.errors.actionType}</FormHelperText>
+          ) : (
+            <FormHelperText>
+              Add required phone number field to form then you can use send sms action type
+            </FormHelperText>
           )}
         </FormControl>
       </InputGroup>
@@ -89,106 +96,147 @@ export default function ActionForm({ onCancel, fields, emailFields, onSave, acti
           helperText={formik.touched.name && formik.errors.name}
         />
       </InputGroup>
-      <InputGroup>
-        <TextField
-          fullWidth
-          label="Sender Email*"
-          variant="outlined"
-          name="senderEmail"
-          size="small"
-          type="email"
-          disabled={formik.isSubmitting}
-          value={formik.values.senderEmail}
-          onChange={formik.handleChange}
-          error={formik.touched.senderEmail && Boolean(formik.errors.senderEmail)}
-          helperText={formik.touched.senderEmail && formik.errors.senderEmail}
-        />
-      </InputGroup>
-      <InputGroup>
-        <FormControl
-          variant="outlined"
-          fullWidth
-          size="small"
-          error={Boolean(formik.touched.receiverType && formik.errors.receiverType)}
-        >
-          <InputLabel id="receiverType">Receiver*</InputLabel>
-          <Select
-            labelId="receiverType"
-            name="receiverType"
-            value={formik.values.receiverType}
-            onChange={formik.handleChange}
-            label="Receiver*"
-          >
-            <MenuItem value="formOwner">Form owner</MenuItem>
-            <MenuItem value="responseSubmitter">Response submitter</MenuItem>
-            <MenuItem value="customEmail">Custom email</MenuItem>
-            {emailFields?.length > 0 && <MenuItem value="emailField">Form email field</MenuItem>}
-          </Select>
-          {formik.touched.receiverType && formik.errors.receiverType ? (
-            <FormHelperText className="text-danger">{formik.errors.receiverType}</FormHelperText>
-          ) : (
-            <FormHelperText>
-              Add required Email field to form then use it as receiver email
-            </FormHelperText>
+      {formik.values.actionType === 'sendEmail' && (
+        <>
+          <InputGroup>
+            <TextField
+              fullWidth
+              label="Sender Email*"
+              variant="outlined"
+              name="senderEmail"
+              size="small"
+              type="email"
+              disabled={formik.isSubmitting}
+              value={formik.values.senderEmail}
+              onChange={formik.handleChange}
+              error={formik.touched.senderEmail && Boolean(formik.errors.senderEmail)}
+              helperText={formik.touched.senderEmail && formik.errors.senderEmail}
+            />
+          </InputGroup>
+          <InputGroup>
+            <FormControl
+              variant="outlined"
+              fullWidth
+              size="small"
+              error={Boolean(formik.touched.receiverType && formik.errors.receiverType)}
+            >
+              <InputLabel id="receiverType">Receiver*</InputLabel>
+              <Select
+                labelId="receiverType"
+                name="receiverType"
+                value={formik.values.receiverType}
+                onChange={formik.handleChange}
+                label="Receiver*"
+              >
+                <MenuItem value="formOwner">Form owner</MenuItem>
+                <MenuItem value="responseSubmitter">Response submitter</MenuItem>
+                <MenuItem value="customEmail">Custom email</MenuItem>
+                {emailFields?.length > 0 && (
+                  <MenuItem value="emailField">Form email field</MenuItem>
+                )}
+              </Select>
+              {formik.touched.receiverType && formik.errors.receiverType ? (
+                <FormHelperText className="text-danger">
+                  {formik.errors.receiverType}
+                </FormHelperText>
+              ) : (
+                <FormHelperText>
+                  Add required Email field to form then use it as receiver email
+                </FormHelperText>
+              )}
+            </FormControl>
+          </InputGroup>
+          {formik.values.receiverType === 'emailField' && (
+            <InputGroup>
+              <FormControl
+                variant="outlined"
+                fullWidth
+                size="small"
+                error={Boolean(formik.touched.emailFieldId && formik.errors.emailFieldId)}
+              >
+                <InputLabel id="emailFieldId-simple-select-outlined-label">Email Field</InputLabel>
+                <Select
+                  labelId="emailFieldId-simple-select-outlined-label"
+                  id="emailFieldId-simple-select-outlined"
+                  name="emailFieldId"
+                  value={formik.values.emailFieldId}
+                  onChange={formik.handleChange}
+                  label="Email Field"
+                >
+                  {emailFields?.map((field) => (
+                    <MenuItem value={field._id}>{field.label}</MenuItem>
+                  ))}
+                </Select>
+                {formik.touched.emailFieldId && formik.errors.emailFieldId && (
+                  <FormHelperText className="text-danger">
+                    {formik.errors.emailFieldId}
+                  </FormHelperText>
+                )}
+              </FormControl>
+            </InputGroup>
           )}
-        </FormControl>
-      </InputGroup>
-      {formik.values.receiverType === 'emailField' && (
+          {formik.values.receiverType === 'customEmail' && (
+            <Autocomplete
+              size="small"
+              multiple
+              value={formik.values.receiverEmails}
+              onChange={(e, newValue) => {
+                formik.setFieldValue('receiverEmails', newValue);
+              }}
+              filterOptions={(options, params) => {
+                const filtered = filter(options, params);
+                const { inputValue } = params;
+                const isExisting = options.some((option) => inputValue === option);
+                if (inputValue !== '' && !isExisting) {
+                  filtered.push(inputValue);
+                }
+                return filtered;
+              }}
+              filterSelectedOptions
+              renderInput={(params) => (
+                <TextField
+                  error={formik.touched.receiverEmails && Boolean(formik.errors.receiverEmails)}
+                  helperText={formik.touched.receiverEmails && formik.errors.receiverEmails}
+                  {...params}
+                  variant="outlined"
+                  fullWidth
+                  label="Receiver Emails*"
+                />
+              )}
+            />
+          )}
+        </>
+      )}
+      {formik.values.actionType === 'sendSms' && (
         <InputGroup>
           <FormControl
             variant="outlined"
             fullWidth
             size="small"
-            error={Boolean(formik.touched.emailFieldId && formik.errors.emailFieldId)}
+            error={Boolean(formik.touched.phoneFieldId && formik.errors.phoneFieldId)}
           >
-            <InputLabel id="emailFieldId-simple-select-outlined-label">Email Field</InputLabel>
+            <InputLabel id="phoneFieldId-simple-select-outlined-label">
+              Phone number field
+            </InputLabel>
             <Select
-              labelId="emailFieldId-simple-select-outlined-label"
-              id="emailFieldId-simple-select-outlined"
-              name="emailFieldId"
-              value={formik.values.emailFieldId}
+              labelId="phoneFieldId-simple-select-outlined-label"
+              id="phoneFieldId-simple-select-outlined"
+              name="phoneFieldId"
+              value={formik.values.phoneFieldId}
               onChange={formik.handleChange}
-              label="Email Field"
+              label="Phone number field"
             >
-              {emailFields?.map((field) => (
-                <MenuItem value={field._id}>{field.label}</MenuItem>
-              ))}
+              {fields
+                ?.filter((f) => f.fieldType === 'phoneNumber' && f?.options?.required)
+                ?.map((field) => (
+                  <MenuItem value={field._id}>{field.label}</MenuItem>
+                ))}
             </Select>
-            {formik.touched.emailFieldId && formik.errors.emailFieldId && (
-              <FormHelperText className="text-danger">{formik.errors.emailFieldId}</FormHelperText>
+            {formik.touched.phoneFieldId && formik.errors.phoneFieldId && (
+              <FormHelperText className="text-danger">{formik.errors.phoneFieldId}</FormHelperText>
             )}
-          </FormControl>{' '}
+          </FormControl>
         </InputGroup>
-      )}
-      {formik.values.receiverType === 'customEmail' && (
-        <Autocomplete
-          size="small"
-          multiple
-          value={formik.values.receiverEmails}
-          onChange={(e, newValue) => {
-            formik.setFieldValue('receiverEmails', newValue);
-          }}
-          filterOptions={(options, params) => {
-            const filtered = filter(options, params);
-            const { inputValue } = params;
-            const isExisting = options.some((option) => inputValue === option);
-            if (inputValue !== '' && !isExisting) {
-              filtered.push(inputValue);
-            }
-            return filtered;
-          }}
-          filterSelectedOptions
-          renderInput={(params) => (
-            <TextField
-              error={formik.touched.receiverEmails && Boolean(formik.errors.receiverEmails)}
-              helperText={formik.touched.receiverEmails && formik.errors.receiverEmails}
-              {...params}
-              variant="outlined"
-              fullWidth
-              label="Receiver Emails*"
-            />
-          )}
-        />
       )}
       <InputGroup>
         <Typography variant="h6" className="d-flex align-items-center pl-2">
@@ -268,30 +316,52 @@ export default function ActionForm({ onCancel, fields, emailFields, onSave, acti
           </div>
         ))}
       </InputGroup>
-      <InputGroup>
-        <TextField
-          fullWidth
-          label="Email Subject*"
-          variant="outlined"
-          name="subject"
-          size="small"
-          disabled={formik.isSubmitting}
-          value={formik.values.subject}
-          onChange={formik.handleChange}
-          error={formik.touched.subject && Boolean(formik.errors.subject)}
-          helperText={formik.touched.subject && formik.errors.subject}
-        />
-      </InputGroup>
-      <InputGroup>
-        <InputLabel>Email Body*</InputLabel>
-        <RichTextarea
-          value={formik.values.body}
-          onChange={(newValue) => formik.setFieldValue('body', newValue)}
-        />
-        {formik.touched.body && formik.errors.body && (
-          <FormHelperText className="text-danger">{formik.errors.body}</FormHelperText>
-        )}
-      </InputGroup>
+      {formik.values.actionType === 'sendEmail' && (
+        <>
+          <InputGroup>
+            <TextField
+              fullWidth
+              label="Email Subject*"
+              variant="outlined"
+              name="subject"
+              size="small"
+              disabled={formik.isSubmitting}
+              value={formik.values.subject}
+              onChange={formik.handleChange}
+              error={formik.touched.subject && Boolean(formik.errors.subject)}
+              helperText={formik.touched.subject && formik.errors.subject}
+            />
+          </InputGroup>
+          <InputGroup>
+            <InputLabel>Email Body*</InputLabel>
+            <RichTextarea
+              value={formik.values.body}
+              onChange={(newValue) => formik.setFieldValue('body', newValue)}
+            />
+            {formik.touched.body && formik.errors.body && (
+              <FormHelperText className="text-danger">{formik.errors.body}</FormHelperText>
+            )}
+          </InputGroup>
+        </>
+      )}
+      {formik.values.actionType === 'sendSms' && (
+        <InputGroup>
+          <TextField
+            fullWidth
+            label="Message*"
+            variant="outlined"
+            name="body"
+            size="small"
+            rows={4}
+            multiline
+            disabled={formik.isSubmitting}
+            value={formik.values.body}
+            onChange={formik.handleChange}
+            error={formik.touched.body && Boolean(formik.errors.body)}
+            helperText={formik.touched.body && formik.errors.body}
+          />
+        </InputGroup>
+      )}
       <InputGroup>
         <LoadingButton type="submit" size="small" loading={formik.isSubmitting}>
           Save

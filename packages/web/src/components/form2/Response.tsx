@@ -118,8 +118,6 @@ export function ResponseChild3({
     _id: form._id,
   });
 
-  console.log({ form });
-
   return (
     <>
       {!hideBreadcrumbs && (
@@ -156,8 +154,13 @@ export function ResponseChild3({
         </div>
       )}
       <Grid container spacing={1}>
-        {!hideAuthor && (
+        {(!hideAuthor || !hideNavigation || !hideBreadcrumbs) && (
           <Grid item xs={3}>
+            <ResponseSections
+              authorized={authorized}
+              section={section}
+              onSectionChange={onSectionChange}
+            />
             <Paper variant="outlined">
               <List dense component="nav" aria-label="main mailbox folders">
                 <ListItem button>
@@ -170,15 +173,18 @@ export function ResponseChild3({
                 ))}
               </List>
             </Paper>
-            <ResponseSections
-              authorized={authorized}
-              section={section}
-              onSectionChange={onSectionChange}
-            />
           </Grid>
         )}
         <Grid item xs={hideAuthor ? 12 : 9}>
           <Paper variant="outlined" style={hideAuthor ? { border: 'none' } : {}}>
+            {(!hideAuthor || !hideNavigation || !hideBreadcrumbs) && (
+              <FormFieldsValue
+                authorized={authorized}
+                fields={section?.fields}
+                values={section?.values}
+                handleValueChange={handleUpdateSection}
+              />
+            )}
             <div className="p-2">
               {!hideAuthor && (
                 <ListItemText
@@ -208,17 +214,6 @@ export function ResponseChild3({
                 );
               })}
             </div>
-            {/* <ResponseSectionValue
-              authorized={authorized}
-              section={section}
-              handleUpdateSection={handleUpdateSection}
-            /> */}
-            <FormFieldsValue
-              authorized={authorized}
-              fields={section?.fields}
-              values={section?.values}
-              handleValueChange={handleUpdateSection}
-            />
           </Paper>
         </Grid>
       </Grid>
