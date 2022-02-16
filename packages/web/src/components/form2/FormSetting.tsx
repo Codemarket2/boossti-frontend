@@ -6,8 +6,6 @@ import InputGroup from '../common/InputGroup';
 import RichTextarea from '../common/RichTextarea2';
 
 export default function FormSetting({ settings, onChange }: any): any {
-  console.log({ settings });
-
   return (
     <Paper variant="outlined" className="p-2">
       <div style={{ margin: '20px' }}>
@@ -110,7 +108,6 @@ export default function FormSetting({ settings, onChange }: any): any {
           label="Allow users to view all form responses"
         />
       </InputGroup>
-
       <InputGroup>
         <InputLabel>After Form Submit Message</InputLabel>
         <RichTextarea
