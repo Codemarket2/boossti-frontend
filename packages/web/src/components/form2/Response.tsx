@@ -154,7 +154,7 @@ export function ResponseChild3({
         </div>
       )}
       <Grid container spacing={1}>
-        {(!hideAuthor || !hideNavigation || !hideBreadcrumbs) && (
+        {!(hideAuthor || hideNavigation || hideBreadcrumbs) && (
           <Grid item xs={3}>
             <ResponseSections
               authorized={authorized}
@@ -177,7 +177,7 @@ export function ResponseChild3({
         )}
         <Grid item xs={hideAuthor ? 12 : 9}>
           <Paper variant="outlined" style={hideAuthor ? { border: 'none' } : {}}>
-            {(!hideAuthor || !hideNavigation || !hideBreadcrumbs) && (
+            {!(hideAuthor || hideNavigation || hideBreadcrumbs) && (
               <FormFieldsValue
                 authorized={authorized}
                 fields={section?.fields}
