@@ -114,7 +114,7 @@ export function ResponseChild3({
   const authorized = useAuthorization([response?.createdBy?._id, form?.createdBy?._id], true);
   const { section, onSectionChange, handleUpdateSection } = useUpdateSection({
     onAlert,
-    _id: form._id,
+    _id: response?.parentId?._id || form._id,
   });
 
   return (
@@ -187,9 +187,9 @@ export function ResponseChild3({
             <div className="p-2">
               {!hideAuthor && (
                 <ListItemText
-                  primary={`Response submitted by ${
+                  primary={`by ${
                     response?.createdBy ? response?.createdBy?.name : 'Unauthorised user'
-                  }`}
+                  } ${response?.parentId?.title ? `from ${response?.parentId?.title} page` : ''}`}
                   secondary={`${moment(response?.createdAt).format('l')} ${moment(
                     response?.createdAt,
                   ).format('LT')}`}

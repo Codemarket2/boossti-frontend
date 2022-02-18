@@ -1,8 +1,13 @@
 import { gql } from '@apollo/client';
 
 export const UPDATE_SECTION = gql`
-  mutation updateSection($_id: ID!, $fields: [Field2Input], $values: [FieldValue2Input]) {
-    updateSection(_id: $_id, fields: $fields, values: $values) {
+  mutation updateSection(
+    $_id: ID!
+    $fields: [Field2Input]
+    $values: [FieldValue2Input]
+    $options: AWSJSON
+  ) {
+    updateSection(_id: $_id, fields: $fields, values: $values, options: $options) {
       _id
       fields {
         _id

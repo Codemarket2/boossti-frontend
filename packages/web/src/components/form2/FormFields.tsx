@@ -32,6 +32,7 @@ import EditFormDrawer from './EditFormDrawer';
 import Overlay from '../common/Overlay';
 import CustomFormSettings from './CustomFormSettings';
 import { SelectFormDrawer } from './SelectForm';
+import ResponseLayout from '../response/ResponseLayout';
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -56,6 +57,7 @@ type IProps = {
   title?: string;
   isSection?: boolean;
   previewMode?: boolean;
+  pageId?: string;
 };
 
 export default function FormFields({
@@ -64,6 +66,7 @@ export default function FormFields({
   title = 'Fields',
   isSection = false,
   previewMode = false,
+  pageId,
 }: IProps): any {
   const [values, setValues] = useState(initialValues);
   const router = useRouter();
@@ -355,6 +358,7 @@ export default function FormFields({
             toggleCustomSettings={(value) => handleToggleCustomSettings(values.field?._id, value)}
             onSettingsChange={(value) => handleEditFormSettings(values.field?._id, value)}
           />
+          {pageId && <ResponseLayout _id={pageId} useCustom />}
         </Overlay>
       )}
     </Paper>

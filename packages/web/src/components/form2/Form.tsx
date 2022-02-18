@@ -8,7 +8,6 @@ import IconButton from '@material-ui/core/IconButton';
 import ShareIcon from '@material-ui/icons/Share';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { useUpdateSection } from '@frontend/shared/hooks/section';
 import Typography from '@material-ui/core/Typography';
 import Alert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -29,7 +28,6 @@ import { onAlert } from '../../utils/alert';
 import Authorization from '../common/Authorization';
 import InlineInput from '../common/InlineInput';
 import { QRButton } from '../qrcode/QRButton';
-import ResponseSections from '../response/ResponseSection';
 import ResponseLayout from '../response/ResponseLayout';
 
 interface IProps {
