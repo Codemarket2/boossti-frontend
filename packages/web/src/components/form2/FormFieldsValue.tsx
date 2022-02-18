@@ -10,7 +10,7 @@ import CRUDMenu from '../common/CRUDMenu';
 import { FormView } from './FormView';
 import DisplayValue from './DisplayValue';
 import BackdropComponent from '../common/Backdrop';
-import ResponseCount from './ResponseCount';
+import ResponseCount from '../response/ResponseCount';
 import FieldViewWrapper from './FieldViewWrapper';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
 

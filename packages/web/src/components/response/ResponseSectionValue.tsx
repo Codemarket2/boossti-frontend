@@ -7,11 +7,11 @@ import EditIcon from '@material-ui/icons/Edit';
 import { useState } from 'react';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import CRUDMenu from '../common/CRUDMenu';
-import { FormView } from './FormView';
-import DisplayValue from './DisplayValue';
+import { FormView } from '../form2/FormView';
+import DisplayValue from '../form2/DisplayValue';
 import BackdropComponent from '../common/Backdrop';
 import ResponseCount from './ResponseCount';
-import FieldViewWrapper from './FieldViewWrapper';
+import FieldViewWrapper from '../form2/FieldViewWrapper';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
 
 interface IProps {

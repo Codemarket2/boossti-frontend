@@ -2,7 +2,7 @@ import { useGetFormBySlug } from '@frontend/shared/hooks/form';
 import { useGetResponseByCount } from '@frontend/shared/hooks/response';
 import NotFound from '../components/common/NotFound';
 import ErrorLoading from '../components/common/ErrorLoading';
-import { ResponseChild3 } from '../components/form2/Response';
+import { ResponseChild3 } from '../components/response/Response';
 
 interface IProps {
   slug: string;

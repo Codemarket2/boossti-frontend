@@ -18,7 +18,7 @@ import { defualtValue, filterValues, FormView } from '../form2/FormView';
 import { onAlert } from '../../utils/alert';
 import StyleDrawer from '../style/StyleDrawer';
 import { SelectFormDrawer } from '../form2/SelectForm';
-import ResponseCount from '../form2/ResponseCount';
+import ResponseCount from '../response/ResponseCount';
 import FieldViewWrapper from '../form2/FieldViewWrapper';
 import EditFormDrawer from '../form2/EditFormDrawer';
 import { convertToSlug } from '../field/LeftNavigation';

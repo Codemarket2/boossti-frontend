@@ -1,4 +1,4 @@
-import FormFields from './FormFields';
+import FormFields from '../form2/FormFields';
 
 interface IProps {
   section: any;

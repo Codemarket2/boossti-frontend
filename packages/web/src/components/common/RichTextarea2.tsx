@@ -56,7 +56,6 @@ function mentionCustomization(editor) {
       if (!modelAttributeValue) {
         return;
       }
-
       return writer.createAttributeElement(
         'a',
         {

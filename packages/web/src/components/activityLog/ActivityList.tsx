@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Accordion, AccordionDetails, AccordionSummary, Button } from '@material-ui/core';
 import { ExpandMore } from '@material-ui/icons';
 import ErrorLoading from '../common/ErrorLoading';
-import { ResponseChild2 } from '../form2/Response';
+import { ResponseChild2 } from '../response/Response';
 
 export default function ActivityList() {
   const { data, error, loading } = useGetMyResponses();

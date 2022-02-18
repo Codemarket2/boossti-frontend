@@ -19,7 +19,7 @@ import { onAlert } from '../../utils/alert';
 import DisplayRichText from '../common/DisplayRichText';
 import Overlay from '../common/Overlay';
 import AuthScreen from '../../screens/AuthScreen';
-import { ResponseChild2 } from './Response';
+import { ResponseChild2 } from '../response/Response';
 import DisplayValue from './DisplayValue';
 
 interface IProps {

@@ -2,7 +2,7 @@ import { useCreateUpdateResponse } from '@frontend/shared/hooks/response';
 import { onAlert } from '../../utils/alert';
 import Authorization from '../common/Authorization';
 import Overlay from '../common/Overlay';
-import { FormView } from './FormView';
+import { FormView } from '../form2/FormView';
 
 interface IProps {
   form: any;
