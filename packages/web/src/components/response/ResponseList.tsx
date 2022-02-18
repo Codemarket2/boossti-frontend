@@ -17,7 +17,7 @@ import { useGetResponses, useDeleteResponse } from '@frontend/shared/hooks/respo
 import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
-import DisplayValue from './DisplayValue';
+import DisplayValue from '../form2/DisplayValue';
 
 interface IProps {
   form: any;

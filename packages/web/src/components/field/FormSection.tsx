@@ -16,9 +16,9 @@ import Backdrop from '../common/Backdrop';
 import EditFormDrawer from '../form2/EditFormDrawer';
 import FieldViewWrapper from '../form2/FieldViewWrapper';
 import SelectFormSection from './SelectFormSection';
-import ResponseCount from '../form2/ResponseCount';
+import ResponseCount from '../response/ResponseCount';
+import Response from '../response/Response';
 import { convertToSlug } from './LeftNavigation';
-import Response from '../form2/Response';
 
 interface IProps {
   field: any;

@@ -28,7 +28,7 @@ export const QRButton = () => {
       <Tooltip title="Page QR Code">
         <QRCode
           value={value}
-          size={50}
+          size={40}
           style={{ cursor: 'pointer' }}
           className="mx-2"
           onClick={() => setState(true)}

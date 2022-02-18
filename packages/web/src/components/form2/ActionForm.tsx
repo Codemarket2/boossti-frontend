@@ -53,7 +53,6 @@ export default function ActionForm({ onCancel, fields, emailFields, onSave, acti
         />
       </InputGroup>
       <InputGroup>
-        {formik.values.actionType}
         <FormControl
           variant="outlined"
           fullWidth

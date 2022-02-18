@@ -16,15 +16,14 @@ import moment from 'moment';
 import Paper from '@material-ui/core/Paper';
 import EditResponseDrawer from './EditResponseDrawer';
 import Breadcrumbs from '../common/Breadcrumbs';
-import DisplayValue from './DisplayValue';
+import DisplayValue from '../form2/DisplayValue';
 import NotFound from '../common/NotFound';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
 import ErrorLoading from '../common/ErrorLoading';
 import { QRButton } from '../qrcode/QRButton';
 import ResponseSections from './ResponseSection';
-import FormFieldsValue from './FormFieldsValue';
+import FormFieldsValue from '../form2/FormFieldsValue';
 import { onAlert } from '../../utils/alert';
-// import ResponseSectionValue from './ResponseSectionValue';
 
 interface IProps {
   responseId: string;
@@ -157,7 +156,7 @@ export function ResponseChild3({
         {!(hideAuthor || hideNavigation || hideBreadcrumbs) && (
           <Grid item xs={3}>
             <ResponseSections
-              authorized={authorized}
+              authorized={false}
               section={section}
               onSectionChange={onSectionChange}
             />
@@ -179,7 +178,7 @@ export function ResponseChild3({
           <Paper variant="outlined" style={hideAuthor ? { border: 'none' } : {}}>
             {!(hideAuthor || hideNavigation || hideBreadcrumbs) && (
               <FormFieldsValue
-                authorized={authorized}
+                authorized={false}
                 fields={section?.fields}
                 values={section?.values}
                 handleValueChange={handleUpdateSection}

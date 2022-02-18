@@ -1,5 +1,5 @@
 import Overlay from '../common/Overlay';
-import FieldViewWrapper from './FieldViewWrapper';
+import FieldViewWrapper from '../form2/FieldViewWrapper';
 
 interface IProps {
   open: boolean;
