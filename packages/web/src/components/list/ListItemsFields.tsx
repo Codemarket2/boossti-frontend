@@ -16,6 +16,7 @@ export default function ListTypeFields({ listItem, previewMode }: IProps) {
       title="Sections"
       isSection
       previewMode={previewMode}
+      pageId={listItem?._id}
     />
   );
 }

@@ -38,7 +38,6 @@ import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
 import NotFound from '../common/NotFound';
 import ListItemsFields from './ListItemsFields';
-import ListItemsFieldsValue from './ListItemsFieldsValue';
 import UnAuthorised from '../common/UnAuthorised';
 import SeoOverlay from './SeoOverlay';
 import { QRButton } from '../qrcode/QRButton';
@@ -364,6 +363,7 @@ export default function ItemScreen({
             fields={data?.getListItemBySlug?.fields}
             values={data?.getListItemBySlug?.values}
             handleValueChange={handleUpdate}
+            pageId={data?.getListItemBySlug?._id}
           />
           {/* <ListItemsFieldsValue listItem={data?.getListItemBySlug} previewMode={!authorized} /> */}
           {mentions.length !== 0 && (

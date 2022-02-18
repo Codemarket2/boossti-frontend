@@ -6,7 +6,6 @@ import { useGetSection } from './getSection';
 import { client as apolloClient } from '../../graphql';
 import { omitTypename } from '../../utils/omitTypename';
 import { IHooksProps } from '../../types/common';
-import { getValues } from '../response/createUpdateResponse';
 
 const updateCache = (_id, newSectionData) => {
   const oldData = apolloClient.readQuery({
@@ -31,8 +30,8 @@ interface IProps extends IHooksProps {
 }
 
 export function useUpdateSection({ onAlert, _id }: IProps): any {
-  const { data, error } = useGetSection(_id);
-  const [updateMutation, { loading: updateLoading }] = useMutation(UPDATE_SECTION);
+  const { data, error, loading } = useGetSection(_id);
+  const [updateMutation] = useMutation(UPDATE_SECTION);
   const [saveToServer, setSaveToServer] = useState(false);
 
   const section = data?.getSection;
@@ -47,7 +46,6 @@ export function useUpdateSection({ onAlert, _id }: IProps): any {
   }, [section]);
 
   const onSectionChange = (newSection) => {
-    // alert('cache uodate');
     updateCache(_id, stringifyPayload({ ...section, ...newSection }));
     setSaveToServer(true);
   };
@@ -56,9 +54,11 @@ export function useUpdateSection({ onAlert, _id }: IProps): any {
     try {
       // alert('updated async wait ');
       const payload = stringifyPayload(newSection ? { ...section, ...newSection } : section, true);
+      console.log({ payload });
       const response = await updateMutation({
         variables: payload,
       });
+      console.log({ response });
       if (callback) {
         callback();
       }
@@ -69,7 +69,7 @@ export function useUpdateSection({ onAlert, _id }: IProps): any {
     }
   };
 
-  return { onSectionChange, section, handleUpdateSection };
+  return { onSectionChange, section, handleUpdateSection, error, loading };
 }
 
 export const stringifyPayload = (oldPayload: any, removeTypeId: boolean = false) => {
