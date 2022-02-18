@@ -37,7 +37,8 @@ export default function BookmarkList() {
       <Paper
         className="my-2 py-1 d-flex justify-content-end align-items-center"
         variant="outlined"
-        style={{ minHeight: 55 }}>
+        style={{ minHeight: 55 }}
+      >
         {bookmarkState.showSearch ? (
           <TextField
             size="small"
@@ -51,7 +52,8 @@ export default function BookmarkList() {
                     className="mr-n3"
                     onClick={() =>
                       bookmarkSetState({ ...bookmarkState, search: '', showSearch: false })
-                    }>
+                    }
+                  >
                     <ClearIcon />
                   </IconButton>
                 </InputAdornment>
@@ -64,7 +66,8 @@ export default function BookmarkList() {
           />
         ) : (
           <IconButton
-            onClick={() => bookmarkSetState({ ...bookmarkState, search: '', showSearch: true })}>
+            onClick={() => bookmarkSetState({ ...bookmarkState, search: '', showSearch: true })}
+          >
             <SearchIcon />
           </IconButton>
         )}
@@ -77,7 +80,8 @@ export default function BookmarkList() {
             <Card
               variant="outlined"
               key={bookmark._id}
-              className="my-2 d-flex justify-content-between align-content-center">
+              className="my-2 d-flex justify-content-between align-content-center"
+            >
               <CardContent>
                 <Chip role="button" color="primary" label={bookmark.bookmark} />
                 <Typography>{moment(bookmark.createdAt).fromNow()}</Typography>
@@ -90,7 +94,8 @@ export default function BookmarkList() {
                       showMenu: event.currentTarget,
                       selectedBookmark: bookmark,
                     })
-                  }>
+                  }
+                >
                   <MoreVertIcon />
                 </IconButton>
               </CardContent>
@@ -104,12 +109,14 @@ export default function BookmarkList() {
         open={Boolean(bookmarkState.showMenu)}
         onClose={() =>
           bookmarkSetState({ ...bookmarkState, showMenu: null, selectedBookmark: null })
-        }>
+        }
+      >
         <MenuItem
           onClick={async () => {
             await handleDeleteBookmark();
             alert('Bookmark deleted!');
-          }}>
+          }}
+        >
           <ListItemIcon className="mr-n4">
             <DeleteIcon fontSize="small" />
           </ListItemIcon>

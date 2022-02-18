@@ -58,6 +58,7 @@ export const GET_LIST_TYPE_BY_SLUG = gql`
     }
   }
 `;
+
 export const GET_MENU_LIST_TYPES = gql`
   query getMenuListTypes {
     getMenuListTypes {
@@ -155,11 +156,40 @@ export const GET_LIST_ITEM_BY_SLUG = gql`
           title
           slug
         }
+        form {
+          _id
+          name
+        }
       }
       createdAt
       createdBy {
         _id
         name
+      }
+      values {
+        _id
+        field
+        value
+        values
+        valueNumber
+        valueBoolean
+        valueDate
+        itemId {
+          _id
+          title
+          slug
+        }
+        media {
+          url
+          caption
+        }
+        response {
+          _id
+          values {
+            field
+            value
+          }
+        }
       }
     }
   }

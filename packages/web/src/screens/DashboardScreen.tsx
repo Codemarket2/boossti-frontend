@@ -55,7 +55,8 @@ export default function DashboardScreen() {
               variant="contained"
               color="secondary"
               size="large"
-              onClick={() => handleCancelSubscribe()}>
+              onClick={() => handleCancelSubscribe()}
+            >
               Cancel Subscription
             </Button>
           </CardActions>

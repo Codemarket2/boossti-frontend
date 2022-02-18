@@ -16,7 +16,8 @@ function MainStack() {
         header: (props) => (
           <AppBar {...props} authenticated={true} title={projectConfig + 'Admin'} />
         ),
-      }}>
+      }}
+    >
       <Stack.Screen name="UserScreen" component={UserScreen} />
       <Stack.Screen name="SampleScreen" component={SampleScreen} />
     </Stack.Navigator>

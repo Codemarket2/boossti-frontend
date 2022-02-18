@@ -33,7 +33,8 @@ export default function SelectTag({ open, onClose, typeId, title, onSelect }: IP
       onClose={onClose}
       scroll="paper"
       aria-labelledby="scroll-dialog-title"
-      aria-describedby="scroll-dialog-description">
+      aria-describedby="scroll-dialog-description"
+    >
       <div className="d-flex justify-content-between align-content-center align-items-center">
         <DialogTitle id="scroll-dialog-title">Select {title}</DialogTitle>
         <IconButton aria-label="close" onClick={onClose}>

@@ -54,7 +54,6 @@ export default function PostScreen({ post, onClose = () => {} }: any) {
         let message = state.body;
         message = message.split('@@@^^^').join('');
         message = message.split('^^__');
-        console.log('Message', message);
         let newMessage = '';
         message.forEach((m) => {
           m = m.split('@@@__')[0];
@@ -107,7 +106,8 @@ export default function PostScreen({ post, onClose = () => {} }: any) {
           type="button"
           variant="contained"
           color="primary"
-          fullWidth>
+          fullWidth
+        >
           {state.edit ? 'EDIT' : 'CREATE'} POST
         </LoadingButton>
       </InputGroup>

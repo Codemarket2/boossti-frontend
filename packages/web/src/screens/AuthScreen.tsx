@@ -26,7 +26,8 @@ const AuthScreen = ({ signinSuccessCallback }: IProps) => {
         value={value}
         onChange={handleChange}
         indicatorColor="primary"
-        centered>
+        centered
+      >
         <Tab label="Sign-In" value="Sign-In" />
         <Tab label="Sign-Up" value="Sign-Up" />
       </Tabs>

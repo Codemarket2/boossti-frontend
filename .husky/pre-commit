@@ -4,3 +4,5 @@
 yarn web:build
 yarn web:test
 yarn shared:test
+yarn format
+# yarn lint

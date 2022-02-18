@@ -12,7 +12,6 @@ export default function OnBoarding() {
   const router = useRouter();
 
   useEffect(() => {
-    // console.log(user);
     if (user && user.subscription && user.subscription.active) {
       router.push('/dashboard');
     }

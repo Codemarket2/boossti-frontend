@@ -27,7 +27,7 @@ export default function InlineForm({
         <InputGroup>
           {multiline ? (
             <RichTextarea
-              value={formik.values[fieldName].includes('-n-e-w') ? '' : formik.values[fieldName]}
+              value={formik?.values[fieldName]?.includes('-n-e-w') ? '' : formik?.values[fieldName]}
               onChange={(value) => formik.setFieldValue(fieldName, value)}
             />
           ) : (
@@ -40,10 +40,10 @@ export default function InlineForm({
               multiline={multiline}
               rows={multiline ? 4 : null}
               disabled={formik.isSubmitting}
-              value={formik.values[fieldName].includes('-n-e-w') ? '' : formik.values[fieldName]}
-              onChange={formik.handleChange}
-              error={formik.touched[fieldName] && Boolean(formik.errors[fieldName])}
-              helperText={formik.touched[fieldName] && formik.errors[fieldName]}
+              value={formik?.values[fieldName]?.includes('-n-e-w') ? '' : formik?.values[fieldName]}
+              onChange={formik?.handleChange}
+              error={formik?.touched[fieldName] && Boolean(formik?.errors[fieldName])}
+              helperText={formik?.touched[fieldName] && formik?.errors[fieldName]}
             />
           )}
         </InputGroup>

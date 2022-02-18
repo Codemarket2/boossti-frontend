@@ -53,7 +53,6 @@ export const useUpdateListType = ({ listType, onAlert }: IProps) => {
       const res = await updateMutation({
         variables: payload,
       });
-      console.log('res', res);
     } catch (error) {
       console.log(error);
       onAlert('Error while auto saving', error.message);

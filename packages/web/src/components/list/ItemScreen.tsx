@@ -23,6 +23,7 @@ import {
   useGetTemplateFieldMentions,
   useGetpageFieldMentions,
   useGetListItemById,
+  useUpdateListItemFields,
 } from '@frontend/shared/hooks/list';
 import { useAuthorization } from '@frontend/shared/hooks/auth';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -31,18 +32,17 @@ import { updateSettingAction } from '@frontend/shared/redux/actions/setting';
 import { onAlert } from '../../utils/alert';
 import FieldValues from '../field/FieldValues';
 import InlineForm from './InlineForm';
-import MediaForm from './MediaForm';
 import LeftNavigation from '../field/LeftNavigation';
 import Breadcrumbs from '../common/Breadcrumbs';
 import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
-import ImageList from '../post/ImageList';
 import NotFound from '../common/NotFound';
-import DisplayRichText from '../common/DisplayRichText';
 import ListItemsFields from './ListItemsFields';
 import ListItemsFieldsValue from './ListItemsFieldsValue';
 import UnAuthorised from '../common/UnAuthorised';
-import Overlay from '../common/Overlay';
+import SeoOverlay from './SeoOverlay';
+import { QRButton } from '../qrcode/QRButton';
+import FormFieldsValue from '../form2/FormFieldsValue';
 
 interface IProps {
   slug: string;
@@ -69,6 +69,13 @@ export function DisplayMentions(value) {
   );
 }
 
+const initialState = {
+  fieldName: '',
+  fields: [],
+  hideLeftNavigation: false,
+  showSeoOverlay: false,
+};
+
 export default function ItemScreen({
   slug,
   hideBreadcrumbs = false,
@@ -81,12 +88,16 @@ export default function ItemScreen({
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('xs'));
   const { setting, auth } = useSelector((state: any) => state);
-  const [state, setState] = useState({ fieldName: '', fields: [], hideLeftNavigation: false });
+  const [state, setState] = useState(initialState);
   const [fieldValueCount, setFieldValueCount] = useState({});
   const { data, error } = useGetListItemBySlug({ slug });
   const authorized = useAuthorization([data?.getListItemBySlug?.createdBy?._id], true);
   const { templateMentionsField } = useGetTemplateFieldMentions(data?.getListItemBySlug?._id);
   const { pageMentionsField } = useGetpageFieldMentions(data?.getListItemBySlug?._id);
+  const { handleUpdate } = useUpdateListItemFields({
+    listItem: data?.getListItemBySlug,
+    onAlert,
+  });
   const mentions = Array.from(new Set(templateMentionsField?.concat(pageMentionsField)));
 
   const deleteCallBack = () => {
@@ -161,9 +172,8 @@ export default function ItemScreen({
   return (
     <div>
       {!hideBreadcrumbs && (
-        <div className="d-flex justify-content-between align-content-center align-items-center">
+        <div className="d-sm-flex justify-content-between align-content-center align-items-center">
           <Breadcrumbs>
-            {/* <Link href="/types">Template</Link> */}
             <Link href={`/${data.getListItemBySlug.types[0].slug}`}>
               <a>{data.getListItemBySlug.types[0].title}</a>
             </Link>
@@ -174,9 +184,10 @@ export default function ItemScreen({
             </Typography>
           </Breadcrumbs>
           <div className="d-flex align-items-center">
+            <QRButton />
             <Tooltip title="share">
               <IconButton
-                edge="start"
+                // edge="start"
                 onClick={() =>
                   navigator.clipboard.writeText(
                     `${window?.location?.origin}/${data?.getListItemBySlug?.types[0]?.slug}/${data?.getListItemBySlug?.slug}`,
@@ -264,6 +275,7 @@ export default function ItemScreen({
           </Hidden>
           <Hidden xsDown>
             <LeftNavigation
+              {...leftNavigationProps}
               style={{
                 position: 'fixed',
                 width: '15%',
@@ -272,10 +284,7 @@ export default function ItemScreen({
                 overflowX: 'hidden',
                 overflowY: 'auto',
               }}
-              setEditValue={(val: string) => {
-                onEdit(val);
-              }}
-              {...leftNavigationProps}
+              setEditValue={() => setState({ ...state, showSeoOverlay: true })}
             >
               <ListItemsFields listItem={data.getListItemBySlug} previewMode={!authorized} />
             </LeftNavigation>
@@ -320,39 +329,21 @@ export default function ItemScreen({
                 </Typography>
               </>
             )}
-            {console.log(state.fieldName)}
-            <Overlay
-              open={state.fieldName === 'description' || state.fieldName === 'media'}
-              title={state.fieldName}
-              onClose={() => {
-                onCancel();
-              }}
-            >
-              <div style={{ padding: '20px' }}>
-                {state.fieldName === 'description' && (
-                  <>
-                    <InlineForm
-                      multiline
-                      fieldName={state.fieldName}
-                      label={state.fieldName}
-                      onCancel={onCancel}
-                      formik={formik}
-                      formLoading={CRUDLoading}
-                    />
-                    <DisplayRichText value={data.getListItemBySlug.description} />
-                  </>
-                )}
-                {state.fieldName === 'media' && (
-                  <MediaForm
-                    state={crudState}
-                    setState={setCrudState}
-                    onCancel={onCancel}
-                    onSave={formik.handleSubmit}
-                    loading={CRUDLoading}
-                  />
-                )}
-              </div>
-            </Overlay>
+            {state.showSeoOverlay && (
+              <SeoOverlay
+                open={state.showSeoOverlay}
+                onClose={() => setState(initialState)}
+                formik={formik}
+                crudState={crudState}
+                setCrudState={setCrudState}
+                data={data.getListItemBySlug}
+                setFields={() => setFormValues(data.getListItemBySlug)}
+                loading={CRUDLoading}
+                state={state}
+                setState={setState}
+                permalinkPrefix={`${window?.location?.origin}/${data?.getListItemBySlug?.types[0]?.slug}`}
+              />
+            )}
           </>
           {data.getListItemBySlug?.types[0]?._id && (
             <FieldValues
@@ -368,8 +359,14 @@ export default function ItemScreen({
               authorized={authorized}
             />
           )}
-          <ListItemsFieldsValue listItem={data?.getListItemBySlug} previewMode={!authorized} />
-          {mentions.length != 0 && (
+          <FormFieldsValue
+            authorized={authorized}
+            fields={data?.getListItemBySlug?.fields}
+            values={data?.getListItemBySlug?.values}
+            handleValueChange={handleUpdate}
+          />
+          {/* <ListItemsFieldsValue listItem={data?.getListItemBySlug} previewMode={!authorized} /> */}
+          {mentions.length !== 0 && (
             <Grid>
               <Typography className="my-3">Mentions</Typography>
               <div className="my-3">

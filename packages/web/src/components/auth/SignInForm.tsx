@@ -70,7 +70,8 @@ export default function SignInForm({ successCallback }: IProps) {
             fullWidth
             data-testid="signin-button"
             type="submit"
-            loading={formik.isSubmitting}>
+            loading={formik.isSubmitting}
+          >
             Sign In
           </LoadingButton>
         </InputGroup>
@@ -79,7 +80,8 @@ export default function SignInForm({ successCallback }: IProps) {
             align="center"
             data-testid="forget-password-text"
             role="button"
-            onClick={() => setState({ ...state, showForgetPasswordForm: true })}>
+            onClick={() => setState({ ...state, showForgetPasswordForm: true })}
+          >
             Forgot Password?
           </Typography>
         </InputGroup>

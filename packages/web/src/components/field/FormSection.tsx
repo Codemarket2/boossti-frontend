@@ -38,6 +38,8 @@ export default function FormSection({ field, parentId, authorized }: IProps): an
   const [state, setState] = useState(initialState);
   const { data, error } = useGetFieldValues({ parentId, field: field._id });
 
+  const options = JSON.parse(field?.options);
+
   const handleSelectForm = async () => {
     try {
       setState({ ...initialState, backdrop: true });
@@ -99,6 +101,10 @@ export default function FormSection({ field, parentId, authorized }: IProps): an
           parentId={parentId}
           authorized={authorized}
           allowOthers={field.allowOthers}
+          customSettings={{
+            ...options?.settings,
+            useCustomSettings: options?.customSettings,
+          }}
         />
       )}
       {state.formId && state.edit && (
@@ -118,16 +124,18 @@ export default function FormSection({ field, parentId, authorized }: IProps): an
   );
 }
 
-const DisplayForm = ({
+export const DisplayForm = ({
   formId,
   parentId,
   allowOthers,
   authorized,
+  customSettings,
 }: {
   formId: string;
   parentId: string;
   allowOthers: boolean;
   authorized: boolean;
+  customSettings: any;
 }) => {
   const { data, error } = useGetResponses(formId, parentId);
 
@@ -140,10 +148,10 @@ const DisplayForm = ({
       {allowOthers ? (
         <>
           <ResponseCount formId={formId} parentId={parentId} />
-          <FieldViewWrapper _id={formId} parentId={parentId} customSettings={null} />
+          <FieldViewWrapper _id={formId} parentId={parentId} customSettings={customSettings} />
         </>
       ) : authorized && !(data?.getResponses && data?.getResponses?.count > 0) ? (
-        <FieldViewWrapper _id={formId} parentId={parentId} customSettings={null} />
+        <FieldViewWrapper _id={formId} parentId={parentId} customSettings={customSettings} />
       ) : (
         <>
           {data?.getResponses?.data?.[0]?._id && (
@@ -164,7 +172,8 @@ export const Form2Section = ({
   parentId: string;
   authorized: boolean;
 }) => {
-  const formId = JSON.parse(field?.options)?.formId;
+  const options = JSON.parse(field?.options);
+  const formId = options?.formId;
 
   return (
     <>
@@ -181,6 +190,10 @@ export const Form2Section = ({
         parentId={parentId}
         authorized={authorized}
         allowOthers={field.allowOthers}
+        customSettings={{
+          ...options?.settings,
+          useCustomSettings: options?.customSettings,
+        }}
       />
     </>
   );

@@ -6,7 +6,13 @@ import { ShowResponseLabel } from './ResponseDrawer';
 import ListItemDrawer from '../list/ListItemDrawer';
 import ImageList from '../post/ImageList';
 
-export default function DisplayValue({ field, value, imageAvatar }: any) {
+interface IProps {
+  field: any;
+  value: any;
+  imageAvatar?: boolean;
+}
+
+export default function DisplayValue({ field, value, imageAvatar }: IProps) {
   switch (field.fieldType) {
     case 'text':
     case 'textarea':

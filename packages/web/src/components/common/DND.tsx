@@ -32,7 +32,8 @@ function Quote({ field, index }) {
         <ListItem
           ref={provided.innerRef}
           {...provided.draggableProps}
-          {...provided.dragHandleProps}>
+          {...provided.dragHandleProps}
+        >
           <ListItemIcon>
             <DragIndicatorIcon />
           </ListItemIcon>

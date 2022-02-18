@@ -104,8 +104,6 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
     );
   };
 
-  console.log(listItem.fields);
-
   return (
     <>
       <Grid container>
@@ -197,7 +195,6 @@ export default function ListItemsFieldsValue({ listItem, previewMode = false }: 
         >
           {state.field?.fieldType === 'form' ? (
             <>
-              {console.log(state)}
               {state.field?.options?.values && (
                 <MenuItem onClick={() => setState({ ...state, showMenu: false, editForm: true })}>
                   <ListItemIcon className="mr-n4">

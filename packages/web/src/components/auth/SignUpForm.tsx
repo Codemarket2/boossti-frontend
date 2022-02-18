@@ -89,7 +89,8 @@ export default function SignUpForm() {
             fullWidth
             data-testid="signup-button"
             type="submit"
-            loading={formik.isSubmitting}>
+            loading={formik.isSubmitting}
+          >
             Sign Up
           </LoadingButton>
         </InputGroup>

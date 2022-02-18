@@ -34,7 +34,8 @@ const BootstrapDialogTitle = (props) => {
             position: 'absolute',
             right: 8,
             top: 8,
-          }}>
+          }}
+        >
           <CloseIcon />
         </IconButton>
       ) : null}
@@ -56,7 +57,8 @@ export default function LikeModal({
       open={open}
       onClose={handleCloseLikeModal}
       aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description">
+      aria-describedby="alert-dialog-description"
+    >
       <BootstrapDialogTitle id="customized-dialog-title" onClose={handleCloseLikeModal}>
         {totalLike && totalLike} Like
       </BootstrapDialogTitle>

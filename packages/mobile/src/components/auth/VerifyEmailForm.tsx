@@ -45,7 +45,8 @@ export default function SignInForm({
           loading={disabled || formik.isSubmitting}
           disabled={disabled || formik.isSubmitting}
           mode="contained"
-          onPress={formik.handleSubmit}>
+          onPress={formik.handleSubmit}
+        >
           Verify Email
         </Button>
       </InputGroup>

@@ -63,7 +63,6 @@ export const getDateRange = (startDate, endDate) => {
 
   let sDate = new Date(startDate);
   let eDate = new Date(endDate);
-  // console.log(sDate.getDate());
   if (startDate !== '' && endDate !== '') {
     if (sDate.getMonth() === eDate.getMonth()) {
       return `${sDate.getDate()} - ${eDate.getDate()} ${monthNames[eDate.getMonth()]}`;

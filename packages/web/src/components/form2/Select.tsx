@@ -23,33 +23,31 @@ export default function Select({
   helperText,
 }: IProps) {
   return (
-    <>
-      <Autocomplete
-        size="small"
-        options={options}
-        getOptionLabel={(option) => option}
-        value={value}
-        onChange={(event: any, newValue) => {
-          onChange(newValue);
-        }}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            fullWidth
-            placeholder={label}
-            variant="outlined"
-            error={error}
-            helperText={helperText}
-          />
-        )}
-        filterOptions={(options2, params) => {
-          const filtered = filter(options2, params);
-          if (params.inputValue !== '' && selectAllowCreate) {
-            filtered.push(params.inputValue);
-          }
-          return filtered;
-        }}
-      />
-    </>
+    <Autocomplete
+      size="small"
+      options={options}
+      getOptionLabel={(option) => option}
+      value={value}
+      onChange={(event: any, newValue) => {
+        onChange(newValue);
+      }}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          fullWidth
+          placeholder={label}
+          variant="outlined"
+          error={error}
+          helperText={helperText}
+        />
+      )}
+      filterOptions={(options2, params) => {
+        const filtered = filter(options2, params);
+        if (params.inputValue !== '' && selectAllowCreate) {
+          filtered.push(params.inputValue);
+        }
+        return filtered;
+      }}
+    />
   );
 }

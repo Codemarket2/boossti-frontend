@@ -1,11 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import { useSelector } from 'react-redux';
 import IconButton from '@material-ui/core/IconButton';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Skeleton from '@material-ui/lab/Skeleton';
+import EditIcon from '@material-ui/icons/Edit';
+import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { ArrowBackIosRounded, ArrowForwardIosRounded } from '@material-ui/icons';
 import { useCreateUpdateResponse } from '@frontend/shared/hooks/response';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
@@ -15,11 +19,15 @@ import { onAlert } from '../../utils/alert';
 import DisplayRichText from '../common/DisplayRichText';
 import Overlay from '../common/Overlay';
 import AuthScreen from '../../screens/AuthScreen';
+import { ResponseChild2 } from './Response';
+import DisplayValue from './DisplayValue';
 
 interface IProps {
   form: any;
   parentId?: string;
   createCallback?: (response: any) => void;
+  setResponded?: () => void;
+  fieldWiseView?: boolean;
 }
 
 export const defualtValue = {
@@ -37,12 +45,15 @@ export default function FormViewWrapper({
   form: { _id, name, fields, settings },
   parentId,
   createCallback,
+  setResponded,
+  fieldWiseView = false,
 }: IProps): any {
   const { handleCreateUpdateResponse, createLoading } = useCreateUpdateResponse(
     { onAlert },
     parentId,
   );
   const [showMessage, setShowMessage] = useState(false);
+  const [formResponse, setFormResponse] = useState(null);
 
   const handleSubmit = async (values) => {
     const payload = { formId: _id, values };
@@ -52,7 +63,10 @@ export default function FormViewWrapper({
       if (createCallback) {
         createCallback(response);
       }
+      if (setResponded) setResponded();
     }
+
+    setFormResponse(response);
     return response;
   };
 
@@ -75,6 +89,8 @@ export default function FormViewWrapper({
               </Button>
             )}
           </InputGroup>
+
+          <ResponseChild2 formId={_id} response={formResponse} hideAuthor hideNavigation />
         </div>
       ) : (
         <FormView
@@ -82,6 +98,7 @@ export default function FormViewWrapper({
           fields={fields}
           handleSubmit={handleSubmit}
           loading={createLoading}
+          fieldWiseView={fieldWiseView}
         />
       )}
     </div>
@@ -95,17 +112,17 @@ interface IProps2 {
   onCancel?: () => void;
   initialValues?: any[];
   authRequired?: boolean;
+  fieldWiseView?: boolean;
 }
 
 const initialSubmitState = {
   validate: false,
-  // showOnSubmitMessage: false,
   loading: false,
 };
 
 export const filterValues = (values, field) => {
   let newValues = [{ ...defualtValue, field: field._id }];
-  if (values.filter((f) => f.field === field._id).length) {
+  if (values.some((f) => f.field === field._id)) {
     if (field?.options?.multipleValues) {
       newValues = values.filter((f) => f.field === field._id);
     } else {
@@ -122,11 +139,21 @@ export function FormView({
   onCancel,
   initialValues = [],
   authRequired = false,
+  fieldWiseView = false,
 }: IProps2): any {
   const [values, setValues] = useState(initialValues);
   const [submitState, setSubmitState] = useState(initialSubmitState);
   const authenticated = useSelector(({ auth }: any) => auth.authenticated);
   const [showAuthModal, setShowAuthModal] = useState(false);
+
+  const [page, setPage] = useState(0);
+  const [hideField, setHideField] = useState(false);
+
+  useEffect(() => {
+    if (hideField) {
+      setHideField(false);
+    }
+  }, [values]);
 
   const onChange = (sValue, valueIndex) => {
     const newValue = { ...defualtValue, ...sValue };
@@ -188,13 +215,11 @@ export function FormView({
 
   const onAddOneMoreValue = (fieldId) => {
     let newValues = [];
-    if (values.filter((f) => f.field === fieldId).length === 0) {
-      newValues = [
-        { ...defualtValue, field: fieldId },
-        { ...defualtValue, field: fieldId },
-      ];
+    const newValue = { ...defualtValue, field: fieldId, value: '' };
+    if (values.some((f) => f.field === fieldId)) {
+      newValues = [newValue];
     } else {
-      newValues = [{ ...defualtValue, field: fieldId }];
+      newValues = [newValue, newValue];
     }
     setValues([...newValues, ...values]);
   };
@@ -202,6 +227,24 @@ export function FormView({
   const onRemoveOneValue = (fieldId, index) => {
     const oldValues = values.filter((f) => f.field !== fieldId);
     const newValues = values.filter((f) => f.field === fieldId).filter((f, i) => i !== index);
+    setValues([...oldValues, ...newValues]);
+  };
+
+  const onEditOneValue = (fieldId, index) => {
+    let selectedField = null;
+    const oldValues = values.filter((f) => f.field !== fieldId);
+    let newValues = values
+      .filter((f) => f.field === fieldId)
+      .filter((f, i) => {
+        if (i !== index) {
+          return true;
+        }
+        selectedField = f;
+        return false;
+      });
+    if (selectedField) {
+      newValues = [selectedField, ...newValues];
+    }
     setValues([...oldValues, ...newValues]);
   };
 
@@ -215,7 +258,7 @@ export function FormView({
         </Overlay>
       )}
       <Grid container spacing={0}>
-        {fields?.map((field) => (
+        {(fieldWiseView && fields?.length > 1 ? [fields[page]] : fields)?.map((field) => (
           <Grid
             item
             xs={field?.options?.grid?.xs || 12}
@@ -228,45 +271,140 @@ export function FormView({
             <InputGroup key={field._id}>
               <Typography>
                 {field?.options?.required ? `${field?.label}*` : field?.label}
-                {field?.options?.multipleValues && (
-                  <>
-                    <IconButton
-                      edge="end"
-                      color="primary"
-                      onClick={() => onAddOneMoreValue(field._id)}
-                    >
-                      <AddCircleIcon fontSize="small" />
-                    </IconButton>
-                  </>
-                )}
               </Typography>
               {filterValues(values, field).map((value, valueIndex) => (
-                <div className="mb-2 d-flex bg-dangerr align-items-center">
-                  <Field
-                    disabled={submitState.loading}
-                    validate={submitState.validate}
-                    {...field}
-                    label={field?.options?.required ? `${field?.label}*` : field?.label}
-                    onChangeValue={(changedValue) =>
-                      onChange({ ...changedValue, field: field._id }, valueIndex)
-                    }
-                    value={value}
-                  />
-                  {values?.length > 1 && (
-                    <IconButton
-                      edge="end"
-                      className="text-danger"
-                      onClick={() => onRemoveOneValue(field._id, valueIndex)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
+                <div key={valueIndex}>
+                  {valueIndex === 0 ? (
+                    <>
+                      <div className="w-100">
+                        {hideField ? (
+                          <Skeleton height={200} />
+                        ) : (
+                          <Field
+                            {...field}
+                            disabled={submitState.loading}
+                            validate={submitState.validate}
+                            label={field?.options?.required ? `${field?.label}*` : field?.label}
+                            onChangeValue={(changedValue) =>
+                              onChange({ ...changedValue, field: field._id }, valueIndex)
+                            }
+                            value={value}
+                          />
+                        )}
+                      </div>
+                      {field?.options?.multipleValues && (
+                        <Button
+                          className="mt-2"
+                          size="small"
+                          color="primary"
+                          variant="contained"
+                          onClick={() => {
+                            if (field?.fieldType === 'richTextarea') {
+                              setHideField(true);
+                            }
+                            onAddOneMoreValue(field._id);
+                          }}
+                          startIcon={<AddIcon />}
+                        >
+                          Add
+                        </Button>
+                      )}
+                    </>
+                  ) : (
+                    <div className="mb-2 d-flex align-items-start">
+                      <div className="w-100">
+                        <DisplayValue imageAvatar value={value} field={field} />
+                        {validateValue(submitState.validate, value, field.options, field.fieldType)
+                          .error && (
+                          <FormHelperText className="text-danger">
+                            {
+                              validateValue(
+                                submitState.validate,
+                                value,
+                                field.options,
+                                field.fieldType,
+                              ).errorMessage
+                            }
+                          </FormHelperText>
+                        )}
+                      </div>
+                      <IconButton
+                        onClick={() => {
+                          if (field?.fieldType === 'richTextarea') {
+                            setHideField(true);
+                          }
+                          onEditOneValue(field._id, valueIndex);
+                        }}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton
+                        edge="end"
+                        onClick={() => onRemoveOneValue(field._id, valueIndex)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </div>
                   )}
                 </div>
               ))}
             </InputGroup>
           </Grid>
         ))}
-        {fields?.length > 0 && (
+        {fieldWiseView && fields?.length > 1 && (
+          <div className="w-100 d-flex justify-content-between">
+            {page !== 0 && (
+              <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                startIcon={<ArrowBackIosRounded fontSize="small" />}
+                onClick={() => {
+                  setPage(page - 1);
+                }}
+              >
+                Back
+              </Button>
+            )}
+            {page !== fields?.length - 1 && (
+              <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                endIcon={<ArrowForwardIosRounded fontSize="small" />}
+                onClick={() => {
+                  setSubmitState({ ...submitState, loading: true });
+                  let validate = false;
+                  if (
+                    fields[page]?.options?.required &&
+                    values.filter((value) => value.field === fields[page]._id).length === 0
+                  )
+                    validate = true;
+                  else
+                    values
+                      .filter((value) => value.field === fields[page]._id)
+                      ?.forEach((tempValue) => {
+                        if (
+                          validateValue(
+                            true,
+                            tempValue,
+                            fields[page].options,
+                            fields[page].fieldType,
+                          ).error
+                        )
+                          validate = true;
+                      });
+
+                  setSubmitState({ ...submitState, validate, loading: false });
+                  if (!validate) setPage(page + 1);
+                }}
+              >
+                Next
+              </Button>
+            )}
+          </div>
+        )}
+        {((!fieldWiseView && fields?.length > 0) || fields?.length === page + 1) && (
           <Grid item xs={12}>
             <InputGroup>
               <LoadingButton

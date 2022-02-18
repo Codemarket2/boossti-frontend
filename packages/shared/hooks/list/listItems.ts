@@ -18,6 +18,7 @@ import { ADDED_LIST_ITEM, UPDATED_LIST_ITEM } from '../../graphql/subscription/l
 import { updateLikeInCache } from '../like/createLike';
 import { parseListType } from './listTypes';
 import { GET_PAGE_MENTIONS } from '../../graphql/query/field';
+import { compressedFile } from '../../utils/compressFile';
 
 const defaultGetListItems = { limit: 100, page: 1 };
 export function useGetpageFieldMentions(_id) {
@@ -140,6 +141,7 @@ interface IListItemsFormValues {
   edit: boolean;
   title: string;
   description: string;
+  slug: string;
   types: [string];
 }
 
@@ -148,6 +150,7 @@ const listItemsDefaultValue = {
   edit: false,
   title: '',
   description: '',
+  slug: '',
 };
 
 interface IProps extends IHooksProps {
@@ -172,12 +175,12 @@ export function useCRUDListItems({ onAlert, types, createCallBack, updateCallBac
   const formik = useFormik({
     initialValues: listItemsDefaultValue,
     validationSchema: listItemsValidationSchema,
-    onSubmit: async (payload: IListItemsFormValues) => {
+    onSubmit: async (payload: IListItemsFormValues, { setFieldError }) => {
       try {
         let newMedia = [];
         let newPayload: any = { ...payload };
         if (state.tempMediaFiles.length > 0) {
-          newMedia = await fileUpload(state.tempMediaFiles, '/list-items');
+          newMedia = await fileUpload(state.tempMediaFiles, '/list-items', compressedFile);
           newMedia = newMedia.map((n, i) => ({ url: n, caption: state.tempMedia[i].caption }));
         }
         let media = [...state.media, ...newMedia];
@@ -185,18 +188,19 @@ export function useCRUDListItems({ onAlert, types, createCallBack, updateCallBac
         newPayload = { ...newPayload, media, types };
         if (newPayload.edit) {
           const res = await onUpdate(newPayload);
-          // console.log('onUpdate res', res);
           updateCallBack(res.data.updateListItem.slug);
         } else {
           let res = await onCreate(newPayload);
           createCallBack(res.data.createListItem.slug);
         }
       } catch (error) {
+        if (error?.message?.includes('duplicate key error')) {
+          return setFieldError('slug', 'This slug is already taken');
+        }
         onAlert('Error', error.message);
       }
     },
   });
-
   const onCreate = async (payload) => {
     // const createInCache = (client, mutationResult) => {
     //   const { getListItems } = client.readQuery({
@@ -247,6 +251,7 @@ export function useCRUDListItems({ onAlert, types, createCallBack, updateCallBac
     formik.setFieldValue('edit', true, false);
     formik.setFieldValue('title', item.title, false);
     formik.setFieldValue('description', item.description, false);
+    formik.setFieldValue('slug', item.slug, false);
     formik.setFieldValue('_id', item._id, false);
 
     setState({

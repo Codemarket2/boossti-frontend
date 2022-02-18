@@ -35,8 +35,20 @@ export const CREATE_LIST_TYPE = gql`
 `;
 
 export const UPDATE_LIST_TYPE = gql`
-  mutation MyMutation($_id: ID!, $title: String, $description: String, $media: [MediaInput]) {
-    updateListType(_id: $_id, title: $title, description: $description, media: $media) {
+  mutation MyMutation(
+    $_id: ID!
+    $title: String
+    $description: String
+    $media: [MediaInput]
+    $slug: String
+  ) {
+    updateListType(
+      _id: $_id
+      title: $title
+      description: $description
+      media: $media
+      slug: $slug
+    ) {
       _id
       slug
       title
@@ -183,19 +195,48 @@ export const CREATE_LIST_ITEM = gql`
           title
           slug
         }
+        form {
+          _id
+          name
+        }
       }
       createdAt
       createdBy {
         _id
         name
       }
+      values {
+        _id
+        field
+        value
+        values
+        valueNumber
+        valueBoolean
+        valueDate
+        itemId {
+          _id
+          title
+          slug
+        }
+        media {
+          url
+          caption
+        }
+        response {
+          _id
+          values {
+            field
+            value
+          }
+        }
+      }
     }
   }
 `;
 
 export const UPDATE_LIST_ITEM_FIELDS = gql`
-  mutation MyMutation($_id: ID!, $fields: [Field2Input]) {
-    updateListItem(_id: $_id, fields: $fields) {
+  mutation MyMutation($_id: ID!, $fields: [Field2Input], $values: [FieldValue2Input]) {
+    updateListItem(_id: $_id, fields: $fields, values: $values) {
       _id
       active
       authenticateUser
@@ -222,11 +263,40 @@ export const UPDATE_LIST_ITEM_FIELDS = gql`
           title
           slug
         }
+        form {
+          _id
+          name
+        }
       }
       createdAt
       createdBy {
         _id
         name
+      }
+      values {
+        _id
+        field
+        value
+        values
+        valueNumber
+        valueBoolean
+        valueDate
+        itemId {
+          _id
+          title
+          slug
+        }
+        media {
+          url
+          caption
+        }
+        response {
+          _id
+          values {
+            field
+            value
+          }
+        }
       }
     }
   }
@@ -239,6 +309,7 @@ export const UPDATE_LIST_ITEM = gql`
     $description: String
     $media: [MediaInput]
     $layouts: AWSJSON
+    $slug: String
   ) {
     updateListItem(
       _id: $_id
@@ -246,6 +317,7 @@ export const UPDATE_LIST_ITEM = gql`
       description: $description
       media: $media
       layouts: $layouts
+      slug: $slug
     ) {
       _id
       active
@@ -273,11 +345,40 @@ export const UPDATE_LIST_ITEM = gql`
           title
           slug
         }
+        form {
+          _id
+          name
+        }
       }
       createdAt
       createdBy {
         _id
         name
+      }
+      values {
+        _id
+        field
+        value
+        values
+        valueNumber
+        valueBoolean
+        valueDate
+        itemId {
+          _id
+          title
+          slug
+        }
+        media {
+          url
+          caption
+        }
+        response {
+          _id
+          values {
+            field
+            value
+          }
+        }
       }
     }
   }
@@ -312,11 +413,40 @@ export const PUBLISH_LIST_ITEM = gql`
           title
           slug
         }
+        form {
+          _id
+          name
+        }
       }
       createdAt
       createdBy {
         _id
         name
+      }
+      values {
+        _id
+        field
+        value
+        values
+        valueNumber
+        valueBoolean
+        valueDate
+        itemId {
+          _id
+          title
+          slug
+        }
+        media {
+          url
+          caption
+        }
+        response {
+          _id
+          values {
+            field
+            value
+          }
+        }
       }
     }
   }
@@ -351,33 +481,44 @@ export const UPDATE_LIST_ITEM_LAYOUTS = gql`
           title
           slug
         }
+        form {
+          _id
+          name
+        }
       }
       createdAt
       createdBy {
         _id
         name
       }
+      values {
+        _id
+        field
+        value
+        values
+        valueNumber
+        valueBoolean
+        valueDate
+        itemId {
+          _id
+          title
+          slug
+        }
+        media {
+          url
+          caption
+        }
+        response {
+          _id
+          values {
+            field
+            value
+          }
+        }
+      }
     }
   }
 `;
-
-// export const UPDATE_PUBLISH = gql`
-//   mutation MyMutation($_id: ID!, $publish: Boolean!) {
-//     updatePublish(_id: $_id, publish: $publish) {
-//       _id
-//       active
-//     }
-//   }
-// `;
-
-// export const UPDATE_AUTHENTICATION = gql`
-//   mutation MyMutation($_id: ID!, $authenticateUser: Boolean!) {
-//     updateAuthentication(_id: $_id, authenticateUser: $authenticateUser) {
-//       authenticateUser
-//       _id
-//     }
-//   }
-// `;
 
 export const DELETE_LIST_ITEM = gql`
   mutation MyMutation($_id: ID!) {

@@ -83,43 +83,42 @@ export default function FieldForm({
           )}
         </FormControl>
       </InputGroup>
-      {formik?.values?.fieldType !== 'label' && (
-        <InputGroup>
-          <FormControlLabel
-            disabled={formik.isSubmitting}
-            control={
-              <Checkbox
-                checked={formik.values.multipleValues}
-                onChange={({ target }) => formik.setFieldValue('multipleValues', target.checked)}
-                name="multipleValues"
-                color="primary"
-              />
-            }
-            label="Mutiple values"
-          />
-        </InputGroup>
-      )}
-      {formik?.values?.fieldType !== 'label' && (
-        <InputGroup>
-          <FormControlLabel
-            disabled={formik.isSubmitting}
-            control={
-              <Checkbox
-                checked={formik.values.required}
-                onChange={({ target }) => formik.setFieldValue('required', target.checked)}
-                name="required"
-                color="primary"
-              />
-            }
-            label="Required"
-          />
-        </InputGroup>
+      {!['label', 'form'].includes(formik?.values?.fieldType) && (
+        <>
+          <InputGroup>
+            <FormControlLabel
+              disabled={formik.isSubmitting}
+              control={
+                <Checkbox
+                  checked={formik.values.multipleValues}
+                  onChange={({ target }) => formik.setFieldValue('multipleValues', target.checked)}
+                  name="multipleValues"
+                  color="primary"
+                />
+              }
+              label="Mutiple values"
+            />
+          </InputGroup>
+          <InputGroup>
+            <FormControlLabel
+              disabled={formik.isSubmitting}
+              control={
+                <Checkbox
+                  checked={formik.values.required}
+                  onChange={({ target }) => formik.setFieldValue('required', target.checked)}
+                  name="required"
+                  color="primary"
+                />
+              }
+              label="Required"
+            />
+          </InputGroup>
+        </>
       )}
       {formik?.values?.fieldType === 'label' && (
         <RichTextarea
           value={formik?.values?.staticText}
           onChange={(val) => {
-            // console.log(val);
             formik.setFieldValue('staticText', val);
           }}
         />

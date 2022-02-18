@@ -25,7 +25,8 @@ export default function Button({
     <PaperButton
       contentStyle={{ paddingVertical: dense ? 0 : 0, ...contentStyle }}
       mode={mode}
-      {...props}>
+      {...props}
+    >
       {children}
     </PaperButton>
   );

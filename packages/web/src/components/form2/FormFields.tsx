@@ -14,9 +14,12 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import GridIcon from '@material-ui/icons/GridOn';
-import ShareIcon from '@material-ui/icons/Share';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
-import { generateObjectId } from '@frontend/shared/utils/objectId';
+import EditIcon from '@material-ui/icons/Edit';
+import SettingsIcon from '@material-ui/icons/Settings';
+import ListIcon from '@material-ui/icons/List';
+// import ShareIcon from '@material-ui/icons/Share';
+// import FileCopyIcon from '@material-ui/icons/FileCopy';
+// import { generateObjectId } from '@frontend/shared/utils/objectId';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
@@ -25,6 +28,10 @@ import AddField from './AddField';
 import EditField from './EditField';
 import EditFieldGrid from './EditFieldGrid';
 import { convertToSlug } from '../field/LeftNavigation';
+import EditFormDrawer from './EditFormDrawer';
+import Overlay from '../common/Overlay';
+import CustomFormSettings from './CustomFormSettings';
+import { SelectFormDrawer } from './SelectForm';
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -38,6 +45,9 @@ const initialValues = {
   field: null,
   showForm: false,
   editGrid: false,
+  selectForm: false,
+  editForm: false,
+  showFormSettings: false,
 };
 
 type IProps = {
@@ -89,37 +99,69 @@ export default function FormFields({
     setValues(initialValues);
   };
 
-  const handleDuplicateField = () => {
-    const newField = { ...values.field, _id: generateObjectId() };
-    setFields([...fields, newField]);
-    setValues(initialValues);
-  };
-
   const handleNavigate = (fieldLabel) => {
     if (isSection) {
-      // console.log(window.location);
       const url = `${window.location.origin}${window.location.pathname}#${convertToSlug(
         fieldLabel,
       )}`;
-      // console.log(url);
       router.push(url);
     }
   };
 
-  const handleShareSection = (fieldLabel) => {
-    if (isSection && fieldLabel) {
-      const url = `${window.location.origin}/page/${router.query?.itemSlug}#${convertToSlug(
-        fieldLabel,
-      )}`;
-      if ('clipboard' in navigator) {
-        navigator.clipboard.writeText(url);
-      } else {
-        document?.execCommand('copy', true, url);
-      }
-      // console.log(url);
-      setValues(initialValues);
-    }
+  const handleEditFormSettings = (fieldId: string, settings: any) => {
+    setFields(
+      fields.map((field) =>
+        field._id === fieldId ? { ...field, options: { ...field?.options, settings } } : field,
+      ),
+    );
   };
+
+  const handleToggleCustomSettings = (fieldId: string, customSettings: boolean) => {
+    setFields(
+      fields.map((field) =>
+        field._id === fieldId
+          ? { ...field, options: { ...field?.options, customSettings } }
+          : field,
+      ),
+    );
+  };
+
+  const handleSelectForm = (fieldId: string, formId: string) => {
+    setFields(
+      fields.map((field) =>
+        field._id === fieldId
+          ? {
+              ...field,
+              options: {
+                ...field?.options,
+                formId,
+              },
+            }
+          : field,
+      ),
+    );
+    setValues(initialValues);
+  };
+
+  // const handleDuplicateField = () => {
+  //   const newField = { ...values.field, _id: generateObjectId() };
+  //   setFields([...fields, newField]);
+  //   setValues(initialValues);
+  // };
+
+  // const handleShareSection = (fieldLabel) => {
+  //   if (isSection && fieldLabel) {
+  //     const url = `${window.location.origin}/page/${router.query?.itemSlug}#${convertToSlug(
+  //       fieldLabel,
+  //     )}`;
+  //     if ('clipboard' in navigator) {
+  //       navigator.clipboard.writeText(url);
+  //     } else {
+  //       document?.execCommand('copy', true, url);
+  //     }
+  //     setValues(initialValues);
+  //   }
+  // };
 
   return (
     <Paper variant="outlined">
@@ -222,24 +264,59 @@ export default function FormFields({
             show={values.showMenu}
             onClose={() => setValues(initialValues)}
             onDelete={() => {
-              setValues({ ...values, showMenu: null });
               setFields(fields.filter((field) => field._id !== values.field._id));
+              setValues(initialValues);
             }}
             onEdit={() => {
               setValues({ ...values, showMenu: null, showForm: true });
             }}
           >
-            <MenuItem onClick={handleDuplicateField}>
-              <ListItemIcon className="mr-n4">
-                <FileCopyIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText primary="Duplicate" />
-            </MenuItem>
             <MenuItem onClick={() => setValues({ ...values, editGrid: true })}>
               <ListItemIcon className="mr-n4">
                 <GridIcon fontSize="small" />
               </ListItemIcon>
               <ListItemText primary="Grid" />
+            </MenuItem>
+            {values.field?.fieldType === 'form' && (
+              <>
+                <MenuItem
+                  onClick={() => setValues({ ...values, showMenu: false, selectForm: true })}
+                >
+                  <ListItemIcon className="mr-n4">
+                    <ListIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText primary="Select Form" />
+                </MenuItem>
+                {values.field?.options?.formId && (
+                  <>
+                    <MenuItem
+                      onClick={() => setValues({ ...values, showMenu: false, editForm: true })}
+                    >
+                      <ListItemIcon className="mr-n4">
+                        <EditIcon fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText primary="Edit Form" />
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() =>
+                        setValues({ ...values, showMenu: false, showFormSettings: true })
+                      }
+                    >
+                      <ListItemIcon className="mr-n4">
+                        <SettingsIcon fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText primary="Form Settings" />
+                    </MenuItem>
+                  </>
+                )}
+              </>
+            )}
+
+            {/* <MenuItem onClick={handleDuplicateField}>
+              <ListItemIcon className="mr-n4">
+                <FileCopyIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Duplicate" />
             </MenuItem>
             {isSection && (
               <MenuItem onClick={() => handleShareSection(values?.field?.label)}>
@@ -248,9 +325,37 @@ export default function FormFields({
                 </ListItemIcon>
                 <ListItemText primary="Share" />
               </MenuItem>
-            )}
+            )} */}
           </CRUDMenu>
         </>
+      )}
+      {values.selectForm && (
+        <SelectFormDrawer
+          open={values.selectForm}
+          onClose={() => setValues(initialValues)}
+          onSelect={(formId) => handleSelectForm(values.field?._id, formId)}
+        />
+      )}
+      {values.editForm && (
+        <EditFormDrawer
+          formId={values.field?.options?.formId}
+          open={values.editForm}
+          onClose={() => setValues(initialValues)}
+        />
+      )}
+      {values.showFormSettings && (
+        <Overlay
+          open={values.showFormSettings}
+          title={`Form Settings - ${values.field?.label ? values.field.label : ''}`}
+          onClose={() => setValues(initialValues)}
+        >
+          <CustomFormSettings
+            settings={values.field?.options?.settings}
+            customSettings={values.field?.options?.customSettings}
+            toggleCustomSettings={(value) => handleToggleCustomSettings(values.field?._id, value)}
+            onSettingsChange={(value) => handleEditFormSettings(values.field?._id, value)}
+          />
+        </Overlay>
       )}
     </Paper>
   );

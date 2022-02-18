@@ -83,11 +83,13 @@ export default function PostFormScreen({ route }: any) {
         enabled
         behavior={Platform.OS === 'ios' ? 'padding' : false}
         style={{ flex: 1 }}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 110 : 0}>
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 110 : 0}
+      >
         <ScrollView
           keyboardShouldPersistTaps={'always'}
           keyboardDismissMode={Platform.OS === 'ios' ? 'interactive' : 'on-drag'}
-          showsVerticalScrollIndicator={false}>
+          showsVerticalScrollIndicator={false}
+        >
           <Title>Create Post</Title>
           <List.Item
             title={page.name}
@@ -125,7 +127,8 @@ export default function PostFormScreen({ route }: any) {
               loading={state.loading}
               disabled={state.loading}
               mode="contained"
-              onPress={handlePublishPost}>
+              onPress={handlePublishPost}
+            >
               Publish Post
             </Button>
           </InputGroup>

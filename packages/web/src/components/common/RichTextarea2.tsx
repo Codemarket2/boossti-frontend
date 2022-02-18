@@ -11,6 +11,7 @@ export async function getListItems(queryText) {
       variables: { search: queryText },
     });
     return new Promise((resolve) => {
+      console.log(response);
       let itemsToDisplay = response?.data?.getMentionItems;
       itemsToDisplay = itemsToDisplay?.map(
         (val) =>
@@ -33,7 +34,7 @@ function mentionCustomization(editor) {
       key: 'data-mention',
       classes: 'mention',
       attributes: {
-        'data-user-id': true,
+        'data-id': true,
         'data-type': true,
       },
     },
@@ -41,7 +42,7 @@ function mentionCustomization(editor) {
       key: 'mention',
       value: (viewItem) => {
         const mentionAttribute = editor.plugins.get('Mention').toMentionAttribute(viewItem, {
-          _id: viewItem.getAttribute('data-user-id'),
+          _id: viewItem.getAttribute('data-id'),
           type: viewItem.getAttribute('data-type'),
         });
         return mentionAttribute;
@@ -175,7 +176,7 @@ export default function RichTextarea2({ value = '', onChange }: IProps) {
 
   useEffect(() => {
     editorRef.current = {
-      CKEditor: require('@ckeditor/ckeditor5-react').CKEditor, // v3+
+      CKEditor: require('@ckeditor/ckeditor5-react').CKEditor,
       Editor: require('@frontend/ckeditor'),
     };
     setLoading(true);

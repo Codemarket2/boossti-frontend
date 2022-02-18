@@ -110,7 +110,8 @@ const SignInWithFacebook = ({ showUser = false }: IProps) => {
             style={{ backgroundColor: '#4267B2', color: 'white' }}
             type="button"
             variant="contained"
-            onClick={handleLogin}>
+            onClick={handleLogin}
+          >
             Connect Facebook Account
           </Button>
           <Typography className="text-center mt-2">
@@ -173,7 +174,8 @@ const SignInWithFacebook = ({ showUser = false }: IProps) => {
             style={{ backgroundColor: '#4267B2', color: 'white' }}
             type="button"
             variant="contained"
-            onClick={handleLogout}>
+            onClick={handleLogout}
+          >
             Disconnect Facebook Account
           </Button>
         </>

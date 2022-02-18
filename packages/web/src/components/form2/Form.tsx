@@ -1,11 +1,14 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import ShareIcon from '@material-ui/icons/Share';
+import DeleteIcon from '@material-ui/icons/Delete';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { useUpdateSection } from '@frontend/shared/hooks/section';
 import Typography from '@material-ui/core/Typography';
 import Alert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -25,6 +28,8 @@ import Actions from './Actions';
 import { onAlert } from '../../utils/alert';
 import Authorization from '../common/Authorization';
 import InlineInput from '../common/InlineInput';
+import { QRButton } from '../qrcode/QRButton';
+import ResponseSections from './ResponseSection';
 
 interface IProps {
   _id: string;
@@ -37,6 +42,7 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
     onAlert,
     _id,
   });
+  const { onSectionChange, section } = useUpdateSection({ onAlert, _id });
 
   const { handleDelete } = useDeleteForm({
     onAlert,
@@ -110,7 +116,7 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
             />
           </Typography>
         ) : (
-          <div className="d-flex justify-content-between align-items-center">
+          <div className="d-sm-flex justify-content-between align-items-center">
             <Breadcrumbs>
               <Link href="/forms">Forms</Link>
               <InlineInput
@@ -128,25 +134,28 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
             </Breadcrumbs>
             <div className="d-flex  align-items-center">
               {updateLoading && <CircularProgress size={25} />}
-              {state?.settings?.published && (
-                <Tooltip title="Copy form link">
-                  <IconButton className="ml-2" onClick={handleCopyLink}>
-                    <ShareIcon />
-                  </IconButton>
-                </Tooltip>
-              )}
-              <Button
-                variant="outlined"
-                color="primary"
-                size="small"
-                className="mx-2"
-                onClick={handlePublish}
-              >
-                {state?.settings?.published ? 'Unpublish' : 'Publish'}
-              </Button>
-              <Button variant="outlined" color="primary" size="small" onClick={onDelete}>
-                Delete
-              </Button>
+              <QRButton />
+              <Tooltip title="Copy form link">
+                <IconButton className="ml-2" onClick={handleCopyLink}>
+                  <ShareIcon />
+                </IconButton>
+              </Tooltip>
+              <FormControlLabel
+                className="m-0"
+                control={
+                  <Switch
+                    color="primary"
+                    checked={state?.settings?.published}
+                    onChange={handlePublish}
+                  />
+                }
+                label="Publish"
+              />
+              <Tooltip title="Delete">
+                <IconButton edge="end" onClick={onDelete}>
+                  <DeleteIcon />
+                </IconButton>
+              </Tooltip>
             </div>
           </div>
         )}
@@ -179,14 +188,22 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
               </Paper>
             )}
             {options.currentTab === 'settings' && (
-              <FormSetting
-                settings={state.settings}
-                onChange={(settings) =>
-                  handleOnChange({
-                    settings: { ...state.settings, ...settings },
-                  })
-                }
-              />
+              <>
+                <FormSetting
+                  settings={state.settings}
+                  onChange={(settings) =>
+                    handleOnChange({
+                      settings: { ...state.settings, ...settings },
+                    })
+                  }
+                />
+                <ResponseSections
+                  section={section}
+                  onSectionChange={onSectionChange}
+                  authorized
+                  title="Response sections"
+                />
+              </>
             )}
             {options.currentTab === 'responses' && <ResponseList form={state} />}
             {/* {options.currentTab === 'design' && (

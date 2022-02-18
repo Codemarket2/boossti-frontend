@@ -46,10 +46,8 @@ export function useGetAllUser() {
       // higherRange,
       // active,
     },
-    fetchPolicy: 'network-only', // 'cache-and-network' //'network-only'
+    fetchPolicy: 'network-only',
   });
-
-  // console.log('Error', data, error);
 
   const [allData, setAllData] = useState({
     count: 0,

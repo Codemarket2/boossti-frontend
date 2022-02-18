@@ -25,7 +25,8 @@ export default function ProfileScreen() {
           textColor="primary"
           centered
           variant="scrollable"
-          scrollButtons="on">
+          scrollButtons="on"
+        >
           <Tab label="Posts" value="posts" />
           <Tab label="My Story" value="about" />
           <Tab label="Saved Tags" value="bookmarks" />

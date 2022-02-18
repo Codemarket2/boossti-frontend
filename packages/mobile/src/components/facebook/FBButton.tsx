@@ -18,7 +18,8 @@ export default function FBButton({ state, handleLogout, getCurrentSession }: any
             }
           }}
           mode="contained"
-          icon="facebook">
+          icon="facebook"
+        >
           Disconnect Facebook Account
         </Button>
       ) : (
@@ -41,7 +42,8 @@ export default function FBButton({ state, handleLogout, getCurrentSession }: any
             }
           }}
           mode="contained"
-          icon="facebook">
+          icon="facebook"
+        >
           Connect Facebook Account
         </Button>
       )}
