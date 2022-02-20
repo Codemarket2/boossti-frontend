@@ -57,6 +57,7 @@ export function useCreateUpdateResponse({ onAlert }: IHooksProps, parentId) {
         });
         response = response?.data?.createResponse;
       }
+
       return response;
     } catch (error) {
       console.log(error);
