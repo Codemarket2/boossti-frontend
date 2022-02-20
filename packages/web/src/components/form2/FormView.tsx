@@ -66,13 +66,14 @@ export default function FormViewWrapper({
     const response = await handleCreateUpdateResponse(payload, fields);
     if (response) {
       setShowMessage(true);
+      setFormResponse(response);
       if (createCallback) {
         createCallback(response);
       }
-      if (setResponded) setResponded();
+      if (setResponded) {
+        setResponded();
+      }
     }
-
-    setFormResponse(response);
     return response;
   };
 
@@ -95,8 +96,9 @@ export default function FormViewWrapper({
               </Button>
             )}
           </InputGroup>
-
-          <ResponseChild2 formId={_id} response={formResponse} hideAuthor hideNavigation />
+          {formResponse && (
+            <ResponseChild2 formId={_id} response={formResponse} hideAuthor hideNavigation />
+          )}
         </div>
       ) : (
         <FormView

@@ -185,7 +185,12 @@ export default function Screen({ slug }: IProps) {
                   Title
                   {authorized && (
                     <Tooltip title="Edit Title">
-                      <IconButton onClick={() => setState({ ...initialState, fieldName: 'title' })}>
+                      <IconButton
+                        onClick={() => {
+                          setFormValues(data.getListTypeBySlug);
+                          setState({ ...initialState, fieldName: 'title' });
+                        }}
+                      >
                         <EditIcon fontSize="small" />
                       </IconButton>
                     </Tooltip>
