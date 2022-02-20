@@ -114,7 +114,7 @@ export function ResponseChild3({
   const authorized = useAuthorization([response?.createdBy?._id, form?.createdBy?._id], true);
   const { section, onSectionChange, handleUpdateSection } = useUpdateSection({
     onAlert,
-    _id: response?.parentId?._id || form._id,
+    _id: JSON.parse(response?.options)?.customSectionId || form._id,
   });
 
   return (
@@ -128,7 +128,7 @@ export function ResponseChild3({
               <Typography>Response</Typography>
             </Breadcrumbs>
           )}
-          <div className="d-flex">
+          <div className="d-flex align-items-center">
             {!hideNavigation && <QRButton />}
             {authorized && (
               <>
@@ -155,27 +155,39 @@ export function ResponseChild3({
       <Grid container spacing={1}>
         {!(hideAuthor || hideNavigation || hideBreadcrumbs) && (
           <Grid item xs={3}>
-            <ResponseSections
-              authorized={false}
-              section={section}
-              onSectionChange={onSectionChange}
-            />
-            <Paper variant="outlined">
-              <List dense component="nav" aria-label="main mailbox folders">
-                <ListItem button>
-                  <ListItemText primary="Form Fields" />
-                </ListItem>
-                {form?.fields?.map((field) => (
-                  <ListItem button key={field._id}>
-                    <ListItemText primary={field?.label} />
+            <div
+              className={`d-flex ${
+                section?.options?.belowResponse ? 'flex-column-reverse' : 'flex-column'
+              }`}
+            >
+              <ResponseSections
+                authorized={false}
+                section={section}
+                onSectionChange={onSectionChange}
+              />
+              <Paper variant="outlined">
+                <List dense component="nav" aria-label="main mailbox folders">
+                  <ListItem button>
+                    <ListItemText primary="Form Fields" />
                   </ListItem>
-                ))}
-              </List>
-            </Paper>
+                  {form?.fields?.map((field) => (
+                    <ListItem button key={field._id}>
+                      <ListItemText primary={field?.label} />
+                    </ListItem>
+                  ))}
+                </List>
+              </Paper>
+            </div>
           </Grid>
         )}
         <Grid item xs={hideAuthor ? 12 : 9}>
-          <Paper variant="outlined" style={hideAuthor ? { border: 'none' } : {}}>
+          <Paper
+            variant="outlined"
+            style={hideAuthor ? { border: 'none' } : {}}
+            className={`d-flex ${
+              section?.options?.belowResponse ? 'flex-column-reverse' : 'flex-column'
+            }`}
+          >
             {!(hideAuthor || hideNavigation || hideBreadcrumbs) && (
               <FormFieldsValue
                 authorized={false}

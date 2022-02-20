@@ -41,6 +41,7 @@ export const GET_RESPONSE = gql`
         name
       }
       createdAt
+      options
     }
   }
 `;
@@ -86,6 +87,7 @@ export const GET_RESPONSE_BY_COUNT = gql`
         name
       }
       createdAt
+      options
     }
   }
 `;

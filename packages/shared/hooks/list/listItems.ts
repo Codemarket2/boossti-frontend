@@ -42,6 +42,7 @@ export function useGetListItemById(_id) {
   });
   return { data };
 }
+
 export function useGetListItemsByType({ types = [] }: any) {
   const [state, setState] = useState({
     search: '',
@@ -95,8 +96,8 @@ export function useGetListItemsByType({ types = [] }: any) {
 export function useGetListItemBySlug({ slug }: any) {
   const { data, error, loading, subscribeToMore } = useQuery(GET_LIST_ITEM_BY_SLUG, {
     variables: { slug },
-    // fetchPolicy: 'cache-only',
   });
+
   const [subscribed, setSubscribed] = useState(false);
   const [lisItem, setListItem] = useState(null);
 
@@ -128,7 +129,7 @@ export function useGetListItemBySlug({ slug }: any) {
       });
     }
   }, [data]);
-  console.log(data);
+
   return { data: lisItem ? { getListItemBySlug: lisItem } : null, error, loading };
 }
 

@@ -20,6 +20,7 @@ export const useNotificationSub = () => {
 
   useEffect(() => {
     if (data?.notificationSub) {
+      alert('new sub');
       let temp = [];
       if (state.notifications[data.notificationSub.formId]) {
         temp = [data.notificationSub, ...state.notifications[data.notificationSub.formId]];

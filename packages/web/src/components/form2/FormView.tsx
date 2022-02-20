@@ -56,7 +56,13 @@ export default function FormViewWrapper({
   const [formResponse, setFormResponse] = useState(null);
 
   const handleSubmit = async (values) => {
-    const payload = { formId: _id, values };
+    let payload: any = { formId: _id, values };
+    if (settings?.customResponseLayout && settings?.customSectionId) {
+      payload = {
+        ...payload,
+        options: JSON.stringify({ customSectionId: settings?.customSectionId }),
+      };
+    }
     const response = await handleCreateUpdateResponse(payload, fields);
     if (response) {
       setShowMessage(true);
