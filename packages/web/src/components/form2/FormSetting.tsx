@@ -5,25 +5,29 @@ import { InputLabel, MenuItem, TextField } from '@material-ui/core';
 import InputGroup from '../common/InputGroup';
 import RichTextarea from '../common/RichTextarea2';
 
-export default function FormSetting({ settings, onChange }: any): any {
+interface IProps {
+  settings: any;
+  onChange: (val: any) => void;
+}
+
+export default function FormSetting({ settings, onChange }: IProps): any {
   return (
     <Paper variant="outlined" className="p-2">
-      <div style={{ margin: '20px' }}>
-        <TextField
-          style={{ width: '200px' }}
-          variant="outlined"
-          select
-          id="demo-simple-select"
-          value={settings?.widgetType ?? 'fullForm'}
-          label="Widget type"
-          onChange={({ target }) => onChange({ widgetType: target.value })}
-        >
-          <MenuItem value="fullForm">Full Form</MenuItem>
-          <MenuItem value="leaderboard">Leaderboad</MenuItem>
-          <MenuItem value="oneField">One field at a time</MenuItem>
-          <MenuItem value="button">Button</MenuItem>
-        </TextField>
-      </div>
+      <TextField
+        fullWidth
+        size="small"
+        variant="outlined"
+        select
+        id="demo-simple-select"
+        value={settings?.widgetType ?? 'fullForm'}
+        label="Widget type"
+        onChange={({ target }) => onChange({ widgetType: target.value })}
+      >
+        <MenuItem value="fullForm">Full Form</MenuItem>
+        <MenuItem value="leaderboard">Leaderboad</MenuItem>
+        <MenuItem value="oneField">One field at a time</MenuItem>
+        <MenuItem value="button">Button</MenuItem>
+      </TextField>
       {settings?.widgetType === 'leaderboard' && (
         <InputGroup>
           <h3>Leader Board</h3>
@@ -54,6 +58,19 @@ export default function FormSetting({ settings, onChange }: any): any {
             />
           }
           label="Authentication required to submit form"
+        />
+      </InputGroup>
+      <InputGroup>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={settings?.onlyOwnerCanSubmit}
+              onChange={({ target }) => onChange({ onlyOwnerCanSubmit: target.checked })}
+              name="onlyOwnerCanSubmit"
+              color="primary"
+            />
+          }
+          label="Only page owner can submit 1 response other users will see the that 1 response"
         />
       </InputGroup>
       <InputGroup>

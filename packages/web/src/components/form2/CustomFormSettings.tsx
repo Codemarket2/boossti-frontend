@@ -1,44 +1,69 @@
-import { useState } from 'react';
-import { Switch, Typography } from '@material-ui/core';
+import { generateObjectId } from '@frontend/shared/utils/objectId';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 import FormSetting from './FormSetting';
+import InputGroup from '../common/InputGroup';
+import Overlay from '../common/Overlay';
+import ResponseLayout from '../response/ResponseLayout';
 
-const initialState = {
-  custom: false,
-  settings: null,
-};
+interface IProps {
+  open: boolean;
+  onClose: () => void;
+  customSettings: boolean;
+  settings: any;
+  toggleCustomSettings: any;
+  onSettingsChange: any;
+}
 
 export default function CustomFormSettings({
+  open,
+  onClose,
   customSettings,
   settings,
   toggleCustomSettings,
   onSettingsChange,
-}: any): any {
-  const [state, setState] = useState({ customSettings, settings });
-
+}: IProps): any {
   return (
-    <div>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <Switch
-          inputProps={{ 'aria-label': 'Use default settings' }}
-          checked={state.customSettings}
-          color="primary"
-          onChange={(e) => {
-            setState({ ...state, customSettings: e.target.checked });
-            toggleCustomSettings(e.target.checked);
-          }}
+    <Overlay title="Form Settings" open={open} onClose={onClose}>
+      <InputGroup className="pl-2">
+        <FormControlLabel
+          label="Use custom form settings"
+          control={
+            <Switch
+              color="primary"
+              checked={customSettings}
+              onChange={(e) => toggleCustomSettings(e.target.checked)}
+            />
+          }
         />
-        <Typography>Use custom form settings</Typography>
-      </div>
-
-      {state.customSettings && (
-        <FormSetting
-          settings={state.settings}
-          onChange={(val) => {
-            setState({ ...state, settings: { ...state.settings, ...val } });
-            onSettingsChange({ ...state.settings, ...val });
-          }}
-        />
+      </InputGroup>
+      {customSettings && (
+        <>
+          <FormSetting
+            settings={settings}
+            onChange={(val) => onSettingsChange({ ...settings, ...val })}
+          />
+          <InputGroup className="pl-2">
+            <FormControlLabel
+              label="Use custom response layout"
+              control={
+                <Switch
+                  color="primary"
+                  checked={settings?.customResponseLayout}
+                  onChange={(e) => {
+                    let newSetting = { ...settings, customResponseLayout: e.target.checked };
+                    if (!settings?.customSectionId && e.target.checked) {
+                      newSetting = { ...newSetting, customSectionId: generateObjectId() };
+                    }
+                    onSettingsChange(newSetting);
+                  }}
+                />
+              }
+            />
+          </InputGroup>
+          {settings?.customSectionId && <ResponseLayout _id={settings?.customSectionId} />}
+        </>
       )}
-    </div>
+    </Overlay>
   );
 }

@@ -128,7 +128,7 @@ export const GET_MENTION_ITEMS = gql`
 `;
 
 export const GET_LIST_ITEM_BY_SLUG = gql`
-  query MyQuery($slug: String!) {
+  query getListItemBySlug($slug: String!) {
     getListItemBySlug(slug: $slug) {
       _id
       active

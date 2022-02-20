@@ -22,7 +22,6 @@ import {
   useUpdateFieldPosition,
   useUpdateFieldOptions,
 } from '@frontend/shared/hooks/field';
-import { useUpdateForm } from '@frontend/shared/hooks/form';
 import { useState, memo, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import FieldForm from './FieldForm';
@@ -33,7 +32,6 @@ import { onAlert } from '../../utils/alert';
 import Backdrop from '../common/Backdrop';
 import { SelectFormDrawer } from '../form2/SelectForm';
 import EditFormDrawer from '../form2/EditFormDrawer';
-import Overlay from '../common/Overlay';
 import CustomFormSettings from '../form2/CustomFormSettings';
 
 const reorder = (list, startIndex, endIndex) => {
@@ -90,7 +88,6 @@ const initialState = {
   editForm: false,
   selectForm: false,
   editSelectedForm: false,
-  formId: null,
   showFormSettings: false,
 };
 
@@ -104,20 +101,6 @@ export default function Fields({
   const [state, setState] = useState(initialState);
 
   const { data, error } = useGetFields(parentId);
-
-  // const { data: form, error: formError } = useGetForm(state.formId);
-  const { handleOnChange } = useUpdateForm({ _id: state.formId, onAlert });
-
-  useEffect(() => {
-    let id = null;
-    if (state.selectedField && state.selectedField.options) {
-      const options = JSON.parse(state.selectedField?.options);
-      id = options?.formId;
-    }
-
-    if (id && id !== state.formId) setState({ ...state, formId: id });
-    else setState({ ...state, formId: null });
-  }, [state.selectedField]);
 
   const deleteCallback = () => {
     setState({ ...state, showMenu: null, selectedField: null, edit: false });
@@ -302,48 +285,42 @@ export default function Fields({
           onClose={() => setState(initialState)}
         />
       )}
-      <Overlay
-        open={state.showFormSettings}
-        title={`Form Settings `}
-        onClose={() => {
-          setState({ ...state, showFormSettings: false });
-        }}
-      >
-        {state?.selectedField && (
-          <CustomFormSettings
-            settings={JSON.parse(state?.selectedField?.options)?.settings ?? null}
-            customSettings={JSON.parse(state?.selectedField?.options)?.customSettings ?? false}
-            toggleCustomSettings={(value) => {
-              const options = JSON.stringify({
-                ...JSON.parse(state?.selectedField?.options),
-                customSettings: value,
-              });
-              handleUpdateFieldOptions(state.selectedField?._id, options);
-              setState({
-                ...state,
-                selectedField: {
-                  ...state.selectedField,
-                  options,
-                },
-              });
-            }}
-            onSettingsChange={(settings) => {
-              const options = JSON.stringify({
-                ...JSON.parse(state?.selectedField?.options),
-                settings,
-              });
-              handleUpdateFieldOptions(state.selectedField?._id, options);
-              setState({
-                ...state,
-                selectedField: {
-                  ...state.selectedField,
-                  options,
-                },
-              });
-            }}
-          />
-        )}
-      </Overlay>
+      {state?.selectedField && state?.showFormSettings && (
+        <CustomFormSettings
+          open={state.showFormSettings}
+          onClose={() => setState(initialState)}
+          settings={JSON.parse(state?.selectedField?.options)?.settings ?? null}
+          customSettings={JSON.parse(state?.selectedField?.options)?.customSettings ?? false}
+          toggleCustomSettings={(value) => {
+            const options = JSON.stringify({
+              ...JSON.parse(state?.selectedField?.options),
+              customSettings: value,
+            });
+            handleUpdateFieldOptions(state.selectedField?._id, options);
+            setState({
+              ...state,
+              selectedField: {
+                ...state.selectedField,
+                options,
+              },
+            });
+          }}
+          onSettingsChange={(settings) => {
+            const options = JSON.stringify({
+              ...JSON.parse(state?.selectedField?.options),
+              settings,
+            });
+            handleUpdateFieldOptions(state.selectedField?._id, options);
+            setState({
+              ...state,
+              selectedField: {
+                ...state.selectedField,
+                options,
+              },
+            });
+          }}
+        />
+      )}
     </Paper>
   );
 }

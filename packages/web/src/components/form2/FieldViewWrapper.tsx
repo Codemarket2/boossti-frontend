@@ -103,14 +103,16 @@ export default function FieldViewWrapper({
   // if (settings?.widgetType === 'leaderboard') return null;
 
   return (
-    <FormView
-      form={{ ...data.getForm, settings: customSettings || data.getForm?.settings }}
-      parentId={parentId}
-      createCallback={createCallback}
-      fieldWiseView={customSettings?.widgetType === 'oneField'}
-      // setResponded={() => {
-      //   setState({ ...state, responded: true });
-      // }}
-    />
+    <>
+      <FormView
+        form={{ ...data.getForm, settings: customSettings || data.getForm?.settings }}
+        parentId={parentId}
+        createCallback={createCallback}
+        fieldWiseView={customSettings?.widgetType === 'oneField'}
+        // setResponded={() => {
+        //   setState({ ...state, responded: true });
+        // }}
+      />
+    </>
   );
 }

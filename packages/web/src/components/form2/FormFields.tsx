@@ -29,10 +29,8 @@ import EditField from './EditField';
 import EditFieldGrid from './EditFieldGrid';
 import { convertToSlug } from '../field/LeftNavigation';
 import EditFormDrawer from './EditFormDrawer';
-import Overlay from '../common/Overlay';
 import CustomFormSettings from './CustomFormSettings';
 import { SelectFormDrawer } from './SelectForm';
-import ResponseLayout from '../response/ResponseLayout';
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -57,7 +55,6 @@ type IProps = {
   title?: string;
   isSection?: boolean;
   previewMode?: boolean;
-  pageId?: string;
 };
 
 export default function FormFields({
@@ -66,7 +63,6 @@ export default function FormFields({
   title = 'Fields',
   isSection = false,
   previewMode = false,
-  pageId,
 }: IProps): any {
   const [values, setValues] = useState(initialValues);
   const router = useRouter();
@@ -113,19 +109,23 @@ export default function FormFields({
 
   const handleEditFormSettings = (fieldId: string, settings: any) => {
     setFields(
-      fields.map((field) =>
-        field._id === fieldId ? { ...field, options: { ...field?.options, settings } } : field,
-      ),
+      fields.map((field) => {
+        if (field._id === fieldId) {
+          return { ...field, options: { ...field?.options, settings } };
+        }
+        return field;
+      }),
     );
   };
 
   const handleToggleCustomSettings = (fieldId: string, customSettings: boolean) => {
     setFields(
-      fields.map((field) =>
-        field._id === fieldId
-          ? { ...field, options: { ...field?.options, customSettings } }
-          : field,
-      ),
+      fields.map((field) => {
+        if (field._id === fieldId) {
+          return { ...field, options: { ...field?.options, customSettings } };
+        }
+        return field;
+      }),
     );
   };
 
@@ -347,19 +347,16 @@ export default function FormFields({
         />
       )}
       {values.showFormSettings && (
-        <Overlay
+        <CustomFormSettings
           open={values.showFormSettings}
-          title={`Form Settings - ${values.field?.label ? values.field.label : ''}`}
           onClose={() => setValues(initialValues)}
-        >
-          <CustomFormSettings
-            settings={values.field?.options?.settings}
-            customSettings={values.field?.options?.customSettings}
-            toggleCustomSettings={(value) => handleToggleCustomSettings(values.field?._id, value)}
-            onSettingsChange={(value) => handleEditFormSettings(values.field?._id, value)}
-          />
-          {pageId && <ResponseLayout _id={pageId} useCustom />}
-        </Overlay>
+          settings={fields?.filter((f) => f._id === values.field?._id)[0]?.options?.settings}
+          customSettings={
+            fields?.filter((f) => f._id === values.field?._id)[0]?.options?.customSettings
+          }
+          toggleCustomSettings={(value) => handleToggleCustomSettings(values.field?._id, value)}
+          onSettingsChange={(value) => handleEditFormSettings(values.field?._id, value)}
+        />
       )}
     </Paper>
   );
