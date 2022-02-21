@@ -1,4 +1,5 @@
-import { useRef } from 'react';
+import { generateObjectId } from '@frontend/shared/utils/objectId';
+import { useEffect, useRef, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary';
 import ImageList from '../post/ImageList';
@@ -18,8 +19,14 @@ export default function ImagePicker({
   state,
   setState,
 }: IProps): any {
+  const [id, setId] = useState('');
   const ref: any = useRef();
   const newArray = [...state.tempMedia];
+
+  useEffect(() => {
+    setId(generateObjectId());
+  }, []);
+
   const handleFileChange = (event) => {
     if (event.target.files.length > 0) {
       for (let i = 0; i < event.target.files.length; i++) {
@@ -72,7 +79,7 @@ export default function ImagePicker({
       {(mutiple || (!state?.media?.length && !state?.tempMedia?.length)) && (
         <>
           <input
-            id="contained-button-file"
+            id={`contained-button-file-${id}`}
             type="file"
             multiple={mutiple}
             accept={fileType}
@@ -80,7 +87,7 @@ export default function ImagePicker({
             onChange={handleFileChange}
             ref={ref}
           />
-          <label htmlFor="contained-button-file">
+          <label htmlFor={`contained-button-file-${id}`}>
             <Button
               size="small"
               variant="outlined"

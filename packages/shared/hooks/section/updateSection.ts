@@ -103,23 +103,12 @@ export const stringifyPayload = (oldPayload: any, removeTypeId: boolean = false)
         let value = { ...v };
         const field = payload.fields?.filter((f) => f._id === value.field)[0];
         if (field) {
-          if (field.fieldType === 'type' || value?.itemId?._id) {
-            value = { ...value, itemId: value?.itemId?._id ? value?.itemId?._id : null };
+          if (removeTypeId && (field.fieldType === 'type' || value?.itemId?._id)) {
+            value = { ...value, itemId: value?.itemId?._id || null };
           }
-          if (field.fieldType === 'existingForm' || value?.response?._id) {
-            value = { ...value, response: value?.response?._id ? value?.response?._id : null };
+          if (removeTypeId && (field.fieldType === 'existingForm' || value?.response?._id)) {
+            value = { ...value, response: value?.response?._id || null };
           }
-          // if (field.fieldType === 'image' && value?.tempMedia?.length > 0) {
-          //   let newMedia = [];
-          //   if (value.tempMediaFiles.length > 0) {
-          //     // eslint-disable-next-line no-await-in-loop
-          //     newMedia = await fileUpload(value.tempMediaFiles, '/form-response');
-          //   }
-          //   if (newMedia?.length > 0) {
-          //     newMedia = newMedia.map((n, i) => ({ url: n, caption: value?.tempMedia[i].caption }));
-          //     value.media = newMedia;
-          //   }
-          // }
           const { tempMedia, tempMediaFiles, ...finalValue } = value;
           return finalValue;
         }
