@@ -63,7 +63,11 @@ export default function DisplayValue({ field, value, imageAvatar }: IProps) {
           </>
         );
       }
-      return <ImageList media={value?.media} />;
+      return (
+        <ImageList
+          media={value?.tempMedia ? [...value?.media, ...value?.tempMedia] : value?.media}
+        />
+      );
     default:
       return <>{value?.value}</>;
   }
