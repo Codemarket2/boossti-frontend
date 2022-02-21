@@ -1,3 +1,4 @@
+import { fileUpload } from '@frontend/shared/utils/fileUpload';
 import { useEffect, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
@@ -39,6 +40,8 @@ export const defualtValue = {
   itemId: null,
   media: [],
   values: [],
+  tempMedia: [],
+  tempMediaFiles: [],
 };
 
 export default function FormViewWrapper({
@@ -211,7 +214,27 @@ export function FormView({
       setSubmitState({ ...submitState, loading: false });
       return setShowAuthModal(true);
     } else {
-      const response = await handleSubmit(values);
+      const payload = [];
+      for (let i = 0; i < values.length; i += 1) {
+        const value = { ...values[i] };
+        const field = fields?.filter((f) => f._id === value.field)[0];
+        if (field) {
+          if (field.fieldType === 'image' && value?.tempMedia?.length > 0) {
+            let newMedia = [];
+            if (value.tempMediaFiles.length > 0) {
+              // eslint-disable-next-line no-await-in-loop
+              newMedia = await fileUpload(value.tempMediaFiles, '/form-response');
+            }
+            if (newMedia?.length > 0) {
+              newMedia = newMedia.map((n, i) => ({ url: n, caption: value?.tempMedia[i].caption }));
+              value.media = newMedia;
+            }
+          }
+        }
+        const { tempMedia, tempMediaFiles, ...finalValue } = value;
+        payload.push(finalValue);
+      }
+      const response = await handleSubmit(payload);
       if (response) {
         setSubmitState(initialSubmitState);
         setValues([]);
@@ -425,7 +448,13 @@ export function FormView({
                 Submit
               </LoadingButton>
               {onCancel && (
-                <Button variant="outlined" size="small" className="ml-2" onClick={onCancel}>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  className="ml-2"
+                  onClick={onCancel}
+                  disabled={submitState.loading || loading}
+                >
                   Cancel
                 </Button>
               )}
