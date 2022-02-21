@@ -344,7 +344,7 @@ export function FormView({
                   ) : (
                     <div className="mb-2 d-flex align-items-start">
                       <div className="w-100">
-                        <DisplayValue imageAvatar value={value} field={field} />
+                        <DisplayValue value={value} field={field} />
                         {validateValue(submitState.validate, value, field.options, field.fieldType)
                           .error && (
                           <FormHelperText className="text-danger">

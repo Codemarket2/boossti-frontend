@@ -147,7 +147,7 @@ export default function FieldValueForm2({
           <ImagePicker
             label="Select Image"
             fileType="image/*"
-            mutiple={options?.multipleValues}
+            // mutiple={options?.multipleValues}
             state={value}
             setState={(newValue) => onChange({ field: _id, ...newValue })}
           />
