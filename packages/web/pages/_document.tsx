@@ -43,6 +43,12 @@ export default class MyDocument extends Document {
           <link rel="apple-touch-icon" href="/icon.png" />
           <meta name="theme-color" content="#fff" />
           <link rel="icon" href="/favicon.ico" />
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
+            rel="stylesheet"
+          />
         </Head>
         <body>
           <Main />

@@ -175,7 +175,7 @@ export default function ItemScreen({
             <Link href={`/${data.getListItemBySlug.types[0].slug}`}>
               <a>{data.getListItemBySlug.types[0].title}</a>
             </Link>
-            <Typography color="textPrimary">
+            <Typography color="textPrimary" align="center">
               {data.getListItemBySlug.title.includes('-n-e-w')
                 ? 'Title'
                 : data.getListItemBySlug.title}
@@ -319,7 +319,9 @@ export default function ItemScreen({
                 <Typography
                   variant="h4"
                   variantMapping={{ h4: 'h1' }}
-                  className="d-flex align-items-center"
+                  color="textPrimary"
+                  align="center"
+                  // className="d-flex align-items-center"
                 >
                   {data.getListItemBySlug.title.includes('-n-e-w')
                     ? 'Title'

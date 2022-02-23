@@ -120,18 +120,17 @@ export default function Album() {
         <div className={classes.heroContent}>
           <Container maxWidth="sm">
             <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-              Full Service Marketing Agency
+              Local Business Social Network
             </Typography>
             <Typography variant="h5" align="center" color="textSecondary" paragraph>
-              End-to-end marketing services for all channels to help your business grow and thrive
-              in the marketplace.
+              Co-marketing and co-promotion opportunities to grow your local business.
             </Typography>
             <div className="text-center">
               <Button variant="contained" color="primary" className="m-2">
-                805-300-7217
+                Referral Gift Cards
               </Button>
               <Button variant="outlined" color="primary" className="m-2">
-                info@boossti.com
+                Raffle Prizes
               </Button>
             </div>
           </Container>

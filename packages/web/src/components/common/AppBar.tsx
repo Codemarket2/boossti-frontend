@@ -84,7 +84,7 @@ export default function AppBarComponent() {
   }, []);
 
   return (
-    <AppBar elevation={1} position={matches ? 'sticky' : 'static'} color="inherit">
+    <AppBar elevation={1} position={matches ? 'sticky' : 'static'} color="primary">
       <Toolbar>
         {authenticated ? (
           <>
