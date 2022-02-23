@@ -24,6 +24,10 @@ export const CREATE_LIST_TYPE = gql`
           title
           slug
         }
+        form {
+          _id
+          name
+        }
       }
       createdAt
       createdBy {
@@ -70,6 +74,10 @@ export const UPDATE_LIST_TYPE = gql`
           title
           slug
         }
+        form {
+          _id
+          name
+        }
       }
       createdAt
       createdBy {
@@ -104,6 +112,10 @@ export const PUBLISH_LIST_TYPE = gql`
           title
           slug
         }
+        form {
+          _id
+          name
+        }
       }
       createdAt
       createdBy {
@@ -137,6 +149,10 @@ export const UPDATE_LIST_TYPE_FIELDS = gql`
           _id
           title
           slug
+        }
+        form {
+          _id
+          name
         }
       }
       createdAt

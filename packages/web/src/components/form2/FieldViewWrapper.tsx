@@ -1,5 +1,5 @@
 // import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import { useGetForm } from '@frontend/shared/hooks/form';
 // import { useGetResponses } from '@frontend/shared/hooks/response';
 // import { Button } from '@material-ui/core';
@@ -15,11 +15,11 @@ interface IProps {
   customSettings?: any;
 }
 
-const initialState = {
-  showForm: false,
-  responseIndex: -1,
-  responded: false,
-};
+// const initialState = {
+//   showForm: false,
+//   responseIndex: -1,
+//   responded: false,
+// };
 
 export default function FieldViewWrapper({
   _id,
@@ -108,7 +108,6 @@ export default function FieldViewWrapper({
         form={{ ...data.getForm, settings: customSettings || data.getForm?.settings }}
         parentId={parentId}
         createCallback={createCallback}
-        fieldWiseView={customSettings?.widgetType === 'oneField'}
         // setResponded={() => {
         //   setState({ ...state, responded: true });
         // }}
