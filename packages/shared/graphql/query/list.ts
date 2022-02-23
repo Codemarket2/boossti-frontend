@@ -49,6 +49,10 @@ export const GET_LIST_TYPE_BY_SLUG = gql`
           title
           slug
         }
+        form {
+          _id
+          name
+        }
       }
       createdAt
       createdBy {

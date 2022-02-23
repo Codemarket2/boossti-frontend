@@ -22,13 +22,13 @@ import Overlay from '../common/Overlay';
 import AuthScreen from '../../screens/AuthScreen';
 import { ResponseChild2 } from '../response/Response';
 import DisplayValue from './DisplayValue';
+import Leaderboard from '../response/Leaderboard';
 
 interface IProps {
   form: any;
   parentId?: string;
   createCallback?: (response: any) => void;
   setResponded?: () => void;
-  fieldWiseView?: boolean;
 }
 
 export const defualtValue = {
@@ -49,7 +49,6 @@ export default function FormViewWrapper({
   parentId,
   createCallback,
   setResponded,
-  fieldWiseView = false,
 }: IProps): any {
   const { handleCreateUpdateResponse, createLoading } = useCreateUpdateResponse(
     { onAlert },
@@ -57,6 +56,7 @@ export default function FormViewWrapper({
   );
   const [showMessage, setShowMessage] = useState(false);
   const [formResponse, setFormResponse] = useState(null);
+  const [formModal, setFormModal] = useState(false);
 
   const handleSubmit = async (values) => {
     let payload: any = { formId: _id, values };
@@ -70,6 +70,7 @@ export default function FormViewWrapper({
     if (response) {
       setShowMessage(true);
       setFormResponse(response);
+      setFormModal(false);
       if (createCallback) {
         createCallback(response);
       }
@@ -103,13 +104,36 @@ export default function FormViewWrapper({
             <ResponseChild2 formId={_id} response={formResponse} hideAuthor hideNavigation />
           )}
         </div>
+      ) : settings?.widgetType === 'leaderboard' ? (
+        <Leaderboard formId={_id} settings={settings} parentId={parentId} />
+      ) : settings?.widgetType === 'button' ? (
+        <>
+          <div className="text-center">
+            <Button variant="contained" color="primary" onClick={() => setFormModal(true)}>
+              {settings?.buttonLabel || name}
+            </Button>
+          </div>
+          {formModal && (
+            <Overlay open={formModal} onClose={() => setFormModal(false)}>
+              <div className="p-2">
+                <FormView
+                  authRequired={!settings?.authRequired}
+                  fields={fields}
+                  handleSubmit={handleSubmit}
+                  loading={createLoading}
+                  fieldWiseView={settings?.widgetType === 'oneField'}
+                />
+              </div>
+            </Overlay>
+          )}
+        </>
       ) : (
         <FormView
           authRequired={!settings?.authRequired}
           fields={fields}
           handleSubmit={handleSubmit}
           loading={createLoading}
-          fieldWiseView={fieldWiseView}
+          fieldWiseView={settings?.widgetType === 'oneField'}
         />
       )}
     </div>
