@@ -22,7 +22,7 @@ export default function Page(): any {
   );
 }
 
-const FormPage = ({ slug, onSlugChange }: { slug: string; onSlugChange: any }) => {
+export const FormPage = ({ slug, onSlugChange }: { slug: string; onSlugChange?: any }) => {
   const { data, error } = useGetFormBySlug(slug);
 
   if (error || !data) {

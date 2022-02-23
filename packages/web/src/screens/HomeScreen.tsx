@@ -27,6 +27,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
 import AppBar from '../components/common/AppBar';
+import { FormPage } from '../../pages/forms/[slug]';
 
 function Copyright() {
   return (
@@ -98,8 +99,8 @@ export default function SignInSide() {
       </Paper>
       <Grid container component="main" className={classes.root}>
         <CssBaseline />
-        <Grid item xs={false} sm={4} md={7} className={classes.image} />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <Grid item xs={12} sm={4} md={5} className={classes.image} />
+        <Grid item xs={12} sm={8} md={7} component={Paper} elevation={6} square>
           <div className={classes.paper}>
             <Paper square>
               <Tabs
@@ -119,58 +120,11 @@ export default function SignInSide() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <form className={classes.form} noValidate>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                autoFocus
-              />
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-              />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-              >
-                Sign In
-              </Button>
-              <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
-              </Grid>
-              <Box mt={5}>
-                <Copyright />
-              </Box>
-            </form>
+            <FormPage slug="gift-card-demo" />
+
+            <Box mt={5}>
+              <Copyright />
+            </Box>
           </div>
         </Grid>
       </Grid>
