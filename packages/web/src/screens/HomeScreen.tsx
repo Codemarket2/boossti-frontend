@@ -10,14 +10,28 @@ import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import StarIcon from '@material-ui/icons/Star';
 import CardHeader from '@material-ui/core/CardHeader';
+
+import React from 'react';
+import Avatar from '@material-ui/core/Avatar';
+
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+
+import Paper from '@material-ui/core/Paper';
+import Box from '@material-ui/core/Box';
+
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+
 import AppBar from '../components/common/AppBar';
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Boossti Inc.
+      <Link color="inherit" href="https://www.boossti.com">
+        Boossti
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -26,208 +40,108 @@ function Copyright() {
 }
 
 const useStyles = makeStyles((theme) => ({
-  icon: {
-    marginRight: theme.spacing(2),
+  root: {
+    height: '100vh',
   },
-  heroContent: {
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(8, 0, 6),
+  image: {
+    backgroundImage: 'url(https://source.unsplash.com/random)',
+    backgroundRepeat: 'no-repeat',
+    backgroundColor:
+      theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
   },
-  heroButtons: {
-    marginTop: theme.spacing(4),
-  },
-  cardGrid: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8),
-  },
-  card: {
-    height: '100%',
+  paper: {
+    margin: theme.spacing(8, 4),
     display: 'flex',
     flexDirection: 'column',
+    alignItems: 'center',
   },
-  cardMedia: {
-    paddingTop: '56.25%', // 16:9
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
   },
-  cardContent: {
-    flexGrow: 1,
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
   },
-  cardHeader: {
-    backgroundColor:
-      theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[700],
-  },
-  cardPricing: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'baseline',
-    marginBottom: theme.spacing(2),
-  },
-  footer: {
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(6),
+  submit: {
+    margin: theme.spacing(3, 0, 2),
   },
 }));
 
-const cards = [
-  {
-    image: require('../assets/images/web-design.png'),
-    title: 'Website Design',
-    description: 'Best responsive websites along with SEO and paid Google Ads',
-  },
-  {
-    image: require('../assets/images/instagram.png'),
-    title: 'Social Media',
-    description: 'Content for social media posts tailor made to your brand.',
-  },
-  {
-    image: require('../assets/images/shopify.png'),
-    title: 'E-Commerce',
-    description: 'Setup product pages with media and optemization',
-  },
-];
-
-const tiers = [
-  {
-    title: 'Basic',
-    price: '499',
-    description: ['3 page website', '1 social media channel', '1 post/week', '1 newsletter/month'],
-    buttonText: '805-300-7217',
-    buttonVariant: 'outlined',
-  },
-  {
-    title: 'Pro',
-    subheader: 'Most popular',
-    price: '799',
-    description: ['5 page website', '2 social media channel', '2 post/week', '1 newsletter/month'],
-    buttonText: 'info@boossti.com',
-    buttonVariant: 'contained',
-  },
-  {
-    title: 'Grow',
-    price: '1,249',
-    description: ['10 page website', '3 social media channel', '4 post/week', '1 newsletter/month'],
-    buttonText: '805-300-7217',
-    buttonVariant: 'outlined',
-  },
-];
-
-export default function Album() {
+export default function SignInSide() {
   const classes = useStyles();
 
   return (
     <>
       <AppBar />
-      <main>
-        <div className={classes.heroContent}>
-          <Container maxWidth="sm">
-            <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-              Local Business Social Network
+      <Grid container component="main" className={classes.root}>
+        <CssBaseline />
+        <Grid item xs={false} sm={4} md={7} className={classes.image} />
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+          <div className={classes.paper}>
+            <Avatar className={classes.avatar}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Sign in
             </Typography>
-            <Typography variant="h5" align="center" color="textSecondary" paragraph>
-              Co-marketing and co-promotion opportunities to grow your local business.
-            </Typography>
-            <div className="text-center">
-              <Button variant="contained" color="primary" className="m-2">
-                Referral Gift Cards
+            <form className={classes.form} noValidate>
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                autoFocus
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+              />
+              <FormControlLabel
+                control={<Checkbox value="remember" color="primary" />}
+                label="Remember me"
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+              >
+                Sign In
               </Button>
-              <Button variant="outlined" color="primary" className="m-2">
-                Raffle Prizes
-              </Button>
-            </div>
-          </Container>
-        </div>
-        <Container className={classes.cardGrid} maxWidth="md">
-          {/* End hero unit */}
-          <Grid container spacing={4}>
-            {cards.map((card, i) => (
-              <Grid item key={i} xs={12} sm={6} md={4}>
-                <Card className={classes.card}>
-                  <CardMedia className={classes.cardMedia} image={card.image} title={card.title} />
-                  <CardContent className={classes.cardContent}>
-                    <Typography gutterBottom variant="h5" component="h2">
-                      {card.title}
-                    </Typography>
-                    <Typography>{card.description}</Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button size="small" color="primary">
-                      805-300-7217
-                    </Button>
-                    <Button size="small" color="primary">
-                      info@boossti.com
-                    </Button>
-                  </CardActions>
-                </Card>
+              <Grid container>
+                <Grid item xs>
+                  <Link href="#" variant="body2">
+                    Forgot password?
+                  </Link>
+                </Grid>
+                <Grid item>
+                  <Link href="#" variant="body2">
+                    {"Don't have an account? Sign Up"}
+                  </Link>
+                </Grid>
               </Grid>
-            ))}
-          </Grid>
-        </Container>
-        <Container maxWidth="sm" component="main" className={classes.heroContent}>
-          <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-            Pricing
-          </Typography>
-          <Typography variant="h5" align="center" color="textSecondary" component="p">
-            Boost your marketing today. Pick a Plan.
-          </Typography>
-        </Container>
-        {/* End hero unit */}
-        <Container maxWidth="md" component="main">
-          <Grid container spacing={5} alignItems="flex-end">
-            {tiers.map((tier) => (
-              // Enterprise card is full width at sm breakpoint
-              <Grid item key={tier.title} xs={12} sm={tier.title === 'Enterprise' ? 12 : 6} md={4}>
-                <Card>
-                  <CardHeader
-                    title={tier.title}
-                    subheader={tier.subheader}
-                    titleTypographyProps={{ align: 'center' }}
-                    subheaderTypographyProps={{ align: 'center' }}
-                    action={tier.title === 'Pro' ? <StarIcon /> : null}
-                    className={classes.cardHeader}
-                  />
-                  <CardContent>
-                    <div className={classes.cardPricing}>
-                      <Typography component="h2" variant="h3" color="textPrimary">
-                        ${tier.price}
-                      </Typography>
-                      <Typography variant="h6" color="textSecondary">
-                        /mo
-                      </Typography>
-                    </div>
-                    <ul>
-                      {tier.description.map((line) => (
-                        <Typography component="li" variant="subtitle1" align="center" key={line}>
-                          {line}
-                        </Typography>
-                      ))}
-                    </ul>
-                  </CardContent>
-                  <CardActions>
-                    <Button
-                      fullWidth
-                      // @ts-ignore
-                      variant={tier.buttonVariant}
-                      color="primary"
-                    >
-                      {tier.buttonText}
-                    </Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
-      </main>
-      {/* Footer */}
-      <footer className={classes.footer}>
-        <Typography variant="h6" align="center" gutterBottom>
-          {/* Footer */}
-        </Typography>
-        <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
-          {/* Something here to give the footer a purpose! */}
-        </Typography>
-        <Copyright />
-      </footer>
-      {/* End footer */}
+              <Box mt={5}>
+                <Copyright />
+              </Box>
+            </form>
+          </div>
+        </Grid>
+      </Grid>
     </>
   );
 }
