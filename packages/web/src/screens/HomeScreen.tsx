@@ -10,6 +10,7 @@ import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import StarIcon from '@material-ui/icons/Star';
 import CardHeader from '@material-ui/core/CardHeader';
+import shopify from '../assets/images/shopify.png';
 
 import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
@@ -47,7 +48,8 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh',
   },
   image: {
-    backgroundImage: 'url(https://source.unsplash.com/random)',
+    backgroundImage: 'url(../assets/images/shopify.png)',
+    // backgroundImage: 'url(https://source.unsplash.com/random)',
     backgroundRepeat: 'no-repeat',
     backgroundColor:
       theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],

@@ -1,5 +1,5 @@
 export const typography = {
   fontFamily: ['Roboto', 'sans-serif'].join(','),
-  fontSize: 16,
+  fontSize: 12,
   fontWeightMedium: 400,
 };
