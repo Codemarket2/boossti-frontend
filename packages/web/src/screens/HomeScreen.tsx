@@ -10,8 +10,6 @@ import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import StarIcon from '@material-ui/icons/Star';
 import CardHeader from '@material-ui/core/CardHeader';
-import shopify from '../assets/images/shopify.png';
-
 import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 
