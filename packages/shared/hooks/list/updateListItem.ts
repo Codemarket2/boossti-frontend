@@ -53,9 +53,11 @@ export const useUpdateListItemFields = ({ listItem, onAlert }: IProps) => {
         newListItem ? { ...listItem, ...newListItem } : listItem,
         true,
       );
-      await updateMutation({
+      console.log({ payload });
+      const res = await updateMutation({
         variables: payload,
       });
+      console.log({ res });
       if (callback) {
         callback();
       }

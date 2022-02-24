@@ -4,7 +4,8 @@ import { UPDATE_LIST_TYPE_FIELDS } from '../../graphql/mutation/list';
 import { GET_LIST_TYPE_BY_SLUG } from '../../graphql/query/list';
 import { client as apolloClient } from '../../graphql';
 import { IHooksProps } from '../../types/common';
-import { omitTypename } from '../../utils/omitTypename';
+// import { omitTypename } from '../../utils/omitTypename';
+import { stringifyPayload } from '../section/updateSection';
 
 interface IProps extends IHooksProps {
   listType: any;
@@ -42,14 +43,14 @@ export const useUpdateListType = ({ listType, onAlert }: IProps) => {
   }, [listType]);
 
   const onFieldsChange = (fields) => {
-    const payload = stringifyListType({ fields });
+    const payload = stringifyPayload({ fields });
     updateCache(listType.slug, payload);
     setSaveToServer(true);
   };
 
   const handleUpdateForm = async () => {
     try {
-      const payload = stringifyListType(listType, true);
+      const payload = stringifyPayload(listType, true);
       const res = await updateMutation({
         variables: payload,
       });
@@ -60,24 +61,4 @@ export const useUpdateListType = ({ listType, onAlert }: IProps) => {
   };
 
   return { onFieldsChange };
-};
-
-export const stringifyListType = (lisType: any, removeTypeId: boolean = false) => {
-  let payload = { ...lisType };
-  payload = {
-    ...payload,
-    fields: payload.fields.map((m) => JSON.parse(JSON.stringify(m), omitTypename)),
-  };
-  payload = {
-    ...payload,
-    fields: payload.fields.map((m) => {
-      const field = { ...m };
-      if (removeTypeId) {
-        field.typeId = field.typeId ? field.typeId._id : null;
-      }
-      field.options = JSON.stringify(field.options);
-      return field;
-    }),
-  };
-  return payload;
 };

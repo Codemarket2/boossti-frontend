@@ -231,7 +231,7 @@ export default function Screen({ slug }: IProps) {
               />
             )}
           </Paper>
-          <Fields title="Sections" parentId={data.getListTypeBySlug._id} guestMode={!authorized} />
+          {/* <Fields title="Sections" parentId={data.getListTypeBySlug._id} guestMode={!authorized} /> */}
           <ListTypeFields listType={data.getListTypeBySlug} previewMode={!authorized} />
         </Grid>
         <Grid item xs>

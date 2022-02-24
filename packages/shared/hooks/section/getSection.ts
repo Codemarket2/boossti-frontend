@@ -42,5 +42,8 @@ export const parsePayload = (section) => {
   if (section?.options) {
     parsedForm.options = JSON.parse(section?.options);
   }
+  if (section?.settings) {
+    parsedForm.options = JSON.parse(section?.options);
+  }
   return parsedForm;
 };
