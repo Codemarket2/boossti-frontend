@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh',
   },
   image: {
-    backgroundImage: 'url(../assets/images/shopify.png)',
+    backgroundImage: 'url("/shopify.png")',
     // backgroundImage: 'url(https://source.unsplash.com/random)',
     backgroundRepeat: 'no-repeat',
     backgroundColor:
