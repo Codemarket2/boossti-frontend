@@ -20,11 +20,11 @@ export default function Overlay({
   title,
   children,
   secondButton = null,
-  minWidth = '50vw',
+  minWidth = '60vw',
 }: IProps) {
   return (
     <Drawer anchor="right" open={open}>
-      <div style={{ minWidth, maxWidth: '75vw' }}>
+      <div style={{ minWidth, maxWidth: '85vw' }}>
         <AppBar color="transparent" position="static" elevation={1}>
           <Toolbar>
             {title && (

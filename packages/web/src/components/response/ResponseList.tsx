@@ -1,3 +1,4 @@
+import { useGetForm } from '@frontend/shared/hooks/form';
 import { useRouter } from 'next/router';
 import moment from 'moment';
 import Paper from '@material-ui/core/Paper';
@@ -29,11 +30,6 @@ export default function ResponseList({ form, hideDelete = false, parentId }: IPr
   const { data, error, state, setState } = useGetResponses(form._id, parentId);
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
   const router = useRouter();
-
-  let design = null;
-  if (form?.settings?.design?.value) {
-    design = form?.settings?.design;
-  }
 
   return (
     <>
@@ -126,4 +122,13 @@ export default function ResponseList({ form, hideDelete = false, parentId }: IPr
       </TableContainer>
     </>
   );
+}
+
+export function ResponseListWrapper({ formId, parentId }: { formId: string; parentId?: string }) {
+  const { data, error } = useGetForm(formId);
+
+  if (error || !data?.getForm) {
+    return <ErrorLoading error={error} />;
+  }
+  return <ResponseList form={data?.getForm} hideDelete parentId={parentId} />;
 }

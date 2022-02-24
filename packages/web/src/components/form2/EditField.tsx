@@ -98,6 +98,19 @@ export default function FormFields({
               <FormControlLabel
                 control={
                   <Checkbox
+                    checked={field?.options?.required}
+                    onChange={({ target }) => onOptionChange({ required: target.checked })}
+                    name="required"
+                    color="primary"
+                  />
+                }
+                label="Required"
+              />
+            </InputGroup>
+            <InputGroup>
+              <FormControlLabel
+                control={
+                  <Checkbox
                     checked={field?.options?.multipleValues}
                     onChange={({ target }) => onOptionChange({ multipleValues: target.checked })}
                     name="multipleValues"
@@ -111,13 +124,13 @@ export default function FormFields({
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={field?.options?.required}
-                    onChange={({ target }) => onOptionChange({ required: target.checked })}
-                    name="required"
+                    checked={field?.options?.allowOtherUsers}
+                    onChange={({ target }) => onOptionChange({ allowOtherUsers: target.checked })}
+                    name="allowOtherUsers"
                     color="primary"
                   />
                 }
-                label="Required"
+                label="Allow other users can add value"
               />
             </InputGroup>
           </>

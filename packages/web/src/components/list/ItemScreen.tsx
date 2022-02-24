@@ -8,12 +8,14 @@ import Paper from '@material-ui/core/Paper';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Hidden from '@material-ui/core/Hidden';
 import Tooltip from '@material-ui/core/Tooltip';
-import Drawer from '@material-ui/core/Drawer';
 import Typography from '@material-ui/core/Typography';
-import { useSelector, useDispatch } from 'react-redux';
 import { useTheme } from '@material-ui/core/styles';
 import ShareIcon from '@material-ui/icons/Share';
-// import FileCopyIcon from '@material-ui/icons/FileCopy';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import { useSelector } from 'react-redux';
 import {
   useCRUDListItems,
   useGetListItemBySlug,
@@ -23,15 +25,13 @@ import {
   useGetpageFieldMentions,
   useGetListItemById,
   useUpdateListItemFields,
+  useGetListTypeBySlug,
 } from '@frontend/shared/hooks/list';
 import { useAuthorization } from '@frontend/shared/hooks/auth';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
-import { updateSettingAction } from '@frontend/shared/redux/actions/setting';
 import { onAlert } from '../../utils/alert';
-import FieldValues from '../field/FieldValues';
 import InlineForm from './InlineForm';
-import LeftNavigation from '../field/LeftNavigation';
 import Breadcrumbs from '../common/Breadcrumbs';
 import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
@@ -41,9 +41,12 @@ import UnAuthorised from '../common/UnAuthorised';
 import SeoOverlay from './SeoOverlay';
 import { QRButton } from '../qrcode/QRButton';
 import FormFieldsValue from '../form2/FormFieldsValue';
+import FormFields from '../form2/FormFields';
+import Bottomsheet from '../common/Bottomsheet';
 
 interface IProps {
   slug: string;
+  typeSlug?: string;
   setItem?: any;
   onSlugUpdate?: (arg: string) => void;
   pushToAnchor?: () => void;
@@ -81,14 +84,18 @@ export default function ItemScreen({
   onSlugUpdate,
   pushToAnchor,
   hideleft = false,
+  typeSlug,
 }: IProps): any {
   const { data, error } = useGetListItemBySlug({ slug });
+  const { data: listTypeData, error: listTypeError } = useGetListTypeBySlug({
+    slug: typeSlug || data?.getListItemBySlug?.types[0]?.slug,
+  });
   const router = useRouter();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('xs'));
-  const { setting, auth } = useSelector((state: any) => state);
+  const { auth } = useSelector((state: any) => state);
   const [state, setState] = useState(initialState);
-  const [fieldValueCount, setFieldValueCount] = useState({});
+  // const [fieldValueCount, setFieldValueCount] = useState({});
   const authorized = useAuthorization([data?.getListItemBySlug?.createdBy?._id], true);
   const { templateMentionsField } = useGetTemplateFieldMentions(data?.getListItemBySlug?._id);
   const { pageMentionsField } = useGetpageFieldMentions(data?.getListItemBySlug?._id);
@@ -112,8 +119,6 @@ export default function ItemScreen({
   const { handleDelete, deleteLoading } = useDeleteListItem({ onAlert });
   const { handlePublish } = usePublishListItem();
 
-  const dispatch = useDispatch();
-
   const {
     state: crudState,
     setState: setCrudState,
@@ -124,10 +129,6 @@ export default function ItemScreen({
     onAlert,
     updateCallBack,
   });
-
-  const handleHideBottomSheet = () => {
-    dispatch(updateSettingAction({ bottomDrawer: false }));
-  };
 
   const onCancel = () => {
     setState({ ...state, fieldName: '' });
@@ -144,28 +145,21 @@ export default function ItemScreen({
     }
   }, [data]);
 
-  if (error || !data) {
-    return <ErrorLoading error={error} />;
+  if (error || listTypeError || !data || !listTypeData) {
+    return <ErrorLoading error={error || listTypeError} />;
   }
 
-  if (!data?.getListItemBySlug || (!authorized && !data?.getListItemBySlug?.active)) {
+  if (
+    !data?.getListItemBySlug ||
+    (!authorized && !data?.getListItemBySlug?.active) ||
+    ((typeSlug || data?.getListItemBySlug) && !listTypeData?.getListTypeBySlug)
+  ) {
     return <NotFound />;
   }
 
   if (!auth.authenticated && data?.getListItemBySlug?.authenticateUser) {
     return <UnAuthorised />;
   }
-
-  const leftNavigationProps = {
-    parentId: data.getListItemBySlug?.types[0]?._id,
-    slug: `/${data?.getListItemBySlug?.types[0]?.slug}/${data?.getListItemBySlug?.slug}`,
-    fields: state.fields,
-    fieldValueCount,
-    layouts: JSON.parse(data.getListItemBySlug?.layouts) || {},
-    itemSlug: data.getListItemBySlug.slug,
-    _id: data.getListItemBySlug._id,
-    previewMode: !authorized,
-  };
 
   return (
     <div>
@@ -197,11 +191,6 @@ export default function ItemScreen({
             </Tooltip>
             {authorized && (
               <>
-                {/* <Tooltip title="Make a copy">
-                  <IconButton onClick={() => alert('Comming soon')}>
-                    <FileCopyIcon />
-                  </IconButton>
-                </Tooltip> */}
                 <FormControlLabel
                   className="m-0"
                   control={
@@ -260,20 +249,23 @@ export default function ItemScreen({
       )}
       {!hideleft && (
         <>
-          <Hidden smUp>
-            <Drawer anchor="bottom" open={setting.bottomDrawer} onClose={handleHideBottomSheet}>
-              <LeftNavigation
-                style={{ maxHeight: '50vh' }}
-                onClick={handleHideBottomSheet}
-                {...leftNavigationProps}
-              >
-                <ListItemsFields listItem={data.getListItemBySlug} previewMode={!authorized} />
-              </LeftNavigation>
-            </Drawer>
-          </Hidden>
+          <Bottomsheet>
+            <Navigation
+              listTypeFields={listTypeData?.getListTypeBySlug?.fields}
+              listItem={data.getListItemBySlug}
+              authorized={authorized}
+              editSeo={() => setState({ ...state, showSeoOverlay: true })}
+              slug={`/${data?.getListItemBySlug?.types[0]?.slug}/${data?.getListItemBySlug?.slug}`}
+              style={{ maxHeight: '50vh' }}
+            />
+          </Bottomsheet>
           <Hidden xsDown>
-            <LeftNavigation
-              {...leftNavigationProps}
+            <Navigation
+              listTypeFields={listTypeData?.getListTypeBySlug?.fields}
+              listItem={data.getListItemBySlug}
+              authorized={authorized}
+              editSeo={() => setState({ ...state, showSeoOverlay: true })}
+              slug={`/${data?.getListItemBySlug?.types[0]?.slug}/${data?.getListItemBySlug?.slug}`}
               style={{
                 position: 'fixed',
                 width: '15%',
@@ -282,10 +274,7 @@ export default function ItemScreen({
                 overflowX: 'hidden',
                 overflowY: 'auto',
               }}
-              setEditValue={() => setState({ ...state, showSeoOverlay: true })}
-            >
-              <ListItemsFields listItem={data.getListItemBySlug} previewMode={!authorized} />
-            </LeftNavigation>
+            />
           </Hidden>
         </>
       )}
@@ -345,7 +334,7 @@ export default function ItemScreen({
               />
             )}
           </>
-          {data.getListItemBySlug?.types[0]?._id && (
+          {/* {data.getListItemBySlug?.types[0]?._id && (
             <FieldValues
               pushToAnchor={pushToAnchor}
               parentId={data.getListItemBySlug._id}
@@ -357,6 +346,15 @@ export default function ItemScreen({
               layouts={JSON.parse(data?.getListItemBySlug?.layouts) || {}}
               isPublish={data?.getListItemBySlug?.active}
               authorized={authorized}
+            />
+          )} */}
+          {listTypeData?.getListTypeBySlug?.fields && (
+            <FormFieldsValue
+              authorized={authorized}
+              fields={listTypeData?.getListTypeBySlug?.fields}
+              values={data?.getListItemBySlug?.values}
+              handleValueChange={handleUpdate}
+              pageId={data?.getListItemBySlug?._id}
             />
           )}
           <FormFieldsValue
@@ -382,3 +380,49 @@ export default function ItemScreen({
     </div>
   );
 }
+
+const Navigation = ({
+  listTypeFields,
+  listItem,
+  authorized,
+  editSeo,
+  slug,
+  style,
+}: {
+  listTypeFields: any;
+  listItem: any;
+  authorized: boolean;
+  editSeo: () => void;
+  slug: string;
+  style: any;
+}) => {
+  return (
+    <div style={style}>
+      <Paper variant="outlined">
+        <List component="nav" dense>
+          <ListItem button>
+            <Link href={`${slug}#title`}>
+              <ListItemText primary="Title" />
+            </Link>
+          </ListItem>
+          <ListItem button>
+            <ListItemText primary="Seo" />
+            <ListItemSecondaryAction>
+              <IconButton edge="end" aria-label="edit" onClick={editSeo}>
+                <EditIcon />
+              </IconButton>
+            </ListItemSecondaryAction>
+          </ListItem>
+        </List>
+      </Paper>
+      <FormFields
+        fields={listTypeFields}
+        setFields={(f: any) => {}}
+        title="Sections"
+        isSection
+        previewMode
+      />
+      <ListItemsFields listItem={listItem} previewMode={!authorized} />
+    </div>
+  );
+};

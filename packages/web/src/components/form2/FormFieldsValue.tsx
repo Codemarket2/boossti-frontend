@@ -10,9 +10,8 @@ import CRUDMenu from '../common/CRUDMenu';
 import { FormView } from './FormView';
 import DisplayValue from './DisplayValue';
 import BackdropComponent from '../common/Backdrop';
-import ResponseCount from '../response/ResponseCount';
-import FieldViewWrapper from './FieldViewWrapper';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
+import { DisplayForm } from './FormSection';
 
 interface IProps {
   fields: any;
@@ -78,20 +77,19 @@ export default function FormFieldsValue({
               <>
                 <Typography className="mt-2">{field.label}</Typography>
                 {field.options?.formId && (
-                  <>
-                    <ResponseCount
-                      formId={field.options?.formId}
-                      settings={field?.options?.customSettings ? field?.options?.settings : null}
-                      parentId={pageId}
-                    />
-                    <FieldViewWrapper
-                      _id={field.options?.formId}
-                      customSettings={
-                        field?.options?.customSettings ? field?.options?.settings : null
-                      }
-                      parentId={pageId}
-                    />
-                  </>
+                  <DisplayForm
+                    formId={field.options?.formId}
+                    parentId={pageId}
+                    authorized={authorized}
+                    customSettings={
+                      field?.options?.customSettings
+                        ? {
+                            ...field?.options?.settings,
+                            customSettings: field?.options?.customSettings,
+                          }
+                        : null
+                    }
+                  />
                 )}
               </>
             ) : (

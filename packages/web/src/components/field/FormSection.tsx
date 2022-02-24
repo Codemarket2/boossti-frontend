@@ -16,7 +16,7 @@ import Backdrop from '../common/Backdrop';
 import EditFormDrawer from '../form2/EditFormDrawer';
 import FieldViewWrapper from '../form2/FieldViewWrapper';
 import SelectFormSection from './SelectFormSection';
-import ResponseCount from '../response/ResponseCount';
+// import ResponseCount from '../response/ResponseCount';
 import Response from '../response/Response';
 import { convertToSlug } from './LeftNavigation';
 
@@ -144,7 +144,7 @@ export const DisplayForm = ({
     <>
       {!customSettings?.onlyOwnerCanSubmit ? (
         <>
-          <ResponseCount formId={formId} parentId={parentId} />
+          {/* <ResponseCount formId={formId} parentId={parentId} /> */}
           <FieldViewWrapper _id={formId} parentId={parentId} customSettings={customSettings} />
         </>
       ) : authorized && !(data?.getResponses && data?.getResponses?.count > 0) ? (

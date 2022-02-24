@@ -7,7 +7,7 @@ interface IProps {
   previewMode?: boolean;
 }
 
-export default function ListTypeFields({ listItem, previewMode }: IProps) {
+export default function ListItemFields({ listItem, previewMode }: IProps) {
   const { onFieldsChange } = useUpdateListItemFields({ listItem, onAlert });
   return (
     <FormFields

@@ -31,20 +31,43 @@ export default function FormSetting({ settings, onChange }: IProps): any {
       {settings?.widgetType === 'leaderboard' && (
         <InputGroup>
           <h3>Leader Board</h3>
-          <div style={{ display: 'flex', marginTop: '10px', width: '50%' }}>
-            <input
-              className="form-control mr-3"
+          <div>
+            <TextField
+              className="mr-3"
               value={settings?.minValue}
               onChange={(e) => onChange({ minValue: e.target.value })}
-              placeholder="min value"
+              label="min value"
+              variant="outlined"
+              size="small"
+              type="number"
+              error={!settings?.minValue}
+              helperText={!settings?.minValue && 'Required'}
             />
-            <input
-              className="form-control"
+            <TextField
               value={settings?.maxValue}
               onChange={(e) => onChange({ maxValue: e.target.value })}
               placeholder="max value"
+              variant="outlined"
+              size="small"
+              type="number"
+              error={!settings?.maxValue}
+              helperText={!settings?.maxValue && 'Required'}
             />
           </div>
+        </InputGroup>
+      )}
+      {settings?.widgetType === 'button' && (
+        <InputGroup>
+          <TextField
+            fullWidth
+            value={settings?.buttonLabel}
+            onChange={(e) => onChange({ buttonLabel: e.target.value })}
+            label="Button label"
+            variant="outlined"
+            size="small"
+            error={!settings?.buttonLabel}
+            helperText={!settings?.buttonLabel && 'Required'}
+          />
         </InputGroup>
       )}
       <InputGroup>

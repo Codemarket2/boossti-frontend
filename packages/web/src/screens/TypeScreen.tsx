@@ -29,6 +29,7 @@ import Fields from '../components/field/Fields';
 import InlineForm from '../components/list/InlineForm';
 import SeoOverlay from '../components/list/SeoOverlay';
 import { QRButton } from '../components/qrcode/QRButton';
+import ListTypeFields from '../components/list/ListTypeFields';
 
 interface IProps {
   slug: string;
@@ -231,7 +232,7 @@ export default function Screen({ slug }: IProps) {
             )}
           </Paper>
           <Fields title="Sections" parentId={data.getListTypeBySlug._id} guestMode={!authorized} />
-          {/* <ListTypeFields listType={data.getListTypeBySlug} /> */}
+          <ListTypeFields listType={data.getListTypeBySlug} previewMode={!authorized} />
         </Grid>
         <Grid item xs>
           <ListItems

@@ -44,6 +44,10 @@ export const UPDATED_LIST_TYPE = gql`
           title
           slug
         }
+        form {
+          _id
+          name
+        }
       }
       createdAt
       createdBy {
