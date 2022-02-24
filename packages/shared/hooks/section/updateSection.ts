@@ -102,17 +102,14 @@ export const stringifyPayload = (oldPayload: any, removeTypeId: boolean = false)
       values: payload.values.map((v) => {
         let value = { ...v };
         const field = payload.fields?.filter((f) => f._id === value.field)[0];
-        if (field) {
-          if (removeTypeId && (field.fieldType === 'type' || value?.itemId?._id)) {
-            value = { ...value, itemId: value?.itemId?._id || null };
-          }
-          if (removeTypeId && (field.fieldType === 'existingForm' || value?.response?._id)) {
-            value = { ...value, response: value?.response?._id || null };
-          }
-          const { tempMedia, tempMediaFiles, ...finalValue } = value;
-          return finalValue;
+        if (removeTypeId && (field?.fieldType === 'type' || value?.itemId?._id)) {
+          value = { ...value, itemId: value?.itemId?._id || null };
         }
-        return value;
+        if (removeTypeId && (field?.fieldType === 'existingForm' || value?.response?._id)) {
+          value = { ...value, response: value?.response?._id || null };
+        }
+        const { tempMedia, tempMediaFiles, ...finalValue } = value;
+        return finalValue;
       }),
     };
   }
