@@ -12,7 +12,7 @@ export const useNotificationSub = () => {
     description: 'Sumi commented on your post',
     link: '',
   });
-
+  const [audio] = useState(typeof Audio !== 'undefined' && new Audio('/notification.mp3'));
   const { attributes } = useSelector((reduxState: any) => reduxState?.auth);
   const { data, error } = useSubscription(NOTIFICATION_SUB, {
     variables: { userId: attributes['custom:_id'] },
@@ -20,7 +20,7 @@ export const useNotificationSub = () => {
 
   useEffect(() => {
     if (data?.notificationSub) {
-      alert('new sub');
+      audio.play();
       let temp = [];
       if (state.notifications[data.notificationSub.formId]) {
         temp = [data.notificationSub, ...state.notifications[data.notificationSub.formId]];
