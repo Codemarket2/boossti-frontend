@@ -29,7 +29,7 @@ export const light = {
   },
   divider: 'rgba(0, 0, 0, 0.12)',
   background: {
-    paper: '#FFFfff',
+    paper: '#FFFffff',
     // default: '#FFFFFF',
     default: '#FFFfff',
     level2: '#F0F2F5',
