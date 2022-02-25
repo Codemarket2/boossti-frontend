@@ -16,9 +16,9 @@ import { fileUpload } from '../../utils/fileUpload';
 import { omitTypename } from '../../utils/omitTypename';
 import { ADDED_LIST_ITEM, UPDATED_LIST_ITEM } from '../../graphql/subscription/list';
 import { updateLikeInCache } from '../like/createLike';
-import { parseListType } from './listTypes';
-import { GET_PAGE_MENTIONS } from '../../graphql/query/field';
+// import { GET_PAGE_MENTIONS } from '../../graphql/query/field';
 import { compressedFile } from '../../utils/compressFile';
+import { parsePayload } from '../section/getSection';
 
 const defaultGetListItems = { limit: 100, page: 1 };
 export function useGetpageFieldMentions(_id) {
@@ -29,13 +29,15 @@ export function useGetpageFieldMentions(_id) {
 
   return { pageMentionsField };
 }
-export function useGetTemplateFieldMentions(_id) {
-  const { data } = useQuery(GET_PAGE_MENTIONS, {
-    variables: { _id },
-  });
-  const templateMentionsField = data?.getPageMentions?.data.map((val) => (val = val.parentId));
-  return { templateMentionsField };
-}
+
+// export function useGetTemplateFieldMentions(_id) {
+//   const { data } = useQuery(GET_PAGE_MENTIONS, {
+//     variables: { _id },
+//   });
+//   const templateMentionsField = data?.getPageMentions?.data.map((val) => (val = val.parentId));
+//   return { templateMentionsField };
+// }
+
 export function useGetListItemById(_id) {
   const { data } = useQuery(GET_LIST_ITEM_BY_ID, {
     variables: { _id },
@@ -103,7 +105,7 @@ export function useGetListItemBySlug({ slug }: any) {
 
   useEffect(() => {
     if (data && data?.getListItemBySlug) {
-      setListItem(parseListType(data.getListItemBySlug));
+      setListItem(parsePayload(data.getListItemBySlug));
     }
   }, [data]);
 

@@ -8,12 +8,12 @@ interface IProps {
 }
 
 export default function ListTypeFields({ listType, previewMode }: IProps) {
-  const { onFieldsChange } = useUpdateListType({ listType, onAlert });
+  const { onListTypeChange } = useUpdateListType({ listType, onAlert });
   return (
     <div>
       <FormFields
         fields={listType?.fields}
-        setFields={onFieldsChange}
+        setFields={(fields) => onListTypeChange({ fields })}
         title="Sections"
         previewMode={previewMode}
         isSection

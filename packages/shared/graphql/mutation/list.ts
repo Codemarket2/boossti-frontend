@@ -29,6 +29,7 @@ export const CREATE_LIST_TYPE = gql`
           name
         }
       }
+      options
       createdAt
       createdBy {
         _id
@@ -79,6 +80,7 @@ export const UPDATE_LIST_TYPE = gql`
           name
         }
       }
+      options
       createdAt
       createdBy {
         _id
@@ -117,6 +119,7 @@ export const PUBLISH_LIST_TYPE = gql`
           name
         }
       }
+      options
       createdAt
       createdBy {
         _id
@@ -127,8 +130,8 @@ export const PUBLISH_LIST_TYPE = gql`
 `;
 
 export const UPDATE_LIST_TYPE_FIELDS = gql`
-  mutation MyMutation($_id: ID!, $fields: [Field2Input]) {
-    updateListType(_id: $_id, fields: $fields) {
+  mutation MyMutation($_id: ID!, $fields: [Field2Input], $options: AWSJSON) {
+    updateListType(_id: $_id, fields: $fields, options: $options) {
       _id
       slug
       title
@@ -155,6 +158,7 @@ export const UPDATE_LIST_TYPE_FIELDS = gql`
           name
         }
       }
+      options
       createdAt
       createdBy {
         _id
@@ -171,20 +175,8 @@ export const DELETE_LIST_TYPE = gql`
 `;
 
 export const CREATE_LIST_ITEM = gql`
-  mutation MyMutation(
-    $types: [ID!]
-    $title: String!
-    $description: String
-    $media: [MediaInput]
-    $layouts: AWSJSON
-  ) {
-    createListItem(
-      types: $types
-      title: $title
-      description: $description
-      media: $media
-      layouts: $layouts
-    ) {
+  mutation MyMutation($types: [ID!], $title: String!, $description: String, $media: [MediaInput]) {
+    createListItem(types: $types, title: $title, description: $description, media: $media) {
       _id
       active
       authenticateUser
@@ -195,7 +187,7 @@ export const CREATE_LIST_ITEM = gql`
         url
         caption
       }
-      layouts
+      options
       types {
         _id
         title
@@ -251,8 +243,13 @@ export const CREATE_LIST_ITEM = gql`
 `;
 
 export const UPDATE_LIST_ITEM_FIELDS = gql`
-  mutation MyMutation($_id: ID!, $fields: [Field2Input], $values: [FieldValue2Input]) {
-    updateListItem(_id: $_id, fields: $fields, values: $values) {
+  mutation MyMutation(
+    $_id: ID!
+    $fields: [Field2Input]
+    $values: [FieldValue2Input]
+    $options: AWSJSON
+  ) {
+    updateListItem(_id: $_id, fields: $fields, values: $values, options: $options) {
       _id
       active
       authenticateUser
@@ -263,7 +260,7 @@ export const UPDATE_LIST_ITEM_FIELDS = gql`
         url
         caption
       }
-      layouts
+      options
       types {
         _id
         title
@@ -324,7 +321,6 @@ export const UPDATE_LIST_ITEM = gql`
     $title: String
     $description: String
     $media: [MediaInput]
-    $layouts: AWSJSON
     $slug: String
   ) {
     updateListItem(
@@ -332,7 +328,6 @@ export const UPDATE_LIST_ITEM = gql`
       title: $title
       description: $description
       media: $media
-      layouts: $layouts
       slug: $slug
     ) {
       _id
@@ -345,7 +340,7 @@ export const UPDATE_LIST_ITEM = gql`
         url
         caption
       }
-      layouts
+      options
       types {
         _id
         title
@@ -413,75 +408,7 @@ export const PUBLISH_LIST_ITEM = gql`
         url
         caption
       }
-      layouts
-      types {
-        _id
-        title
-        slug
-      }
-      fields {
-        _id
-        label
-        fieldType
-        options
-        typeId {
-          _id
-          title
-          slug
-        }
-        form {
-          _id
-          name
-        }
-      }
-      createdAt
-      createdBy {
-        _id
-        name
-      }
-      values {
-        _id
-        field
-        value
-        values
-        valueNumber
-        valueBoolean
-        valueDate
-        itemId {
-          _id
-          title
-          slug
-        }
-        media {
-          url
-          caption
-        }
-        response {
-          _id
-          values {
-            field
-            value
-          }
-        }
-      }
-    }
-  }
-`;
-
-export const UPDATE_LIST_ITEM_LAYOUTS = gql`
-  mutation MyMutation($_id: ID!, $layouts: AWSJSON) {
-    updateListItem(_id: $_id, layouts: $layouts) {
-      _id
-      active
-      authenticateUser
-      slug
-      title
-      description
-      media {
-        url
-        caption
-      }
-      layouts
+      options
       types {
         _id
         title

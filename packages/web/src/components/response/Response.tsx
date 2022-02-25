@@ -163,7 +163,7 @@ export function ResponseChild3({
               <ResponseSections
                 authorized={false}
                 section={section}
-                onSectionChange={onSectionChange}
+                onSectionChange={(sec) => {}}
               />
               <Paper variant="outlined">
                 <List dense component="nav" aria-label="main mailbox folders">
@@ -194,6 +194,12 @@ export function ResponseChild3({
                 fields={section?.fields}
                 values={section?.values}
                 handleValueChange={handleUpdateSection}
+                layouts={section?.options?.layouts || {}}
+                onLayoutChange={(layouts) =>
+                  onSectionChange({
+                    options: { ...section?.options, layouts },
+                  })
+                }
               />
             )}
             <div className="p-2">
