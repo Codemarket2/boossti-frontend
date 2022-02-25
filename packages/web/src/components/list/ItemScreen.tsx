@@ -21,11 +21,12 @@ import {
   useGetListItemBySlug,
   useDeleteListItem,
   usePublishListItem,
-  useGetTemplateFieldMentions,
+  // useGetTemplateFieldMentions,
   useGetpageFieldMentions,
   useGetListItemById,
   useUpdateListItemFields,
   useGetListTypeBySlug,
+  useUpdateListType,
 } from '@frontend/shared/hooks/list';
 import { useAuthorization } from '@frontend/shared/hooks/auth';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -90,32 +91,32 @@ export default function ItemScreen({
   const { data: listTypeData, error: listTypeError } = useGetListTypeBySlug({
     slug: typeSlug || data?.getListItemBySlug?.types[0]?.slug,
   });
+  const { onListTypeChange } = useUpdateListType({
+    listType: listTypeData?.getListTypeBySlug,
+    onAlert,
+  });
   const router = useRouter();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('xs'));
   const { auth } = useSelector((state: any) => state);
   const [state, setState] = useState(initialState);
-  // const [fieldValueCount, setFieldValueCount] = useState({});
   const authorized = useAuthorization([data?.getListItemBySlug?.createdBy?._id], true);
-  const { templateMentionsField } = useGetTemplateFieldMentions(data?.getListItemBySlug?._id);
+  // const { templateMentionsField } = useGetTemplateFieldMentions(data?.getListItemBySlug?._id);
   const { pageMentionsField } = useGetpageFieldMentions(data?.getListItemBySlug?._id);
-  const { handleUpdate } = useUpdateListItemFields({
+  const { handleUpdate, onListItemChange } = useUpdateListItemFields({
     listItem: data?.getListItemBySlug,
     onAlert,
   });
-  const mentions = Array.from(new Set(templateMentionsField?.concat(pageMentionsField)));
-
+  const mentions = Array.from(new Set(pageMentionsField));
   const deleteCallBack = () => {
     router.push(`/${data?.getListItemBySlug?.types[0]?.slug}`);
   };
-
   const updateCallBack = (newSlug) => {
     setState({ ...state, fieldName: '' });
     if (newSlug !== slug && onSlugUpdate) {
       onSlugUpdate(newSlug);
     }
   };
-
   const { handleDelete, deleteLoading } = useDeleteListItem({ onAlert });
   const { handlePublish } = usePublishListItem();
 
@@ -179,7 +180,6 @@ export default function ItemScreen({
             <QRButton />
             <Tooltip title="share">
               <IconButton
-                // edge="start"
                 onClick={() =>
                   navigator.clipboard.writeText(
                     `${window?.location?.origin}/${data?.getListItemBySlug?.types[0]?.slug}/${data?.getListItemBySlug?.slug}`,
@@ -332,20 +332,6 @@ export default function ItemScreen({
               />
             )}
           </>
-          {/* {data.getListItemBySlug?.types[0]?._id && (
-            <FieldValues
-              pushToAnchor={pushToAnchor}
-              parentId={data.getListItemBySlug._id}
-              typeId={data.getListItemBySlug?.types[0]?._id}
-              setFields={(fields) => setState({ ...state, fields })}
-              setFieldValueCount={(index, value) =>
-                setFieldValueCount({ ...fieldValueCount, [index]: value })
-              }
-              layouts={JSON.parse(data?.getListItemBySlug?.layouts) || {}}
-              isPublish={data?.getListItemBySlug?.active}
-              authorized={authorized}
-            />
-          )} */}
           {listTypeData?.getListTypeBySlug?.fields && (
             <FormFieldsValue
               authorized={authorized}
@@ -353,6 +339,12 @@ export default function ItemScreen({
               values={data?.getListItemBySlug?.values}
               handleValueChange={handleUpdate}
               pageId={data?.getListItemBySlug?._id}
+              layouts={listTypeData?.getListTypeBySlug?.options?.layouts || {}}
+              onLayoutChange={(layouts) =>
+                onListTypeChange({
+                  options: { ...listTypeData?.getListTypeBySlug?.options, layouts },
+                })
+              }
             />
           )}
           <FormFieldsValue
@@ -361,6 +353,12 @@ export default function ItemScreen({
             values={data?.getListItemBySlug?.values}
             handleValueChange={handleUpdate}
             pageId={data?.getListItemBySlug?._id}
+            layouts={data?.getListItemBySlug?.options?.layouts || {}}
+            onLayoutChange={(layouts) =>
+              onListItemChange({
+                options: { ...listTypeData?.getListTypeBySlug?.options, layouts },
+              })
+            }
           />
           {mentions.length > 0 && (
             <div>

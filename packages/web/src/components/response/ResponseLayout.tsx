@@ -52,6 +52,12 @@ export default function ResponseLayout({ _id }: { _id: string }) {
             fields={section?.fields}
             values={section?.values}
             handleValueChange={handleUpdateSection}
+            layouts={section?.options?.layouts || {}}
+            onLayoutChange={(layouts) =>
+              onSectionChange({
+                options: { ...section?.options, layouts },
+              })
+            }
           />
         </Grid>
       </Grid>

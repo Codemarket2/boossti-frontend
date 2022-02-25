@@ -54,6 +54,7 @@ export const GET_LIST_TYPE_BY_SLUG = gql`
           name
         }
       }
+      options
       createdAt
       createdBy {
         _id
@@ -144,7 +145,7 @@ export const GET_LIST_ITEM_BY_SLUG = gql`
         url
         caption
       }
-      layouts
+      options
       types {
         _id
         title

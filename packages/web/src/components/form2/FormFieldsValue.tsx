@@ -1,4 +1,4 @@
-import Grid from '@material-ui/core/Grid';
+// import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import { generateObjectId } from '@frontend/shared/utils/objectId';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import EditIcon from '@material-ui/icons/Edit';
 import { useState } from 'react';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import { WidthProvider, Responsive } from 'react-grid-layout';
 import CRUDMenu from '../common/CRUDMenu';
 import { FormView } from './FormView';
 import DisplayValue from './DisplayValue';
@@ -13,12 +14,19 @@ import BackdropComponent from '../common/Backdrop';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
 import { DisplayForm } from './FormSection';
 
+import 'react-grid-layout/css/styles.css';
+import 'react-resizable/css/styles.css';
+
+const ResponsiveReactGridLayout = WidthProvider(Responsive);
+
 interface IProps {
   fields: any;
   values: any;
   handleValueChange: any;
   authorized: boolean;
   pageId?: string;
+  layouts: any;
+  onLayoutChange: (layouts: any) => void;
 }
 
 const initialState = {
@@ -35,8 +43,11 @@ export default function FormFieldsValue({
   handleValueChange,
   authorized,
   pageId,
+  layouts = {},
+  onLayoutChange,
 }: IProps) {
   const [state, setState] = useState(initialState);
+  const [layout, setLayout] = useState({});
 
   const setInitialState = () => setState(initialState);
 
@@ -62,17 +73,17 @@ export default function FormFieldsValue({
   return (
     <div className="p-2">
       <BackdropComponent open={state.loading} />
-      <Grid container>
+      <ResponsiveReactGridLayout
+        className="layout"
+        cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
+        rowHeight={30}
+        layouts={layouts}
+        onLayoutChange={(layout, newLayouts) => onLayoutChange(newLayouts)}
+        isDraggable={authorized}
+        isResizable={authorized}
+      >
         {fields?.map((field) => (
-          <Grid
-            key={field._id}
-            xs={field?.options?.grid?.xs || 12}
-            sm={field?.options?.grid?.sm}
-            md={field?.options?.grid?.md}
-            lg={field?.options?.grid?.lg}
-            xl={field?.options?.grid?.xl}
-            item
-          >
+          <div key={field._id}>
             {field.fieldType === 'form' ? (
               <>
                 <Typography className="mt-2">{field.label}</Typography>
@@ -143,9 +154,9 @@ export default function FormFieldsValue({
               </>
             )}
             {field?.options?.showCommentBox && <CommentLikeShare parentId={field._id} />}
-          </Grid>
+          </div>
         ))}
-      </Grid>
+      </ResponsiveReactGridLayout>
       {authorized && (
         <CRUDMenu
           show={state.showMenu}

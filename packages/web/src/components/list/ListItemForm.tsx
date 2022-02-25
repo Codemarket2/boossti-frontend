@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import { useRouter } from 'next/router';
 import Button from '@material-ui/core/Button';
 import InputLabel from '@material-ui/core/InputLabel';
-import { useGetFields } from '@frontend/shared/hooks/field';
+// import { useGetFields } from '@frontend/shared/hooks/field';
 import { useCRUDListItems } from '@frontend/shared/hooks/list';
 import LoadingButton from '../common/LoadingButton';
 import InputGroup from '../common/InputGroup';
@@ -12,7 +12,7 @@ import ImagePicker from '../common/ImagePicker';
 import { onAlert } from '../../utils/alert';
 import Backdrop from '../common/Backdrop';
 import ErrorLoading from '../common/ErrorLoading';
-import FieldValueForm2 from '../field/FieldValueForm2';
+// import FieldValueForm2 from '../field/FieldValueForm2';
 
 interface IProps {
   typeSlug: string;
@@ -43,7 +43,7 @@ export default function ListItemForm({
     updateCallBack,
   });
 
-  const { data, loading, error } = useGetFields(parentId);
+  // const { data, loading, error } = useGetFields(parentId);
 
   useEffect(() => {
     if (item) {
@@ -55,27 +55,27 @@ export default function ListItemForm({
     router.push(`/${typeSlug}`);
   };
 
-  useEffect(() => {
-    if (data && data.getFields) {
-      const newFields = data.getFields.map((field) => ({
-        value: '',
-        media: [],
-        tempMedia: [],
-        tempMediaFiles: [],
-        itemId: null,
-        fieldType: field.fieldType,
-        parentId,
-        field: field._id,
-        label: field.label,
-        typeId: field.fieldType === 'type' ? field.typeId : null,
-      }));
-      setExtraFields(newFields);
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data && data.getFields) {
+  //     const newFields = data.getFields.map((field) => ({
+  //       value: '',
+  //       media: [],
+  //       tempMedia: [],
+  //       tempMediaFiles: [],
+  //       itemId: null,
+  //       fieldType: field.fieldType,
+  //       parentId,
+  //       field: field._id,
+  //       label: field.label,
+  //       typeId: field.fieldType === 'type' ? field.typeId : null,
+  //     }));
+  //     setExtraFields(newFields);
+  //   }
+  // }, [data]);
 
-  if (error || !data || !data.getFields) {
-    return <ErrorLoading error={error} />;
-  }
+  // if (error || !data || !data.getFields) {
+  //   return <ErrorLoading error={error} />;
+  // }
 
   return (
     <>
@@ -118,7 +118,7 @@ export default function ListItemForm({
             <InputLabel htmlFor="my-input">Images/Video</InputLabel>
             <ImagePicker state={state} setState={setState} />
           </InputGroup>
-          {extraFields.map((field, index) => (
+          {/* {extraFields.map((field, index) => (
             <div className="my-4" key={field._id}>
               <FieldValueForm2
                 label={field.label}
@@ -152,7 +152,7 @@ export default function ListItemForm({
                 }
               />
             </div>
-          ))}
+          ))} */}
           <InputGroup>
             <LoadingButton type="submit" color="primary" loading={formik.isSubmitting}>
               {formik.values.edit ? 'Submit' : 'Submit'}
