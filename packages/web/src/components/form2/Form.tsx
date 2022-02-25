@@ -92,7 +92,11 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
   }
 
   return (
-    <Authorization _id={[state?.createdBy?._id]} allowAdmin>
+    <Authorization
+      _id={[state?.createdBy?._id]}
+      allowAdmin
+      ViewAuth={state?.settings?.ViewAuthRequired}
+    >
       {options.backdrop && <Backdrop open />}
       <div>
         <Snackbar
