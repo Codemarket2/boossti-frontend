@@ -87,6 +87,19 @@ export default function FormSetting({ settings, onChange }: IProps): any {
         <FormControlLabel
           control={
             <Checkbox
+              checked={settings?.ViewAuthRequired}
+              onChange={({ target }) => onChange({ ViewAuthRequired: target.checked })}
+              name="authRequired"
+              color="primary"
+            />
+          }
+          label="Authentication required to view form"
+        />
+      </InputGroup>
+      <InputGroup>
+        <FormControlLabel
+          control={
+            <Checkbox
               checked={settings?.onlyOwnerCanSubmit}
               onChange={({ target }) => onChange({ onlyOwnerCanSubmit: target.checked })}
               name="onlyOwnerCanSubmit"
