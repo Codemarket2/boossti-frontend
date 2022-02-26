@@ -6,7 +6,6 @@ interface IProps {
   children: ReactNode;
   _id: string[];
   allowAdmin?: boolean;
-  ViewAuth?: boolean;
   returnNull?: boolean;
 }
 
@@ -14,12 +13,11 @@ export default function Authorization({
   children,
   _id = [],
   allowAdmin = false,
-  ViewAuth = true,
   returnNull,
 }: IProps) {
   const authorized = useAuthorization(_id, allowAdmin);
 
-  if (authorized || !ViewAuth) {
+  if (authorized) {
     return <>{children}</>;
   }
 
