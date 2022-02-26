@@ -49,6 +49,7 @@ export const UPDATED_LIST_TYPE = gql`
           name
         }
       }
+      options
       createdAt
       createdBy {
         _id
@@ -86,6 +87,7 @@ export const UPDATED_LIST_ITEM = gql`
         title
         slug
       }
+      options
       media {
         url
         caption

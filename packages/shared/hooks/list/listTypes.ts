@@ -10,6 +10,7 @@ import { fileUpload } from '../../utils/fileUpload';
 import { omitTypename } from '../../utils/omitTypename';
 import { ADDED_LIST_TYPE, UPDATED_LIST_TYPE } from '../../graphql/subscription/list';
 import { compressedFile } from '../../utils/compressFile';
+import { parsePayload } from '../section/getSection';
 
 const defaultQueryVariables = { limit: 25, page: 1 };
 
@@ -71,17 +72,6 @@ export function useGetListTypes(queryVariables?: IQueryProps) {
   return { data, error, loading, state, setState };
 }
 
-export const parseListType = (lisType) => {
-  return {
-    ...lisType,
-    fields: lisType?.fields?.map((m) => {
-      const field = { ...m };
-      field.options = JSON.parse(field.options);
-      return field;
-    }),
-  };
-};
-
 export function useGetListTypeBySlug({ slug }: any) {
   const { data, error, loading, subscribeToMore } = useQuery(GET_LIST_TYPE_BY_SLUG, {
     variables: { slug },
@@ -91,7 +81,7 @@ export function useGetListTypeBySlug({ slug }: any) {
 
   useEffect(() => {
     if (data && data?.getListTypeBySlug) {
-      setListType(parseListType(data.getListTypeBySlug));
+      setListType(parsePayload(data.getListTypeBySlug));
     }
   }, [data]);
 

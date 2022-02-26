@@ -25,7 +25,6 @@ import ListItems from '../components/list/ListItems';
 import NotFound from '../components/common/NotFound';
 import Backdrop from '../components/common/Backdrop';
 import { onAlert } from '../utils/alert';
-import Fields from '../components/field/Fields';
 import InlineForm from '../components/list/InlineForm';
 import SeoOverlay from '../components/list/SeoOverlay';
 import { QRButton } from '../components/qrcode/QRButton';

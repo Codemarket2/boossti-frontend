@@ -27,10 +27,16 @@ import CRUDMenu from '../common/CRUDMenu';
 import AddField from './AddField';
 import EditField from './EditField';
 import EditFieldGrid from './EditFieldGrid';
-import { convertToSlug } from '../field/LeftNavigation';
 import EditFormDrawer from './EditFormDrawer';
 import CustomFormSettings from './CustomFormSettings';
 import { SelectFormDrawer } from './SelectForm';
+
+export function convertToSlug(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/ /g, '-')
+    .replace(/[^\w-]+/g, '');
+}
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);

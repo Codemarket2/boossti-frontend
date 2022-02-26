@@ -37,18 +37,18 @@ export const useUpdateListType = ({ listType, onAlert }: IProps) => {
     let timeOutId;
     if (saveToServer && listType) {
       setSaveToServer(false);
-      timeOutId = setTimeout(() => handleUpdateForm(), 1000);
+      timeOutId = setTimeout(() => handleUpdate(), 1000);
     }
     return () => clearTimeout(timeOutId);
   }, [listType]);
 
-  const onFieldsChange = (fields) => {
-    const payload = stringifyPayload({ fields });
+  const onListTypeChange = (newListType) => {
+    const payload = stringifyPayload({ ...listType, ...newListType });
     updateCache(listType.slug, payload);
     setSaveToServer(true);
   };
 
-  const handleUpdateForm = async () => {
+  const handleUpdate = async () => {
     try {
       const payload = stringifyPayload(listType, true);
       const res = await updateMutation({
@@ -60,5 +60,5 @@ export const useUpdateListType = ({ listType, onAlert }: IProps) => {
     }
   };
 
-  return { onFieldsChange };
+  return { onListTypeChange };
 };
