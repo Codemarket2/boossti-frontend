@@ -19,6 +19,7 @@ import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
 import DisplayValue from '../form2/DisplayValue';
+import { useSelector } from 'react-redux';
 
 interface IProps {
   form: any;
@@ -30,7 +31,7 @@ export default function ResponseList({ form, hideDelete = false, parentId }: IPr
   const { data, error, state, setState } = useGetResponses(form._id, parentId);
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
   const router = useRouter();
-
+  const { admin = false } = useSelector(({ auth }: any) => auth);
   return (
     <>
       <Backdrop open={deleteLoading} />
@@ -67,7 +68,7 @@ export default function ResponseList({ form, hideDelete = false, parentId }: IPr
                 <TableRow key={response._id}>
                   <TableCell>
                     <div className="d-flex">
-                      {!hideDelete && (
+                      {!hideDelete && admin && (
                         <Tooltip title="Delete response">
                           <IconButton
                             onClick={() => {
