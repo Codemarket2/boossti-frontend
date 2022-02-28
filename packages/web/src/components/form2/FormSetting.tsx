@@ -107,7 +107,7 @@ export default function FormSetting({ settings, onChange }: IProps): any {
               color="primary"
             />
           }
-          label="Only page owner can submit 1 response other users will see the that 1 response"
+          label="Only page owner can submit response other users will see the responses"
         />
       </InputGroup>
       <InputGroup>
