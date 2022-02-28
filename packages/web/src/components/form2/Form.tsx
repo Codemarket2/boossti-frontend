@@ -95,7 +95,11 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
   if (!state?.settings?.ViewAuthRequired && !admin) {
     return (
       <div style={{ width: '100%' }}>
-        <FormView form={state} />
+        {state?.settings?.onlyOwnerCanSubmit ? (
+          <ResponseList form={state} />
+        ) : (
+          <FormView form={state} />
+        )}
       </div>
     );
   } else {
