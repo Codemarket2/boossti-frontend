@@ -1,8 +1,8 @@
 export const getFormFieldTypes = (isSection: boolean): FieldType[] => {
   if (isSection) {
-    return [...fieldTypes, ...sectionFieldTypes];
+    return sectionFieldTypes;
   }
-  return [...fieldTypes];
+  return fieldTypes;
 };
 
 type FieldType = {
