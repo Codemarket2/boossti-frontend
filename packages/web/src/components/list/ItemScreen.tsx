@@ -144,8 +144,6 @@ export default function ItemScreen({
     }
   }, [data]);
 
-  const showEdit = authorized && editMode;
-
   if (error || listTypeError || !data || !listTypeData) {
     return <ErrorLoading error={error || listTypeError} />;
   }
@@ -319,7 +317,7 @@ export default function ItemScreen({
                 </Typography>
               </>
             )}
-            {state.showSeoOverlay && (
+            {authorized && state.showSeoOverlay && (
               <SeoOverlay
                 open={state.showSeoOverlay}
                 onClose={() => setState(initialState)}
@@ -400,14 +398,16 @@ const Navigation = ({
               <ListItemText primary="Title" />
             </Link>
           </ListItem>
-          <ListItem button>
-            <ListItemText primary="Seo" />
-            <ListItemSecondaryAction>
-              <IconButton edge="end" aria-label="edit" onClick={editSeo}>
-                <EditIcon />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
+          {authorized && (
+            <ListItem button>
+              <ListItemText primary="Seo" />
+              <ListItemSecondaryAction>
+                <IconButton edge="end" aria-label="edit" onClick={editSeo}>
+                  <EditIcon />
+                </IconButton>
+              </ListItemSecondaryAction>
+            </ListItem>
+          )}
         </List>
       </Paper>
       <FormFields

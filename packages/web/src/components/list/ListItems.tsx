@@ -66,7 +66,7 @@ export default function ListItems({ types, slug, listType }: any) {
               loading={createLoading}
               startIcon={<AddIcon />}
             >
-              Use this template
+              Create New Page
             </LoadingButton>
           </Tooltip>
         </div>
@@ -79,9 +79,9 @@ export default function ListItems({ types, slug, listType }: any) {
           indicatorColor="primary"
         >
           <Tab label="Preview" value="preview" />
-          <Tab label="Responses" value="responses" />
+          <Tab label="Pages" value="pages" />
         </Tabs>
-        {tab === 'responses' ? (
+        {tab === 'pages' ? (
           <>
             {error || !data ? (
               <ErrorLoading error={error} />

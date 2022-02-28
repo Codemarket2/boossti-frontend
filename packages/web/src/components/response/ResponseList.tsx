@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux';
 import { useGetForm } from '@frontend/shared/hooks/form';
 import { useRouter } from 'next/router';
 import moment from 'moment';
@@ -19,7 +20,6 @@ import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
 import DisplayValue from '../form2/DisplayValue';
-import { useSelector } from 'react-redux';
 
 interface IProps {
   form: any;
