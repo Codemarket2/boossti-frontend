@@ -26,7 +26,8 @@ interface IProps {
   authorized: boolean;
   pageId?: string;
   layouts: any;
-  onLayoutChange: (layouts: any) => void;
+  disableGrid?: boolean;
+  onLayoutChange?: (layouts: any) => void;
 }
 
 const initialState = {
@@ -44,10 +45,11 @@ export default function FormFieldsValue({
   authorized,
   pageId,
   layouts = {},
+  disableGrid = true,
   onLayoutChange,
 }: IProps) {
   const [state, setState] = useState(initialState);
-  const [layout, setLayout] = useState({});
+  // const [layout, setLayout] = useState({});
 
   const setInitialState = () => setState(initialState);
 
@@ -78,9 +80,11 @@ export default function FormFieldsValue({
         cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
         rowHeight={30}
         layouts={layouts}
-        onLayoutChange={(layout, newLayouts) => onLayoutChange(newLayouts)}
-        isDraggable={authorized}
-        isResizable={authorized}
+        onLayoutChange={(newLayout, newLayouts) => {
+          if (onLayoutChange && !disableGrid) onLayoutChange(newLayouts);
+        }}
+        isDraggable={authorized && !disableGrid}
+        isResizable={authorized && !disableGrid}
       >
         {fields?.map((field) => (
           <div key={field._id}>

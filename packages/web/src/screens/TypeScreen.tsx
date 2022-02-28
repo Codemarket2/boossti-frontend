@@ -29,6 +29,7 @@ import InlineForm from '../components/list/InlineForm';
 import SeoOverlay from '../components/list/SeoOverlay';
 import { QRButton } from '../components/qrcode/QRButton';
 import ListTypeFields from '../components/list/ListTypeFields';
+import EditMode from '../components/common/EditMode';
 
 interface IProps {
   slug: string;
@@ -96,12 +97,10 @@ export default function Screen({ slug }: IProps) {
           </Typography>
         </Breadcrumbs>
         <div className="d-flex align-items-center">
+          {authorized && <EditMode />}
           <QRButton />
           <Tooltip title="Copy page link">
-            <IconButton
-              // edge="start"
-              onClick={() => navigator.clipboard.writeText(window?.location?.href)}
-            >
+            <IconButton onClick={() => navigator.clipboard.writeText(window?.location?.href)}>
               <Share />
             </IconButton>
           </Tooltip>
@@ -169,7 +168,7 @@ export default function Screen({ slug }: IProps) {
         </div>
       </div>
       <Grid container spacing={1}>
-        <Grid item sm={3} xs={12}>
+        <Grid item sm={2} xs={12}>
           <Paper variant="outlined" className="p-2 mb-2">
             {state.fieldName === 'title' ? (
               <InlineForm
@@ -203,34 +202,37 @@ export default function Screen({ slug }: IProps) {
                 </Typography>
               </div>
             )}
-            <Typography>
-              SEO
-              <Tooltip title="Edit seo">
-                <IconButton
-                  size="small"
-                  onClick={() => setState({ ...initialState, showSeoOverlay: true })}
-                >
-                  <EditIcon fontSize="small" />
-                </IconButton>
-              </Tooltip>
-            </Typography>
-            {state.showSeoOverlay && (
-              <SeoOverlay
-                open={state.showSeoOverlay}
-                onClose={() => setState(initialState)}
-                formik={formik}
-                crudState={crudState}
-                setCrudState={setCrudState}
-                data={data.getListTypeBySlug}
-                setFields={() => setFormValues(data.getListTypeBySlug)}
-                loading={CRUDLoading}
-                state={state}
-                setState={setState}
-                permalinkPrefix={window?.location?.origin}
-              />
+            {authorized && (
+              <>
+                <Typography>
+                  SEO
+                  <Tooltip title="Edit seo">
+                    <IconButton
+                      size="small"
+                      onClick={() => setState({ ...initialState, showSeoOverlay: true })}
+                    >
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </Typography>
+                {state.showSeoOverlay && (
+                  <SeoOverlay
+                    open={state.showSeoOverlay}
+                    onClose={() => setState(initialState)}
+                    formik={formik}
+                    crudState={crudState}
+                    setCrudState={setCrudState}
+                    data={data.getListTypeBySlug}
+                    setFields={() => setFormValues(data.getListTypeBySlug)}
+                    loading={CRUDLoading}
+                    state={state}
+                    setState={setState}
+                    permalinkPrefix={window?.location?.origin}
+                  />
+                )}
+              </>
             )}
           </Paper>
-          {/* <Fields title="Sections" parentId={data.getListTypeBySlug._id} guestMode={!authorized} /> */}
           <ListTypeFields listType={data.getListTypeBySlug} previewMode={!authorized} />
         </Grid>
         <Grid item xs>
@@ -238,6 +240,7 @@ export default function Screen({ slug }: IProps) {
             types={[data.getListTypeBySlug._id]}
             name={data.getListTypeBySlug.title}
             slug={data.getListTypeBySlug.slug}
+            listType={data.getListTypeBySlug}
           />
         </Grid>
       </Grid>
