@@ -88,76 +88,80 @@ export default function FormFieldsValue({
       >
         {fields?.map((field) => (
           <div key={field._id}>
-            {field.fieldType === 'form' ? (
-              <>
-                <Typography className="mt-2">{field.label}</Typography>
-                {field.options?.formId && (
-                  <DisplayForm
-                    formId={field.options?.formId}
-                    parentId={pageId}
-                    authorized={authorized}
-                    customSettings={
-                      field?.options?.customSettings
-                        ? {
-                            ...field?.options?.settings,
-                            customSettings: field?.options?.customSettings,
-                          }
-                        : null
-                    }
-                  />
-                )}
-              </>
-            ) : (
-              <>
-                {state.showForm && state.field?._id === field?._id ? (
-                  <FormView
-                    fields={[field]}
-                    handleSubmit={(tempValues) => handleSubmit(tempValues)}
-                    onCancel={() => setState(initialState)}
-                    initialValues={state?.value ? [state?.value] : []}
-                  />
-                ) : (
-                  <>
-                    <Typography className="d-flex align-items-center mt-2">
-                      {field?.label}
-                      {authorized &&
-                        (field.options?.multipleValues ||
-                          !values?.some((v) => v.field === field._id)) && (
+            <div style={field?.options?.style || {}}>
+              {field.fieldType === 'form' ? (
+                <>
+                  <Typography className="mt-2">{field.label}</Typography>
+                  {field.options?.formId && (
+                    <DisplayForm
+                      formId={field.options?.formId}
+                      parentId={pageId}
+                      authorized={authorized}
+                      customSettings={
+                        field?.options?.customSettings
+                          ? {
+                              ...field?.options?.settings,
+                              customSettings: field?.options?.customSettings,
+                            }
+                          : null
+                      }
+                    />
+                  )}
+                </>
+              ) : (
+                <>
+                  {state.showForm && state.field?._id === field?._id ? (
+                    <FormView
+                      fields={[field]}
+                      handleSubmit={(tempValues) => handleSubmit(tempValues)}
+                      onCancel={() => setState(initialState)}
+                      initialValues={state?.value ? [state?.value] : []}
+                    />
+                  ) : (
+                    <>
+                      <Typography className="d-flex align-items-center mt-2">
+                        {field?.label}
+                        {authorized &&
+                          (field.options?.multipleValues ||
+                            !values?.some((v) => v.field === field._id)) && (
+                            <Tooltip title="Actions">
+                              <IconButton
+                                edge="end"
+                                color="primary"
+                                onClick={(e) =>
+                                  setState({ ...initialState, field, showForm: true })
+                                }
+                              >
+                                <AddCircleIcon fontSize="small" />
+                              </IconButton>
+                            </Tooltip>
+                          )}
+                      </Typography>
+                    </>
+                  )}
+                  {values
+                    ?.filter((v) => v.field === field._id)
+                    ?.map((value) => (
+                      <>
+                        {authorized && (
                           <Tooltip title="Actions">
                             <IconButton
-                              edge="end"
-                              color="primary"
-                              onClick={(e) => setState({ ...initialState, field, showForm: true })}
+                              edge="start"
+                              onClick={(e) =>
+                                setState({ ...initialState, showMenu: e.target, field, value })
+                              }
                             >
-                              <AddCircleIcon fontSize="small" />
+                              <EditIcon fontSize="small" />
                             </IconButton>
                           </Tooltip>
                         )}
-                    </Typography>
-                  </>
-                )}
-                {values
-                  ?.filter((v) => v.field === field._id)
-                  ?.map((value) => (
-                    <>
-                      {authorized && (
-                        <Tooltip title="Actions">
-                          <IconButton
-                            edge="start"
-                            onClick={(e) =>
-                              setState({ ...initialState, showMenu: e.target, field, value })
-                            }
-                          >
-                            <EditIcon fontSize="small" />
-                          </IconButton>
-                        </Tooltip>
-                      )}
-                      <DisplayValue key={value?._id} value={value} field={field} />
-                    </>
-                  ))}
-              </>
-            )}
-            {field?.options?.showCommentBox && <CommentLikeShare parentId={field._id} />}
+                        <DisplayValue key={value?._id} value={value} field={field} />
+                      </>
+                    ))}
+                </>
+              )}
+              {field?.options?.showCommentBox && <CommentLikeShare parentId={field._id} />}
+            </div>
           </div>
         ))}
       </ResponsiveReactGridLayout>
