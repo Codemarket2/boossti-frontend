@@ -67,6 +67,7 @@ export default function ActionForm({ onCancel, fields, emailFields, onSave, acti
             onChange={formik.handleChange}
             label="Action Type*"
           >
+            <MenuItem value="showMessage">Show Message</MenuItem>
             <MenuItem value="sendEmail">Send Email</MenuItem>
             {fields?.some((f) => f.fieldType === 'phoneNumber' && f?.options?.required) && (
               <MenuItem value="sendSms">Send SMS</MenuItem>
@@ -343,7 +344,7 @@ export default function ActionForm({ onCancel, fields, emailFields, onSave, acti
           </InputGroup>
         </>
       )}
-      {formik.values.actionType === 'sendSms' && (
+      {['showMessage', 'sendSms'].includes(formik.values.actionType) && (
         <InputGroup>
           <TextField
             fullWidth
