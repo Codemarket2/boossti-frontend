@@ -360,87 +360,93 @@ export function FormView({
             xl={field?.options?.grid?.xl}
             key={field._id}
           >
-            <InputGroup key={field._id}>
-              <Typography>
-                {field?.options?.required ? `${field?.label}*` : field?.label}
-              </Typography>
-              {filterValues(values, field).map((value, valueIndex) => (
-                <div key={valueIndex}>
-                  {valueIndex === 0 ? (
-                    <>
-                      <div className="w-100">
-                        {hideField ? (
-                          <Skeleton height={200} />
-                        ) : (
-                          <Field
-                            {...field}
-                            disabled={submitState.loading}
-                            validate={submitState.validate}
-                            label={field?.options?.required ? `${field?.label}*` : field?.label}
-                            onChangeValue={(changedValue) =>
-                              onChange({ ...changedValue, field: field._id }, valueIndex)
-                            }
-                            value={value}
-                          />
+            <div style={field?.options?.style || {}}>
+              <InputGroup key={field._id}>
+                <Typography>
+                  {field?.options?.required ? `${field?.label}*` : field?.label}
+                </Typography>
+                {filterValues(values, field).map((value, valueIndex) => (
+                  <div key={valueIndex}>
+                    {valueIndex === 0 ? (
+                      <>
+                        <div className="w-100">
+                          {hideField ? (
+                            <Skeleton height={200} />
+                          ) : (
+                            <Field
+                              {...field}
+                              disabled={submitState.loading}
+                              validate={submitState.validate}
+                              label={field?.options?.required ? `${field?.label}*` : field?.label}
+                              onChangeValue={(changedValue) =>
+                                onChange({ ...changedValue, field: field._id }, valueIndex)
+                              }
+                              value={value}
+                            />
+                          )}
+                        </div>
+                        {field?.options?.multipleValues && (
+                          <Button
+                            className="mt-2"
+                            size="small"
+                            color="primary"
+                            variant="contained"
+                            onClick={() => {
+                              if (field?.fieldType === 'richTextarea') {
+                                setHideField(true);
+                              }
+                              onAddOneMoreValue(field._id);
+                            }}
+                            startIcon={<AddIcon />}
+                          >
+                            Add
+                          </Button>
                         )}
-                      </div>
-                      {field?.options?.multipleValues && (
-                        <Button
-                          className="mt-2"
-                          size="small"
-                          color="primary"
-                          variant="contained"
+                      </>
+                    ) : (
+                      <div className="mb-2 d-flex align-items-start">
+                        <div className="w-100">
+                          <DisplayValue value={value} field={field} />
+                          {validateValue(
+                            submitState.validate,
+                            value,
+                            field.options,
+                            field.fieldType,
+                          ).error && (
+                            <FormHelperText className="text-danger">
+                              {
+                                validateValue(
+                                  submitState.validate,
+                                  value,
+                                  field.options,
+                                  field.fieldType,
+                                ).errorMessage
+                              }
+                            </FormHelperText>
+                          )}
+                        </div>
+                        <IconButton
                           onClick={() => {
                             if (field?.fieldType === 'richTextarea') {
                               setHideField(true);
                             }
-                            onAddOneMoreValue(field._id);
+                            onEditOneValue(field._id, valueIndex);
                           }}
-                          startIcon={<AddIcon />}
                         >
-                          Add
-                        </Button>
-                      )}
-                    </>
-                  ) : (
-                    <div className="mb-2 d-flex align-items-start">
-                      <div className="w-100">
-                        <DisplayValue value={value} field={field} />
-                        {validateValue(submitState.validate, value, field.options, field.fieldType)
-                          .error && (
-                          <FormHelperText className="text-danger">
-                            {
-                              validateValue(
-                                submitState.validate,
-                                value,
-                                field.options,
-                                field.fieldType,
-                              ).errorMessage
-                            }
-                          </FormHelperText>
-                        )}
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton
+                          edge="end"
+                          onClick={() => onRemoveOneValue(field._id, valueIndex)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
                       </div>
-                      <IconButton
-                        onClick={() => {
-                          if (field?.fieldType === 'richTextarea') {
-                            setHideField(true);
-                          }
-                          onEditOneValue(field._id, valueIndex);
-                        }}
-                      >
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton
-                        edge="end"
-                        onClick={() => onRemoveOneValue(field._id, valueIndex)}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </InputGroup>
+                    )}
+                  </div>
+                ))}
+              </InputGroup>
+            </div>
           </Grid>
         ))}
         {fieldWiseView && fields?.length > 1 && (

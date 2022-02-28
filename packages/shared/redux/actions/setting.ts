@@ -7,6 +7,7 @@ export interface IAttributes {
     description: string;
     title: string;
   };
+  editMode?: boolean;
 }
 
 export function updateSettingAction(payload: IAttributes) {
