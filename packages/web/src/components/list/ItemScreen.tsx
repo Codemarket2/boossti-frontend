@@ -26,7 +26,6 @@ import {
   useGetListItemById,
   useUpdateListItemFields,
   useGetListTypeBySlug,
-  useUpdateListType,
 } from '@frontend/shared/hooks/list';
 import { useAuthorization } from '@frontend/shared/hooks/auth';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -44,6 +43,7 @@ import { QRButton } from '../qrcode/QRButton';
 import FormFieldsValue from '../form2/FormFieldsValue';
 import FormFields from '../form2/FormFields';
 import Bottomsheet from '../common/Bottomsheet';
+import EditMode from '../common/EditMode';
 
 interface IProps {
   slug: string;
@@ -91,10 +91,8 @@ export default function ItemScreen({
   const { data: listTypeData, error: listTypeError } = useGetListTypeBySlug({
     slug: typeSlug || data?.getListItemBySlug?.types[0]?.slug,
   });
-  const { onListTypeChange } = useUpdateListType({
-    listType: listTypeData?.getListTypeBySlug,
-    onAlert,
-  });
+  const { editMode } = useSelector(({ setting }: any) => setting);
+
   const router = useRouter();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('xs'));
@@ -177,6 +175,7 @@ export default function ItemScreen({
             </Typography>
           </Breadcrumbs>
           <div className="d-flex align-items-center">
+            {authorized && <EditMode />}
             <QRButton />
             <Tooltip title="share">
               <IconButton
@@ -318,7 +317,7 @@ export default function ItemScreen({
                 </Typography>
               </>
             )}
-            {state.showSeoOverlay && (
+            {authorized && state.showSeoOverlay && (
               <SeoOverlay
                 open={state.showSeoOverlay}
                 onClose={() => setState(initialState)}
@@ -342,11 +341,6 @@ export default function ItemScreen({
               handleValueChange={handleUpdate}
               pageId={data?.getListItemBySlug?._id}
               layouts={listTypeData?.getListTypeBySlug?.options?.layouts || {}}
-              onLayoutChange={(layouts) =>
-                onListTypeChange({
-                  options: { ...listTypeData?.getListTypeBySlug?.options, layouts },
-                })
-              }
             />
           )}
           <FormFieldsValue
@@ -356,6 +350,7 @@ export default function ItemScreen({
             handleValueChange={handleUpdate}
             pageId={data?.getListItemBySlug?._id}
             layouts={data?.getListItemBySlug?.options?.layouts || {}}
+            disableGrid={!editMode}
             onLayoutChange={(layouts) =>
               onListItemChange({
                 options: { ...listTypeData?.getListTypeBySlug?.options, layouts },
@@ -403,14 +398,16 @@ const Navigation = ({
               <ListItemText primary="Title" />
             </Link>
           </ListItem>
-          <ListItem button>
-            <ListItemText primary="Seo" />
-            <ListItemSecondaryAction>
-              <IconButton edge="end" aria-label="edit" onClick={editSeo}>
-                <EditIcon />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
+          {authorized && (
+            <ListItem button>
+              <ListItemText primary="Seo" />
+              <ListItemSecondaryAction>
+                <IconButton edge="end" aria-label="edit" onClick={editSeo}>
+                  <EditIcon />
+                </IconButton>
+              </ListItemSecondaryAction>
+            </ListItem>
+          )}
         </List>
       </Paper>
       <FormFields

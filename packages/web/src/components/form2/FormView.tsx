@@ -12,6 +12,7 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { ArrowBackIosRounded, ArrowForwardIosRounded } from '@material-ui/icons';
 import { useCreateUpdateResponse } from '@frontend/shared/hooks/response';
+import ResponseList from '../response/ResponseList';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
 import Field from './Field';
@@ -45,7 +46,7 @@ export const defualtValue = {
 };
 
 export default function FormViewWrapper({
-  form: { _id, name, fields, settings },
+  form,
   parentId,
   createCallback,
   setResponded,
@@ -55,18 +56,19 @@ export default function FormViewWrapper({
     parentId,
   );
   const [showMessage, setShowMessage] = useState(false);
+  const [showResponse, setShowResponse] = useState(true);
   const [formResponse, setFormResponse] = useState(null);
   const [formModal, setFormModal] = useState(false);
-
+  const authenticated = useSelector(({ auth }: any) => auth.authenticated);
   const handleSubmit = async (values) => {
-    let payload: any = { formId: _id, values };
-    if (settings?.customResponseLayout && settings?.customSectionId) {
+    let payload: any = { formId: form?._id, values };
+    if (form?.settings?.customResponseLayout && form?.settings?.customSectionId) {
       payload = {
         ...payload,
-        options: JSON.stringify({ customSectionId: settings?.customSectionId }),
+        options: JSON.stringify({ customSectionId: form?.settings?.customSectionId }),
       };
     }
-    const response = await handleCreateUpdateResponse(payload, fields);
+    const response = await handleCreateUpdateResponse(payload, form?.fields);
     if (response) {
       setShowMessage(true);
       setFormResponse(response);
@@ -83,57 +85,90 @@ export default function FormViewWrapper({
 
   return (
     <div>
-      {settings?.showFormTitle && (
+      {form?.settings?.showFormTitle && (
         <InputGroup className="text-center">
-          <Typography variant="h4">{name}</Typography>
+          <Typography variant="h4">{form?.name}</Typography>
         </InputGroup>
       )}
       {showMessage ? (
         <div className="py-5">
           <DisplayRichText
-            value={settings?.onSubmitMessage || '<h2 class="text-center">Thank you</h2>'}
+            value={form?.settings?.onSubmitMessage || '<h2 class="text-center">Thank you</h2>'}
           />
           <InputGroup className="text-center">
-            {settings?.editResponse && (
+            {form?.settings?.editResponse && (
               <Button variant="outlined" color="primary" size="small">
                 Edit Response
               </Button>
             )}
           </InputGroup>
           {formResponse && (
-            <ResponseChild2 formId={_id} response={formResponse} hideAuthor hideNavigation />
+            <ResponseChild2 formId={form?._id} response={formResponse} hideAuthor hideNavigation />
           )}
         </div>
-      ) : settings?.widgetType === 'leaderboard' ? (
-        <Leaderboard formId={_id} settings={settings} parentId={parentId} />
-      ) : settings?.widgetType === 'button' ? (
+      ) : form?.settings?.widgetType === 'leaderboard' ? (
+        <Leaderboard formId={form?._id} settings={form?.settings} parentId={parentId} />
+      ) : form?.settings?.widgetType === 'button' ? (
         <>
           <div className="text-center">
             <Button variant="contained" color="primary" onClick={() => setFormModal(true)}>
-              {settings?.buttonLabel || name}
+              {form?.settings?.buttonLabel || name}
             </Button>
           </div>
           {formModal && (
             <Overlay open={formModal} onClose={() => setFormModal(false)}>
               <div className="p-2">
                 <FormView
-                  authRequired={!settings?.authRequired}
-                  fields={fields}
+                  authRequired={!form?.settings?.authRequired}
+                  fields={form?.fields}
                   handleSubmit={handleSubmit}
                   loading={createLoading}
-                  fieldWiseView={settings?.widgetType === 'oneField'}
+                  fieldWiseView={form?.settings?.widgetType === 'oneField'}
                 />
               </div>
             </Overlay>
           )}
         </>
+      ) : form?.settings?.widgetType === 'displayResponses' ? (
+        showResponse ? (
+          <>
+            <ResponseList form={form} />
+            {authenticated && (
+              <Button
+                className="mt-2"
+                size="small"
+                color="primary"
+                variant="contained"
+                onClick={() => {
+                  setShowResponse(false);
+                }}
+                startIcon={<AddIcon />}
+              >
+                Add Response
+              </Button>
+            )}
+          </>
+        ) : (
+          <>
+            <FormView
+              authRequired={!form?.settings?.authRequired}
+              fieldWiseView={form?.settings?.widgetType === 'oneField'}
+              fields={form?.fields}
+              handleSubmit={handleSubmit}
+              loading={createLoading}
+              viewResponse={() => {
+                setShowResponse(true);
+              }}
+            />
+          </>
+        )
       ) : (
         <FormView
-          authRequired={!settings?.authRequired}
-          fields={fields}
+          authRequired={!form?.settings?.authRequired}
+          fields={form?.fields}
           handleSubmit={handleSubmit}
           loading={createLoading}
-          fieldWiseView={settings?.widgetType === 'oneField'}
+          fieldWiseView={form?.settings?.widgetType === 'oneField'}
         />
       )}
     </div>
@@ -143,6 +178,7 @@ export default function FormViewWrapper({
 interface IProps2 {
   fields: any;
   handleSubmit: (payload: any) => any;
+  viewResponse?: () => void;
   loading?: boolean;
   onCancel?: () => void;
   initialValues?: any[];
@@ -170,6 +206,7 @@ export const filterValues = (values, field) => {
 export function FormView({
   fields,
   handleSubmit,
+  viewResponse,
   loading,
   onCancel,
   initialValues = [],
@@ -323,87 +360,93 @@ export function FormView({
             xl={field?.options?.grid?.xl}
             key={field._id}
           >
-            <InputGroup key={field._id}>
-              <Typography>
-                {field?.options?.required ? `${field?.label}*` : field?.label}
-              </Typography>
-              {filterValues(values, field).map((value, valueIndex) => (
-                <div key={valueIndex}>
-                  {valueIndex === 0 ? (
-                    <>
-                      <div className="w-100">
-                        {hideField ? (
-                          <Skeleton height={200} />
-                        ) : (
-                          <Field
-                            {...field}
-                            disabled={submitState.loading}
-                            validate={submitState.validate}
-                            label={field?.options?.required ? `${field?.label}*` : field?.label}
-                            onChangeValue={(changedValue) =>
-                              onChange({ ...changedValue, field: field._id }, valueIndex)
-                            }
-                            value={value}
-                          />
+            <div style={field?.options?.style || {}}>
+              <InputGroup key={field._id}>
+                <Typography>
+                  {field?.options?.required ? `${field?.label}*` : field?.label}
+                </Typography>
+                {filterValues(values, field).map((value, valueIndex) => (
+                  <div key={valueIndex}>
+                    {valueIndex === 0 ? (
+                      <>
+                        <div className="w-100">
+                          {hideField ? (
+                            <Skeleton height={200} />
+                          ) : (
+                            <Field
+                              {...field}
+                              disabled={submitState.loading}
+                              validate={submitState.validate}
+                              label={field?.options?.required ? `${field?.label}*` : field?.label}
+                              onChangeValue={(changedValue) =>
+                                onChange({ ...changedValue, field: field._id }, valueIndex)
+                              }
+                              value={value}
+                            />
+                          )}
+                        </div>
+                        {field?.options?.multipleValues && (
+                          <Button
+                            className="mt-2"
+                            size="small"
+                            color="primary"
+                            variant="contained"
+                            onClick={() => {
+                              if (field?.fieldType === 'richTextarea') {
+                                setHideField(true);
+                              }
+                              onAddOneMoreValue(field._id);
+                            }}
+                            startIcon={<AddIcon />}
+                          >
+                            Add
+                          </Button>
                         )}
-                      </div>
-                      {field?.options?.multipleValues && (
-                        <Button
-                          className="mt-2"
-                          size="small"
-                          color="primary"
-                          variant="contained"
+                      </>
+                    ) : (
+                      <div className="mb-2 d-flex align-items-start">
+                        <div className="w-100">
+                          <DisplayValue value={value} field={field} />
+                          {validateValue(
+                            submitState.validate,
+                            value,
+                            field.options,
+                            field.fieldType,
+                          ).error && (
+                            <FormHelperText className="text-danger">
+                              {
+                                validateValue(
+                                  submitState.validate,
+                                  value,
+                                  field.options,
+                                  field.fieldType,
+                                ).errorMessage
+                              }
+                            </FormHelperText>
+                          )}
+                        </div>
+                        <IconButton
                           onClick={() => {
                             if (field?.fieldType === 'richTextarea') {
                               setHideField(true);
                             }
-                            onAddOneMoreValue(field._id);
+                            onEditOneValue(field._id, valueIndex);
                           }}
-                          startIcon={<AddIcon />}
                         >
-                          Add
-                        </Button>
-                      )}
-                    </>
-                  ) : (
-                    <div className="mb-2 d-flex align-items-start">
-                      <div className="w-100">
-                        <DisplayValue value={value} field={field} />
-                        {validateValue(submitState.validate, value, field.options, field.fieldType)
-                          .error && (
-                          <FormHelperText className="text-danger">
-                            {
-                              validateValue(
-                                submitState.validate,
-                                value,
-                                field.options,
-                                field.fieldType,
-                              ).errorMessage
-                            }
-                          </FormHelperText>
-                        )}
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton
+                          edge="end"
+                          onClick={() => onRemoveOneValue(field._id, valueIndex)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
                       </div>
-                      <IconButton
-                        onClick={() => {
-                          if (field?.fieldType === 'richTextarea') {
-                            setHideField(true);
-                          }
-                          onEditOneValue(field._id, valueIndex);
-                        }}
-                      >
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton
-                        edge="end"
-                        onClick={() => onRemoveOneValue(field._id, valueIndex)}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </InputGroup>
+                    )}
+                  </div>
+                ))}
+              </InputGroup>
+            </div>
           </Grid>
         ))}
         {fieldWiseView && fields?.length > 1 && (
@@ -461,7 +504,7 @@ export function FormView({
         )}
         {((!fieldWiseView && fields?.length > 0) || fields?.length === page + 1) && (
           <Grid item xs={12}>
-            <InputGroup>
+            <InputGroup style={{ display: 'flex' }}>
               <LoadingButton
                 loading={submitState.loading || loading}
                 onClick={onSubmit}
@@ -471,6 +514,19 @@ export function FormView({
               >
                 Submit
               </LoadingButton>
+              {viewResponse && (
+                <Button
+                  className="ml-3"
+                  size="small"
+                  color="primary"
+                  variant="contained"
+                  onClick={() => {
+                    viewResponse();
+                  }}
+                >
+                  Back
+                </Button>
+              )}
               {onCancel && (
                 <Button
                   variant="outlined"

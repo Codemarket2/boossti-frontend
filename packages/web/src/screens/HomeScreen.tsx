@@ -48,6 +48,7 @@ const useStyles = makeStyles((theme) => ({
   image: {
     backgroundImage: 'url("/handshake.png")',
     // backgroundImage: 'url(https://source.unsplash.com/random)',
+    paddingBottom: '60%',
     backgroundRepeat: 'no-repeat',
     backgroundColor:
       theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],

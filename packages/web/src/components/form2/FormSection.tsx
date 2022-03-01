@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { useGetResponses } from '@frontend/shared/hooks/response';
 import Button from '@material-ui/core/Button';
+import AddIcon from '@material-ui/icons/Add';
+import { IconButton } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 import FieldViewWrapper from './FieldViewWrapper';
 import Response from '../response/Response';
 import ErrorLoading from '../common/ErrorLoading';
@@ -18,8 +21,12 @@ export const DisplayForm = ({
   authorized: boolean;
   customSettings: any;
 }) => {
-  const { data, error } = useGetResponses(formId, parentId);
-  const [open, setOpen] = useState(false);
+  const { data, error, refetch } = useGetResponses(formId, parentId);
+  const [state, setState] = useState({ drawer: false, showForm: false });
+
+  const handleRefetch = () => {
+    refetch();
+  };
 
   if (error || !data) {
     return <ErrorLoading error={error} />;
@@ -30,12 +37,17 @@ export const DisplayForm = ({
       {!customSettings?.onlyOwnerCanSubmit ? (
         <>
           <div className="text-center">
-            <Button variant="outlined" onClick={() => setOpen(true)}>
+            <Button variant="outlined" onClick={() => setState({ ...state, drawer: true })}>
               {`${data?.getResponses?.count} Responses`}
             </Button>
           </div>
-          {open && (
-            <Overlay minWidth="85vw" title="Responses" open={open} onClose={() => setOpen(false)}>
+          {state.drawer && (
+            <Overlay
+              minWidth="85vw"
+              title="Responses"
+              open={state.drawer}
+              onClose={() => setState({ ...state, drawer: false })}
+            >
               <ResponseListWrapper formId={formId} parentId={parentId} />
             </Overlay>
           )}
@@ -45,9 +57,50 @@ export const DisplayForm = ({
         <FieldViewWrapper _id={formId} parentId={parentId} customSettings={customSettings} />
       ) : (
         <>
-          {data?.getResponses?.data?.[0]?._id && (
-            <Response hideNavigation hideAuthor responseId={data?.getResponses?.data?.[0]?._id} />
+          {customSettings?.multipleResponses && (
+            <>
+              {state.showForm ? (
+                <>
+                  <div className="text-right">
+                    <IconButton
+                      size="small"
+                      onClick={() => setState({ ...state, showForm: false })}
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                  </div>
+                  <FieldViewWrapper
+                    _id={formId}
+                    parentId={parentId}
+                    customSettings={customSettings}
+                    createCallback={(r) => {
+                      handleRefetch();
+                      setState({ ...state, showForm: false });
+                    }}
+                  />
+                </>
+              ) : (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  startIcon={<AddIcon />}
+                  onClick={() => setState({ ...state, showForm: true })}
+                >
+                  Add new
+                </Button>
+              )}
+            </>
           )}
+          {(customSettings?.multipleResponses
+            ? data?.getResponses?.data
+            : [data?.getResponses?.data?.[0]]
+          )
+            ?.slice(0)
+            .reverse()
+            ?.map((response) => (
+              <Response key={response?._id} hideNavigation hideAuthor responseId={response?._id} />
+            ))}
         </>
       )}
     </>

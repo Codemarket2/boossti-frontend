@@ -27,6 +27,7 @@ export default function FormSetting({ settings, onChange }: IProps): any {
         <MenuItem value="leaderboard">Leaderboad</MenuItem>
         <MenuItem value="oneField">One field at a time</MenuItem>
         <MenuItem value="button">Button</MenuItem>
+        <MenuItem value="displayResponses">Display Responses</MenuItem>
       </TextField>
       {settings?.widgetType === 'leaderboard' && (
         <InputGroup>
@@ -106,7 +107,7 @@ export default function FormSetting({ settings, onChange }: IProps): any {
               color="primary"
             />
           }
-          label="Only page owner can submit 1 response other users will see the that 1 response"
+          label="Only page owner can submit response other users will see the responses"
         />
       </InputGroup>
       <InputGroup>

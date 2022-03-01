@@ -1,5 +1,4 @@
 import { AnyAction } from 'redux';
-import { string } from 'yup/lib/locale';
 
 import { UPDATE_SETTING, IAttributes } from '../actions/setting';
 
@@ -10,6 +9,7 @@ export const initialState: IAttributes = {
     description: '',
     title: '',
   },
+  editMode: false,
 };
 
 const setting = (state: IAttributes = initialState, action: AnyAction) => {

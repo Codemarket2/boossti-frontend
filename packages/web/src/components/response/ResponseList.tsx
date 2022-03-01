@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux';
 import { useGetForm } from '@frontend/shared/hooks/form';
 import { useRouter } from 'next/router';
 import moment from 'moment';
@@ -30,7 +31,7 @@ export default function ResponseList({ form, hideDelete = false, parentId }: IPr
   const { data, error, state, setState } = useGetResponses(form._id, parentId);
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
   const router = useRouter();
-
+  const { admin = false } = useSelector(({ auth }: any) => auth);
   return (
     <>
       <Backdrop open={deleteLoading} />
@@ -67,7 +68,7 @@ export default function ResponseList({ form, hideDelete = false, parentId }: IPr
                 <TableRow key={response._id}>
                   <TableCell>
                     <div className="d-flex">
-                      {!hideDelete && (
+                      {!hideDelete && admin && (
                         <Tooltip title="Delete response">
                           <IconButton
                             onClick={() => {

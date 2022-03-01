@@ -20,7 +20,7 @@ export function useGetResponses(formId: string, parentId: string = null, formFie
     formField,
   });
 
-  const { data, error, loading, subscribeToMore } = useQuery(GET_RESPONSES, {
+  const { data, error, loading, subscribeToMore, refetch } = useQuery(GET_RESPONSES, {
     variables: { ...state, formId, parentId },
     fetchPolicy: 'cache-and-network',
   });
@@ -59,7 +59,7 @@ export function useGetResponses(formId: string, parentId: string = null, formFie
     }
   }, []);
 
-  return { data, error, loading, state, setState };
+  return { data, error, loading, state, setState, refetch };
 }
 
 export function useGetResponse(_id: string): any {

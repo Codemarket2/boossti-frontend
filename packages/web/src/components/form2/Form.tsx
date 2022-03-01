@@ -94,16 +94,20 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
 
   if (!state?.settings?.ViewAuthRequired && !admin) {
     return (
-      <Paper variant="outlined" className="px-2">
-        <FormView form={state} />
-      </Paper>
+      <div style={{ width: '100%' }}>
+        {state?.settings?.onlyOwnerCanSubmit ? (
+          <ResponseList form={state} />
+        ) : (
+          <FormView form={state} />
+        )}
+      </div>
     );
   } else {
     return (
       <Authorization _id={[state?.createdBy?._id]} allowAdmin>
         {state?.settings?.ViewAuthRequired}
         {options.backdrop && <Backdrop open />}
-        <div>
+        <div style={{ width: '100%' }}>
           <Snackbar
             open={Boolean(options.snackBar)}
             autoHideDuration={4000}

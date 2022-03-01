@@ -30,6 +30,7 @@ import EditFieldGrid from './EditFieldGrid';
 import EditFormDrawer from './EditFormDrawer';
 import CustomFormSettings from './CustomFormSettings';
 import { SelectFormDrawer } from './SelectForm';
+import StyleDrawer from '../style/StyleDrawer';
 
 export function convertToSlug(text: string): string {
   return text
@@ -49,6 +50,7 @@ const initialValues = {
   showMenu: null,
   field: null,
   showForm: false,
+  editStyle: false,
   editGrid: false,
   selectForm: false,
   editForm: false,
@@ -172,6 +174,21 @@ export default function FormFields({
   //   }
   // };
 
+  const handleRemoveStyle = (field: any, styleKey: string) => {
+    if (field?.options?.style) {
+      const { [styleKey]: removedStyle, ...restStyles } = field?.options?.style;
+      handleEditStyle(field._id, restStyles);
+    }
+  };
+
+  const handleEditStyle = (fieldId: string, style: any) => {
+    setFields(
+      fields.map((field) =>
+        field._id === fieldId ? { ...field, options: { ...field?.options, style } } : field,
+      ),
+    );
+  };
+
   return (
     <Paper variant="outlined">
       {values.editGrid ? (
@@ -280,7 +297,13 @@ export default function FormFields({
               setValues({ ...values, showMenu: null, showForm: true });
             }}
           >
-            <MenuItem onClick={() => setValues({ ...values, editGrid: true })}>
+            <MenuItem onClick={() => setValues({ ...values, showMenu: false, editStyle: true })}>
+              <ListItemIcon className="mr-n4">
+                <EditIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Edit Style" />
+            </MenuItem>
+            <MenuItem onClick={() => setValues({ ...values, showMenu: false, editGrid: true })}>
               <ListItemIcon className="mr-n4">
                 <GridIcon fontSize="small" />
               </ListItemIcon>
@@ -337,6 +360,24 @@ export default function FormFields({
             )} */}
           </CRUDMenu>
         </>
+      )}
+
+      {values.editStyle && (
+        <StyleDrawer
+          onClose={() => setValues(initialValues)}
+          open={values.editStyle}
+          styles={fields?.filter((f) => f._id === values?.field?._id)?.pop()?.options?.style || {}}
+          handleResetStyle={() => handleEditStyle(values?.field._id, {})}
+          onStyleChange={(value) =>
+            handleEditStyle(
+              values?.field._id,
+              values?.field?.options?.style
+                ? { ...values?.field?.options?.style, ...value }
+                : value,
+            )
+          }
+          removeStyle={(styleKey) => handleRemoveStyle(values?.field, styleKey)}
+        />
       )}
       {values.selectForm && (
         <SelectFormDrawer

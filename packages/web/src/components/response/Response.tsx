@@ -5,7 +5,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import { useGetResponse } from '@frontend/shared/hooks/response';
+import { useDeleteResponse, useGetResponse } from '@frontend/shared/hooks/response';
 import Link from 'next/link';
 import Typography from '@material-ui/core/Typography';
 import { useUpdateSection } from '@frontend/shared/hooks/section';
@@ -24,6 +24,8 @@ import { QRButton } from '../qrcode/QRButton';
 import ResponseSections from './ResponseSection';
 import FormFieldsValue from '../form2/FormFieldsValue';
 import { onAlert } from '../../utils/alert';
+import CRUDMenu from '../common/CRUDMenu';
+import BackdropComponent from '../common/Backdrop';
 
 interface IProps {
   responseId: string;
@@ -110,7 +112,8 @@ export function ResponseChild3({
   hideNavigation,
   hideAuthor,
 }: IProps3) {
-  const [openDrawer, setOpenDrawer] = useState(false);
+  const [state, setState] = useState({ showMenu: null, edit: false });
+  const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
   const authorized = useAuthorization([response?.createdBy?._id, form?.createdBy?._id], true);
   const { section, onSectionChange, handleUpdateSection } = useUpdateSection({
     onAlert,
@@ -119,6 +122,7 @@ export function ResponseChild3({
 
   return (
     <>
+      <BackdropComponent open={deleteLoading} />
       {!hideBreadcrumbs && (
         <div className="d-flex justify-content-between align-items-center">
           {!hideNavigation && (
@@ -133,17 +137,26 @@ export function ResponseChild3({
             {authorized && (
               <>
                 <Tooltip title="Edit Response">
-                  <IconButton onClick={() => setOpenDrawer(true)}>
+                  <IconButton onClick={(e) => setState({ ...state, showMenu: e.currentTarget })}>
                     <EditIcon />
                   </IconButton>
                 </Tooltip>
-                {openDrawer && (
+                <CRUDMenu
+                  show={state.showMenu}
+                  onEdit={() => setState({ ...state, showMenu: null, edit: true })}
+                  onDelete={() => {
+                    setState({ ...state, showMenu: null });
+                    handleDelete(response?._id, form?._id);
+                  }}
+                  onClose={() => setState({ ...state, showMenu: null })}
+                />
+                {state.edit && (
                   <EditResponseDrawer
                     form={form}
                     response={response}
-                    open={openDrawer}
+                    open={state.edit}
                     onClose={() => {
-                      setOpenDrawer(false);
+                      setState({ ...state, edit: false });
                     }}
                   />
                 )}
