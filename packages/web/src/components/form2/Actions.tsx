@@ -70,10 +70,7 @@ export default function Actions({ form, onChange }: IProps) {
         <List>
           {form?.settings?.actions?.map((action, i) => (
             <ListItem button key={i}>
-              <ListItemText
-                primary={action.name}
-                secondary={action?.senderEmail ? `from ${action?.senderEmail}` : ''}
-              />
+              <ListItemText primary={action.name} secondary={action?.actionType} />
               {!action?.active && (
                 <Tooltip title="Action is not active">
                   <ListItemIcon className="text-danger">
