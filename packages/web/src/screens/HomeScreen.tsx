@@ -120,7 +120,7 @@ export default function SignInSide() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <FormPage slug="gift-card-demo" />
+            <FormPage slug="gift-card-campaigns" />
 
             <Box mt={5}>
               <Copyright />
