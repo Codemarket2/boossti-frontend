@@ -80,15 +80,17 @@ export const DisplayForm = ({
                   />
                 </>
               ) : (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                  startIcon={<AddIcon />}
-                  onClick={() => setState({ ...state, showForm: true })}
-                >
-                  Add new
-                </Button>
+                authorized && (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    startIcon={<AddIcon />}
+                    onClick={() => setState({ ...state, showForm: true })}
+                  >
+                    Add new
+                  </Button>
+                )
               )}
             </>
           )}
