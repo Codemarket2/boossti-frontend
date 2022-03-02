@@ -2,8 +2,9 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { generateObjectId } from '@frontend/shared/utils/objectId';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { getForm } from '@frontend/shared/hooks/form/getForm';
 import Switch from '@material-ui/core/Switch';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import FormSetting from './FormSetting';
 import InputGroup from '../common/InputGroup';
 import Overlay from '../common/Overlay';
@@ -11,6 +12,7 @@ import ResponseLayout from '../response/ResponseLayout';
 import { ActionsWrapper } from './Actions';
 
 interface IProps {
+  fields: any;
   formId: string;
   open: boolean;
   onClose: () => void;
@@ -19,6 +21,7 @@ interface IProps {
 }
 
 export default function CustomFormSettings({
+  fields,
   formId,
   open,
   onClose,
@@ -26,6 +29,29 @@ export default function CustomFormSettings({
   onSettingsChange,
 }: IProps): any {
   const [tab, setTab] = useState('settings');
+  const [pageFields, setPageFields] = useState([]);
+
+  useEffect(() => {
+    if (!(pageFields?.length > 0)) {
+      getFormFields();
+    }
+  }, [fields]);
+
+  const getFormFields = async () => {
+    const formFields = fields?.filter((f) => f?.fieldType === 'form' && f?.form?._id !== formId);
+    for (const field of formFields) {
+      const form = await getForm(field?.form?._id);
+      if (form) {
+        const pageField = form?.fields?.map((f) => ({
+          ...f,
+          label: `${field?.label}-${f?.label}`,
+          formId: form?._id,
+        }));
+        setPageFields([...pageFields, ...pageField]);
+      }
+    }
+  };
+
   return (
     <Overlay title="Form Settings" open={open} onClose={onClose}>
       <InputGroup className="pl-2">
@@ -84,6 +110,7 @@ export default function CustomFormSettings({
           )}
           {tab === 'actions' && (
             <ActionsWrapper
+              pageFields={pageFields}
               formId={formId}
               settings={settings}
               onChange={(actions) => onSettingsChange({ ...settings, actions })}

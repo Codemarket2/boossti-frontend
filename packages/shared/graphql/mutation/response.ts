@@ -27,6 +27,13 @@ export const CREATE_RESPONSE = gql`
           url
           caption
         }
+        response {
+          _id
+          values {
+            field
+            value
+          }
+        }
       }
       createdBy {
         _id
@@ -59,6 +66,13 @@ export const UPDATE_RESPONSE = gql`
         media {
           url
           caption
+        }
+        response {
+          _id
+          values {
+            field
+            value
+          }
         }
       }
     }

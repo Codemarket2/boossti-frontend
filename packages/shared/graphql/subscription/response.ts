@@ -27,6 +27,13 @@ export const RESPONSE_SUB = gql`
           url
           caption
         }
+        response {
+          _id
+          values {
+            field
+            value
+          }
+        }
       }
       createdBy {
         _id

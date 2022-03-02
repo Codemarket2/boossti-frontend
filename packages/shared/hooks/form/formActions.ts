@@ -48,6 +48,7 @@ const validationSchema = yup.object({
 type TVariables = {
   name: string;
   field: string;
+  formId?: any;
 };
 
 interface IFormValues {
@@ -59,7 +60,7 @@ interface IFormValues {
   receiverType: string;
   emailFieldId: string;
   receiverEmails: string[];
-  variables: [TVariables];
+  variables: TVariables[];
   subject: string;
   body: string;
 }
@@ -73,7 +74,7 @@ const defaultFormValues = {
   receiverType: 'customEmail',
   emailFieldId: '',
   receiverEmails: [],
-  variables: [{ name: '', field: '' }],
+  variables: [{ name: '', field: '', formId: null }],
   subject: '',
   body: '',
 };

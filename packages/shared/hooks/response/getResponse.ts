@@ -2,6 +2,7 @@ import { useQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { GET_RESPONSE_BY_COUNT, GET_RESPONSES, GET_RESPONSE } from '../../graphql/query/response';
 import { RESPONSE_SUB } from '../../graphql/subscription/response';
+import { client as apolloClient } from '../../graphql';
 
 export const defaultQueryVariables = {
   formId: null,
@@ -76,4 +77,20 @@ export function useGetResponseByCount(formId: string, count: number): any {
     fetchPolicy: 'cache-and-network',
   });
   return { data, error, loading };
+}
+
+export async function getResponse(formId, parentId) {
+  let response = null;
+  try {
+    const res = await apolloClient.query({
+      query: GET_RESPONSES,
+      variables: { ...defaultQueryVariables, limit: 1, formId, parentId },
+    });
+    if (res?.data?.getResponses?.data?.length > 0) {
+      response = res?.data?.getResponses?.data[0];
+    }
+  } catch (error) {
+    console.log({ error });
+  }
+  return response;
 }

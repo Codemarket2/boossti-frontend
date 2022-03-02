@@ -119,19 +119,22 @@ export function ActionsWrapper({
   formId,
   settings,
   onChange,
+  pageFields = [],
 }: {
   formId: string;
   settings?: any;
   onChange: (action: any) => void;
+  pageFields: any;
 }) {
   const { data, error } = useGetForm(formId);
 
   if (!data || error) {
     return <ErrorLoading error={error} />;
   }
+
   return (
     <Actions
-      fields={data?.getForm?.fields}
+      fields={[...data?.getForm?.fields, ...pageFields]}
       settings={settings || data?.getForm?.settings}
       onChange={onChange}
     />

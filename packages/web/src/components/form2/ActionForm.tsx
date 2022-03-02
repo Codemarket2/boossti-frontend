@@ -288,9 +288,17 @@ export default function ActionForm({ onCancel, fields, emailFields, onSave, acti
                 onChange={({ target }) =>
                   formik.setFieldValue(
                     'variables',
-                    formik.values.variables.map((sV, sI) =>
-                      sI === i ? { ...variable, field: target.value } : sV,
-                    ),
+                    formik.values.variables.map((sV, sI) => {
+                      if (sI === i) {
+                        let payload = { ...variable, field: target.value };
+                        const field = fields?.filter((f) => f._id === target.value && f?.formId)[0];
+                        if (field) {
+                          payload = { ...payload, formId: field.formId };
+                        }
+                        return payload;
+                      }
+                      return sV;
+                    }),
                   )
                 }
                 label="Field"
@@ -317,34 +325,34 @@ export default function ActionForm({ onCancel, fields, emailFields, onSave, acti
         ))}
       </InputGroup>
       {formik.values.actionType === 'sendEmail' && (
-        <>
-          <InputGroup>
-            <TextField
-              fullWidth
-              label="Email Subject*"
-              variant="outlined"
-              name="subject"
-              size="small"
-              disabled={formik.isSubmitting}
-              value={formik.values.subject}
-              onChange={formik.handleChange}
-              error={formik.touched.subject && Boolean(formik.errors.subject)}
-              helperText={formik.touched.subject && formik.errors.subject}
-            />
-          </InputGroup>
-          <InputGroup>
-            <InputLabel>Email Body*</InputLabel>
-            <RichTextarea
-              value={formik.values.body}
-              onChange={(newValue) => formik.setFieldValue('body', newValue)}
-            />
-            {formik.touched.body && formik.errors.body && (
-              <FormHelperText className="text-danger">{formik.errors.body}</FormHelperText>
-            )}
-          </InputGroup>
-        </>
+        <InputGroup>
+          <TextField
+            fullWidth
+            label="Email Subject*"
+            variant="outlined"
+            name="subject"
+            size="small"
+            disabled={formik.isSubmitting}
+            value={formik.values.subject}
+            onChange={formik.handleChange}
+            error={formik.touched.subject && Boolean(formik.errors.subject)}
+            helperText={formik.touched.subject && formik.errors.subject}
+          />
+        </InputGroup>
       )}
-      {['showMessage', 'sendSms'].includes(formik.values.actionType) && (
+      {['sendEmail', 'showMessage'].includes(formik.values.actionType) && (
+        <InputGroup>
+          <InputLabel>Email Body*</InputLabel>
+          <RichTextarea
+            value={formik.values.body}
+            onChange={(newValue) => formik.setFieldValue('body', newValue)}
+          />
+          {formik.touched.body && formik.errors.body && (
+            <FormHelperText className="text-danger">{formik.errors.body}</FormHelperText>
+          )}
+        </InputGroup>
+      )}
+      {formik.values.actionType === 'sendSms' && (
         <InputGroup>
           <TextField
             fullWidth
