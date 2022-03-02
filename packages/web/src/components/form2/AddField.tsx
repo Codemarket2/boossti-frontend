@@ -15,6 +15,7 @@ import LoadingButton from '../common/LoadingButton';
 import { onAlert } from '../../utils/alert';
 import { getFormFieldTypes } from './fieldTypes';
 import RichTextarea from '../common/RichTextarea2';
+import SelectForm from './SelectForm';
 
 interface IProps {
   onCancel: () => void;
@@ -83,7 +84,15 @@ export default function FieldForm({
           )}
         </FormControl>
       </InputGroup>
-      {!['label', 'form'].includes(formik?.values?.fieldType) && (
+      {formik.values.fieldType === 'form' && (
+        <SelectForm
+          value={formik.values.form}
+          onChange={(newValue) => formik.setFieldValue('form', newValue, false)}
+          error={formik.touched.label && Boolean(formik.errors.label)}
+          helperText={formik.touched.label && formik.errors.label}
+        />
+      )}
+      {!isSection && !['label', 'form'].includes(formik?.values?.fieldType) && (
         <>
           <InputGroup>
             <FormControlLabel

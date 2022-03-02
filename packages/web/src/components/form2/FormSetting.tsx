@@ -1,9 +1,9 @@
 import Paper from '@material-ui/core/Paper';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import { InputLabel, MenuItem, TextField } from '@material-ui/core';
+import TextField from '@material-ui/core/TextField';
+import MenuItem from '@material-ui/core/MenuItem';
 import InputGroup from '../common/InputGroup';
-import RichTextarea from '../common/RichTextarea2';
 
 interface IProps {
   settings: any;
@@ -162,13 +162,13 @@ export default function FormSetting({ settings, onChange }: IProps): any {
           label="Allow users to view all form responses"
         />
       </InputGroup>
-      <InputGroup>
+      {/* <InputGroup>
         <InputLabel>After Form Submit Message</InputLabel>
         <RichTextarea
           value={settings?.onSubmitMessage || ''}
           onChange={(newValue) => onChange({ onSubmitMessage: newValue })}
         />
-      </InputGroup>
+      </InputGroup> */}
     </Paper>
   );
 }

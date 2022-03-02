@@ -92,19 +92,12 @@ export default function FormFieldsValue({
               {field.fieldType === 'form' ? (
                 <>
                   <Typography className="mt-2">{field.label}</Typography>
-                  {field.options?.formId && (
+                  {field.form?._id && (
                     <DisplayForm
-                      formId={field.options?.formId}
+                      formId={field.form?._id}
                       parentId={pageId}
                       authorized={authorized}
-                      customSettings={
-                        field?.options?.customSettings
-                          ? {
-                              ...field?.options?.settings,
-                              customSettings: field?.options?.customSettings,
-                            }
-                          : null
-                      }
+                      customSettings={field?.options?.settings?.active && field?.options?.settings}
                     />
                   )}
                 </>

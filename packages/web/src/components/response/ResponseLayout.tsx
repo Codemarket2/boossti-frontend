@@ -58,6 +58,7 @@ export default function ResponseLayout({ _id }: { _id: string }) {
             values={section?.values}
             handleValueChange={handleUpdateSection}
             layouts={section?.options?.layouts || {}}
+            disableGrid={false}
             onLayoutChange={(layouts) =>
               onSectionChange({
                 options: { ...section?.options, layouts },
