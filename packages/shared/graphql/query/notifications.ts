@@ -6,7 +6,11 @@ export const GET_MY_NOTIFICATIONS = gql`
       count
       data {
         _id
-        userId
+        userId {
+          picture
+          userId
+          name
+        }
         title
         description
         link
@@ -14,6 +18,7 @@ export const GET_MY_NOTIFICATIONS = gql`
         threadId
         parentId
         isClicked
+        createdAt
       }
     }
   }
