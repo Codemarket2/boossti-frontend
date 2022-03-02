@@ -1,6 +1,4 @@
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import CloseIcon from '@material-ui/icons/Close';
+import Overlay from '../common/Overlay';
 import Form from './Form';
 
 interface IProps {
@@ -11,21 +9,10 @@ interface IProps {
 
 export default function EditFormDrawer({ formId, open, onClose }: IProps): any {
   return (
-    <Dialog fullScreen open={open}>
+    <Overlay onClose={onClose} open={open} title="Edit form" minWidth="85vw">
       <div className="p-2">
-        <Button
-          startIcon={<CloseIcon />}
-          onClick={onClose}
-          size="small"
-          color="primary"
-          variant="contained"
-          className="position-absolute m-2"
-          style={{ right: 0 }}
-        >
-          Close
-        </Button>
         <Form _id={formId} drawerMode />
       </div>
-    </Dialog>
+    </Overlay>
   );
 }

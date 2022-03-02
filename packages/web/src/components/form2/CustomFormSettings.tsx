@@ -1,29 +1,28 @@
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 import { generateObjectId } from '@frontend/shared/utils/objectId';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
+import { useState } from 'react';
 import FormSetting from './FormSetting';
 import InputGroup from '../common/InputGroup';
 import Overlay from '../common/Overlay';
 import ResponseLayout from '../response/ResponseLayout';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import { useState } from 'react';
+import { ActionsWrapper } from './Actions';
 
 interface IProps {
+  formId: string;
   open: boolean;
   onClose: () => void;
-  customSettings: boolean;
   settings: any;
-  toggleCustomSettings: any;
-  onSettingsChange: any;
+  onSettingsChange: (settings: any) => void;
 }
 
 export default function CustomFormSettings({
+  formId,
   open,
   onClose,
-  customSettings,
   settings,
-  toggleCustomSettings,
   onSettingsChange,
 }: IProps): any {
   const [tab, setTab] = useState('settings');
@@ -35,14 +34,13 @@ export default function CustomFormSettings({
           control={
             <Switch
               color="primary"
-              checked={customSettings}
-              onChange={(e) => toggleCustomSettings(e.target.checked)}
+              checked={settings?.active}
+              onChange={(e) => onSettingsChange({ ...settings, active: e.target.checked })}
             />
           }
         />
       </InputGroup>
-
-      {customSettings && (
+      {settings?.active && (
         <>
           <Tabs
             variant="fullWidth"
@@ -83,6 +81,13 @@ export default function CustomFormSettings({
               </InputGroup>
               {settings?.customSectionId && <ResponseLayout _id={settings?.customSectionId} />}
             </>
+          )}
+          {tab === 'actions' && (
+            <ActionsWrapper
+              formId={formId}
+              settings={settings}
+              onChange={(actions) => onSettingsChange({ ...settings, actions })}
+            />
           )}
         </>
       )}

@@ -1,3 +1,4 @@
+import { useGetForm } from '@frontend/shared/hooks/form';
 import List from '@material-ui/core/List';
 import Paper from '@material-ui/core/Paper';
 import ListItem from '@material-ui/core/ListItem';
@@ -13,20 +14,21 @@ import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { useState } from 'react';
 import ActionForm from './ActionForm';
 import CRUDMenu from '../common/CRUDMenu';
-import BulkUploadAction from './BulkUploadAction';
+import ErrorLoading from '../common/ErrorLoading';
 
 interface IProps {
-  form: any;
+  fields: any;
+  settings: any;
   onChange: any;
 }
 
 const initialState = { showForm: false, selectedIndex: null, selectedItem: null, showMenu: null };
 
-export default function Actions({ form, onChange }: IProps) {
+export default function Actions({ fields, settings, onChange }: IProps) {
   const [state, setState] = useState(initialState);
 
   const onSave = (payload, operation) => {
-    let newActions = form?.settings?.actions || [];
+    let newActions = settings?.actions || [];
     if (operation === 'update') {
       // Update
       newActions = newActions?.map((a, i) => (i === state.selectedIndex ? payload : a));
@@ -39,7 +41,7 @@ export default function Actions({ form, onChange }: IProps) {
   };
 
   const onDelete = () => {
-    const newActions = form?.settings?.actions?.filter((action, i) => i !== state.selectedIndex);
+    const newActions = settings?.actions?.filter((action, i) => i !== state.selectedIndex);
     onChange(newActions);
     setState(initialState);
   };
@@ -58,17 +60,17 @@ export default function Actions({ form, onChange }: IProps) {
       </Typography>
       {state.showForm ? (
         <ActionForm
-          emailFields={form?.fields?.filter(
+          emailFields={fields?.filter(
             (field) => field.fieldType === 'email' && field.options.required,
           )}
-          fields={form?.fields}
+          fields={fields}
           onCancel={() => setState(initialState)}
           onSave={onSave}
           action={state.selectedItem}
         />
       ) : (
         <List>
-          {form?.settings?.actions?.map((action, i) => (
+          {settings?.actions?.map((action, i) => (
             <ListItem button key={i}>
               <ListItemText primary={action.name} secondary={action?.actionType} />
               {!action?.active && (
@@ -109,7 +111,29 @@ export default function Actions({ form, onChange }: IProps) {
           />
         </List>
       )}
-      <BulkUploadAction form={form} />
     </Paper>
+  );
+}
+
+export function ActionsWrapper({
+  formId,
+  settings,
+  onChange,
+}: {
+  formId: string;
+  settings?: any;
+  onChange: (action: any) => void;
+}) {
+  const { data, error } = useGetForm(formId);
+
+  if (!data || error) {
+    return <ErrorLoading error={error} />;
+  }
+  return (
+    <Actions
+      fields={data?.getForm?.fields}
+      settings={settings || data?.getForm?.settings}
+      onChange={onChange}
+    />
   );
 }

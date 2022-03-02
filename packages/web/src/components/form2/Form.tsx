@@ -30,6 +30,7 @@ import Authorization from '../common/Authorization';
 import InlineInput from '../common/InlineInput';
 import { QRButton } from '../qrcode/QRButton';
 import ResponseLayout from '../response/ResponseLayout';
+import BulkUploadAction from './BulkUploadAction';
 
 interface IProps {
   _id: string;
@@ -211,21 +212,23 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
                 />
               </>
             )}
-            {options.currentTab === 'workflows' && (
-              <>
-                <ResponseLayout _id={_id} />
-              </>
-            )}
+            {options.currentTab === 'workflows' && <ResponseLayout _id={_id} />}
             {options.currentTab === 'responses' && <ResponseList form={state} />}
             {options.currentTab === 'actions' && (
-              <Actions
-                form={state}
-                onChange={(actions) =>
-                  handleOnChange({
-                    settings: { ...state.settings, actions },
-                  })
-                }
-              />
+              <>
+                <Actions
+                  fields={state?.fields}
+                  settings={state?.settings}
+                  onChange={(actions) =>
+                    handleOnChange({
+                      settings: { ...state.settings, actions },
+                    })
+                  }
+                />
+                <Paper variant="outlined">
+                  <BulkUploadAction form={state} />
+                </Paper>
+              </>
             )}
           </Grid>
         </Grid>

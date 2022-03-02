@@ -141,6 +141,22 @@ export default function FormFields({
             onChange={(val) => onOptionChange({ staticText: val })}
           />
         )}
+        {field.fieldType === 'form' && (
+          <InputGroup>
+            <SelectForm
+              value={field.form}
+              onChange={(newValue) =>
+                onFieldChange({
+                  ...field,
+                  form: newValue,
+                  options: { ...field.options, formField: '' },
+                })
+              }
+              error={!field.form}
+              helperText={!field.form && 'required'}
+            />
+          </InputGroup>
+        )}
         <InputGroup>
           <FormControlLabel
             control={

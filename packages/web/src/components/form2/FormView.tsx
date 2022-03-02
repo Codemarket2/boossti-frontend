@@ -62,12 +62,17 @@ export default function FormViewWrapper({
   const authenticated = useSelector(({ auth }: any) => auth.authenticated);
   const handleSubmit = async (values) => {
     let payload: any = { formId: form?._id, values };
+    let options = {};
     if (form?.settings?.customResponseLayout && form?.settings?.customSectionId) {
-      payload = {
-        ...payload,
-        options: JSON.stringify({ customSectionId: form?.settings?.customSectionId }),
-      };
+      options = { ...options, customSectionId: form?.settings?.customSectionId };
     }
+    if (form?.settings?.active && form?.settings?.actions) {
+      options = { ...options, actions: form?.settings?.actions };
+    }
+    payload = {
+      ...payload,
+      options: JSON.stringify(options),
+    };
     const response = await handleCreateUpdateResponse(payload, form?.fields);
     if (response) {
       setShowMessage(true);
@@ -92,16 +97,11 @@ export default function FormViewWrapper({
       )}
       {showMessage ? (
         <div className="py-5">
-          <DisplayRichText
-            value={form?.settings?.onSubmitMessage || '<h2 class="text-center">Thank you</h2>'}
-          />
-          <InputGroup className="text-center">
-            {form?.settings?.editResponse && (
-              <Button variant="outlined" color="primary" size="small">
-                Edit Response
-              </Button>
-            )}
-          </InputGroup>
+          {form?.settings?.actions
+            ?.filter((a) => a?.actionType === 'showMessage' && a?.active)
+            ?.map((a) => (
+              <DisplayRichText value={getDisplayMessage(a?.body, a?.variables, formResponse)} />
+            ))}
           {formResponse && (
             <ResponseChild2 formId={form?._id} response={formResponse} hideAuthor hideNavigation />
           )}
@@ -112,7 +112,7 @@ export default function FormViewWrapper({
         <>
           <div className="text-center">
             <Button variant="contained" color="primary" onClick={() => setFormModal(true)}>
-              {form?.settings?.buttonLabel || name}
+              {form?.settings?.buttonLabel || form?.name}
             </Button>
           </div>
           {formModal && (
@@ -545,3 +545,23 @@ export function FormView({
     </div>
   );
 }
+
+const getDisplayMessage = (oldBody, oldVariables, response) => {
+  let body = oldBody;
+  const variables = oldVariables?.map((v) => {
+    v.value = '';
+    const variableValue = response?.values?.filter((value) => value.field === v?.field)[0];
+    if (variableValue) {
+      v.value =
+        variableValue.value ||
+        variableValue.valueNumber ||
+        variableValue.valueBoolean ||
+        variableValue.valueDate;
+    }
+    return v;
+  });
+  variables.forEach((variable) => {
+    body = body.split(`{{${variable.name}}}`).join(variable.value || '');
+  });
+  return body;
+};

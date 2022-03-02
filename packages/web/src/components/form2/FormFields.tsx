@@ -16,7 +16,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import GridIcon from '@material-ui/icons/GridOn';
 import EditIcon from '@material-ui/icons/Edit';
 import SettingsIcon from '@material-ui/icons/Settings';
-import ListIcon from '@material-ui/icons/List';
 // import ShareIcon from '@material-ui/icons/Share';
 // import FileCopyIcon from '@material-ui/icons/FileCopy';
 // import { generateObjectId } from '@frontend/shared/utils/objectId';
@@ -29,7 +28,6 @@ import EditField from './EditField';
 import EditFieldGrid from './EditFieldGrid';
 import EditFormDrawer from './EditFormDrawer';
 import CustomFormSettings from './CustomFormSettings';
-import { SelectFormDrawer } from './SelectForm';
 import StyleDrawer from '../style/StyleDrawer';
 
 export function convertToSlug(text: string): string {
@@ -126,33 +124,22 @@ export default function FormFields({
     );
   };
 
-  const handleToggleCustomSettings = (fieldId: string, customSettings: boolean) => {
-    setFields(
-      fields.map((field) => {
-        if (field._id === fieldId) {
-          return { ...field, options: { ...field?.options, customSettings } };
-        }
-        return field;
-      }),
-    );
-  };
-
-  const handleSelectForm = (fieldId: string, formId: string) => {
-    setFields(
-      fields.map((field) =>
-        field._id === fieldId
-          ? {
-              ...field,
-              options: {
-                ...field?.options,
-                formId,
-              },
-            }
-          : field,
-      ),
-    );
-    setValues(initialValues);
-  };
+  // const handleSelectForm = (fieldId: string, formId: string) => {
+  //   setFields(
+  //     fields.map((field) =>
+  //       field._id === fieldId
+  //         ? {
+  //             ...field,
+  //             options: {
+  //               ...field?.options,
+  //               formId,
+  //             },
+  //           }
+  //         : field,
+  //     ),
+  //   );
+  //   setValues(initialValues);
+  // };
 
   // const handleDuplicateField = () => {
   //   const newField = { ...values.field, _id: generateObjectId() };
@@ -258,7 +245,11 @@ export default function FormFields({
                           >
                             <ListItemText
                               primary={field.label}
-                              secondary={!previewMode && field.fieldType}
+                              secondary={
+                                !previewMode &&
+                                ((field?.fieldType === 'form' && field?.form?.name) ||
+                                  field.fieldType)
+                              }
                             />
                             {!(previewMode || snapshot.isDraggingOver) && (
                               <ListItemSecondaryAction>
@@ -311,15 +302,15 @@ export default function FormFields({
             </MenuItem>
             {values.field?.fieldType === 'form' && (
               <>
-                <MenuItem
+                {/* <MenuItem
                   onClick={() => setValues({ ...values, showMenu: false, selectForm: true })}
                 >
                   <ListItemIcon className="mr-n4">
                     <ListIcon fontSize="small" />
                   </ListItemIcon>
                   <ListItemText primary="Select Form" />
-                </MenuItem>
-                {values.field?.options?.formId && (
+                </MenuItem> */}
+                {values.field?.form?._id && (
                   <>
                     <MenuItem
                       onClick={() => setValues({ ...values, showMenu: false, editForm: true })}
@@ -343,7 +334,6 @@ export default function FormFields({
                 )}
               </>
             )}
-
             {/* <MenuItem onClick={handleDuplicateField}>
               <ListItemIcon className="mr-n4">
                 <FileCopyIcon fontSize="small" />
@@ -361,7 +351,6 @@ export default function FormFields({
           </CRUDMenu>
         </>
       )}
-
       {values.editStyle && (
         <StyleDrawer
           onClose={() => setValues(initialValues)}
@@ -379,29 +368,26 @@ export default function FormFields({
           removeStyle={(styleKey) => handleRemoveStyle(values?.field, styleKey)}
         />
       )}
-      {values.selectForm && (
+      {/* {values.selectForm && (
         <SelectFormDrawer
           open={values.selectForm}
           onClose={() => setValues(initialValues)}
           onSelect={(formId) => handleSelectForm(values.field?._id, formId)}
         />
-      )}
+      )} */}
       {values.editForm && (
         <EditFormDrawer
-          formId={values.field?.options?.formId}
+          formId={values.field?.form?._id}
           open={values.editForm}
           onClose={() => setValues(initialValues)}
         />
       )}
       {values.showFormSettings && (
         <CustomFormSettings
+          formId={values.field?.form?._id}
           open={values.showFormSettings}
           onClose={() => setValues(initialValues)}
           settings={fields?.filter((f) => f._id === values.field?._id)[0]?.options?.settings}
-          customSettings={
-            fields?.filter((f) => f._id === values.field?._id)[0]?.options?.customSettings
-          }
-          toggleCustomSettings={(value) => handleToggleCustomSettings(values.field?._id, value)}
           onSettingsChange={(value) => handleEditFormSettings(values.field?._id, value)}
         />
       )}
