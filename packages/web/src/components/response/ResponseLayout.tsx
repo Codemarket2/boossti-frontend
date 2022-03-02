@@ -1,5 +1,10 @@
 import { useUpdateSection } from '@frontend/shared/hooks/section';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+
 import Paper from '@material-ui/core/Paper';
+
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
 import Switch from '@material-ui/core/Switch';

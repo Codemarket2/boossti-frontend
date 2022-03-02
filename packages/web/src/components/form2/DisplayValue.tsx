@@ -42,6 +42,8 @@ export default function DisplayValue({ field, value, imageAvatar }: IProps) {
         );
       }
       return <>{value?.value}</>;
+    case 'link':
+      return <a href={value?.value}>{value?.value}</a>;
     case 'richTextarea':
       return <DisplayRichText value={value?.value} />;
     case 'date':
