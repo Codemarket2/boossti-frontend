@@ -50,7 +50,6 @@ const initialValues = {
   showForm: false,
   editStyle: false,
   editGrid: false,
-  selectForm: false,
   editForm: false,
   showFormSettings: false,
 };
@@ -123,23 +122,6 @@ export default function FormFields({
       }),
     );
   };
-
-  // const handleSelectForm = (fieldId: string, formId: string) => {
-  //   setFields(
-  //     fields.map((field) =>
-  //       field._id === fieldId
-  //         ? {
-  //             ...field,
-  //             options: {
-  //               ...field?.options,
-  //               formId,
-  //             },
-  //           }
-  //         : field,
-  //     ),
-  //   );
-  //   setValues(initialValues);
-  // };
 
   // const handleDuplicateField = () => {
   //   const newField = { ...values.field, _id: generateObjectId() };
@@ -302,14 +284,6 @@ export default function FormFields({
             </MenuItem>
             {values.field?.fieldType === 'form' && (
               <>
-                {/* <MenuItem
-                  onClick={() => setValues({ ...values, showMenu: false, selectForm: true })}
-                >
-                  <ListItemIcon className="mr-n4">
-                    <ListIcon fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText primary="Select Form" />
-                </MenuItem> */}
                 {values.field?.form?._id && (
                   <>
                     <MenuItem
@@ -368,13 +342,6 @@ export default function FormFields({
           removeStyle={(styleKey) => handleRemoveStyle(values?.field, styleKey)}
         />
       )}
-      {/* {values.selectForm && (
-        <SelectFormDrawer
-          open={values.selectForm}
-          onClose={() => setValues(initialValues)}
-          onSelect={(formId) => handleSelectForm(values.field?._id, formId)}
-        />
-      )} */}
       {values.editForm && (
         <EditFormDrawer
           formId={values.field?.form?._id}
@@ -384,6 +351,7 @@ export default function FormFields({
       )}
       {values.showFormSettings && (
         <CustomFormSettings
+          fields={fields}
           formId={values.field?.form?._id}
           open={values.showFormSettings}
           onClose={() => setValues(initialValues)}

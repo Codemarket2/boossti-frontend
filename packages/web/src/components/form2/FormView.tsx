@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { fileUpload } from '@frontend/shared/utils/fileUpload';
 import { useEffect, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
@@ -11,6 +12,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { ArrowBackIosRounded, ArrowForwardIosRounded } from '@material-ui/icons';
+import { getForm } from '@frontend/shared/hooks/form/getForm';
+import { getResponse } from '@frontend/shared/hooks/response/getResponse';
 import { useCreateUpdateResponse } from '@frontend/shared/hooks/response';
 import ResponseList from '../response/ResponseList';
 import InputGroup from '../common/InputGroup';
@@ -21,9 +24,10 @@ import { onAlert } from '../../utils/alert';
 import DisplayRichText from '../common/DisplayRichText';
 import Overlay from '../common/Overlay';
 import AuthScreen from '../../screens/AuthScreen';
-import { ResponseChild2 } from '../response/Response';
+import { ResponseChild3 } from '../response/Response';
 import DisplayValue from './DisplayValue';
 import Leaderboard from '../response/Leaderboard';
+import { getLabel } from '../response/SelectResponse';
 
 interface IProps {
   form: any;
@@ -45,6 +49,13 @@ export const defualtValue = {
   tempMediaFiles: [],
 };
 
+const initialState = {
+  submitted: false,
+  messages: [],
+  response: null,
+  formModal: false,
+};
+
 export default function FormViewWrapper({
   form,
   parentId,
@@ -55,11 +66,10 @@ export default function FormViewWrapper({
     { onAlert },
     parentId,
   );
-  const [showMessage, setShowMessage] = useState(false);
+  const [state, setState] = useState(initialState);
   const [showResponse, setShowResponse] = useState(true);
-  const [formResponse, setFormResponse] = useState(null);
-  const [formModal, setFormModal] = useState(false);
   const authenticated = useSelector(({ auth }: any) => auth.authenticated);
+
   const handleSubmit = async (values) => {
     let payload: any = { formId: form?._id, values };
     let options = {};
@@ -75,9 +85,21 @@ export default function FormViewWrapper({
     };
     const response = await handleCreateUpdateResponse(payload, form?.fields);
     if (response) {
-      setShowMessage(true);
-      setFormResponse(response);
-      setFormModal(false);
+      const messages = await Promise.all(
+        form?.settings?.actions
+          ?.filter((a) => a?.actionType === 'showMessage' && a?.active)
+          ?.map(async (a) => {
+            const message = await replaceVariables(
+              a?.body,
+              a?.variables,
+              form?.fields,
+              response?.values,
+              parentId,
+            );
+            return message;
+          }),
+      );
+      setState({ ...state, submitted: true, formModal: false, messages, response });
       if (createCallback) {
         createCallback(response);
       }
@@ -95,15 +117,13 @@ export default function FormViewWrapper({
           <Typography variant="h4">{form?.name}</Typography>
         </InputGroup>
       )}
-      {showMessage ? (
+      {state.submitted ? (
         <div className="py-5">
-          {form?.settings?.actions
-            ?.filter((a) => a?.actionType === 'showMessage' && a?.active)
-            ?.map((a) => (
-              <DisplayRichText value={getDisplayMessage(a?.body, a?.variables, formResponse)} />
-            ))}
-          {formResponse && (
-            <ResponseChild2 formId={form?._id} response={formResponse} hideAuthor hideNavigation />
+          {state.messages?.map((message) => (
+            <DisplayRichText value={message} />
+          ))}
+          {state.response && (
+            <ResponseChild3 form={form} response={state.response} hideAuthor hideNavigation />
           )}
         </div>
       ) : form?.settings?.widgetType === 'leaderboard' ? (
@@ -111,12 +131,19 @@ export default function FormViewWrapper({
       ) : form?.settings?.widgetType === 'button' ? (
         <>
           <div className="text-center">
-            <Button variant="contained" color="primary" onClick={() => setFormModal(true)}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setState({ ...state, formModal: true })}
+            >
               {form?.settings?.buttonLabel || form?.name}
             </Button>
           </div>
-          {formModal && (
-            <Overlay open={formModal} onClose={() => setFormModal(false)}>
+          {state.formModal && (
+            <Overlay
+              open={state.formModal}
+              onClose={() => setState({ ...state, formModal: false })}
+            >
               <div className="p-2">
                 <FormView
                   authRequired={!form?.settings?.authRequired}
@@ -546,22 +573,78 @@ export function FormView({
   );
 }
 
-const getDisplayMessage = (oldBody, oldVariables, response) => {
+const replaceVariables = async (oldBody, oldVariables, fields, values, pageId) => {
   let body = oldBody;
-  const variables = oldVariables?.map((v) => {
-    v.value = '';
-    const variableValue = response?.values?.filter((value) => value.field === v?.field)[0];
-    if (variableValue) {
-      v.value =
-        variableValue.value ||
-        variableValue.valueNumber ||
-        variableValue.valueBoolean ||
-        variableValue.valueDate;
+  const formIds = [];
+  const forms = [];
+
+  oldVariables?.forEach((variable) => {
+    if (variable.formId && !formIds.includes(variable.formId)) {
+      formIds.push(variable.formId);
     }
-    return v;
+  });
+
+  for (const formId of formIds) {
+    const form = await getForm(formId);
+    const response = await getResponse(formId, pageId);
+    if (form && response) {
+      forms.push({ ...form, response });
+    }
+  }
+
+  const variables = oldVariables?.map((oneVariable) => {
+    const variable = { ...oneVariable, value: '' };
+    let field = null;
+    let value = null;
+
+    field = fields.find((f) => f._id === variable?.field);
+    value = values?.find((v) => v.field === variable?.field);
+
+    if (variable.formId) {
+      const form = forms?.find((f) => f._id === variable.formId);
+      if (form) {
+        field = form?.fields.find((f) => f._id === variable?.field);
+        value = form?.response?.values?.find((v) => v.field === variable?.field);
+      }
+    }
+
+    if (field && value) {
+      variable.value = getValue(field, value);
+    }
+    return variable;
   });
   variables.forEach((variable) => {
     body = body.split(`{{${variable.name}}}`).join(variable.value || '');
   });
   return body;
+};
+
+const getValue = (field, value) => {
+  switch (field?.fieldType) {
+    case 'number':
+    case 'phoneNumber': {
+      return value.valueNumber;
+    }
+    case 'date': {
+      return value?.valueDate && moment(value?.valueDate).format('L');
+    }
+    case 'dateTime': {
+      return value?.valueDate && moment(value?.valueDate).format('lll');
+    }
+    case 'checkbox': {
+      return value.valueBoolean?.toString();
+    }
+    case 'select': {
+      if (field?.options?.optionsListType === 'type') {
+        return value?.itemId?.title;
+      }
+      if (field?.options?.optionsListType === 'existingForm') {
+        return getLabel(field?.options?.formField, value?.response);
+      }
+      return value?.value;
+    }
+    default: {
+      return value.value;
+    }
+  }
 };

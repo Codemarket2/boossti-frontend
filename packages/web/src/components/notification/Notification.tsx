@@ -6,9 +6,11 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import Typography from '@material-ui/core/Typography';
+import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Badge from '@material-ui/core/Badge';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import moment from 'moment';
 import {
   useGetMyNotifications,
   useGetNotificationList,
@@ -16,9 +18,17 @@ import {
   useNotificationSub,
 } from '@frontend/shared/hooks/notification';
 import { useEffect, useState } from 'react';
-import { Accordion, AccordionDetails, AccordionSummary } from '@material-ui/core';
+import { Accordion, AccordionDetails, AccordionSummary, ListItemText } from '@material-ui/core';
 import { ExpandMore } from '@material-ui/icons';
+import styled from 'styled-components';
 import CommentModel from './CommentModel';
+
+const StyledAvatar = styled(Avatar)`
+  min-width: 25px;
+  min-height: 25px;
+  margin: 0 auto;
+  border: 2px solid ${(props) => props.theme.palette.primary.main};
+`;
 
 export default function Notification() {
   const { state, setState } = useNotificationSub();
@@ -70,7 +80,6 @@ export default function Notification() {
               </Button>
             )}
           </Typography>
-
           {List?.length ? (
             List?.map((list) => (
               <NotificationListItem
@@ -145,14 +154,18 @@ const NotificationItem = ({ notification, onClose }: any) => {
       variant="outlined"
       className="mt-1"
       style={background}
-      icon={<NotificationsIcon fontSize="inherit" />}
+      icon={<StyledAvatar src={notification.userId?.picture} alt="profile Pic" />}
       onClose={onClose}
     >
-      <AlertTitle>
+      <>
         {notification.link ? (
           <Link href={notification.link}>
             <div style={{ cursor: 'pointer' }} onClick={handleClick}>
-              {notification.title || 'New Notification'}
+              <ListItemText
+                className="m-0 p-0"
+                primary={<span dangerouslySetInnerHTML={{ __html: notification.description }} />}
+                secondary={`${moment(notification.createdAt).fromNow()}`}
+              />
             </div>
           </Link>
         ) : (
@@ -160,8 +173,7 @@ const NotificationItem = ({ notification, onClose }: any) => {
             <CommentModel notification={notification} />
           </div>
         )}
-      </AlertTitle>
-      {notification.description}
+      </>
     </Alert>
   );
 };

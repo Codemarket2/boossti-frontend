@@ -44,6 +44,7 @@ const initialState = {
 
 export default function Screen({ slug }: IProps) {
   const router = useRouter();
+
   const [state, setState] = useState(initialState);
 
   const { handlePublish } = usePublishListType({ onAlert });
