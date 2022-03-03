@@ -9,6 +9,7 @@ import SelectFormFields from './SelectFormFields';
 interface IProps {
   settings: any;
   onChange: (val: any) => void;
+  formId: any;
 }
 
 export default function FormSetting({ formId, settings, onChange }: IProps): any {
