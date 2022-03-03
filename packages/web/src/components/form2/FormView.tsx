@@ -85,20 +85,23 @@ export default function FormViewWrapper({
     };
     const response = await handleCreateUpdateResponse(payload, form?.fields);
     if (response) {
-      const messages = await Promise.all(
-        form?.settings?.actions
-          ?.filter((a) => a?.actionType === 'showMessage' && a?.active)
-          ?.map(async (a) => {
-            const message = await replaceVariables(
-              a?.body,
-              a?.variables,
-              form?.fields,
-              response?.values,
-              parentId,
-            );
-            return message;
-          }),
-      );
+      let messages = [];
+      // if (form?.settings?.actions?.length > 0) {
+      //   messages = await Promise.all(
+      //     form?.settings?.actions
+      //       ?.filter((a) => a?.actionType === 'showMessage' && a?.active)
+      //       ?.map(async (a) => {
+      //         const message = await replaceVariables(
+      //           a?.body,
+      //           a?.variables,
+      //           form?.fields,
+      //           response?.values,
+      //           parentId,
+      //         );
+      //         return message;
+      //       }),
+      //   );
+      // }
       setState({ ...state, submitted: true, formModal: false, messages, response });
       if (createCallback) {
         createCallback(response);
@@ -596,10 +599,8 @@ const replaceVariables = async (oldBody, oldVariables, fields, values, pageId) =
     const variable = { ...oneVariable, value: '' };
     let field = null;
     let value = null;
-
     field = fields.find((f) => f._id === variable?.field);
     value = values?.find((v) => v.field === variable?.field);
-
     if (variable.formId) {
       const form = forms?.find((f) => f._id === variable.formId);
       if (form) {
@@ -607,7 +608,6 @@ const replaceVariables = async (oldBody, oldVariables, fields, values, pageId) =
         value = form?.response?.values?.find((v) => v.field === variable?.field);
       }
     }
-
     if (field && value) {
       variable.value = getValue(field, value);
     }
