@@ -5,7 +5,7 @@ import {
   DataGrid,
   GridSortDirection,
   GridSortModel,
-} from '@mui/x-data-grid';
+} from '@material-ui/data-grid';
 import { useGetAllContact } from '@frontend/shared/hooks/contact';
 import { useEffect } from 'react';
 
