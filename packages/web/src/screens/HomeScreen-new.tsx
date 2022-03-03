@@ -127,8 +127,13 @@ export default function Album() {
               online.
             </Typography>
             <div className="text-center">
-              <Button variant="contained" color="primary" className="m-2">
-                sumi@boossti.com
+              <Button
+                variant="contained"
+                href="forms/boossti-interest-form"
+                color="primary"
+                className="m-2"
+              >
+                Start
               </Button>
               <Button variant="outlined" color="primary" className="m-2">
                 805-300-7217
