@@ -27,7 +27,7 @@ import AuthScreen from '../../screens/AuthScreen';
 import { ResponseChild3 } from '../response/Response';
 import DisplayValue from './DisplayValue';
 import Leaderboard from '../response/Leaderboard';
-import { getLabel } from '../response/SelectResponse';
+import SelectResponse, { getLabel } from '../response/SelectResponse';
 
 interface IProps {
   form: any;
@@ -54,6 +54,7 @@ const initialState = {
   messages: [],
   response: null,
   formModal: false,
+  selectItemValue: null,
 };
 
 export default function FormViewWrapper({
@@ -180,7 +181,7 @@ export default function FormViewWrapper({
             <FormView
               authRequired={!form?.settings?.authRequired}
               fieldWiseView={form?.settings?.widgetType === 'oneField'}
-              fields={form?.fields}
+              fields={form?.fields?.map((fld) => ({ ...fld, form }))}
               handleSubmit={handleSubmit}
               loading={createLoading}
               viewResponse={() => {
@@ -189,6 +190,25 @@ export default function FormViewWrapper({
             />
           </>
         )
+      ) : form?.settings?.widgetType === 'selectItem' ? (
+        <>
+          <SelectResponse
+            label={form?.fields?.find((fld) => fld._id === form?.settings?.selectItemField)?.label}
+            formId={form?._id}
+            formField={form?.settings?.selectItemField}
+            value={state?.selectItemValue}
+            onChange={(newValue) => {
+              // onChange({ field: _id, response: newValue });
+              setState({ ...state, selectItemValue: newValue });
+              console.log(newValue);
+            }}
+            error={validateValue(true, state, form?.settings, 'form').error}
+            helperText={validateValue(true, state, form?.settings, 'form').errorMessage}
+          />
+          <Button variant="contained" color="primary">
+            Submit
+          </Button>
+        </>
       ) : (
         <FormView
           authRequired={!form?.settings?.authRequired}
@@ -247,6 +267,8 @@ export function FormView({
 
   const [page, setPage] = useState(0);
   const [hideField, setHideField] = useState(false);
+
+  console.log({ fields });
 
   useEffect(() => {
     if (hideField) {
