@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import { useGetForm } from '@frontend/shared/hooks/form';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -26,6 +27,7 @@ import FormFieldsValue from '../form2/FormFieldsValue';
 import { onAlert } from '../../utils/alert';
 import CRUDMenu from '../common/CRUDMenu';
 import BackdropComponent from '../common/Backdrop';
+import EditMode from '../common/EditMode';
 
 interface IProps {
   responseId: string;
@@ -115,10 +117,12 @@ export function ResponseChild3({
   const [state, setState] = useState({ showMenu: null, edit: false });
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
   const authorized = useAuthorization([response?.createdBy?._id, form?.createdBy?._id], true);
+  const authorized2 = useAuthorization([form?.createdBy?._id], true);
   const { section, onSectionChange, handleUpdateSection } = useUpdateSection({
     onAlert,
     _id: JSON.parse(response?.options)?.customSectionId || form._id,
   });
+  const { editMode } = useSelector(({ setting }: any) => setting);
 
   return (
     <>
@@ -133,7 +137,12 @@ export function ResponseChild3({
             </Breadcrumbs>
           )}
           <div className="d-flex align-items-center">
-            {!hideNavigation && <QRButton />}
+            {!hideNavigation && (
+              <>
+                <EditMode />
+                <QRButton />
+              </>
+            )}
             {authorized && (
               <>
                 <Tooltip title="Edit Response">
@@ -179,7 +188,7 @@ export function ResponseChild3({
                 onSectionChange={(sec) => {}}
               />
               <Paper variant="outlined">
-                <List dense component="nav" aria-label="main mailbox folders">
+                <List dense component="nav">
                   <ListItem button>
                     <ListItemText primary="Form Fields" />
                   </ListItem>
@@ -201,13 +210,14 @@ export function ResponseChild3({
               section?.options?.belowResponse ? 'flex-column-reverse' : 'flex-column'
             }`}
           >
-            {!(hideAuthor || hideNavigation || hideBreadcrumbs) && (
+            {section?.fields?.length > 0 && (
               <FormFieldsValue
-                authorized={false}
+                authorized={authorized2}
+                disableGrid={!editMode}
                 fields={section?.fields}
                 values={section?.values}
-                handleValueChange={handleUpdateSection}
                 layouts={section?.options?.layouts || {}}
+                handleValueChange={handleUpdateSection}
                 onLayoutChange={(layouts) =>
                   onSectionChange({
                     options: { ...section?.options, layouts },
