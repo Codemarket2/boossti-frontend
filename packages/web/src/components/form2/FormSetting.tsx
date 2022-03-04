@@ -28,6 +28,9 @@ export default function FormSetting({ settings, onChange }: IProps): any {
         <MenuItem value="oneField">One field at a time</MenuItem>
         <MenuItem value="button">Button</MenuItem>
         <MenuItem value="displayResponses">Display Responses</MenuItem>
+        <MenuItem value="displayVertical">
+          Display result on one page in vertical one below the other
+        </MenuItem>
       </TextField>
       {settings?.widgetType === 'leaderboard' && (
         <InputGroup>

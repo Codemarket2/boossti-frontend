@@ -156,6 +156,39 @@ export default function FormViewWrapper({
             </Overlay>
           )}
         </>
+      ) : form?.settings?.widgetType === 'displayVertical' ? (
+        showResponse ? (
+          <>
+            <ResponseList form={form} />
+            {authenticated && (
+              <Button
+                className="mt-2"
+                size="small"
+                color="primary"
+                variant="contained"
+                onClick={() => {
+                  setShowResponse(false);
+                }}
+                startIcon={<AddIcon />}
+              >
+                Add Response
+              </Button>
+            )}
+          </>
+        ) : (
+          <>
+            <FormView
+              authRequired={!form?.settings?.authRequired}
+              fieldWiseView={form?.settings?.widgetType === 'oneField'}
+              fields={form?.fields}
+              handleSubmit={handleSubmit}
+              loading={createLoading}
+              viewResponse={() => {
+                setShowResponse(true);
+              }}
+            />
+          </>
+        )
       ) : form?.settings?.widgetType === 'displayResponses' ? (
         showResponse ? (
           <>
