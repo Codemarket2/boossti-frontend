@@ -2,6 +2,36 @@ import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useSubscription } from '@apollo/client';
 import { NOTIFICATION_SUB } from '../../graphql/subscription/notification';
+import { client as apolloClient } from '../../graphql';
+import { GET_NOTIFICATION_LIST } from '../../graphql/query/notifications';
+import { defaultQueryVariables } from './getNotificationList';
+
+export const updateNotificationCache = async (notification) => {
+  const oldData = await apolloClient.readQuery({
+    query: GET_NOTIFICATION_LIST,
+    variables: { ...defaultQueryVariables, showSearch: false },
+  });
+  if (oldData?.getNotificationList) {
+    const index = oldData.getNotificationList.findIndex((el) => el._id === notification._id);
+    const newData = { ...oldData };
+    if (index === -1) {
+      newData.getNotificationList = [...oldData.getNotificationList, notification];
+    } else {
+      newData.getNotificationList = oldData.getNotificationList.filter(
+        (el) => el._id !== notification._id,
+      );
+      newData.getNotificationList.unshift({
+        ...notification,
+        notificationCount: oldData.getNotificationList[index].notificationCount + 1,
+      });
+    }
+    await apolloClient.writeQuery({
+      query: GET_NOTIFICATION_LIST,
+      variables: { ...defaultQueryVariables, showSearch: false },
+      data: newData,
+    });
+  }
+};
 
 export const useNotificationSub = () => {
   const [state, setState] = useState({
@@ -17,6 +47,12 @@ export const useNotificationSub = () => {
   const { data, error } = useSubscription(NOTIFICATION_SUB, {
     variables: { userId: attributes['custom:_id'] },
   });
+  const notificationListItem = {
+    __typename: 'NotificationListItem',
+    lastNotification: {},
+    _id: '',
+    notificationCount: 1,
+  };
 
   useEffect(() => {
     if (data?.notificationSub) {
@@ -27,6 +63,9 @@ export const useNotificationSub = () => {
       } else {
         temp = [data.notificationSub];
       }
+      notificationListItem.lastNotification = data.notificationSub;
+      notificationListItem._id = data.notificationSub.threadId;
+      updateNotificationCache(notificationListItem);
       setState({
         ...state,
         notifications: { ...state.notifications, [data.notificationSub.formId]: temp },
