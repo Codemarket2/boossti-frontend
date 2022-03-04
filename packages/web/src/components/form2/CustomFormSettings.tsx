@@ -39,6 +39,7 @@ export default function CustomFormSettings({
 
   const getFormFields = async () => {
     const formFields = fields?.filter((f) => f?.fieldType === 'form' && f?.form?._id !== formId);
+    let newPageFields = [];
     for (const field of formFields) {
       const form = await getForm(field?.form?._id);
       if (form) {
@@ -47,9 +48,10 @@ export default function CustomFormSettings({
           label: `${field?.label}-${f?.label}`,
           formId: form?._id,
         }));
-        setPageFields([...pageFields, ...pageField]);
+        newPageFields = [...newPageFields, ...pageField];
       }
     }
+    setPageFields(newPageFields);
   };
 
   return (
