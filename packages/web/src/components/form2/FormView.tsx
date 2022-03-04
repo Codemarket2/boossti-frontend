@@ -86,22 +86,22 @@ export default function FormViewWrapper({
     const response = await handleCreateUpdateResponse(payload, form?.fields);
     if (response) {
       let messages = [];
-      // if (form?.settings?.actions?.length > 0) {
-      //   messages = await Promise.all(
-      //     form?.settings?.actions
-      //       ?.filter((a) => a?.actionType === 'showMessage' && a?.active)
-      //       ?.map(async (a) => {
-      //         const message = await replaceVariables(
-      //           a?.body,
-      //           a?.variables,
-      //           form?.fields,
-      //           response?.values,
-      //           parentId,
-      //         );
-      //         return message;
-      //       }),
-      //   );
-      // }
+      if (form?.settings?.actions?.length > 0) {
+        messages = await Promise.all(
+          form?.settings?.actions
+            ?.filter((a) => a?.actionType === 'showMessage' && a?.active)
+            ?.map(async (a) => {
+              const message = await replaceVariables(
+                a?.body,
+                a?.variables,
+                form?.fields,
+                response?.values,
+                parentId,
+              );
+              return message;
+            }),
+        );
+      }
       setState({ ...state, submitted: true, formModal: false, messages, response });
       if (createCallback) {
         createCallback(response);
