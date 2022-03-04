@@ -32,12 +32,8 @@ const StyledAvatar = styled(Avatar)`
 
 export default function Notification() {
   const { state, setState } = useNotificationSub();
-  // const [List, setList] = useState([]);
   const [store, setStore] = useState({});
   const { notificationList } = useGetNotificationList();
-  // useEffect(() => {
-  //   setList(notificationList);
-  // }, [notificationList]);
 
   useEffect(() => {
     setState({ ...state, notifications: store });
