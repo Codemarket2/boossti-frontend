@@ -32,12 +32,8 @@ const StyledAvatar = styled(Avatar)`
 
 export default function Notification() {
   const { state, setState } = useNotificationSub();
-  const [List, setList] = useState([]);
   const [store, setStore] = useState({});
   const { notificationList } = useGetNotificationList();
-  useEffect(() => {
-    setList(notificationList);
-  }, [notificationList]);
 
   useEffect(() => {
     setState({ ...state, notifications: store });
@@ -47,7 +43,7 @@ export default function Notification() {
     <>
       <Tooltip title="Notifications">
         <IconButton onClick={(e) => setState({ ...state, showNotification: e.target })}>
-          <Badge badgeContent={List?.length} color="primary">
+          <Badge badgeContent={notificationList?.length} color="primary">
             <NotificationsIcon />
           </Badge>
         </IconButton>
@@ -69,7 +65,7 @@ export default function Notification() {
         <div className="p-2" style={{ minWidth: '40vw' }}>
           <Typography variant="h5" className="d-flex justify-content-between align-items-center">
             Notifications
-            {List?.length > 0 && (
+            {notificationList?.length > 0 && (
               <Button
                 size="small"
                 color="primary"
@@ -80,8 +76,8 @@ export default function Notification() {
               </Button>
             )}
           </Typography>
-          {List?.length ? (
-            List?.map((list) => (
+          {notificationList?.length ? (
+            notificationList?.map((list) => (
               <NotificationListItem
                 key={list._id}
                 list={list}
@@ -162,7 +158,7 @@ const NotificationItem = ({ notification, onClose }: any) => {
           <Link href={notification.link}>
             <div style={{ cursor: 'pointer' }} onClick={handleClick}>
               <ListItemText
-                className="m-0 p-0"
+                className="p-0 m-0"
                 primary={<span dangerouslySetInnerHTML={{ __html: notification.description }} />}
                 secondary={`${moment(notification.createdAt).fromNow()}`}
               />
