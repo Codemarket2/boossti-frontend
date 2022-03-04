@@ -290,7 +290,7 @@ export default function ActionForm({ onCancel, fields, emailFields, onSave, acti
                     'variables',
                     formik.values.variables.map((sV, sI) => {
                       if (sI === i) {
-                        let payload = { ...variable, field: target.value };
+                        let payload = { ...variable, field: target.value, formId: null };
                         const field = fields?.filter((f) => f._id === target.value && f?.formId)[0];
                         if (field) {
                           payload = { ...payload, formId: field.formId };

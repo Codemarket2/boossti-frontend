@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
 import { useSendEmail } from '@frontend/shared/hooks/email/sendEmail';
 import InputGroup from '../common/InputGroup';
 import RichTextarea from '../common/RichTextarea2';
@@ -15,7 +14,7 @@ import {
   FormControl,
   InputLabel,
   Switch,
-} from '@mui/material';
+} from '@material-ui/core';
 
 export default function EmailForm() {
   const { formik, formLoading } = useSendEmail();

@@ -203,6 +203,7 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
             {options.currentTab === 'settings' && (
               <>
                 <FormSetting
+                  formId={_id}
                   settings={state.settings}
                   onChange={(settings) =>
                     handleOnChange({

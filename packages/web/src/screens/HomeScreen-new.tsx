@@ -10,7 +10,11 @@ import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import StarIcon from '@material-ui/icons/Star';
 import CardHeader from '@material-ui/core/CardHeader';
+import { useGetFormBySlug } from '@frontend/shared/hooks/form';
 import AppBar from '../components/common/AppBar';
+import ErrorLoading from '../components/common/ErrorLoading';
+import FormView from '../components/form2/FormView';
+import NotFound from '../components/common/NotFound';
 
 function Copyright() {
   return (
@@ -128,11 +132,12 @@ export default function Album() {
             </Typography>
             <div className="text-center">
               <Button variant="contained" color="primary" className="m-2">
-                sumi@boossti.com
+                Tell Us About Your Project
               </Button>
-              <Button variant="outlined" color="primary" className="m-2">
+              <FormPage slug="boossti-interest-form" />
+              {/* <Button variant="outlined" color="primary" className="m-2">
                 805-300-7217
-              </Button>
+              </Button> */}
             </div>
           </Container>
         </div>
@@ -232,3 +237,15 @@ export default function Album() {
     </>
   );
 }
+export const FormPage = ({ slug }: { slug: string }) => {
+  const { data, error } = useGetFormBySlug(slug);
+
+  if (error || !data) {
+    return <ErrorLoading error={error} />;
+  }
+
+  if (!data?.getFormBySlug) {
+    return <NotFound />;
+  }
+  return <FormView form={data.getFormBySlug} />;
+};

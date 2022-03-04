@@ -4,13 +4,15 @@ import Checkbox from '@material-ui/core/Checkbox';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputGroup from '../common/InputGroup';
+import SelectFormFields from './SelectFormFields';
 
 interface IProps {
   settings: any;
   onChange: (val: any) => void;
+  formId: any;
 }
 
-export default function FormSetting({ settings, onChange }: IProps): any {
+export default function FormSetting({ formId, settings, onChange }: IProps): any {
   return (
     <Paper variant="outlined" className="p-2">
       <TextField
@@ -31,6 +33,7 @@ export default function FormSetting({ settings, onChange }: IProps): any {
         <MenuItem value="displayVertical">
           Display result on one page in vertical one below the other
         </MenuItem>
+        <MenuItem value="selectItem">Select Item</MenuItem>
       </TextField>
       {settings?.widgetType === 'leaderboard' && (
         <InputGroup>
@@ -73,6 +76,17 @@ export default function FormSetting({ settings, onChange }: IProps): any {
             helperText={!settings?.buttonLabel && 'Required'}
           />
         </InputGroup>
+      )}
+      {settings?.widgetType === 'selectItem' && (
+        <div className="mt-3">
+          <SelectFormFields
+            formId={formId}
+            value={settings?.selectItemField}
+            onChange={(newValue) => onChange({ selectItemField: newValue })}
+            error={!settings?.selectItemField}
+            helperText={!settings?.selectItemField && 'required'}
+          />
+        </div>
       )}
       <InputGroup>
         <FormControlLabel
