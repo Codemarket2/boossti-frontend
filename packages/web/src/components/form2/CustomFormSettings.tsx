@@ -83,6 +83,7 @@ export default function CustomFormSettings({
           </Tabs>
           {tab === 'settings' && (
             <FormSetting
+              formId={formId}
               settings={settings}
               onChange={(val) => onSettingsChange({ ...settings, ...val })}
             />
