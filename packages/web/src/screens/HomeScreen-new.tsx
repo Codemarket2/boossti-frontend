@@ -122,24 +122,34 @@ export default function Album() {
       <AppBar />
       <main>
         <div className={classes.heroContent}>
-          <Container maxWidth="sm">
-            <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-              Best Website Design, Online, Social Media, Offline Marketing Agency
-            </Typography>
-            <Typography variant="h5" align="center" color="textSecondary" paragraph>
-              Co-marketing and co-promotion opportunities to grow your business both local and
-              online.
-            </Typography>
-            <div className="text-center">
-              <Button variant="contained" color="primary" className="m-2">
-                Tell Us About Your Project
-              </Button>
-              <FormPage slug="boossti-interest-form" />
-              {/* <Button variant="outlined" color="primary" className="m-2">
+          <Grid container>
+            <Grid item xs={6}>
+              <Typography
+                component="h1"
+                variant="h2"
+                align="center"
+                color="textPrimary"
+                gutterBottom
+              >
+                Best Website Design, Online, Social Media, Offline Marketing Agency
+              </Typography>
+              <Typography variant="h5" align="center" color="textSecondary" paragraph>
+                Co-marketing and co-promotion opportunities to grow your business both local and
+                online.
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <div className="text-center">
+                <Button variant="contained" color="primary" className="m-2">
+                  Tell Us About Your Project
+                </Button>
+                <FormPage slug="boossti-interest-form" />
+                {/* <Button variant="outlined" color="primary" className="m-2">
                 805-300-7217
               </Button> */}
-            </div>
-          </Container>
+              </div>
+            </Grid>
+          </Grid>
         </div>
         <Container className={classes.cardGrid} maxWidth="md">
           {/* End hero unit */}
