@@ -112,7 +112,6 @@ export default function FormFieldsValue({
 
   return (
     <div className="p-2">
-      {console.log(height)}
       <BackdropComponent open={state.loading} />
       <ResponsiveReactGridLayout
         className="layout"

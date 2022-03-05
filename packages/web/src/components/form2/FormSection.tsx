@@ -34,7 +34,7 @@ export const DisplayForm = ({
 
   return (
     <>
-      {!customSettings?.onlyOwnerCanSubmit ? (
+      {!(customSettings?.widgetType === 'onlyPageOwner') ? (
         <>
           <div className="text-center">
             <Button variant="outlined" onClick={() => setState({ ...state, drawer: true })}>
@@ -56,54 +56,61 @@ export const DisplayForm = ({
       ) : authorized && !(data?.getResponses && data?.getResponses?.count > 0) ? (
         <FieldViewWrapper _id={formId} parentId={parentId} customSettings={customSettings} />
       ) : (
-        <>
-          {customSettings?.multipleResponses && (
-            <>
-              {state.showForm ? (
-                <>
-                  <div className="text-right">
-                    <IconButton
+        (authorized || customSettings?.showResponses) && (
+          <>
+            {customSettings?.multipleResponses && (
+              <>
+                {state.showForm ? (
+                  <>
+                    <div className="text-right">
+                      <IconButton
+                        size="small"
+                        onClick={() => setState({ ...state, showForm: false })}
+                      >
+                        <CloseIcon />
+                      </IconButton>
+                    </div>
+                    <FieldViewWrapper
+                      _id={formId}
+                      parentId={parentId}
+                      customSettings={customSettings}
+                      createCallback={(r) => {
+                        handleRefetch();
+                        setState({ ...state, showForm: false });
+                      }}
+                    />
+                  </>
+                ) : (
+                  authorized && (
+                    <Button
+                      variant="contained"
+                      color="primary"
                       size="small"
-                      onClick={() => setState({ ...state, showForm: false })}
+                      startIcon={<AddIcon />}
+                      onClick={() => setState({ ...state, showForm: true })}
                     >
-                      <CloseIcon />
-                    </IconButton>
-                  </div>
-                  <FieldViewWrapper
-                    _id={formId}
-                    parentId={parentId}
-                    customSettings={customSettings}
-                    createCallback={(r) => {
-                      handleRefetch();
-                      setState({ ...state, showForm: false });
-                    }}
-                  />
-                </>
-              ) : (
-                authorized && (
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    size="small"
-                    startIcon={<AddIcon />}
-                    onClick={() => setState({ ...state, showForm: true })}
-                  >
-                    Add new
-                  </Button>
-                )
-              )}
-            </>
-          )}
-          {(customSettings?.multipleResponses
-            ? data?.getResponses?.data
-            : [data?.getResponses?.data?.[0]]
-          )
-            ?.slice(0)
-            .reverse()
-            ?.map((response) => (
-              <Response key={response?._id} hideNavigation hideAuthor responseId={response?._id} />
-            ))}
-        </>
+                      Add new
+                    </Button>
+                  )
+                )}
+              </>
+            )}
+            {(customSettings?.multipleResponses
+              ? data?.getResponses?.data
+              : [data?.getResponses?.data?.[0]]
+            )
+              ?.slice(0)
+              .reverse()
+              ?.map((response) => (
+                <Response
+                  key={response?._id}
+                  hideNavigation
+                  hideAuthor
+                  responseId={response?._id}
+                />
+              ))}
+          </>
+        )
       )}
     </>
   );

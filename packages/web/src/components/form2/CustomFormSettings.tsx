@@ -12,6 +12,7 @@ import ResponseLayout from '../response/ResponseLayout';
 import { ActionsWrapper } from './Actions';
 
 interface IProps {
+  isSection?: boolean;
   fields: any;
   formId: string;
   open: boolean;
@@ -22,6 +23,7 @@ interface IProps {
 }
 
 export default function CustomFormSettings({
+  isSection = false,
   fields,
   formId,
   open,
@@ -89,6 +91,7 @@ export default function CustomFormSettings({
               formId={formId}
               settings={settings}
               onChange={(val) => onSettingsChange({ ...settings, ...val })}
+              isSection={isSection}
             />
           )}
           {tab === 'workflows' && (
