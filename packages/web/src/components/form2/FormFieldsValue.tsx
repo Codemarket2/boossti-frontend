@@ -49,7 +49,6 @@ export default function FormFieldsValue({
   onLayoutChange,
 }: IProps) {
   const [state, setState] = useState(initialState);
-  // const [layout, setLayout] = useState({});
 
   const setInitialState = () => setState(initialState);
 

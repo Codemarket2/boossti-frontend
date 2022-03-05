@@ -18,6 +18,7 @@ interface IProps {
   onClose: () => void;
   settings: any;
   onSettingsChange: (settings: any) => void;
+  parentPageFields: any;
 }
 
 export default function CustomFormSettings({
@@ -27,6 +28,7 @@ export default function CustomFormSettings({
   onClose,
   settings,
   onSettingsChange,
+  parentPageFields = [],
 }: IProps): any {
   const [tab, setTab] = useState('settings');
   const [pageFields, setPageFields] = useState([]);
@@ -38,7 +40,8 @@ export default function CustomFormSettings({
   }, [fields]);
 
   const getFormFields = async () => {
-    const formFields = fields?.filter((f) => f?.fieldType === 'form' && f?.form?._id !== formId);
+    const formFields = fields?.filter((f) => f?.fieldType === 'form');
+    // const formFields = fields?.filter((f) => f?.fieldType === 'form' && f?.form?._id !== formId);
     let newPageFields = [];
     for (const field of formFields) {
       const form = await getForm(field?.form?._id);
@@ -108,12 +111,17 @@ export default function CustomFormSettings({
                   }
                 />
               </InputGroup>
-              {settings?.customSectionId && <ResponseLayout _id={settings?.customSectionId} />}
+              {settings?.customSectionId && (
+                <ResponseLayout
+                  _id={settings?.customSectionId}
+                  parentPageFields={[...pageFields, ...parentPageFields]}
+                />
+              )}
             </>
           )}
           {tab === 'actions' && (
             <ActionsWrapper
-              pageFields={pageFields}
+              pageFields={[...pageFields, ...parentPageFields]}
               formId={formId}
               settings={settings}
               onChange={(actions) => onSettingsChange({ ...settings, actions })}

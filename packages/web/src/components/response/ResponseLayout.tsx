@@ -1,10 +1,5 @@
 import { useUpdateSection } from '@frontend/shared/hooks/section';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-
 import Paper from '@material-ui/core/Paper';
-
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
 import Switch from '@material-ui/core/Switch';
@@ -14,7 +9,13 @@ import FormFieldsValue from '../form2/FormFieldsValue';
 import ResponseSections from './ResponseSection';
 import ErrorLoading from '../common/ErrorLoading';
 
-export default function ResponseLayout({ _id }: { _id: string }) {
+export default function ResponseLayout({
+  _id,
+  parentPageFields = [],
+}: {
+  _id: string;
+  parentPageFields?: any;
+}) {
   const { onSectionChange, section, handleUpdateSection, error } = useUpdateSection({
     onAlert,
     _id,
@@ -49,6 +50,7 @@ export default function ResponseLayout({ _id }: { _id: string }) {
             onSectionChange={onSectionChange}
             authorized
             title="Response sections"
+            parentPageFields={parentPageFields}
           />
         </Grid>
         <Grid item xs={12} md={9}>

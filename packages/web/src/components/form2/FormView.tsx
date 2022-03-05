@@ -200,11 +200,7 @@ export default function FormViewWrapper({
             formId={form?._id}
             formField={form?.settings?.selectItemField}
             value={state?.selectItemValue}
-            onChange={(newValue) => {
-              // onChange({ field: _id, response: newValue });
-              setState({ ...state, selectItemValue: newValue });
-              console.log(newValue);
-            }}
+            onChange={(newValue) => setState({ ...state, selectItemValue: newValue })}
             error={validateValue(true, state, form?.settings, 'form').error}
             helperText={validateValue(true, state, form?.settings, 'form').errorMessage}
           />
@@ -270,8 +266,6 @@ export function FormView({
 
   const [page, setPage] = useState(0);
   const [hideField, setHideField] = useState(false);
-
-  console.log({ fields });
 
   useEffect(() => {
     if (hideField) {
