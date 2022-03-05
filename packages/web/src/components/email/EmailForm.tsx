@@ -26,6 +26,7 @@ export default function EmailForm() {
     resetEmails: true,
   });
   const [checked, setChecked] = React.useState(false);
+  const [verified, setVerified] = React.useState(['info@boossti.com', 'contact@boossti.com']);
 
   const handleChange = (event) => {
     setChecked(event.target.checked);
@@ -57,7 +58,7 @@ export default function EmailForm() {
         />
       </FormGroup>
       <form className="px-2" onSubmit={handleSubmit}>
-        <InputGroup>
+        {/* <InputGroup>
           <TextField
             fullWidth
             label="From"
@@ -71,7 +72,24 @@ export default function EmailForm() {
             error={formik.touched.senderEmail && Boolean(formik.errors.senderEmail)}
             helperText={formik.touched.senderEmail && formik.errors.senderEmail}
           />
-        </InputGroup>
+        </InputGroup> */}
+        <FormControl fullWidth>
+          <InputLabel id="from">Select Mailing List</InputLabel>
+          <Select
+            labelId="from"
+            name="senderEmail"
+            label="From"
+            required
+            value={formik.values.senderEmail}
+            onChange={formik.handleChange}
+          >
+            {verified?.map((list, i) => (
+              <MenuItem key={i} value={list}>
+                {list}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         {checked ? (
           <FormControl fullWidth>
             <InputLabel id="mailinglist">Select Mailing List</InputLabel>
@@ -83,8 +101,8 @@ export default function EmailForm() {
               onChange={formik.handleChange}
             >
               {mailingList?.map((list, i) => (
-                <MenuItem key={i} value={list._id}>
-                  <em>{list._id} | </em> {list.emailCount} emails
+                <MenuItem key={i} value={list.listName}>
+                  <em>{list.listName} - </em> {list.contacts.length} emails
                 </MenuItem>
               ))}
             </Select>

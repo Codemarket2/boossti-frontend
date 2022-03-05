@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
+import { CREATE_MAILING_LIST_FROM_CONTACT } from '../../graphql/mutation/contact';
 import { CREATE_MAILING_LIST } from '../../graphql/mutation/email';
 import { GET_ALL_MAILING_LIST } from '../../graphql/query/contact';
 
@@ -31,3 +32,21 @@ export const useGetAllMailingList = () => {
     loading,
   };
 };
+
+export function useCreateMailingListFromContact() {
+  const [createMutation, { loading: createLoading }] = useMutation(
+    CREATE_MAILING_LIST_FROM_CONTACT,
+  );
+  const handleCreateMailingList = async (payload: any) => {
+    try {
+      const res = await createMutation({
+        variables: payload,
+      });
+      return res;
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
+  };
+  return { handleCreateMailingList, createLoading };
+}
