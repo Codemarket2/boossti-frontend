@@ -69,3 +69,9 @@ export const DELETE_CONTACT = gql`
     deleteContact(_id: $_id)
   }
 `;
+
+export const CREATE_MAILING_LIST_FROM_CONTACT = gql`
+  mutation MyMutation($listName: String!, $selectedContact: [ID!]!) {
+    createMailingListFromContact(listName: $listName, selectedContact: $selectedContact)
+  }
+`;
