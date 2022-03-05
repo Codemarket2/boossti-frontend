@@ -68,8 +68,8 @@ export const GET_CONTACT = gql`
 export const GET_ALL_MAILING_LIST = gql`
   query MyQuery($page: Int, $limit: Int) {
     getAllMailingList(page: $page, limit: $limit) {
-      _id
-      emailCount
+      contacts
+      listName
     }
   }
 `;

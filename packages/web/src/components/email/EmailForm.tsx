@@ -83,8 +83,8 @@ export default function EmailForm() {
               onChange={formik.handleChange}
             >
               {mailingList?.map((list, i) => (
-                <MenuItem key={i} value={list._id}>
-                  <em>{list._id} | </em> {list.emailCount} emails
+                <MenuItem key={i} value={list.listName}>
+                  <em>{list.listName} - </em> {list.contacts.length} emails
                 </MenuItem>
               ))}
             </Select>
