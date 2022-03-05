@@ -147,7 +147,7 @@ export default function Album() {
                 online.
               </Typography> */}
               {cards2.map((card, i) => (
-                <Grid item key={i} xs={12} sm={6} md={12}>
+                <Grid item key={i} xs={12} sm={12} md={12} lg={6}>
                   <Card className={classes.card}>
                     <CardMedia
                       className={classes.cardMedia}
@@ -172,7 +172,7 @@ export default function Album() {
                 </Grid>
               ))}
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12} sm={12} md={6} lg={6}>
               <div className="text-center">
                 <Button variant="contained" color="primary" className="m-2">
                   Tell Us About Your Project
