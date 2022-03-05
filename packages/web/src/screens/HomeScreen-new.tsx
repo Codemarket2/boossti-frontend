@@ -50,7 +50,8 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
   },
   cardMedia: {
-    paddingTop: '56.25%', // 16:9
+    // paddingTop: '56.25%', // 16:9
+    paddingTop: '100%',
   },
   cardContent: {
     flexGrow: 1,
@@ -89,6 +90,14 @@ const cards = [
   },
 ];
 
+const cards2 = [
+  {
+    image: require('../assets/images/web.gif'),
+    title: 'Website Design',
+    description: 'Best responsive websites along with SEO and paid Google Ads',
+  },
+];
+
 const tiers = [
   {
     title: 'Basic',
@@ -124,7 +133,7 @@ export default function Album() {
         <div className={classes.heroContent}>
           <Grid container>
             <Grid item xs={6}>
-              <Typography
+              {/* <Typography
                 component="h1"
                 variant="h2"
                 align="center"
@@ -132,11 +141,36 @@ export default function Album() {
                 gutterBottom
               >
                 Best Website Design, Online, Social Media, Offline Marketing Agency
-              </Typography>
-              <Typography variant="h5" align="center" color="textSecondary" paragraph>
+              </Typography> */}
+              {/*  <Typography variant="h5" align="center" color="textSecondary" paragraph>
                 Co-marketing and co-promotion opportunities to grow your business both local and
                 online.
-              </Typography>
+              </Typography> */}
+              {cards2.map((card, i) => (
+                <Grid item key={i} xs={12} sm={6} md={12}>
+                  <Card className={classes.card}>
+                    <CardMedia
+                      className={classes.cardMedia}
+                      image={card.image}
+                      title={card.title}
+                    />
+                    <CardContent className={classes.cardContent}>
+                      <Typography gutterBottom variant="h5" component="h2">
+                        {card.title}
+                      </Typography>
+                      <Typography>{card.description}</Typography>
+                    </CardContent>
+                    <CardActions>
+                      <Button size="small" color="primary">
+                        805-300-7217
+                      </Button>
+                      <Button size="small" color="primary">
+                        sumi@boossti.com
+                      </Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              ))}
             </Grid>
             <Grid item xs={6}>
               <div className="text-center">
