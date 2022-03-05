@@ -5,9 +5,16 @@ interface IProps {
   onSectionChange: any;
   authorized: boolean;
   title?: string;
+  parentPageFields?: any;
 }
 
-export default function ResponseSections({ section, onSectionChange, authorized, title }: IProps) {
+export default function ResponseSections({
+  section,
+  onSectionChange,
+  authorized,
+  title,
+  parentPageFields = [],
+}: IProps) {
   return (
     <FormFields
       fields={section?.fields}
@@ -15,6 +22,7 @@ export default function ResponseSections({ section, onSectionChange, authorized,
       title={title || 'Sections'}
       previewMode={!authorized}
       isSection
+      parentPageFields={parentPageFields}
     />
   );
 }

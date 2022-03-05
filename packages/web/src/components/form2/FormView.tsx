@@ -87,22 +87,22 @@ export default function FormViewWrapper({
     const response = await handleCreateUpdateResponse(payload, form?.fields);
     if (response) {
       let messages = [];
-      // if (form?.settings?.actions?.length > 0) {
-      //   messages = await Promise.all(
-      //     form?.settings?.actions
-      //       ?.filter((a) => a?.actionType === 'showMessage' && a?.active)
-      //       ?.map(async (a) => {
-      //         const message = await replaceVariables(
-      //           a?.body,
-      //           a?.variables,
-      //           form?.fields,
-      //           response?.values,
-      //           parentId,
-      //         );
-      //         return message;
-      //       }),
-      //   );
-      // }
+      if (form?.settings?.actions?.length > 0) {
+        messages = await Promise.all(
+          form?.settings?.actions
+            ?.filter((a) => a?.actionType === 'showMessage' && a?.active)
+            ?.map(async (a) => {
+              const message = await replaceVariables(
+                a?.body,
+                a?.variables,
+                form?.fields,
+                response?.values,
+                parentId,
+              );
+              return message;
+            }),
+        );
+      }
       setState({ ...state, submitted: true, formModal: false, messages, response });
       if (createCallback) {
         createCallback(response);
@@ -233,11 +233,7 @@ export default function FormViewWrapper({
             formId={form?._id}
             formField={form?.settings?.selectItemField}
             value={state?.selectItemValue}
-            onChange={(newValue) => {
-              // onChange({ field: _id, response: newValue });
-              setState({ ...state, selectItemValue: newValue });
-              console.log(newValue);
-            }}
+            onChange={(newValue) => setState({ ...state, selectItemValue: newValue })}
             error={validateValue(true, state, form?.settings, 'form').error}
             helperText={validateValue(true, state, form?.settings, 'form').errorMessage}
           />
@@ -303,8 +299,6 @@ export function FormView({
 
   const [page, setPage] = useState(0);
   const [hideField, setHideField] = useState(false);
-
-  console.log({ fields });
 
   useEffect(() => {
     if (hideField) {

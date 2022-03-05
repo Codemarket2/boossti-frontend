@@ -223,6 +223,7 @@ export function ResponseChild3({
                     options: { ...section?.options, layouts },
                   })
                 }
+                pageId={response?.parentId?._id}
               />
             )}
             <div className="p-2">
