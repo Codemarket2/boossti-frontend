@@ -1,4 +1,3 @@
-import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -43,7 +42,6 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
     onAlert,
     _id,
   });
-  const { admin = false } = useSelector(({ auth }: any) => auth);
   const { handleDelete } = useDeleteForm({
     onAlert,
   });
@@ -93,21 +91,8 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
     return <ErrorLoading error={error} />;
   }
 
-  if (!state?.settings?.ViewAuthRequired && !admin) {
-    return (
-      <div style={{ width: '100%' }}>
-        {state?.settings?.onlyOwnerCanSubmit ? (
-          <ResponseList form={state} />
-        ) : (
-          <FormView form={state} />
-        )}
-      </div>
-    );
-  }
-
   return (
     <Authorization _id={[state?.createdBy?._id]} allowAdmin>
-      {state?.settings?.ViewAuthRequired}
       {options.backdrop && <Backdrop open />}
       <div style={{ width: '100%' }}>
         <Snackbar

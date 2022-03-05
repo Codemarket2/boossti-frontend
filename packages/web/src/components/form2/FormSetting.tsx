@@ -7,12 +7,13 @@ import InputGroup from '../common/InputGroup';
 import SelectFormFields from './SelectFormFields';
 
 interface IProps {
+  isSection?: boolean;
   settings: any;
   onChange: (val: any) => void;
   formId: any;
 }
 
-export default function FormSetting({ formId, settings, onChange }: IProps): any {
+export default function FormSetting({ formId, settings, onChange, isSection }: IProps): any {
   return (
     <Paper variant="outlined" className="p-2">
       <TextField
@@ -34,6 +35,9 @@ export default function FormSetting({ formId, settings, onChange }: IProps): any
           Display result on one page in vertical one below the other
         </MenuItem>
         <MenuItem value="selectItem">Select Item</MenuItem>
+        {isSection && (
+          <MenuItem value="onlyPageOwner">Only page owner can submit response</MenuItem>
+        )}
       </TextField>
       {settings?.widgetType === 'leaderboard' && (
         <InputGroup>
@@ -88,45 +92,36 @@ export default function FormSetting({ formId, settings, onChange }: IProps): any
           />
         </div>
       )}
-      <InputGroup>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={!settings?.authRequired}
-              onChange={({ target }) => onChange({ authRequired: !target.checked })}
-              name="authRequired"
-              color="primary"
+      {!(settings?.widgetType === 'onlyPageOwner') && (
+        <>
+          <InputGroup>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={!settings?.authRequired}
+                  onChange={({ target }) => onChange({ authRequired: !target.checked })}
+                  name="authRequired"
+                  color="primary"
+                />
+              }
+              label="Authentication required to submit form"
             />
-          }
-          label="Authentication required to submit form"
-        />
-      </InputGroup>
-      <InputGroup>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={settings?.ViewAuthRequired}
-              onChange={({ target }) => onChange({ ViewAuthRequired: target.checked })}
-              name="authRequired"
-              color="primary"
+          </InputGroup>
+          <InputGroup>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={settings?.ViewAuthRequired}
+                  onChange={({ target }) => onChange({ ViewAuthRequired: target.checked })}
+                  name="authRequired"
+                  color="primary"
+                />
+              }
+              label="Authentication required to view form"
             />
-          }
-          label="Authentication required to view form"
-        />
-      </InputGroup>
-      <InputGroup>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={settings?.onlyOwnerCanSubmit}
-              onChange={({ target }) => onChange({ onlyOwnerCanSubmit: target.checked })}
-              name="onlyOwnerCanSubmit"
-              color="primary"
-            />
-          }
-          label="Only page owner can submit response other users will see the responses"
-        />
-      </InputGroup>
+          </InputGroup>
+        </>
+      )}
       <InputGroup>
         <FormControlLabel
           control={
@@ -137,7 +132,7 @@ export default function FormSetting({ formId, settings, onChange }: IProps): any
               color="primary"
             />
           }
-          label="One user can submit mutiple responses"
+          label="can submit multiple responses"
         />
       </InputGroup>
       <InputGroup>
@@ -179,13 +174,6 @@ export default function FormSetting({ formId, settings, onChange }: IProps): any
           label="Allow users to view all form responses"
         />
       </InputGroup>
-      {/* <InputGroup>
-        <InputLabel>After Form Submit Message</InputLabel>
-        <RichTextarea
-          value={settings?.onSubmitMessage || ''}
-          onChange={(newValue) => onChange({ onSubmitMessage: newValue })}
-        />
-      </InputGroup> */}
     </Paper>
   );
 }

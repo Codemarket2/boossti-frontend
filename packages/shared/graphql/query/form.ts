@@ -55,6 +55,7 @@ export const GET_FORM_BY_SLUG = gql`
           name
         }
       }
+      settings
     }
   }
 `;
