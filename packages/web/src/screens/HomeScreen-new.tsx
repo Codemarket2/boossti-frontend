@@ -131,59 +131,45 @@ export default function Album() {
       <AppBar />
       <main>
         <div className={classes.heroContent}>
-          <Grid container>
-            <Grid item xs={6}>
-              {/* <Typography
-                component="h1"
-                variant="h2"
-                align="center"
-                color="textPrimary"
-                gutterBottom
-              >
-                Best Website Design, Online, Social Media, Offline Marketing Agency
-              </Typography> */}
-              {/*  <Typography variant="h5" align="center" color="textSecondary" paragraph>
-                Co-marketing and co-promotion opportunities to grow your business both local and
-                online.
-              </Typography> */}
-              {cards2.map((card, i) => (
-                <Grid item key={i} xs={12} sm={12} md={12} lg={6}>
-                  <Card className={classes.card}>
-                    <CardMedia
-                      className={classes.cardMedia}
-                      image={card.image}
-                      title={card.title}
-                    />
-                    <CardContent className={classes.cardContent}>
-                      <Typography gutterBottom variant="h5" component="h2">
-                        {card.title}
-                      </Typography>
-                      <Typography>{card.description}</Typography>
-                    </CardContent>
-                    <CardActions>
-                      <Button size="small" color="primary">
-                        805-300-7217
-                      </Button>
-                      <Button size="small" color="primary">
-                        sumi@boossti.com
-                      </Button>
-                    </CardActions>
-                  </Card>
-                </Grid>
-              ))}
+          <Container className={classes.cardGrid} maxWidth="md">
+            <Grid container spacing={6}>
+              <Grid xs={12} sm={12} md={6} lg={6}>
+                {cards2.map((card, i) => (
+                  <Grid item key={i}>
+                    <Card className={classes.card}>
+                      <CardMedia
+                        className={classes.cardMedia}
+                        image={card.image}
+                        title={card.title}
+                      />
+                      <CardContent className={classes.cardContent}>
+                        <Typography gutterBottom variant="h5" component="h2">
+                          {card.title}
+                        </Typography>
+                        <Typography>{card.description}</Typography>
+                      </CardContent>
+                      <CardActions>
+                        <Button size="small" color="primary">
+                          805-300-7217
+                        </Button>
+                        <Button size="small" color="primary">
+                          sumi@boossti.com
+                        </Button>
+                      </CardActions>
+                    </Card>
+                  </Grid>
+                ))}
+              </Grid>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <div className="text-center">
+                  <Button variant="contained" color="primary" className="m-2">
+                    Tell Us About Your Project
+                  </Button>
+                  <FormPage slug="boossti-interest-form" />
+                </div>
+              </Grid>
             </Grid>
-            <Grid item xs={12} sm={12} md={6} lg={6}>
-              <div className="text-center">
-                <Button variant="contained" color="primary" className="m-2">
-                  Tell Us About Your Project
-                </Button>
-                <FormPage slug="boossti-interest-form" />
-                {/* <Button variant="outlined" color="primary" className="m-2">
-                805-300-7217
-              </Button> */}
-              </div>
-            </Grid>
-          </Grid>
+          </Container>
         </div>
         <Container className={classes.cardGrid} maxWidth="md">
           {/* End hero unit */}
