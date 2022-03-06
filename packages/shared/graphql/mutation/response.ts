@@ -1,7 +1,12 @@
 import { gql } from '@apollo/client';
 
 export const CREATE_RESPONSE = gql`
-  mutation MyMutation($formId: ID!, $parentId: ID, $values: [FieldValue2Input], $options: AWSJSON) {
+  mutation MyMutation(
+    $formId: ID!
+    $parentId: [ID]
+    $values: [FieldValue2Input]
+    $options: AWSJSON
+  ) {
     createResponse(formId: $formId, parentId: $parentId, values: $values, options: $options) {
       _id
       formId
@@ -90,7 +95,7 @@ export const CREATE_BULK_RESPONSE = gql`
     $formId: ID!
     $fileUrl: String!
     $map: AWSJSON!
-    $parentId: ID
+    $parentId: [ID]
     $fileData: AWSJSON
   ) {
     createBulkResponses(

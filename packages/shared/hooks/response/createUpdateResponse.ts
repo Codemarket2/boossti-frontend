@@ -30,7 +30,7 @@ export function useCreateUpdateResponse({ onAlert }: IHooksProps, parentId) {
       const values = getValues(payload.values, fields);
       payload = {
         ...payload,
-        parentId,
+        parentId: [parentId],
         values: values.map((m) => JSON.parse(JSON.stringify(m), omitTypename)),
       };
       let response = null;

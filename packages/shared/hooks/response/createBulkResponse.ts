@@ -14,7 +14,7 @@ export function useCreateBulkResponse() {
     const { formId, fileData, fileUrl, map, parentId } = payload;
     try {
       await createBulkResponses({
-        variables: { formId, fileData, fileUrl, map, parentId },
+        variables: { formId, fileData, fileUrl, map, parentId: [parentId] },
       });
     } catch (error) {
       console.log('Error delete', error.message);
