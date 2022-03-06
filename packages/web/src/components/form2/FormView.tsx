@@ -71,6 +71,8 @@ export default function FormViewWrapper({
   const [showResponse, setShowResponse] = useState(true);
   const authenticated = useSelector(({ auth }: any) => auth.authenticated);
 
+  const [showOverlayResult, setShowOverlayResult] = useState(true);
+
   const handleSubmit = async (values) => {
     let payload: any = { formId: form?._id, values };
     let options = {};
@@ -122,14 +124,20 @@ export default function FormViewWrapper({
         </InputGroup>
       )}
       {state.submitted ? (
-        <div className="py-5">
-          {state.messages?.map((message) => (
-            <DisplayRichText value={message} />
-          ))}
-          {state.response && (
-            <ResponseChild3 form={form} response={state.response} hideAuthor hideNavigation />
-          )}
-        </div>
+        <Overlay
+          onClose={() => setShowOverlayResult(false)}
+          open={showOverlayResult}
+          minWidth="60vw"
+        >
+          <div className="py-5">
+            {state.messages?.map((message) => (
+              <DisplayRichText value={message} />
+            ))}
+            {state.response && (
+              <ResponseChild3 form={form} response={state.response} hideAuthor hideNavigation />
+            )}
+          </div>
+        </Overlay>
       ) : form?.settings?.widgetType === 'leaderboard' ? (
         <Leaderboard formId={form?._id} settings={form?.settings} parentId={parentId} />
       ) : form?.settings?.widgetType === 'button' ? (
