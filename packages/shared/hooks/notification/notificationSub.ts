@@ -15,7 +15,7 @@ export const updateNotificationCache = async (notification) => {
     const index = oldData.getNotificationList.findIndex((el) => el._id === notification._id);
     const newData = { ...oldData };
     if (index === -1) {
-      newData.getNotificationList = [...oldData.getNotificationList, notification];
+      newData.getNotificationList = [notification, ...oldData.getNotificationList];
     } else {
       newData.getNotificationList = oldData.getNotificationList.filter(
         (el) => el._id !== notification._id,
