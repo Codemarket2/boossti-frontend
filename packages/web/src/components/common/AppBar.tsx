@@ -120,14 +120,14 @@ export default function AppBarComponent() {
           <>
             <Notification />
             <MenuWrapper>
-              <Tooltip title="Home">
+              {/* <Tooltip title="Home">
                 <IconButton
                   onClick={() => router.push(routes.feeds)}
                   color={setActiveRouteColor(activeRoute, routes.feeds)}
                 >
                   <HomeIcon />
                 </IconButton>
-              </Tooltip>
+              </Tooltip> */}
             </MenuWrapper>
             <div>
               <Tooltip title="Profile">
@@ -156,7 +156,7 @@ export default function AppBarComponent() {
                 open={open}
                 onClose={handleClose}
               >
-                <Link href={`/user/${attributes['custom:_id']}`}>
+                {/* <Link href={`/user/${attributes['custom:_id']}`}>
                   <MenuItem>
                     <ListItemIcon className="mr-n4">
                       <AccountCircleIcon fontSize="small" />
@@ -171,7 +171,7 @@ export default function AppBarComponent() {
                     </ListItemIcon>
                     <ListItemText primary="Create Post" />
                   </MenuItem>
-                </Link>
+                </Link> */}
                 <MenuItem onClick={handleLogout}>
                   <ListItemIcon className="mr-n4">
                     <ExitToAppIcon fontSize="small" />
