@@ -125,9 +125,13 @@ export default function FormViewWrapper({
       )}
       {state.submitted ? (
         <Overlay
-          onClose={() => setShowOverlayResult(false)}
+          onClose={() => {
+            setShowOverlayResult(false);
+            setState({ ...state, submitted: false });
+          }}
           open={showOverlayResult}
-          minWidth="60vw"
+          minWidth="40vw"
+          title="Your submitted response"
         >
           <div className="py-5">
             {state.messages?.map((message) => (
