@@ -130,7 +130,6 @@ export default function FormViewWrapper({
             setState({ ...state, submitted: false });
           }}
           open={showOverlayResult}
-          minWidth="40vw"
           title="Your submitted response"
         >
           <div className="py-5">
