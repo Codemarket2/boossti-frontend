@@ -16,29 +16,41 @@ interface IProps {
 export default function FormSetting({ formId, settings, onChange, isSection }: IProps): any {
   return (
     <Paper variant="outlined" className="p-2">
-      <TextField
-        fullWidth
-        size="small"
-        variant="outlined"
-        select
-        id="demo-simple-select"
-        value={settings?.widgetType ?? 'fullForm'}
-        label="Widget type"
-        onChange={({ target }) => onChange({ widgetType: target.value })}
-      >
-        <MenuItem value="fullForm">Full Form</MenuItem>
-        <MenuItem value="leaderboard">Leaderboad</MenuItem>
-        <MenuItem value="oneField">One field at a time</MenuItem>
-        <MenuItem value="button">Button</MenuItem>
-        <MenuItem value="displayResponses">Display Responses</MenuItem>
-        <MenuItem value="displayVertical">
-          Display result on one page in vertical one below the other
-        </MenuItem>
-        <MenuItem value="selectItem">Select Item</MenuItem>
-        {isSection && (
-          <MenuItem value="onlyPageOwner">Only page owner can submit response</MenuItem>
-        )}
-      </TextField>
+      <InputGroup>
+        <TextField
+          fullWidth
+          size="small"
+          variant="outlined"
+          select
+          id="demo-simple-select"
+          value={settings?.widgetType ?? 'fullForm'}
+          label="Widget type"
+          onChange={({ target }) => onChange({ widgetType: target.value })}
+        >
+          <MenuItem value="fullForm">Full Form</MenuItem>
+          <MenuItem value="leaderboard">Leaderboad</MenuItem>
+          <MenuItem value="oneField">One field at a time</MenuItem>
+          <MenuItem value="button">Button</MenuItem>
+          <MenuItem value="displayResponses">Display Responses</MenuItem>
+          <MenuItem value="selectItem">Select Item</MenuItem>
+        </TextField>
+      </InputGroup>
+      {settings?.widgetType === 'displayResponses' && (
+        <InputGroup>
+          <TextField
+            fullWidth
+            size="small"
+            variant="outlined"
+            select
+            value={settings?.responsesView ?? 'table'}
+            label="Responses view"
+            onChange={({ target }) => onChange({ responsesView: target.value })}
+          >
+            <MenuItem value="table">Table</MenuItem>
+            <MenuItem value="vertical">Vertical</MenuItem>
+          </TextField>
+        </InputGroup>
+      )}
       {settings?.widgetType === 'leaderboard' && (
         <InputGroup>
           <h3>Leader Board</h3>
@@ -92,35 +104,35 @@ export default function FormSetting({ formId, settings, onChange, isSection }: I
           />
         </div>
       )}
-      {!(settings?.widgetType === 'onlyPageOwner') && (
-        <>
-          <InputGroup>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={!settings?.authRequired}
-                  onChange={({ target }) => onChange({ authRequired: !target.checked })}
-                  name="authRequired"
-                  color="primary"
-                />
-              }
-              label="Authentication required to submit form"
-            />
-          </InputGroup>
-          <InputGroup>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={settings?.ViewAuthRequired}
-                  onChange={({ target }) => onChange({ ViewAuthRequired: target.checked })}
-                  name="authRequired"
-                  color="primary"
-                />
-              }
-              label="Authentication required to view form"
-            />
-          </InputGroup>
-        </>
+      <InputGroup>
+        <TextField
+          fullWidth
+          size="small"
+          variant="outlined"
+          select
+          value={settings?.whoCanSubmit ?? 'authUser'}
+          label="Who can submit the response"
+          onChange={({ target }) => onChange({ whoCanSubmit: target.value })}
+        >
+          <MenuItem value="all">{'Both authenticated & unauthenticated users'}</MenuItem>
+          <MenuItem value="authUser">Only Authenticated users</MenuItem>
+          {isSection && <MenuItem value="onlyPageOwner">Only page owner</MenuItem>}
+        </TextField>
+      </InputGroup>
+      {!(settings?.whoCanSubmit === 'all') && (
+        <InputGroup>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={settings?.viewAuthRequired}
+                onChange={({ target }) => onChange({ viewAuthRequired: target.checked })}
+                name="authRequired"
+                color="primary"
+              />
+            }
+            label="Authentication required to view form"
+          />
+        </InputGroup>
       )}
       <InputGroup>
         <FormControlLabel
