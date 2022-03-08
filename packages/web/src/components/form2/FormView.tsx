@@ -13,8 +13,11 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { ArrowBackIosRounded, ArrowForwardIosRounded } from '@material-ui/icons';
 import { getForm } from '@frontend/shared/hooks/form/getForm';
-import { getResponse } from '@frontend/shared/hooks/response/getResponse';
-import { useCreateUpdateResponse } from '@frontend/shared/hooks/response';
+import { getResponse, useGetResponses } from '@frontend/shared/hooks/response/getResponse';
+import {
+  useCreateUpdateResponse,
+  useCreateUpdateResponseParent,
+} from '@frontend/shared/hooks/response';
 import ResponseList from '../response/ResponseList';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
@@ -55,6 +58,7 @@ const initialState = {
   response: null,
   formModal: false,
   selectItemValue: null,
+  drawer: false,
 };
 
 export default function FormViewWrapper({
@@ -67,9 +71,18 @@ export default function FormViewWrapper({
     { onAlert },
     parentId,
   );
+
+  const { handleCreateUpdateResponseParent, updateParentLoading } = useCreateUpdateResponseParent(
+    { onAlert },
+    parentId,
+  );
+
+  const { data, error, refetch } = useGetResponses(form?._id, parentId);
   const [state, setState] = useState(initialState);
   const [showResponse, setShowResponse] = useState(true);
   const authenticated = useSelector(({ auth }: any) => auth.authenticated);
+
+  const [showOverlayResult, setShowOverlayResult] = useState(true);
 
   const handleSubmit = async (values) => {
     let payload: any = { formId: form?._id, values };
@@ -84,6 +97,7 @@ export default function FormViewWrapper({
       ...payload,
       options: JSON.stringify(options),
     };
+
     const response = await handleCreateUpdateResponse(payload, form?.fields);
     if (response) {
       let messages = [];
@@ -121,15 +135,43 @@ export default function FormViewWrapper({
           <Typography variant="h4">{form?.name}</Typography>
         </InputGroup>
       )}
-      {state.submitted ? (
-        <div className="py-5">
-          {state.messages?.map((message) => (
-            <DisplayRichText value={message} />
-          ))}
-          {state.response && (
-            <ResponseChild3 form={form} response={state.response} hideAuthor hideNavigation />
+      {!['onlyPageOwner', 'displayResponses'].includes(form?.settings?.widgetType) && (
+        <>
+          <div className="text-center">
+            <Button variant="outlined" onClick={() => setState({ ...state, drawer: true })}>
+              {`${data?.getResponses?.count} Responses`}
+            </Button>
+          </div>
+          {state.drawer && (
+            <Overlay
+              minWidth="85vw"
+              title="Responses"
+              open={state.drawer}
+              onClose={() => setState({ ...state, drawer: false })}
+            >
+              <ResponseList form={form} parentId={parentId} />
+            </Overlay>
           )}
-        </div>
+        </>
+      )}
+      {state.submitted ? (
+        <Overlay
+          onClose={() => {
+            setShowOverlayResult(false);
+            setState({ ...state, submitted: false });
+          }}
+          open={showOverlayResult}
+          title="Your submitted response"
+        >
+          <div className="py-5">
+            {state.messages?.map((message) => (
+              <DisplayRichText value={message} />
+            ))}
+            {state.response && (
+              <ResponseChild3 form={form} response={state.response} hideAuthor hideNavigation />
+            )}
+          </div>
+        </Overlay>
       ) : form?.settings?.widgetType === 'leaderboard' ? (
         <Leaderboard formId={form?._id} settings={form?.settings} parentId={parentId} />
       ) : form?.settings?.widgetType === 'button' ? (
@@ -153,17 +195,16 @@ export default function FormViewWrapper({
                   authRequired={!form?.settings?.authRequired}
                   fields={form?.fields}
                   handleSubmit={handleSubmit}
-                  loading={createLoading}
+                  loading={createLoading || updateParentLoading}
                   fieldWiseView={form?.settings?.widgetType === 'oneField'}
                 />
               </div>
             </Overlay>
           )}
         </>
-      ) : form?.settings?.widgetType === 'displayVertical' ? (
+      ) : form?.settings?.widgetType === 'displayResponses' ? (
         showResponse ? (
           <>
-            <ResponseList form={form} />
             {authenticated && (
               <Button
                 className="mt-2"
@@ -178,6 +219,7 @@ export default function FormViewWrapper({
                 Add Response
               </Button>
             )}
+            <ResponseList form={form} parentId={parentId} />
           </>
         ) : (
           <>
@@ -186,43 +228,8 @@ export default function FormViewWrapper({
               fieldWiseView={form?.settings?.widgetType === 'oneField'}
               fields={form?.fields}
               handleSubmit={handleSubmit}
-              loading={createLoading}
-              viewResponse={() => {
-                setShowResponse(true);
-              }}
-            />
-          </>
-        )
-      ) : form?.settings?.widgetType === 'displayResponses' ? (
-        showResponse ? (
-          <>
-            <ResponseList form={form} />
-            {authenticated && (
-              <Button
-                className="mt-2"
-                size="small"
-                color="primary"
-                variant="contained"
-                onClick={() => {
-                  setShowResponse(false);
-                }}
-                startIcon={<AddIcon />}
-              >
-                Add Response
-              </Button>
-            )}
-          </>
-        ) : (
-          <>
-            <FormView
-              authRequired={!form?.settings?.authRequired}
-              fieldWiseView={form?.settings?.widgetType === 'oneField'}
-              fields={form?.fields?.map((fld) => ({ ...fld, form }))}
-              handleSubmit={handleSubmit}
-              loading={createLoading}
-              viewResponse={() => {
-                setShowResponse(true);
-              }}
+              loading={createLoading || updateParentLoading}
+              onCancel={() => setShowResponse(true)}
             />
           </>
         )
@@ -234,10 +241,27 @@ export default function FormViewWrapper({
             formField={form?.settings?.selectItemField}
             value={state?.selectItemValue}
             onChange={(newValue) => setState({ ...state, selectItemValue: newValue })}
-            error={validateValue(true, state, form?.settings, 'form').error}
-            helperText={validateValue(true, state, form?.settings, 'form').errorMessage}
+            error={
+              validateValue(true, state, form?.settings, 'form').error ||
+              !form?.settings?.selectItemField
+            }
+            helperText={
+              validateValue(true, state, form?.settings, 'form').errorMessage ||
+              (!form?.settings?.selectItemField ? 'Form field not selected' : '')
+            }
           />
-          <Button variant="contained" color="primary">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={async () => {
+              const responseId = state?.selectItemValue?._id;
+
+              const response = await handleCreateUpdateResponseParent({ _id: responseId });
+              if (response) {
+                console.log(response);
+              }
+            }}
+          >
             Submit
           </Button>
         </>
@@ -246,7 +270,7 @@ export default function FormViewWrapper({
           authRequired={!form?.settings?.authRequired}
           fields={form?.fields}
           handleSubmit={handleSubmit}
-          loading={createLoading}
+          loading={createLoading || updateParentLoading}
           fieldWiseView={form?.settings?.widgetType === 'oneField'}
         />
       )}
@@ -593,19 +617,6 @@ export function FormView({
               >
                 Submit
               </LoadingButton>
-              {viewResponse && (
-                <Button
-                  className="ml-3"
-                  size="small"
-                  color="primary"
-                  variant="contained"
-                  onClick={() => {
-                    viewResponse();
-                  }}
-                >
-                  Back
-                </Button>
-              )}
               {onCancel && (
                 <Button
                   variant="outlined"

@@ -353,6 +353,7 @@ export default function FormFields({
       )}
       {values.showFormSettings && (
         <CustomFormSettings
+          isSection={isSection}
           fields={fields}
           formId={values.field?.form?._id}
           open={values.showFormSettings}

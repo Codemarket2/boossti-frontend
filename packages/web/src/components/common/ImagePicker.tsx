@@ -21,7 +21,7 @@ export default function ImagePicker({
 }: IProps): any {
   const [id, setId] = useState('');
   const ref: any = useRef();
-  const newArray = [...state.tempMedia];
+  const newArray = state.tempMedia?.length > 0 ? [...state.tempMedia] : [];
 
   useEffect(() => {
     setId(generateObjectId());

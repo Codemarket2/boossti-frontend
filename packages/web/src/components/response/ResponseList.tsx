@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux';
+import { useState } from 'react';
 import { useGetForm } from '@frontend/shared/hooks/form';
 import { useRouter } from 'next/router';
 import moment from 'moment';
@@ -13,27 +13,29 @@ import Tooltip from '@material-ui/core/Tooltip';
 import ListItemText from '@material-ui/core/ListItemText';
 import TablePagination from '@material-ui/core/TablePagination';
 import IconButton from '@material-ui/core/IconButton';
-import Delete from '@material-ui/icons/Delete';
 import LaunchIcon from '@material-ui/icons/Launch';
+import EditIcon from '@material-ui/icons/Edit';
 import { useGetResponses, useDeleteResponse } from '@frontend/shared/hooks/response';
 import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
 import DisplayValue from '../form2/DisplayValue';
-import Typography from '@material-ui/core/Typography';
-import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
+import Authorization from '../common/Authorization';
+import DeleteButton from '../common/DeleteButton';
+import { ResponseChild3 } from './Response';
+import EditResponseDrawer from './EditResponseDrawer';
 
 interface IProps {
   form: any;
-  hideDelete?: boolean;
   parentId?: string;
 }
 
-export default function ResponseList({ form, hideDelete = false, parentId }: IProps): any {
+export default function ResponseList({ form, parentId }: IProps): any {
   const { data, error, state, setState } = useGetResponses(form._id, parentId);
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
   const router = useRouter();
-  const { admin = false } = useSelector(({ auth }: any) => auth);
+  const [selectedResponse, setSelectedResponse] = useState(null);
+
   return (
     <>
       <Backdrop open={deleteLoading} />
@@ -51,35 +53,9 @@ export default function ResponseList({ form, hideDelete = false, parentId }: IPr
           <Paper variant="outlined" className="p-5">
             <ErrorLoading error={error} />
           </Paper>
-        ) : form?.settings?.widgetType == 'displayVertical' ? (
+        ) : form?.settings?.responsesView === 'vertical' ? (
           data?.getResponses?.data?.map((response) => (
-            <div className="p-2">
-              <ListItemText
-                primary={`by ${form?.createdBy ? form?.createdBy?.name : 'Unauthorised user'} ${
-                  form?.parentId?.title ? `from ${form?.parentId?.title} page` : ''
-                }`}
-                secondary={`${moment(form?.createdAt).format('l')} ${moment(form?.createdAt).format(
-                  'LT',
-                )}`}
-              />
-              {form?.fields?.map((field, index) => {
-                return (
-                  <div key={field?._id}>
-                    <Typography>{field?.label}</Typography>
-                    {response?.values
-                      ?.filter((v) => v.field === field._id)
-                      .map((value) => (
-                        <div key={value?._id}>
-                          <DisplayValue field={field} value={value} />
-                          {field?.options?.showCommentBox && (
-                            <CommentLikeShare parentId={value?._id} />
-                          )}
-                        </div>
-                      ))}
-                  </div>
-                );
-              })}
-            </div>
+            <ResponseChild3 key={response?._id} hideBreadcrumbs form={form} response={response} />
           ))
         ) : (
           <Table
@@ -100,23 +76,27 @@ export default function ResponseList({ form, hideDelete = false, parentId }: IPr
                 <TableRow key={response._id}>
                   <TableCell>
                     <div className="d-flex">
-                      {!hideDelete && admin && (
-                        <Tooltip title="Delete response">
-                          <IconButton
-                            onClick={() => {
-                              const anwser = confirm(
-                                'Are you sure you want to delete this response',
-                              );
-                              if (anwser) {
-                                handleDelete(response._id, form._id);
-                              }
-                            }}
-                            edge="start"
-                          >
-                            <Delete />
+                      <Authorization _id={[response?.createdBy?._id]} allowAdmin returnNull>
+                        <DeleteButton
+                          onClick={() => handleDelete(response._id, form._id)}
+                          edge="start"
+                        />
+                        <Tooltip title="Open Response">
+                          <IconButton onClick={() => setSelectedResponse(response)} edge="start">
+                            <EditIcon />
                           </IconButton>
                         </Tooltip>
-                      )}
+                        {selectedResponse?._id === response?._id && (
+                          <>
+                            <EditResponseDrawer
+                              open
+                              form={form}
+                              response={selectedResponse}
+                              onClose={() => setSelectedResponse(null)}
+                            />
+                          </>
+                        )}
+                      </Authorization>
                       <Tooltip title="Open Response">
                         <IconButton
                           onClick={() => {
@@ -155,13 +135,4 @@ export default function ResponseList({ form, hideDelete = false, parentId }: IPr
       </TableContainer>
     </>
   );
-}
-
-export function ResponseListWrapper({ formId, parentId }: { formId: string; parentId?: string }) {
-  const { data, error } = useGetForm(formId);
-
-  if (error || !data?.getForm) {
-    return <ErrorLoading error={error} />;
-  }
-  return <ResponseList form={data?.getForm} hideDelete parentId={parentId} />;
 }

@@ -18,7 +18,13 @@ import {
   useNotificationSub,
 } from '@frontend/shared/hooks/notification';
 import { useEffect, useState } from 'react';
-import { Accordion, AccordionDetails, AccordionSummary, ListItemText } from '@material-ui/core';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  ListItemText,
+  Box,
+} from '@material-ui/core';
 import { ExpandMore } from '@material-ui/icons';
 import styled from 'styled-components';
 import CommentModel from './CommentModel';
@@ -28,6 +34,18 @@ const StyledAvatar = styled(Avatar)`
   min-height: 25px;
   margin: 0 auto;
   border: 2px solid ${(props) => props.theme.palette.primary.main};
+`;
+const StyledPopover = styled(Popover)`
+  width: 90% !important;
+  ${(props) => props.theme.breakpoints.up('md')} {
+    width: 50% !important;
+  }
+`;
+const StyledSnackbar = styled(Snackbar)`
+  width: 90% !important;
+  ${(props) => props.theme.breakpoints.up('md')} {
+    width: 50% !important;
+  }
 `;
 
 export default function Notification() {
@@ -48,7 +66,7 @@ export default function Notification() {
           </Badge>
         </IconButton>
       </Tooltip>
-      <Popover
+      <StyledPopover
         className="mt-2"
         open={Boolean(state.showNotification)}
         anchorEl={state.showNotification}
@@ -90,8 +108,8 @@ export default function Notification() {
             <Typography>You don&apos;t have any notifications</Typography>
           )}
         </div>
-      </Popover>
-      <Snackbar
+      </StyledPopover>
+      <StyledSnackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         open={state.showSnack}
         autoHideDuration={4000}
@@ -101,7 +119,7 @@ export default function Notification() {
           onClose={() => setState({ ...state, showSnack: false })}
           notification={state}
         />
-      </Snackbar>
+      </StyledSnackbar>
     </>
   );
 }

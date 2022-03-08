@@ -160,19 +160,6 @@ export default function FieldValueForm2({
         </div>
       );
     }
-    // case 'media': {
-    //   return (
-    //     <div>
-    //       <FormLabel component="legend">Select {label}</FormLabel>
-    //       <ImagePicker state={mediaState} setState={setMediaState} />
-    //       {validateValue(validate, value, options, fieldType).error && (
-    //         <FormHelperText className="text-danger">
-    //           {validateValue(validate, value, options, fieldType).errorMessage}
-    //         </FormHelperText>
-    //       )}
-    //     </div>
-    //   );
-    // }
     case 'select': {
       return (
         <>
@@ -241,7 +228,7 @@ export default function FieldValueForm2({
             country="us"
             preferredCountries={['us']}
             enableSearch
-            value={value ? value.valueNumber : ''}
+            value={value?.valueNumber?.toString() || ''}
             onChange={(phone) => onChange({ field: _id, valueNumber: phone })}
             inputStyle={
               validateValue(validate, value, options, fieldType).error ? { borderColor: 'red' } : {}

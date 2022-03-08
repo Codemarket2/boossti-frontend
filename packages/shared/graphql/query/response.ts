@@ -149,6 +149,7 @@ export const GET_RESPONSES = gql`
           name
         }
         createdAt
+        options
       }
     }
   }

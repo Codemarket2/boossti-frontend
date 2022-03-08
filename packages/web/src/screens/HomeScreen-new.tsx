@@ -131,141 +131,48 @@ export default function Album() {
       <AppBar />
       <main>
         <div className={classes.heroContent}>
-          <Grid container>
-            <Grid item xs={6}>
-              {/* <Typography
-                component="h1"
-                variant="h2"
-                align="center"
-                color="textPrimary"
-                gutterBottom
-              >
-                Best Website Design, Online, Social Media, Offline Marketing Agency
-              </Typography> */}
-              {/*  <Typography variant="h5" align="center" color="textSecondary" paragraph>
-                Co-marketing and co-promotion opportunities to grow your business both local and
-                online.
-              </Typography> */}
-              {cards2.map((card, i) => (
-                <Grid item key={i} xs={12} sm={12} md={12} lg={6}>
-                  <Card className={classes.card}>
-                    <CardMedia
-                      className={classes.cardMedia}
-                      image={card.image}
-                      title={card.title}
-                    />
-                    <CardContent className={classes.cardContent}>
-                      <Typography gutterBottom variant="h5" component="h2">
-                        {card.title}
-                      </Typography>
-                      <Typography>{card.description}</Typography>
-                    </CardContent>
-                    <CardActions>
-                      <Button size="small" color="primary">
-                        805-300-7217
-                      </Button>
-                      <Button size="small" color="primary">
-                        sumi@boossti.com
-                      </Button>
-                    </CardActions>
-                  </Card>
-                </Grid>
-              ))}
-            </Grid>
-            <Grid item xs={12} sm={12} md={6} lg={6}>
-              <div className="text-center">
-                <Button variant="contained" color="primary" className="m-2">
-                  Tell Us About Your Project
-                </Button>
-                <FormPage slug="boossti-interest-form" />
-                {/* <Button variant="outlined" color="primary" className="m-2">
-                805-300-7217
-              </Button> */}
-              </div>
-            </Grid>
-          </Grid>
-        </div>
-        <Container className={classes.cardGrid} maxWidth="md">
-          {/* End hero unit */}
-          <Grid container spacing={4}>
-            {cards.map((card, i) => (
-              <Grid item key={i} xs={12} sm={6} md={4}>
-                <Card className={classes.card}>
-                  <CardMedia className={classes.cardMedia} image={card.image} title={card.title} />
-                  <CardContent className={classes.cardContent}>
-                    <Typography gutterBottom variant="h5" component="h2">
-                      {card.title}
-                    </Typography>
-                    <Typography>{card.description}</Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button size="small" color="primary">
-                      805-300-7217
-                    </Button>
-                    <Button size="small" color="primary">
-                      sumi@boossti.com
-                    </Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
-        <Container maxWidth="sm" component="main" className={classes.heroContent}>
-          <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-            Pricing
-          </Typography>
-          <Typography variant="h5" align="center" color="textSecondary" component="p">
-            Boost your marketing today. Pick a Plan.
-          </Typography>
-        </Container>
-        {/* End hero unit */}
-        <Container maxWidth="md" component="main">
-          <Grid container spacing={5} alignItems="flex-end">
-            {tiers.map((tier) => (
-              // Enterprise card is full width at sm breakpoint
-              <Grid item key={tier.title} xs={12} sm={tier.title === 'Enterprise' ? 12 : 6} md={4}>
-                <Card>
-                  <CardHeader
-                    title={tier.title}
-                    subheader={tier.subheader}
-                    titleTypographyProps={{ align: 'center' }}
-                    subheaderTypographyProps={{ align: 'center' }}
-                    action={tier.title === 'Pro' ? <StarIcon /> : null}
-                    className={classes.cardHeader}
-                  />
-                  <CardContent>
-                    <div className={classes.cardPricing}>
-                      <Typography component="h2" variant="h3" color="textPrimary">
-                        ${tier.price}
-                      </Typography>
-                      <Typography variant="h6" color="textSecondary">
-                        /mo
-                      </Typography>
-                    </div>
-                    <ul>
-                      {tier.description.map((line) => (
-                        <Typography component="li" variant="subtitle1" align="center" key={line}>
-                          {line}
+          <Container className={classes.cardGrid} maxWidth="md">
+            <Grid container spacing={6}>
+              <Grid xs={12} sm={12} md={6} lg={6}>
+                {cards2.map((card, i) => (
+                  <Grid item key={i}>
+                    <Card className={classes.card}>
+                      <CardMedia
+                        className={classes.cardMedia}
+                        image={card.image}
+                        title={card.title}
+                      />
+                      <CardContent className={classes.cardContent}>
+                        <Typography gutterBottom variant="h5" component="h2">
+                          {card.title}
                         </Typography>
-                      ))}
-                    </ul>
-                  </CardContent>
-                  <CardActions>
-                    <Button
-                      fullWidth
-                      // @ts-ignore
-                      variant={tier.buttonVariant}
-                      color="primary"
-                    >
-                      {tier.buttonText}
-                    </Button>
-                  </CardActions>
-                </Card>
+                        <Typography>{card.description}</Typography>
+                      </CardContent>
+                      <CardActions>
+                        <Button size="small" color="primary">
+                          805-300-7217
+                        </Button>
+                        <Button size="small" color="primary">
+                          sumi@boossti.com
+                        </Button>
+                      </CardActions>
+                    </Card>
+                  </Grid>
+                ))}
               </Grid>
-            ))}
-          </Grid>
-        </Container>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <div className="text-center">
+                  <Button variant="contained" color="primary" className="m-2">
+                    Tell Us About Your Project
+                  </Button>
+                  <FormPage slug="boossti-interest-form" />
+                </div>
+              </Grid>
+            </Grid>
+          </Container>
+        </div>
+
+        {/* End hero unit */}
       </main>
       {/* Footer */}
       <footer className={classes.footer}>
