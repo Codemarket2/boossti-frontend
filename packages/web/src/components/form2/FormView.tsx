@@ -14,7 +14,10 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { ArrowBackIosRounded, ArrowForwardIosRounded } from '@material-ui/icons';
 import { getForm } from '@frontend/shared/hooks/form/getForm';
 import { getResponse, useGetResponses } from '@frontend/shared/hooks/response/getResponse';
-import { useCreateUpdateResponse } from '@frontend/shared/hooks/response';
+import {
+  useCreateUpdateResponse,
+  useCreateUpdateResponseParent,
+} from '@frontend/shared/hooks/response';
 import ResponseList from '../response/ResponseList';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
@@ -68,6 +71,12 @@ export default function FormViewWrapper({
     { onAlert },
     parentId,
   );
+
+  const { handleCreateUpdateResponseParent, updateParentLoading } = useCreateUpdateResponseParent(
+    { onAlert },
+    parentId,
+  );
+
   const { data, error, refetch } = useGetResponses(form?._id, parentId);
   const [state, setState] = useState(initialState);
   const [showResponse, setShowResponse] = useState(true);
@@ -88,6 +97,7 @@ export default function FormViewWrapper({
       ...payload,
       options: JSON.stringify(options),
     };
+
     const response = await handleCreateUpdateResponse(payload, form?.fields);
     if (response) {
       let messages = [];
@@ -185,7 +195,7 @@ export default function FormViewWrapper({
                   authRequired={!form?.settings?.authRequired}
                   fields={form?.fields}
                   handleSubmit={handleSubmit}
-                  loading={createLoading}
+                  loading={createLoading || updateParentLoading}
                   fieldWiseView={form?.settings?.widgetType === 'oneField'}
                 />
               </div>
@@ -218,7 +228,7 @@ export default function FormViewWrapper({
               fieldWiseView={form?.settings?.widgetType === 'oneField'}
               fields={form?.fields}
               handleSubmit={handleSubmit}
-              loading={createLoading}
+              loading={createLoading || updateParentLoading}
               onCancel={() => setShowResponse(true)}
             />
           </>
@@ -231,10 +241,27 @@ export default function FormViewWrapper({
             formField={form?.settings?.selectItemField}
             value={state?.selectItemValue}
             onChange={(newValue) => setState({ ...state, selectItemValue: newValue })}
-            error={validateValue(true, state, form?.settings, 'form').error}
-            helperText={validateValue(true, state, form?.settings, 'form').errorMessage}
+            error={
+              validateValue(true, state, form?.settings, 'form').error ||
+              !form?.settings?.selectItemField
+            }
+            helperText={
+              validateValue(true, state, form?.settings, 'form').errorMessage ||
+              (!form?.settings?.selectItemField ? 'Form field not selected' : '')
+            }
           />
-          <Button variant="contained" color="primary">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={async () => {
+              const responseId = state?.selectItemValue?._id;
+
+              const response = await handleCreateUpdateResponseParent({ _id: responseId });
+              if (response) {
+                console.log(response);
+              }
+            }}
+          >
             Submit
           </Button>
         </>
@@ -243,7 +270,7 @@ export default function FormViewWrapper({
           authRequired={!form?.settings?.authRequired}
           fields={form?.fields}
           handleSubmit={handleSubmit}
-          loading={createLoading}
+          loading={createLoading || updateParentLoading}
           fieldWiseView={form?.settings?.widgetType === 'oneField'}
         />
       )}

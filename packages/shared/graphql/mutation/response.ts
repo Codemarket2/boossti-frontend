@@ -84,6 +84,18 @@ export const UPDATE_RESPONSE = gql`
   }
 `;
 
+export const UPDATE_RESPONSE_PARENTID = gql`
+  mutation MyMutation($_id: ID!, $parentId: [ID]) {
+    updateResponse(_id: $_id, parentId: $parentId) {
+      _id
+      parentId {
+        _id
+        title
+      }
+    }
+  }
+`;
+
 export const DELETE_RESPONSE = gql`
   mutation MyMutation($_id: ID!) {
     deleteResponse(_id: $_id)

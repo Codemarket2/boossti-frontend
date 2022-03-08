@@ -17,13 +17,13 @@ export const validateValue = (
 
   switch (fieldType) {
     case 'number': {
-      if (options.required && (!value || !value?.valueNumber)) {
+      if (options?.required && (!value || !value?.valueNumber)) {
         result = { error: true, errorMessage: 'Required' };
       }
       break;
     }
     case 'email': {
-      if (options.required && (!value || !value?.value)) {
+      if (options?.required && (!value || !value?.value)) {
         result = { error: true, errorMessage: 'Required' };
       } else if (value?.value && !validateEmail(value?.value)) {
         result = { error: true, errorMessage: 'Invalid Email' };
@@ -31,7 +31,7 @@ export const validateValue = (
       break;
     }
     case 'phoneNumber': {
-      if (options.required && (!value || !value?.valueNumber)) {
+      if (options?.required && (!value || !value?.valueNumber)) {
         result = { error: true, errorMessage: 'Required' };
       } else if (value?.valueNumber && !(value?.valueNumber?.toString().length >= 11)) {
         result = { error: true, errorMessage: 'Invalid Phone Number' };
@@ -39,42 +39,42 @@ export const validateValue = (
       break;
     }
     case 'checkbox': {
-      if (options.required && (!value || !value?.valueBoolean)) {
+      if (options?.required && (!value || !value?.valueBoolean)) {
         result = { error: true, errorMessage: 'Required' };
       }
       break;
     }
     case 'date':
     case 'dateTime': {
-      if (options.required && (!value || !value?.valueDate)) {
+      if (options?.required && (!value || !value?.valueDate)) {
         result = { error: true, errorMessage: 'Required' };
       }
       break;
     }
     case 'image': {
-      if (options.required && (!value || !(value?.tempMedia?.length > 0))) {
+      if (options?.required && (!value || !(value?.tempMedia?.length > 0))) {
         result = { error: true, errorMessage: 'Required' };
       }
       break;
     }
     case 'media': {
-      if (options.required && (!value || !value?.valueDate)) {
+      if (options?.required && (!value || !value?.valueDate)) {
         result = { error: true, errorMessage: 'Required' };
       }
       break;
     }
     case 'select': {
-      if (options?.optionsListType === 'type' && options.required && (!value || !value?.itemId)) {
+      if (options?.optionsListType === 'type' && options?.required && (!value || !value?.itemId)) {
         result = { error: true, errorMessage: 'Required' };
       } else if (
         options?.optionsListType === 'existingForm' &&
-        options.required &&
+        options?.required &&
         (!value || !value?.response)
       ) {
         result = { error: true, errorMessage: 'Required' };
       } else if (
         !(options?.optionsListType === 'type' || options?.optionsListType === 'existingForm') &&
-        options.required &&
+        options?.required &&
         (!value || !value?.value)
       ) {
         if (options?.showAsCheckbox && value?.values?.length) {
@@ -86,7 +86,7 @@ export const validateValue = (
       break;
     }
     default: {
-      if (options.required && (!value || !value?.value)) {
+      if (options?.required && (!value || !value?.value)) {
         result = { error: true, errorMessage: 'Required' };
       }
       break;
