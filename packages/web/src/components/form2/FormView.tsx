@@ -13,7 +13,7 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { ArrowBackIosRounded, ArrowForwardIosRounded } from '@material-ui/icons';
 import { getForm } from '@frontend/shared/hooks/form/getForm';
-import { getResponse } from '@frontend/shared/hooks/response/getResponse';
+import { getResponse, useGetResponses } from '@frontend/shared/hooks/response/getResponse';
 import { useCreateUpdateResponse } from '@frontend/shared/hooks/response';
 import ResponseList from '../response/ResponseList';
 import InputGroup from '../common/InputGroup';
@@ -55,6 +55,7 @@ const initialState = {
   response: null,
   formModal: false,
   selectItemValue: null,
+  drawer: false,
 };
 
 export default function FormViewWrapper({
@@ -67,6 +68,7 @@ export default function FormViewWrapper({
     { onAlert },
     parentId,
   );
+  const { data, error, refetch } = useGetResponses(form?._id, parentId);
   const [state, setState] = useState(initialState);
   const [showResponse, setShowResponse] = useState(true);
   const authenticated = useSelector(({ auth }: any) => auth.authenticated);
@@ -123,6 +125,25 @@ export default function FormViewWrapper({
           <Typography variant="h4">{form?.name}</Typography>
         </InputGroup>
       )}
+      {!['onlyPageOwner', 'displayResponses'].includes(form?.settings?.widgetType) && (
+        <>
+          <div className="text-center">
+            <Button variant="outlined" onClick={() => setState({ ...state, drawer: true })}>
+              {`${data?.getResponses?.count} Responses`}
+            </Button>
+          </div>
+          {state.drawer && (
+            <Overlay
+              minWidth="85vw"
+              title="Responses"
+              open={state.drawer}
+              onClose={() => setState({ ...state, drawer: false })}
+            >
+              <ResponseList form={form} parentId={parentId} />
+            </Overlay>
+          )}
+        </>
+      )}
       {state.submitted ? (
         <Overlay
           onClose={() => {
@@ -171,10 +192,9 @@ export default function FormViewWrapper({
             </Overlay>
           )}
         </>
-      ) : form?.settings?.widgetType === 'displayVertical' ? (
+      ) : form?.settings?.widgetType === 'displayResponses' ? (
         showResponse ? (
           <>
-            <ResponseList form={form} />
             {authenticated && (
               <Button
                 className="mt-2"
@@ -189,6 +209,7 @@ export default function FormViewWrapper({
                 Add Response
               </Button>
             )}
+            <ResponseList form={form} parentId={parentId} />
           </>
         ) : (
           <>
@@ -198,42 +219,7 @@ export default function FormViewWrapper({
               fields={form?.fields}
               handleSubmit={handleSubmit}
               loading={createLoading}
-              viewResponse={() => {
-                setShowResponse(true);
-              }}
-            />
-          </>
-        )
-      ) : form?.settings?.widgetType === 'displayResponses' ? (
-        showResponse ? (
-          <>
-            <ResponseList form={form} />
-            {authenticated && (
-              <Button
-                className="mt-2"
-                size="small"
-                color="primary"
-                variant="contained"
-                onClick={() => {
-                  setShowResponse(false);
-                }}
-                startIcon={<AddIcon />}
-              >
-                Add Response
-              </Button>
-            )}
-          </>
-        ) : (
-          <>
-            <FormView
-              authRequired={!form?.settings?.authRequired}
-              fieldWiseView={form?.settings?.widgetType === 'oneField'}
-              fields={form?.fields?.map((fld) => ({ ...fld, form }))}
-              handleSubmit={handleSubmit}
-              loading={createLoading}
-              viewResponse={() => {
-                setShowResponse(true);
-              }}
+              onCancel={() => setShowResponse(true)}
             />
           </>
         )
@@ -604,19 +590,6 @@ export function FormView({
               >
                 Submit
               </LoadingButton>
-              {viewResponse && (
-                <Button
-                  className="ml-3"
-                  size="small"
-                  color="primary"
-                  variant="contained"
-                  onClick={() => {
-                    viewResponse();
-                  }}
-                >
-                  Back
-                </Button>
-              )}
               {onCancel && (
                 <Button
                   variant="outlined"

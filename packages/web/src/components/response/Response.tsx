@@ -124,10 +124,12 @@ export function ResponseChild3({
   });
   const { editMode } = useSelector(({ setting }: any) => setting);
 
+  const hideLeftNavigation = !(hideAuthor || hideNavigation || hideBreadcrumbs);
+
   return (
     <>
       <BackdropComponent open={deleteLoading} />
-      {!hideBreadcrumbs && (
+      {!hideBreadcrumbs ? (
         <div className="d-flex justify-content-between align-items-center">
           {!hideNavigation && (
             <Breadcrumbs>
@@ -144,38 +146,50 @@ export function ResponseChild3({
               </>
             )}
             {authorized && (
-              <>
-                <Tooltip title="Edit Response">
-                  <IconButton onClick={(e) => setState({ ...state, showMenu: e.currentTarget })}>
-                    <EditIcon />
-                  </IconButton>
-                </Tooltip>
-                <CRUDMenu
-                  show={state.showMenu}
-                  onEdit={() => setState({ ...state, showMenu: null, edit: true })}
-                  onDelete={() => {
-                    setState({ ...state, showMenu: null });
-                    handleDelete(response?._id, form?._id);
-                  }}
-                  onClose={() => setState({ ...state, showMenu: null })}
-                />
-                {state.edit && (
-                  <EditResponseDrawer
-                    form={form}
-                    response={response}
-                    open={state.edit}
-                    onClose={() => {
-                      setState({ ...state, edit: false });
-                    }}
-                  />
-                )}
-              </>
+              <Tooltip title="Edit Response">
+                <IconButton onClick={(e) => setState({ ...state, showMenu: e.currentTarget })}>
+                  <EditIcon />
+                </IconButton>
+              </Tooltip>
             )}
           </div>
         </div>
+      ) : (
+        authorized && (
+          <Tooltip title="Edit Response">
+            <IconButton onClick={(e) => setState({ ...state, showMenu: e.currentTarget })}>
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+        )
+      )}
+      {authorized && (
+        <>
+          <CRUDMenu
+            show={state.showMenu}
+            onEdit={() => setState({ ...state, showMenu: null, edit: true })}
+            onDelete={() => {
+              setState({ ...state, showMenu: null });
+              handleDelete(response?._id, form?._id);
+            }}
+            onClose={() => setState({ ...state, showMenu: null })}
+          />
+          {state.edit && (
+            <>
+              <EditResponseDrawer
+                form={form}
+                response={response}
+                open={state.edit}
+                onClose={() => {
+                  setState({ ...state, edit: false });
+                }}
+              />
+            </>
+          )}
+        </>
       )}
       <Grid container spacing={1}>
-        {!(hideAuthor || hideNavigation || hideBreadcrumbs) && (
+        {hideLeftNavigation && (
           <Grid item xs={3}>
             <div
               className={`d-flex ${
@@ -202,10 +216,10 @@ export function ResponseChild3({
             </div>
           </Grid>
         )}
-        <Grid item xs={hideAuthor ? 12 : 9}>
+        <Grid item xs={!hideLeftNavigation ? 12 : 9}>
           <Paper
             variant="outlined"
-            style={hideAuthor ? { border: 'none' } : {}}
+            style={!hideLeftNavigation ? { border: 'none' } : {}}
             className={`d-flex ${
               section?.options?.belowResponse ? 'flex-column-reverse' : 'flex-column'
             }`}

@@ -15,7 +15,7 @@ import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
 import { DisplayForm } from './FormSection';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
-import { getForm } from '@frontend/shared/hooks/form';
+// import { getForm } from '@frontend/shared/hooks/form';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
@@ -49,41 +49,41 @@ export default function FormFieldsValue({
   onLayoutChange,
 }: IProps) {
   const [state, setState] = useState(initialState);
-  const [height, setheight] = useState([]);
+  // const [height, setheight] = useState([]);
   // const [layout, setLayout] = useState({});
 
   const setInitialState = () => setState(initialState);
 
-  const countFormHeight = (forms) => {
-    let formHeights = [];
-    forms.map(async (form) => {
-      let height = 128; //default height for each form
-      let pageForm = await getForm(form.form._id);
-      pageForm.fields.map((field) => {
-        console.log(field);
-        if (
-          field.fieldType == 'text' ||
-          field.fieldType == 'number' ||
-          field.fieldType == 'password' ||
-          field.fieldType == 'checkbox' ||
-          field.fieldType == 'select' ||
-          field.fieldType == 'email' ||
-          field.fieldType == 'dateTime' ||
-          field.fieldType == 'phoneNumber'
-        ) {
-          height = height + 85.25;
-        }
-        if (field.fieldType == 'textarea' || field.fieldType == 'richTextarea') {
-          height = height + 156.5;
-        }
-      });
-      formHeights.push(height);
-    });
-    setTimeout(() => {
-      console.log(formHeights);
-    }, 3000);
-    return formHeights;
-  };
+  // const countFormHeight = (forms) => {
+  //   let formHeights = [];
+  //   forms.map(async (form) => {
+  //     let height = 128; //default height for each form
+  //     let pageForm = await getForm(form.form._id);
+  //     pageForm.fields.map((field) => {
+  //       console.log(field);
+  //       if (
+  //         field.fieldType == 'text' ||
+  //         field.fieldType == 'number' ||
+  //         field.fieldType == 'password' ||
+  //         field.fieldType == 'checkbox' ||
+  //         field.fieldType == 'select' ||
+  //         field.fieldType == 'email' ||
+  //         field.fieldType == 'dateTime' ||
+  //         field.fieldType == 'phoneNumber'
+  //       ) {
+  //         height = height + 85.25;
+  //       }
+  //       if (field.fieldType == 'textarea' || field.fieldType == 'richTextarea') {
+  //         height = height + 156.5;
+  //       }
+  //     });
+  //     formHeights.push(height);
+  //   });
+  //   setTimeout(() => {
+  //     console.log(formHeights);
+  //   }, 3000);
+  //   return formHeights;
+  // };
 
   const handleSubmit = async (tempValues: any) => {
     let newValues = values ? [...values] : [];
@@ -104,11 +104,11 @@ export default function FormFieldsValue({
     await handleValueChange({ values: newValues }, setInitialState);
   };
 
-  useEffect(() => {
-    setTimeout(() => {
-      setheight(countFormHeight(fields));
-    }, 2000);
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setheight(countFormHeight(fields));
+  //   }, 2000);
+  // }, []);
 
   return (
     <div className="p-2">
