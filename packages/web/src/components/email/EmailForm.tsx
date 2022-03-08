@@ -30,7 +30,6 @@ export default function EmailForm() {
 
   const handleChange = (event) => {
     setChecked(event.target.checked);
-    formik.handleReset('');
   };
   console.log(formik.values);
   const handleSubmit = (e) => {
@@ -45,18 +44,33 @@ export default function EmailForm() {
   };
   return (
     <>
-      <FormGroup>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={checked}
-              onChange={handleChange}
-              inputProps={{ 'aria-label': 'controlled' }}
-            />
-          }
-          label="Select Mailing List"
-        />
-      </FormGroup>
+      <div style={{ display: 'flex' }}>
+        <FormGroup>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={checked}
+                onChange={handleChange}
+                inputProps={{ 'aria-label': 'controlled' }}
+              />
+            }
+            label="Select Mailing List"
+          />
+        </FormGroup>
+        <FormGroup style={{ marginLeft: '40px' }}>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={formik.values.sendIndividual}
+                name="sendIndividual"
+                onChange={formik.handleChange}
+                inputProps={{ 'aria-label': 'controlled' }}
+              />
+            }
+            label="Send Email one by one"
+          />
+        </FormGroup>
+      </div>
       <form className="px-2" onSubmit={handleSubmit}>
         {/* <InputGroup>
           <TextField

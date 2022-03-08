@@ -7,6 +7,7 @@ export const CREATE_SEND_EMAIL = gql`
     $subject: String!
     $receiverEmail: [String]
     $mailingList: String
+    $sendIndividual: Boolean
   ) {
     createSendEmail(
       body: $body
@@ -14,6 +15,7 @@ export const CREATE_SEND_EMAIL = gql`
       subject: $subject
       receiverEmail: $receiverEmail
       mailingList: $mailingList
+      sendIndividual: $sendIndividual
     ) {
       _id
       body

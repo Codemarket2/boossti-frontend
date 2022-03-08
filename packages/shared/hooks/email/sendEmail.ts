@@ -25,6 +25,7 @@ interface IFormValues {
   mailingList: string;
   subject: string;
   body: string;
+  sendIndividual: boolean;
 }
 
 const defaultFormValues = {
@@ -33,6 +34,7 @@ const defaultFormValues = {
   senderEmail: '',
   subject: '',
   body: '',
+  sendIndividual: false,
 };
 
 export function useSendEmail(): any {
@@ -48,8 +50,10 @@ export function useSendEmail(): any {
           senderEmail: payload.senderEmail,
           subject: payload.subject,
           body: payload.body,
+          sendIndividual: payload.sendIndividual,
         };
         await createSendEmail({ variables: newPayload });
+        console.log(payload);
         // await onSend(newPayload);
         formik.handleReset('');
       } catch (error) {
@@ -70,6 +74,7 @@ export function useSendEmail(): any {
     formik.setFieldValue('body', form.body, false);
     formik.setFieldValue('receiverEmail', form.receiverEmail, false);
     formik.setFieldValue('senderEmail', form.senderEmail, false);
+    formik.setFieldValue('sendIndividual', form.sendIndividual, false);
   };
   const formLoading = loading || formik.isSubmitting;
   return { formik, formLoading, setFormValues };
