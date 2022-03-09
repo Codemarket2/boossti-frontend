@@ -18301,6 +18301,13 @@ react-grid-layout@^1.3.4:
     react-draggable "^4.0.0"
     react-resizable "^3.0.4"
 
+react-height@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/react-height/-/react-height-3.0.2.tgz#a08568f9f75feef5296a057d4161743c414abacb"
+  integrity sha512-tv9wUx95wbFONvRfq0lJjIrEI5QSwa28tSK3m0spuc3YAiz6nJDCVRK5k6VgE4xyQGvr7C1tAzwNTWxwf1bHow==
+  dependencies:
+    prop-types "^15.5.8"
+
 react-helmet-async@^1.0.7:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/react-helmet-async/-/react-helmet-async-1.2.2.tgz#38d58d32ebffbc01ba42b5ad9142f85722492389"

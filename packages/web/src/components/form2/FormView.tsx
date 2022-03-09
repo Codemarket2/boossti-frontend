@@ -38,6 +38,7 @@ interface IProps {
   createCallback?: (response: any) => void;
   setResponded?: () => void;
   isPageOwner?: boolean;
+  layouts?: any;
 }
 
 export const defualtValue = {
@@ -67,6 +68,7 @@ export default function FormViewWrapper({
   parentId,
   createCallback,
   setResponded,
+  layouts,
   isPageOwner,
 }: IProps): any {
   const { handleCreateUpdateResponse, createLoading } = useCreateUpdateResponse(
@@ -276,7 +278,7 @@ export default function FormViewWrapper({
       {canViewResponses &&
         form?.settings?.widgetType !== 'form' &&
         form?.settings?.responsesView !== 'button' && (
-          <ResponseList form={form} parentId={parentId} />
+          <ResponseList layouts={layouts} form={form} parentId={parentId} />
         )}
     </div>
   );

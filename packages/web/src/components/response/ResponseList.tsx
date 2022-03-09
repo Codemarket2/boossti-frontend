@@ -24,18 +24,26 @@ import Authorization from '../common/Authorization';
 import DeleteButton from '../common/DeleteButton';
 import { ResponseChild3 } from './Response';
 import EditResponseDrawer from './EditResponseDrawer';
+import { ReactHeight } from 'react-height';
+import Button from '@material-ui/core/Button';
+import Overlay from '../common/Overlay';
 
 interface IProps {
   form: any;
   parentId?: string;
+  layouts?: any;
 }
 
-export default function ResponseList({ form, parentId }: IProps): any {
+export default function ResponseList({ form, parentId, layouts }: IProps): any {
   const { data, error, state, setState } = useGetResponses(form._id, parentId);
+  const [height, setHeight] = useState(0);
+  const gridHeight = layouts?.lg[0].h * 36.5;
+  const [show, setShow] = useState(false);
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
   const router = useRouter();
   const [selectedResponse, setSelectedResponse] = useState(null);
-
+  console.log(layouts);
+  console.log(layouts?.lg[0].h);
   return (
     <>
       <Backdrop open={deleteLoading} />
@@ -54,9 +62,49 @@ export default function ResponseList({ form, parentId }: IProps): any {
             <ErrorLoading error={error} />
           </Paper>
         ) : form?.settings?.responsesView === 'vertical' ? (
-          data?.getResponses?.data?.map((response) => (
-            <ResponseChild3 key={response?._id} hideBreadcrumbs form={form} response={response} />
-          ))
+          <>
+            <div style={{ height: `${gridHeight}px`, overflow: 'hidden' }}>
+              <Overlay
+                open={show}
+                onClose={() => {
+                  setShow(false);
+                }}
+              >
+                {data?.getResponses?.data?.map((response) => (
+                  <ResponseChild3
+                    key={response?._id}
+                    hideBreadcrumbs
+                    form={form}
+                    response={response}
+                  />
+                ))}
+              </Overlay>
+              <ReactHeight onHeightReady={(height) => setHeight(height)}>
+                {gridHeight < height && (
+                  <Button
+                    className="mr-5"
+                    style={{ float: 'right' }}
+                    size="small"
+                    color="primary"
+                    variant="contained"
+                    onClick={() => {
+                      setShow(true);
+                    }}
+                  >
+                    view more
+                  </Button>
+                )}
+                {data?.getResponses?.data?.map((response) => (
+                  <ResponseChild3
+                    key={response?._id}
+                    hideBreadcrumbs
+                    form={form}
+                    response={response}
+                  />
+                ))}
+              </ReactHeight>
+            </div>
+          </>
         ) : (
           <Table
             aria-label="response table"

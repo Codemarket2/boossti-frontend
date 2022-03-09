@@ -9,6 +9,7 @@ interface IProps {
   createCallback?: (response: any) => void;
   customSettings?: any;
   isPageOwner?: boolean;
+  layouts?: any;
 }
 
 export default function FormViewWrapper({
@@ -17,6 +18,7 @@ export default function FormViewWrapper({
   createCallback,
   customSettings,
   isPageOwner,
+  layouts,
 }: IProps): any {
   const { error, data } = useGetForm(formId);
 
@@ -34,6 +36,7 @@ export default function FormViewWrapper({
       parentId={parentId}
       createCallback={createCallback}
       isPageOwner={isPageOwner}
+      layouts={layouts}
     />
   );
 }
