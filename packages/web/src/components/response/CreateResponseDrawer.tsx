@@ -1,5 +1,5 @@
 import Overlay from '../common/Overlay';
-import FieldViewWrapper from '../form2/FieldViewWrapper';
+import FormViewWrapper from '../form2/FormViewWrapper';
 
 interface IProps {
   open: boolean;
@@ -19,7 +19,7 @@ export default function CreateResponseDrawer({
   return (
     <Overlay open={open} onClose={onClose} title={`Create new ${title}`}>
       <div className="p-2">
-        <FieldViewWrapper _id={formId} createCallback={createCallback} customSettings={null} />
+        <FormViewWrapper formId={formId} createCallback={createCallback} customSettings={null} />
       </div>
     </Overlay>
   );

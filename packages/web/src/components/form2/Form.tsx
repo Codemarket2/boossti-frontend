@@ -15,7 +15,9 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Tooltip from '@material-ui/core/Tooltip';
 import { useUpdateForm, useDeleteForm } from '@frontend/shared/hooks/form';
+import { useAuthorization } from '@frontend/shared/hooks/auth';
 import Link from 'next/link';
+import Container from '@material-ui/core/Container';
 import ErrorLoading from '../common/ErrorLoading';
 import Breadcrumbs from '../common/Breadcrumbs';
 import Backdrop from '../common/Backdrop';
@@ -25,11 +27,12 @@ import FormSetting from './FormSetting';
 import ResponseList from '../response/ResponseList';
 import Actions from './Actions';
 import { onAlert } from '../../utils/alert';
-import Authorization from '../common/Authorization';
 import InlineInput from '../common/InlineInput';
 import { QRButton } from '../qrcode/QRButton';
 import ResponseLayout from '../response/ResponseLayout';
 import BulkUploadAction from './BulkUploadAction';
+import NotFound from '../common/NotFound';
+import UnAuthorised from '../common/UnAuthorised';
 
 interface IProps {
   _id: string;
@@ -53,9 +56,10 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
   });
 
   const router = useRouter();
+  const authorized = useAuthorization([state?.createdBy?._id], true);
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(window?.location?.href?.replace('forms', 'form'));
+    navigator.clipboard.writeText(window?.location?.href);
     setOptions({
       ...options,
       snackBar: 'Link copied to clipboard',
@@ -91,134 +95,153 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
     return <ErrorLoading error={error} />;
   }
 
-  return (
-    <Authorization _id={[state?.createdBy?._id]} allowAdmin>
-      {options.backdrop && <Backdrop open />}
-      <div style={{ width: '100%' }}>
-        <Snackbar
-          open={Boolean(options.snackBar)}
-          autoHideDuration={4000}
-          onClose={() => setOptions({ ...options, snackBar: '' })}
-          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        >
-          <Alert onClose={() => setOptions({ ...options, snackBar: '' })} severity="success">
-            {options.snackBar}
-          </Alert>
-        </Snackbar>
-        {drawerMode ? (
-          <Typography variant="h5" className="py-2">
-            <InlineInput
-              placeholder="Form Name"
-              value={state?.name}
-              onChange={(e) => handleOnChange({ name: e.target.value })}
-            />
-          </Typography>
-        ) : (
-          <div className="d-sm-flex justify-content-between align-items-center">
-            <Breadcrumbs>
-              <Link href="/forms">Forms</Link>
+  if (authorized) {
+    return (
+      <>
+        {options.backdrop && <Backdrop open />}
+        <div style={{ width: '100%' }}>
+          <Snackbar
+            open={Boolean(options.snackBar)}
+            autoHideDuration={4000}
+            onClose={() => setOptions({ ...options, snackBar: '' })}
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          >
+            <Alert onClose={() => setOptions({ ...options, snackBar: '' })} severity="success">
+              {options.snackBar}
+            </Alert>
+          </Snackbar>
+          {drawerMode ? (
+            <Typography variant="h5" className="py-2">
               <InlineInput
                 placeholder="Form Name"
                 value={state?.name}
-                onChange={async (e) => {
-                  setOptions({ ...options, backdrop: true });
-                  const newSlug = await handleUpdateName(e.target.value);
-                  setOptions({ ...options, backdrop: false });
-                  if (newSlug && onSlugChange) {
-                    onSlugChange(newSlug);
+                onChange={(e) => handleOnChange({ name: e.target.value })}
+              />
+            </Typography>
+          ) : (
+            <div className="d-sm-flex justify-content-between align-items-center">
+              <Breadcrumbs>
+                <Link href="/forms">Forms</Link>
+                <InlineInput
+                  placeholder="Form Name"
+                  value={state?.name}
+                  onChange={async (e) => {
+                    setOptions({ ...options, backdrop: true });
+                    const newSlug = await handleUpdateName(e.target.value);
+                    setOptions({ ...options, backdrop: false });
+                    if (newSlug && onSlugChange) {
+                      onSlugChange(newSlug);
+                    }
+                  }}
+                />
+              </Breadcrumbs>
+              <div className="d-flex  align-items-center">
+                {updateLoading && <CircularProgress size={25} />}
+                <QRButton />
+                <Tooltip title="Copy form link">
+                  <IconButton className="ml-2" onClick={handleCopyLink}>
+                    <ShareIcon />
+                  </IconButton>
+                </Tooltip>
+                <FormControlLabel
+                  className="m-0"
+                  control={
+                    <Switch
+                      color="primary"
+                      checked={state?.settings?.published}
+                      onChange={handlePublish}
+                    />
                   }
-                }}
-              />
-            </Breadcrumbs>
-            <div className="d-flex  align-items-center">
-              {updateLoading && <CircularProgress size={25} />}
-              <QRButton />
-              <Tooltip title="Copy form link">
-                <IconButton className="ml-2" onClick={handleCopyLink}>
-                  <ShareIcon />
-                </IconButton>
-              </Tooltip>
-              <FormControlLabel
-                className="m-0"
-                control={
-                  <Switch
-                    color="primary"
-                    checked={state?.settings?.published}
-                    onChange={handlePublish}
-                  />
-                }
-                label="Publish"
-              />
-              <Tooltip title="Delete">
-                <IconButton edge="end" onClick={onDelete}>
-                  <DeleteIcon />
-                </IconButton>
-              </Tooltip>
+                  label="Publish"
+                />
+                <Tooltip title="Delete">
+                  <IconButton edge="end" onClick={onDelete}>
+                    <DeleteIcon />
+                  </IconButton>
+                </Tooltip>
+              </div>
             </div>
-          </div>
-        )}
-        <Grid container spacing={1} style={{ minHeight: 'calc(100vh - 130px)' }}>
-          <Grid item xs={12} md={4}>
-            <FormFields
-              fields={state.fields}
-              setFields={(newFields) => handleOnChange({ fields: newFields })}
-            />
-          </Grid>
-          <Grid item xs={12} md={8}>
-            <Paper variant="outlined">
-              <Tabs
-                variant="scrollable"
-                value={options.currentTab}
-                indicatorColor="primary"
-                textColor="primary"
-                onChange={(event, newValue) => setOptions({ ...options, currentTab: newValue })}
-              >
-                <Tab label="Preview" value="preview" />
-                <Tab label="Settings" value="settings" />
-                <Tab label="Actions" value="actions" />
-                <Tab label="Workflows" value="workflows" />
-                <Tab label="Responses" value="responses" />
-              </Tabs>
-            </Paper>
-            {options.currentTab === 'preview' && (
-              <Paper variant="outlined" className="px-2">
-                <FormView form={state} />
+          )}
+          <Grid container spacing={1} style={{ minHeight: 'calc(100vh - 130px)' }}>
+            <Grid item xs={12} md={4}>
+              <FormFields
+                fields={state.fields}
+                setFields={(newFields) => handleOnChange({ fields: newFields })}
+              />
+            </Grid>
+            <Grid item xs={12} md={8}>
+              <Paper variant="outlined">
+                <Tabs
+                  variant="scrollable"
+                  value={options.currentTab}
+                  indicatorColor="primary"
+                  textColor="primary"
+                  onChange={(event, newValue) => setOptions({ ...options, currentTab: newValue })}
+                >
+                  <Tab label="Preview" value="preview" />
+                  <Tab label="Settings" value="settings" />
+                  <Tab label="Actions" value="actions" />
+                  <Tab label="Workflows" value="workflows" />
+                  <Tab label="Responses" value="responses" />
+                </Tabs>
               </Paper>
-            )}
-            {options.currentTab === 'settings' && (
-              <>
-                <FormSetting
-                  formId={_id}
-                  settings={state.settings}
-                  onChange={(settings) =>
-                    handleOnChange({
-                      settings: { ...state.settings, ...settings },
-                    })
-                  }
-                />
-              </>
-            )}
-            {options.currentTab === 'workflows' && <ResponseLayout _id={_id} />}
-            {options.currentTab === 'responses' && <ResponseList form={state} />}
-            {options.currentTab === 'actions' && (
-              <>
-                <Actions
-                  fields={state?.fields}
-                  settings={state?.settings}
-                  onChange={(actions) =>
-                    handleOnChange({
-                      settings: { ...state.settings, actions },
-                    })
-                  }
-                />
-                <Paper variant="outlined">
-                  <BulkUploadAction form={state} />
+              {options.currentTab === 'preview' && (
+                <Paper variant="outlined" className="px-2">
+                  <FormView form={state} />
                 </Paper>
-              </>
-            )}
+              )}
+              {options.currentTab === 'settings' && (
+                <>
+                  <FormSetting
+                    formId={_id}
+                    settings={state.settings}
+                    onChange={(settings) =>
+                      handleOnChange({
+                        settings: { ...state.settings, ...settings },
+                      })
+                    }
+                  />
+                </>
+              )}
+              {options.currentTab === 'workflows' && <ResponseLayout _id={_id} />}
+              {options.currentTab === 'responses' && <ResponseList form={state} />}
+              {options.currentTab === 'actions' && (
+                <>
+                  <Actions
+                    fields={state?.fields}
+                    settings={state?.settings}
+                    onChange={(actions) =>
+                      handleOnChange({
+                        settings: { ...state.settings, actions },
+                      })
+                    }
+                  />
+                  <Paper variant="outlined">
+                    <BulkUploadAction form={state} />
+                  </Paper>
+                </>
+              )}
+            </Grid>
           </Grid>
-        </Grid>
-      </div>
-    </Authorization>
-  );
+        </div>
+      </>
+    );
+  }
+
+  if (
+    state?.settings?.published &&
+    (state?.settings?.whoCanViewResponses === 'all' || state?.settings?.whoCanSubmit === 'all')
+  ) {
+    return (
+      <Container>
+        <FormView form={state} />
+      </Container>
+    );
+  }
+
+  if (state?.settings?.published) {
+    return <UnAuthorised />;
+  }
+
+  return <NotFound />;
 }

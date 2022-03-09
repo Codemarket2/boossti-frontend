@@ -12,7 +12,7 @@ import { FormView } from './FormView';
 import DisplayValue from './DisplayValue';
 import BackdropComponent from '../common/Backdrop';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
-import { DisplayForm } from './FormSection';
+import FormViewWrapper from './FormViewWrapper';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 // import { getForm } from '@frontend/shared/hooks/form';
@@ -131,11 +131,11 @@ export default function FormFieldsValue({
                 <>
                   <Typography className="mt-2">{field.label}</Typography>
                   {field.form?._id && (
-                    <DisplayForm
+                    <FormViewWrapper
                       formId={field.form?._id}
                       parentId={pageId}
-                      authorized={authorized}
                       customSettings={field?.options?.settings?.active && field?.options?.settings}
+                      isPageOwner={authorized}
                     />
                   )}
                 </>
