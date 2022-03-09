@@ -194,13 +194,13 @@ export default function FormSetting({ formId, settings, onChange, isSection }: I
           <FormControlLabel
             control={
               <Checkbox
-                checked={settings?.showResponses ?? false}
-                onChange={({ target }) => onChange({ showResponses: target.checked })}
+                checked={settings?.onlyMyResponses ?? false}
+                onChange={({ target }) => onChange({ onlyMyResponses: target.checked })}
                 name="showFormResponses"
                 color="primary"
               />
             }
-            label="Users can view all form responses"
+            label="Users can view only their own responses"
           />
         </>
       )}

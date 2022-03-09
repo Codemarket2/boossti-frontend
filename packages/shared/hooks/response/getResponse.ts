@@ -13,7 +13,12 @@ export const defaultQueryVariables = {
   formField: null,
 };
 
-export function useGetResponses(formId: string, parentId: string = null, formField = null) {
+export function useGetResponses(
+  formId: string,
+  parentId: string = null,
+  formField = null,
+  onlyMy = false,
+) {
   const [subsribed, setSubsribed] = useState(false);
   const [state, setState] = useState({
     ...defaultQueryVariables,
@@ -22,7 +27,7 @@ export function useGetResponses(formId: string, parentId: string = null, formFie
   });
 
   const { data, error, loading, subscribeToMore, refetch } = useQuery(GET_RESPONSES, {
-    variables: { ...state, formId, parentId },
+    variables: { ...state, formId, parentId, onlyMy },
     fetchPolicy: 'cache-and-network',
   });
 

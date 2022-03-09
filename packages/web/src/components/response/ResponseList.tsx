@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useGetForm } from '@frontend/shared/hooks/form';
 import { useRouter } from 'next/router';
 import moment from 'moment';
 import Paper from '@material-ui/core/Paper';
@@ -16,6 +15,8 @@ import IconButton from '@material-ui/core/IconButton';
 import LaunchIcon from '@material-ui/icons/Launch';
 import EditIcon from '@material-ui/icons/Edit';
 import { useGetResponses, useDeleteResponse } from '@frontend/shared/hooks/response';
+import { ReactHeight } from 'react-height';
+import Button from '@material-ui/core/Button';
 import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
@@ -24,18 +25,27 @@ import Authorization from '../common/Authorization';
 import DeleteButton from '../common/DeleteButton';
 import { ResponseChild3 } from './Response';
 import EditResponseDrawer from './EditResponseDrawer';
-import { ReactHeight } from 'react-height';
-import Button from '@material-ui/core/Button';
 import Overlay from '../common/Overlay';
 
 interface IProps {
   form: any;
   parentId?: string;
   layouts?: any;
+  showOnlyMyResponses?: boolean;
 }
 
-export default function ResponseList({ form, parentId, layouts }: IProps): any {
-  const { data, error, state, setState } = useGetResponses(form._id, parentId);
+export default function ResponseList({
+  form,
+  parentId,
+  layouts,
+  showOnlyMyResponses,
+}: IProps): any {
+  const { data, error, state, setState } = useGetResponses(
+    form._id,
+    parentId,
+    null,
+    showOnlyMyResponses,
+  );
   const [height, setHeight] = useState(0);
   let gridHeight = 0;
   if (layouts) {
