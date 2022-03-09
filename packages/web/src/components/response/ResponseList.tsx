@@ -49,27 +49,27 @@ export default function ResponseList({ form, parentId, layouts }: IProps): any {
   let gridHeight = 0;
   if (layouts?.lg) {
     if (windowWidth < 650) {
-      if (layouts?.xxs[0]) {
+      if (layouts?.xxs) {
         gridHeight = layouts?.xxs[0].h * 38.5;
       }
     }
     if (650 < windowWidth && windowWidth < 1000) {
-      if (layouts?.xs[0]) {
+      if (layouts?.xs) {
         gridHeight = layouts?.xs[0].h * 38.5;
       }
     }
     if (1000 < windowWidth && windowWidth < 1280) {
-      if (layouts?.sm[0]) {
+      if (layouts?.sm) {
         gridHeight = layouts?.sm[0].h * 38.5;
       }
     }
     if (1280 < windowWidth && windowWidth < 1520) {
-      if (layouts?.md[0]) {
+      if (layouts?.md) {
         gridHeight = layouts?.md[0].h * 38.5;
       }
     }
     if (1520 < windowWidth) {
-      if (layouts?.lg[0]) {
+      if (layouts?.lg) {
         gridHeight = layouts?.lg[0].h * 38.5;
       }
     }
