@@ -37,13 +37,18 @@ interface IProps {
 export default function ResponseList({ form, parentId, layouts }: IProps): any {
   const { data, error, state, setState } = useGetResponses(form._id, parentId);
   const [height, setHeight] = useState(0);
-  const gridHeight = layouts?.lg[0].h * 36.5;
+  let gridHeight = 0;
+  if (layouts) {
+    if (layouts?.lg) {
+      if (layouts?.lg[0]) {
+        gridHeight = layouts?.lg[0].h * 38.5;
+      }
+    }
+  }
   const [show, setShow] = useState(false);
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
   const router = useRouter();
   const [selectedResponse, setSelectedResponse] = useState(null);
-  console.log(layouts);
-  console.log(layouts?.lg[0].h);
   return (
     <>
       <Backdrop open={deleteLoading} />
