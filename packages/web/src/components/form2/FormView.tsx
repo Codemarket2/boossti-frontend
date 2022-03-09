@@ -259,7 +259,7 @@ export default function FormViewWrapper({
                       }
                     }}
                   >
-                    Submit kdk
+                    Submit
                   </Button>
                 </>
               ) : (
