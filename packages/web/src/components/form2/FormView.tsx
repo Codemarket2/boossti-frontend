@@ -37,6 +37,7 @@ interface IProps {
   parentId?: string;
   createCallback?: (response: any) => void;
   setResponded?: () => void;
+  isPageOwner?: boolean;
 }
 
 export const defualtValue = {
@@ -66,6 +67,7 @@ export default function FormViewWrapper({
   parentId,
   createCallback,
   setResponded,
+  isPageOwner,
 }: IProps): any {
   const { handleCreateUpdateResponse, createLoading } = useCreateUpdateResponse(
     { onAlert },
@@ -79,9 +81,7 @@ export default function FormViewWrapper({
 
   const { data, error, refetch } = useGetResponses(form?._id, parentId);
   const [state, setState] = useState(initialState);
-  const [showResponse, setShowResponse] = useState(true);
   const authenticated = useSelector(({ auth }: any) => auth.authenticated);
-
   const [showOverlayResult, setShowOverlayResult] = useState(true);
 
   const handleSubmit = async (values) => {
@@ -117,6 +117,7 @@ export default function FormViewWrapper({
             }),
         );
       }
+      await refetch();
       setState({ ...state, submitted: true, formModal: false, messages, response });
       if (createCallback) {
         createCallback(response);
@@ -128,6 +129,23 @@ export default function FormViewWrapper({
     return response;
   };
 
+  let canSubmit = authenticated;
+  if (form?.settings?.whoCanSubmit) {
+    canSubmit =
+      (form?.settings?.multipleResponses || data?.getResponses?.data?.length === 0) &&
+      ((authenticated && isPageOwner && form?.settings?.whoCanSubmit === 'onlyPageOwner') ||
+        (authenticated && form?.settings?.whoCanSubmit === 'authUser') ||
+        form?.settings?.whoCanSubmit === 'all');
+  }
+
+  let canViewResponses = authenticated;
+  if (form?.settings?.whoCanViewResponses) {
+    canViewResponses =
+      (authenticated && isPageOwner && form?.settings?.whoCanViewResponses === 'onlyPageOwner') ||
+      (authenticated && form?.settings?.whoCanViewResponses === 'authUser') ||
+      form?.settings?.whoCanViewResponses === 'all';
+  }
+
   return (
     <div>
       {form?.settings?.showFormTitle && (
@@ -135,145 +153,131 @@ export default function FormViewWrapper({
           <Typography variant="h4">{form?.name}</Typography>
         </InputGroup>
       )}
-      {!['onlyPageOwner', 'displayResponses'].includes(form?.settings?.widgetType) && (
-        <>
-          <div className="text-center">
-            <Button variant="outlined" onClick={() => setState({ ...state, drawer: true })}>
-              {`${data?.getResponses?.count} Responses`}
-            </Button>
-          </div>
-          {state.drawer && (
-            <Overlay
-              minWidth="85vw"
-              title="Responses"
-              open={state.drawer}
-              onClose={() => setState({ ...state, drawer: false })}
-            >
-              <ResponseList form={form} parentId={parentId} />
-            </Overlay>
-          )}
-        </>
-      )}
-      {state.submitted ? (
-        <Overlay
-          onClose={() => {
-            setShowOverlayResult(false);
-            setState({ ...state, submitted: false });
-          }}
-          open={showOverlayResult}
-          title="Your submitted response"
-        >
-          <div className="py-5">
-            {state.messages?.map((message) => (
-              <DisplayRichText value={message} />
-            ))}
-            {state.response && (
-              <ResponseChild3 form={form} response={state.response} hideAuthor hideNavigation />
+      {canViewResponses &&
+        form?.settings?.widgetType !== 'form' &&
+        form?.settings?.responsesView === 'button' && (
+          <>
+            <div className="text-center">
+              <Button variant="outlined" onClick={() => setState({ ...state, drawer: true })}>
+                {`${data?.getResponses?.count} Responses`}
+              </Button>
+            </div>
+            {state.drawer && (
+              <Overlay
+                minWidth="85vw"
+                title="Responses"
+                open={state.drawer}
+                onClose={() => setState({ ...state, drawer: false })}
+              >
+                <ResponseList form={form} parentId={parentId} />
+              </Overlay>
             )}
-          </div>
-        </Overlay>
-      ) : form?.settings?.widgetType === 'leaderboard' ? (
-        <Leaderboard formId={form?._id} settings={form?.settings} parentId={parentId} />
-      ) : form?.settings?.widgetType === 'button' ? (
+          </>
+        )}
+      {canSubmit && form?.settings?.widgetType !== 'responses' && (
         <>
-          <div className="text-center">
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => setState({ ...state, formModal: true })}
-            >
-              {form?.settings?.buttonLabel || form?.name}
-            </Button>
-          </div>
-          {state.formModal && (
+          {state.submitted ? (
             <Overlay
-              open={state.formModal}
-              onClose={() => setState({ ...state, formModal: false })}
+              onClose={() => {
+                setShowOverlayResult(false);
+                setState({ ...state, submitted: false });
+              }}
+              open={showOverlayResult}
+              title="Your submitted response"
             >
-              <div className="p-2">
+              <div className="py-5">
+                {state.messages?.map((message) => (
+                  <DisplayRichText value={message} />
+                ))}
+                {state.response && (
+                  <ResponseChild3 form={form} response={state.response} hideAuthor hideNavigation />
+                )}
+              </div>
+            </Overlay>
+          ) : (
+            <>
+              {form?.settings?.formView === 'leaderboard' ? (
+                <Leaderboard formId={form?._id} settings={form?.settings} parentId={parentId} />
+              ) : form?.settings?.formView === 'button' ? (
+                <>
+                  <div className="text-center">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => setState({ ...state, formModal: true })}
+                    >
+                      {form?.settings?.buttonLabel || form?.name}
+                    </Button>
+                  </div>
+                  {state.formModal && (
+                    <Overlay
+                      open={state.formModal}
+                      onClose={() => setState({ ...state, formModal: false })}
+                    >
+                      <div className="p-2">
+                        <FormView
+                          authRequired={!form?.settings?.authRequired}
+                          fields={form?.fields}
+                          handleSubmit={handleSubmit}
+                          loading={createLoading || updateParentLoading}
+                          fieldWiseView={form?.settings?.formView === 'oneField'}
+                        />
+                      </div>
+                    </Overlay>
+                  )}
+                </>
+              ) : form?.settings?.formView === 'selectItem' ? (
+                <>
+                  <SelectResponse
+                    label={
+                      form?.fields?.find((fld) => fld._id === form?.settings?.selectItemField)
+                        ?.label
+                    }
+                    formId={form?._id}
+                    formField={form?.settings?.selectItemField}
+                    value={state?.selectItemValue}
+                    onChange={(newValue) => setState({ ...state, selectItemValue: newValue })}
+                    error={
+                      validateValue(true, state, form?.settings, 'form').error ||
+                      !form?.settings?.selectItemField
+                    }
+                    helperText={
+                      validateValue(true, state, form?.settings, 'form').errorMessage ||
+                      (!form?.settings?.selectItemField ? 'Form field not selected' : '')
+                    }
+                  />
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={async () => {
+                      const responseId = state?.selectItemValue?._id;
+                      const response = await handleCreateUpdateResponseParent({ _id: responseId });
+                      if (response) {
+                        console.log(response);
+                      }
+                    }}
+                  >
+                    Submit kdk
+                  </Button>
+                </>
+              ) : (
                 <FormView
                   authRequired={!form?.settings?.authRequired}
                   fields={form?.fields}
                   handleSubmit={handleSubmit}
                   loading={createLoading || updateParentLoading}
-                  fieldWiseView={form?.settings?.widgetType === 'oneField'}
+                  fieldWiseView={form?.settings?.formView === 'oneField'}
                 />
-              </div>
-            </Overlay>
+              )}
+            </>
           )}
         </>
-      ) : form?.settings?.widgetType === 'displayResponses' ? (
-        showResponse ? (
-          <>
-            {authenticated && (
-              <Button
-                className="mt-2"
-                size="small"
-                color="primary"
-                variant="contained"
-                onClick={() => {
-                  setShowResponse(false);
-                }}
-                startIcon={<AddIcon />}
-              >
-                Add Response
-              </Button>
-            )}
-            <ResponseList form={form} parentId={parentId} />
-          </>
-        ) : (
-          <>
-            <FormView
-              authRequired={!form?.settings?.authRequired}
-              fieldWiseView={form?.settings?.widgetType === 'oneField'}
-              fields={form?.fields}
-              handleSubmit={handleSubmit}
-              loading={createLoading || updateParentLoading}
-              onCancel={() => setShowResponse(true)}
-            />
-          </>
-        )
-      ) : form?.settings?.widgetType === 'selectItem' ? (
-        <>
-          <SelectResponse
-            label={form?.fields?.find((fld) => fld._id === form?.settings?.selectItemField)?.label}
-            formId={form?._id}
-            formField={form?.settings?.selectItemField}
-            value={state?.selectItemValue}
-            onChange={(newValue) => setState({ ...state, selectItemValue: newValue })}
-            error={
-              validateValue(true, state, form?.settings, 'form').error ||
-              !form?.settings?.selectItemField
-            }
-            helperText={
-              validateValue(true, state, form?.settings, 'form').errorMessage ||
-              (!form?.settings?.selectItemField ? 'Form field not selected' : '')
-            }
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={async () => {
-              const responseId = state?.selectItemValue?._id;
-
-              const response = await handleCreateUpdateResponseParent({ _id: responseId });
-              if (response) {
-                console.log(response);
-              }
-            }}
-          >
-            Submit
-          </Button>
-        </>
-      ) : (
-        <FormView
-          authRequired={!form?.settings?.authRequired}
-          fields={form?.fields}
-          handleSubmit={handleSubmit}
-          loading={createLoading || updateParentLoading}
-          fieldWiseView={form?.settings?.widgetType === 'oneField'}
-        />
       )}
+      {canViewResponses &&
+        form?.settings?.widgetType !== 'form' &&
+        form?.settings?.responsesView !== 'button' && (
+          <ResponseList form={form} parentId={parentId} />
+        )}
     </div>
   );
 }
@@ -281,7 +285,6 @@ export default function FormViewWrapper({
 interface IProps2 {
   fields: any;
   handleSubmit: (payload: any) => any;
-  viewResponse?: () => void;
   loading?: boolean;
   onCancel?: () => void;
   initialValues?: any[];
@@ -309,7 +312,6 @@ export const filterValues = (values, field) => {
 export function FormView({
   fields,
   handleSubmit,
-  viewResponse,
   loading,
   onCancel,
   initialValues = [],
