@@ -27,6 +27,7 @@ import EditResponseDrawer from './EditResponseDrawer';
 import { ReactHeight } from 'react-height';
 import Button from '@material-ui/core/Button';
 import Overlay from '../common/Overlay';
+import { useEffect } from 'react';
 
 interface IProps {
   form: any;
@@ -37,9 +38,37 @@ interface IProps {
 export default function ResponseList({ form, parentId, layouts }: IProps): any {
   const { data, error, state, setState } = useGetResponses(form._id, parentId);
   const [height, setHeight] = useState(0);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const handleResize = () => {
+    setWindowWidth(window.innerWidth);
+  };
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+  }, []);
+
   let gridHeight = 0;
-  if (layouts) {
-    if (layouts?.lg) {
+  if (layouts?.lg) {
+    if (windowWidth < 650) {
+      if (layouts?.xxs[0]) {
+        gridHeight = layouts?.xxs[0].h * 38.5;
+      }
+    }
+    if (650 < windowWidth && windowWidth < 1000) {
+      if (layouts?.xs[0]) {
+        gridHeight = layouts?.xs[0].h * 38.5;
+      }
+    }
+    if (1000 < windowWidth && windowWidth < 1280) {
+      if (layouts?.sm[0]) {
+        gridHeight = layouts?.sm[0].h * 38.5;
+      }
+    }
+    if (1280 < windowWidth && windowWidth < 1520) {
+      if (layouts?.md[0]) {
+        gridHeight = layouts?.md[0].h * 38.5;
+      }
+    }
+    if (1520 < windowWidth) {
       if (layouts?.lg[0]) {
         gridHeight = layouts?.lg[0].h * 38.5;
       }
