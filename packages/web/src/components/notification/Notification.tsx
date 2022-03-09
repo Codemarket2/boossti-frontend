@@ -51,8 +51,15 @@ const StyledSnackbar = styled(Snackbar)`
 export default function Notification() {
   const { state, setState } = useNotificationSub();
   const [store, setStore] = useState({});
+  const [total, setTotal] = useState(0);
   const { notificationList } = useGetNotificationList();
-
+  useEffect(() => {
+    let t = 0;
+    for (let i = 0; i < notificationList?.length; i += 1) {
+      t += notificationList[i]?.notificationCount;
+    }
+    setTotal(t);
+  }, [notificationList]);
   useEffect(() => {
     setState({ ...state, notifications: store });
   }, [store]);
@@ -61,7 +68,7 @@ export default function Notification() {
     <>
       <Tooltip title="Notifications">
         <IconButton onClick={(e) => setState({ ...state, showNotification: e.target })}>
-          <Badge badgeContent={notificationList?.length} color="primary">
+          <Badge badgeContent={total} color="primary">
             <NotificationsIcon />
           </Badge>
         </IconButton>
@@ -157,7 +164,7 @@ const NotificationItem = ({ notification, onClose }: any) => {
   const [variant, setVariant] = useState(notification.isClicked);
   const { handleNotificationClicked } = useIsNotificationClicked();
   const handleClick = () => {
-    handleNotificationClicked(notification._id);
+    handleNotificationClicked(notification._id, notification.threadId);
     setVariant(true);
   };
   const background = {
@@ -168,6 +175,7 @@ const NotificationItem = ({ notification, onClose }: any) => {
       variant="outlined"
       className="mt-1"
       style={background}
+      hidden={variant || notification?.isClicked}
       icon={<StyledAvatar src={notification.userId?.picture} alt="profile Pic" />}
       onClose={onClose}
     >
