@@ -47,140 +47,141 @@ export default function ResponseList({ form, parentId, layouts }: IProps): any {
   return (
     <>
       <Backdrop open={deleteLoading} />
-      <TableContainer component={Paper} variant="outlined">
-        <TablePagination
-          component="div"
-          rowsPerPageOptions={[10, 25, 50]}
-          count={data?.getResponses?.count || 0}
-          rowsPerPage={state.limit}
-          page={state.page - 1}
-          onChangePage={(e, newPage) => setState({ ...state, page: newPage + 1 })}
-          onChangeRowsPerPage={(e) => setState({ ...state, limit: parseInt(e.target.value) })}
-        />
-        {error || !data || !data.getResponses ? (
-          <Paper variant="outlined" className="p-5">
-            <ErrorLoading error={error} />
-          </Paper>
-        ) : form?.settings?.responsesView === 'vertical' ? (
-          <>
-            <div style={{ height: `${gridHeight}px`, overflow: 'hidden' }}>
-              <Overlay
-                open={show}
-                onClose={() => {
-                  setShow(false);
-                }}
-              >
-                {data?.getResponses?.data?.map((response) => (
-                  <ResponseChild3
-                    key={response?._id}
-                    hideBreadcrumbs
-                    form={form}
-                    response={response}
-                  />
-                ))}
-              </Overlay>
-              <ReactHeight onHeightReady={(height) => setHeight(height)}>
-                {gridHeight < height && (
-                  <Button
-                    className="mr-5"
-                    style={{ float: 'right' }}
-                    size="small"
-                    color="primary"
-                    variant="contained"
-                    onClick={() => {
-                      setShow(true);
-                    }}
-                  >
-                    view more
-                  </Button>
-                )}
-                {data?.getResponses?.data?.map((response) => (
-                  <ResponseChild3
-                    key={response?._id}
-                    hideBreadcrumbs
-                    form={form}
-                    response={response}
-                  />
-                ))}
-              </ReactHeight>
-            </div>
-          </>
-        ) : (
-          <Table
-            aria-label="response table"
-            size="small"
-            style={{ overflow: 'scroll', width: '100%' }}
-          >
-            <TableHead>
-              <TableRow>
-                <TableCell>Action</TableCell>
-                {form?.fields?.map((field, i) => (
-                  <TableCell key={i}>{field.label}</TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {data?.getResponses?.data?.map((response) => (
-                <TableRow key={response._id}>
-                  <TableCell>
-                    <div className="d-flex">
-                      <Authorization _id={[response?.createdBy?._id]} allowAdmin returnNull>
-                        <DeleteButton
-                          onClick={() => handleDelete(response._id, form._id)}
-                          edge="start"
-                        />
-                        <Tooltip title="Open Response">
-                          <IconButton onClick={() => setSelectedResponse(response)} edge="start">
-                            <EditIcon />
-                          </IconButton>
-                        </Tooltip>
-                        {selectedResponse?._id === response?._id && (
-                          <>
-                            <EditResponseDrawer
-                              open
-                              form={form}
-                              response={selectedResponse}
-                              onClose={() => setSelectedResponse(null)}
-                            />
-                          </>
-                        )}
-                      </Authorization>
-                      <Tooltip title="Open Response">
-                        <IconButton
-                          onClick={() => {
-                            router.push(`/forms/${form.slug}/response/${response.count}`);
-                          }}
-                          edge="start"
-                        >
-                          <LaunchIcon />
-                        </IconButton>
-                      </Tooltip>
-                      <ListItemText
-                        className="m-0 p-0"
-                        primary={response?.createdBy?.name}
-                        secondary={`${moment(response.createdAt).format('l')} ${moment(
-                          response.createdAt,
-                        ).format('LT')}`}
-                      />
-                    </div>
-                  </TableCell>
+      {form?.settings?.responsesView != 'vertical' && (
+        <TableContainer component={Paper} variant="outlined">
+          <TablePagination
+            component="div"
+            rowsPerPageOptions={[10, 25, 50]}
+            count={data?.getResponses?.count || 0}
+            rowsPerPage={state.limit}
+            page={state.page - 1}
+            onChangePage={(e, newPage) => setState({ ...state, page: newPage + 1 })}
+            onChangeRowsPerPage={(e) => setState({ ...state, limit: parseInt(e.target.value) })}
+          />
+          {error || !data || !data.getResponses ? (
+            <Paper variant="outlined" className="p-5">
+              <ErrorLoading error={error} />
+            </Paper>
+          ) : (
+            <Table
+              aria-label="response table"
+              size="small"
+              style={{ overflow: 'scroll', width: '100%' }}
+            >
+              <TableHead>
+                <TableRow>
+                  <TableCell>Action</TableCell>
                   {form?.fields?.map((field, i) => (
-                    <TableCell key={i}>
-                      {response?.values
-                        ?.filter((v) => v.field === field._id)
-                        ?.map((value) => (
-                          <div key={value?._id}>
-                            <DisplayValue field={field} value={value} />
-                          </div>
-                        ))}
-                    </TableCell>
+                    <TableCell key={i}>{field.label}</TableCell>
                   ))}
                 </TableRow>
+              </TableHead>
+              <TableBody>
+                {data?.getResponses?.data?.map((response) => (
+                  <TableRow key={response._id}>
+                    <TableCell>
+                      <div className="d-flex">
+                        <Authorization _id={[response?.createdBy?._id]} allowAdmin returnNull>
+                          <DeleteButton
+                            onClick={() => handleDelete(response._id, form._id)}
+                            edge="start"
+                          />
+                          <Tooltip title="Open Response">
+                            <IconButton onClick={() => setSelectedResponse(response)} edge="start">
+                              <EditIcon />
+                            </IconButton>
+                          </Tooltip>
+                          {selectedResponse?._id === response?._id && (
+                            <>
+                              <EditResponseDrawer
+                                open
+                                form={form}
+                                response={selectedResponse}
+                                onClose={() => setSelectedResponse(null)}
+                              />
+                            </>
+                          )}
+                        </Authorization>
+                        <Tooltip title="Open Response">
+                          <IconButton
+                            onClick={() => {
+                              router.push(`/forms/${form.slug}/response/${response.count}`);
+                            }}
+                            edge="start"
+                          >
+                            <LaunchIcon />
+                          </IconButton>
+                        </Tooltip>
+                        <ListItemText
+                          className="m-0 p-0"
+                          primary={response?.createdBy?.name}
+                          secondary={`${moment(response.createdAt).format('l')} ${moment(
+                            response.createdAt,
+                          ).format('LT')}`}
+                        />
+                      </div>
+                    </TableCell>
+                    {form?.fields?.map((field, i) => (
+                      <TableCell key={i}>
+                        {response?.values
+                          ?.filter((v) => v.field === field._id)
+                          ?.map((value) => (
+                            <div key={value?._id}>
+                              <DisplayValue field={field} value={value} />
+                            </div>
+                          ))}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </TableContainer>
+      )}
+      {form?.settings?.responsesView === 'vertical' && (
+        <>
+          <div style={{ height: `${gridHeight}px`, overflow: 'hidden' }}>
+            <Overlay
+              open={show}
+              onClose={() => {
+                setShow(false);
+              }}
+            >
+              {data?.getResponses?.data?.map((response) => (
+                <ResponseChild3
+                  key={response?._id}
+                  hideBreadcrumbs
+                  form={form}
+                  response={response}
+                />
               ))}
-            </TableBody>
-          </Table>
-        )}
-      </TableContainer>
+            </Overlay>
+            <ReactHeight onHeightReady={(height) => setHeight(height)}>
+              {data?.getResponses?.data?.map((response) => (
+                <ResponseChild3
+                  key={response?._id}
+                  hideBreadcrumbs
+                  form={form}
+                  response={response}
+                />
+              ))}
+            </ReactHeight>
+          </div>
+          {gridHeight < height && (
+            <Button
+              size="small"
+              color="primary"
+              variant="contained"
+              onClick={() => {
+                setShow(true);
+              }}
+            >
+              view more
+            </Button>
+          )}
+        </>
+      )}
     </>
   );
 }
