@@ -76,10 +76,10 @@ export default function FormViewWrapper({
     parentId,
   );
 
-  const { handleCreateUpdateResponseParent, updateParentLoading } = useCreateUpdateResponseParent(
-    { onAlert },
-    parentId,
-  );
+  // const { handleCreateUpdateResponseParent, updateParentLoading } = useCreateUpdateResponseParent(
+  //   { onAlert },
+  //   parentId,
+  // );
 
   const showOnlyMyResponses = !isPageOwner && form?.settings?.onlyMyResponses;
 
@@ -221,7 +221,7 @@ export default function FormViewWrapper({
                           authRequired={!form?.settings?.authRequired}
                           fields={form?.fields}
                           handleSubmit={handleSubmit}
-                          loading={createLoading || updateParentLoading}
+                          loading={createLoading}
                           fieldWiseView={form?.settings?.formView === 'oneField'}
                         />
                       </div>
@@ -252,11 +252,11 @@ export default function FormViewWrapper({
                     variant="contained"
                     color="primary"
                     onClick={async () => {
-                      const responseId = state?.selectItemValue?._id;
-                      const response = await handleCreateUpdateResponseParent({ _id: responseId });
-                      if (response) {
-                        console.log(response);
-                      }
+                      // const responseId = state?.selectItemValue?._id;
+                      // const response = await handleCreateUpdateResponseParent({ _id: responseId });
+                      // if (response) {
+                      //   console.log(response);
+                      // }
                     }}
                   >
                     Submit
@@ -267,7 +267,7 @@ export default function FormViewWrapper({
                   authRequired={!form?.settings?.authRequired}
                   fields={form?.fields}
                   handleSubmit={handleSubmit}
-                  loading={createLoading || updateParentLoading}
+                  loading={createLoading}
                   fieldWiseView={form?.settings?.formView === 'oneField'}
                 />
               )}
