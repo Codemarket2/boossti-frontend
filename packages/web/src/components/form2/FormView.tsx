@@ -81,7 +81,9 @@ export default function FormViewWrapper({
     parentId,
   );
 
-  const { data, error, refetch } = useGetResponses(form?._id, parentId);
+  const showOnlyMyResponses = !isPageOwner && form?.settings?.onlyMyResponses;
+
+  const { data, error, refetch } = useGetResponses(form?._id, parentId, null, showOnlyMyResponses);
   const [state, setState] = useState(initialState);
   const authenticated = useSelector(({ auth }: any) => auth.authenticated);
   const [showOverlayResult, setShowOverlayResult] = useState(true);
@@ -131,22 +133,20 @@ export default function FormViewWrapper({
     return response;
   };
 
-  let canSubmit = authenticated;
-  if (form?.settings?.whoCanSubmit) {
-    canSubmit =
-      (form?.settings?.multipleResponses || data?.getResponses?.data?.length === 0) &&
-      ((authenticated && isPageOwner && form?.settings?.whoCanSubmit === 'onlyPageOwner') ||
-        (authenticated && form?.settings?.whoCanSubmit === 'authUser') ||
-        form?.settings?.whoCanSubmit === 'all');
-  }
+  const canSubmit =
+    (authenticated && !form?.settings?.whoCanSubmit) ||
+    (authenticated &&
+      isPageOwner &&
+      form?.settings?.whoCanSubmit === 'onlyPageOwner' &&
+      (form?.settings?.multipleResponses || data?.getResponses?.data?.length === 0)) ||
+    (authenticated && form?.settings?.whoCanSubmit === 'authUser') ||
+    form?.settings?.whoCanSubmit === 'all';
 
-  let canViewResponses = authenticated;
-  if (form?.settings?.whoCanViewResponses) {
-    canViewResponses =
-      (authenticated && isPageOwner && form?.settings?.whoCanViewResponses === 'onlyPageOwner') ||
-      (authenticated && form?.settings?.whoCanViewResponses === 'authUser') ||
-      form?.settings?.whoCanViewResponses === 'all';
-  }
+  const canViewResponses =
+    (authenticated && !form?.settings?.whoCanViewResponses) ||
+    (authenticated && isPageOwner && form?.settings?.whoCanViewResponses === 'onlyPageOwner') ||
+    (authenticated && form?.settings?.whoCanViewResponses === 'authUser') ||
+    form?.settings?.whoCanViewResponses === 'all';
 
   return (
     <div>
@@ -278,7 +278,12 @@ export default function FormViewWrapper({
       {canViewResponses &&
         form?.settings?.widgetType !== 'form' &&
         form?.settings?.responsesView !== 'button' && (
-          <ResponseList layouts={layouts} form={form} parentId={parentId} />
+          <ResponseList
+            layouts={layouts}
+            form={form}
+            parentId={parentId}
+            showOnlyMyResponses={showOnlyMyResponses}
+          />
         )}
     </div>
   );

@@ -100,6 +100,7 @@ export const GET_RESPONSES = gql`
     $limit: Int
     $search: String
     $formField: ID
+    $onlyMy: Boolean
   ) {
     getResponses(
       formId: $formId
@@ -108,6 +109,7 @@ export const GET_RESPONSES = gql`
       limit: $limit
       search: $search
       formField: $formField
+      onlyMy: $onlyMy
     ) {
       count
       data {
