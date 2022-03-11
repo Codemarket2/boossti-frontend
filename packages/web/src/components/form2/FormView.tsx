@@ -14,10 +14,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { ArrowBackIosRounded, ArrowForwardIosRounded } from '@material-ui/icons';
 import { getForm } from '@frontend/shared/hooks/form/getForm';
 import { getResponse, useGetResponses } from '@frontend/shared/hooks/response/getResponse';
-import {
-  useCreateUpdateResponse,
-  useCreateUpdateResponseParent,
-} from '@frontend/shared/hooks/response';
+import { useCreateUpdateResponse } from '@frontend/shared/hooks/response';
 import ResponseList from '../response/ResponseList';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
@@ -35,6 +32,7 @@ import SelectResponse, { getLabel } from '../response/SelectResponse';
 interface IProps {
   form: any;
   parentId?: string;
+  responseId?: string;
   createCallback?: (response: any) => void;
   setResponded?: () => void;
   isPageOwner?: boolean;
@@ -66,6 +64,7 @@ const initialState = {
 export default function FormViewWrapper({
   form,
   parentId,
+  responseId,
   createCallback,
   setResponded,
   layouts,
@@ -74,16 +73,18 @@ export default function FormViewWrapper({
   const { handleCreateUpdateResponse, createLoading } = useCreateUpdateResponse(
     { onAlert },
     parentId,
+    responseId,
   );
-
-  // const { handleCreateUpdateResponseParent, updateParentLoading } = useCreateUpdateResponseParent(
-  //   { onAlert },
-  //   parentId,
-  // );
 
   const showOnlyMyResponses = !isPageOwner && form?.settings?.onlyMyResponses;
 
-  const { data, error, refetch } = useGetResponses(form?._id, parentId, null, showOnlyMyResponses);
+  const { data, error, refetch } = useGetResponses(
+    form?._id,
+    parentId,
+    null,
+    showOnlyMyResponses,
+    responseId,
+  );
   const [state, setState] = useState(initialState);
   const authenticated = useSelector(({ auth }: any) => auth.authenticated);
   const [showOverlayResult, setShowOverlayResult] = useState(true);
@@ -282,6 +283,7 @@ export default function FormViewWrapper({
             layouts={layouts}
             form={form}
             parentId={parentId}
+            responseId={responseId}
             showOnlyMyResponses={showOnlyMyResponses}
           />
         )}

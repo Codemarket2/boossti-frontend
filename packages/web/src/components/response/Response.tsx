@@ -7,6 +7,8 @@ import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import { useDeleteResponse, useGetResponse } from '@frontend/shared/hooks/response';
+import { getListItem } from '@frontend/shared/hooks/list/listItems';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Typography from '@material-ui/core/Typography';
 import { useUpdateSection } from '@frontend/shared/hooks/section';
@@ -34,6 +36,7 @@ interface IProps {
   hideBreadcrumbs?: boolean;
   hideNavigation?: boolean;
   hideAuthor?: boolean;
+  hideWorkflow?: boolean;
 }
 
 export default function Response({
@@ -41,6 +44,7 @@ export default function Response({
   hideBreadcrumbs,
   hideNavigation,
   hideAuthor,
+  hideWorkflow,
 }: IProps) {
   const { data, error } = useGetResponse(responseId);
 
@@ -59,6 +63,7 @@ export default function Response({
       hideBreadcrumbs={hideBreadcrumbs}
       hideNavigation={hideNavigation}
       hideAuthor={hideAuthor}
+      hideWorkflow={hideWorkflow}
     />
   );
 }
@@ -69,6 +74,7 @@ interface IProps2 {
   hideBreadcrumbs?: boolean;
   hideNavigation?: boolean;
   hideAuthor?: boolean;
+  hideWorkflow?: boolean;
 }
 
 export function ResponseChild2({
@@ -77,6 +83,7 @@ export function ResponseChild2({
   hideBreadcrumbs,
   hideNavigation,
   hideAuthor,
+  hideWorkflow,
 }: IProps2) {
   const { data, error, loading } = useGetForm(formId);
 
@@ -95,6 +102,7 @@ export function ResponseChild2({
       hideBreadcrumbs={hideBreadcrumbs}
       hideNavigation={hideNavigation}
       hideAuthor={hideAuthor}
+      hideWorkflow={hideWorkflow}
     />
   );
 }
@@ -105,6 +113,7 @@ interface IProps3 {
   hideBreadcrumbs?: boolean;
   hideNavigation?: boolean;
   hideAuthor?: boolean;
+  hideWorkflow?: boolean;
 }
 
 export function ResponseChild3({
@@ -113,8 +122,9 @@ export function ResponseChild3({
   hideBreadcrumbs,
   hideNavigation,
   hideAuthor,
+  hideWorkflow,
 }: IProps3) {
-  const [state, setState] = useState({ showMenu: null, edit: false });
+  const [state, setState] = useState({ showMenu: null, edit: false, showBackdrop: false });
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
   const authorized = useAuthorization([response?.createdBy?._id, form?.createdBy?._id], true);
   const authorized2 = useAuthorization([form?.createdBy?._id], true);
@@ -123,12 +133,23 @@ export function ResponseChild3({
     _id: JSON.parse(response?.options)?.customSectionId || form._id,
   });
   const { editMode } = useSelector(({ setting }: any) => setting);
+  const router = useRouter();
+
+  const redirectToPage = async (_id) => {
+    setState({ ...state, showBackdrop: true });
+    const page = await getListItem(_id);
+    if (page?.data?.getListItem?.types[0]?.slug && page?.data?.getListItem?.slug) {
+      router.push(`/${page?.data?.getListItem?.types[0]?.slug}/${page?.data?.getListItem?.slug}`);
+    } else {
+      setState({ ...state, showBackdrop: false });
+    }
+  };
 
   const hideLeftNavigation = !(hideAuthor || hideNavigation || hideBreadcrumbs);
 
   return (
     <>
-      <BackdropComponent open={deleteLoading} />
+      <BackdropComponent open={deleteLoading || state.showBackdrop} />
       {!hideBreadcrumbs ? (
         <div className="d-flex justify-content-between align-items-center">
           {!hideNavigation && (
@@ -217,6 +238,9 @@ export function ResponseChild3({
           </Grid>
         )}
         <Grid item xs={!hideLeftNavigation ? 12 : 9}>
+          {response?.responseId && section?.options?.showRelation && (
+            <Response responseId={response?.responseId} hideBreadcrumbs hideWorkflow />
+          )}
           <Paper
             variant="outlined"
             style={!hideLeftNavigation ? { border: 'none' } : {}}
@@ -224,7 +248,7 @@ export function ResponseChild3({
               section?.options?.belowResponse ? 'flex-column-reverse' : 'flex-column'
             }`}
           >
-            {section?.fields?.length > 0 && (
+            {!hideWorkflow && section?.fields?.length > 0 && (
               <FormFieldsValue
                 authorized={authorized2}
                 disableGrid={!editMode}
@@ -237,19 +261,31 @@ export function ResponseChild3({
                     options: { ...section?.options, layouts },
                   })
                 }
-                pageId={response?.parentId?._id}
+                responseId={response?._id}
               />
             )}
             <div className="p-2">
               {!hideAuthor && (
-                <ListItemText
-                  primary={`by ${
-                    response?.createdBy ? response?.createdBy?.name : 'Unauthorised user'
-                  } ${response?.parentId?.title ? `from ${response?.parentId?.title} page` : ''}`}
-                  secondary={`created at ${moment(response?.createdAt).format('l')} ${moment(
-                    response?.createdAt,
-                  ).format('LT')}`}
-                />
+                <>
+                  <Typography variant="body1">
+                    {`by ${response?.createdBy ? response?.createdBy?.name : 'Unauthorised user'} `}
+                    {response?.parentId?.title && (
+                      <Typography
+                        color="primary"
+                        display="inline"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => redirectToPage(response?.parentId?._id)}
+                      >
+                        {`${response?.parentId?.title} page`}
+                      </Typography>
+                    )}
+                  </Typography>
+                  <Typography variant="body2">
+                    {`created at ${moment(response?.createdAt).format('l')} ${moment(
+                      response?.createdAt,
+                    ).format('LT')}`}
+                  </Typography>
+                </>
               )}
               {form?.fields?.map((field, index) => {
                 return (
