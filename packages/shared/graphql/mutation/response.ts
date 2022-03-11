@@ -1,8 +1,20 @@
 import { gql } from '@apollo/client';
 
 export const CREATE_RESPONSE = gql`
-  mutation MyMutation($formId: ID!, $parentId: ID, $values: [FieldValue2Input], $options: AWSJSON) {
-    createResponse(formId: $formId, parentId: $parentId, values: $values, options: $options) {
+  mutation MyMutation(
+    $formId: ID!
+    $parentId: ID
+    $responseId: ID
+    $values: [FieldValue2Input]
+    $options: AWSJSON
+  ) {
+    createResponse(
+      formId: $formId
+      parentId: $parentId
+      responseId: $responseId
+      values: $values
+      options: $options
+    ) {
       _id
       formId
       count
@@ -10,6 +22,7 @@ export const CREATE_RESPONSE = gql`
         _id
         title
       }
+      responseId
       values {
         _id
         field
@@ -74,18 +87,6 @@ export const UPDATE_RESPONSE = gql`
             value
           }
         }
-      }
-    }
-  }
-`;
-
-export const UPDATE_RESPONSE_PARENTID = gql`
-  mutation MyMutation($_id: ID!, $parentId: [ID]) {
-    updateResponse(_id: $_id, parentId: $parentId) {
-      _id
-      parentId {
-        _id
-        title
       }
     }
   }

@@ -43,6 +43,22 @@ export default function ResponseLayout({
           label="Show sections below response"
         />
       </InputGroup>
+      <InputGroup className="px-2">
+        <FormControlLabel
+          control={
+            <Switch
+              color="primary"
+              checked={section?.options?.showRelation}
+              onChange={(e) => {
+                onSectionChange({
+                  options: { ...section.options, showRelation: e.target.checked },
+                });
+              }}
+            />
+          }
+          label="Show relation response"
+        />
+      </InputGroup>
       <Grid container>
         <Grid item xs={12} md={3}>
           <ResponseSections

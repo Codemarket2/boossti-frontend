@@ -30,6 +30,7 @@ import Overlay from '../common/Overlay';
 interface IProps {
   form: any;
   parentId?: string;
+  responseId?: string;
   layouts?: any;
   showOnlyMyResponses?: boolean;
 }
@@ -37,6 +38,7 @@ interface IProps {
 export default function ResponseList({
   form,
   parentId,
+  responseId,
   layouts,
   showOnlyMyResponses,
 }: IProps): any {
@@ -45,6 +47,7 @@ export default function ResponseList({
     parentId,
     null,
     showOnlyMyResponses,
+    responseId,
   );
   const [height, setHeight] = useState(0);
   let gridHeight = 0;
