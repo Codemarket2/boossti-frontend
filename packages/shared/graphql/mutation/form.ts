@@ -1,8 +1,20 @@
 import { gql } from '@apollo/client';
 
 export const CREATE_FORM = gql`
-  mutation MyMutation($parentId: ID, $name: String!, $fields: [Field2Input], $settings: AWSJSON) {
-    createForm(parentId: $parentId, name: $name, fields: $fields, settings: $settings) {
+  mutation MyMutation(
+    $parentId: ID
+    $name: String!
+    $fields: [Field2Input]
+    $settings: AWSJSON
+    $virtualForm: Boolean
+  ) {
+    createForm(
+      parentId: $parentId
+      name: $name
+      fields: $fields
+      settings: $settings
+      virtualForm: $virtualForm
+    ) {
       _id
       parentId
       name

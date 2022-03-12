@@ -20,3 +20,23 @@ export function useCreateForm({ onAlert }: IHooksProps) {
   };
   return { handleCreateForm, createLoading };
 }
+
+export function useCreateVirtualForm({ onAlert }: IHooksProps) {
+  const [createMutation, { loading: createLoading }] = useMutation(CREATE_FORM);
+
+  const handleCreateVirtualForm = async (name: string, tPayload) => {
+    const payload = { name, ...tPayload, virtualForm: true };
+    try {
+      const res = await createMutation({
+        variables: payload,
+      });
+      return res;
+    } catch (error) {
+      console.log(error);
+      onAlert('Error', error.message);
+      return error;
+    }
+  };
+
+  return { handleCreateVirtualForm, createLoading };
+}
