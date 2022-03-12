@@ -101,7 +101,9 @@ export default function ResponseList({
                       <div className="d-flex">
                         <Authorization _id={[response?.createdBy?._id]} allowAdmin returnNull>
                           <DeleteButton
-                            onClick={() => handleDelete(response._id, form._id)}
+                            onClick={() =>
+                              handleDelete(response._id, form._id, null, { parentId, responseId })
+                            }
                             edge="start"
                           />
                           <Tooltip title="Open Response">

@@ -1,4 +1,3 @@
-import moment from 'moment';
 import { fileUpload } from '@frontend/shared/utils/fileUpload';
 import { useEffect, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
@@ -12,8 +11,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { ArrowBackIosRounded, ArrowForwardIosRounded } from '@material-ui/icons';
-import { getForm } from '@frontend/shared/hooks/form/getForm';
-import { getResponse, useGetResponses } from '@frontend/shared/hooks/response/getResponse';
+import { useGetResponses } from '@frontend/shared/hooks/response/getResponse';
 import { useCreateUpdateResponse } from '@frontend/shared/hooks/response';
 import ResponseList from '../response/ResponseList';
 import InputGroup from '../common/InputGroup';
@@ -27,7 +25,8 @@ import AuthScreen from '../../screens/AuthScreen';
 import { ResponseChild3 } from '../response/Response';
 import DisplayValue from './DisplayValue';
 import Leaderboard from '../response/Leaderboard';
-import SelectResponse, { getLabel } from '../response/SelectResponse';
+import SelectResponse from '../response/SelectResponse';
+import { replaceVariables } from './variables';
 
 interface IProps {
   form: any;
@@ -111,13 +110,7 @@ export default function FormViewWrapper({
           form?.settings?.actions
             ?.filter((a) => a?.actionType === 'showMessage' && a?.active)
             ?.map(async (a) => {
-              const message = await replaceVariables(
-                a?.body,
-                a?.variables,
-                form?.fields,
-                response?.values,
-                parentId,
-              );
+              const message = await replaceVariables(a?.body, a?.variables, form, response);
               return message;
             }),
         );
@@ -646,76 +639,3 @@ export function FormView({
     </div>
   );
 }
-
-const replaceVariables = async (oldBody, oldVariables, fields, values, pageId) => {
-  let body = oldBody;
-  const formIds = [];
-  const forms = [];
-
-  oldVariables?.forEach((variable) => {
-    if (variable.formId && !formIds.includes(variable.formId)) {
-      formIds.push(variable.formId);
-    }
-  });
-
-  for (const formId of formIds) {
-    const form = await getForm(formId);
-    const response = await getResponse(formId, pageId);
-    if (form && response) {
-      forms.push({ ...form, response });
-    }
-  }
-
-  const variables = oldVariables?.map((oneVariable) => {
-    const variable = { ...oneVariable, value: '' };
-    let field = null;
-    let value = null;
-    field = fields.find((f) => f._id === variable?.field);
-    value = values?.find((v) => v.field === variable?.field);
-    if (variable.formId) {
-      const form = forms?.find((f) => f._id === variable.formId);
-      if (form) {
-        field = form?.fields.find((f) => f._id === variable?.field);
-        value = form?.response?.values?.find((v) => v.field === variable?.field);
-      }
-    }
-    if (field && value) {
-      variable.value = getValue(field, value);
-    }
-    return variable;
-  });
-  variables.forEach((variable) => {
-    body = body.split(`{{${variable.name}}}`).join(variable.value || '');
-  });
-  return body;
-};
-
-const getValue = (field, value) => {
-  switch (field?.fieldType) {
-    case 'number':
-    case 'phoneNumber': {
-      return value.valueNumber;
-    }
-    case 'date': {
-      return value?.valueDate && moment(value?.valueDate).format('L');
-    }
-    case 'dateTime': {
-      return value?.valueDate && moment(value?.valueDate).format('lll');
-    }
-    case 'checkbox': {
-      return value.valueBoolean?.toString();
-    }
-    case 'select': {
-      if (field?.options?.optionsListType === 'type') {
-        return value?.itemId?.title;
-      }
-      if (field?.options?.optionsListType === 'existingForm') {
-        return getLabel(field?.options?.formField, value?.response);
-      }
-      return value?.value;
-    }
-    default: {
-      return value.value;
-    }
-  }
-};

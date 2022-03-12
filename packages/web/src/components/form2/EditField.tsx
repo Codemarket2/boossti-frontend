@@ -76,22 +76,6 @@ export default function FormFields({
             </Select>
           </FormControl>
         </InputGroup>
-        {/* {field.fieldType === 'form' && (
-          <InputGroup>
-            <SelectForm
-              value={field.form}
-              onChange={(newValue) =>
-                onFieldChange({
-                  ...field,
-                  form: newValue,
-                  options: { ...field.options, formField: '' },
-                })
-              }
-              error={!field.form}
-              helperText={!field.form && 'required'}
-            />
-          </InputGroup>
-        )} */}
         {!['label', 'form'].includes(field.fieldType) && (
           <>
             <InputGroup>
@@ -118,19 +102,6 @@ export default function FormFields({
                   />
                 }
                 label="Mutiple values"
-              />
-            </InputGroup>
-            <InputGroup>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={field?.options?.allowOtherUsers}
-                    onChange={({ target }) => onOptionChange({ allowOtherUsers: target.checked })}
-                    name="allowOtherUsers"
-                    color="primary"
-                  />
-                }
-                label="Allow other users can add value"
               />
             </InputGroup>
           </>

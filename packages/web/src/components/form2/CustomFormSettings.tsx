@@ -49,9 +49,10 @@ export default function CustomFormSettings({
       const form = await getForm(field?.form?._id);
       if (form) {
         const pageField = form?.fields?.map((f) => ({
-          ...f,
-          label: `${field?.label}-${f?.label}`,
+          // ...f,
+          label: `${field?.label} - ${f?.label}`,
           formId: form?._id,
+          _id: f?._id,
         }));
         newPageFields = [...newPageFields, ...pageField];
       }

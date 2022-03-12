@@ -11,6 +11,7 @@ export const defaultQueryVariables = {
   limit: 10,
   search: '',
   formField: null,
+  onlyMy: false,
 };
 
 export function useGetResponses(
@@ -85,7 +86,7 @@ export function useGetResponseByCount(formId: string, count: number): any {
   return { data, error, loading };
 }
 
-export async function getResponse(formId, parentId) {
+export async function getResponseByParentId(formId, parentId) {
   let response = null;
   try {
     const res = await apolloClient.query({
@@ -94,6 +95,21 @@ export async function getResponse(formId, parentId) {
     });
     if (res?.data?.getResponses?.data?.length > 0) {
       response = res?.data?.getResponses?.data[0];
+    }
+  } catch (error) {
+    console.log({ error });
+  }
+  return response;
+}
+export async function getResponse(_id) {
+  let response = null;
+  try {
+    const res = await apolloClient.query({
+      query: GET_RESPONSE,
+      variables: { _id },
+    });
+    if (res?.data?.getResponse) {
+      response = res?.data?.getResponse;
     }
   } catch (error) {
     console.log({ error });
