@@ -159,26 +159,19 @@ export default function ResponseList({
       )}
       {form?.settings?.responsesView === 'vertical' && (
         <>
-          <div style={{ height: `${gridHeight}px`, overflow: 'hidden' }}>
-            <Overlay
-              open={show}
-              onClose={() => {
-                setShow(false);
-              }}
-            >
-              {data?.getResponses?.data?.map((response) => (
-                <ResponseChild3
-                  key={response?._id}
-                  hideBreadcrumbs
-                  form={form}
-                  response={response}
-                />
-              ))}
-            </Overlay>
+          <Overlay
+            open={show}
+            onClose={() => {
+              setShow(false);
+            }}
+          >
             {data?.getResponses?.data?.map((response) => (
               <ResponseChild3 key={response?._id} hideBreadcrumbs form={form} response={response} />
             ))}
-          </div>
+          </Overlay>
+          {data?.getResponses?.data?.map((response) => (
+            <ResponseChild3 key={response?._id} hideBreadcrumbs form={form} response={response} />
+          ))}
         </>
       )}
     </>
