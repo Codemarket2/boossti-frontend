@@ -83,8 +83,8 @@ export default function FormFieldsValue({
         // if (layouts && breakPoint) {
         let gridHeight;
         if (layouts?.[breakPoint]) {
-          gridHeight = layouts?.[breakPoint][i].h * 35;
-          const key = layouts?.[breakPoint][i].i;
+          gridHeight = layouts?.[breakPoint][i]?.h * 35;
+          const key = layouts?.[breakPoint][i]?.i;
           newHeights = { ...newHeights, [key]: gridHeight };
         }
         // }

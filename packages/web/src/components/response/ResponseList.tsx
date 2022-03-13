@@ -15,8 +15,6 @@ import IconButton from '@material-ui/core/IconButton';
 import LaunchIcon from '@material-ui/icons/Launch';
 import EditIcon from '@material-ui/icons/Edit';
 import { useGetResponses, useDeleteResponse } from '@frontend/shared/hooks/response';
-import { ReactHeight } from 'react-height';
-import Button from '@material-ui/core/Button';
 import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
@@ -177,29 +175,10 @@ export default function ResponseList({
                 />
               ))}
             </Overlay>
-            <ReactHeight onHeightReady={(height) => setHeight(height)}>
-              {data?.getResponses?.data?.map((response) => (
-                <ResponseChild3
-                  key={response?._id}
-                  hideBreadcrumbs
-                  form={form}
-                  response={response}
-                />
-              ))}
-            </ReactHeight>
+            {data?.getResponses?.data?.map((response) => (
+              <ResponseChild3 key={response?._id} hideBreadcrumbs form={form} response={response} />
+            ))}
           </div>
-          {gridHeight < height && (
-            <Button
-              size="small"
-              color="primary"
-              variant="contained"
-              onClick={() => {
-                setShow(true);
-              }}
-            >
-              view more
-            </Button>
-          )}
         </>
       )}
     </>
