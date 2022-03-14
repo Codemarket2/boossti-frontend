@@ -72,7 +72,7 @@ export default function EmailForm() {
         </FormGroup>
       </div>
       <form className="px-2" onSubmit={handleSubmit}>
-        {/* <InputGroup>
+        <InputGroup>
           <TextField
             fullWidth
             label="From"
@@ -86,8 +86,8 @@ export default function EmailForm() {
             error={formik.touched.senderEmail && Boolean(formik.errors.senderEmail)}
             helperText={formik.touched.senderEmail && formik.errors.senderEmail}
           />
-        </InputGroup> */}
-        <FormControl fullWidth>
+        </InputGroup>
+        {/* <FormControl fullWidth>
           <InputLabel id="from">Select Mailing List</InputLabel>
           <Select
             labelId="from"
@@ -103,7 +103,7 @@ export default function EmailForm() {
               </MenuItem>
             ))}
           </Select>
-        </FormControl>
+        </FormControl> */}
         {checked ? (
           <FormControl fullWidth>
             <InputLabel id="mailinglist">Select Mailing List</InputLabel>
