@@ -1,4 +1,3 @@
-import moment from 'moment';
 import { fileUpload } from '@frontend/shared/utils/fileUpload';
 import { useEffect, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
@@ -12,16 +11,13 @@ import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { ArrowBackIosRounded, ArrowForwardIosRounded } from '@material-ui/icons';
-import { getForm } from '@frontend/shared/hooks/form/getForm';
-import { getResponse, useGetResponses } from '@frontend/shared/hooks/response/getResponse';
-import {
-  useCreateUpdateResponse,
-  useCreateUpdateResponseParent,
-} from '@frontend/shared/hooks/response';
+import { useGetResponses } from '@frontend/shared/hooks/response/getResponse';
+import { useCreateUpdateResponse } from '@frontend/shared/hooks/response';
 import ResponseList from '../response/ResponseList';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
 import Field from './Field';
+import SelectItemView from './SelectItemView';
 import { validateValue } from './validate';
 import { onAlert } from '../../utils/alert';
 import DisplayRichText from '../common/DisplayRichText';
@@ -30,11 +26,13 @@ import AuthScreen from '../../screens/AuthScreen';
 import { ResponseChild3 } from '../response/Response';
 import DisplayValue from './DisplayValue';
 import Leaderboard from '../response/Leaderboard';
-import SelectResponse, { getLabel } from '../response/SelectResponse';
+import SelectResponse from '../response/SelectResponse';
+import { replaceVariables } from './variables';
 
 interface IProps {
   form: any;
   parentId?: string;
+  responseId?: string;
   createCallback?: (response: any) => void;
   setResponded?: () => void;
   isPageOwner?: boolean;
@@ -66,6 +64,7 @@ const initialState = {
 export default function FormViewWrapper({
   form,
   parentId,
+  responseId,
   createCallback,
   setResponded,
   layouts,
@@ -74,16 +73,18 @@ export default function FormViewWrapper({
   const { handleCreateUpdateResponse, createLoading } = useCreateUpdateResponse(
     { onAlert },
     parentId,
+    responseId,
   );
-
-  // const { handleCreateUpdateResponseParent, updateParentLoading } = useCreateUpdateResponseParent(
-  //   { onAlert },
-  //   parentId,
-  // );
 
   const showOnlyMyResponses = !isPageOwner && form?.settings?.onlyMyResponses;
 
-  const { data, error, refetch } = useGetResponses(form?._id, parentId, null, showOnlyMyResponses);
+  const { data, error, refetch } = useGetResponses(
+    form?._id,
+    parentId,
+    null,
+    showOnlyMyResponses,
+    responseId,
+  );
   const [state, setState] = useState(initialState);
   const authenticated = useSelector(({ auth }: any) => auth.authenticated);
   const [showOverlayResult, setShowOverlayResult] = useState(true);
@@ -110,13 +111,7 @@ export default function FormViewWrapper({
           form?.settings?.actions
             ?.filter((a) => a?.actionType === 'showMessage' && a?.active)
             ?.map(async (a) => {
-              const message = await replaceVariables(
-                a?.body,
-                a?.variables,
-                form?.fields,
-                response?.values,
-                parentId,
-              );
+              const message = await replaceVariables(a?.body, a?.variables, form, response);
               return message;
             }),
         );
@@ -148,6 +143,8 @@ export default function FormViewWrapper({
     (authenticated && form?.settings?.whoCanViewResponses === 'authUser') ||
     form?.settings?.whoCanViewResponses === 'all';
 
+  console.log({ form });
+
   return (
     <div>
       {form?.settings?.showFormTitle && (
@@ -176,61 +173,72 @@ export default function FormViewWrapper({
             )}
           </>
         )}
-      {canSubmit && form?.settings?.widgetType !== 'responses' && (
-        <>
-          {state.submitted ? (
-            <Overlay
-              onClose={() => {
-                setShowOverlayResult(false);
-                setState({ ...state, submitted: false });
-              }}
-              open={showOverlayResult}
-              title="Your submitted response"
-            >
-              <div className="py-5">
-                {state.messages?.map((message) => (
-                  <DisplayRichText value={message} />
-                ))}
-                {state.response && (
-                  <ResponseChild3 form={form} response={state.response} hideAuthor hideNavigation />
-                )}
-              </div>
-            </Overlay>
-          ) : (
-            <>
-              {form?.settings?.formView === 'leaderboard' ? (
-                <Leaderboard formId={form?._id} settings={form?.settings} parentId={parentId} />
-              ) : form?.settings?.formView === 'button' ? (
-                <>
-                  <div className="text-center">
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => setState({ ...state, formModal: true })}
-                    >
-                      {form?.settings?.buttonLabel || form?.name}
-                    </Button>
-                  </div>
-                  {state.formModal && (
-                    <Overlay
-                      open={state.formModal}
-                      onClose={() => setState({ ...state, formModal: false })}
-                    >
-                      <div className="p-2">
-                        <FormView
-                          authRequired={!form?.settings?.authRequired}
-                          fields={form?.fields}
-                          handleSubmit={handleSubmit}
-                          loading={createLoading}
-                          fieldWiseView={form?.settings?.formView === 'oneField'}
-                        />
-                      </div>
-                    </Overlay>
+      {canSubmit &&
+        (form?.settings?.widgetType !== 'responses' ||
+          form?.settings?.formView === 'selectItem') && (
+          <>
+            {state.submitted ? (
+              <Overlay
+                onClose={() => {
+                  setShowOverlayResult(false);
+                  setState({ ...state, submitted: false });
+                }}
+                open={showOverlayResult}
+                title="Your submitted response"
+              >
+                <div className="py-5">
+                  {state.messages?.map((message) => (
+                    <DisplayRichText value={message} />
+                  ))}
+                  {state.response && (
+                    <ResponseChild3
+                      form={form}
+                      response={state.response}
+                      hideAuthor
+                      hideNavigation
+                    />
                   )}
-                </>
-              ) : form?.settings?.formView === 'selectItem' ? (
-                <>
-                  <SelectResponse
+                </div>
+              </Overlay>
+            ) : (
+              <>
+                {form?.settings?.formView === 'leaderboard' ? (
+                  <Leaderboard formId={form?._id} settings={form?.settings} parentId={parentId} />
+                ) : form?.settings?.formView === 'button' ? (
+                  <>
+                    <div className="text-center">
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => setState({ ...state, formModal: true })}
+                      >
+                        {form?.settings?.buttonLabel || form?.name}
+                      </Button>
+                    </div>
+                    {state.formModal && (
+                      <Overlay
+                        open={state.formModal}
+                        onClose={() => setState({ ...state, formModal: false })}
+                      >
+                        <div className="p-2">
+                          <FormView
+                            authRequired={!form?.settings?.authRequired}
+                            fields={form?.fields}
+                            handleSubmit={handleSubmit}
+                            loading={createLoading}
+                            fieldWiseView={form?.settings?.formView === 'oneField'}
+                          />
+                        </div>
+                      </Overlay>
+                    )}
+                  </>
+                ) : form?.settings?.formView === 'selectItem' ? (
+                  <>
+                    <SelectItemView
+                      formId={form?.settings?.selectItemForm}
+                      settings={form?.settings}
+                    />
+                    {/* <SelectResponse
                     label={
                       form?.fields?.find((fld) => fld._id === form?.settings?.selectItemField)
                         ?.label
@@ -260,28 +268,30 @@ export default function FormViewWrapper({
                     }}
                   >
                     Submit
-                  </Button>
-                </>
-              ) : (
-                <FormView
-                  authRequired={!form?.settings?.authRequired}
-                  fields={form?.fields}
-                  handleSubmit={handleSubmit}
-                  loading={createLoading}
-                  fieldWiseView={form?.settings?.formView === 'oneField'}
-                />
-              )}
-            </>
-          )}
-        </>
-      )}
+                  </Button> */}
+                  </>
+                ) : (
+                  <FormView
+                    authRequired={!form?.settings?.authRequired}
+                    fields={form?.fields}
+                    handleSubmit={handleSubmit}
+                    loading={createLoading}
+                    fieldWiseView={form?.settings?.formView === 'oneField'}
+                  />
+                )}
+              </>
+            )}
+          </>
+        )}
       {canViewResponses &&
         form?.settings?.widgetType !== 'form' &&
+        form?.settings?.formView !== 'selectItem' &&
         form?.settings?.responsesView !== 'button' && (
           <ResponseList
             layouts={layouts}
             form={form}
             parentId={parentId}
+            responseId={responseId}
             showOnlyMyResponses={showOnlyMyResponses}
           />
         )}
@@ -644,76 +654,3 @@ export function FormView({
     </div>
   );
 }
-
-const replaceVariables = async (oldBody, oldVariables, fields, values, pageId) => {
-  let body = oldBody;
-  const formIds = [];
-  const forms = [];
-
-  oldVariables?.forEach((variable) => {
-    if (variable.formId && !formIds.includes(variable.formId)) {
-      formIds.push(variable.formId);
-    }
-  });
-
-  for (const formId of formIds) {
-    const form = await getForm(formId);
-    const response = await getResponse(formId, pageId);
-    if (form && response) {
-      forms.push({ ...form, response });
-    }
-  }
-
-  const variables = oldVariables?.map((oneVariable) => {
-    const variable = { ...oneVariable, value: '' };
-    let field = null;
-    let value = null;
-    field = fields.find((f) => f._id === variable?.field);
-    value = values?.find((v) => v.field === variable?.field);
-    if (variable.formId) {
-      const form = forms?.find((f) => f._id === variable.formId);
-      if (form) {
-        field = form?.fields.find((f) => f._id === variable?.field);
-        value = form?.response?.values?.find((v) => v.field === variable?.field);
-      }
-    }
-    if (field && value) {
-      variable.value = getValue(field, value);
-    }
-    return variable;
-  });
-  variables.forEach((variable) => {
-    body = body.split(`{{${variable.name}}}`).join(variable.value || '');
-  });
-  return body;
-};
-
-const getValue = (field, value) => {
-  switch (field?.fieldType) {
-    case 'number':
-    case 'phoneNumber': {
-      return value.valueNumber;
-    }
-    case 'date': {
-      return value?.valueDate && moment(value?.valueDate).format('L');
-    }
-    case 'dateTime': {
-      return value?.valueDate && moment(value?.valueDate).format('lll');
-    }
-    case 'checkbox': {
-      return value.valueBoolean?.toString();
-    }
-    case 'select': {
-      if (field?.options?.optionsListType === 'type') {
-        return value?.itemId?.title;
-      }
-      if (field?.options?.optionsListType === 'existingForm') {
-        return getLabel(field?.options?.formField, value?.response);
-      }
-      return value?.value;
-    }
-    default: {
-      return value.value;
-    }
-  }
-};

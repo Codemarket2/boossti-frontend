@@ -238,6 +238,7 @@ export default function ActionForm({ onCancel, fields, emailFields, onSave, acti
           </FormControl>
         </InputGroup>
       )}
+      {console.log({ fields })}
       <InputGroup>
         <Typography variant="h6" className="d-flex align-items-center pl-2">
           Variables
@@ -258,8 +259,8 @@ export default function ActionForm({ onCancel, fields, emailFields, onSave, acti
         <InputLabel>
           Define Variables and use it in email subject and body. example - {`{{email}}`}
         </InputLabel>
-        {formik.values.variables.map((variable, i) => (
-          <div className="d-flex align-items-center" key={i}>
+        {formik.values.variables.map((variable, variableIndex) => (
+          <div className="d-flex align-items-center" key={variableIndex}>
             <TextField
               fullWidth
               className="mr-2"
@@ -273,7 +274,7 @@ export default function ActionForm({ onCancel, fields, emailFields, onSave, acti
                 formik.setFieldValue(
                   'variables',
                   formik.values.variables.map((sV, sI) =>
-                    sI === i ? { ...variable, name: target.value } : sV,
+                    sI === variableIndex ? { ...variable, name: target.value } : sV,
                   ),
                 )
               }
@@ -289,7 +290,7 @@ export default function ActionForm({ onCancel, fields, emailFields, onSave, acti
                   formik.setFieldValue(
                     'variables',
                     formik.values.variables.map((sV, sI) => {
-                      if (sI === i) {
+                      if (sI === variableIndex) {
                         let payload = { ...variable, field: target.value, formId: null };
                         const field = fields?.filter((f) => f._id === target.value && f?.formId)[0];
                         if (field) {
@@ -314,7 +315,7 @@ export default function ActionForm({ onCancel, fields, emailFields, onSave, acti
                 onClick={() =>
                   formik.setFieldValue(
                     'variables',
-                    formik.values.variables.filter((sV, sI) => sI !== i),
+                    formik.values.variables.filter((sV, sI) => sI !== variableIndex),
                   )
                 }
               >

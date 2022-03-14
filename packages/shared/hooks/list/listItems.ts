@@ -45,6 +45,18 @@ export function useGetListItemById(_id) {
   return { data };
 }
 
+export async function getListItem(_id) {
+  try {
+    const response = await apolloClient.query({
+      query: GET_LIST_ITEM_BY_ID,
+      variables: { _id },
+    });
+    return response;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 export function useGetListItemsByType({ types = [] }: any) {
   const [state, setState] = useState({
     search: '',

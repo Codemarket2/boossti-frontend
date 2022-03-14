@@ -10,6 +10,7 @@ export const RESPONSE_SUB = gql`
         _id
         title
       }
+      responseId
       values {
         _id
         field

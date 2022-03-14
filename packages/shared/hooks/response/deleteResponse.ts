@@ -10,12 +10,17 @@ interface IDeleteProps extends IHooksProps {
 
 export function useDeleteResponse({ onAlert }: IDeleteProps) {
   const [deleteMutation, { loading: deleteLoading }] = useMutation(DELETE_RESPONSE);
-  const handleDelete = async (_id: string, formId: string, deleteCallBack?: any) => {
+  const handleDelete = async (
+    _id: string,
+    formId: string,
+    deleteCallBack?: any,
+    variables = {},
+  ) => {
     try {
       const deleteInCache = (client) => {
         const oldData = client.readQuery({
           query: GET_RESPONSES,
-          variables: { ...defaultQueryVariables, formId },
+          variables: { ...defaultQueryVariables, ...variables, formId },
         });
         if (oldData?.getResponses) {
           const newData = {
@@ -26,7 +31,7 @@ export function useDeleteResponse({ onAlert }: IDeleteProps) {
           };
           client.writeQuery({
             query: GET_RESPONSES,
-            variables: { ...defaultQueryVariables, formId },
+            variables: { ...defaultQueryVariables, ...variables, formId },
             data: newData,
           });
         }

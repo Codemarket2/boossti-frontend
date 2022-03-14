@@ -3,6 +3,9 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
+import { useCreateVirtualForm } from '@frontend/shared/hooks/form';
+import { generateObjectId } from '@frontend/shared/utils/objectId';
+import { onAlert } from '../../utils/alert';
 import InputGroup from '../common/InputGroup';
 import SelectFormFields from './SelectFormFields';
 
@@ -14,6 +17,8 @@ interface IProps {
 }
 
 export default function FormSetting({ formId, settings, onChange, isSection }: IProps): any {
+  const { handleCreateVirtualForm, createLoading } = useCreateVirtualForm({ onAlert });
+
   return (
     <Paper variant="outlined" className="p-2">
       <InputGroup>
@@ -97,7 +102,28 @@ export default function FormSetting({ formId, settings, onChange, isSection }: I
               <SelectFormFields
                 formId={formId}
                 value={settings?.selectItemField}
-                onChange={(newValue) => onChange({ selectItemField: newValue })}
+                onChange={async (newValue, label) => {
+                  // console.log({ settings, selectItemField: newValue, formId, label });
+                  onChange({ selectItemField: newValue });
+
+                  const res = await handleCreateVirtualForm(`VForm ${generateObjectId()}`, {
+                    fields: [
+                      {
+                        label,
+                        fieldType: 'select',
+                        options: JSON.stringify({
+                          optionsListType: 'existingForm',
+                          formField: newValue,
+                        }),
+                        form: formId,
+                      },
+                    ],
+                  });
+
+                  onChange({
+                    selectItemForm: res?.data?.createForm?._id,
+                  });
+                }}
                 error={!settings?.selectItemField}
                 helperText={!settings?.selectItemField && 'required'}
               />
