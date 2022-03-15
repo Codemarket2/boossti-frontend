@@ -26,11 +26,19 @@ interface IProps {
   onCancel: () => void;
   fields: any[];
   emailFields: any[];
+  nameFields: any[];
   onSave: (payload: any, operation: string) => void;
   action: any;
 }
 
-export default function ActionForm({ onCancel, fields, emailFields, onSave, action }: IProps) {
+export default function ActionForm({
+  onCancel,
+  fields,
+  emailFields,
+  nameFields,
+  onSave,
+  action,
+}: IProps) {
   const { formik, setFormValues } = useFormActions({ onAlert, onSave });
   useEffect(() => {
     if (action) {
@@ -72,6 +80,9 @@ export default function ActionForm({ onCancel, fields, emailFields, onSave, acti
             {fields?.some((f) => f.fieldType === 'phoneNumber' && f?.options?.required) && (
               <MenuItem value="sendSms">Send SMS</MenuItem>
             )}
+            {fields?.some((f) => f.fieldType === 'email' && f?.options?.required) && (
+              <MenuItem value="generateNewUser">Generate New User</MenuItem>
+            )}
           </Select>
           {formik.touched.actionType && formik.errors.actionType ? (
             <FormHelperText className="text-danger">{formik.errors.actionType}</FormHelperText>
@@ -96,7 +107,8 @@ export default function ActionForm({ onCancel, fields, emailFields, onSave, acti
           helperText={formik.touched.name && formik.errors.name}
         />
       </InputGroup>
-      {formik.values.actionType === 'sendEmail' && (
+      {(formik.values.actionType === 'sendEmail' ||
+        formik.values.actionType === 'generateNewUser') && (
         <>
           <InputGroup>
             <TextField
@@ -121,20 +133,34 @@ export default function ActionForm({ onCancel, fields, emailFields, onSave, acti
               error={Boolean(formik.touched.receiverType && formik.errors.receiverType)}
             >
               <InputLabel id="receiverType">Receiver*</InputLabel>
-              <Select
-                labelId="receiverType"
-                name="receiverType"
-                value={formik.values.receiverType}
-                onChange={formik.handleChange}
-                label="Receiver*"
-              >
-                <MenuItem value="formOwner">Form owner</MenuItem>
-                <MenuItem value="responseSubmitter">Response submitter</MenuItem>
-                <MenuItem value="customEmail">Custom email</MenuItem>
-                {emailFields?.length > 0 && (
-                  <MenuItem value="emailField">Form email field</MenuItem>
-                )}
-              </Select>
+              {formik.values.actionType === 'sendEmail' ? (
+                <Select
+                  labelId="receiverType"
+                  name="receiverType"
+                  value={formik.values.receiverType}
+                  onChange={formik.handleChange}
+                  label="Receiver*"
+                >
+                  <MenuItem value="formOwner">Form owner</MenuItem>
+                  <MenuItem value="responseSubmitter">Response submitter</MenuItem>
+                  <MenuItem value="customEmail">Custom email</MenuItem>
+                  {emailFields?.length > 0 && (
+                    <MenuItem value="emailField">Form email field</MenuItem>
+                  )}
+                </Select>
+              ) : (
+                <Select
+                  labelId="receiverType"
+                  name="receiverType"
+                  value={(formik.values.receiverType = 'emailField')}
+                  onChange={formik.handleChange}
+                  label="Receiver*"
+                >
+                  {emailFields?.length > 0 && (
+                    <MenuItem value="emailField">Form email field</MenuItem>
+                  )}
+                </Select>
+              )}
               {formik.touched.receiverType && formik.errors.receiverType ? (
                 <FormHelperText className="text-danger">
                   {formik.errors.receiverType}
@@ -170,6 +196,35 @@ export default function ActionForm({ onCancel, fields, emailFields, onSave, acti
                 {formik.touched.emailFieldId && formik.errors.emailFieldId && (
                   <FormHelperText className="text-danger">
                     {formik.errors.emailFieldId}
+                  </FormHelperText>
+                )}
+              </FormControl>
+            </InputGroup>
+          )}
+          {formik.values.receiverType === 'emailField' && (
+            <InputGroup>
+              <FormControl
+                variant="outlined"
+                fullWidth
+                size="small"
+                error={Boolean(formik.touched.nameFieldId && formik.errors.nameFieldId)}
+              >
+                <InputLabel id="nameFieldId-simple-select-outlined-label">Name Field</InputLabel>
+                <Select
+                  labelId="nameFieldId-simple-select-outlined-label"
+                  id="nameFieldId-simple-select-outlined"
+                  name="nameFieldId"
+                  value={formik.values.nameFieldId}
+                  onChange={formik.handleChange}
+                  label="Name Field"
+                >
+                  {nameFields?.map((field) => (
+                    <MenuItem value={field._id}>{field.label}</MenuItem>
+                  ))}
+                </Select>
+                {formik.touched.nameFieldId && formik.errors.nameFieldId && (
+                  <FormHelperText className="text-danger">
+                    {formik.errors.nameFieldId}
                   </FormHelperText>
                 )}
               </FormControl>
@@ -325,7 +380,8 @@ export default function ActionForm({ onCancel, fields, emailFields, onSave, acti
           </div>
         ))}
       </InputGroup>
-      {formik.values.actionType === 'sendEmail' && (
+      {(formik.values.actionType === 'sendEmail' ||
+        formik.values.actionType === 'generateNewUser') && (
         <InputGroup>
           <TextField
             fullWidth
@@ -341,7 +397,7 @@ export default function ActionForm({ onCancel, fields, emailFields, onSave, acti
           />
         </InputGroup>
       )}
-      {['sendEmail', 'showMessage'].includes(formik.values.actionType) && (
+      {['sendEmail', 'showMessage', 'generateNewUser'].includes(formik.values.actionType) && (
         <InputGroup>
           <InputLabel>Email Body*</InputLabel>
           <RichTextarea

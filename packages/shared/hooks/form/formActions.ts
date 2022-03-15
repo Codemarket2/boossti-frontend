@@ -59,6 +59,7 @@ interface IFormValues {
   senderEmail: string;
   receiverType: string;
   emailFieldId: string;
+  nameFieldId: string;
   receiverEmails: string[];
   variables: TVariables[];
   subject: string;
@@ -73,6 +74,7 @@ const defaultFormValues = {
   senderEmail: '',
   receiverType: 'customEmail',
   emailFieldId: '',
+  nameFieldId: '',
   receiverEmails: [],
   variables: [{ name: '', field: '', formId: null }],
   subject: '',
@@ -111,6 +113,7 @@ export function useFormActions({ onAlert, onSave }: IProps) {
     formik.setFieldValue('senderEmail', payload.senderEmail, false);
     formik.setFieldValue('receiverType', payload?.receiverType, false);
     formik.setFieldValue('emailFieldId', payload.emailFieldId, false);
+    formik.setFieldValue('nameFieldId', payload.nameFieldId, false);
     formik.setFieldValue('receiverEmails', payload?.receiverEmails, false);
     formik.setFieldValue('phoneFieldId', payload.phoneFieldId, false);
     formik.setFieldValue('variables', payload.variables, false);
