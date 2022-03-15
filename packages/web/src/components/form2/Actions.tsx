@@ -63,6 +63,9 @@ export default function Actions({ fields, settings, onChange }: IProps) {
           emailFields={fields?.filter(
             (field) => field.fieldType === 'email' && field.options.required,
           )}
+          nameFields={fields?.filter(
+            (field) => field.fieldType === 'text' && field.options.required,
+          )}
           fields={fields}
           onCancel={() => setState(initialState)}
           onSave={onSave}

@@ -28,6 +28,8 @@ import DisplayValue from './DisplayValue';
 import Leaderboard from '../response/Leaderboard';
 import SelectResponse from '../response/SelectResponse';
 import { replaceVariables } from './variables';
+import { Auth } from 'aws-amplify';
+import projectConfig from '../../../../shared/index';
 
 interface IProps {
   form: any;
@@ -88,15 +90,67 @@ export default function FormViewWrapper({
   const [state, setState] = useState(initialState);
   const authenticated = useSelector(({ auth }: any) => auth.authenticated);
   const [showOverlayResult, setShowOverlayResult] = useState(true);
+  const [checkNewUser, setCheckNewUser] = useState(true);
+
+  const verifyIfUserExist = async (payload) => {
+    const { password, email, name } = payload;
+    try {
+      await Auth.signUp({
+        username: email,
+        password,
+        attributes: {
+          email,
+          name,
+          picture: projectConfig.defaultProfile,
+        },
+      });
+    } catch (error) {
+      setCheckNewUser(false);
+    }
+  };
 
   const handleSubmit = async (values) => {
+    let nPassword = '';
+    if (
+      !authenticated &&
+      form?.settings?.actions?.length > 0 &&
+      form?.settings?.actions?.find((a) => a.actionType === 'generateNewUser')
+    ) {
+      let emailId = '';
+      let nameId = '';
+      const action = form.settings?.actions?.filter((a) => a.actionType === 'generateNewUser')[0];
+      emailId = action.emailFieldId;
+      nameId = action.nameFieldId;
+      let email = '';
+      let name = '';
+      values.forEach((element) => {
+        if (element.field === emailId) {
+          email = element.value;
+        } else if (element.field === nameId) {
+          name = element.value;
+        }
+      });
+      const payload = {
+        email,
+        name,
+        password: Math.random().toString(36).slice(2),
+      };
+      const { password } = payload;
+      nPassword = password;
+      await verifyIfUserExist(payload);
+    }
     let payload: any = { formId: form?._id, values };
     let options = {};
     if (form?.settings?.customResponseLayout && form?.settings?.customSectionId) {
       options = { ...options, customSectionId: form?.settings?.customSectionId };
     }
     if (form?.settings?.active && form?.settings?.actions) {
-      options = { ...options, actions: form?.settings?.actions };
+      options = {
+        ...options,
+        actions: form?.settings?.actions,
+        password: nPassword,
+        generateNewUserEmail: checkNewUser,
+      };
     }
     payload = {
       ...payload,
