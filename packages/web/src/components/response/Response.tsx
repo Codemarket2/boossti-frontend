@@ -1,11 +1,6 @@
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import { useGetForm } from '@frontend/shared/hooks/form';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-import Grid from '@material-ui/core/Grid';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
 import { useDeleteResponse, useGetResponse } from '@frontend/shared/hooks/response';
 import { getListItem } from '@frontend/shared/hooks/list/listItems';
 import { useRouter } from 'next/router';
@@ -16,12 +11,14 @@ import EditIcon from '@material-ui/icons/Edit';
 import { useAuthorization } from '@frontend/shared/hooks/auth';
 import ListItemText from '@material-ui/core/ListItemText';
 import moment from 'moment';
-import Paper from '@material-ui/core/Paper';
+import { Paper, Box, Grid, List, ListItem, IconButton, Tooltip } from '@material-ui/core';
+import styled from 'styled-components';
 import EditResponseDrawer from './EditResponseDrawer';
 import Breadcrumbs from '../common/Breadcrumbs';
 import DisplayValue from '../form2/DisplayValue';
 import NotFound from '../common/NotFound';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
+import StarRating from '../starRating/starRating';
 import ErrorLoading from '../common/ErrorLoading';
 import { QRButton } from '../qrcode/QRButton';
 import ResponseSections from './ResponseSection';
@@ -31,6 +28,12 @@ import CRUDMenu from '../common/CRUDMenu';
 import BackdropComponent from '../common/Backdrop';
 import EditMode from '../common/EditMode';
 
+const StyledBox = styled(Box)`
+  flex-direction: column !important;
+  ${(props) => props.theme.breakpoints.up('md')} {
+    flex-direction: row !important;
+  }
+`;
 interface IProps {
   responseId: string;
   hideBreadcrumbs?: boolean;
@@ -294,12 +297,16 @@ export function ResponseChild3({
                     {response?.values
                       ?.filter((v) => v.field === field._id)
                       .map((value) => (
-                        <div key={value?._id}>
+                        <StyledBox
+                          key={value?._id}
+                          style={{ display: 'flex', alignContent: 'center' }}
+                        >
                           <DisplayValue field={field} value={value} />
                           {field?.options?.showCommentBox && (
                             <CommentLikeShare parentId={value?._id} />
                           )}
-                        </div>
+                          {field?.options?.showStarRating && <StarRating parentId={value?._id} />}
+                        </StyledBox>
                       ))}
                   </div>
                 );
