@@ -28,7 +28,7 @@ import Overlay from '../common/Overlay';
 interface IProps {
   form: any;
   parentId?: string;
-  responseId?: string;
+  workFlowFormReponseParentId?: string;
   layouts?: any;
   showOnlyMyResponses?: boolean;
 }
@@ -36,7 +36,7 @@ interface IProps {
 export default function ResponseList({
   form,
   parentId,
-  responseId,
+  workFlowFormReponseParentId,
   layouts,
   showOnlyMyResponses,
 }: IProps): any {
@@ -45,7 +45,7 @@ export default function ResponseList({
     parentId,
     null,
     showOnlyMyResponses,
-    responseId,
+    workFlowFormReponseParentId,
   );
   const [height, setHeight] = useState(0);
   let gridHeight = 0;
@@ -100,7 +100,10 @@ export default function ResponseList({
                         <Authorization _id={[response?.createdBy?._id]} allowAdmin returnNull>
                           <DeleteButton
                             onClick={() =>
-                              handleDelete(response._id, form._id, null, { parentId, responseId })
+                              handleDelete(response._id, form._id, null, {
+                                parentId,
+                                workFlowFormReponseParentId,
+                              })
                             }
                             edge="start"
                           />

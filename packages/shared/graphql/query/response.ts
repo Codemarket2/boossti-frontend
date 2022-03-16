@@ -10,7 +10,7 @@ export const GET_RESPONSE = gql`
         _id
         title
       }
-      responseId
+      workFlowFormReponseParentId
       values {
         _id
         field
@@ -57,7 +57,7 @@ export const GET_RESPONSE_BY_COUNT = gql`
         _id
         title
       }
-      responseId
+      workFlowFormReponseParentId
       values {
         _id
         field
@@ -98,7 +98,7 @@ export const GET_RESPONSES = gql`
   query MyQuery(
     $formId: ID!
     $parentId: ID
-    $responseId: ID
+    $workFlowFormReponseParentId: ID
     $page: Int
     $limit: Int
     $search: String
@@ -108,7 +108,7 @@ export const GET_RESPONSES = gql`
     getResponses(
       formId: $formId
       parentId: $parentId
-      responseId: $responseId
+      workFlowFormReponseParentId: $workFlowFormReponseParentId
       page: $page
       limit: $limit
       search: $search
@@ -124,7 +124,7 @@ export const GET_RESPONSES = gql`
           _id
           title
         }
-        responseId
+        workFlowFormReponseParentId
         values {
           _id
           field
@@ -177,7 +177,7 @@ export const GET_MY_RESPONSES = gql`
           _id
           title
         }
-        responseId
+        workFlowFormReponseParentId
         values {
           _id
           field

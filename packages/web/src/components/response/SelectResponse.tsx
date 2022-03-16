@@ -9,6 +9,7 @@ import CreateResponseDrawer from './CreateResponseDrawer';
 interface IProps {
   label: string;
   formId: string;
+  parentId?: string;
   value: any;
   onChange: (form) => void;
   error?: boolean;
@@ -22,6 +23,7 @@ const filter = createFilterOptions();
 export default function SelectResponse({
   label,
   formId,
+  parentId,
   value = null,
   onChange,
   error = false,
@@ -104,6 +106,7 @@ export default function SelectResponse({
           onClose={() => setAddOption({ ...addOption, showDrawer: false })}
           title={label}
           formId={formId}
+          parentId={parentId}
           createCallback={(newResponse) => {
             onChange(getLabels(formField, [newResponse])?.pop());
             setAddOption({ ...addOption, showDrawer: false });
