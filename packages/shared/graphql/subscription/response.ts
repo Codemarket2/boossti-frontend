@@ -10,7 +10,7 @@ export const RESPONSE_SUB = gql`
         _id
         title
       }
-      responseId
+      workFlowFormReponseParentId
       values {
         _id
         field

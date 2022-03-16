@@ -20,7 +20,11 @@ export const getValues = (values, fields) => {
   return newValues;
 };
 
-export function useCreateUpdateResponse({ onAlert }: IHooksProps, parentId, responseId?: string) {
+export function useCreateUpdateResponse(
+  { onAlert }: IHooksProps,
+  parentId,
+  workFlowFormReponseParentId?: string,
+) {
   const [createMutation, { loading: createLoading }] = useMutation(CREATE_RESPONSE);
   const [updateMutation, { loading: updateLoading }] = useMutation(UPDATE_RESPONSE);
 
@@ -32,7 +36,7 @@ export function useCreateUpdateResponse({ onAlert }: IHooksProps, parentId, resp
         ...payload,
         values: values.map((m) => JSON.parse(JSON.stringify(m), omitTypename)),
         parentId,
-        responseId,
+        workFlowFormReponseParentId,
       };
       let response = null;
       if (edit) {

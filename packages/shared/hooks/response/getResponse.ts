@@ -19,7 +19,7 @@ export function useGetResponses(
   parentId: string = null,
   formField = null,
   onlyMy = false,
-  responseId: string = null,
+  workFlowFormReponseParentId: string = null,
 ) {
   const [subsribed, setSubsribed] = useState(false);
   const [state, setState] = useState({
@@ -29,7 +29,7 @@ export function useGetResponses(
   });
 
   const { data, error, loading, subscribeToMore, refetch } = useQuery(GET_RESPONSES, {
-    variables: { ...state, formId, parentId, responseId, onlyMy },
+    variables: { ...state, formId, parentId, workFlowFormReponseParentId, onlyMy },
     fetchPolicy: 'cache-and-network',
   });
 

@@ -241,8 +241,12 @@ export function ResponseChild3({
           </Grid>
         )}
         <Grid item xs={!hideLeftNavigation ? 12 : 9}>
-          {response?.responseId && section?.options?.showRelation && (
-            <Response responseId={response?.responseId} hideBreadcrumbs hideWorkflow />
+          {response?.workFlowFormReponseParentId && section?.options?.showRelation && (
+            <Response
+              responseId={response?.workFlowFormReponseParentId}
+              hideBreadcrumbs
+              hideWorkflow
+            />
           )}
           <Paper
             variant="outlined"
@@ -264,7 +268,7 @@ export function ResponseChild3({
                     options: { ...section?.options, layouts },
                   })
                 }
-                responseId={response?._id}
+                workFlowFormReponseParentId={response?._id}
               />
             )}
             <div className="p-2">

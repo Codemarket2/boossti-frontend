@@ -34,7 +34,7 @@ import projectConfig from '../../../../shared/index';
 interface IProps {
   form: any;
   parentId?: string;
-  responseId?: string;
+  workFlowFormReponseParentId?: string;
   createCallback?: (response: any) => void;
   setResponded?: () => void;
   isPageOwner?: boolean;
@@ -66,7 +66,7 @@ const initialState = {
 export default function FormViewWrapper({
   form,
   parentId,
-  responseId,
+  workFlowFormReponseParentId,
   createCallback,
   setResponded,
   layouts,
@@ -75,7 +75,7 @@ export default function FormViewWrapper({
   const { handleCreateUpdateResponse, createLoading } = useCreateUpdateResponse(
     { onAlert },
     parentId,
-    responseId,
+    workFlowFormReponseParentId,
   );
 
   const showOnlyMyResponses = !isPageOwner && form?.settings?.onlyMyResponses;
@@ -85,7 +85,7 @@ export default function FormViewWrapper({
     parentId,
     null,
     showOnlyMyResponses,
-    responseId,
+    workFlowFormReponseParentId,
   );
   const [state, setState] = useState(initialState);
   const authenticated = useSelector(({ auth }: any) => auth.authenticated);
@@ -345,7 +345,7 @@ export default function FormViewWrapper({
             layouts={layouts}
             form={form}
             parentId={parentId}
-            responseId={responseId}
+            workFlowFormReponseParentId={workFlowFormReponseParentId}
             showOnlyMyResponses={showOnlyMyResponses}
           />
         )}
