@@ -51,7 +51,7 @@ export default function StarRating({ parentId }: StarRatingProps) {
         />
         <div className="m-1">
           {data?.getRatingCounts?.ratingCount}
-          {data?.getRatingCounts?.ratingCount === 1 ? 'review' : 'reviews'}
+          {data?.getRatingCounts?.ratingCount === 1 ? ' review' : ' reviews'}
         </div>
       </Box>
     </>
