@@ -141,6 +141,19 @@ export default function FormFields({
             label="Show CommentBox"
           />
         </InputGroup>
+        <InputGroup>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={field?.options?.showStarRating}
+                onChange={({ target }) => onOptionChange({ showStarRating: target.checked })}
+                name="showStarRating"
+                color="primary"
+              />
+            }
+            label="Show Star Ratings"
+          />
+        </InputGroup>
         {field.fieldType === 'select' && (
           <>
             <InputGroup>

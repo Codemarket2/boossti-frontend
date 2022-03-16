@@ -12,6 +12,7 @@ import { FormView } from './FormView';
 import DisplayValue from './DisplayValue';
 import BackdropComponent from '../common/Backdrop';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
+import StarRating from '../starRating/starRating';
 import FormViewWrapper from './FormViewWrapper';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
@@ -67,6 +68,7 @@ export default function FormFieldsValue({
     const response = await handleValueChange({ values: newValues }, setInitialState);
     return response;
   };
+  console.log('FormFieldsValue', values);
 
   const handleDelete = async () => {
     setState({ ...state, loading: true });
@@ -105,7 +107,7 @@ export default function FormFieldsValue({
   //   val = { ...val, height: gridHeight };
   //   return val;
   // });
-  console.log(breakPoint);
+  console.log(',breakpoint', breakPoint, fields);
   return (
     <div className="p-2">
       <BackdropComponent open={state.loading} />
@@ -198,6 +200,7 @@ export default function FormFieldsValue({
                 </>
               )}
               {field?.options?.showCommentBox && <CommentLikeShare parentId={field._id} />}
+              <StarRating parentId={field._id} />
             </div>
             {showOverlay.show && showOverlay.id == field._id && (
               <Overlay
@@ -275,6 +278,7 @@ export default function FormFieldsValue({
                     </>
                   )}
                   {field?.options?.showCommentBox && <CommentLikeShare parentId={field._id} />}
+                  <StarRating parentId={field._id} />
                 </div>
               </Overlay>
             )}
