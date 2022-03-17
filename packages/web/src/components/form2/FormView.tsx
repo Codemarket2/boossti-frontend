@@ -282,6 +282,10 @@ export default function FormViewWrapper({
                 </>
               ) : form?.settings?.formView === 'selectItem' ? (
                 <>
+                  <SelectItemView
+                    formId={form?.settings?.selectItemForm}
+                    settings={form?.settings}
+                  />
                   <SelectResponse
                     label={form?.name}
                     formId={form?._id}
