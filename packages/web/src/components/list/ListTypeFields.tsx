@@ -14,7 +14,7 @@ export default function ListTypeFields({ listType, previewMode }: IProps) {
       <FormFields
         fields={listType?.fields}
         setFields={(fields) => onListTypeChange({ fields })}
-        title="Wigets"
+        title="Widgets"
         previewMode={previewMode}
         isSection
       />
