@@ -104,6 +104,7 @@ export default function FormViewWrapper({
           picture: projectConfig.defaultProfile,
         },
       });
+      setCheckNewUser(true);
     } catch (error) {
       setCheckNewUser(false);
     }
