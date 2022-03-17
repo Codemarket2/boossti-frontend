@@ -16,6 +16,7 @@ interface IProps {
   helperText?: string;
   disabled?: boolean;
   formField?: string;
+  openDrawer?: any;
 }
 
 const filter = createFilterOptions();
@@ -30,6 +31,7 @@ export default function SelectResponse({
   helperText,
   disabled,
   formField,
+  openDrawer,
 }: IProps) {
   const { data, error: queryError, loading, state, setState } = useGetResponses(
     formId,
@@ -57,8 +59,12 @@ export default function SelectResponse({
         value={value}
         onChange={(event: any, newValue) => {
           if (newValue?.openDrawer) {
-            onChange(null);
-            setAddOption({ ...addOption, showDrawer: true });
+            if (openDrawer) {
+              openDrawer();
+            } else {
+              onChange(null);
+              setAddOption({ ...addOption, showDrawer: true });
+            }
           } else {
             onChange(newValue);
           }

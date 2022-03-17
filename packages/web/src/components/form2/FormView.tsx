@@ -61,6 +61,7 @@ const initialState = {
   formModal: false,
   selectItemValue: null,
   drawer: false,
+  temp: null,
 };
 
 export default function FormViewWrapper({
@@ -227,72 +228,71 @@ export default function FormViewWrapper({
             )}
           </>
         )}
-      {canSubmit &&
-        (form?.settings?.widgetType !== 'responses' ||
-          form?.settings?.formView === 'selectItem') && (
-          <>
-            {state.submitted ? (
-              <Overlay
-                onClose={() => {
-                  setShowOverlayResult(false);
-                  setState({ ...state, submitted: false });
-                }}
-                open={showOverlayResult}
-                title="Your submitted response"
-              >
-                <div className="py-5">
-                  {state.messages?.map((message) => (
-                    <DisplayRichText value={message} />
-                  ))}
-                  {state.response && (
-                    <ResponseChild3
-                      form={form}
-                      response={state.response}
-                      hideAuthor
-                      hideNavigation
-                    />
-                  )}
-                </div>
-              </Overlay>
-            ) : (
-              <>
-                {form?.settings?.formView === 'leaderboard' ? (
-                  <Leaderboard formId={form?._id} settings={form?.settings} parentId={parentId} />
-                ) : form?.settings?.formView === 'button' ? (
-                  <>
-                    <div className="text-center">
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => setState({ ...state, formModal: true })}
-                      >
-                        {form?.settings?.buttonLabel || form?.name}
-                      </Button>
-                    </div>
-                    {state.formModal && (
-                      <Overlay
-                        open={state.formModal}
-                        onClose={() => setState({ ...state, formModal: false })}
-                      >
-                        <div className="p-2">
-                          <FormView
-                            authRequired={!form?.settings?.authRequired}
-                            fields={form?.fields}
-                            handleSubmit={handleSubmit}
-                            loading={createLoading}
-                            fieldWiseView={form?.settings?.formView === 'oneField'}
-                          />
-                        </div>
-                      </Overlay>
-                    )}
-                  </>
-                ) : form?.settings?.formView === 'selectItem' ? (
-                  <>
-                    <SelectItemView
-                      formId={form?.settings?.selectItemForm}
-                      settings={form?.settings}
-                    />
-                    {/* <SelectResponse
+      {canSubmit && form?.settings?.widgetType !== 'responses' && (
+        <>
+          {state.formModal && (
+            <Overlay
+              open={state.formModal}
+              onClose={() => setState({ ...state, formModal: false })}
+            >
+              <div className="p-2">
+                <FormView
+                  authRequired={!form?.settings?.authRequired}
+                  fields={form?.fields}
+                  handleSubmit={handleSubmit}
+                  loading={createLoading}
+                  fieldWiseView={form?.settings?.formView === 'oneField'}
+                />
+              </div>
+            </Overlay>
+          )}
+          {state.submitted ? (
+            <Overlay
+              onClose={() => {
+                setShowOverlayResult(false);
+                setState({ ...state, submitted: false });
+              }}
+              open={showOverlayResult}
+              title="Your submitted response"
+            >
+              <div className="py-5">
+                {state.messages?.map((message) => (
+                  <DisplayRichText value={message} />
+                ))}
+                {state.response && (
+                  <ResponseChild3 form={form} response={state.response} hideAuthor hideNavigation />
+                )}
+              </div>
+            </Overlay>
+          ) : (
+            <>
+              {form?.settings?.formView === 'leaderboard' ? (
+                <Leaderboard formId={form?._id} settings={form?.settings} parentId={parentId} />
+              ) : form?.settings?.formView === 'button' ? (
+                <>
+                  <div className="text-center">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => setState({ ...state, formModal: true })}
+                    >
+                      {form?.settings?.buttonLabel || form?.name}
+                    </Button>
+                  </div>
+                </>
+              ) : form?.settings?.formView === 'selectItem' ? (
+                <>
+                  <SelectResponse
+                    label={form?.name}
+                    formId={form?._id}
+                    value={null}
+                    onChange={function (temp: any): void {
+                      setState({ ...state, temp });
+                    }}
+                    openDrawer={() => setState({ ...state, formModal: true })}
+                  />
+
+                  {/* <SelectResponse
                     label={
                       form?.fields?.find((fld) => fld._id === form?.settings?.selectItemField)
                         ?.label
@@ -323,23 +323,22 @@ export default function FormViewWrapper({
                   >
                     Submit
                   </Button> */}
-                  </>
-                ) : (
-                  <FormView
-                    authRequired={!form?.settings?.authRequired}
-                    fields={form?.fields}
-                    handleSubmit={handleSubmit}
-                    loading={createLoading}
-                    fieldWiseView={form?.settings?.formView === 'oneField'}
-                  />
-                )}
-              </>
-            )}
-          </>
-        )}
+                </>
+              ) : (
+                <FormView
+                  authRequired={!form?.settings?.authRequired}
+                  fields={form?.fields}
+                  handleSubmit={handleSubmit}
+                  loading={createLoading}
+                  fieldWiseView={form?.settings?.formView === 'oneField'}
+                />
+              )}
+            </>
+          )}
+        </>
+      )}
       {canViewResponses &&
         form?.settings?.widgetType !== 'form' &&
-        form?.settings?.formView !== 'selectItem' &&
         form?.settings?.responsesView !== 'button' && (
           <ResponseList
             layouts={layouts}

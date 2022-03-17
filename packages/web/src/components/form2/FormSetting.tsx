@@ -55,6 +55,7 @@ export default function FormSetting({ formId, settings, onChange, isSection }: I
               <MenuItem value="selectItem">Select Item</MenuItem>
             </TextField>
           </InputGroup>
+          {/* ADD THE SELECT FORM FIELD  */}
           {settings?.formView === 'leaderboard' && (
             <InputGroup>
               <h3>Leader Board</h3>
