@@ -96,7 +96,7 @@ export default function FormViewWrapper({
   const verifyIfUserExist = async (payload) => {
     const { password, email, name } = payload;
     try {
-      await Auth.signUp({
+      const response = await Auth.signUp({
         username: email,
         password,
         attributes: {
@@ -105,6 +105,9 @@ export default function FormViewWrapper({
           picture: projectConfig.defaultProfile,
         },
       });
+      if (response) {
+        setCheckNewUser(true);
+      }
     } catch (error) {
       setCheckNewUser(false);
     }
@@ -145,7 +148,7 @@ export default function FormViewWrapper({
     if (form?.settings?.customResponseLayout && form?.settings?.customSectionId) {
       options = { ...options, customSectionId: form?.settings?.customSectionId };
     }
-    if (form?.settings?.active && form?.settings?.actions) {
+    if (form?.settings?.actions?.length > 0) {
       options = {
         ...options,
         actions: form?.settings?.actions,
