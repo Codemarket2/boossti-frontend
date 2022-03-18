@@ -31,7 +31,7 @@ interface IProps {
   form: any;
 }
 
-export default function FieldValueForm2({
+export default function Field({
   disabled = false,
   validate,
   _id,

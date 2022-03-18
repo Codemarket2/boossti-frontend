@@ -201,8 +201,6 @@ export default function FormViewWrapper({
     (authenticated && form?.settings?.whoCanViewResponses === 'authUser') ||
     form?.settings?.whoCanViewResponses === 'all';
 
-  console.log({ form });
-
   return (
     <div>
       {form?.settings?.showFormTitle && (

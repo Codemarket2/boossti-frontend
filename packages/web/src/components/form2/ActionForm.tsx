@@ -19,6 +19,8 @@ import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
 import { onAlert } from '../../utils/alert';
 import RichTextarea from '../common/RichTextarea2';
+import Field from './Field';
+import { defualtValue } from './FormView';
 
 const filter = createFilterOptions();
 
@@ -45,6 +47,7 @@ export default function ActionForm({
       setFormValues(action);
     }
   }, [action]);
+
   return (
     <form className="px-2" onSubmit={formik.handleSubmit}>
       <InputGroup>
@@ -83,6 +86,7 @@ export default function ActionForm({
             {fields?.some((f) => f.fieldType === 'email' && f?.options?.required) && (
               <MenuItem value="generateNewUser">Generate New User</MenuItem>
             )}
+            <MenuItem value="updateFieldValue">Update field value</MenuItem>
           </Select>
           {formik.touched.actionType && formik.errors.actionType ? (
             <FormHelperText className="text-danger">{formik.errors.actionType}</FormHelperText>
@@ -107,24 +111,25 @@ export default function ActionForm({
           helperText={formik.touched.name && formik.errors.name}
         />
       </InputGroup>
-      {(formik.values.actionType === 'sendEmail' ||
-        formik.values.actionType === 'generateNewUser') && (
+      {['sendEmail', 'generateNewUser']?.includes(formik.values.actionType) && (
+        <InputGroup>
+          <TextField
+            fullWidth
+            label="Sender Email*"
+            variant="outlined"
+            name="senderEmail"
+            size="small"
+            type="email"
+            disabled={formik.isSubmitting}
+            value={formik.values.senderEmail}
+            onChange={formik.handleChange}
+            error={formik.touched.senderEmail && Boolean(formik.errors.senderEmail)}
+            helperText={formik.touched.senderEmail && formik.errors.senderEmail}
+          />
+        </InputGroup>
+      )}
+      {formik.values.actionType === 'sendEmail' && (
         <>
-          <InputGroup>
-            <TextField
-              fullWidth
-              label="Sender Email*"
-              variant="outlined"
-              name="senderEmail"
-              size="small"
-              type="email"
-              disabled={formik.isSubmitting}
-              value={formik.values.senderEmail}
-              onChange={formik.handleChange}
-              error={formik.touched.senderEmail && Boolean(formik.errors.senderEmail)}
-              helperText={formik.touched.senderEmail && formik.errors.senderEmail}
-            />
-          </InputGroup>
           <InputGroup>
             <FormControl
               variant="outlined"
@@ -133,34 +138,20 @@ export default function ActionForm({
               error={Boolean(formik.touched.receiverType && formik.errors.receiverType)}
             >
               <InputLabel id="receiverType">Receiver*</InputLabel>
-              {formik.values.actionType === 'sendEmail' ? (
-                <Select
-                  labelId="receiverType"
-                  name="receiverType"
-                  value={formik.values.receiverType}
-                  onChange={formik.handleChange}
-                  label="Receiver*"
-                >
-                  <MenuItem value="formOwner">Form owner</MenuItem>
-                  <MenuItem value="responseSubmitter">Response submitter</MenuItem>
-                  <MenuItem value="customEmail">Custom email</MenuItem>
-                  {emailFields?.length > 0 && (
-                    <MenuItem value="emailField">Form email field</MenuItem>
-                  )}
-                </Select>
-              ) : (
-                <Select
-                  labelId="receiverType"
-                  name="receiverType"
-                  value={(formik.values.receiverType = 'emailField')}
-                  onChange={formik.handleChange}
-                  label="Receiver*"
-                >
-                  {emailFields?.length > 0 && (
-                    <MenuItem value="emailField">Form email field</MenuItem>
-                  )}
-                </Select>
-              )}
+              <Select
+                labelId="receiverType"
+                name="receiverType"
+                value={formik.values.receiverType}
+                onChange={formik.handleChange}
+                label="Receiver*"
+              >
+                <MenuItem value="formOwner">Form owner</MenuItem>
+                <MenuItem value="responseSubmitter">Response submitter</MenuItem>
+                <MenuItem value="customEmail">Custom email</MenuItem>
+                {emailFields?.length > 0 && (
+                  <MenuItem value="emailField">Form email field</MenuItem>
+                )}
+              </Select>
               {formik.touched.receiverType && formik.errors.receiverType ? (
                 <FormHelperText className="text-danger">
                   {formik.errors.receiverType}
@@ -172,64 +163,6 @@ export default function ActionForm({
               )}
             </FormControl>
           </InputGroup>
-          {formik.values.receiverType === 'emailField' && (
-            <InputGroup>
-              <FormControl
-                variant="outlined"
-                fullWidth
-                size="small"
-                error={Boolean(formik.touched.emailFieldId && formik.errors.emailFieldId)}
-              >
-                <InputLabel id="emailFieldId-simple-select-outlined-label">Email Field</InputLabel>
-                <Select
-                  labelId="emailFieldId-simple-select-outlined-label"
-                  id="emailFieldId-simple-select-outlined"
-                  name="emailFieldId"
-                  value={formik.values.emailFieldId}
-                  onChange={formik.handleChange}
-                  label="Email Field"
-                >
-                  {emailFields?.map((field) => (
-                    <MenuItem value={field._id}>{field.label}</MenuItem>
-                  ))}
-                </Select>
-                {formik.touched.emailFieldId && formik.errors.emailFieldId && (
-                  <FormHelperText className="text-danger">
-                    {formik.errors.emailFieldId}
-                  </FormHelperText>
-                )}
-              </FormControl>
-            </InputGroup>
-          )}
-          {formik.values.receiverType === 'emailField' && (
-            <InputGroup>
-              <FormControl
-                variant="outlined"
-                fullWidth
-                size="small"
-                error={Boolean(formik.touched.nameFieldId && formik.errors.nameFieldId)}
-              >
-                <InputLabel id="nameFieldId-simple-select-outlined-label">Name Field</InputLabel>
-                <Select
-                  labelId="nameFieldId-simple-select-outlined-label"
-                  id="nameFieldId-simple-select-outlined"
-                  name="nameFieldId"
-                  value={formik.values.nameFieldId}
-                  onChange={formik.handleChange}
-                  label="Name Field"
-                >
-                  {nameFields?.map((field) => (
-                    <MenuItem value={field._id}>{field.label}</MenuItem>
-                  ))}
-                </Select>
-                {formik.touched.nameFieldId && formik.errors.nameFieldId && (
-                  <FormHelperText className="text-danger">
-                    {formik.errors.nameFieldId}
-                  </FormHelperText>
-                )}
-              </FormControl>
-            </InputGroup>
-          )}
           {formik.values.receiverType === 'customEmail' && (
             <Autocomplete
               size="small"
@@ -262,6 +195,61 @@ export default function ActionForm({
           )}
         </>
       )}
+      {(formik.values.receiverType === 'emailField' ||
+        formik.values.actionType === 'generateNewUser') && (
+        <InputGroup>
+          <FormControl
+            variant="outlined"
+            fullWidth
+            size="small"
+            error={Boolean(formik.touched.emailFieldId && formik.errors.emailFieldId)}
+          >
+            <InputLabel id="emailFieldId-simple-select-outlined-label">Email Field</InputLabel>
+            <Select
+              labelId="emailFieldId-simple-select-outlined-label"
+              id="emailFieldId-simple-select-outlined"
+              name="emailFieldId"
+              value={formik.values.emailFieldId}
+              onChange={formik.handleChange}
+              label="Email Field"
+            >
+              {emailFields?.map((field) => (
+                <MenuItem value={field._id}>{field.label}</MenuItem>
+              ))}
+            </Select>
+            {formik.touched.emailFieldId && formik.errors.emailFieldId && (
+              <FormHelperText className="text-danger">{formik.errors.emailFieldId}</FormHelperText>
+            )}
+          </FormControl>
+        </InputGroup>
+      )}
+      {formik.values.actionType === 'generateNewUser' && (
+        <InputGroup>
+          <FormControl
+            variant="outlined"
+            fullWidth
+            size="small"
+            error={Boolean(formik.touched.nameFieldId && formik.errors.nameFieldId)}
+          >
+            <InputLabel id="nameFieldId-simple-select-outlined-label">Name Field</InputLabel>
+            <Select
+              labelId="nameFieldId-simple-select-outlined-label"
+              id="nameFieldId-simple-select-outlined"
+              name="nameFieldId"
+              value={formik.values.nameFieldId}
+              onChange={formik.handleChange}
+              label="Name Field"
+            >
+              {nameFields?.map((field) => (
+                <MenuItem value={field._id}>{field.label}</MenuItem>
+              ))}
+            </Select>
+            {formik.touched.nameFieldId && formik.errors.nameFieldId && (
+              <FormHelperText className="text-danger">{formik.errors.nameFieldId}</FormHelperText>
+            )}
+          </FormControl>
+        </InputGroup>
+      )}
       {formik.values.actionType === 'sendSms' && (
         <InputGroup>
           <FormControl
@@ -293,95 +281,97 @@ export default function ActionForm({
           </FormControl>
         </InputGroup>
       )}
-      {console.log({ fields })}
-      <InputGroup>
-        <Typography variant="h6" className="d-flex align-items-center pl-2">
-          Variables
-          <Tooltip title="Add New Action">
-            <IconButton
-              color="primary"
-              onClick={() =>
-                formik.setFieldValue('variables', [
-                  ...formik.values.variables,
-                  { name: '', field: '' },
-                ])
-              }
-            >
-              <AddCircleIcon />
-            </IconButton>
-          </Tooltip>
-        </Typography>
-        <InputLabel>
-          Define Variables and use it in email subject and body. example - {`{{email}}`}
-        </InputLabel>
-        {formik.values.variables.map((variable, variableIndex) => (
-          <div className="d-flex align-items-center" key={variableIndex}>
-            <TextField
-              fullWidth
-              className="mr-2"
-              label="Name"
-              variant="outlined"
-              name="name"
-              size="small"
-              disabled={formik.isSubmitting}
-              value={variable.name}
-              onChange={({ target }) =>
-                formik.setFieldValue(
-                  'variables',
-                  formik.values.variables.map((sV, sI) =>
-                    sI === variableIndex ? { ...variable, name: target.value } : sV,
-                  ),
-                )
-              }
-            />
-            <FormControl fullWidth variant="outlined" size="small">
-              <InputLabel id="variablefield-simple-select-outlined-label">Field</InputLabel>
-              <Select
-                labelId="variablefield-simple-select-outlined-label"
-                id="variablefield-simple-select-outlined"
-                name="value"
-                value={variable.field}
-                onChange={({ target }) =>
-                  formik.setFieldValue(
-                    'variables',
-                    formik.values.variables.map((sV, sI) => {
-                      if (sI === variableIndex) {
-                        let payload = { ...variable, field: target.value, formId: null };
-                        const field = fields?.filter((f) => f._id === target.value && f?.formId)[0];
-                        if (field) {
-                          payload = { ...payload, formId: field.formId };
-                        }
-                        return payload;
-                      }
-                      return sV;
-                    }),
-                  )
-                }
-                label="Field"
-              >
-                {fields?.map((field) => (
-                  <MenuItem value={field._id}>{field.label}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <Tooltip title="Delete Variable">
+      {formik.values.actionType !== 'updateFieldValue' && (
+        <InputGroup>
+          <Typography variant="h6" className="d-flex align-items-center pl-2">
+            Variables
+            <Tooltip title="Add New Action">
               <IconButton
                 color="primary"
                 onClick={() =>
-                  formik.setFieldValue(
-                    'variables',
-                    formik.values.variables.filter((sV, sI) => sI !== variableIndex),
-                  )
+                  formik.setFieldValue('variables', [
+                    ...formik.values.variables,
+                    { name: '', field: '' },
+                  ])
                 }
               >
-                <DeleteIcon />
+                <AddCircleIcon />
               </IconButton>
             </Tooltip>
-          </div>
-        ))}
-      </InputGroup>
-      {(formik.values.actionType === 'sendEmail' ||
-        formik.values.actionType === 'generateNewUser') && (
+          </Typography>
+          <InputLabel>
+            Define Variables and use it in email subject and body. example - {`{{email}}`}
+          </InputLabel>
+          {formik.values.variables.map((variable, variableIndex) => (
+            <div className="d-flex align-items-center" key={variableIndex}>
+              <TextField
+                fullWidth
+                className="mr-2"
+                label="Name"
+                variant="outlined"
+                name="name"
+                size="small"
+                disabled={formik.isSubmitting}
+                value={variable.name}
+                onChange={({ target }) =>
+                  formik.setFieldValue(
+                    'variables',
+                    formik.values.variables.map((sV, sI) =>
+                      sI === variableIndex ? { ...variable, name: target.value } : sV,
+                    ),
+                  )
+                }
+              />
+              <FormControl fullWidth variant="outlined" size="small">
+                <InputLabel id="variablefield-simple-select-outlined-label">Field</InputLabel>
+                <Select
+                  labelId="variablefield-simple-select-outlined-label"
+                  id="variablefield-simple-select-outlined"
+                  name="value"
+                  value={variable.field}
+                  onChange={({ target }) =>
+                    formik.setFieldValue(
+                      'variables',
+                      formik.values.variables.map((sV, sI) => {
+                        if (sI === variableIndex) {
+                          let payload = { ...variable, field: target.value, formId: null };
+                          const field = fields?.filter(
+                            (f) => f._id === target.value && f?.formId,
+                          )[0];
+                          if (field) {
+                            payload = { ...payload, formId: field.formId };
+                          }
+                          return payload;
+                        }
+                        return sV;
+                      }),
+                    )
+                  }
+                  label="Field"
+                >
+                  {fields?.map((field) => (
+                    <MenuItem value={field._id}>{field.label}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <Tooltip title="Delete Variable">
+                <IconButton
+                  color="primary"
+                  onClick={() =>
+                    formik.setFieldValue(
+                      'variables',
+                      formik.values.variables.filter((sV, sI) => sI !== variableIndex),
+                    )
+                  }
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </Tooltip>
+            </div>
+          ))}
+        </InputGroup>
+      )}
+      {['sendEmail', 'generateNewUser'].includes(formik.values.actionType) && (
         <InputGroup>
           <TextField
             fullWidth
@@ -425,6 +415,95 @@ export default function ActionForm({
             error={formik.touched.body && Boolean(formik.errors.body)}
             helperText={formik.touched.body && formik.errors.body}
           />
+        </InputGroup>
+      )}
+      {formik.values.actionType === 'updateFieldValue' && (
+        <InputGroup>
+          <Typography variant="h6" className="d-flex align-items-center pl-2">
+            Fields
+            <Tooltip title="Add New Action">
+              <IconButton
+                color="primary"
+                onClick={() =>
+                  formik.setFieldValue('fields', [
+                    ...formik.values.fields,
+                    { field: '', formId: null, value: null },
+                  ])
+                }
+              >
+                <AddCircleIcon />
+              </IconButton>
+            </Tooltip>
+          </Typography>
+          {formik.values.fields.map((variable, variableIndex) => (
+            <div key={variableIndex}>
+              <>
+                <div className="d-flex align-items-center mt-3 mb-2">
+                  <FormControl fullWidth variant="outlined" size="small">
+                    <InputLabel id="variablefield-simple-select-outlined-label">Field</InputLabel>
+                    <Select
+                      labelId="variablefield-simple-select-outlined-label"
+                      id="variablefield-simple-select-outlined"
+                      name="value"
+                      value={variable.field}
+                      onChange={({ target }) =>
+                        formik.setFieldValue(
+                          'fields',
+                          formik.values.fields.map((sV, sI) => {
+                            if (sI === variableIndex) {
+                              let payload = { ...variable, field: target.value, formId: null };
+                              const field = fields?.filter(
+                                (f) => f._id === target.value && f?.formId,
+                              )[0];
+                              if (field) {
+                                payload = { ...payload, formId: field.formId };
+                              }
+                              return payload;
+                            }
+                            return sV;
+                          }),
+                        )
+                      }
+                      label="Field"
+                    >
+                      {fields?.map((field) => (
+                        <MenuItem value={field._id}>{field.label}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  <Tooltip title="Delete Variable">
+                    <IconButton
+                      color="primary"
+                      onClick={() =>
+                        formik.setFieldValue(
+                          'fields',
+                          formik.values.fields.filter((sV, sI) => sI !== variableIndex),
+                        )
+                      }
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
+                </div>
+                <Field
+                  {...fields?.filter((f) => f?._id === variable.field)[0]}
+                  label="Value"
+                  validate
+                  value={variable.value}
+                  onChangeValue={(newValue) =>
+                    formik.setFieldValue(
+                      'fields',
+                      formik.values.fields.map((sV, sI) =>
+                        sI === variableIndex
+                          ? { ...variable, value: { ...defualtValue, ...newValue } }
+                          : sV,
+                      ),
+                    )
+                  }
+                />
+              </>
+            </div>
+          ))}
         </InputGroup>
       )}
       <InputGroup>

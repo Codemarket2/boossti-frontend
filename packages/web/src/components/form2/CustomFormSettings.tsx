@@ -43,13 +43,12 @@ export default function CustomFormSettings({
 
   const getFormFields = async () => {
     const formFields = fields?.filter((f) => f?.fieldType === 'form');
-    // const formFields = fields?.filter((f) => f?.fieldType === 'form' && f?.form?._id !== formId);
     let newPageFields = [];
     for (const field of formFields) {
       const form = await getForm(field?.form?._id);
       if (form) {
         const pageField = form?.fields?.map((f) => ({
-          // ...f,
+          ...f,
           label: `${field?.label} - ${f?.label}`,
           formId: form?._id,
           _id: f?._id,
@@ -126,7 +125,6 @@ export default function CustomFormSettings({
           {tab === 'actions' && (
             <ActionsWrapper
               pageFields={[...pageFields, ...parentPageFields]}
-              formId={formId}
               settings={settings}
               onChange={(actions) => onSettingsChange({ ...settings, actions })}
             />
