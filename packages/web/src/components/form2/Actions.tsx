@@ -1,4 +1,3 @@
-import { useGetForm } from '@frontend/shared/hooks/form';
 import List from '@material-ui/core/List';
 import Paper from '@material-ui/core/Paper';
 import ListItem from '@material-ui/core/ListItem';
@@ -14,7 +13,6 @@ import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { useState } from 'react';
 import ActionForm from './ActionForm';
 import CRUDMenu from '../common/CRUDMenu';
-import ErrorLoading from '../common/ErrorLoading';
 
 interface IProps {
   fields: any;
@@ -119,28 +117,13 @@ export default function Actions({ fields, settings, onChange }: IProps) {
 }
 
 export function ActionsWrapper({
-  formId,
   settings,
   onChange,
   pageFields = [],
 }: {
-  formId: string;
   settings?: any;
   onChange: (action: any) => void;
   pageFields: any;
 }) {
-  // const { data, error } = useGetForm(formId);
-
-  // if (!data || error) {
-  //   return <ErrorLoading error={error} />;
-  // }
-
-  return (
-    <Actions
-      fields={pageFields}
-      // fields={[...data?.getForm?.fields, ...pageFields]}
-      settings={settings}
-      onChange={onChange}
-    />
-  );
+  return <Actions fields={pageFields} settings={settings} onChange={onChange} />;
 }

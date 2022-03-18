@@ -14,10 +14,10 @@ import BackdropComponent from '../common/Backdrop';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
 import StarRating from '../starRating/starRating';
 import FormViewWrapper from './FormViewWrapper';
+import Overlay from '../common/Overlay';
+
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
-import Button from '@material-ui/core/Button';
-import Overlay from '../common/Overlay';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
@@ -68,7 +68,6 @@ export default function FormFieldsValue({
     const response = await handleValueChange({ values: newValues }, setInitialState);
     return response;
   };
-  console.log('FormFieldsValue', values);
 
   const handleDelete = async () => {
     setState({ ...state, loading: true });
@@ -79,7 +78,6 @@ export default function FormFieldsValue({
   const [heights, setHeights] = useState({});
   useEffect(() => {
     if (layouts?.[breakPoint]?.length > 0) {
-      console.log({ layouts, breakPoint });
       let newHeights = {};
       fields.forEach((val, i) => {
         // if (layouts && breakPoint) {
@@ -107,7 +105,7 @@ export default function FormFieldsValue({
   //   val = { ...val, height: gridHeight };
   //   return val;
   // });
-  console.log(',breakpoint', breakPoint, fields);
+
   return (
     <div className="p-2">
       <BackdropComponent open={state.loading} />
