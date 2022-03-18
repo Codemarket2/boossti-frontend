@@ -14,7 +14,8 @@ const validationSchema = yup.object({
   }),
   senderEmail: yup.string().when('actionType', {
     is: (value) => ['sendEmail', 'generateNewUser'].includes(value),
-    then: yup.string().label('Sender email').email().required(),
+    // then: yup.string().label('Sender email').email().required(),
+    then: yup.string().label('Sender email').required(),
     otherwise: yup.string(),
   }),
   receiverType: yup.string().label('Receiver').required(),

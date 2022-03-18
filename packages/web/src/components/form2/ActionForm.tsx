@@ -119,7 +119,7 @@ export default function ActionForm({
             variant="outlined"
             name="senderEmail"
             size="small"
-            type="email"
+            // type="email"
             disabled={formik.isSubmitting}
             value={formik.values.senderEmail}
             onChange={formik.handleChange}
