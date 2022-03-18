@@ -285,19 +285,33 @@ export default function FormViewWrapper({
                 </>
               ) : form?.settings?.formView === 'selectItem' ? (
                 <>
-                  <SelectItemView
+                  {/* <SelectItemView
                     formId={form?.settings?.selectItemForm}
                     settings={form?.settings}
-                  />
+                  /> */}
                   <SelectResponse
                     label={form?.name}
                     formId={form?._id}
-                    value={null}
+                    formField={form?.settings?.selectItemField}
+                    value={state.temp}
                     onChange={function (temp: any): void {
                       setState({ ...state, temp });
                     }}
                     openDrawer={() => setState({ ...state, formModal: true })}
                   />
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={async () => {
+                      // const responseId = state?.selectItemValue?._id;
+                      // const response = await handleCreateUpdateResponseParent({ _id: responseId });
+                      // if (response) {
+                      //   console.log(response);
+                      // }
+                    }}
+                  >
+                    Submit
+                  </Button>
 
                   {/* <SelectResponse
                     label={
