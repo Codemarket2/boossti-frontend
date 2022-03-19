@@ -4,6 +4,7 @@ import { CREATE_SEND_EMAIL } from '../../graphql/mutation/email';
 import { useMutation } from '@apollo/client';
 
 const validationSchema = yup.object({
+  sendEmailLabel: yup.string().required('Label for send email is required'),
   senderEmail: yup.string().email('Invalid email').required('Email is required'),
   receiverEmail: yup
     .array()
@@ -21,6 +22,7 @@ const validationSchema = yup.object({
 
 interface IFormValues {
   receiverEmail: any;
+  sendEmailLabel: string;
   senderEmail: string;
   mailingList: string;
   subject: string;
@@ -31,6 +33,7 @@ interface IFormValues {
 const defaultFormValues = {
   receiverEmail: [],
   mailingList: '',
+  sendEmailLabel: '',
   senderEmail: '',
   subject: '',
   body: '',
@@ -47,7 +50,7 @@ export function useSendEmail(): any {
         const newPayload = {
           receiverEmail: payload.receiverEmail,
           mailingList: payload.mailingList,
-          senderEmail: payload.senderEmail,
+          senderEmail: `${payload.sendEmailLabel} <${payload.senderEmail}>`,
           subject: payload.subject,
           body: payload.body,
           sendIndividual: payload.sendIndividual,

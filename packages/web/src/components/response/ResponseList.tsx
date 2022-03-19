@@ -40,26 +40,15 @@ export default function ResponseList({
   form,
   parentId,
   workFlowFormReponseParentId,
-  layouts,
   showOnlyMyResponses,
 }: IProps): any {
-  const { data, error, state, setState } = useGetResponses(
+  const { data, error, state, setState, refetch } = useGetResponses(
     form._id,
     parentId,
     null,
     showOnlyMyResponses,
     workFlowFormReponseParentId,
   );
-  const [height, setHeight] = useState(0);
-  let gridHeight = 0;
-  if (layouts) {
-    if (layouts?.lg) {
-      if (layouts?.lg[0]) {
-        gridHeight = layouts?.lg[0].h * 38.5;
-      }
-    }
-  }
-  const [show, setShow] = useState(false);
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
   const router = useRouter();
   const [selectedResponse, setSelectedResponse] = useState(null);
@@ -198,12 +187,9 @@ export default function ResponseList({
                       <div className="d-flex">
                         <Authorization _id={[response?.createdBy?._id]} allowAdmin returnNull>
                           <DeleteButton
-                            onClick={() =>
-                              handleDelete(response._id, form._id, null, {
-                                parentId,
-                                workFlowFormReponseParentId,
-                              })
-                            }
+                            onClick={async () => {
+                              await handleDelete(response._id, refetch);
+                            }}
                             edge="start"
                           />
                           <Tooltip title="Open Response">
@@ -261,18 +247,14 @@ export default function ResponseList({
       )}
       {form?.settings?.responsesView === 'vertical' && (
         <>
-          <Overlay
-            open={show}
-            onClose={() => {
-              setShow(false);
-            }}
-          >
-            {data?.getResponses?.data?.map((response) => (
-              <ResponseChild3 key={response?._id} hideBreadcrumbs form={form} response={response} />
-            ))}
-          </Overlay>
           {data?.getResponses?.data?.map((response) => (
-            <ResponseChild3 key={response?._id} hideBreadcrumbs form={form} response={response} />
+            <ResponseChild3
+              key={response?._id}
+              hideBreadcrumbs
+              form={form}
+              response={response}
+              deleteCallBack={() => refetch()}
+            />
           ))}
         </>
       )}

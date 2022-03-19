@@ -117,6 +117,7 @@ interface IProps3 {
   hideNavigation?: boolean;
   hideAuthor?: boolean;
   hideWorkflow?: boolean;
+  deleteCallBack?: () => void;
 }
 
 export function ResponseChild3({
@@ -126,8 +127,10 @@ export function ResponseChild3({
   hideNavigation,
   hideAuthor,
   hideWorkflow,
+  deleteCallBack,
 }: IProps3) {
   const [state, setState] = useState({ showMenu: null, edit: false, showBackdrop: false });
+
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
   const authorized = useAuthorization([response?.createdBy?._id, form?.createdBy?._id], true);
   const authorized2 = useAuthorization([form?.createdBy?._id], true);
@@ -141,7 +144,11 @@ export function ResponseChild3({
   const redirectToPage = async (_id) => {
     setState({ ...state, showBackdrop: true });
     const page = await getListItem(_id);
-    if (page?.data?.getListItem?.types[0]?.slug && page?.data?.getListItem?.slug) {
+    if (
+      page?.data?.getListItem?.types[0]?.slug &&
+      page?.data?.getListItem?.slug &&
+      router?.query?.itemSlug !== page?.data?.getListItem?.slug
+    ) {
       router.push(`/${page?.data?.getListItem?.types[0]?.slug}/${page?.data?.getListItem?.slug}`);
     } else {
       setState({ ...state, showBackdrop: false });
@@ -194,7 +201,7 @@ export function ResponseChild3({
             onEdit={() => setState({ ...state, showMenu: null, edit: true })}
             onDelete={() => {
               setState({ ...state, showMenu: null });
-              handleDelete(response?._id, form?._id);
+              handleDelete(response?._id, deleteCallBack);
             }}
             onClose={() => setState({ ...state, showMenu: null })}
           />
@@ -277,14 +284,18 @@ export function ResponseChild3({
                   <Typography variant="body1">
                     {`by ${response?.createdBy ? response?.createdBy?.name : 'Unauthorised user'} `}
                     {response?.parentId?.title && (
-                      <Typography
-                        color="primary"
-                        display="inline"
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => redirectToPage(response?.parentId?._id)}
-                      >
-                        {`${response?.parentId?.title} page`}
-                      </Typography>
+                      <span>
+                        {'from '}
+                        <Typography
+                          color="primary"
+                          display="inline"
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => redirectToPage(response?.parentId?._id)}
+                        >
+                          {response?.parentId?.title}
+                        </Typography>
+                        {' page'}
+                      </span>
                     )}
                   </Typography>
                   <Typography variant="body2">
