@@ -144,7 +144,7 @@ export default function ResponseList({
   return (
     <>
       <Backdrop open={deleteLoading} />
-      {form?.settings?.responsesView != 'vertical' && (
+      {form?.settings?.responsesView != 'vertical' && form?.settings?.responsesView == 'table' && (
         <div style={{ height: 720, width: '100%' }}>
           <DataGrid
             rows={rows}
@@ -161,7 +161,9 @@ export default function ResponseList({
             direction={direction}
           />
         </div>
-        /*<TableContainer component={Paper} variant="outlined">
+      )}
+      {form?.settings?.responsesView != 'vertical' && form?.settings?.responsesView != 'table' && (
+        <TableContainer component={Paper} variant="outlined">
           <TablePagination
             component="div"
             rowsPerPageOptions={[10, 25, 50]}
@@ -255,7 +257,7 @@ export default function ResponseList({
               </TableBody>
             </Table>
           )}
-        </TableContainer>*/
+        </TableContainer>
       )}
       {form?.settings?.responsesView === 'vertical' && (
         <>
