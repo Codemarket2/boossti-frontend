@@ -23,6 +23,9 @@ import Authorization from '../common/Authorization';
 import DeleteButton from '../common/DeleteButton';
 import { ResponseChild3 } from './Response';
 import EditResponseDrawer from './EditResponseDrawer';
+import Overlay from '../common/Overlay';
+import { useEffect } from 'react';
+import DataGrid, { CopyEvent, PasteEvent, SelectColumn, TextEditor } from 'react-data-grid';
 
 interface IProps {
   form: any;
@@ -31,6 +34,7 @@ interface IProps {
   layouts?: any;
   showOnlyMyResponses?: boolean;
 }
+type Direction = 'ltr' | 'rtl';
 
 export default function ResponseList({
   form,
@@ -48,10 +52,106 @@ export default function ResponseList({
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
   const router = useRouter();
   const [selectedResponse, setSelectedResponse] = useState(null);
+  const [rows, setRows] = useState([]);
+  const [colm, setColm] = useState([]);
+  const [direction, setDirection] = useState<Direction>('ltr');
+  const [selectedRows, setSelectedRows] = useState<ReadonlySet<string>>(() => new Set());
+  /*
+    const columns: GridColDef[] = [
+      { field: 'col1', headerName: 'Column 1', width: 150 },
+      { field: 'col2', headerName: 'Column 2', width: 150 },
+    ];   
+   */
+  function handleFill({ columnKey, sourceRow, targetRow }) {
+    return { ...targetRow, [columnKey]: sourceRow[columnKey] };
+  }
+
+  function handlePaste({ sourceColumnKey, sourceRow, targetColumnKey, targetRow }) {
+    const incompatibleColumns = ['email', 'zipCode', 'date'];
+    if (
+      sourceColumnKey === 'avatar' ||
+      ['id', 'avatar'].includes(targetColumnKey) ||
+      ((incompatibleColumns.includes(targetColumnKey) ||
+        incompatibleColumns.includes(sourceColumnKey)) &&
+        sourceColumnKey !== targetColumnKey)
+    ) {
+      return targetRow;
+    }
+
+    return { ...targetRow, [targetColumnKey]: sourceRow[sourceColumnKey] };
+  }
+
+  function handleCopy({ sourceRow, sourceColumnKey }) {
+    if (window.isSecureContext) {
+      navigator.clipboard.writeText(sourceRow[sourceColumnKey]);
+    }
+  }
+
+  function rowKeyGetter(row) {
+    return row.id;
+  }
+
+  const createColm = (form) => {
+    const arr = [
+      SelectColumn,
+      { key: 'sno', name: 'S.No', resizable: true, frozen: true, width: 60 },
+    ];
+
+    form?.fields?.map((e) => {
+      const temp = {
+        key: '',
+        name: '',
+        resizable: true,
+        frozen: false,
+        editor: TextEditor,
+      };
+      temp.key = e._id;
+      temp.name = e.label;
+      arr.push(temp);
+    });
+    return arr;
+  };
+
+  const createRows = (data) => {
+    const arr = [];
+    data?.getResponses?.data?.map((e, i) => {
+      const temp = { sno: i, id: i };
+      e?.values?.map((v) => {
+        temp[v.field] = v.value;
+      });
+      arr.push(temp);
+    });
+    return arr;
+  };
+
+  useEffect(() => {
+    setColm(createColm(form));
+  }, [form]);
+  useEffect(() => {
+    setRows(createRows(data));
+  }, [form, data]);
   return (
     <>
       <Backdrop open={deleteLoading} />
-      {form?.settings?.responsesView !== 'vertical' && (
+      {form?.settings?.responsesView != 'vertical' && form?.settings?.responsesView == 'table' && (
+        <div style={{ height: 720, width: '100%' }}>
+          <DataGrid
+            rows={rows}
+            columns={colm}
+            rowHeight={40}
+            onRowsChange={setRows}
+            rowKeyGetter={rowKeyGetter}
+            selectedRows={selectedRows}
+            onSelectedRowsChange={setSelectedRows}
+            onFill={handleFill}
+            onCopy={handleCopy}
+            onPaste={handlePaste}
+            className="fill-grid"
+            direction={direction}
+          />
+        </div>
+      )}
+      {form?.settings?.responsesView != 'vertical' && form?.settings?.responsesView != 'table' && (
         <TableContainer component={Paper} variant="outlined">
           <TablePagination
             component="div"
