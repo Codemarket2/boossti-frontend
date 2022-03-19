@@ -2,8 +2,8 @@ import { useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
-import { useGetListItemsByType } from '@frontend/shared/hooks/list';
-import ItemFormDrawer from '../list/ItemFormDrawer';
+import { useGetPagesByTemplate } from '@frontend/shared/hooks/template';
+import ItemFormDrawer from '../template/PageFormDrawer';
 import ErrorLoading from '../common/ErrorLoading';
 
 interface IProps {
@@ -20,7 +20,7 @@ interface IProps {
 
 const filter = createFilterOptions();
 
-export default function SelectListItem({
+export default function SelectPage({
   typeId,
   disabled = false,
   value,
@@ -31,7 +31,7 @@ export default function SelectListItem({
   helperText,
   allowCreate,
 }: IProps): any {
-  const { data, error: queryError, loading, state, setState } = useGetListItemsByType({
+  const { data, error: queryError, loading, state, setState } = useGetPagesByTemplate({
     limit: 10,
     types: [typeId],
   });
@@ -61,7 +61,7 @@ export default function SelectListItem({
         onInputChange={(event, newInputValue) => {
           setState({ ...state, search: newInputValue });
         }}
-        options={data?.getListItems?.data || []}
+        options={data?.getPages?.data || []}
         filterOptions={(options, params) => {
           const filtered = filter(options, params);
           if (params.inputValue !== '' && !loading && allowCreate) {

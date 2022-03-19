@@ -1,5 +1,5 @@
-import { getListTypeMetaTags } from '@frontend/shared/hooks/metaTags';
-import TypeScreen from '../../src/screens/TypeScreen';
+import { getTemplateMetaTags } from '@frontend/shared/hooks/metaTags';
+import TypeScreen from '../../src/screens/TemplateScreen';
 import Loading from '../../src/components/common/Loading';
 import Head from '../../src/components/common/Head';
 import UserLayout from '../../src/components/common/UserLayout';
@@ -26,7 +26,7 @@ export default function Page({ metaTags, slug }: IProps) {
 export async function getServerSideProps(context) {
   const { slug } = context.query;
 
-  const metaTags = await getListTypeMetaTags(slug);
+  const metaTags = await getTemplateMetaTags(slug);
   if (metaTags) {
     metaTags.url = `/${slug}`;
   }

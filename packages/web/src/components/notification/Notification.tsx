@@ -18,13 +18,7 @@ import {
   useNotificationSub,
 } from '@frontend/shared/hooks/notification';
 import { useEffect, useState } from 'react';
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  ListItemText,
-  Box,
-} from '@material-ui/core';
+import { Accordion, AccordionDetails, AccordionSummary, PageText, Box } from '@material-ui/core';
 import { ExpandMore } from '@material-ui/icons';
 import styled from 'styled-components';
 import CommentModel from './CommentModel';
@@ -103,7 +97,7 @@ export default function Notification() {
           </Typography>
           {notificationList?.length ? (
             notificationList?.map((list) => (
-              <NotificationListItem
+              <NotificationPage
                 key={list._id}
                 list={list}
                 store={store}
@@ -131,7 +125,7 @@ export default function Notification() {
   );
 }
 
-const NotificationListItem = ({ list, store, setStore, state }) => {
+const NotificationPage = ({ list, store, setStore, state }) => {
   const { notifications } = useGetMyNotifications({ formId: list._id });
 
   useEffect(() => {
@@ -183,7 +177,7 @@ const NotificationItem = ({ notification, onClose }: any) => {
         {notification.link ? (
           <Link href={notification.link}>
             <div style={{ cursor: 'pointer' }} onClick={handleClick}>
-              <ListItemText
+              <PageText
                 className="p-0 m-0"
                 primary={<span dangerouslySetInnerHTML={{ __html: notification.description }} />}
                 secondary={`${moment(notification.createdAt).fromNow()}`}

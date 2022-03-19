@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Tabs from '@material-ui/core/Tabs';
-import { useMentionList } from '@frontend/shared/hooks/list';
+import { useMention } from '@frontend/shared/hooks/template';
 import Skeleton from '@material-ui/lab/Skeleton';
 import Chip from '@material-ui/core/Chip';
 import ErrorLoading from '../common/ErrorLoading';
@@ -13,9 +13,9 @@ const initialState = {
 };
 export default function TagTabs({ handleSelectTag }: any) {
   const [state, setState] = useState(initialState);
-  const { data, loading, error } = useMentionList();
+  const { data, loading, error } = useMention();
 
-  if (error || !data || !data.getListTypes) {
+  if (error || !data || !data.getTemplates) {
     return (
       <ErrorLoading error={error}>
         <Skeleton variant="rect" height={50} />
@@ -32,12 +32,12 @@ export default function TagTabs({ handleSelectTag }: any) {
         scrollButtons="auto"
         className="mt-n2"
       >
-        {data.getListTypes.data.map((listType) => (
+        {data.getTemplates.data.map((template) => (
           <Chip
-            label={listType.title.includes('-n-e-w') ? 'Title' : listType.title}
+            label={template.title.includes('-n-e-w') ? 'Title' : template.title}
             className="mt-2 mr-1"
             onClick={() =>
-              setState({ ...state, typeId: listType._id, title: listType.title, showModel: true })
+              setState({ ...state, typeId: template._id, title: template.title, showModel: true })
             }
           />
         ))}

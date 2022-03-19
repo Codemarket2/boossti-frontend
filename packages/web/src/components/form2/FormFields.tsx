@@ -60,7 +60,7 @@ type IProps = {
   title?: string;
   isSection?: boolean;
   previewMode?: boolean;
-  parentPageFields?: any;
+  parentListItemFields?: any;
 };
 
 export default function FormFields({
@@ -69,7 +69,7 @@ export default function FormFields({
   title = 'Fields',
   isSection = false,
   previewMode = false,
-  parentPageFields = [],
+  parentListItemFields = [],
 }: IProps): any {
   const [values, setValues] = useState(initialValues);
   const router = useRouter();
@@ -360,7 +360,7 @@ export default function FormFields({
           onClose={() => setValues(initialValues)}
           settings={fields?.filter((f) => f._id === values.field?._id)[0]?.options?.settings}
           onSettingsChange={(value) => handleEditFormSettings(values.field?._id, value)}
-          parentPageFields={parentPageFields}
+          parentListItemFields={parentListItemFields}
         />
       )}
     </Paper>

@@ -2,7 +2,7 @@ import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import { useMenuListTypes } from '@frontend/shared/hooks/list';
+import { useMenuTemplates } from '@frontend/shared/hooks/template';
 import CloseIcon from '@material-ui/icons/Close';
 import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
@@ -37,7 +37,7 @@ export default function DrawerContent({ showDrawer, toggleDrawer, admin }: IProp
     showList: true,
   });
   const router = useRouter();
-  const { data } = useMenuListTypes();
+  const { data } = useMenuTemplates();
 
   useEffect(() => {
     if (router.pathname !== activeRoute.pathname) {
@@ -67,7 +67,7 @@ export default function DrawerContent({ showDrawer, toggleDrawer, admin }: IProp
         <DarkModeToggle />
         <Divider />
         <Link href="/types">
-          <ListItem button selected={checkActiveRoute(activeRoute, '/types')}>
+          <ListItem button selected={checkActiveRoute(activeRoute, '/templates')}>
             <ListItemIcon>
               <ListIcon />
             </ListItemIcon>
@@ -106,7 +106,7 @@ export default function DrawerContent({ showDrawer, toggleDrawer, admin }: IProp
             <ListItemText primary="Activity Log" />
           </ListItem>
         </Link>
-        {data?.getMenuListTypes?.map((t) => (
+        {data?.getMenuTemplates?.map((t) => (
           <Link href={`/${t.slug}`} key={t._id}>
             <ListItem button selected={checkActiveRoute(activeRoute, '/log')}>
               <ListItemIcon>

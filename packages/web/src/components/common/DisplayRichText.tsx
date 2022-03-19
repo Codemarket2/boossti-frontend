@@ -2,7 +2,7 @@ import parse from 'html-react-parser';
 import styled from 'styled-components';
 import { client } from '@frontend/shared/graphql';
 import { useRouter } from 'next/router';
-import { GET_LIST_ITEM_BY_ID } from '@frontend/shared/graphql/query/list';
+import { GET_PAGE_BY_ID } from '@frontend/shared/graphql/query/template';
 
 type IProps = {
   value: string;
@@ -27,8 +27,8 @@ const StyledDiv = styled.div`
 export default function DisplayRichText({ value = '' }: IProps) {
   const router = useRouter();
   const getData = async (id) => {
-    const listItem = await getListItem(id);
-    router.push(`/page/${listItem['data'].getListItem.slug}`);
+    const page = await getPage(id);
+    router.push(`/page/${page['data'].getPage.slug}`);
   };
   return (
     <StyledDiv className="ck-content">
@@ -56,10 +56,10 @@ export default function DisplayRichText({ value = '' }: IProps) {
   );
 }
 
-export async function getListItem(_id) {
+export async function getPage(_id) {
   try {
     const response = await client.query({
-      query: GET_LIST_ITEM_BY_ID,
+      query: GET_PAGE_BY_ID,
       variables: { _id: _id },
     });
     return new Promise((resolve) => {

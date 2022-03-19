@@ -114,7 +114,7 @@ export default function FormSetting({ formId, settings, onChange, isSection }: I
                         label,
                         fieldType: 'select',
                         options: JSON.stringify({
-                          optionsListType: 'existingForm',
+                          optionsTemplate: 'existingForm',
                           formField: newValue,
                         }),
                         form: formId,

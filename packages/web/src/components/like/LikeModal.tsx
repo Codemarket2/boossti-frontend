@@ -1,9 +1,9 @@
 import {
   Avatar,
   List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
+  Page,
+  PageAvatar,
+  PageText,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -68,12 +68,12 @@ export default function LikeModal({
         <DialogContent dividers>
           {data.getLikesByParentId.data.map((user) => (
             <List key={user._id}>
-              <ListItem>
-                <ListItemAvatar>
+              <Page>
+                <PageAvatar>
                   <Avatar alt={user.createdBy.name} src={user.createdBy.picture} />
-                </ListItemAvatar>
-                <ListItemText primary={user.createdBy.name} />
-              </ListItem>
+                </PageAvatar>
+                <PageText primary={user.createdBy.name} />
+              </Page>
             </List>
           ))}
         </DialogContent>

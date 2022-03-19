@@ -1,7 +1,7 @@
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { useGetListTypes } from '@frontend/shared/hooks/list';
+import { useGetTemplates } from '@frontend/shared/hooks/template';
 import ErrorLoading from '../common/ErrorLoading';
 
 interface IProps {
@@ -13,7 +13,7 @@ interface IProps {
   helperText?: any;
 }
 
-export default function SelectListType({
+export default function SelectTemplate({
   disabled,
   value,
   onChange,
@@ -21,7 +21,7 @@ export default function SelectListType({
   helperText,
   filterId,
 }: IProps): any {
-  const { data, loading, error, state, setState } = useGetListTypes({ limit: 10 });
+  const { data, loading, error, state, setState } = useGetTemplates({ limit: 10 });
 
   if (error) {
     return <ErrorLoading error={error} />;
@@ -40,7 +40,7 @@ export default function SelectListType({
       onInputChange={(event, newInputValue) => {
         setState({ ...state, search: newInputValue });
       }}
-      options={data?.getListTypes?.data?.filter((f) => f._id !== filterId) || []}
+      options={data?.getTemplates?.data?.filter((f) => f._id !== filterId) || []}
       loading={loading}
       renderInput={(params) => (
         <TextField

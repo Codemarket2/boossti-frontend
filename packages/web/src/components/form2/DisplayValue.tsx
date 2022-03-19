@@ -3,7 +3,7 @@ import moment from 'moment';
 import Avatar from '@material-ui/core/Avatar';
 import DisplayRichText from '../common/DisplayRichText';
 import { ShowResponseLabel } from '../response/ResponseDrawer';
-import ListItemDrawer from '../list/ListItemDrawer';
+import PageDrawer from '../template/PageDrawer';
 import ImageList from '../post/ImageList';
 
 interface IProps {
@@ -21,10 +21,10 @@ export default function DisplayValue({ field, value, imageAvatar }: IProps) {
     case 'password':
       return <>{value?.value}</>;
     case 'select':
-      if (field?.options?.optionsListType === 'type') {
-        return <ListItemDrawer title={value.itemId.title} slug={value.itemId.slug} />;
+      if (field?.options?.optionsTemplate === 'type') {
+        return <PageDrawer title={value.itemId.title} slug={value.itemId.slug} />;
       }
-      if (field?.options?.optionsListType === 'existingForm') {
+      if (field?.options?.optionsTemplate === 'existingForm') {
         return (
           <ShowResponseLabel formField={field?.options?.formField} response={value?.response} />
         );

@@ -9,7 +9,7 @@ import PhoneInput from 'react-phone-input-2';
 import ImagePicker from '../common/ImagePicker';
 import RichTextarea from '../common/RichTextarea2';
 import DisplayRichText from '../common/DisplayRichText';
-import SelectListItem from './SelectListItem';
+import SelectPage from './SelectPage';
 import { validateValue } from './validate';
 import SelectResponse from '../response/SelectResponse';
 import Select from './Select';
@@ -163,8 +163,8 @@ export default function Field({
     case 'select': {
       return (
         <>
-          {options?.optionsListType === 'type' ? (
-            <SelectListItem
+          {options?.optionsTemplate === 'type' ? (
+            <SelectPage
               typeSlug={typeId?.slug || null}
               typeId={typeId?._id || null}
               label={label}
@@ -174,7 +174,7 @@ export default function Field({
               onChange={(newValue) => onChange({ field: _id, itemId: newValue })}
               allowCreate={options?.selectAllowCreate}
             />
-          ) : options?.optionsListType === 'existingForm' ? (
+          ) : options?.optionsTemplate === 'existingForm' ? (
             <SelectResponse
               label={label}
               formId={form?._id}
