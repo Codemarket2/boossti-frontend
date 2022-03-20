@@ -61,6 +61,7 @@ type IProps = {
   isSection?: boolean;
   previewMode?: boolean;
   parentPageFields?: any;
+  tab?: string;
 };
 
 export default function FormFields({
@@ -70,6 +71,7 @@ export default function FormFields({
   isSection = false,
   previewMode = false,
   parentPageFields = [],
+  tab = 'form',
 }: IProps): any {
   const [values, setValues] = useState(initialValues);
   const router = useRouter();
@@ -187,18 +189,29 @@ export default function FormFields({
         <>
           {!previewMode && (
             <>
-              <Typography variant="h5" className="d-flex align-items-center pl-2">
-                {title}
-                <Tooltip title="Add New Field">
-                  <IconButton
-                    color="primary"
-                    onClick={() => setValues({ ...initialValues, showForm: true })}
-                  >
-                    <AddCircleIcon />
-                  </IconButton>
-                </Tooltip>
-              </Typography>
-              <Divider />
+              {tab === 'setting' ? (
+                <>
+                  <Typography variant="h5" className="d-flex align-items-center pl-2">
+                    {`Manage Field Settings`}
+                  </Typography>
+                  <Divider />
+                </>
+              ) : (
+                <>
+                  <Typography variant="h5" className="d-flex align-items-center pl-2">
+                    {title}
+                    <Tooltip title="Add New Field">
+                      <IconButton
+                        color="primary"
+                        onClick={() => setValues({ ...initialValues, showForm: true })}
+                      >
+                        <AddCircleIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </Typography>
+                  <Divider />
+                </>
+              )}
             </>
           )}
           {values.showForm && (
