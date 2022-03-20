@@ -258,9 +258,9 @@ export default function FormSetting({
       <br />
       <Grid item xs={12} md={8}>
         <FormFields
-          fields={state.fields}
+          fields={state?.fields}
           setFields={(newFields) => handleOnChange({ fields: newFields })}
-          tab="setting"
+          tabName="setting"
         />
       </Grid>
     </Paper>
