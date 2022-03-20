@@ -61,6 +61,7 @@ type IProps = {
   isSection?: boolean;
   previewMode?: boolean;
   parentPageFields?: any;
+  tabName?: string;
 };
 
 export default function FormFields({
@@ -70,6 +71,7 @@ export default function FormFields({
   isSection = false,
   previewMode = false,
   parentPageFields = [],
+  tabName = 'form',
 }: IProps): any {
   const [values, setValues] = useState(initialValues);
   const router = useRouter();
@@ -116,7 +118,7 @@ export default function FormFields({
 
   const handleEditFormSettings = (fieldId: string, settings: any) => {
     setFields(
-      fields.map((field) => {
+      fields?.map((field) => {
         if (field._id === fieldId) {
           return { ...field, options: { ...field?.options, settings } };
         }
@@ -187,17 +189,23 @@ export default function FormFields({
         <>
           {!previewMode && (
             <>
-              <Typography variant="h5" className="d-flex align-items-center pl-2">
-                {title}
-                <Tooltip title="Add New Field">
-                  <IconButton
-                    color="primary"
-                    onClick={() => setValues({ ...initialValues, showForm: true })}
-                  >
-                    <AddCircleIcon />
-                  </IconButton>
-                </Tooltip>
-              </Typography>
+              {tabName === 'setting' ? (
+                <Typography variant="h5" className="d-flex align-items-center pl-2">
+                  {`Manage Field Settings`}
+                </Typography>
+              ) : (
+                <Typography variant="h5" className="d-flex align-items-center pl-2">
+                  {title}
+                  <Tooltip title="Add New Field">
+                    <IconButton
+                      color="primary"
+                      onClick={() => setValues({ ...initialValues, showForm: true })}
+                    >
+                      <AddCircleIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Typography>
+              )}
               <Divider />
             </>
           )}
