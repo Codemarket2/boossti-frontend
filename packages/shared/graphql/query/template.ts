@@ -75,7 +75,7 @@ export const GET_MENU_TEMPLATES = gql`
 `;
 
 export const GET_PAGES_BY_TYPE = gql`
-  query MyQuery($limit: Int, $page: Int, $template: [ID], $search: String) {
+  query MyQuery($limit: Int, $page: Int, $template: ID, $search: String) {
     getPages(limit: $limit, page: $page, template: $template, search: $search) {
       count
       data {

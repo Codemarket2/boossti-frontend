@@ -238,8 +238,7 @@ export default function Screen({ slug }: IProps) {
         </Grid>
         <Grid item xs>
           <Pages
-            types={[data.getTemplateBySlug._id]}
-            name={data.getTemplateBySlug.title}
+            templateId={data.getTemplateBySlug._id}
             slug={data.getTemplateBySlug.slug}
             template={data.getTemplateBySlug}
           />

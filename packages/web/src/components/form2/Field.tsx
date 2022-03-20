@@ -22,7 +22,7 @@ interface IProps {
   _id: string;
   label: string;
   fieldType: string;
-  typeId: any;
+  templateId: any;
   options: any;
   value: any;
   onChangeValue: (arg: any) => void;
@@ -37,7 +37,7 @@ export default function Field({
   _id,
   label,
   fieldType,
-  typeId,
+  templateId,
   options,
   value,
   onChangeValue,
@@ -165,8 +165,8 @@ export default function Field({
         <>
           {options?.optionsTemplate === 'type' ? (
             <SelectPage
-              typeSlug={typeId?.slug || null}
-              typeId={typeId?._id || null}
+              typeSlug={templateId?.slug || null}
+              templateId={templateId?._id || null}
               label={label}
               error={validateValue(validate, value, options, fieldType).error}
               helperText={validateValue(validate, value, options, fieldType).errorMessage}

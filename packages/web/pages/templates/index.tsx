@@ -1,5 +1,5 @@
-import TypesScreen from '../../src/screens/TemplatesScreen';
+import TemplatesScreen from '../../src/screens/TemplatesScreen';
 
 export default function Page() {
-  return <TypesScreen />;
+  return <TemplatesScreen />;
 }

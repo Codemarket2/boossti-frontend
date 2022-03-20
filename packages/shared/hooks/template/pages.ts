@@ -30,14 +30,6 @@ export function useGetpageFieldMentions(_id) {
   return { pageMentionsField };
 }
 
-// export function useGetTemplateFieldMentions(_id) {
-//   const { data } = useQuery(GET_PAGE_MENTIONS, {
-//     variables: { _id },
-//   });
-//   const templateMentionsField = data?.getPageMentions?.data.map((val) => (val = val.parentId));
-//   return { templateMentionsField };
-// }
-
 export function useGetPageById(_id) {
   const { data } = useQuery(GET_PAGE_BY_ID, {
     variables: { _id },
@@ -57,14 +49,14 @@ export async function getPage(_id) {
   }
 }
 
-export function useGetPagesByTemplate({ template  }: any) {
+export function useGetPagesByTemplate(templateId: string) {
   const [state, setState] = useState({
     search: '',
     showSearch: false,
   });
   const [subscribed, setSubscribed] = useState(false);
   const { data, error, loading, subscribeToMore } = useQuery(GET_PAGES_BY_TYPE, {
-    variables: { ...defaultGetPages, template, search: state.search },
+    variables: { ...defaultGetPages, template: templateId, search: state.search },
     fetchPolicy: 'cache-and-network',
   });
 
@@ -78,7 +70,7 @@ export function useGetPagesByTemplate({ template  }: any) {
         updateQuery: (prev, { subscriptionData }) => {
           if (!subscriptionData.data) return prev;
           const newPage = subscriptionData.data.addedPage;
-          if (template === newPage.addedPage?.template?._id) {
+          if (templateId === newPage.addedPage?.template?._id) {
             updateLikeInCache(newPage._id, 1);
             let isNew = true;
             let newData = prev?.getPages?.data?.map((t) => {
@@ -284,7 +276,7 @@ export function useCRUDPages({ onAlert, template, createCallBack, updateCallBack
 
 export function useCreatePage({ onAlert }: IHooksProps) {
   const [createPageMutation, { loading: createLoading }] = useMutation(CREATE_PAGE);
-  const handleCreate = async (template, createCallback) => {
+  const handleCreate = async (template: string, createCallback?: any) => {
     try {
       const payload = {
         template,

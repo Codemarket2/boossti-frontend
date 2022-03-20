@@ -26,8 +26,14 @@ import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
 import FormFieldsValue from '../form2/FormFieldsValue';
 
-export default function Pages({ types, slug, template }: any) {
-  const { data, loading, error, state, setState } = useGetPagesByTemplate({ types });
+interface IProps {
+  templateId: string;
+  slug: string;
+  template: any;
+}
+
+export default function Pages({ templateId, slug, template }: IProps) {
+  const { data, loading, error, state, setState } = useGetPagesByTemplate(templateId);
   const router = useRouter();
   const { editMode } = useSelector(({ setting }: any) => setting);
 
@@ -62,7 +68,7 @@ export default function Pages({ types, slug, template }: any) {
               variant="contained"
               color="primary"
               type="button"
-              onClick={() => handleCreate(types, createCallback)}
+              onClick={() => handleCreate(templateId, createCallback)}
               loading={createLoading}
               startIcon={<AddIcon />}
             >

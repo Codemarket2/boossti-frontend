@@ -4,7 +4,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Popover from '@material-ui/core/Popover';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
-import AlertTitle from '@material-ui/lab/AlertTitle';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -18,7 +17,10 @@ import {
   useNotificationSub,
 } from '@frontend/shared/hooks/notification';
 import { useEffect, useState } from 'react';
-import { Accordion, AccordionDetails, AccordionSummary, PageText, Box } from '@material-ui/core';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import ListItemText from '@material-ui/core/ListItemText';
 import { ExpandMore } from '@material-ui/icons';
 import styled from 'styled-components';
 import CommentModel from './CommentModel';
@@ -177,7 +179,7 @@ const NotificationItem = ({ notification, onClose }: any) => {
         {notification.link ? (
           <Link href={notification.link}>
             <div style={{ cursor: 'pointer' }} onClick={handleClick}>
-              <PageText
+              <ListItemText
                 className="p-0 m-0"
                 primary={<span dangerouslySetInnerHTML={{ __html: notification.description }} />}
                 secondary={`${moment(notification.createdAt).fromNow()}`}

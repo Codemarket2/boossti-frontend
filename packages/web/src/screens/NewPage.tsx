@@ -21,7 +21,7 @@ export default function Screen({ slug }: any) {
       </Breadcrumbs>
       <PageForm
         typeSlug={data.getTemplateBySlug.slug}
-        types={[data.getTemplateBySlug._id]}
+        template={data.getTemplateBySlug._id}
         parentId={data.getTemplateBySlug._id}
       />
     </UserLayout>

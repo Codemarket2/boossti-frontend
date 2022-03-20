@@ -17,7 +17,7 @@ import ErrorLoading from '../common/ErrorLoading';
 interface IProps {
   typeSlug: string;
   parentId: string;
-  types: [string];
+  template: string;
   item?: any;
   updateCallBack?: (arg: string) => void;
   onCancel?: () => void;
@@ -25,7 +25,7 @@ interface IProps {
 
 export default function PageForm({
   typeSlug,
-  types,
+  template,
   item = null,
   updateCallBack,
   onCancel,
@@ -38,12 +38,10 @@ export default function PageForm({
   };
   const { state, setState, formik, setFormValues, CRUDLoading } = useCRUDPages({
     onAlert,
-    types,
+    template,
     createCallBack,
     updateCallBack,
   });
-
-  // const { data, loading, error } = useGetFields(parentId);
 
   useEffect(() => {
     if (item) {

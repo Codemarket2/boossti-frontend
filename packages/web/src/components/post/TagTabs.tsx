@@ -8,7 +8,7 @@ import SelectTag from '../post/SelectTag';
 
 const initialState = {
   showModel: false,
-  typeId: '',
+  templateId: '',
   title: 'Tag',
 };
 export default function TagTabs({ handleSelectTag }: any) {
@@ -37,7 +37,12 @@ export default function TagTabs({ handleSelectTag }: any) {
             label={template.title.includes('-n-e-w') ? 'Title' : template.title}
             className="mt-2 mr-1"
             onClick={() =>
-              setState({ ...state, typeId: template._id, title: template.title, showModel: true })
+              setState({
+                ...state,
+                templateId: template._id,
+                title: template.title,
+                showModel: true,
+              })
             }
           />
         ))}
@@ -46,7 +51,7 @@ export default function TagTabs({ handleSelectTag }: any) {
         <SelectTag
           open={state.showModel}
           onClose={() => setState(initialState)}
-          typeId={state.typeId}
+          templateId={state.templateId}
           title={state.title}
           onSelect={(_id, title) => {
             handleSelectTag(_id, title);

@@ -66,7 +66,7 @@ export default function DrawerContent({ showDrawer, toggleDrawer, admin }: IProp
       <List style={{ minWidth: 300 }}>
         <DarkModeToggle />
         <Divider />
-        <Link href="/types">
+        <Link href="/templates">
           <ListItem button selected={checkActiveRoute(activeRoute, '/templates')}>
             <ListItemIcon>
               <ListIcon />

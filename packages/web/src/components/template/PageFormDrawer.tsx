@@ -11,7 +11,7 @@ interface IProps {
   onClose: () => void;
   typeTitle: string;
   typeSlug: string;
-  typeId: string;
+  templateId: string;
   onSelect: (arg: any) => void;
 }
 
@@ -21,7 +21,7 @@ export default function ItemFormDrawer({
   typeTitle = 'Item',
   typeSlug,
   onSelect,
-  typeId,
+  templateId,
 }: IProps) {
   const [item, setItem] = useState(null);
   const [slug, setSlug] = useState(null);
@@ -34,7 +34,7 @@ export default function ItemFormDrawer({
 
   useEffect(() => {
     if (open) {
-      handleCreate([typeId], createCallback);
+      handleCreate(templateId, createCallback);
     }
   }, [open]);
 

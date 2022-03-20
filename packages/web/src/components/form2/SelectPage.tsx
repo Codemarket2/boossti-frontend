@@ -7,7 +7,7 @@ import ItemFormDrawer from '../template/PageFormDrawer';
 import ErrorLoading from '../common/ErrorLoading';
 
 interface IProps {
-  typeId: string;
+  templateId: string;
   label: string;
   typeSlug: any;
   disabled?: boolean;
@@ -21,7 +21,7 @@ interface IProps {
 const filter = createFilterOptions();
 
 export default function SelectPage({
-  typeId,
+  templateId,
   disabled = false,
   value,
   onChange,
@@ -31,13 +31,10 @@ export default function SelectPage({
   helperText,
   allowCreate,
 }: IProps): any {
-  const { data, error: queryError, loading, state, setState } = useGetPagesByTemplate({
-    limit: 10,
-    types: [typeId],
-  });
+  const { data, error: queryError, loading, state, setState } = useGetPagesByTemplate(templateId);
   const [drawer, setDrawer] = useState({ showDrawer: false });
 
-  if (queryError || !typeId) {
+  if (queryError || !templateId) {
     return <ErrorLoading error={queryError || { message: 'Please select Existing Type' }} />;
   }
 
@@ -99,7 +96,7 @@ export default function SelectPage({
           onClose={() => setDrawer({ showDrawer: false })}
           typeTitle={label}
           typeSlug={typeSlug}
-          typeId={typeId}
+          templateId={templateId}
           onSelect={(newValue) => {
             onChange(newValue);
             setDrawer({ showDrawer: false });

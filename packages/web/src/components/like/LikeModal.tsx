@@ -1,14 +1,12 @@
-import {
-  Avatar,
-  List,
-  Page,
-  PageAvatar,
-  PageText,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  IconButton,
-} from '@material-ui/core';
+import Avatar from '@material-ui/core/Avatar';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemText from '@material-ui/core/ListItemText';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { useGetLikes } from '@frontend/shared/hooks/like/getLike';
 import ErrorLoading from '../common/ErrorLoading';
@@ -68,12 +66,12 @@ export default function LikeModal({
         <DialogContent dividers>
           {data.getLikesByParentId.data.map((user) => (
             <List key={user._id}>
-              <Page>
-                <PageAvatar>
+              <ListItem>
+                <ListItemAvatar>
                   <Avatar alt={user.createdBy.name} src={user.createdBy.picture} />
-                </PageAvatar>
-                <PageText primary={user.createdBy.name} />
-              </Page>
+                </ListItemAvatar>
+                <ListItemText primary={user.createdBy.name} />
+              </ListItem>
             </List>
           ))}
         </DialogContent>

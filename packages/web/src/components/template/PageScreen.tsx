@@ -413,7 +413,7 @@ const Navigation = ({
         isSection
         previewMode
       />
-      <ListItemsFields page={page} previewMode={!authorized} />
+      <PagesFields page={page} previewMode={!authorized} />
     </div>
   );
 };

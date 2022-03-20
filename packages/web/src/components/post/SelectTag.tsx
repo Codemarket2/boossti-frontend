@@ -15,16 +15,14 @@ import ErrorLoading from '../common/ErrorLoading';
 
 interface IProps {
   open: boolean;
-  typeId: string;
+  templateId: string;
   title: string;
   onClose: () => void;
   onSelect: (_id: string, name: string) => void;
 }
 
-export default function SelectTag({ open, onClose, typeId, title, onSelect }: IProps) {
-  const { data, loading, error, state, setState } = useGetPagesByTemplate({
-    types: [typeId || null],
-  });
+export default function SelectTag({ open, onClose, templateId, title, onSelect }: IProps) {
+  const { data, loading, error, state, setState } = useGetPagesByTemplate(templateId || null);
 
   return (
     <Dialog

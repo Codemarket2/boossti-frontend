@@ -29,7 +29,11 @@ function Quote({ field, index }) {
   return (
     <Draggable draggableId={field._id} index={index}>
       {(provided) => (
-        <ListItem ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+        <ListItem
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+        >
           <ListItemIcon>
             <DragIndicatorIcon />
           </ListItemIcon>
