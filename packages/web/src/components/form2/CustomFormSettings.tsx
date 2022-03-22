@@ -10,6 +10,8 @@ import InputGroup from '../common/InputGroup';
 import Overlay from '../common/Overlay';
 import ResponseLayout from '../response/ResponseLayout';
 import { ActionsWrapper } from './Actions';
+import { Grid } from '@material-ui/core';
+import FormFields from './FormFields';
 
 interface IProps {
   isSection?: boolean;
@@ -129,6 +131,9 @@ export default function CustomFormSettings({
               onChange={(actions) => onSettingsChange({ ...settings, actions })}
             />
           )}
+          <Grid item xs={12} md={8}>
+            <FormFields fields={fields} setFields={() => null} />
+          </Grid>
         </>
       )}
     </Overlay>
