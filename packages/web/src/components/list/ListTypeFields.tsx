@@ -15,6 +15,7 @@ export default function ListTypeFields({ listType, previewMode }: IProps) {
         fields={listType?.fields}
         setFields={(fields) => onListTypeChange({ fields })}
         title="Widgets"
+        showDisplaySettings
         previewMode={previewMode}
         isSection
       />
