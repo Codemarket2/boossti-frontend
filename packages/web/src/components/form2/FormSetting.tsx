@@ -3,20 +3,31 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
+import { Grid } from '@material-ui/core';
 import { useCreateVirtualForm } from '@frontend/shared/hooks/form';
 import { generateObjectId } from '@frontend/shared/utils/objectId';
 import { onAlert } from '../../utils/alert';
 import InputGroup from '../common/InputGroup';
 import SelectFormFields from './SelectFormFields';
+import FormFields from './FormFields';
 
 interface IProps {
   isSection?: boolean;
   settings: any;
   onChange: (val: any) => void;
   formId: any;
+  handleOnChange?: any;
+  state?: any;
 }
 
-export default function FormSetting({ formId, settings, onChange, isSection }: IProps): any {
+export default function FormSetting({
+  formId,
+  settings,
+  onChange,
+  isSection,
+  handleOnChange,
+  state,
+}: IProps): any {
   const { handleCreateVirtualForm, createLoading } = useCreateVirtualForm({ onAlert });
 
   return (
@@ -244,6 +255,14 @@ export default function FormSetting({ formId, settings, onChange, isSection }: I
         }
         label="Show form title"
       />
+      <br />
+      <Grid item xs={12} md={8}>
+        <FormFields
+          fields={state?.fields}
+          setFields={(newFields) => handleOnChange({ fields: newFields })}
+          tabName="setting"
+        />
+      </Grid>
     </Paper>
   );
 }

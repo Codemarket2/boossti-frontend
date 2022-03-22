@@ -195,6 +195,8 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
                   <FormSetting
                     formId={_id}
                     settings={state.settings}
+                    handleOnChange={handleOnChange}
+                    state={state}
                     onChange={(settings) =>
                       handleOnChange({
                         settings: { ...state.settings, ...settings },
