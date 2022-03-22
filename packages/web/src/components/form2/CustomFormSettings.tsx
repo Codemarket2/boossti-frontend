@@ -10,6 +10,8 @@ import InputGroup from '../common/InputGroup';
 import Overlay from '../common/Overlay';
 import ResponseLayout from '../response/ResponseLayout';
 import { ActionsWrapper } from './Actions';
+import { Grid } from '@material-ui/core';
+import FormFields from './FormFields';
 
 interface IProps {
   isSection?: boolean;
@@ -34,11 +36,13 @@ export default function CustomFormSettings({
 }: IProps): any {
   const [tab, setTab] = useState('settings');
   const [pageFields, setPageFields] = useState([]);
+  const [state, setState] = useState({});
 
   useEffect(() => {
     if (!(pageFields?.length > 0)) {
       getFormFields();
     }
+    setState({ ['fields']: fields });
   }, [fields]);
 
   const getFormFields = async () => {
@@ -92,6 +96,7 @@ export default function CustomFormSettings({
               settings={settings}
               onChange={(val) => onSettingsChange({ ...settings, ...val })}
               isSection={isSection}
+              state={state}
             />
           )}
           {tab === 'workflows' && (
