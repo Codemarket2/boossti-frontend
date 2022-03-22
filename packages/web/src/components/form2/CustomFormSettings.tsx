@@ -36,11 +36,13 @@ export default function CustomFormSettings({
 }: IProps): any {
   const [tab, setTab] = useState('settings');
   const [pageFields, setPageFields] = useState([]);
+  const [state, setState] = useState({});
 
   useEffect(() => {
     if (!(pageFields?.length > 0)) {
       getFormFields();
     }
+    setState({ ['fields']: fields });
   }, [fields]);
 
   const getFormFields = async () => {
@@ -94,6 +96,7 @@ export default function CustomFormSettings({
               settings={settings}
               onChange={(val) => onSettingsChange({ ...settings, ...val })}
               isSection={isSection}
+              state={state}
             />
           )}
           {tab === 'workflows' && (
@@ -131,9 +134,6 @@ export default function CustomFormSettings({
               onChange={(actions) => onSettingsChange({ ...settings, actions })}
             />
           )}
-          <Grid item xs={12} md={8}>
-            <FormFields fields={fields} setFields={() => null} />
-          </Grid>
         </>
       )}
     </Overlay>
