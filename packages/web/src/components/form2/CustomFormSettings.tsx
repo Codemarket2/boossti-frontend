@@ -42,8 +42,11 @@ export default function CustomFormSettings({
     if (!(pageFields?.length > 0)) {
       getFormFields();
     }
-    setState({ ['fields']: fields });
   }, [fields]);
+
+  useEffect(() => {
+    setState({ ['fields']: pageFields });
+  }, [pageFields]);
 
   const getFormFields = async () => {
     const formFields = fields?.filter((f) => f?.fieldType === 'form');
