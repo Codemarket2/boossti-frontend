@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import DataGrid, { CopyEvent, PasteEvent, SelectColumn, TextEditor } from 'react-data-grid';
 import { useRouter } from 'next/router';
 import moment from 'moment';
 import Paper from '@material-ui/core/Paper';
@@ -23,15 +24,11 @@ import Authorization from '../common/Authorization';
 import DeleteButton from '../common/DeleteButton';
 import { ResponseChild3 } from './Response';
 import EditResponseDrawer from './EditResponseDrawer';
-import Overlay from '../common/Overlay';
-import { useEffect } from 'react';
-import DataGrid, { CopyEvent, PasteEvent, SelectColumn, TextEditor } from 'react-data-grid';
 
 interface IProps {
   form: any;
   parentId?: string;
   workFlowFormReponseParentId?: string;
-  layouts?: any;
   showOnlyMyResponses?: boolean;
 }
 type Direction = 'ltr' | 'rtl';

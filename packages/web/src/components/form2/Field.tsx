@@ -9,7 +9,7 @@ import PhoneInput from 'react-phone-input-2';
 import ImagePicker from '../common/ImagePicker';
 import RichTextarea from '../common/RichTextarea2';
 import DisplayRichText from '../common/DisplayRichText';
-import SelectListItem from './SelectListItem';
+import SelectPage from './SelectPage';
 import { validateValue } from './validate';
 import SelectResponse from '../response/SelectResponse';
 import Select from './Select';
@@ -22,7 +22,7 @@ interface IProps {
   _id: string;
   label: string;
   fieldType: string;
-  typeId: any;
+  templateId: any;
   options: any;
   value: any;
   onChangeValue: (arg: any) => void;
@@ -37,7 +37,7 @@ export default function Field({
   _id,
   label,
   fieldType,
-  typeId,
+  templateId,
   options,
   value,
   onChangeValue,
@@ -163,10 +163,10 @@ export default function Field({
     case 'select': {
       return (
         <>
-          {options?.optionsListType === 'type' ? (
-            <SelectListItem
-              typeSlug={typeId?.slug || null}
-              typeId={typeId?._id || null}
+          {options?.optionsTemplate === 'type' ? (
+            <SelectPage
+              typeSlug={templateId?.slug || null}
+              templateId={templateId?._id || null}
               label={label}
               error={validateValue(validate, value, options, fieldType).error}
               helperText={validateValue(validate, value, options, fieldType).errorMessage}
@@ -174,7 +174,7 @@ export default function Field({
               onChange={(newValue) => onChange({ field: _id, itemId: newValue })}
               allowCreate={options?.selectAllowCreate}
             />
-          ) : options?.optionsListType === 'existingForm' ? (
+          ) : options?.optionsTemplate === 'existingForm' ? (
             <SelectResponse
               label={label}
               formId={form?._id}

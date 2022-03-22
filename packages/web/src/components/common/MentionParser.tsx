@@ -64,7 +64,7 @@ export default function MentionParser({
                       selectedTag &&
                       selectedTag.types &&
                       Object.prototype.hasOwnProperty.call(selectedTag, 'types')
-                        ? `/${selectedTag.types[0].slug}/${selectedTag.slug}`
+                        ? `/${selectedTag.template.slug}/${selectedTag.slug}`
                         : selectedTag.slug
                         ? `/${selectedTag.slug}`
                         : `/${Date.now()}`;

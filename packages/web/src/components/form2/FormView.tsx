@@ -1,3 +1,4 @@
+import { Auth } from 'aws-amplify';
 import { fileUpload } from '@frontend/shared/utils/fileUpload';
 import { useEffect, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
@@ -17,7 +18,6 @@ import ResponseList from '../response/ResponseList';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
 import Field from './Field';
-import SelectItemView from './SelectItemView';
 import { validateValue } from './validate';
 import { onAlert } from '../../utils/alert';
 import DisplayRichText from '../common/DisplayRichText';
@@ -28,7 +28,6 @@ import DisplayValue from './DisplayValue';
 import Leaderboard from '../response/Leaderboard';
 import SelectResponse from '../response/SelectResponse';
 import { replaceVariables } from './variables';
-import { Auth } from 'aws-amplify';
 import projectConfig from '../../../../shared/index';
 
 interface IProps {
@@ -360,7 +359,6 @@ export default function FormViewWrapper({
         form?.settings?.widgetType !== 'form' &&
         form?.settings?.responsesView !== 'button' && (
           <ResponseList
-            layouts={layouts}
             form={form}
             parentId={parentId}
             workFlowFormReponseParentId={workFlowFormReponseParentId}

@@ -1,5 +1,5 @@
-import { getListItemMetaTags } from '@frontend/shared/hooks/metaTags';
-import ItemScreen from '../../../src/screens/ItemScreen';
+import { getPageMetaTags } from '@frontend/shared/hooks/metaTags';
+import ItemScreen from '../../../src/screens/PageScreen';
 import Loading from '../../../src/components/common/Loading';
 import Head from '../../../src/components/common/Head';
 import UserLayout from '../../../src/components/common/UserLayout';
@@ -24,7 +24,7 @@ export default function Page({ metaTags, itemSlug, slug }: IProps) {
 export async function getServerSideProps(context) {
   const { itemSlug, slug } = context.query;
 
-  const metaTags = await getListItemMetaTags(itemSlug);
+  const metaTags = await getPageMetaTags(itemSlug);
   if (metaTags) {
     metaTags.url = `/${slug}/${itemSlug}`;
   }

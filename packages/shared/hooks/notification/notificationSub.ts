@@ -47,8 +47,8 @@ export const useNotificationSub = () => {
   const { data, error } = useSubscription(NOTIFICATION_SUB, {
     variables: { userId: attributes['custom:_id'] },
   });
-  const notificationListItem = {
-    __typename: 'NotificationListItem',
+  const notificationPage = {
+    __typename: 'NotificationPage',
     lastNotification: {},
     _id: '',
     notificationCount: 1,
@@ -63,9 +63,9 @@ export const useNotificationSub = () => {
       } else {
         temp = [data.notificationSub];
       }
-      notificationListItem.lastNotification = data.notificationSub;
-      notificationListItem._id = data.notificationSub.threadId;
-      updateNotificationCache(notificationListItem);
+      notificationPage.lastNotification = data.notificationSub;
+      notificationPage._id = data.notificationSub.threadId;
+      updateNotificationCache(notificationPage);
       setState({
         ...state,
         notifications: { ...state.notifications, [data.notificationSub.formId]: temp },

@@ -5,7 +5,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import List from '@material-ui/core/List';
-import { useGetListItemsByType, useCreateListItem } from '@frontend/shared/hooks/list';
+import { useGetPagesByTemplate, useCreatePage } from '@frontend/shared/hooks/template';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -15,16 +15,14 @@ import ErrorLoading from '../common/ErrorLoading';
 
 interface IProps {
   open: boolean;
-  typeId: string;
+  templateId: string;
   title: string;
   onClose: () => void;
   onSelect: (_id: string, name: string) => void;
 }
 
-export default function SelectTag({ open, onClose, typeId, title, onSelect }: IProps) {
-  const { data, loading, error, state, setState } = useGetListItemsByType({
-    types: [typeId || null],
-  });
+export default function SelectTag({ open, onClose, templateId, title, onSelect }: IProps) {
+  const { data, loading, error, state, setState } = useGetPagesByTemplate(templateId || null);
 
   return (
     <Dialog
@@ -42,12 +40,12 @@ export default function SelectTag({ open, onClose, typeId, title, onSelect }: IP
         </IconButton>
       </div>
       <DialogContent dividers={true}>
-        {error || !data || !data.getListItems ? (
+        {error || !data || !data.getPages ? (
           <ErrorLoading error={error} />
         ) : (
           <DialogContentText id="scroll-dialog-description">
             <List component="div">
-              {data.getListItems.data.map((item) => (
+              {data.getPages.data.map((item) => (
                 <ListItem button onClick={() => onSelect(item._id, item.title)}>
                   <ListItemText primary={item.title} secondary={item.description || null} />
                   <ListItemSecondaryAction>
