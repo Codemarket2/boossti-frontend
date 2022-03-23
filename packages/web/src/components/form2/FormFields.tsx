@@ -29,6 +29,7 @@ import EditFieldGrid from './EditFieldGrid';
 import EditFormDrawer from './EditFormDrawer';
 import CustomFormSettings from './CustomFormSettings';
 import StyleDrawer from '../style/StyleDrawer';
+import DisplaySettings from './DisplaySettings';
 
 export function convertToSlug(text: string): string {
   return text
@@ -44,7 +45,7 @@ const reorder = (list, startIndex, endIndex) => {
   return result;
 };
 
-const initialValues = {
+export const initialValues = {
   showMenu: null,
   field: null,
   showForm: false,
@@ -61,6 +62,7 @@ type IProps = {
   isSection?: boolean;
   previewMode?: boolean;
   parentPageFields?: any;
+  showDisplaySettings?: boolean;
   tabName?: string;
 };
 
@@ -71,6 +73,7 @@ export default function FormFields({
   isSection = false,
   previewMode = false,
   parentPageFields = [],
+  showDisplaySettings = false,
   tabName = 'form',
 }: IProps): any {
   const [values, setValues] = useState(initialValues);
@@ -120,7 +123,10 @@ export default function FormFields({
     setFields(
       fields?.map((field) => {
         if (field._id === fieldId) {
-          return { ...field, options: { ...field?.options, settings } };
+          return {
+            ...field,
+            options: { ...field?.options, settings: { ...field?.options?.settings, ...settings } },
+          };
         }
         return field;
       }),
@@ -223,45 +229,59 @@ export default function FormFields({
                 {(provided, snapshot) => (
                   <div ref={provided.innerRef} {...provided.droppableProps}>
                     {fields?.map((field: any, index: number) => (
-                      <Draggable key={field._id} draggableId={field._id} index={index}>
-                        {(draggableProvided, draggableSnapshot) => (
-                          <ListItem
-                            button
-                            onClick={() => handleNavigate(field.label)}
-                            selected={
-                              draggableSnapshot.isDragging || field?._id === values?.field?._id
-                            }
-                            ref={draggableProvided.innerRef}
-                            {...draggableProvided.draggableProps}
-                            {...draggableProvided.dragHandleProps}
-                          >
-                            <ListItemText
-                              primary={field.label}
-                              secondary={
-                                !previewMode &&
-                                ((field?.fieldType === 'form' && field?.form?.name) ||
-                                  field.fieldType)
-                              }
-                            />
-                            {!(previewMode || snapshot.isDraggingOver) && (
-                              <ListItemSecondaryAction>
-                                <IconButton
-                                  edge="end"
-                                  onClick={(event) =>
-                                    setValues({
-                                      ...initialValues,
-                                      showMenu: event.currentTarget,
-                                      field,
-                                    })
+                      <>
+                        <Draggable key={field._id} draggableId={field._id} index={index}>
+                          {(draggableProvided, draggableSnapshot) => (
+                            <div>
+                              {showDisplaySettings && field?.fieldType === 'form' && (
+                                <DisplaySettings
+                                  fields={fields}
+                                  formId={field?.form?._id}
+                                  isSection={isSection}
+                                  key={field._id}
+                                  onChange={(value) => handleEditFormSettings(field?._id, value)}
+                                  settings={field?.options.settings}
+                                />
+                              )}
+                              <ListItem
+                                button
+                                onClick={() => handleNavigate(field.label)}
+                                selected={
+                                  draggableSnapshot.isDragging || field?._id === values?.field?._id
+                                }
+                                ref={draggableProvided.innerRef}
+                                {...draggableProvided.draggableProps}
+                                {...draggableProvided.dragHandleProps}
+                              >
+                                <ListItemText
+                                  primary={field.label}
+                                  secondary={
+                                    !previewMode &&
+                                    ((field?.fieldType === 'form' && field?.form?.name) ||
+                                      field.fieldType)
                                   }
-                                >
-                                  <MoreVertIcon />
-                                </IconButton>
-                              </ListItemSecondaryAction>
-                            )}
-                          </ListItem>
-                        )}
-                      </Draggable>
+                                />
+                                {!(previewMode || snapshot.isDraggingOver) && (
+                                  <ListItemSecondaryAction>
+                                    <IconButton
+                                      edge="end"
+                                      onClick={(event) =>
+                                        setValues({
+                                          ...initialValues,
+                                          showMenu: event.currentTarget,
+                                          field,
+                                        })
+                                      }
+                                    >
+                                      <MoreVertIcon />
+                                    </IconButton>
+                                  </ListItemSecondaryAction>
+                                )}
+                              </ListItem>
+                            </div>
+                          )}
+                        </Draggable>
+                      </>
                     ))}
                     {provided.placeholder}
                   </div>

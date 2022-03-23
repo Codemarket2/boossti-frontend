@@ -3,12 +3,12 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
+import { Grid } from '@material-ui/core';
 import { useCreateVirtualForm } from '@frontend/shared/hooks/form';
 import { generateObjectId } from '@frontend/shared/utils/objectId';
 import { onAlert } from '../../utils/alert';
 import InputGroup from '../common/InputGroup';
 import SelectFormFields from './SelectFormFields';
-import { Grid } from '@material-ui/core';
 import FormFields from './FormFields';
 
 interface IProps {
@@ -125,7 +125,7 @@ export default function FormSetting({
                         label,
                         fieldType: 'select',
                         options: JSON.stringify({
-                          optionsListType: 'existingForm',
+                          optionsTemplate: 'existingForm',
                           formField: newValue,
                         }),
                         form: formId,

@@ -2,9 +2,9 @@ import { fileUpload } from '@frontend/shared/utils/fileUpload';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { useEffect, useRef, useState } from 'react';
 import { client } from '@frontend/shared/graphql';
-import { GET_MENTION_ITEMS } from '@frontend/shared/graphql/query/list';
+import { GET_MENTION_ITEMS } from '@frontend/shared/graphql/query/template';
 
-export async function getListItems(queryText) {
+export async function getPages(queryText) {
   try {
     const response = await client.query({
       query: GET_MENTION_ITEMS,
@@ -127,7 +127,7 @@ const editorConfiguration = {
     feeds: [
       {
         marker: '@',
-        feed: getListItems,
+        feed: getPages,
       },
     ],
   },

@@ -87,6 +87,8 @@ export default function ActionForm({
               <MenuItem value="generateNewUser">Generate New User</MenuItem>
             )}
             <MenuItem value="updateFieldValue">Update field value</MenuItem>
+            <MenuItem value="sendInAppNotification">Send In-App Notification</MenuItem>
+            <MenuItem value="sendPushNotification">Send Push Notification</MenuItem>
           </Select>
           {formik.touched.actionType && formik.errors.actionType ? (
             <FormHelperText className="text-danger">{formik.errors.actionType}</FormHelperText>
@@ -128,41 +130,47 @@ export default function ActionForm({
           />
         </InputGroup>
       )}
+      {['sendEmail', 'sendInAppNotification', 'sendPushNotification']?.includes(
+        formik.values.actionType,
+      ) && (
+        <InputGroup>
+          <FormControl
+            variant="outlined"
+            fullWidth
+            size="small"
+            error={Boolean(formik.touched.receiverType && formik.errors.receiverType)}
+          >
+            <InputLabel id="receiverType">Receiver*</InputLabel>
+            <Select
+              labelId="receiverType"
+              name="receiverType"
+              value={formik.values.receiverType}
+              onChange={formik.handleChange}
+              label="Receiver*"
+            >
+              <MenuItem value="formOwner">Form owner</MenuItem>
+              <MenuItem value="responseSubmitter">Response submitter</MenuItem>
+              {formik.values.actionType === 'sendEmail' && (
+                <>
+                  <MenuItem value="customEmail">Custom email</MenuItem>
+                  {emailFields?.length > 0 && (
+                    <MenuItem value="emailField">Form email field</MenuItem>
+                  )}
+                </>
+              )}
+            </Select>
+            {formik.touched.receiverType && formik.errors.receiverType ? (
+              <FormHelperText className="text-danger">{formik.errors.receiverType}</FormHelperText>
+            ) : (
+              <FormHelperText>
+                Add required Email field to form then use it as receiver email
+              </FormHelperText>
+            )}
+          </FormControl>
+        </InputGroup>
+      )}
       {formik.values.actionType === 'sendEmail' && (
         <>
-          <InputGroup>
-            <FormControl
-              variant="outlined"
-              fullWidth
-              size="small"
-              error={Boolean(formik.touched.receiverType && formik.errors.receiverType)}
-            >
-              <InputLabel id="receiverType">Receiver*</InputLabel>
-              <Select
-                labelId="receiverType"
-                name="receiverType"
-                value={formik.values.receiverType}
-                onChange={formik.handleChange}
-                label="Receiver*"
-              >
-                <MenuItem value="formOwner">Form owner</MenuItem>
-                <MenuItem value="responseSubmitter">Response submitter</MenuItem>
-                <MenuItem value="customEmail">Custom email</MenuItem>
-                {emailFields?.length > 0 && (
-                  <MenuItem value="emailField">Form email field</MenuItem>
-                )}
-              </Select>
-              {formik.touched.receiverType && formik.errors.receiverType ? (
-                <FormHelperText className="text-danger">
-                  {formik.errors.receiverType}
-                </FormHelperText>
-              ) : (
-                <FormHelperText>
-                  Add required Email field to form then use it as receiver email
-                </FormHelperText>
-              )}
-            </FormControl>
-          </InputGroup>
           {formik.values.receiverType === 'customEmail' && (
             <Autocomplete
               size="small"
@@ -299,6 +307,7 @@ export default function ActionForm({
               </IconButton>
             </Tooltip>
           </Typography>
+          <Typography>Inbuilt Variables - formName, createdBy, createdAt, pageName</Typography>
           <InputLabel>
             Define Variables and use it in email subject and body. example - {`{{email}}`}
           </InputLabel>
@@ -387,9 +396,13 @@ export default function ActionForm({
           />
         </InputGroup>
       )}
-      {['sendEmail', 'showMessage', 'generateNewUser'].includes(formik.values.actionType) && (
+      {['sendEmail', 'showMessage', 'generateNewUser', 'sendInAppNotification'].includes(
+        formik.values.actionType,
+      ) && (
         <InputGroup>
-          <InputLabel>Email Body*</InputLabel>
+          <InputLabel>
+            {formik.values.actionType === 'sendInAppNotification' ? 'description' : 'Email Body'}*
+          </InputLabel>
           <RichTextarea
             value={formik.values.body}
             onChange={(newValue) => formik.setFieldValue('body', newValue)}
@@ -399,7 +412,7 @@ export default function ActionForm({
           )}
         </InputGroup>
       )}
-      {formik.values.actionType === 'sendSms' && (
+      {['sendSms', 'sendPushNotification'].includes(formik.values.actionType) && (
         <InputGroup>
           <TextField
             fullWidth

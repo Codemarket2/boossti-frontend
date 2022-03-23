@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/client';
 import { CREATE_POST, UPDATE_POST } from '../../graphql/mutation/post';
-// import { useMentionList } from '../list';
 import { GET_MY_POSTS } from '../../graphql/query/post';
 import { fileUpload } from '../../utils/fileUpload';
 import { omitTypename } from '../../utils/omitTypename';
@@ -20,7 +19,7 @@ const defaultPost = {
 };
 
 export function useCreatePost({ onAlert, onSuccess, post = defaultPost }: IProps) {
-  // const { data, loading, error } = useMentionList();
+  // const { data, loading, error } = useMention();
   const [state, setState] = useState({
     edit: false,
     _id: '',

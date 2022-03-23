@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import { useGetForm } from '@frontend/shared/hooks/form';
 import { useDeleteResponse, useGetResponse } from '@frontend/shared/hooks/response';
-import { getListItem } from '@frontend/shared/hooks/list/listItems';
+import { getPage } from '@frontend/shared/hooks/template/pages';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Typography from '@material-ui/core/Typography';
@@ -143,13 +143,13 @@ export function ResponseChild3({
 
   const redirectToPage = async (_id) => {
     setState({ ...state, showBackdrop: true });
-    const page = await getListItem(_id);
+    const page = await getPage(_id);
     if (
-      page?.data?.getListItem?.types[0]?.slug &&
-      page?.data?.getListItem?.slug &&
-      router?.query?.itemSlug !== page?.data?.getListItem?.slug
+      page?.data?.getPage?.template?.slug &&
+      page?.data?.getPage?.slug &&
+      router?.query?.itemSlug !== page?.data?.getPage?.slug
     ) {
-      router.push(`/${page?.data?.getListItem?.types[0]?.slug}/${page?.data?.getListItem?.slug}`);
+      router.push(`/${page?.data?.getPage?.template?.slug}/${page?.data?.getPage?.slug}`);
     } else {
       setState({ ...state, showBackdrop: false });
     }
