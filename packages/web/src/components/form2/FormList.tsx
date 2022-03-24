@@ -23,9 +23,10 @@ export default function FormList(): any {
   const [showBackdrop, setShowBackdrop] = useState(false);
 
   const handleAddNewForm = async () => {
-    const res = await handleCreateForm(`Form ${generateObjectId()}`);
-    setShowBackdrop(true);
-    router.push(`/forms/${res?.data?.createForm?.slug}`);
+    await handleCreateForm(`Form ${generateObjectId()}`, (form) => {
+      setShowBackdrop(true);
+      router.push(`/forms/${form.slug}`);
+    });
   };
 
   return (

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
-import { v4 as uuid } from 'uuid';
 import { useQuery, useMutation } from '@apollo/client';
 import { CREATE_TEMPLATE, UPDATE_TEMPLATE, DELETE_TEMPLATE } from '../../graphql/mutation/template';
 import { GET_TEMPLATES, GET_TEMPLATE_BY_SLUG } from '../../graphql/query/template';
@@ -150,27 +149,6 @@ const templatesDefaultValue = {
 interface IProps extends IHooksProps {
   createCallBack?: (slug: string) => void;
   updateCallBack?: (slug: string) => void;
-}
-
-export function useCreateTemplate({ onAlert }: IHooksProps) {
-  const [createTemplateMutation, { loading: createLoading }] = useMutation(CREATE_TEMPLATE);
-  const handleCreate = async (createCallback) => {
-    try {
-      const payload = {
-        title: `${uuid()}-${new Date().getTime()}-n-e-w`,
-        description: '',
-        slug: '',
-        media: [],
-      };
-      const res = await createTemplateMutation({
-        variables: payload,
-      });
-      createCallback(res.data.createTemplate.slug);
-    } catch (error) {
-      onAlert('Error', error.message);
-    }
-  };
-  return { handleCreate, createLoading };
 }
 
 export function useCRUDTemplates({ onAlert, createCallBack, updateCallBack }: IProps) {
