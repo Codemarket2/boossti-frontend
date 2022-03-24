@@ -233,16 +233,6 @@ export default function FormFields({
                         <Draggable key={field._id} draggableId={field._id} index={index}>
                           {(draggableProvided, draggableSnapshot) => (
                             <div>
-                              {showDisplaySettings && field?.fieldType === 'form' && (
-                                <DisplaySettings
-                                  fields={fields}
-                                  formId={field?.form?._id}
-                                  isSection={isSection}
-                                  key={field._id}
-                                  onChange={(value) => handleEditFormSettings(field?._id, value)}
-                                  settings={field?.options.settings}
-                                />
-                              )}
                               <ListItem
                                 button
                                 onClick={() => handleNavigate(field.label)}
@@ -278,6 +268,17 @@ export default function FormFields({
                                   </ListItemSecondaryAction>
                                 )}
                               </ListItem>
+                              {showDisplaySettings && field?.fieldType === 'form' && (
+                                <Paper variant="outlined" className="p-2">
+                                  <DisplaySettings
+                                    fields={fields}
+                                    formId={field?.form?._id}
+                                    isSection={isSection}
+                                    key={field._id}
+                                    settings={field?.options.settings}
+                                  />
+                                </Paper>
+                              )}
                             </div>
                           )}
                         </Draggable>
