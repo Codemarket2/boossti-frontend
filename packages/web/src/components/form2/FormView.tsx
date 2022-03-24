@@ -37,7 +37,6 @@ interface IProps {
   createCallback?: (response: any) => void;
   setResponded?: () => void;
   isPageOwner?: boolean;
-  layouts?: any;
 }
 
 export const defualtValue = {
@@ -69,7 +68,6 @@ export default function FormViewWrapper({
   workFlowFormReponseParentId,
   createCallback,
   setResponded,
-  layouts,
   isPageOwner,
 }: IProps): any {
   const { handleCreateUpdateResponse, createLoading } = useCreateUpdateResponse(
@@ -406,6 +404,7 @@ export function FormView({
   fieldWiseView = false,
 }: IProps2): any {
   const [values, setValues] = useState(initialValues);
+  const [editValue, setEditValue] = useState({ fieldId: null, index: null });
   const [submitState, setSubmitState] = useState(initialSubmitState);
   const authenticated = useSelector(({ auth }: any) => auth.authenticated);
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -497,15 +496,24 @@ export function FormView({
     }
   };
 
-  const onAddOneMoreValue = (fieldId) => {
+  const onAddOneMoreValue = (field) => {
     let newValues = [];
-    const newValue = { ...defualtValue, field: fieldId, value: '' };
-    if (values.some((f) => f.field === fieldId)) {
+    const newValue = { ...defualtValue, field: field._id, value: '' };
+    const fieldValues = values.filter((f) => f.field === field._id);
+    if (
+      fieldValues.length > 0 &&
+      !validateValue(
+        true,
+        fieldValues[fieldValues.length - 1],
+        { ...field.options, required: true },
+        field.fieldType,
+      ).error
+    ) {
       newValues = [newValue];
-    } else {
-      newValues = [newValue, newValue];
+    } else if (!submitState.validate) {
+      setSubmitState({ ...submitState, validate: true });
     }
-    setValues([...newValues, ...values]);
+    setValues([...values, ...newValues]);
   };
 
   const onRemoveOneValue = (fieldId, index) => {
@@ -514,23 +522,21 @@ export function FormView({
     setValues([...oldValues, ...newValues]);
   };
 
-  const onEditOneValue = (fieldId, index) => {
-    let selectedField = null;
-    const oldValues = values.filter((f) => f.field !== fieldId);
-    let newValues = values
-      .filter((f) => f.field === fieldId)
-      .filter((f, i) => {
-        if (i !== index) {
-          return true;
-        }
-        selectedField = f;
-        return false;
-      });
-    if (selectedField) {
-      newValues = [selectedField, ...newValues];
-    }
-    setValues([...oldValues, ...newValues]);
-  };
+  // const onEditOneValue = (fieldId, index) => {
+  //   const oldValues = values.filter((f) => f.field !== fieldId);
+  //   const currentFieldValues = values.filter((f) => f.field === fieldId);
+  //   const newValues = currentFieldValues.map((f, i) => {
+  //     let tempValue = { ...f };
+  //     if (i === currentFieldValues.length - 1) {
+  //       tempValue = currentFieldValues[index];
+  //     }
+  //     if (i === index) {
+  //       tempValue = currentFieldValues[currentFieldValues.length - 1];
+  //     }
+  //     return tempValue;
+  //   });
+  //   setValues([...oldValues, ...newValues]);
+  // };
 
   return (
     <div className="position-relative">
@@ -557,83 +563,116 @@ export function FormView({
                 <Typography>
                   {field?.options?.required ? `${field?.label}*` : field?.label}
                 </Typography>
+                <>
+                  <div className="w-100">
+                    {hideField ? (
+                      <Skeleton height={200} />
+                    ) : (
+                      <Field
+                        {...field}
+                        disabled={submitState.loading}
+                        validate={submitState.validate}
+                        label={field?.options?.required ? `${field?.label}*` : field?.label}
+                        onChangeValue={(changedValue) =>
+                          onChange(
+                            { ...changedValue, field: field._id },
+                            filterValues(values, field)?.length - 1,
+                          )
+                        }
+                        value={filterValues(values, field)[filterValues(values, field)?.length - 1]}
+                      />
+                    )}
+                  </div>
+                  {field?.options?.multipleValues && (
+                    <Button
+                      className="my-2"
+                      size="small"
+                      color="primary"
+                      variant="contained"
+                      onClick={() => {
+                        if (field?.fieldType === 'richTextarea') {
+                          setHideField(true);
+                        }
+                        onAddOneMoreValue(field);
+                      }}
+                      startIcon={<AddIcon />}
+                    >
+                      Add
+                    </Button>
+                  )}
+                </>
                 {filterValues(values, field).map((value, valueIndex) => (
                   <div key={valueIndex}>
-                    {valueIndex === 0 ? (
+                    {valueIndex !== filterValues(values, field)?.length - 1 && (
                       <>
-                        <div className="w-100">
-                          {hideField ? (
-                            <Skeleton height={200} />
-                          ) : (
-                            <Field
-                              {...field}
-                              disabled={submitState.loading}
-                              validate={submitState.validate}
-                              label={field?.options?.required ? `${field?.label}*` : field?.label}
-                              onChangeValue={(changedValue) =>
-                                onChange({ ...changedValue, field: field._id }, valueIndex)
+                        {editValue.fieldId === field._id && editValue.index === valueIndex ? (
+                          <>
+                            <div className="w-100">
+                              {hideField ? (
+                                <Skeleton height={200} />
+                              ) : (
+                                <Field
+                                  {...field}
+                                  disabled={submitState.loading}
+                                  validate={submitState.validate}
+                                  label={
+                                    field?.options?.required ? `${field?.label}*` : field?.label
+                                  }
+                                  onChangeValue={(changedValue) =>
+                                    onChange({ ...changedValue, field: field._id }, valueIndex)
+                                  }
+                                  value={value}
+                                />
+                              )}
+                            </div>
+                            <Button
+                              className="my-2"
+                              size="small"
+                              color="primary"
+                              variant="contained"
+                              onClick={() => setEditValue({ fieldId: null, index: null })}
+                            >
+                              Save
+                            </Button>
+                          </>
+                        ) : (
+                          <div className="mb-2 d-flex align-items-start">
+                            <div className="w-100">
+                              <DisplayValue value={value} field={field} />
+                              {validateValue(
+                                submitState.validate,
+                                value,
+                                field.options,
+                                field.fieldType,
+                              ).error && (
+                                <FormHelperText className="text-danger">
+                                  {
+                                    validateValue(
+                                      submitState.validate,
+                                      value,
+                                      field.options,
+                                      field.fieldType,
+                                    ).errorMessage
+                                  }
+                                </FormHelperText>
+                              )}
+                            </div>
+                            <IconButton
+                              onClick={() =>
+                                setEditValue({ fieldId: field._id, index: valueIndex })
                               }
-                              value={value}
-                            />
-                          )}
-                        </div>
-                        {field?.options?.multipleValues && (
-                          <Button
-                            className="mt-2"
-                            size="small"
-                            color="primary"
-                            variant="contained"
-                            onClick={() => {
-                              if (field?.fieldType === 'richTextarea') {
-                                setHideField(true);
-                              }
-                              onAddOneMoreValue(field._id);
-                            }}
-                            startIcon={<AddIcon />}
-                          >
-                            Add
-                          </Button>
+                            >
+                              <EditIcon />
+                            </IconButton>
+                            <IconButton
+                              edge="end"
+                              onClick={() => onRemoveOneValue(field._id, valueIndex)}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </div>
                         )}
                       </>
-                    ) : (
-                      <div className="mb-2 d-flex align-items-start">
-                        <div className="w-100">
-                          <DisplayValue value={value} field={field} />
-                          {validateValue(
-                            submitState.validate,
-                            value,
-                            field.options,
-                            field.fieldType,
-                          ).error && (
-                            <FormHelperText className="text-danger">
-                              {
-                                validateValue(
-                                  submitState.validate,
-                                  value,
-                                  field.options,
-                                  field.fieldType,
-                                ).errorMessage
-                              }
-                            </FormHelperText>
-                          )}
-                        </div>
-                        <IconButton
-                          onClick={() => {
-                            if (field?.fieldType === 'richTextarea') {
-                              setHideField(true);
-                            }
-                            onEditOneValue(field._id, valueIndex);
-                          }}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton
-                          edge="end"
-                          onClick={() => onRemoveOneValue(field._id, valueIndex)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </div>
                     )}
                   </div>
                 ))}
