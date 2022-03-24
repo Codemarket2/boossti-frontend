@@ -13,7 +13,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Grid from '@material-ui/core/Grid';
 import EditIcon from '@material-ui/icons/Edit';
 import StarOutlineIcon from '@material-ui/icons/StarOutline';
-import DeleteIcon from '@material-ui/icons/Delete';
 import StarIcon from '@material-ui/icons/Star';
 import Share from '@material-ui/icons/Share';
 import { useAuthorization } from '@frontend/shared/hooks/auth';
@@ -30,6 +29,7 @@ import SeoOverlay from '../components/template/SeoOverlay';
 import { QRButton } from '../components/qrcode/QRButton';
 import TemplateFields from '../components/template/TemplateFields';
 import EditMode from '../components/common/EditMode';
+import DeleteButton from '../components/common/DeleteButton';
 
 interface IProps {
   slug: string;
@@ -50,7 +50,7 @@ export default function Screen({ slug }: IProps) {
   const { handlePublish } = usePublishTemplate({ onAlert });
 
   const deleteCallBack = () => {
-    router.push(`/types`);
+    router.push(`/templates`);
   };
 
   const updateCallBack = (newSlug) => {
@@ -147,23 +147,11 @@ export default function Screen({ slug }: IProps) {
                 }
                 label="Publish"
               />
-              <Tooltip title="Delete">
-                <IconButton
-                  edge="end"
-                  onClick={() => {
-                    if (data.getTemplateBySlug.inUse) {
-                      alert("This type is being used in some form, you can't delete");
-                    } else {
-                      const answer = confirm('Are you sure you want to delete?');
-                      if (answer) {
-                        handleDelete(data.getTemplateBySlug._id, deleteCallBack);
-                      }
-                    }
-                  }}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </Tooltip>
+              <DeleteButton
+                tooltip="Delete template"
+                onClick={() => handleDelete(data.getTemplateBySlug._id, deleteCallBack)}
+                edge="end"
+              />
             </>
           )}
         </div>

@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const CREATE_TEMPLATE = gql`
-  mutation MyMutation($title: String!, $description: String, $media: [MediaInput]) {
-    createTemplate(title: $title, description: $description, media: $media) {
+  mutation MyMutation($title: String!, $fields: [Field2Input!]) {
+    createTemplate(title: $title, fields: $fields) {
       _id
       slug
       title

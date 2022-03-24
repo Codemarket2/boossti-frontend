@@ -18,7 +18,7 @@ import RichTextarea from '../common/RichTextarea2';
 import SelectForm from './SelectForm';
 
 interface IProps {
-  onCancel: () => void;
+  onCancel?: () => void;
   onSave: (field: any, action: string) => void;
   field: any;
   isSection?: boolean;
@@ -88,8 +88,8 @@ export default function FieldForm({
         <SelectForm
           value={formik.values.form}
           onChange={(newValue) => formik.setFieldValue('form', newValue, false)}
-          error={formik.touched.label && Boolean(formik.errors.label)}
-          helperText={formik.touched.label && formik.errors.label}
+          error={formik.touched.form && Boolean(formik.errors.form)}
+          helperText={formik.touched.form && formik.errors.form}
         />
       )}
       {!isSection && !['label', 'form'].includes(formik?.values?.fieldType) && (
@@ -136,15 +136,17 @@ export default function FieldForm({
         <LoadingButton type="submit" loading={formLoading} size="small">
           Save
         </LoadingButton>
-        <Button
-          className="ml-2"
-          disabled={formLoading}
-          variant="outlined"
-          size="small"
-          onClick={onCancel}
-        >
-          Cancel
-        </Button>
+        {onCancel && (
+          <Button
+            className="ml-2"
+            disabled={formLoading}
+            variant="outlined"
+            size="small"
+            onClick={onCancel}
+          >
+            Cancel
+          </Button>
+        )}
       </InputGroup>
     </form>
   );

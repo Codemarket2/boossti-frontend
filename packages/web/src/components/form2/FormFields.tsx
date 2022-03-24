@@ -290,6 +290,7 @@ export default function FormFields({
             </DragDropContext>
           </List>
           <CRUDMenu
+            hideDelete={values.field?.options?.default}
             show={values.showMenu}
             onClose={() => setValues(initialValues)}
             onDelete={() => {

@@ -3,7 +3,6 @@ export {
   useGetTemplates,
   useGetTemplateBySlug,
   useDeleteTemplate,
-  useCreateTemplate,
 } from './templates';
 export {
   useCRUDPages,
@@ -16,6 +15,7 @@ export {
   useGetPageById,
 } from './pages';
 export { useMention } from './mention';
+export { useCreateTemplate } from './createTemplate';
 export { useUpdateTemplate } from './updateTemplate';
 export { useUpdatePageFields } from './updatePage';
 export { usePublishTemplate } from './publishTemplate';

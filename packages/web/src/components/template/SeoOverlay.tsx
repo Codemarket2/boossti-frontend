@@ -67,7 +67,7 @@ export default function SeoOverlay({
           />
         ) : (
           <>
-            <DisplayRichText value={data.description} />
+            <DisplayRichText value={data?.description || ''} />
           </>
         )}
         <Typography className="mt-4">

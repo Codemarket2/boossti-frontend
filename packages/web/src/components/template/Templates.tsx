@@ -10,21 +10,18 @@ import { getCreatedAtDate } from '@frontend/shared/utils/date';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import { useGetTemplates, useCreateTemplate } from '@frontend/shared/hooks/template';
+import { useGetTemplates } from '@frontend/shared/hooks/template';
 import ErrorLoading from '../common/ErrorLoading';
-import Backdrop from '../common/Backdrop';
-import { onAlert } from '../../utils/alert';
 import ListHeader2 from '../common/ListHeader2';
+import AddTemplateForm from './AddTemplateForm';
+import Overlay from '../common/Overlay';
 
 export default function Templates(): any {
   const { data, loading, error, state, setState } = useGetTemplates();
-  const [showBackdrop, setShowBackdrop] = useState(false);
-
+  const [showOverlay, setShowOverlay] = useState(false);
   const router = useRouter();
-  const { handleCreate, createLoading } = useCreateTemplate({ onAlert });
 
   const createCallback = (slug) => {
-    setShowBackdrop(true);
     router.push(`/${slug}`);
   };
 
@@ -34,11 +31,16 @@ export default function Templates(): any {
         search={state.search}
         onSearchChange={(newSearch) => setState({ ...state, search: newSearch })}
         searchLoading={loading}
-        handleAddNew={() => handleCreate(createCallback)}
-        addNewLoading={createLoading}
+        handleAddNew={() => router.push(`/templates/new`)}
+        // handleAddNew={() => setShowOverlay(true)}
       >
         <Typography color="textPrimary">Templates</Typography>
       </ListHeader2>
+      {showOverlay && (
+        <Overlay title="Add new template" open={showOverlay} onClose={() => setShowOverlay(false)}>
+          <AddTemplateForm createCallback={createCallback} />
+        </Overlay>
+      )}
       <Paper variant="outlined">
         {error || !data ? (
           <ErrorLoading error={error} />
@@ -68,7 +70,6 @@ export default function Templates(): any {
           </List>
         )}
       </Paper>
-      <Backdrop open={createLoading || showBackdrop} />
     </>
   );
 }
