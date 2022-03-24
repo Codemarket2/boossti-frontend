@@ -1,5 +1,5 @@
 import { useUpdateSection } from '@frontend/shared/hooks/section';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import {
   Paper,
@@ -32,7 +32,7 @@ export default function DisplaySettings({ formId, settings, fields, isSection }:
   const [state, setState] = useState(initialState);
   const { onSectionChange, section, handleUpdateSection, error } = useUpdateSection({
     onAlert,
-    _id: formId,
+    _id: settings?.customSectionId,
   });
   const router = useRouter();
   const handleNavigate = (fieldLabel) => {
@@ -73,7 +73,7 @@ export default function DisplaySettings({ formId, settings, fields, isSection }:
   };
 
   return (
-    <Paper variant="outlined" className="p-2">
+    <Paper>
       <>
         <SPaper label="Widget Type">{widgetTypes[settings?.widgetType] || widgetTypes.both}</SPaper>
         {settings?.widgetType !== 'responses' && (
@@ -133,12 +133,12 @@ export default function DisplaySettings({ formId, settings, fields, isSection }:
       </>
       <>
         <Paper variant="outlined" style={{ margin: '1rem 0' }}>
-          <Typography variant="h5" className="d-flex align-items-center pl-2">
+          <Typography variant="h5" className="d-flex align-items-center p-2">
             Actions
           </Typography>
           <Divider />
           <List>
-            {settings?.actions?.map((action, i) => (
+            {settings?.actions?.map((action: any, i: any) => (
               <ListItem button key={i}>
                 <ListItemText primary={action.name} secondary={action?.actionType} />
                 {!action?.active && (
@@ -154,33 +154,34 @@ export default function DisplaySettings({ formId, settings, fields, isSection }:
         </Paper>
       </>
       <>
-        <Paper variant="outlined" style={{ margin: '1rem 0' }}>
-          <Typography variant="h5" className="d-flex align-items-center pl-2">
+        <Paper>
+          <Typography variant="h5" className="d-flex align-items-center p-2">
             Response Section
           </Typography>
           <Divider />
           <List>
-            {section?.fields?.map((field: any, i: any) => (
-              <div>
-                <ListItem button onClick={() => handleNavigate(field.label)}>
-                  <ListItemText
-                    primary={field.label}
-                    secondary={
-                      (field?.fieldType === 'form' && field?.form?.name) || field.fieldType
-                    }
-                  />
-                </ListItem>
-                {field?.fieldType === 'form' && (
-                  <DisplaySettings
-                    fields={fields}
-                    formId={field?.form?._id}
-                    isSection={isSection}
-                    key={field._id}
-                    settings={field?.options.settings}
-                  />
-                )}
-              </div>
-            ))}
+            {section !== undefined &&
+              section.fields?.map((field: any, i: any) => (
+                <div>
+                  <ListItem button onClick={() => handleNavigate(field.label)}>
+                    <ListItemText
+                      primary={field.label}
+                      secondary={
+                        (field?.fieldType === 'form' && field?.form?.name) || field.fieldType
+                      }
+                    />
+                  </ListItem>
+                  {field?.fieldType === 'form' && (
+                    <DisplaySettings
+                      fields={section?.fields}
+                      formId={field?.form?._id}
+                      isSection={isSection}
+                      key={field._id}
+                      settings={field?.options?.settings}
+                    />
+                  )}
+                </div>
+              ))}
           </List>
         </Paper>
       </>

@@ -269,13 +269,15 @@ export default function FormFields({
                                 )}
                               </ListItem>
                               {showDisplaySettings && field?.fieldType === 'form' && (
-                                <DisplaySettings
-                                  fields={fields}
-                                  formId={field?.form?._id}
-                                  isSection={isSection}
-                                  key={field._id}
-                                  settings={field?.options.settings}
-                                />
+                                <Paper variant="outlined" className="p-2">
+                                  <DisplaySettings
+                                    fields={fields}
+                                    formId={field?.form?._id}
+                                    isSection={isSection}
+                                    key={field._id}
+                                    settings={field?.options.settings}
+                                  />
+                                </Paper>
                               )}
                             </div>
                           )}
