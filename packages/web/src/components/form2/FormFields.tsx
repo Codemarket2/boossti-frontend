@@ -62,7 +62,6 @@ type IProps = {
   isSection?: boolean;
   previewMode?: boolean;
   parentPageFields?: any;
-  showDisplaySettings?: boolean;
   tabName?: string;
 };
 
@@ -73,7 +72,6 @@ export default function FormFields({
   isSection = false,
   previewMode = false,
   parentPageFields = [],
-  showDisplaySettings = false,
   tabName = 'form',
 }: IProps): any {
   const [values, setValues] = useState(initialValues);
@@ -268,7 +266,7 @@ export default function FormFields({
                                   </ListItemSecondaryAction>
                                 )}
                               </ListItem>
-                              {showDisplaySettings && field?.fieldType === 'form' && (
+                              {field?.fieldType === 'form' && (
                                 <Paper variant="outlined" className="p-2">
                                   <DisplaySettings
                                     fields={fields}
