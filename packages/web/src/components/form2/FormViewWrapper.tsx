@@ -39,7 +39,6 @@ export default function FormViewWrapper({
       workFlowFormReponseParentId={workFlowFormReponseParentId}
       createCallback={createCallback}
       isPageOwner={isPageOwner}
-      layouts={layouts}
     />
   );
 }
