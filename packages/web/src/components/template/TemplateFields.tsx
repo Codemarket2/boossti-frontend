@@ -15,7 +15,6 @@ export default function TemplateFields({ template, previewMode }: IProps) {
         fields={template?.fields}
         setFields={(fields) => onTemplateChange({ fields })}
         title="Widgets"
-        showDisplaySettings
         previewMode={previewMode}
         isSection
       />

@@ -62,7 +62,6 @@ type IProps = {
   isSection?: boolean;
   previewMode?: boolean;
   parentPageFields?: any;
-  showDisplaySettings?: boolean;
   tabName?: string;
 };
 
@@ -73,7 +72,6 @@ export default function FormFields({
   isSection = false,
   previewMode = false,
   parentPageFields = [],
-  showDisplaySettings = false,
   tabName = 'form',
 }: IProps): any {
   const [values, setValues] = useState(initialValues);
@@ -233,16 +231,6 @@ export default function FormFields({
                         <Draggable key={field._id} draggableId={field._id} index={index}>
                           {(draggableProvided, draggableSnapshot) => (
                             <div>
-                              {showDisplaySettings && field?.fieldType === 'form' && (
-                                <DisplaySettings
-                                  fields={fields}
-                                  formId={field?.form?._id}
-                                  isSection={isSection}
-                                  key={field._id}
-                                  onChange={(value) => handleEditFormSettings(field?._id, value)}
-                                  settings={field?.options.settings}
-                                />
-                              )}
                               <ListItem
                                 button
                                 onClick={() => handleNavigate(field.label)}
@@ -278,6 +266,17 @@ export default function FormFields({
                                   </ListItemSecondaryAction>
                                 )}
                               </ListItem>
+                              {field?.fieldType === 'form' && (
+                                <Paper variant="outlined" className="p-2">
+                                  <DisplaySettings
+                                    fields={fields}
+                                    formId={field?.form?._id}
+                                    isSection={isSection}
+                                    key={field._id}
+                                    settings={field?.options.settings}
+                                  />
+                                </Paper>
+                              )}
                             </div>
                           )}
                         </Draggable>

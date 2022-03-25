@@ -15,7 +15,7 @@ export default function Screen({ slug }: any) {
   return (
     <UserLayout authRequired mustAdmin>
       <Breadcrumbs>
-        <Link href="/types">Template</Link>
+        <Link href="/templates">Template</Link>
         <Link href={`/${data.getTemplateBySlug.slug}`}>{data.getTemplateBySlug.title}</Link>
         <Typography color="textPrimary">New</Typography>
       </Breadcrumbs>
