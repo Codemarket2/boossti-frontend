@@ -1,6 +1,6 @@
 import { MentionsInput, Mention } from 'react-mentions';
 import classNames from '../../utils/mention.module.css';
-import { useMentionList } from '@frontend/shared/hooks/list';
+import { useMention } from '@frontend/shared/hooks/template';
 
 interface IProps {
   value: string;
@@ -15,7 +15,7 @@ export default function MentionInput({
   minHeight = 0,
   placeholder = "What's on your mind ?",
 }: IProps) {
-  const { suggestions, state, setState, data } = useMentionList();
+  const { suggestions, state, setState, data } = useMention();
 
   const handleChange = ({ target }: any) => {
     target.value = target.value.split('@@@^^^@@@__').join('@@@^^^ @@@__');

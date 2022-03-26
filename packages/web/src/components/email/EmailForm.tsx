@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import { useSendEmail } from '@frontend/shared/hooks/email/sendEmail';
-import InputGroup from '../common/InputGroup';
-import RichTextarea from '../common/RichTextarea2';
-import LoadingButton from '../common/LoadingButton';
-import MultipleEmails from '../common/MultipleEmails';
-import { useGetAllMailingList } from '@frontend/shared/hooks/email/createMailingList';
 import {
   MenuItem,
   FormControlLabel,
@@ -15,6 +10,11 @@ import {
   InputLabel,
   Switch,
 } from '@material-ui/core';
+import { useGetAllMailingList } from '@frontend/shared/hooks/email/createMailingList';
+import InputGroup from '../common/InputGroup';
+import RichTextarea from '../common/RichTextarea2';
+import LoadingButton from '../common/LoadingButton';
+import MultipleEmails from '../common/MultipleEmails';
 
 export default function EmailForm() {
   const { formik, formLoading } = useSendEmail();
@@ -72,6 +72,20 @@ export default function EmailForm() {
         </FormGroup>
       </div>
       <form className="px-2" onSubmit={handleSubmit}>
+        <InputGroup>
+          <TextField
+            fullWidth
+            label="Send Email Label"
+            variant="outlined"
+            name="sendEmailLabel"
+            size="small"
+            placeholder="Enter Label for  your Email Address"
+            value={formik.values.sendEmailLabel}
+            onChange={formik.handleChange}
+            error={formik.touched.sendEmailLabel && Boolean(formik.errors.sendEmailLabel)}
+            helperText={formik.touched.sendEmailLabel && formik.errors.sendEmailLabel}
+          />
+        </InputGroup>
         <InputGroup>
           <TextField
             fullWidth

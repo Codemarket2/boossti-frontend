@@ -9,12 +9,14 @@ import CreateResponseDrawer from './CreateResponseDrawer';
 interface IProps {
   label: string;
   formId: string;
+  parentId?: string;
   value: any;
   onChange: (form) => void;
   error?: boolean;
   helperText?: string;
   disabled?: boolean;
   formField?: string;
+  openDrawer?: any;
 }
 
 const filter = createFilterOptions();
@@ -22,12 +24,14 @@ const filter = createFilterOptions();
 export default function SelectResponse({
   label,
   formId,
+  parentId,
   value = null,
   onChange,
   error = false,
   helperText,
   disabled,
   formField,
+  openDrawer,
 }: IProps) {
   const { data, error: queryError, loading, state, setState } = useGetResponses(
     formId,
@@ -55,8 +59,12 @@ export default function SelectResponse({
         value={value}
         onChange={(event: any, newValue) => {
           if (newValue?.openDrawer) {
-            onChange(null);
-            setAddOption({ ...addOption, showDrawer: true });
+            if (openDrawer) {
+              openDrawer();
+            } else {
+              onChange(null);
+              setAddOption({ ...addOption, showDrawer: true });
+            }
           } else {
             onChange(newValue);
           }
@@ -104,6 +112,7 @@ export default function SelectResponse({
           onClose={() => setAddOption({ ...addOption, showDrawer: false })}
           title={label}
           formId={formId}
+          parentId={parentId}
           createCallback={(newResponse) => {
             onChange(getLabels(formField, [newResponse])?.pop());
             setAddOption({ ...addOption, showDrawer: false });

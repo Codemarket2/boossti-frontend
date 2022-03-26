@@ -11,8 +11,8 @@ const getResponseById = async (responseId) => {
   if (response && form) {
     forms.push({ ...form, response });
   }
-  if (response?.responseId) {
-    const newForms = await getResponseById(response?.responseId);
+  if (response?.workFlowFormReponseParentId) {
+    const newForms = await getResponseById(response?.workFlowFormReponseParentId);
     if (newForms?.length > 0) {
       forms = [...forms, ...newForms];
     }
@@ -43,8 +43,8 @@ export const replaceVariables = async (oldBody, oldVariables, mainForm, mainResp
         forms.push({ ...form, response });
       }
     }
-  } else if (mainResponse?.responseId) {
-    const newForms = await getResponseById(mainResponse?.responseId);
+  } else if (mainResponse?.workFlowFormReponseParentId) {
+    const newForms = await getResponseById(mainResponse?.workFlowFormReponseParentId);
     if (newForms?.length > 0) {
       forms = [...forms, ...newForms];
     }
@@ -91,10 +91,10 @@ const getValue = (field, value) => {
       return value.valueBoolean?.toString();
     }
     case 'select': {
-      if (field?.options?.optionsListType === 'type') {
+      if (field?.options?.optionsTemplate === 'type') {
         return value?.itemId?.title;
       }
-      if (field?.options?.optionsListType === 'existingForm') {
+      if (field?.options?.optionsTemplate === 'existingForm') {
         return getLabel(field?.options?.formField, value?.response);
       }
       return value?.value;

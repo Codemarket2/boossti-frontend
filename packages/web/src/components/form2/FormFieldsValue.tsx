@@ -12,11 +12,12 @@ import { FormView } from './FormView';
 import DisplayValue from './DisplayValue';
 import BackdropComponent from '../common/Backdrop';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
+import StarRating from '../starRating/starRating';
 import FormViewWrapper from './FormViewWrapper';
+import Overlay from '../common/Overlay';
+
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
-import Button from '@material-ui/core/Button';
-import Overlay from '../common/Overlay';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
@@ -26,7 +27,7 @@ interface IProps {
   handleValueChange: any;
   authorized: boolean;
   pageId?: string;
-  responseId?: string;
+  workFlowFormReponseParentId?: string;
   layouts: any;
   disableGrid?: boolean;
   onLayoutChange?: (layouts: any) => void;
@@ -46,7 +47,7 @@ export default function FormFieldsValue({
   handleValueChange,
   authorized,
   pageId,
-  responseId,
+  workFlowFormReponseParentId,
   layouts = {},
   disableGrid = true,
   onLayoutChange,
@@ -77,7 +78,6 @@ export default function FormFieldsValue({
   const [heights, setHeights] = useState({});
   useEffect(() => {
     if (layouts?.[breakPoint]?.length > 0) {
-      console.log({ layouts, breakPoint });
       let newHeights = {};
       fields.forEach((val, i) => {
         // if (layouts && breakPoint) {
@@ -105,7 +105,7 @@ export default function FormFieldsValue({
   //   val = { ...val, height: gridHeight };
   //   return val;
   // });
-  console.log(breakPoint);
+
   return (
     <div className="p-2">
       <BackdropComponent open={state.loading} />
@@ -133,7 +133,7 @@ export default function FormFieldsValue({
                     <FormViewWrapper
                       formId={field.form?._id}
                       parentId={pageId}
-                      responseId={responseId}
+                      workFlowFormReponseParentId={workFlowFormReponseParentId}
                       layouts={layouts}
                       customSettings={field?.options?.settings?.active && field?.options?.settings}
                       isPageOwner={authorized}
@@ -198,6 +198,7 @@ export default function FormFieldsValue({
                 </>
               )}
               {field?.options?.showCommentBox && <CommentLikeShare parentId={field._id} />}
+              <StarRating parentId={field._id} />
             </div>
             {showOverlay.show && showOverlay.id == field._id && (
               <Overlay
@@ -275,6 +276,7 @@ export default function FormFieldsValue({
                     </>
                   )}
                   {field?.options?.showCommentBox && <CommentLikeShare parentId={field._id} />}
+                  <StarRating parentId={field._id} />
                 </div>
               </Overlay>
             )}

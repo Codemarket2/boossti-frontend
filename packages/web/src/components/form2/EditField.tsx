@@ -18,7 +18,7 @@ import OutlinedInput from '@material-ui/core/OutlinedInput';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import InputGroup from '../common/InputGroup';
 import { getFormFieldTypes } from './fieldTypes';
-import SelectListType from './SelectListType';
+import SelectTemplate from './SelectTemplate';
 import InlineInput from '../common/InlineInput';
 import SelectForm from './SelectForm';
 import SelectFormFields from './SelectFormFields';
@@ -80,6 +80,7 @@ export default function FormFields({
           <>
             <InputGroup>
               <FormControlLabel
+                disabled={field?.options?.default}
                 control={
                   <Checkbox
                     checked={field?.options?.required}
@@ -141,6 +142,19 @@ export default function FormFields({
             label="Show CommentBox"
           />
         </InputGroup>
+        <InputGroup>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={field?.options?.showStarRating}
+                onChange={({ target }) => onOptionChange({ showStarRating: target.checked })}
+                name="showStarRating"
+                color="primary"
+              />
+            }
+            label="Show Star Ratings"
+          />
+        </InputGroup>
         {field.fieldType === 'select' && (
           <>
             <InputGroup>
@@ -152,12 +166,12 @@ export default function FormFields({
                   labelId="fieldType-simple-select-outlined-label"
                   id="fieldType-simple-select-outlined"
                   name="fieldType"
-                  value={field?.options?.optionsListType}
+                  value={field?.options?.optionsTemplate}
                   defaultValue="text"
-                  onChange={({ target }) => onOptionChange({ optionsListType: target.value })}
+                  onChange={({ target }) => onOptionChange({ optionsTemplate: target.value })}
                   label="Options list type"
                 >
-                  {optionsListTypes?.map((option, index) => (
+                  {optionsTemplates?.map((option, index) => (
                     <MenuItem key={index} value={option?.value}>
                       {option?.label}
                     </MenuItem>
@@ -165,7 +179,7 @@ export default function FormFields({
                 </Select>
               </FormControl>
             </InputGroup>
-            {!['type', 'existingForm'].includes(field?.options?.optionsListType) && (
+            {!['type', 'existingForm'].includes(field?.options?.optionsTemplate) && (
               <FormControlLabel
                 control={
                   <Checkbox
@@ -190,14 +204,14 @@ export default function FormFields({
               label="Allow user to create new option"
             />
             <InputGroup>
-              {field?.options?.optionsListType === 'type' ? (
-                <SelectListType
+              {field?.options?.optionsTemplate === 'type' ? (
+                <SelectTemplate
                   value={field.typeId}
                   onChange={(newValue) => onFieldChange({ ...field, typeId: newValue })}
                   error={!field.typeId}
                   helperText={!field.typeId && 'Required'}
                 />
-              ) : field?.options?.optionsListType === 'existingForm' ? (
+              ) : field?.options?.optionsTemplate === 'existingForm' ? (
                 <>
                   <SelectForm
                     value={field.form}
@@ -295,7 +309,7 @@ export default function FormFields({
   );
 }
 
-const optionsListTypes = [
+const optionsTemplates = [
   { label: 'Text', value: 'text' },
   { label: 'Existing Type', value: 'type' },
   { label: 'Existing Form', value: 'existingForm' },

@@ -18200,6 +18200,13 @@ react-colorful@^5.0.1:
   resolved "https://registry.yarnpkg.com/react-colorful/-/react-colorful-5.5.1.tgz#29d9c4e496f2ca784dd2bb5053a3a4340cfaf784"
   integrity sha512-M1TJH2X3RXEt12sWkpa6hLc/bbYS0H6F4rIqjQZ+RxNBstpY67d9TrFXtqdZwhpmBXcCwEi7stKqFue3ZRkiOg==
 
+react-data-grid@^7.0.0-beta.11:
+  version "7.0.0-beta.11"
+  resolved "https://registry.yarnpkg.com/react-data-grid/-/react-data-grid-7.0.0-beta.11.tgz#16e87f87ac2d1f2c33816837f1be3c4210f1e4b2"
+  integrity sha512-IjJf3GZ7HxH7uSoDaQhKXV9+L8I64xRKgLVQNCblSgvEY20mg2XlMmEjiV9KqROTUM2MqI+IlEpeBLCZRB3mEw==
+  dependencies:
+    clsx "^1.1.1"
+
 react-dev-utils@^11.0.3:
   version "11.0.4"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-11.0.4.tgz#a7ccb60257a1ca2e0efe7a83e38e6700d17aa37a"

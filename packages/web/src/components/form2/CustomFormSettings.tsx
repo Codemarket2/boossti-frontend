@@ -10,6 +10,8 @@ import InputGroup from '../common/InputGroup';
 import Overlay from '../common/Overlay';
 import ResponseLayout from '../response/ResponseLayout';
 import { ActionsWrapper } from './Actions';
+import { Grid } from '@material-ui/core';
+import FormFields from './FormFields';
 
 interface IProps {
   isSection?: boolean;
@@ -34,6 +36,7 @@ export default function CustomFormSettings({
 }: IProps): any {
   const [tab, setTab] = useState('settings');
   const [pageFields, setPageFields] = useState([]);
+  const [state, setState] = useState({});
 
   useEffect(() => {
     if (!(pageFields?.length > 0)) {
@@ -41,15 +44,18 @@ export default function CustomFormSettings({
     }
   }, [fields]);
 
+  useEffect(() => {
+    setState({ ['fields']: pageFields });
+  }, [pageFields]);
+
   const getFormFields = async () => {
     const formFields = fields?.filter((f) => f?.fieldType === 'form');
-    // const formFields = fields?.filter((f) => f?.fieldType === 'form' && f?.form?._id !== formId);
     let newPageFields = [];
     for (const field of formFields) {
       const form = await getForm(field?.form?._id);
       if (form) {
         const pageField = form?.fields?.map((f) => ({
-          // ...f,
+          ...f,
           label: `${field?.label} - ${f?.label}`,
           formId: form?._id,
           _id: f?._id,
@@ -93,6 +99,7 @@ export default function CustomFormSettings({
               settings={settings}
               onChange={(val) => onSettingsChange({ ...settings, ...val })}
               isSection={isSection}
+              state={state}
             />
           )}
           {tab === 'workflows' && (
@@ -126,7 +133,6 @@ export default function CustomFormSettings({
           {tab === 'actions' && (
             <ActionsWrapper
               pageFields={[...pageFields, ...parentPageFields]}
-              formId={formId}
               settings={settings}
               onChange={(actions) => onSettingsChange({ ...settings, actions })}
             />

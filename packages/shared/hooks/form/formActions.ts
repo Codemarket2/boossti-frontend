@@ -13,8 +13,9 @@ const validationSchema = yup.object({
     otherwise: yup.string(),
   }),
   senderEmail: yup.string().when('actionType', {
-    is: (value) => value === 'sendEmail',
-    then: yup.string().label('Sender email').email().required(),
+    is: (value) => ['sendEmail', 'generateNewUser'].includes(value),
+    // then: yup.string().label('Sender email').email().required(),
+    then: yup.string().label('Sender email').required(),
     otherwise: yup.string(),
   }),
   receiverType: yup.string().label('Receiver').required(),
@@ -38,11 +39,15 @@ const validationSchema = yup.object({
   }),
   variables: yup.array(),
   subject: yup.string().when('actionType', {
-    is: (value) => value === 'sendEmail',
+    is: (value) => ['sendEmail', 'generateNewUser'].includes(value),
     then: yup.string().required('Email subject is required'),
     otherwise: yup.string(),
   }),
-  body: yup.string().required('This is a required field'),
+  body: yup.string().when('actionType', {
+    is: (value) => value !== 'updateFieldValue',
+    then: yup.string().required('This is a required field'),
+    otherwise: yup.string(),
+  }),
 });
 
 type TVariables = {
@@ -68,15 +73,16 @@ interface IFormValues {
 
 const defaultFormValues = {
   active: true,
-  actionType: 'sendEmail',
+  actionType: 'updateFieldValue', // 'sendEmail',
   name: '',
   phoneFieldId: '',
   senderEmail: '',
-  receiverType: 'customEmail',
+  receiverType: 'formOwner',
   emailFieldId: '',
   nameFieldId: '',
   receiverEmails: [],
   variables: [{ name: '', field: '', formId: null }],
+  fields: [{ field: '', formId: null, value: null }],
   subject: '',
   body: '',
 };
@@ -113,12 +119,13 @@ export function useFormActions({ onAlert, onSave }: IProps) {
     formik.setFieldValue('senderEmail', payload.senderEmail, false);
     formik.setFieldValue('receiverType', payload?.receiverType, false);
     formik.setFieldValue('emailFieldId', payload.emailFieldId, false);
-    formik.setFieldValue('nameFieldId', payload.nameFieldId, false);
+    formik.setFieldValue('nameFieldId', payload?.nameFieldId, false);
     formik.setFieldValue('receiverEmails', payload?.receiverEmails, false);
     formik.setFieldValue('phoneFieldId', payload.phoneFieldId, false);
     formik.setFieldValue('variables', payload.variables, false);
     formik.setFieldValue('subject', payload.subject, false);
     formik.setFieldValue('body', payload.body, false);
+    formik.setFieldValue('fields', payload?.fields, false);
   };
 
   return { formik, setFormValues };

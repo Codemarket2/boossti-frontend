@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import NewItem from '../../src/screens/NewItem';
+import NewItem from '../../src/screens/NewPage';
 import Loading from '../../src/components/common/Loading';
 
 export default function Page() {

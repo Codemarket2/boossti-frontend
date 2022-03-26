@@ -1,13 +1,8 @@
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import { useGetForm } from '@frontend/shared/hooks/form';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-import Grid from '@material-ui/core/Grid';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
 import { useDeleteResponse, useGetResponse } from '@frontend/shared/hooks/response';
-import { getListItem } from '@frontend/shared/hooks/list/listItems';
+import { getPage } from '@frontend/shared/hooks/template/pages';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Typography from '@material-ui/core/Typography';
@@ -16,12 +11,14 @@ import EditIcon from '@material-ui/icons/Edit';
 import { useAuthorization } from '@frontend/shared/hooks/auth';
 import ListItemText from '@material-ui/core/ListItemText';
 import moment from 'moment';
-import Paper from '@material-ui/core/Paper';
+import { Paper, Box, Grid, List, ListItem, IconButton, Tooltip } from '@material-ui/core';
+import styled from 'styled-components';
 import EditResponseDrawer from './EditResponseDrawer';
 import Breadcrumbs from '../common/Breadcrumbs';
 import DisplayValue from '../form2/DisplayValue';
 import NotFound from '../common/NotFound';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
+import StarRating from '../starRating/starRating';
 import ErrorLoading from '../common/ErrorLoading';
 import { QRButton } from '../qrcode/QRButton';
 import ResponseSections from './ResponseSection';
@@ -31,6 +28,12 @@ import CRUDMenu from '../common/CRUDMenu';
 import BackdropComponent from '../common/Backdrop';
 import EditMode from '../common/EditMode';
 
+const StyledBox = styled(Box)`
+  flex-direction: column !important;
+  ${(props) => props.theme.breakpoints.up('md')} {
+    flex-direction: row !important;
+  }
+`;
 interface IProps {
   responseId: string;
   hideBreadcrumbs?: boolean;
@@ -114,6 +117,7 @@ interface IProps3 {
   hideNavigation?: boolean;
   hideAuthor?: boolean;
   hideWorkflow?: boolean;
+  deleteCallBack?: () => void;
 }
 
 export function ResponseChild3({
@@ -123,8 +127,10 @@ export function ResponseChild3({
   hideNavigation,
   hideAuthor,
   hideWorkflow,
+  deleteCallBack,
 }: IProps3) {
   const [state, setState] = useState({ showMenu: null, edit: false, showBackdrop: false });
+
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
   const authorized = useAuthorization([response?.createdBy?._id, form?.createdBy?._id], true);
   const authorized2 = useAuthorization([form?.createdBy?._id], true);
@@ -137,9 +143,13 @@ export function ResponseChild3({
 
   const redirectToPage = async (_id) => {
     setState({ ...state, showBackdrop: true });
-    const page = await getListItem(_id);
-    if (page?.data?.getListItem?.types[0]?.slug && page?.data?.getListItem?.slug) {
-      router.push(`/${page?.data?.getListItem?.types[0]?.slug}/${page?.data?.getListItem?.slug}`);
+    const page = await getPage(_id);
+    if (
+      page?.data?.getPage?.template?.slug &&
+      page?.data?.getPage?.slug &&
+      router?.query?.itemSlug !== page?.data?.getPage?.slug
+    ) {
+      router.push(`/${page?.data?.getPage?.template?.slug}/${page?.data?.getPage?.slug}`);
     } else {
       setState({ ...state, showBackdrop: false });
     }
@@ -191,7 +201,7 @@ export function ResponseChild3({
             onEdit={() => setState({ ...state, showMenu: null, edit: true })}
             onDelete={() => {
               setState({ ...state, showMenu: null });
-              handleDelete(response?._id, form?._id);
+              handleDelete(response?._id, deleteCallBack);
             }}
             onClose={() => setState({ ...state, showMenu: null })}
           />
@@ -238,8 +248,12 @@ export function ResponseChild3({
           </Grid>
         )}
         <Grid item xs={!hideLeftNavigation ? 12 : 9}>
-          {response?.responseId && section?.options?.showRelation && (
-            <Response responseId={response?.responseId} hideBreadcrumbs hideWorkflow />
+          {response?.workFlowFormReponseParentId && section?.options?.showRelation && (
+            <Response
+              responseId={response?.workFlowFormReponseParentId}
+              hideBreadcrumbs
+              hideWorkflow
+            />
           )}
           <Paper
             variant="outlined"
@@ -261,7 +275,7 @@ export function ResponseChild3({
                     options: { ...section?.options, layouts },
                   })
                 }
-                responseId={response?._id}
+                workFlowFormReponseParentId={response?._id}
               />
             )}
             <div className="p-2">
@@ -270,14 +284,18 @@ export function ResponseChild3({
                   <Typography variant="body1">
                     {`by ${response?.createdBy ? response?.createdBy?.name : 'Unauthorised user'} `}
                     {response?.parentId?.title && (
-                      <Typography
-                        color="primary"
-                        display="inline"
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => redirectToPage(response?.parentId?._id)}
-                      >
-                        {`${response?.parentId?.title} page`}
-                      </Typography>
+                      <span>
+                        {'from '}
+                        <Typography
+                          color="primary"
+                          display="inline"
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => redirectToPage(response?.parentId?._id)}
+                        >
+                          {response?.parentId?.title}
+                        </Typography>
+                        {' page'}
+                      </span>
                     )}
                   </Typography>
                   <Typography variant="body2">
@@ -294,12 +312,16 @@ export function ResponseChild3({
                     {response?.values
                       ?.filter((v) => v.field === field._id)
                       .map((value) => (
-                        <div key={value?._id}>
+                        <StyledBox
+                          key={value?._id}
+                          style={{ display: 'flex', alignContent: 'center' }}
+                        >
                           <DisplayValue field={field} value={value} />
                           {field?.options?.showCommentBox && (
                             <CommentLikeShare parentId={value?._id} />
                           )}
-                        </div>
+                          {field?.options?.showStarRating && <StarRating parentId={value?._id} />}
+                        </StyledBox>
                       ))}
                   </div>
                 );

@@ -48,7 +48,7 @@ export default function CommentLikeShare({
   };
 
   return (
-    <div className="w-100">
+    <div className="">
       {error && <ErrorLoading error={error} />}
       <div className="d-flex align-items-center">
         <Like parentId={parentId} likedByUser={data?.getActionCounts?.likedByUser || false} />

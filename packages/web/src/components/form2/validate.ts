@@ -64,16 +64,16 @@ export const validateValue = (
       break;
     }
     case 'select': {
-      if (options?.optionsListType === 'type' && options?.required && (!value || !value?.itemId)) {
+      if (options?.optionsTemplate === 'type' && options?.required && (!value || !value?.itemId)) {
         result = { error: true, errorMessage: 'Required' };
       } else if (
-        options?.optionsListType === 'existingForm' &&
+        options?.optionsTemplate === 'existingForm' &&
         options?.required &&
         (!value || !value?.response)
       ) {
         result = { error: true, errorMessage: 'Required' };
       } else if (
-        !(options?.optionsListType === 'type' || options?.optionsListType === 'existingForm') &&
+        !(options?.optionsTemplate === 'type' || options?.optionsTemplate === 'existingForm') &&
         options?.required &&
         (!value || !value?.value)
       ) {

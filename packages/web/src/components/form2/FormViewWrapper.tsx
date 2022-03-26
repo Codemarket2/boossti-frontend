@@ -6,7 +6,7 @@ import NotFound from '../common/NotFound';
 interface IProps {
   formId: string;
   parentId?: string;
-  responseId?: string;
+  workFlowFormReponseParentId?: string;
   createCallback?: (response: any) => void;
   customSettings?: any;
   isPageOwner?: boolean;
@@ -16,7 +16,7 @@ interface IProps {
 export default function FormViewWrapper({
   formId,
   parentId,
-  responseId,
+  workFlowFormReponseParentId,
   createCallback,
   customSettings,
   isPageOwner,
@@ -36,10 +36,9 @@ export default function FormViewWrapper({
     <FormView
       form={{ ...data.getForm, settings: customSettings || data.getForm?.settings }}
       parentId={parentId}
-      responseId={responseId}
+      workFlowFormReponseParentId={workFlowFormReponseParentId}
       createCallback={createCallback}
       isPageOwner={isPageOwner}
-      layouts={layouts}
     />
   );
 }
