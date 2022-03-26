@@ -19,6 +19,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Link from 'next/link';
 import AnalyticsIcon from '@material-ui/icons/Announcement';
 import DarkModeToggle from './DarkModeToggle';
+import BuildIcon from '@material-ui/icons/Build';
 
 interface IProps {
   showDrawer: boolean;
@@ -106,7 +107,15 @@ export default function DrawerContent({ showDrawer, toggleDrawer, admin }: IProp
             <ListItemText primary="Activity Log" />
           </ListItem>
         </Link>
-        {data?.getMenuTemplates?.map((t) => (
+        <Link href="/customizeUI">
+          <ListItem button selected={checkActiveRoute(activeRoute, '/customizeUI')}>
+            <ListItemIcon>
+              <BuildIcon />
+            </ListItemIcon>
+            <ListItemText primary="Customize UI" />
+          </ListItem>
+        </Link>
+        {data?.getMenuListTypes?.map((t) => (
           <Link href={`/${t.slug}`} key={t._id}>
             <ListItem button selected={checkActiveRoute(activeRoute, '/log')}>
               <ListItemIcon>

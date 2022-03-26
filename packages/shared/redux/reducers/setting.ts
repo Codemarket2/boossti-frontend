@@ -1,6 +1,5 @@
 import { AnyAction } from 'redux';
-
-import { UPDATE_SETTING, IAttributes } from '../actions/setting';
+import { UPDATE_SETTING, IAttributes, UPDATE_THEME, SET_DEFAULT_THEME } from '../actions/setting';
 
 export const initialState: IAttributes = {
   bottomDrawer: false,
@@ -10,6 +9,7 @@ export const initialState: IAttributes = {
     title: '',
   },
   editMode: false,
+  theme: {},
 };
 
 const setting = (state: IAttributes = initialState, action: AnyAction) => {
@@ -18,6 +18,21 @@ const setting = (state: IAttributes = initialState, action: AnyAction) => {
       return {
         ...state,
         ...action.payload,
+      };
+    }
+    case UPDATE_THEME: {
+      return {
+        ...state,
+        theme: {
+          // ...state.theme,
+          ...action.theme,
+        },
+      };
+    }
+    case SET_DEFAULT_THEME: {
+      return {
+        ...state,
+        theme: action.value,
       };
     }
     default: {
