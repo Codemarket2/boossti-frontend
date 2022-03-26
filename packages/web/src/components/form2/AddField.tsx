@@ -22,6 +22,7 @@ interface IProps {
   onSave: (field: any, action: string) => void;
   field: any;
   isSection?: boolean;
+  isDefault?: boolean;
 }
 
 export default function FieldForm({
@@ -29,6 +30,7 @@ export default function FieldForm({
   onSave,
   field = null,
   isSection = false,
+  isDefault,
 }: IProps): any {
   const { formik, formLoading, setFormValues } = useAddFields({
     onAlert,
@@ -113,7 +115,7 @@ export default function FieldForm({
               disabled={formik.isSubmitting}
               control={
                 <Checkbox
-                  checked={formik.values.required}
+                  checked={isDefault || formik.values.required}
                   onChange={({ target }) => formik.setFieldValue('required', target.checked)}
                   name="required"
                   color="primary"
