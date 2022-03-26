@@ -63,7 +63,10 @@ export default function Notification() {
   return (
     <>
       <Tooltip title="Notifications">
-        <IconButton onClick={(e) => setState({ ...state, showNotification: e.target })}>
+        <IconButton
+          onClick={(e) => setState({ ...state, showNotification: e.target })}
+          color="inherit"
+        >
           <Badge badgeContent={total} color="primary">
             <NotificationsIcon />
           </Badge>

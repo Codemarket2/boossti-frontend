@@ -56,6 +56,19 @@ function App({ Component, pageProps }: AppProps) {
       appBar: 1200,
       drawer: 1100,
     },
+    overrides: {
+      MuiButton: {
+        root: {
+          fontSize: '3rem',
+          // backgroundColor: 'gray',
+        },
+      },
+      MuiCard: {
+        root: {
+          fontSize: '1rem',
+        },
+      },
+    },
   });
 
   useEffect(() => {

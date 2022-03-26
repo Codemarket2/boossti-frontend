@@ -271,7 +271,7 @@ export default function FormViewWrapper({
                   <div className="text-center">
                     <Button
                       variant="contained"
-                      color="primary"
+                      // color="primary"
                       onClick={() => setState({ ...state, formModal: true })}
                     >
                       {form?.settings?.buttonLabel || form?.name}
