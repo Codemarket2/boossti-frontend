@@ -6,11 +6,11 @@ import { useRouter } from 'next/router';
 import InitialLoading from '../src/components/common/InitialLoading';
 // import UserLayout from '../src/components/common/UserLayout';
 import HomeScreen from '../src/screens/HomeScreen-new';
+import { store } from '../../shared/redux';
 
 export default function Page() {
   const router = useRouter();
   const initial = useSelector(({ auth }: any) => auth.initial);
-
   const { error_description: errorDescription } = router.query;
 
   useEffect(() => {
