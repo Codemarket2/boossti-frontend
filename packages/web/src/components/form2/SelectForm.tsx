@@ -88,7 +88,20 @@ export default function SelectForm({
   const { handleCreateForm, createLoading } = useCreateForm({ onAlert });
 
   const handleAddNew = async (name: string) => {
-    await handleCreateForm(name, (newForm) => {
+    const payload = {
+      name,
+      fields: [
+        {
+          label: 'Field 1',
+          fieldType: 'text',
+          options: JSON.stringify({
+            required: true,
+            default: true,
+          }),
+        },
+      ],
+    };
+    await handleCreateForm(payload, (newForm) => {
       onChange(newForm);
     });
   };

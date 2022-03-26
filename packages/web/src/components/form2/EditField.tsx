@@ -80,6 +80,7 @@ export default function FormFields({
           <>
             <InputGroup>
               <FormControlLabel
+                disabled={field?.options?.default}
                 control={
                   <Checkbox
                     checked={field?.options?.required}

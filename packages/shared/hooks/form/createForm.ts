@@ -5,20 +5,11 @@ import { IHooksProps } from '../../types/common';
 export function useCreateForm({ onAlert }: IHooksProps) {
   const [createMutation, { loading: createLoading }] = useMutation(CREATE_FORM);
 
-  const handleCreateForm = async (name: string, onSuccess: (newForm: any) => void) => {
-    const payload = {
-      name,
-      fields: [
-        {
-          label: 'Field 1',
-          fieldType: 'text',
-          options: JSON.stringify({
-            required: false,
-            default: true,
-          }),
-        },
-      ],
-    };
+  const handleCreateForm = async (
+    payload: { name: string; fields: any[] },
+    onSuccess: (newForm: any) => void,
+    onFailure?: () => void,
+  ) => {
     try {
       const res = await createMutation({
         variables: payload,
@@ -27,8 +18,14 @@ export function useCreateForm({ onAlert }: IHooksProps) {
         onSuccess(res?.data?.createForm);
       }
     } catch (error) {
-      console.log(error);
-      onAlert('Error', error.message);
+      if (onFailure) {
+        onFailure();
+      }
+      if (error.message.includes('name_1 dup key')) {
+        onAlert('Error', 'Form with this name already exists');
+      } else {
+        onAlert('Error', error.message);
+      }
     }
   };
   return { handleCreateForm, createLoading };
