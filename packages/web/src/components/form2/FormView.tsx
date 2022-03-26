@@ -240,6 +240,7 @@ export default function FormViewWrapper({
                   handleSubmit={handleSubmit}
                   loading={createLoading}
                   fieldWiseView={form?.settings?.formView === 'oneField'}
+                  formId={form?._id}
                 />
               </div>
             </Overlay>
@@ -347,6 +348,7 @@ export default function FormViewWrapper({
                   handleSubmit={handleSubmit}
                   loading={createLoading}
                   fieldWiseView={form?.settings?.formView === 'oneField'}
+                  formId={form?._id}
                 />
               )}
             </>
@@ -375,6 +377,7 @@ interface IProps2 {
   initialValues?: any[];
   authRequired?: boolean;
   fieldWiseView?: boolean;
+  formId?: any;
 }
 
 const initialSubmitState = {
@@ -402,6 +405,7 @@ export function FormView({
   initialValues = [],
   authRequired = false,
   fieldWiseView = false,
+  formId,
 }: IProps2): any {
   const [values, setValues] = useState(initialValues);
   const [editValue, setEditValue] = useState({ fieldId: null, index: null });
@@ -580,6 +584,7 @@ export function FormView({
                           )
                         }
                         value={filterValues(values, field)[filterValues(values, field)?.length - 1]}
+                        formId={formId}
                       />
                     )}
                   </div>
@@ -622,6 +627,7 @@ export function FormView({
                                     onChange({ ...changedValue, field: field._id }, valueIndex)
                                   }
                                   value={value}
+                                  formId={formId}
                                 />
                               )}
                             </div>

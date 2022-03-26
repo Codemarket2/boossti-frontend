@@ -15,6 +15,7 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import SwipeableViews from 'react-swipeable-views';
+import { useGetResponses } from '@frontend/shared/hooks/response';
 
 interface IProps {
   label?: string;
@@ -22,6 +23,7 @@ interface IProps {
   mutiple?: boolean;
   state: any;
   setState: any;
+  formId?: any;
 }
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -75,6 +77,17 @@ const useStyles = makeStyles((theme: Theme) =>
     formControlLabel: {
       marginTop: theme.spacing(1),
     },
+    imageListRoot: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'space-around',
+      overflow: 'hidden',
+      backgroundColor: theme.palette.background.paper,
+    },
+    imageList: {
+      width: 500,
+      height: 450,
+    },
   }),
 );
 
@@ -84,11 +97,13 @@ export default function ImagePicker2({
   mutiple = false,
   state,
   setState,
+  formId,
 }: IProps): any {
   const [id, setId] = useState('');
   const ref: any = useRef();
   const newArray = state?.tempMedia?.length > 0 ? [...state.tempMedia] : [];
-
+  const { data, error, loading, refetch } = useGetResponses(formId);
+  console.log('form data from useGetResponses : ', data);
   useEffect(() => {
     setId(generateObjectId());
   }, []);
@@ -165,7 +180,7 @@ export default function ImagePicker2({
       {(mutiple || (!state?.media?.length && !state?.tempMedia?.length)) && (
         <>
           <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-            Open max-width dialog
+            Open Library
           </Button>
           <Dialog
             fullWidth={true}
@@ -189,7 +204,7 @@ export default function ImagePicker2({
                     variant="fullWidth"
                     aria-label="full width tabs example"
                   >
-                    <Tab label="Choose Image/Video" {...a11yProps(0)} />
+                    <Tab label="Image/Video Library" {...a11yProps(0)} />
                     <Tab label="Upload New" {...a11yProps(1)} />
                   </Tabs>
                 </AppBar>
@@ -200,6 +215,20 @@ export default function ImagePicker2({
                 >
                   <TabPanel value={value} index={0} dir={theme.direction}>
                     <Typography>Select uploaded Image</Typography>
+                    {/* <div className={classes.imageListRoot}>
+                      <ImageList rowHeight={160} className={classes.imageList} cols={3}>
+                        {data?.getResponses?.data?.map((res) => (
+                          <ImageListItem key={res?.values[0]?.media} cols={res.cols || 1}>
+                            <img src={res.img} alt={res.title} />
+                          </ImageListItem>
+                        ))}
+                      </ImageList>
+                    </div> */}
+                    {data?.getResponses?.data?.map((res) =>
+                      res?.values?.map((value) =>
+                        value?.media?.length >= 1 ? <ImageList media={value?.media} /> : null,
+                      ),
+                    )}
                   </TabPanel>
                   <TabPanel value={value} index={1} dir={theme.direction}>
                     <label htmlFor={`contained-button-file-${id}`}>
