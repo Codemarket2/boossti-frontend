@@ -17,6 +17,7 @@ import SelectForm from './SelectForm';
 import SelectTemplate from '../template/SelectTemplate';
 
 import 'react-phone-input-2/lib/style.css';
+import ImagePicker2 from '../common/ImagePicker2';
 
 interface IProps {
   disabled?: boolean;
@@ -31,6 +32,7 @@ interface IProps {
   mediaState: any;
   setMediaState: any;
   form: any;
+  formId?: any;
 }
 
 export default function Field({
@@ -44,6 +46,7 @@ export default function Field({
   value,
   onChangeValue,
   form,
+  formId,
 }: IProps): any {
   const onChange = (payload) => {
     onChangeValue({ ...value, ...payload });
@@ -143,12 +146,13 @@ export default function Field({
     case 'image': {
       return (
         <div>
-          <ImagePicker
+          <ImagePicker2
             label="Select Image"
             fileType="image/*"
             // mutiple={options?.multipleValues}
             state={value}
             setState={(newValue) => onChange({ field: _id, ...newValue })}
+            formId={formId}
           />
           {validation.error && (
             <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
