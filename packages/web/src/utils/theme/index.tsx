@@ -4,7 +4,7 @@ import { light, dark } from './palette';
 const getTheme = (mode) =>
   responsiveFontSizes(
     createMuiTheme({
-      palette: mode === 'light' ? light : dark,
+      palette: mode === 'light' ? light.palette : dark.palette,
       typography: {
         fontFamily: 'Lato',
       },

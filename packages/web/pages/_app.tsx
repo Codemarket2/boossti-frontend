@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { ThemeProvider as StyledProvider } from 'styled-components';
 import { AppProps } from 'next/app';
 import Amplify, { Hub } from 'aws-amplify';
-import { Provider, useSelector } from 'react-redux';
+import { Provider, useDispatch, useSelector } from 'react-redux';
 import { ApolloProvider } from '@apollo/client/react';
 import { client, guestClient } from '@frontend/shared/graphql';
 import awsExports from '@frontend/shared/aws-exports';
@@ -24,6 +24,9 @@ import '../src/assets/css/ckeditor.css';
 import '../src/assets/css/common.css';
 
 import { useOneSignal } from '../src/components/notification/onesignal';
+import { useState } from 'react';
+import { setDefaultTheme } from '../src/components/customMUI/commonFunc';
+import { setDefaultThemeAction } from '@frontend/shared/redux/actions/setting';
 
 const customsSignInUrl =
   process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : 'https://www.boossti.com/';
@@ -45,33 +48,16 @@ Amplify.configure({
 function App({ Component, pageProps }: AppProps) {
   const { getUser } = useCurrentAuthenticatedUser();
   const { darkMode, authenticated } = useSelector(({ auth }: any) => auth);
+  const settings = useSelector(({ setting }: any) => setting);
+  const dispatch = useDispatch();
 
   useOneSignal();
   useLogoHook();
 
-  const theme = createMuiTheme({
-    palette: darkMode ? dark : light,
-    typography,
-    zIndex: {
-      appBar: 1200,
-      drawer: 1100,
-    },
-    overrides: {
-      MuiButton: {
-        root: {
-          fontSize: '3rem',
-          // backgroundColor: 'gray',
-        },
-      },
-      MuiCard: {
-        root: {
-          fontSize: '1rem',
-        },
-      },
-    },
-  });
+  let theme = createMuiTheme(settings.theme);
 
   useEffect(() => {
+    setDefaultTheme().then((res: any) => dispatch(setDefaultThemeAction(res)));
     const jssStyles = document.querySelector('#jss-server-side');
     if (jssStyles && jssStyles.parentNode) {
       jssStyles.parentNode.removeChild(jssStyles);
