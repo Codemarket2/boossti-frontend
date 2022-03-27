@@ -136,7 +136,7 @@ export default function AppBarComponent() {
                   aria-controls="menu-appbar"
                   aria-haspopup="true"
                   onClick={handleMenu}
-                  // color="inherit"
+                  color="inherit"
                 >
                   <AccountCircleIcon />
                 </IconButton>

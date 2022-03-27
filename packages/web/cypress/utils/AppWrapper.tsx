@@ -44,7 +44,7 @@ function App({ Component, pageProps }: AppProps) {
 
   useLogoHook();
   const theme = createMuiTheme({
-    palette: darkMode ? dark : light,
+    palette: darkMode ? dark.palette : light.palette,
     typography: {
       fontFamily: [
         '-apple-system',

@@ -17,8 +17,8 @@ import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import InputGroup from '../common/InputGroup';
-import { getFormFieldTypes } from './fieldTypes';
-import SelectTemplate from './SelectTemplate';
+import { getFormFieldTypes, fieldTypes } from './fieldTypes';
+import SelectTemplate from '../template/SelectTemplate';
 import InlineInput from '../common/InlineInput';
 import SelectForm from './SelectForm';
 import SelectFormFields from './SelectFormFields';
@@ -80,6 +80,7 @@ export default function FormFields({
           <>
             <InputGroup>
               <FormControlLabel
+                disabled={field?.options?.default}
                 control={
                   <Checkbox
                     checked={field?.options?.required}
@@ -203,12 +204,10 @@ export default function FormFields({
               label="Allow user to create new option"
             />
             <InputGroup>
-              {field?.options?.optionsTemplate === 'type' ? (
+              {field?.options?.optionsTemplate === 'template' ? (
                 <SelectTemplate
                   value={field.typeId}
                   onChange={(newValue) => onFieldChange({ ...field, typeId: newValue })}
-                  error={!field.typeId}
-                  helperText={!field.typeId && 'Required'}
                 />
               ) : field?.options?.optionsTemplate === 'existingForm' ? (
                 <>
@@ -221,8 +220,6 @@ export default function FormFields({
                         options: { ...field.options, formField: '' },
                       })
                     }
-                    error={!field.form}
-                    helperText={!field.form && 'required'}
                   />
                   {field.form && (
                     <div className="mt-3">
@@ -309,7 +306,8 @@ export default function FormFields({
 }
 
 const optionsTemplates = [
-  { label: 'Text', value: 'text' },
-  { label: 'Existing Type', value: 'type' },
+  // { label: 'Text', value: 'text' },
   { label: 'Existing Form', value: 'existingForm' },
+  { label: 'Existing Template', value: 'template' },
+  ...fieldTypes,
 ];

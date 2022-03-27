@@ -24,7 +24,7 @@ export default function TemplateForm({ vType = null, updateCallBack, onCancel }:
   };
 
   const defaultOnCancel = () => {
-    router.push('/types');
+    router.push('/templates');
   };
 
   const { state, setState, formik, CRUDLoading, setFormValues } = useCRUDTemplates({
