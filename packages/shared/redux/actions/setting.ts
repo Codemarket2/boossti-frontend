@@ -23,7 +23,7 @@ export function updateSettingAction(payload: IAttributes) {
 }
 
 export function setDefaultThemeAction(payload: boolean) {
-  const value = payload ? dark : light;
+  const value = light;
   return {
     type: SET_DEFAULT_THEME,
     value,
