@@ -3,27 +3,34 @@ interface IReturn {
   errorMessage: string;
 }
 
-export const validateValue = (
-  validate: boolean,
-  value: any,
-  options: any,
-  fieldType: string,
-): IReturn => {
+interface Field {
+  fieldType: any;
+  options: any;
+  typeId?: any;
+  form?: any;
+}
+
+export const validateValue = (validate: boolean, value: any, field: Field): IReturn => {
   let result = { error: false, errorMessage: '' };
+  const { options, fieldType } = field;
 
   if (!validate) {
     return result;
   }
 
+  if (options?.required && !value) {
+    return { error: true, errorMessage: 'Required' };
+  }
+
   switch (fieldType) {
     case 'number': {
-      if (options?.required && (!value || !value?.valueNumber)) {
+      if (options?.required && !value?.valueNumber) {
         result = { error: true, errorMessage: 'Required' };
       }
       break;
     }
     case 'email': {
-      if (options?.required && (!value || !value?.value)) {
+      if (options?.required && !value?.value) {
         result = { error: true, errorMessage: 'Required' };
       } else if (value?.value && !validateEmail(value?.value)) {
         result = { error: true, errorMessage: 'Invalid Email' };
@@ -31,7 +38,7 @@ export const validateValue = (
       break;
     }
     case 'phoneNumber': {
-      if (options?.required && (!value || !value?.valueNumber)) {
+      if (options?.required && !value?.valueNumber) {
         result = { error: true, errorMessage: 'Required' };
       } else if (value?.valueNumber && !(value?.valueNumber?.toString().length >= 11)) {
         result = { error: true, errorMessage: 'Invalid Phone Number' };
@@ -39,45 +46,49 @@ export const validateValue = (
       break;
     }
     case 'checkbox': {
-      if (options?.required && (!value || !value?.valueBoolean)) {
+      if (options?.required && !value?.valueBoolean) {
         result = { error: true, errorMessage: 'Required' };
       }
       break;
     }
     case 'date':
     case 'dateTime': {
-      if (options?.required && (!value || !value?.valueDate)) {
+      if (options?.required && !value?.valueDate) {
         result = { error: true, errorMessage: 'Required' };
       }
       break;
     }
     case 'image': {
-      if (options?.required && (!value || !(value?.tempMedia?.length > 0))) {
+      if (options?.required && !(value?.tempMedia?.length > 0)) {
         result = { error: true, errorMessage: 'Required' };
       }
       break;
     }
     case 'media': {
-      if (options?.required && (!value || !value?.valueDate)) {
+      if (options?.required && !value?.valueDate) {
         result = { error: true, errorMessage: 'Required' };
       }
       break;
     }
     case 'select': {
-      if (options?.optionsTemplate === 'type' && options?.required && (!value || !value?.itemId)) {
+      if (
+        options?.optionsTemplate === 'template' &&
+        options?.required &&
+        ((!field?.typeId && !value?.template) || (field?.typeId && !value?.itemId))
+      ) {
         result = { error: true, errorMessage: 'Required' };
       } else if (
         options?.optionsTemplate === 'existingForm' &&
         options?.required &&
-        (!value || !value?.response)
+        ((!field?.form && !value?.form) || (field?.form && !value?.response))
       ) {
         result = { error: true, errorMessage: 'Required' };
       } else if (
-        !(options?.optionsTemplate === 'type' || options?.optionsTemplate === 'existingForm') &&
+        !['template', 'existingForm'].includes(options?.optionsTemplate) &&
         options?.required &&
-        (!value || !value?.value)
+        !value?.value
       ) {
-        if (options?.showAsCheckbox && value?.values?.length) {
+        if (options?.showAsCheckbox && value?.values?.length > 0) {
           result = { error: false, errorMessage: '' };
         } else {
           result = { error: true, errorMessage: 'Required' };
@@ -86,7 +97,7 @@ export const validateValue = (
       break;
     }
     default: {
-      if (options?.required && (!value || !value?.value)) {
+      if (options?.required && !value?.value) {
         result = { error: true, errorMessage: 'Required' };
       }
       break;

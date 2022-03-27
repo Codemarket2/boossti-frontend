@@ -11,6 +11,8 @@ interface IProps {
   disabled?: boolean;
   error?: boolean;
   helperText?: any;
+  placeholder?: string;
+  label?: string;
 }
 
 export default function SelectTemplate({
@@ -20,6 +22,8 @@ export default function SelectTemplate({
   error: isError,
   helperText,
   filterId,
+  placeholder = 'Select Template',
+  label = 'Select Template',
 }: IProps): any {
   const { data, loading, error, state, setState } = useGetTemplates({ limit: 10 });
 
@@ -46,7 +50,8 @@ export default function SelectTemplate({
         <TextField
           fullWidth
           {...params}
-          label="Select Type"
+          placeholder={placeholder}
+          label={label}
           variant="outlined"
           InputProps={{
             ...params.InputProps,

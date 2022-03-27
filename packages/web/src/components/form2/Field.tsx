@@ -6,13 +6,15 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import MomentUtils from '@date-io/moment';
 import { MuiPickersUtilsProvider, DateTimePicker, DatePicker } from '@material-ui/pickers';
 import PhoneInput from 'react-phone-input-2';
+import { validateValue } from '@frontend/shared/utils/validate';
 import ImagePicker from '../common/ImagePicker';
 import RichTextarea from '../common/RichTextarea2';
 import DisplayRichText from '../common/DisplayRichText';
-import SelectPage from './SelectPage';
-import { validateValue } from './validate';
+import SelectPage from '../template/SelectPage';
 import SelectResponse from '../response/SelectResponse';
 import Select from './Select';
+import SelectForm from './SelectForm';
+import SelectTemplate from '../template/SelectTemplate';
 
 import 'react-phone-input-2/lib/style.css';
 
@@ -22,7 +24,7 @@ interface IProps {
   _id: string;
   label: string;
   fieldType: string;
-  templateId: any;
+  typeId: any;
   options: any;
   value: any;
   onChangeValue: (arg: any) => void;
@@ -37,7 +39,7 @@ export default function Field({
   _id,
   label,
   fieldType,
-  templateId,
+  typeId,
   options,
   value,
   onChangeValue,
@@ -60,6 +62,8 @@ export default function Field({
     onChange({ values: newValues });
   };
 
+  const validation = validateValue(validate, value, { options, fieldType, typeId, form });
+
   switch (fieldType) {
     case 'label': {
       return <DisplayRichText value={options?.staticText} />;
@@ -74,12 +78,11 @@ export default function Field({
             inputVariant="outlined"
             placeholder={moment().format('L')}
             format="MM/DD/YYYY"
-            // label={label}
             value={value && value?.valueDate ? moment(value.valueDate) : null}
             onChange={(newValue) => onChange({ field: _id, valueDate: moment(newValue) })}
             animateYearScrolling
-            error={validateValue(validate, value, options, fieldType).error}
-            helperText={validateValue(validate, value, options, fieldType).errorMessage}
+            error={validation.error}
+            helperText={validation.errorMessage}
           />
         </MuiPickersUtilsProvider>
       );
@@ -94,12 +97,11 @@ export default function Field({
             inputVariant="outlined"
             placeholder={moment().format('L')}
             format="lll"
-            // label={label}
             value={value && value?.valueDate ? moment(value.valueDate) : null}
             onChange={(newValue) => onChange({ field: _id, valueDate: moment(newValue) })}
             animateYearScrolling
-            error={validateValue(validate, value, options, fieldType).error}
-            helperText={validateValue(validate, value, options, fieldType).errorMessage}
+            error={validation.error}
+            helperText={validation.errorMessage}
           />
         </MuiPickersUtilsProvider>
       );
@@ -111,10 +113,8 @@ export default function Field({
             value={value?.value || ''}
             onChange={(newValue) => onChange({ value: newValue })}
           />
-          {validateValue(validate, value, options, fieldType).error && (
-            <FormHelperText className="text-danger">
-              {validateValue(validate, value, options, fieldType).errorMessage}
-            </FormHelperText>
+          {validation.error && (
+            <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
           )}
         </>
       );
@@ -134,10 +134,8 @@ export default function Field({
             }
             label={label}
           />
-          {validateValue(validate, value, options, fieldType).error && (
-            <FormHelperText className="text-danger">
-              {validateValue(validate, value, options, fieldType).errorMessage}
-            </FormHelperText>
+          {validation.error && (
+            <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
           )}
         </>
       );
@@ -152,10 +150,8 @@ export default function Field({
             state={value}
             setState={(newValue) => onChange({ field: _id, ...newValue })}
           />
-          {validateValue(validate, value, options, fieldType).error && (
-            <FormHelperText className="text-danger">
-              {validateValue(validate, value, options, fieldType).errorMessage}
-            </FormHelperText>
+          {validation.error && (
+            <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
           )}
         </div>
       );
@@ -163,27 +159,56 @@ export default function Field({
     case 'select': {
       return (
         <>
-          {options?.optionsTemplate === 'type' ? (
-            <SelectPage
-              typeSlug={templateId?.slug || null}
-              templateId={templateId?._id || null}
-              label={label}
-              error={validateValue(validate, value, options, fieldType).error}
-              helperText={validateValue(validate, value, options, fieldType).errorMessage}
-              value={value ? value.itemId : null}
-              onChange={(newValue) => onChange({ field: _id, itemId: newValue })}
-              allowCreate={options?.selectAllowCreate}
-            />
+          {options?.optionsTemplate === 'template' ? (
+            <>
+              {typeId?.slug && typeId?._id ? (
+                <SelectPage
+                  typeSlug={typeId?.slug || null}
+                  templateId={typeId?._id || null}
+                  label={null}
+                  placeholder={label}
+                  error={validation.error}
+                  helperText={validation.errorMessage}
+                  value={value ? value.itemId : null}
+                  onChange={(newValue) => onChange({ field: _id, itemId: newValue })}
+                  allowCreate={options?.selectAllowCreate}
+                />
+              ) : (
+                <>
+                  <SelectTemplate
+                    label={null}
+                    placeholder={label}
+                    value={value?.template || null}
+                    onChange={(newValue) => onChange({ field: _id, template: newValue })}
+                    error={validation.error}
+                    helperText={validation.errorMessage}
+                  />
+                </>
+              )}
+            </>
           ) : options?.optionsTemplate === 'existingForm' ? (
-            <SelectResponse
-              label={label}
-              formId={form?._id}
-              formField={options?.formField}
-              value={value?.response}
-              onChange={(newValue) => onChange({ field: _id, response: newValue })}
-              error={validateValue(validate, value, options, fieldType).error}
-              helperText={validateValue(validate, value, options, fieldType).errorMessage}
-            />
+            <>
+              {form?._id ? (
+                <SelectResponse
+                  label={label}
+                  formId={form?._id}
+                  formField={options?.formField}
+                  value={value?.response}
+                  onChange={(newValue) => onChange({ field: _id, response: newValue })}
+                  error={validation.error}
+                  helperText={validation.errorMessage}
+                />
+              ) : (
+                <SelectForm
+                  placeholder={label}
+                  label={null}
+                  value={value?.form}
+                  onChange={(newValue) => onChange({ field: _id, form: newValue })}
+                  error={validation.error}
+                  helperText={validation.errorMessage}
+                />
+              )}
+            </>
           ) : options?.showAsCheckbox ? (
             <div>
               {options?.selectOptions?.map((option, i) => (
@@ -200,10 +225,8 @@ export default function Field({
                   label={option}
                 />
               ))}
-              {validateValue(validate, value, options, fieldType).error && (
-                <FormHelperText className="text-danger">
-                  {validateValue(validate, value, options, fieldType).errorMessage}
-                </FormHelperText>
+              {validation.error && (
+                <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
               )}
             </div>
           ) : (
@@ -213,8 +236,8 @@ export default function Field({
               value={value ? value?.value : ''}
               onChange={(newValue) => onChange({ field: _id, value: newValue })}
               selectAllowCreate={options?.selectAllowCreate}
-              error={validateValue(validate, value, options, fieldType).error}
-              helperText={validateValue(validate, value, options, fieldType).errorMessage}
+              error={validation.error}
+              helperText={validation.errorMessage}
             />
           )}
         </>
@@ -230,14 +253,10 @@ export default function Field({
             enableSearch
             value={value?.valueNumber?.toString() || ''}
             onChange={(phone) => onChange({ field: _id, valueNumber: phone })}
-            inputStyle={
-              validateValue(validate, value, options, fieldType).error ? { borderColor: 'red' } : {}
-            }
+            inputStyle={validation.error ? { borderColor: 'red' } : {}}
           />
-          {validateValue(validate, value, options, fieldType).error && (
-            <FormHelperText className="text-danger">
-              {validateValue(validate, value, options, fieldType).errorMessage}
-            </FormHelperText>
+          {validation.error && (
+            <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
           )}
         </>
       );
@@ -254,12 +273,16 @@ export default function Field({
           disabled={disabled}
           value={value ? value.valueNumber : ''}
           onChange={({ target }) => onChange({ field: _id, valueNumber: target.value })}
-          error={validateValue(validate, value, options, fieldType).error}
-          helperText={validateValue(validate, value, options, fieldType).errorMessage}
+          error={validation.error}
+          helperText={validation.errorMessage}
         />
       );
     }
     default: {
+      const textValidation = validateValue(validate, value, {
+        options,
+        fieldType: ['email'].includes(fieldType) ? fieldType : 'text',
+      });
       return (
         <TextField
           multiline={fieldType === 'textarea'}
@@ -273,22 +296,8 @@ export default function Field({
           disabled={disabled}
           value={value ? value.value : ''}
           onChange={({ target }) => onChange({ field: _id, value: target.value })}
-          error={
-            validateValue(
-              validate,
-              value,
-              options,
-              ['email'].includes(fieldType) ? fieldType : 'text',
-            ).error
-          }
-          helperText={
-            validateValue(
-              validate,
-              value,
-              options,
-              ['email'].includes(fieldType) ? fieldType : 'text',
-            ).errorMessage
-          }
+          error={textValidation.error}
+          helperText={textValidation.errorMessage}
         />
       );
     }

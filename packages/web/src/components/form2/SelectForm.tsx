@@ -75,6 +75,8 @@ interface IProps {
   error?: boolean;
   helperText?: string;
   disabled?: boolean;
+  placeholder?: string;
+  label?: string;
 }
 
 export default function SelectForm({
@@ -83,6 +85,8 @@ export default function SelectForm({
   error = false,
   helperText,
   disabled,
+  placeholder = 'Select Form',
+  label = 'Select Form',
 }: IProps) {
   const { data, error: queryError, loading, state, setState } = useGetForms({ page: 1, limit: 10 });
   const { handleCreateForm, createLoading } = useCreateForm({ onAlert });
@@ -146,7 +150,8 @@ export default function SelectForm({
             helperText={helperText}
             fullWidth
             {...params}
-            label="Select Form"
+            placeholder={placeholder}
+            label={label}
             variant="outlined"
             InputProps={{
               ...params.InputProps,

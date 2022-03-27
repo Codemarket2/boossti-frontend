@@ -14,11 +14,11 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { ArrowBackIosRounded, ArrowForwardIosRounded } from '@material-ui/icons';
 import { useGetResponses } from '@frontend/shared/hooks/response/getResponse';
 import { useCreateUpdateResponse } from '@frontend/shared/hooks/response';
+import { validateValue } from '@frontend/shared/utils/validate';
 import ResponseList from '../response/ResponseList';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
 import Field from './Field';
-import { validateValue } from './validate';
 import { onAlert } from '../../utils/alert';
 import DisplayRichText from '../common/DisplayRichText';
 import Overlay from '../common/Overlay';
@@ -452,7 +452,7 @@ export function FormView({
         values
           .filter((value) => value.field === field._id)
           ?.map((tempValue) => {
-            if (validateValue(true, tempValue, field.options, field.fieldType).error) {
+            if (validateValue(true, tempValue, field).error) {
               validate = true;
             }
             return tempValue;
@@ -502,12 +502,10 @@ export function FormView({
     const fieldValues = values.filter((f) => f.field === field._id);
     if (
       fieldValues.length > 0 &&
-      !validateValue(
-        true,
-        fieldValues[fieldValues.length - 1],
-        { ...field.options, required: true },
-        field.fieldType,
-      ).error
+      !validateValue(true, fieldValues[fieldValues.length - 1], {
+        ...field,
+        options: { ...field.options, required: true },
+      }).error
     ) {
       newValues = [newValue];
     } else if (!submitState.validate) {
@@ -639,21 +637,9 @@ export function FormView({
                           <div className="mb-2 d-flex align-items-start">
                             <div className="w-100">
                               <DisplayValue value={value} field={field} />
-                              {validateValue(
-                                submitState.validate,
-                                value,
-                                field.options,
-                                field.fieldType,
-                              ).error && (
+                              {validateValue(submitState.validate, value, field).error && (
                                 <FormHelperText className="text-danger">
-                                  {
-                                    validateValue(
-                                      submitState.validate,
-                                      value,
-                                      field.options,
-                                      field.fieldType,
-                                    ).errorMessage
-                                  }
+                                  {validateValue(submitState.validate, value, field).errorMessage}
                                 </FormHelperText>
                               )}
                             </div>
@@ -713,14 +699,7 @@ export function FormView({
                     values
                       .filter((value) => value.field === fields[page]._id)
                       ?.forEach((tempValue) => {
-                        if (
-                          validateValue(
-                            true,
-                            tempValue,
-                            fields[page].options,
-                            fields[page].fieldType,
-                          ).error
-                        )
+                        if (validateValue(true, tempValue, { ...fields[page] }).error)
                           validate = true;
                       });
 
