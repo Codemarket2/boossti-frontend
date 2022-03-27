@@ -3,12 +3,11 @@ import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import { useGetPagesByTemplate } from '@frontend/shared/hooks/template';
-import ItemFormDrawer from '../template/PageFormDrawer';
+import ItemFormDrawer from './PageFormDrawer';
 import ErrorLoading from '../common/ErrorLoading';
 
 interface IProps {
   templateId: string;
-  label: string;
   typeSlug: any;
   disabled?: boolean;
   value: string;
@@ -16,6 +15,8 @@ interface IProps {
   error?: boolean;
   helperText?: any;
   allowCreate?: boolean;
+  placeholder?: string;
+  label?: string;
 }
 
 const filter = createFilterOptions();
@@ -26,10 +27,11 @@ export default function SelectPage({
   value,
   onChange,
   typeSlug,
-  label,
   error = false,
   helperText,
   allowCreate,
+  placeholder = 'Select Page',
+  label = 'Select Page',
 }: IProps): any {
   const { data, error: queryError, loading, state, setState } = useGetPagesByTemplate(templateId);
   const [drawer, setDrawer] = useState({ showDrawer: false });
@@ -72,11 +74,12 @@ export default function SelectPage({
         }}
         renderInput={(params) => (
           <TextField
+            {...params}
             error={error}
             helperText={helperText}
             fullWidth
-            {...params}
             label={label}
+            placeholder={placeholder}
             variant="outlined"
             InputProps={{
               ...params.InputProps,
@@ -94,7 +97,7 @@ export default function SelectPage({
         <ItemFormDrawer
           open={drawer.showDrawer}
           onClose={() => setDrawer({ showDrawer: false })}
-          typeTitle={label}
+          typeTitle={label || placeholder}
           typeSlug={typeSlug}
           templateId={templateId}
           onSelect={(newValue) => {
