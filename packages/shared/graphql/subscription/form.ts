@@ -12,7 +12,7 @@ export const UPDATED_FORM = gql`
         label
         fieldType
         options
-        typeId {
+        template {
           _id
           title
           slug
@@ -45,7 +45,7 @@ export const FORM_SUB = gql`
         label
         fieldType
         options
-        typeId {
+        template {
           _id
           title
           slug

@@ -77,7 +77,7 @@ export function useUpdateForm({ onAlert, _id }: IProps): any {
   return { state: form, handleOnChange, error, updateLoading, handleUpdateForm, handleUpdateName };
 }
 
-export const stringifyForm = (form: any, removeTypeId: boolean = false) => {
+export const stringifyForm = (form: any, removetemplate: boolean = false) => {
   let payload = { ...form };
   payload = {
     ...payload,
@@ -87,10 +87,10 @@ export const stringifyForm = (form: any, removeTypeId: boolean = false) => {
     ...payload,
     fields: payload.fields.map((m) => {
       const field = { ...m };
-      if (removeTypeId && field?.typeId) {
-        field.typeId = field?.typeId?._id ? field?.typeId?._id : null;
+      if (removetemplate && field?.template) {
+        field.template = field?.template?._id ? field?.template?._id : null;
       }
-      if (removeTypeId && field?.form) {
+      if (removetemplate && field?.form) {
         field.form = field?.form?._id ? field?.form?._id : null;
       }
       field.options = JSON.stringify(field.options);

@@ -6,7 +6,7 @@ export default function About({ userId, authorized = false }) {
     <Paper variant="outlined" className="p-2">
       About
       {/* <FieldValues
-        typeId="6119695c580ba8000904f06b"
+        template="6119695c580ba8000904f06b"
         parentId={userId}
         authorized={authorized}
         layouts={{}}

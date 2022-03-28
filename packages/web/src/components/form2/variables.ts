@@ -92,7 +92,7 @@ const getValue = (field, value) => {
     }
     case 'select': {
       if (field?.options?.optionsTemplate === 'type') {
-        return value?.itemId?.title;
+        return value?.page?.title;
       }
       if (field?.options?.optionsTemplate === 'existingForm') {
         return getLabel(field?.options?.formField, value?.response);

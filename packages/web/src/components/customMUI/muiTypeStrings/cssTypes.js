@@ -34864,7 +34864,7 @@ export type HtmlAttributes =
   | "[intrinsicsize]"
   | "[is]"
   | "[ismap]"
-  | "[itemid]"
+  | "[page]"
   | "[itemprop]"
   | "[itemref]"
   | "[itemscope]"

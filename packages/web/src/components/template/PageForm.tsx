@@ -65,7 +65,7 @@ export default function PageForm({
   //       parentId,
   //       field: field._id,
   //       label: field.label,
-  //       typeId: field.fieldType === 'type' ? field.typeId : null,
+  //       template: field.fieldType === 'type' ? field.template : null,
   //     }));
   //     setExtraFields(newFields);
   //   }
@@ -138,8 +138,8 @@ export default function PageForm({
                   }
                 }}
                 itemId={field.itemId}
-                typeId={field.typeId ? field.typeId._id : null}
-                typeSlug={field.typeId ? field.typeId.slug : null}
+                template={field.template ? field.template._id : null}
+                typeSlug={field.template ? field.template.slug : null}
                 mediaState={field}
                 setMediaState={(newValue) =>
                   setExtraFields(

@@ -148,5 +148,5 @@ export const getLabel = (formField: string, response: any): string => {
       label += i > 0 ? `${f?.value}` : f?.value;
     }
   });
-  return label;
+  return label || response?.label;
 };

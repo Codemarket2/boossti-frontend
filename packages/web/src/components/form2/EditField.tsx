@@ -158,26 +158,10 @@ export default function FormFields({
         {field.fieldType === 'select' && (
           <>
             <InputGroup>
-              <FormControl variant="outlined" fullWidth size="small">
-                <InputLabel id="fieldType-simple-select-outlined-label">
-                  Options list type
-                </InputLabel>
-                <Select
-                  labelId="fieldType-simple-select-outlined-label"
-                  id="fieldType-simple-select-outlined"
-                  name="fieldType"
-                  value={field?.options?.optionsTemplate}
-                  defaultValue="text"
-                  onChange={({ target }) => onOptionChange({ optionsTemplate: target.value })}
-                  label="Options list type"
-                >
-                  {optionsTemplates?.map((option, index) => (
-                    <MenuItem key={index} value={option?.value}>
-                      {option?.label}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              <SelectOptionType
+                value={field?.options?.optionsTemplate}
+                onChange={(optionsTemplate) => onOptionChange({ optionsTemplate })}
+              />
             </InputGroup>
             {!['type', 'existingForm'].includes(field?.options?.optionsTemplate) && (
               <FormControlLabel
@@ -206,8 +190,8 @@ export default function FormFields({
             <InputGroup>
               {field?.options?.optionsTemplate === 'template' ? (
                 <SelectTemplate
-                  value={field.typeId}
-                  onChange={(newValue) => onFieldChange({ ...field, typeId: newValue })}
+                  value={field.template}
+                  onChange={(newValue) => onFieldChange({ ...field, template: newValue })}
                 />
               ) : field?.options?.optionsTemplate === 'existingForm' ? (
                 <>
@@ -306,8 +290,36 @@ export default function FormFields({
 }
 
 const optionsTemplates = [
-  // { label: 'Text', value: 'text' },
+  { label: 'No Type', value: null },
   { label: 'Existing Form', value: 'existingForm' },
   { label: 'Existing Template', value: 'template' },
   ...fieldTypes,
 ];
+
+export const SelectOptionType = ({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (newValue: any) => void;
+}) => {
+  return (
+    <FormControl variant="outlined" fullWidth size="small">
+      <InputLabel id="fieldType-simple-select-outlined-label">Options list type</InputLabel>
+      <Select
+        labelId="fieldType-simple-select-outlined-label"
+        id="fieldType-simple-select-outlined"
+        name="fieldType"
+        value={value}
+        onChange={({ target }) => onChange(target.value)}
+        label="Options list type"
+      >
+        {optionsTemplates?.map((option, index) => (
+          <MenuItem key={index} value={option?.value}>
+            {option?.label}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  );
+};

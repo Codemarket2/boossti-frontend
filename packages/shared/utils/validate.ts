@@ -6,7 +6,7 @@ interface IReturn {
 interface Field {
   fieldType: any;
   options: any;
-  typeId?: any;
+  template?: any;
   form?: any;
 }
 
@@ -74,7 +74,7 @@ export const validateValue = (validate: boolean, value: any, field: Field): IRet
       if (
         options?.optionsTemplate === 'template' &&
         options?.required &&
-        ((!field?.typeId && !value?.template) || (field?.typeId && !value?.itemId))
+        ((!field?.template && !value?.template) || (field?.template && !value?.page))
       ) {
         result = { error: true, errorMessage: 'Required' };
       } else if (

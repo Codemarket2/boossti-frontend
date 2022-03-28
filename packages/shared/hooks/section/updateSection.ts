@@ -69,49 +69,30 @@ export function useUpdateSection({ onAlert, _id }: IProps): any {
   return { onSectionChange, section, handleUpdateSection, error, loading };
 }
 
-export const stringifyPayload = (oldPayload: any, removeTypeId: boolean = false) => {
+export const stringifyPayload = (oldPayload: any, removeId: boolean = false) => {
   let payload = { ...oldPayload };
-
   if (payload?.fields) {
     payload = {
       ...payload,
-      fields: payload.fields.map((m) => JSON.parse(JSON.stringify(m), omitTypename)),
-    };
-    payload = {
-      ...payload,
       fields: payload.fields.map((m) => {
-        const field = { ...m };
-        if (removeTypeId && field?.typeId) {
-          field.typeId = field?.typeId?._id ? field?.typeId?._id : null;
+        const field = JSON.parse(JSON.stringify(m), omitTypename);
+        if (field.options) {
+          field.options = JSON.stringify(field.options);
         }
-        if (removeTypeId && field?.form) {
-          field.form = field?.form?._id ? field?.form?._id : null;
+        if (removeId) {
+          if (field?.template) {
+            field.template = field?.template?._id || null;
+          }
+          if (field?.form) {
+            field.form = field?.form?._id || null;
+          }
         }
-        field.options = JSON.stringify(field.options);
         return field;
       }),
     };
   }
   if (payload?.values) {
-    payload = {
-      ...payload,
-      values: payload.values.map((m) => JSON.parse(JSON.stringify(m), omitTypename)),
-    };
-    payload = {
-      ...payload,
-      values: payload.values.map((v) => {
-        let value = { ...v };
-        const field = payload.fields?.filter((f) => f._id === value.field)[0];
-        if (removeTypeId && (field?.fieldType === 'type' || value?.itemId?._id)) {
-          value = { ...value, itemId: value?.itemId?._id || null };
-        }
-        if (removeTypeId && (field?.fieldType === 'existingForm' || value?.response?._id)) {
-          value = { ...value, response: value?.response?._id || null };
-        }
-        const { tempMedia, tempMediaFiles, ...finalValue } = value;
-        return finalValue;
-      }),
-    };
+    payload.values = stringifyValues(payload?.values, removeId);
   }
   if (payload?.options) {
     payload = {
@@ -126,4 +107,29 @@ export const stringifyPayload = (oldPayload: any, removeTypeId: boolean = false)
     };
   }
   return payload;
+};
+
+export const stringifyValues = (values, removeId: boolean = false) => {
+  return values.map((m) => {
+    let value = JSON.parse(JSON.stringify(m), omitTypename);
+    if (removeId) {
+      if (value?.template?._id) {
+        value = { ...value, template: value?.template?._id || null };
+      }
+      if (value?.page?._id) {
+        value = { ...value, page: value?.page?._id || null };
+      }
+      if (value?.form?._id) {
+        value = { ...value, form: value?.form?._id || null };
+      }
+      if (value?.response?._id) {
+        value = { ...value, response: value?.response?._id || null };
+      }
+    }
+    if (value.options) {
+      value.options = JSON.stringify(value.options);
+    }
+    const { tempMedia, tempMediaFiles, ...finalValue } = value;
+    return finalValue;
+  });
 };
