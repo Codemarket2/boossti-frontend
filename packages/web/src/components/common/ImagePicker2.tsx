@@ -1,7 +1,7 @@
 import { generateObjectId } from '@frontend/shared/utils/objectId';
 import { useEffect, useRef, useState } from 'react';
 import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary';
-import ImageList from '../post/ImageList';
+import MediaList from './MediaList';
 import { createStyles, Theme, makeStyles, useTheme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog, { DialogProps } from '@material-ui/core/Dialog';
@@ -16,6 +16,8 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import SwipeableViews from 'react-swipeable-views';
 import { useGetResponses } from '@frontend/shared/hooks/response';
+import ImageList from '../post/ImageList';
+import SaveIcon from '@material-ui/icons/Save';
 
 interface IProps {
   label?: string;
@@ -88,6 +90,9 @@ const useStyles = makeStyles((theme: Theme) =>
       width: 500,
       height: 450,
     },
+    button: {
+      margin: theme.spacing(1),
+    },
   }),
 );
 
@@ -158,6 +163,7 @@ export default function ImagePicker2({
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(0);
+  const [selected, setSelected] = useState([]);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
@@ -226,9 +232,25 @@ export default function ImagePicker2({
                     </div> */}
                     {data?.getResponses?.data?.map((res) =>
                       res?.values?.map((value) =>
-                        value?.media?.length >= 1 ? <ImageList media={value?.media} /> : null,
+                        value?.media?.length >= 1 ? (
+                          <MediaList
+                            media={value?.media}
+                            selected={selected}
+                            setSelected={setSelected}
+                          />
+                        ) : null,
                       ),
                     )}
+                    <br />
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                      className={classes.button}
+                      startIcon={<SaveIcon />}
+                    >
+                      Save
+                    </Button>
                   </TabPanel>
                   <TabPanel value={value} index={1} dir={theme.direction}>
                     <label htmlFor={`contained-button-file-${id}`}>
