@@ -44,7 +44,7 @@ export const GET_TEMPLATE_BY_SLUG = gql`
         label
         fieldType
         options
-        typeId {
+        template {
           _id
           title
           slug
@@ -156,7 +156,7 @@ export const GET_PAGE_BY_SLUG = gql`
         label
         fieldType
         options
-        typeId {
+        template {
           _id
           title
           slug
@@ -179,14 +179,23 @@ export const GET_PAGE_BY_SLUG = gql`
         valueNumber
         valueBoolean
         valueDate
-        itemId {
+        media {
+          url
+          caption
+        }
+        template {
           _id
           title
           slug
         }
-        media {
-          url
-          caption
+        page {
+          _id
+          title
+          slug
+        }
+        form {
+          _id
+          name
         }
         response {
           _id
@@ -195,6 +204,7 @@ export const GET_PAGE_BY_SLUG = gql`
             value
           }
         }
+        options
       }
     }
   }

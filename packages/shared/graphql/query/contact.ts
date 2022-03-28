@@ -38,14 +38,23 @@ export const GET_CONTACT = gql`
         valueNumber
         valueBoolean
         valueDate
-        itemId {
+        media {
+          url
+          caption
+        }
+        template {
           _id
           title
           slug
         }
-        media {
-          url
-          caption
+        page {
+          _id
+          title
+          slug
+        }
+        form {
+          _id
+          name
         }
         response {
           _id
@@ -54,6 +63,7 @@ export const GET_CONTACT = gql`
             value
           }
         }
+        options
       }
       createdBy {
         _id

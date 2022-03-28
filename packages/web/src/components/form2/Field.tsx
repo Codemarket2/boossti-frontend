@@ -17,6 +17,8 @@ import SelectForm from './SelectForm';
 import SelectTemplate from '../template/SelectTemplate';
 
 import 'react-phone-input-2/lib/style.css';
+import InputGroup from '../common/InputGroup';
+import { SelectOptionType } from './EditField';
 
 interface IProps {
   disabled?: boolean;
@@ -24,7 +26,7 @@ interface IProps {
   _id: string;
   label: string;
   fieldType: string;
-  typeId: any;
+  template: any;
   options: any;
   value: any;
   onChangeValue: (arg: any) => void;
@@ -39,7 +41,7 @@ export default function Field({
   _id,
   label,
   fieldType,
-  typeId,
+  template,
   options,
   value,
   onChangeValue,
@@ -62,7 +64,7 @@ export default function Field({
     onChange({ values: newValues });
   };
 
-  const validation = validateValue(validate, value, { options, fieldType, typeId, form });
+  const validation = validateValue(validate, value, { options, fieldType, template, form });
 
   switch (fieldType) {
     case 'label': {
@@ -157,36 +159,52 @@ export default function Field({
       );
     }
     case 'select': {
+      const optionsTemplate = options?.optionsTemplate || value?.options?.optionsTemplate;
       return (
         <>
-          {options?.optionsTemplate === 'template' ? (
+          {!options?.optionsTemplate && (
+            <div className="my-2">
+              <SelectOptionType
+                value={value?.options?.optionsTemplate}
+                onChange={(newOptionsTemplate) =>
+                  onChange({
+                    field: _id,
+                    options: {
+                      ...value?.options,
+                      optionsTemplate: newOptionsTemplate,
+                    },
+                  })
+                }
+              />
+            </div>
+          )}
+          {optionsTemplate === 'template' ? (
             <>
-              {typeId?.slug && typeId?._id ? (
-                <SelectPage
-                  typeSlug={typeId?.slug || null}
-                  templateId={typeId?._id || null}
-                  label={null}
-                  placeholder={label}
-                  error={validation.error}
-                  helperText={validation.errorMessage}
-                  value={value ? value.itemId : null}
-                  onChange={(newValue) => onChange({ field: _id, itemId: newValue })}
-                  allowCreate={options?.selectAllowCreate}
-                />
-              ) : (
-                <>
-                  <SelectTemplate
+              <SelectTemplate
+                label={null}
+                placeholder={label}
+                value={value?.template || null}
+                onChange={(newValue) => onChange({ field: _id, template: newValue })}
+                error={validation.error}
+                helperText={validation.errorMessage}
+              />
+              {(template?._id || value?.template?._id) && (
+                <div className="mt-2">
+                  <SelectPage
+                    templateId={template?._id || value?.template?._id}
+                    typeSlug={template?.slug || value?.template?.slug}
                     label={null}
                     placeholder={label}
-                    value={value?.template || null}
-                    onChange={(newValue) => onChange({ field: _id, template: newValue })}
                     error={validation.error}
                     helperText={validation.errorMessage}
+                    value={value ? value.page : null}
+                    onChange={(newValue) => onChange({ field: _id, page: newValue })}
+                    allowCreate={options?.selectAllowCreate}
                   />
-                </>
+                </div>
               )}
             </>
-          ) : options?.optionsTemplate === 'existingForm' ? (
+          ) : optionsTemplate === 'existingForm' ? (
             <>
               {form?._id ? (
                 <SelectResponse
@@ -230,15 +248,17 @@ export default function Field({
               )}
             </div>
           ) : (
-            <Select
-              label={label}
-              options={options?.selectOptions}
-              value={value ? value?.value : ''}
-              onChange={(newValue) => onChange({ field: _id, value: newValue })}
-              selectAllowCreate={options?.selectAllowCreate}
-              error={validation.error}
-              helperText={validation.errorMessage}
-            />
+            optionsTemplate && (
+              <Select
+                label={label}
+                options={options?.selectOptions}
+                value={value ? value?.value : ''}
+                onChange={(newValue) => onChange({ field: _id, value: newValue })}
+                selectAllowCreate={options?.selectAllowCreate}
+                error={validation.error}
+                helperText={validation.errorMessage}
+              />
+            )
           )}
         </>
       );

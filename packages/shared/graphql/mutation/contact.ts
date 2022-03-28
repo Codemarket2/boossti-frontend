@@ -39,7 +39,7 @@ export const CREATE_CONTACT = gql`
 `;
 
 export const UPDATE_CONTACT = gql`
-  mutation MyMutation($_id: ID!, $values: [FieldValue2Input]) {
+  mutation MyMutation($_id: ID!, $values: [ValueInput]) {
     updateContact(_id: $_id, values: $values) {
       _id
       values {
@@ -50,7 +50,7 @@ export const UPDATE_CONTACT = gql`
         valueNumber
         valueBoolean
         valueDate
-        itemId {
+        page {
           _id
           title
           slug

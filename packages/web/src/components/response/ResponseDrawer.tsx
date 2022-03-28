@@ -29,11 +29,13 @@ export const ShowResponseLabel = ({ formField, response }: IProps2) => {
   const [showOverlay, setShowOverlay] = useState(false);
   return (
     <div>
-      <ResponseDrawer
-        open={showOverlay}
-        onClose={() => setShowOverlay(false)}
-        responseId={response?._id}
-      />
+      {showOverlay && (
+        <ResponseDrawer
+          open={showOverlay}
+          onClose={() => setShowOverlay(false)}
+          responseId={response?._id}
+        />
+      )}
       <Typography
         color="primary"
         onClick={() => setShowOverlay(true)}

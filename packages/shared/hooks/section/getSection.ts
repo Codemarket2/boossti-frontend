@@ -30,20 +30,33 @@ export function useGetSection(_id: string) {
   return { data: getSection ? { getSection } : null, error, loading };
 }
 
-export const parsePayload = (section) => {
-  const parsedForm = {
-    ...section,
-    fields: section?.fields?.map((m) => {
+export const parsePayload = (payload) => {
+  const newPayload = {
+    ...payload,
+  };
+  if (newPayload?.fields) {
+    newPayload.fields = newPayload?.fields?.map((m) => {
       const field = { ...m };
       field.options = JSON.parse(field.options);
       return field;
-    }),
-  };
-  if (section?.options) {
-    parsedForm.options = JSON.parse(section?.options);
+    });
   }
-  if (section?.settings) {
-    parsedForm.options = JSON.parse(section?.options);
+  if (newPayload?.options) {
+    newPayload.options = JSON.parse(newPayload?.options);
   }
-  return parsedForm;
+  if (newPayload?.settings) {
+    newPayload.options = JSON.parse(newPayload?.options);
+  }
+  // if (newPayload?.values) {
+  //   newPayload.values = parseValues(newPayload?.values);
+  // }
+  return newPayload;
 };
+
+// export const parseValues = (values) => {
+//   return values?.map((m) => {
+//     const value = { ...m };
+//     value.options = JSON.parse(value.options);
+//     return value;
+//   });
+// };

@@ -45,9 +45,13 @@ export const defualtValue = {
   valueNumber: null,
   valueBoolean: null,
   valueDate: null,
-  itemId: null,
   media: [],
   values: [],
+  template: null,
+  page: null,
+  form: null,
+  response: null,
+  options: { option: false },
   tempMedia: [],
   tempMediaFiles: [],
 };
@@ -105,7 +109,7 @@ export default function FormViewWrapper({
       if (response) {
         setCheckNewUser(true);
       }
-    } catch (error) {
+    } catch (er) {
       setCheckNewUser(false);
     }
   };
@@ -391,7 +395,17 @@ export const filterValues = (values, field) => {
       newValues = [values.filter((f) => f.field === field._id)[0]];
     }
   }
-  return newValues;
+  return newValues?.map((v) => {
+    let newOptions = { option: false };
+    if (v?.options) {
+      if (typeof v?.options === 'object') {
+        newOptions = { ...v?.options };
+      } else if (typeof v?.options === 'string') {
+        newOptions = JSON.parse(v?.options);
+      }
+    }
+    return { ...v, options: newOptions };
+  });
 };
 
 export function FormView({
@@ -519,22 +533,6 @@ export function FormView({
     const newValues = values.filter((f) => f.field === fieldId).filter((f, i) => i !== index);
     setValues([...oldValues, ...newValues]);
   };
-
-  // const onEditOneValue = (fieldId, index) => {
-  //   const oldValues = values.filter((f) => f.field !== fieldId);
-  //   const currentFieldValues = values.filter((f) => f.field === fieldId);
-  //   const newValues = currentFieldValues.map((f, i) => {
-  //     let tempValue = { ...f };
-  //     if (i === currentFieldValues.length - 1) {
-  //       tempValue = currentFieldValues[index];
-  //     }
-  //     if (i === index) {
-  //       tempValue = currentFieldValues[currentFieldValues.length - 1];
-  //     }
-  //     return tempValue;
-  //   });
-  //   setValues([...oldValues, ...newValues]);
-  // };
 
   return (
     <div className="position-relative">

@@ -3,8 +3,8 @@ import { gql } from '@apollo/client';
 export const UPDATE_SECTION = gql`
   mutation updateSection(
     $_id: ID!
-    $fields: [Field2Input]
-    $values: [FieldValue2Input]
+    $fields: [FieldInput]
+    $values: [ValueInput]
     $options: AWSJSON
   ) {
     updateSection(_id: $_id, fields: $fields, values: $values, options: $options) {
@@ -14,7 +14,7 @@ export const UPDATE_SECTION = gql`
         label
         fieldType
         options
-        typeId {
+        template {
           _id
           title
           slug
@@ -32,14 +32,23 @@ export const UPDATE_SECTION = gql`
         valueNumber
         valueBoolean
         valueDate
-        itemId {
+        media {
+          url
+          caption
+        }
+        template {
           _id
           title
           slug
         }
-        media {
-          url
-          caption
+        page {
+          _id
+          title
+          slug
+        }
+        form {
+          _id
+          name
         }
         response {
           _id
@@ -48,6 +57,7 @@ export const UPDATE_SECTION = gql`
             value
           }
         }
+        options
       }
       options
     }

@@ -5,6 +5,7 @@ import DisplayRichText from '../common/DisplayRichText';
 import { ShowResponseLabel } from '../response/ResponseDrawer';
 import PageDrawer from '../template/PageDrawer';
 import ImageList from '../post/ImageList';
+import Link from 'next/link';
 
 interface IProps {
   field: any;
@@ -21,13 +22,19 @@ export default function DisplayValue({ field, value, imageAvatar }: IProps) {
     case 'password':
       return <>{value?.value}</>;
     case 'select':
-      if (field?.options?.optionsTemplate === 'type') {
-        return <PageDrawer title={value.itemId.title} slug={value.itemId.slug} />;
+      if (field?.options?.optionsTemplate === 'template') {
+        if (field?.template?._id) {
+          return <PageDrawer title={value.page?.title} slug={value.page?.slug} />;
+        }
+        return <Link href={`/${value?.template?.slug}`}>{value?.template?.title}</Link>;
       }
       if (field?.options?.optionsTemplate === 'existingForm') {
-        return (
-          <ShowResponseLabel formField={field?.options?.formField} response={value?.response} />
-        );
+        if (field?.form?._id && field?.options?.formField) {
+          return (
+            <ShowResponseLabel formField={field?.options?.formField} response={value?.response} />
+          );
+        }
+        return <>{value?.form?.name}</>;
       }
       if (field?.options?.showAsCheckbox) {
         return (

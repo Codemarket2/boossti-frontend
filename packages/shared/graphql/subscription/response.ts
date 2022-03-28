@@ -19,14 +19,23 @@ export const RESPONSE_SUB = gql`
         valueNumber
         valueBoolean
         valueDate
-        itemId {
+        media {
+          url
+          caption
+        }
+        template {
           _id
           title
           slug
         }
-        media {
-          url
-          caption
+        page {
+          _id
+          title
+          slug
+        }
+        form {
+          _id
+          name
         }
         response {
           _id
@@ -35,6 +44,7 @@ export const RESPONSE_SUB = gql`
             value
           }
         }
+        options
       }
       createdBy {
         _id
