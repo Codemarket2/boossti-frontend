@@ -153,14 +153,23 @@ export const GET_RESPONSES = gql`
           valueNumber
           valueBoolean
           valueDate
+          media {
+            url
+            caption
+          }
+          template {
+            _id
+            title
+            slug
+          }
           page {
             _id
             title
             slug
           }
-          media {
-            url
-            caption
+          form {
+            _id
+            name
           }
           response {
             _id
@@ -169,6 +178,7 @@ export const GET_RESPONSES = gql`
               value
             }
           }
+          options
         }
         createdBy {
           _id
@@ -206,14 +216,23 @@ export const GET_MY_RESPONSES = gql`
           valueNumber
           valueBoolean
           valueDate
+          media {
+            url
+            caption
+          }
+          template {
+            _id
+            title
+            slug
+          }
           page {
             _id
             title
             slug
           }
-          media {
-            url
-            caption
+          form {
+            _id
+            name
           }
           response {
             _id
@@ -222,6 +241,7 @@ export const GET_MY_RESPONSES = gql`
               value
             }
           }
+          options
         }
         createdBy {
           _id
