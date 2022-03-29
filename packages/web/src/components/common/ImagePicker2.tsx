@@ -165,6 +165,20 @@ export default function ImagePicker2({
   const [value, setValue] = useState(0);
   const [selected, setSelected] = useState([]);
 
+  useEffect(() => {
+    const tempArr = [];
+    selected.map((select) => {
+      const temp = {
+        caption: '',
+        type: 'image/jpeg',
+        url: '',
+      };
+      temp.url = select;
+      tempArr.push(temp);
+    });
+    setState({ ...state, ['media']: tempArr });
+  }, [selected]);
+
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
@@ -180,6 +194,7 @@ export default function ImagePicker2({
   const handleClose = () => {
     setOpen(false);
   };
+  console.log('state', state);
 
   return (
     <>
