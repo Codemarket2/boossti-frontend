@@ -16,6 +16,7 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import InputGroup from '../common/InputGroup';
 import { getFormFieldTypes, fieldTypes } from './fieldTypes';
 import SelectTemplate from '../template/SelectTemplate';
@@ -290,7 +291,6 @@ export default function FormFields({
 }
 
 const optionsTemplates = [
-  { label: 'No Type', value: null },
   { label: 'Existing Form', value: 'existingForm' },
   { label: 'Existing Template', value: 'template' },
   ...fieldTypes,
@@ -299,12 +299,16 @@ const optionsTemplates = [
 export const SelectOptionType = ({
   value,
   onChange,
+  error,
+  helperText,
 }: {
   value: string;
   onChange: (newValue: any) => void;
+  error?: boolean;
+  helperText?: string;
 }) => {
   return (
-    <FormControl variant="outlined" fullWidth size="small">
+    <FormControl variant="outlined" fullWidth size="small" error={error}>
       <InputLabel id="fieldType-simple-select-outlined-label">Options list type</InputLabel>
       <Select
         labelId="fieldType-simple-select-outlined-label"
@@ -314,12 +318,16 @@ export const SelectOptionType = ({
         onChange={({ target }) => onChange(target.value)}
         label="Options list type"
       >
+        <MenuItem value="">
+          <em>None</em>
+        </MenuItem>
         {optionsTemplates?.map((option, index) => (
           <MenuItem key={index} value={option?.value}>
             {option?.label}
           </MenuItem>
         ))}
       </Select>
+      {error && <FormHelperText>{helperText}</FormHelperText>}
     </FormControl>
   );
 };
