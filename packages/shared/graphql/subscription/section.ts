@@ -9,7 +9,7 @@ export const SECTION_SUB = gql`
         label
         fieldType
         options
-        typeId {
+        template {
           _id
           title
           slug
@@ -27,14 +27,23 @@ export const SECTION_SUB = gql`
         valueNumber
         valueBoolean
         valueDate
-        itemId {
+        media {
+          url
+          caption
+        }
+        template {
           _id
           title
           slug
         }
-        media {
-          url
-          caption
+        page {
+          _id
+          title
+          slug
+        }
+        form {
+          _id
+          name
         }
         response {
           _id
@@ -43,6 +52,7 @@ export const SECTION_SUB = gql`
             value
           }
         }
+        options
       }
       options
     }

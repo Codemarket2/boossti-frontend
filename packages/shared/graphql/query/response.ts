@@ -19,14 +19,23 @@ export const GET_RESPONSE = gql`
         valueNumber
         valueBoolean
         valueDate
-        itemId {
+        media {
+          url
+          caption
+        }
+        template {
           _id
           title
           slug
         }
-        media {
-          url
-          caption
+        page {
+          _id
+          title
+          slug
+        }
+        form {
+          _id
+          name
         }
         response {
           _id
@@ -35,6 +44,7 @@ export const GET_RESPONSE = gql`
             value
           }
         }
+        options
       }
       createdBy {
         _id
@@ -66,14 +76,23 @@ export const GET_RESPONSE_BY_COUNT = gql`
         valueNumber
         valueBoolean
         valueDate
-        itemId {
+        media {
+          url
+          caption
+        }
+        template {
           _id
           title
           slug
         }
-        media {
-          url
-          caption
+        page {
+          _id
+          title
+          slug
+        }
+        form {
+          _id
+          name
         }
         response {
           _id
@@ -82,6 +101,7 @@ export const GET_RESPONSE_BY_COUNT = gql`
             value
           }
         }
+        options
       }
       createdBy {
         _id
@@ -133,7 +153,7 @@ export const GET_RESPONSES = gql`
           valueNumber
           valueBoolean
           valueDate
-          itemId {
+          page {
             _id
             title
             slug
@@ -186,7 +206,7 @@ export const GET_MY_RESPONSES = gql`
           valueNumber
           valueBoolean
           valueDate
-          itemId {
+          page {
             _id
             title
             slug

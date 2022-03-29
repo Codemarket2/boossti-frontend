@@ -39,7 +39,7 @@ export const UPDATED_TEMPLATE = gql`
         label
         fieldType
         options
-        typeId {
+        template {
           _id
           title
           slug
@@ -97,7 +97,7 @@ export const UPDATED_PAGE = gql`
         label
         fieldType
         options
-        typeId {
+        template {
           _id
           title
           slug
@@ -115,14 +115,23 @@ export const UPDATED_PAGE = gql`
         valueNumber
         valueBoolean
         valueDate
-        itemId {
+        media {
+          url
+          caption
+        }
+        template {
           _id
           title
           slug
         }
-        media {
-          url
-          caption
+        page {
+          _id
+          title
+          slug
+        }
+        form {
+          _id
+          name
         }
         response {
           _id
@@ -131,6 +140,7 @@ export const UPDATED_PAGE = gql`
             value
           }
         }
+        options
       }
     }
   }

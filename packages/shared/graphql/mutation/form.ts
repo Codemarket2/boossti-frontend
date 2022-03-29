@@ -4,7 +4,7 @@ export const CREATE_FORM = gql`
   mutation MyMutation(
     $parentId: ID
     $name: String!
-    $fields: [Field2Input]
+    $fields: [FieldInput]
     $settings: AWSJSON
     $virtualForm: Boolean
   ) {
@@ -24,7 +24,7 @@ export const CREATE_FORM = gql`
         label
         fieldType
         options
-        typeId {
+        template {
           _id
           title
           slug
@@ -51,7 +51,7 @@ export const UPDATE_FORM = gql`
     $_id: ID!
     $parentId: ID
     $name: String!
-    $fields: [Field2Input]
+    $fields: [FieldInput]
     $settings: AWSJSON
   ) {
     updateForm(_id: $_id, parentId: $parentId, name: $name, fields: $fields, settings: $settings) {
@@ -64,7 +64,7 @@ export const UPDATE_FORM = gql`
         label
         fieldType
         options
-        typeId {
+        template {
           _id
           title
           slug

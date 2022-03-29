@@ -5,7 +5,7 @@ export const CREATE_RESPONSE = gql`
     $formId: ID!
     $parentId: ID
     $workFlowFormReponseParentId: ID
-    $values: [FieldValue2Input]
+    $values: [ValueInput]
     $options: AWSJSON
   ) {
     createResponse(
@@ -31,14 +31,23 @@ export const CREATE_RESPONSE = gql`
         valueNumber
         valueBoolean
         valueDate
-        itemId {
+        media {
+          url
+          caption
+        }
+        template {
           _id
           title
           slug
         }
-        media {
-          url
-          caption
+        page {
+          _id
+          title
+          slug
+        }
+        form {
+          _id
+          name
         }
         response {
           _id
@@ -47,6 +56,7 @@ export const CREATE_RESPONSE = gql`
             value
           }
         }
+        options
       }
       createdBy {
         _id
@@ -60,7 +70,7 @@ export const CREATE_RESPONSE = gql`
 `;
 
 export const UPDATE_RESPONSE = gql`
-  mutation MyMutation($_id: ID!, $values: [FieldValue2Input]) {
+  mutation MyMutation($_id: ID!, $values: [ValueInput]) {
     updateResponse(_id: $_id, values: $values) {
       _id
       values {
@@ -71,14 +81,23 @@ export const UPDATE_RESPONSE = gql`
         valueNumber
         valueBoolean
         valueDate
-        itemId {
+        media {
+          url
+          caption
+        }
+        template {
           _id
           title
           slug
         }
-        media {
-          url
-          caption
+        page {
+          _id
+          title
+          slug
+        }
+        form {
+          _id
+          name
         }
         response {
           _id
@@ -87,6 +106,7 @@ export const UPDATE_RESPONSE = gql`
             value
           }
         }
+        options
       }
     }
   }

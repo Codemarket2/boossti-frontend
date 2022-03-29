@@ -6,7 +6,7 @@ import { generateObjectId } from '../../utils/objectId';
 const validationSchema = yup.object({
   label: yup.string().required('Label is required'),
   fieldType: yup.string().required('Field Type is required'),
-  // typeId: yup.object().when('fieldType', {
+  // template: yup.object().when('fieldType', {
   //   is: (value) => value === 'type',
   //   then: yup.object().nullable(true).required('Type is required'),
   //   otherwise: yup.object().nullable(true),
@@ -36,7 +36,7 @@ interface IFormValues {
   fieldType: string;
   multipleValues: boolean;
   required: boolean;
-  typeId: any;
+  template: any;
   form: any;
   formField: string;
   staticText: string;
@@ -50,7 +50,7 @@ const defaultFormValues = {
   fieldType: '',
   multipleValues: false,
   required: false,
-  typeId: null,
+  template: null,
   form: null,
   formField: '',
 };
@@ -69,7 +69,7 @@ export function useAddFields({ onAlert, onSave }: ICRUDProps): any {
           _id: payload.edit ? payload._id : generateObjectId(),
           label: payload.label,
           fieldType: payload.fieldType,
-          typeId: payload.typeId,
+          template: payload.template,
           form: payload.form,
           options: {
             multipleValues: payload.multipleValues,
@@ -99,7 +99,7 @@ export function useAddFields({ onAlert, onSave }: ICRUDProps): any {
     formik.setFieldValue('required', field.options?.required, false);
     formik.setFieldValue('_id', field._id, false);
     formik.setFieldValue('staticText', field.options?.staticText, false);
-    // formik.setFieldValue('typeId', field.typeId, false);
+    // formik.setFieldValue('template', field.template, false);
     formik.setFieldValue('form', field?.form, false);
     // formik.setFieldValue('formField', field.options?.formField, false);
   };

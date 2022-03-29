@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const CREATE_TEMPLATE = gql`
-  mutation MyMutation($title: String!, $fields: [Field2Input!]) {
+  mutation MyMutation($title: String!, $fields: [FieldInput!]) {
     createTemplate(title: $title, fields: $fields) {
       _id
       slug
@@ -19,7 +19,7 @@ export const CREATE_TEMPLATE = gql`
         label
         fieldType
         options
-        typeId {
+        template {
           _id
           title
           slug
@@ -70,7 +70,7 @@ export const UPDATE_TEMPLATE = gql`
         label
         fieldType
         options
-        typeId {
+        template {
           _id
           title
           slug
@@ -109,7 +109,7 @@ export const PUBLISH_TEMPLATE = gql`
         label
         fieldType
         options
-        typeId {
+        template {
           _id
           title
           slug
@@ -130,7 +130,7 @@ export const PUBLISH_TEMPLATE = gql`
 `;
 
 export const UPDATE_TEMPLATE_FIELDS = gql`
-  mutation MyMutation($_id: ID!, $fields: [Field2Input], $options: AWSJSON) {
+  mutation MyMutation($_id: ID!, $fields: [FieldInput], $options: AWSJSON) {
     updateTemplate(_id: $_id, fields: $fields, options: $options) {
       _id
       slug
@@ -148,7 +148,7 @@ export const UPDATE_TEMPLATE_FIELDS = gql`
         label
         fieldType
         options
-        typeId {
+        template {
           _id
           title
           slug
@@ -198,7 +198,7 @@ export const CREATE_PAGE = gql`
         label
         fieldType
         options
-        typeId {
+        template {
           _id
           title
           slug
@@ -221,14 +221,23 @@ export const CREATE_PAGE = gql`
         valueNumber
         valueBoolean
         valueDate
-        itemId {
+        media {
+          url
+          caption
+        }
+        template {
           _id
           title
           slug
         }
-        media {
-          url
-          caption
+        page {
+          _id
+          title
+          slug
+        }
+        form {
+          _id
+          name
         }
         response {
           _id
@@ -237,18 +246,14 @@ export const CREATE_PAGE = gql`
             value
           }
         }
+        options
       }
     }
   }
 `;
 
 export const UPDATE_PAGE_FIELDS = gql`
-  mutation MyMutation(
-    $_id: ID!
-    $fields: [Field2Input]
-    $values: [FieldValue2Input]
-    $options: AWSJSON
-  ) {
+  mutation MyMutation($_id: ID!, $fields: [FieldInput], $values: [ValueInput], $options: AWSJSON) {
     updatePage(_id: $_id, fields: $fields, values: $values, options: $options) {
       _id
       active
@@ -271,7 +276,7 @@ export const UPDATE_PAGE_FIELDS = gql`
         label
         fieldType
         options
-        typeId {
+        template {
           _id
           title
           slug
@@ -294,14 +299,23 @@ export const UPDATE_PAGE_FIELDS = gql`
         valueNumber
         valueBoolean
         valueDate
-        itemId {
+        media {
+          url
+          caption
+        }
+        template {
           _id
           title
           slug
         }
-        media {
-          url
-          caption
+        page {
+          _id
+          title
+          slug
+        }
+        form {
+          _id
+          name
         }
         response {
           _id
@@ -310,6 +324,7 @@ export const UPDATE_PAGE_FIELDS = gql`
             value
           }
         }
+        options
       }
     }
   }
@@ -345,7 +360,7 @@ export const UPDATE_PAGE = gql`
         label
         fieldType
         options
-        typeId {
+        template {
           _id
           title
           slug
@@ -368,14 +383,23 @@ export const UPDATE_PAGE = gql`
         valueNumber
         valueBoolean
         valueDate
-        itemId {
+        media {
+          url
+          caption
+        }
+        template {
           _id
           title
           slug
         }
-        media {
-          url
-          caption
+        page {
+          _id
+          title
+          slug
+        }
+        form {
+          _id
+          name
         }
         response {
           _id
@@ -384,6 +408,7 @@ export const UPDATE_PAGE = gql`
             value
           }
         }
+        options
       }
     }
   }
@@ -413,7 +438,7 @@ export const PUBLISH_PAGE = gql`
         label
         fieldType
         options
-        typeId {
+        template {
           _id
           title
           slug
@@ -436,14 +461,23 @@ export const PUBLISH_PAGE = gql`
         valueNumber
         valueBoolean
         valueDate
-        itemId {
+        media {
+          url
+          caption
+        }
+        template {
           _id
           title
           slug
         }
-        media {
-          url
-          caption
+        page {
+          _id
+          title
+          slug
+        }
+        form {
+          _id
+          name
         }
         response {
           _id
@@ -452,6 +486,7 @@ export const PUBLISH_PAGE = gql`
             value
           }
         }
+        options
       }
     }
   }
