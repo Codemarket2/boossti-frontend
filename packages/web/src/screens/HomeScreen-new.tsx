@@ -188,7 +188,8 @@ export default function Album() {
     </>
   );
 }
-export const FormPage = ({ slug }: { slug: string }) => {
+
+export const FormPage = ({ slug, settings = {} }: { slug: string; settings?: any }) => {
   const { data, error } = useGetFormBySlug(slug);
 
   if (error || !data) {
@@ -198,5 +199,10 @@ export const FormPage = ({ slug }: { slug: string }) => {
   if (!data?.getFormBySlug) {
     return <NotFound />;
   }
-  return <FormView form={data.getFormBySlug} />;
+
+  return (
+    <FormView
+      form={{ ...data.getFormBySlug, settings: { ...data.getFormBySlug?.settings, ...settings } }}
+    />
+  );
 };

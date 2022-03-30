@@ -27,7 +27,7 @@ import { onAlert } from '../utils/alert';
 import InlineForm from '../components/template/InlineForm';
 import SeoOverlay from '../components/template/SeoOverlay';
 import { QRButton } from '../components/qrcode/QRButton';
-import TemplateFields from '../components/template/TemplateFields';
+import TemplateWidgets from '../components/template/TemplateWidgets';
 import EditMode from '../components/common/EditMode';
 import DeleteButton from '../components/common/DeleteButton';
 
@@ -222,7 +222,7 @@ export default function Screen({ slug }: IProps) {
               </>
             )}
           </Paper>
-          <TemplateFields template={data.getTemplateBySlug} previewMode={!authorized} />
+          <TemplateWidgets template={data.getTemplateBySlug} previewMode={!authorized} />
         </Grid>
         <Grid item xs>
           <Pages
