@@ -17,6 +17,7 @@ export default function TemplateFields({ template, previewMode }: IProps) {
         title="Widgets"
         previewMode={previewMode}
         isSection
+        showWidgetExpand
       />
     </div>
   );
