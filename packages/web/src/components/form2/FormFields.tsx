@@ -63,6 +63,7 @@ type IProps = {
   previewMode?: boolean;
   parentPageFields?: any;
   tabName?: string;
+  showWidgetExpand?: boolean;
 };
 
 export default function FormFields({
@@ -73,9 +74,11 @@ export default function FormFields({
   previewMode = false,
   parentPageFields = [],
   tabName = 'form',
+  showWidgetExpand = false,
 }: IProps): any {
   const [values, setValues] = useState(initialValues);
   const router = useRouter();
+  const [isExpanded, setIsExpanded] = useState<boolean[]>([]);
 
   function onDragEnd(result) {
     if (!result.destination) {
@@ -226,62 +229,71 @@ export default function FormFields({
               <Droppable droppableId="list">
                 {(provided, snapshot) => (
                   <div ref={provided.innerRef} {...provided.droppableProps}>
-                    {fields?.map((field: any, index: number) => (
-                      <>
-                        <Draggable key={field._id} draggableId={field._id} index={index}>
-                          {(draggableProvided, draggableSnapshot) => (
-                            <div>
-                              <ListItem
-                                button
-                                onClick={() => handleNavigate(field.label)}
-                                selected={
-                                  draggableSnapshot.isDragging || field?._id === values?.field?._id
-                                }
-                                ref={draggableProvided.innerRef}
-                                {...draggableProvided.draggableProps}
-                                {...draggableProvided.dragHandleProps}
-                              >
-                                <ListItemText
-                                  primary={field.label}
-                                  secondary={
-                                    !previewMode &&
-                                    ((field?.fieldType === 'form' && field?.form?.name) ||
-                                      field.fieldType)
+                    {fields?.map((field: any, index: number) => {
+                      const expanded = isExpanded[index] || false;
+                      return (
+                        <>
+                          <Draggable key={field._id} draggableId={field._id} index={index}>
+                            {(draggableProvided, draggableSnapshot) => (
+                              <div>
+                                <ListItem
+                                  button
+                                  onClick={() => handleNavigate(field.label)}
+                                  selected={
+                                    draggableSnapshot.isDragging ||
+                                    field?._id === values?.field?._id
                                   }
-                                />
-                                {!(previewMode || snapshot.isDraggingOver) && (
-                                  <ListItemSecondaryAction>
-                                    <IconButton
-                                      edge="end"
-                                      onClick={(event) =>
-                                        setValues({
-                                          ...initialValues,
-                                          showMenu: event.currentTarget,
-                                          field,
-                                        })
-                                      }
-                                    >
-                                      <MoreVertIcon />
-                                    </IconButton>
-                                  </ListItemSecondaryAction>
-                                )}
-                              </ListItem>
-                              {field?.fieldType === 'form' && (
-                                <Paper variant="outlined" className="p-2">
-                                  <DisplaySettings
-                                    fields={fields}
-                                    formId={field?.form?._id}
-                                    isSection={isSection}
-                                    key={field._id}
-                                    settings={field?.options.settings}
+                                  ref={draggableProvided.innerRef}
+                                  {...draggableProvided.draggableProps}
+                                  {...draggableProvided.dragHandleProps}
+                                >
+                                  <ListItemText
+                                    primary={field.label}
+                                    secondary={
+                                      !previewMode &&
+                                      ((field?.fieldType === 'form' && field?.form?.name) ||
+                                        field.fieldType)
+                                    }
                                   />
-                                </Paper>
-                              )}
-                            </div>
-                          )}
-                        </Draggable>
-                      </>
-                    ))}
+                                  {!(previewMode || snapshot.isDraggingOver) && (
+                                    <ListItemSecondaryAction>
+                                      {showWidgetExpand && (
+                                        <IconButton
+                                          edge="start"
+                                          onClick={(event) => {
+                                            setIsExpanded({
+                                              ...isExpanded,
+                                              [index]: !expanded,
+                                            });
+                                          }}
+                                        >
+                                          {expanded ? '\u25BC' : '\u25B6'}
+                                        </IconButton>
+                                      )}
+                                      <IconButton
+                                        edge="end"
+                                        onClick={(event) =>
+                                          setValues({
+                                            ...initialValues,
+                                            showMenu: event.currentTarget,
+                                            field,
+                                          })
+                                        }
+                                      >
+                                        <MoreVertIcon />
+                                      </IconButton>
+                                    </ListItemSecondaryAction>
+                                  )}
+                                </ListItem>
+                                {field?.fieldType === 'form' && expanded && (
+                                  <DisplaySettings field={field} />
+                                )}
+                              </div>
+                            )}
+                          </Draggable>
+                        </>
+                      );
+                    })}
                     {provided.placeholder}
                   </div>
                 )}
