@@ -1,11 +1,11 @@
 import { useState, useEffect, useMemo } from 'react';
 import DataGrid from 'react-data-grid';
-import { Tooltip, Box } from '@material-ui/core';
+import { Tooltip, Box } from '@mui/material';
 import type { Column } from 'react-data-grid';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import IconButton from '@material-ui/core/IconButton';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import IconButton from '@mui/material/IconButton';
 import WorkFlowView from './WorkFlowView';
 
 interface Row2 {
@@ -65,6 +65,7 @@ export default function TreeView({ field, treeDepth }: IProps) {
                       const newR = toggleSubRow(rows, row.id);
                       setRows(newR);
                     }}
+                    size="large"
                   >
                     {row.isExpanded ? '\u25BC' : '\u25B6'}
                   </IconButton>

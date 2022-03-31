@@ -1,12 +1,12 @@
-import Drawer from '@material-ui/core/Drawer';
-import TextField from '@material-ui/core/TextField';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import IconButton from '@material-ui/core/IconButton';
-import Close from '@material-ui/icons/Close';
-import Refresh from '@material-ui/icons/Refresh';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
+import Drawer from '@mui/material/Drawer';
+import TextField from '@mui/material/TextField';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import IconButton from '@mui/material/IconButton';
+import Close from '@mui/icons-material/Close';
+import Refresh from '@mui/icons-material/Refresh';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import InputGroup from '../common/InputGroup';
 import { defaultStyles } from './defaultStyles';
 

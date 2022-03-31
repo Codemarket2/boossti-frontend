@@ -1,13 +1,13 @@
 import React, { useState, memo } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import MoreHoriz from '@material-ui/icons/MoreHoriz';
-import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import IconButton from '@material-ui/core/IconButton';
+import MoreHoriz from '@mui/icons-material/MoreHoriz';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import IconButton from '@mui/material/IconButton';
 
 const initialFields = [
   { _id: '1', label: 'Email', fieldType: 'string' },
@@ -39,7 +39,7 @@ function Quote({ field, index }) {
           </ListItemIcon>
           <ListItemText primary={field.label} secondary={field.fieldType} />
           <ListItemSecondaryAction>
-            <IconButton edge="end">
+            <IconButton edge="end" size="large">
               <MoreHoriz />
             </IconButton>
           </ListItemSecondaryAction>

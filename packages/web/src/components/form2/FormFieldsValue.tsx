@@ -1,11 +1,11 @@
-// import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
+// import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
 import { generateObjectId } from '@frontend/shared/utils/objectId';
-import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
-import EditIcon from '@material-ui/icons/Edit';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+import EditIcon from '@mui/icons-material/Edit';
 import { useEffect, useState } from 'react';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { WidthProvider, Responsive } from 'react-grid-layout';
 import CRUDMenu from '../common/CRUDMenu';
 import { FormView } from './FormView';
@@ -168,6 +168,7 @@ export default function FormFieldsValue({
                                 onClick={(e) =>
                                   setState({ ...initialState, field, showForm: true })
                                 }
+                                size="large"
                               >
                                 <AddCircleIcon fontSize="small" />
                               </IconButton>
@@ -187,6 +188,7 @@ export default function FormFieldsValue({
                               onClick={(e) =>
                                 setState({ ...initialState, showMenu: e.target, field, value })
                               }
+                              size="large"
                             >
                               <EditIcon fontSize="small" />
                             </IconButton>
@@ -246,6 +248,7 @@ export default function FormFieldsValue({
                                     onClick={(e) =>
                                       setState({ ...initialState, field, showForm: true })
                                     }
+                                    size="large"
                                   >
                                     <AddCircleIcon fontSize="small" />
                                   </IconButton>
@@ -265,6 +268,7 @@ export default function FormFieldsValue({
                                   onClick={(e) =>
                                     setState({ ...initialState, showMenu: e.target, field, value })
                                   }
+                                  size="large"
                                 >
                                   <EditIcon fontSize="small" />
                                 </IconButton>

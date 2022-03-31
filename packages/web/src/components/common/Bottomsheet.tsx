@@ -1,5 +1,5 @@
-import Drawer from '@material-ui/core/Drawer';
-import Hidden from '@material-ui/core/Hidden';
+import Drawer from '@mui/material/Drawer';
+import Hidden from '@mui/material/Hidden';
 import { ReactNode } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateSettingAction } from '@frontend/shared/redux/actions/setting';

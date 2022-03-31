@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container } from '@material-ui/core';
+import { Container } from '@mui/material';
 import { useGetComment } from '@frontend/shared/hooks/comment/getComment';
 import Comment from '../components/comment/Comment';
 import PostCardSkeleton from '../components/post/PostCardSkeleton';

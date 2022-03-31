@@ -1,5 +1,5 @@
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
+import TextField from '@mui/material/TextField';
 import { useSignUp, useSignIn } from '@frontend/shared/hooks/auth';
 import LoadingButton from '../common/LoadingButton';
 import VerifyEmailForm from './VerifyEmailForm';

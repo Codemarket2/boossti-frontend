@@ -6,18 +6,18 @@ import {
 } from '@frontend/shared/hooks/template';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-import Grid from '@material-ui/core/Grid';
-import EditIcon from '@material-ui/icons/Edit';
-import StarOutlineIcon from '@material-ui/icons/StarOutline';
-import StarIcon from '@material-ui/icons/Star';
-import Share from '@material-ui/icons/Share';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import Grid from '@mui/material/Grid';
+import EditIcon from '@mui/icons-material/Edit';
+import StarOutlineIcon from '@mui/icons-material/StarOutline';
+import StarIcon from '@mui/icons-material/Star';
+import Share from '@mui/icons-material/Share';
 import { useAuthorization } from '@frontend/shared/hooks/auth';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 import Breadcrumbs from '../components/common/Breadcrumbs';
 import ErrorLoading from '../components/common/ErrorLoading';
 import Pages from '../components/template/Pages';
@@ -101,7 +101,10 @@ export default function Screen({ slug }: IProps) {
           {authorized && <EditMode />}
           <QRButton />
           <Tooltip title="Copy page link">
-            <IconButton onClick={() => navigator.clipboard.writeText(window?.location?.href)}>
+            <IconButton
+              onClick={() => navigator.clipboard.writeText(window?.location?.href)}
+              size="large"
+            >
               <Share />
             </IconButton>
           </Tooltip>
@@ -118,6 +121,7 @@ export default function Screen({ slug }: IProps) {
                     showInMenu: !data.getTemplateBySlug?.showInMenu,
                   })
                 }
+                size="large"
               >
                 {data.getTemplateBySlug?.showInMenu ? (
                   <StarIcon color="primary" />
@@ -178,6 +182,7 @@ export default function Screen({ slug }: IProps) {
                           setFormValues(data.getTemplateBySlug);
                           setState({ ...initialState, fieldName: 'title' });
                         }}
+                        size="large"
                       >
                         <EditIcon fontSize="small" />
                       </IconButton>

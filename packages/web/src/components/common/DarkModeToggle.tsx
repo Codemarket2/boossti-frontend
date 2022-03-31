@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
-import ListItem from '@material-ui/core/ListItem';
+import ListItem from '@mui/material/ListItem';
 import { useSelector, useDispatch } from 'react-redux';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import Brightness4 from '@material-ui/icons/Brightness4';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import Switch from '@mui/material/Switch';
+import Brightness4 from '@mui/icons-material/Brightness4';
 import { toggleDarkMode } from '@frontend/shared/redux/actions/auth';
-import IOSSwitch from './IOSSwitch';
 
 export const useDarkMode = () => {
   const { darkMode } = useSelector((state: any) => state.auth);
@@ -38,7 +38,7 @@ export default function DarkModeToggle() {
       </ListItemIcon>
       <ListItemText primary="Dark Mode" />
       <ListItemSecondaryAction>
-        <IOSSwitch onChange={handleToggleDarkMode} checked={darkMode} name="darkMode" />
+        <Switch onChange={handleToggleDarkMode} checked={darkMode} name="darkMode" />
       </ListItemSecondaryAction>
     </ListItem>
   );

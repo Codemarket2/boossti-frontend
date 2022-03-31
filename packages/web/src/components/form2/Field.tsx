@@ -1,13 +1,14 @@
 import moment from 'moment';
-import TextField from '@material-ui/core/TextField';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import MomentUtils from '@date-io/moment';
-import { MuiPickersUtilsProvider, DateTimePicker, DatePicker } from '@material-ui/pickers';
+import TextField from '@mui/material/TextField';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormHelperText from '@mui/material/FormHelperText';
+import AdapterMoment from '@mui/lab/AdapterMoment';
+import DateTimePicker from '@mui/lab/DateTimePicker';
+import DatePicker from '@mui/lab/DatePicker';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import PhoneInput from 'react-phone-input-2';
 import { validateValue } from '@frontend/shared/utils/validate';
-import ImagePicker from '../common/ImagePicker';
 import RichTextarea from '../common/RichTextarea2';
 import DisplayRichText from '../common/DisplayRichText';
 import SelectPage from '../template/SelectPage';
@@ -75,40 +76,64 @@ export default function Field({
     }
     case 'date': {
       return (
-        <MuiPickersUtilsProvider libInstance={moment} utils={MomentUtils}>
+        <LocalizationProvider
+          dateAdapter={AdapterMoment}
+          //  libInstance={moment} utils={MomentUtils}
+        >
           <DatePicker
             disabled={disabled}
-            fullWidth
-            size="small"
-            inputVariant="outlined"
-            placeholder={moment().format('L')}
-            format="MM/DD/YYYY"
+            // fullWidth
+            // size="small"
+            // inputVariant="outlined"
+            // placeholder={moment().format('L')}
+            inputFormat="MM/DD/YYYY"
             value={value && value?.valueDate ? moment(value.valueDate) : null}
             onChange={(newValue) => onChange({ field: _id, valueDate: moment(newValue) })}
-            animateYearScrolling
-            error={validation.error}
-            helperText={validation.errorMessage}
+            // animateYearScrolling
+            renderInput={(props) => (
+              <TextField
+                {...props}
+                fullWidth
+                size="small"
+                variant="outlined"
+                placeholder={moment().format('L')}
+                error={validation.error}
+                helperText={validation.errorMessage}
+              />
+            )}
           />
-        </MuiPickersUtilsProvider>
+        </LocalizationProvider>
       );
     }
     case 'dateTime': {
       return (
-        <MuiPickersUtilsProvider libInstance={moment} utils={MomentUtils}>
+        <LocalizationProvider
+          dateAdapter={AdapterMoment}
+          //  libInstance={moment} utils={MomentUtils}
+        >
           <DateTimePicker
             disabled={disabled}
-            fullWidth
-            size="small"
-            inputVariant="outlined"
-            placeholder={moment().format('L')}
-            format="lll"
+            // fullWidth
+            // size="small"
+            // inputVariant="outlined"
+            // placeholder={moment().format('L')}
+            inputFormat="lll"
             value={value && value?.valueDate ? moment(value.valueDate) : null}
             onChange={(newValue) => onChange({ field: _id, valueDate: moment(newValue) })}
-            animateYearScrolling
-            error={validation.error}
-            helperText={validation.errorMessage}
+            // animateYearScrolling
+            renderInput={(props) => (
+              <TextField
+                {...props}
+                fullWidth
+                size="small"
+                variant="outlined"
+                placeholder={moment().format('L')}
+                error={validation.error}
+                helperText={validation.errorMessage}
+              />
+            )}
           />
-        </MuiPickersUtilsProvider>
+        </LocalizationProvider>
       );
     }
     case 'richTextarea': {

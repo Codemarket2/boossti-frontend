@@ -1,13 +1,14 @@
-import React from 'react';
+/* eslint-disable camelcase */
 import { useEffect, useState, useMemo, useRef } from 'react';
-import TextField from '@material-ui/core/TextField';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@mui/material/TextField';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 import apiKeys from '@frontend/shared/config/apiKeys';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import throttle from 'lodash/throttle';
-import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
+import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
+import { styled } from '@mui/material/styles';
 
 const filter = createFilterOptions();
 
@@ -25,11 +26,9 @@ function loadScript(src: string, position: HTMLElement | null, id: string) {
 
 const autocompleteService = { current: null };
 
-const useStyles = makeStyles((theme) => ({
-  icon: {
-    color: theme.palette.text.secondary,
-    marginRight: theme.spacing(2),
-  },
+const StyledLocationOnIcon = styled(LocationOnIcon)(({ theme }) => ({
+  color: theme.palette.text.secondary,
+  marginRight: theme.spacing(2),
 }));
 
 interface PlaceType {
@@ -53,7 +52,6 @@ interface IProps {
 }
 
 export default function GoogleMaps({ value, label, onChange }: IProps) {
-  const classes = useStyles();
   const [inputValue, setInputValue] = useState('');
   const [options, setOptions] = useState([]);
   const loaded = useRef(false);
@@ -152,11 +150,11 @@ export default function GoogleMaps({ value, label, onChange }: IProps) {
       renderInput={(params) => (
         <TextField {...params} label={label || 'Address'} variant="outlined" fullWidth />
       )}
-      renderOption={(option) => {
+      renderOption={(option: any) => {
         return (
           <Grid container alignItems="center">
             <Grid item>
-              <LocationOnIcon className={classes.icon} />
+              <StyledLocationOnIcon />
             </Grid>
             <Grid item xs>
               <span className="font-weight-bold">{option.structured_formatting.main_text}</span>

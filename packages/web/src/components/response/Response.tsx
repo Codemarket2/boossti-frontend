@@ -5,14 +5,14 @@ import { useDeleteResponse, useGetResponse } from '@frontend/shared/hooks/respon
 import { getPage } from '@frontend/shared/hooks/template/pages';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 import { useUpdateSection } from '@frontend/shared/hooks/section';
-import EditIcon from '@material-ui/icons/Edit';
+import EditIcon from '@mui/icons-material/Edit';
 import { useAuthorization } from '@frontend/shared/hooks/auth';
-import ListItemText from '@material-ui/core/ListItemText';
+import ListItemText from '@mui/material/ListItemText';
 import moment from 'moment';
-import { Paper, Box, Grid, List, ListItem, IconButton, Tooltip } from '@material-ui/core';
-import styled from 'styled-components';
+import { Paper, Box, Grid, List, ListItem, IconButton, Tooltip } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import EditResponseDrawer from './EditResponseDrawer';
 import Breadcrumbs from '../common/Breadcrumbs';
 import DisplayValue from '../form2/DisplayValue';
@@ -28,12 +28,13 @@ import CRUDMenu from '../common/CRUDMenu';
 import BackdropComponent from '../common/Backdrop';
 import EditMode from '../common/EditMode';
 
-const StyledBox = styled(Box)`
-  flex-direction: column !important;
-  ${(props) => props.theme.breakpoints.up('md')} {
-    flex-direction: row !important;
-  }
-`;
+const StyledBox = styled(Box)(({ theme }) => ({
+  flexDirection: 'column',
+  [theme.breakpoints.up('md')]: {
+    flexDirection: 'row !important',
+  },
+}));
+
 interface IProps {
   responseId: string;
   hideBreadcrumbs?: boolean;
@@ -178,7 +179,10 @@ export function ResponseChild3({
             )}
             {authorized && (
               <Tooltip title="Edit Response">
-                <IconButton onClick={(e) => setState({ ...state, showMenu: e.currentTarget })}>
+                <IconButton
+                  onClick={(e) => setState({ ...state, showMenu: e.currentTarget })}
+                  size="large"
+                >
                   <EditIcon />
                 </IconButton>
               </Tooltip>
@@ -188,7 +192,10 @@ export function ResponseChild3({
       ) : (
         authorized && (
           <Tooltip title="Edit Response">
-            <IconButton onClick={(e) => setState({ ...state, showMenu: e.currentTarget })}>
+            <IconButton
+              onClick={(e) => setState({ ...state, showMenu: e.currentTarget })}
+              size="large"
+            >
               <EditIcon />
             </IconButton>
           </Tooltip>

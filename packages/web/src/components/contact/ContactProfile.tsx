@@ -1,11 +1,11 @@
 import React from 'react';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import IconButton from '@material-ui/core/IconButton';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
+import IconButton from '@mui/material/IconButton';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import { useGetContact, useDeleteContact } from '@frontend/shared/hooks/contact';
 import Loading from '../common/Loading';
@@ -45,7 +45,7 @@ export default function ContactProfile({ _id }: IProps) {
       <CardHeader
         action={
           <>
-            <IconButton aria-label="settings" onClick={handleClick}>
+            <IconButton aria-label="settings" onClick={handleClick} size="large">
               <MoreVertIcon />
             </IconButton>
             <CRUDMenu

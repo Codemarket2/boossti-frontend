@@ -1,17 +1,17 @@
 import { Fragment, useState } from 'react';
 import { useRouter } from 'next/router';
-import Paper from '@material-ui/core/Paper';
-import Divider from '@material-ui/core/Divider';
-import Tooltip from '@material-ui/core/Tooltip';
-import List from '@material-ui/core/List';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
+import Paper from '@mui/material/Paper';
+import Divider from '@mui/material/Divider';
+import Tooltip from '@mui/material/Tooltip';
+import List from '@mui/material/List';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
 import Link from 'next/link';
-import AddIcon from '@material-ui/icons/Add';
+import AddIcon from '@mui/icons-material/Add';
 import { getCreatedAtDate } from '@frontend/shared/utils/date';
 import { useSelector } from 'react-redux';
 import {

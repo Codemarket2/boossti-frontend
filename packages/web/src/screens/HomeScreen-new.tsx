@@ -1,20 +1,87 @@
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import Link from '@material-ui/core/Link';
-import StarIcon from '@material-ui/icons/Star';
-import CardHeader from '@material-ui/core/CardHeader';
+import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Link from '@mui/material/Link';
+// import StarIcon from '@mui/icons-material/Star';
+// import CardHeader from '@mui/material/CardHeader';
 import { useGetFormBySlug } from '@frontend/shared/hooks/form';
 import AppBar from '../components/common/AppBar';
 import ErrorLoading from '../components/common/ErrorLoading';
 import FormView from '../components/form2/FormView';
 import NotFound from '../components/common/NotFound';
+
+const PREFIX = 'FormPage';
+
+const classes = {
+  icon: `${PREFIX}-icon`,
+  heroContent: `${PREFIX}-heroContent`,
+  heroButtons: `${PREFIX}-heroButtons`,
+  cardGrid: `${PREFIX}-cardGrid`,
+  card: `${PREFIX}-card`,
+  cardMedia: `${PREFIX}-cardMedia`,
+  cardContent: `${PREFIX}-cardContent`,
+  cardHeader: `${PREFIX}-cardHeader`,
+  cardPricing: `${PREFIX}-cardPricing`,
+  footer: `${PREFIX}-footer`,
+};
+
+const StyledFormView = styled(FormView)(({ theme }) => ({
+  [`& .${classes.icon}`]: {
+    marginRight: theme.spacing(2),
+  },
+
+  [`& .${classes.heroContent}`]: {
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(8, 0, 6),
+  },
+
+  [`& .${classes.heroButtons}`]: {
+    marginTop: theme.spacing(4),
+  },
+
+  [`& .${classes.cardGrid}`]: {
+    paddingTop: theme.spacing(8),
+    paddingBottom: theme.spacing(8),
+  },
+
+  [`& .${classes.card}`]: {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+
+  [`& .${classes.cardMedia}`]: {
+    // paddingTop: '56.25%', // 16:9
+    paddingTop: '100%',
+  },
+
+  [`& .${classes.cardContent}`]: {
+    flexGrow: 1,
+  },
+
+  [`& .${classes.cardHeader}`]: {
+    backgroundColor:
+      theme.palette.mode === 'light' ? theme.palette.grey[200] : theme.palette.grey[700],
+  },
+
+  [`& .${classes.cardPricing}`]: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'baseline',
+    marginBottom: theme.spacing(2),
+  },
+
+  [`& .${classes.footer}`]: {
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(6),
+  },
+}));
 
 function Copyright() {
   return (
@@ -28,49 +95,6 @@ function Copyright() {
     </Typography>
   );
 }
-
-const useStyles = makeStyles((theme) => ({
-  icon: {
-    marginRight: theme.spacing(2),
-  },
-  heroContent: {
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(8, 0, 6),
-  },
-  heroButtons: {
-    marginTop: theme.spacing(4),
-  },
-  cardGrid: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8),
-  },
-  card: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  cardMedia: {
-    // paddingTop: '56.25%', // 16:9
-    paddingTop: '100%',
-  },
-  cardContent: {
-    flexGrow: 1,
-  },
-  cardHeader: {
-    backgroundColor:
-      theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[700],
-  },
-  cardPricing: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'baseline',
-    marginBottom: theme.spacing(2),
-  },
-  footer: {
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(6),
-  },
-}));
 
 const cards = [
   {
@@ -124,41 +148,41 @@ const tiers = [
 ];
 
 export default function Album() {
-  const classes = useStyles();
-
   return (
     <>
       <AppBar />
       <main>
         <div className={classes.heroContent}>
           <Container className={classes.cardGrid} maxWidth="md">
-            <Grid container spacing={6}>
+            <Grid container spacing={1}>
               <Grid xs={12} sm={12} md={6} lg={6}>
-                {cards2.map((card, i) => (
-                  <Grid item key={i}>
-                    <Card className={classes.card}>
-                      <CardMedia
-                        className={classes.cardMedia}
-                        image={card.image}
-                        title={card.title}
-                      />
-                      <CardContent className={classes.cardContent}>
-                        <Typography gutterBottom variant="h5" component="h2">
-                          {card.title}
-                        </Typography>
-                        <Typography>{card.description}</Typography>
-                      </CardContent>
-                      <CardActions>
-                        <Button size="small" color="primary">
-                          805-300-7217
-                        </Button>
-                        <Button size="small" color="primary">
-                          sumi@boossti.com
-                        </Button>
-                      </CardActions>
-                    </Card>
-                  </Grid>
-                ))}
+                <Grid container className="mt-5">
+                  {cards2.map((card, i) => (
+                    <Grid item key={i}>
+                      <Card className={classes.card}>
+                        <CardMedia
+                          className={classes.cardMedia}
+                          image={card.image}
+                          title={card.title}
+                        />
+                        <CardContent className={classes.cardContent}>
+                          <Typography gutterBottom variant="h5" component="h2">
+                            {card.title}
+                          </Typography>
+                          <Typography>{card.description}</Typography>
+                        </CardContent>
+                        <CardActions>
+                          <Button size="small" color="primary">
+                            805-300-7217
+                          </Button>
+                          <Button size="small" color="primary">
+                            sumi@boossti.com
+                          </Button>
+                        </CardActions>
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
               </Grid>
               <Grid item xs={12} sm={12} md={6} lg={6}>
                 <div className="text-center">
@@ -198,5 +222,5 @@ export const FormPage = ({ slug }: { slug: string }) => {
   if (!data?.getFormBySlug) {
     return <NotFound />;
   }
-  return <FormView form={data.getFormBySlug} />;
+  return <StyledFormView form={data.getFormBySlug} />;
 };

@@ -1,32 +1,34 @@
+import * as React from 'react';
 import { useEffect } from 'react';
-import { ThemeProvider as StyledProvider } from 'styled-components';
+// import { ThemeProvider as StyledProvider } from 'styled-components';
 import { AppProps } from 'next/app';
 import Amplify, { Hub } from 'aws-amplify';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { ApolloProvider } from '@apollo/client/react';
 import { client, guestClient } from '@frontend/shared/graphql';
+import { setDefaultThemeAction } from '@frontend/shared/redux/actions/setting';
 import awsExports from '@frontend/shared/aws-exports';
 import { store } from '@frontend/shared/redux';
 import { useLogoHook } from '@frontend/shared/hooks/metaTags';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import CssBaseline from '@mui/material/CssBaseline';
 import { useCurrentAuthenticatedUser } from '@frontend/shared/hooks/auth';
-import { createMuiTheme, ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
+import { createTheme, ThemeProvider as MuiThemeProvider, adaptV4Theme } from '@mui/material/styles';
+import { CacheProvider, EmotionCache } from '@emotion/react';
+import GlobalStyles from '@mui/material/GlobalStyles';
 import LoadingBar from '../src/components/common/LoadingBar';
 import Head from '../src/components/common/Head';
-import { light, dark } from '../src/utils/theme/palette';
-import { typography } from '../src/utils/theme/typography';
-import GlobalStyle from '../src/utils/GlobalStyle';
+import { useOneSignal } from '../src/components/notification/onesignal';
+import { setDefaultTheme } from '../src/components/customMUI/commonFunc';
+import createEmotionCache from '../src/utils/createEmotionCache';
+// import { light, dark } from '../src/utils/theme/palette';
+// import { typography } from '../src/utils/theme/typography';
+// import GlobalStyle from '../src/utils/GlobalStyle';
 
 // // CSS from node modules
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import '../src/assets/css/ckeditor.css';
 import '../src/assets/css/common.css';
-
-import { useOneSignal } from '../src/components/notification/onesignal';
-import { useState } from 'react';
-import { setDefaultTheme } from '../src/components/customMUI/commonFunc';
-import { setDefaultThemeAction } from '@frontend/shared/redux/actions/setting';
 
 const customsSignInUrl =
   process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : 'https://www.boossti.com/';
@@ -45,7 +47,14 @@ Amplify.configure({
   },
 });
 
-function App({ Component, pageProps }: AppProps) {
+interface MyAppProps extends AppProps {
+  emotionCache?: EmotionCache;
+}
+
+// Client-side cache, shared for the whole session of the user in the browser.
+const clientSideEmotionCache = createEmotionCache();
+
+function App({ Component, pageProps, emotionCache = clientSideEmotionCache }: MyAppProps) {
   const { getUser } = useCurrentAuthenticatedUser();
   const { darkMode, authenticated } = useSelector(({ auth }: any) => auth);
   const settings = useSelector(({ setting }: any) => setting);
@@ -54,14 +63,14 @@ function App({ Component, pageProps }: AppProps) {
   useOneSignal();
   useLogoHook();
 
-  let theme = createMuiTheme(settings.theme);
+  const theme = createTheme(adaptV4Theme(settings.theme));
 
   useEffect(() => {
     setDefaultTheme().then((res: any) => dispatch(setDefaultThemeAction(res)));
-    const jssStyles = document.querySelector('#jss-server-side');
-    if (jssStyles && jssStyles.parentNode) {
-      jssStyles.parentNode.removeChild(jssStyles);
-    }
+    // const jssStyles = document.querySelector('#jss-server-side');
+    // if (jssStyles && jssStyles.parentNode) {
+    //   jssStyles.parentNode.removeChild(jssStyles);
+    // }
     Hub.listen('auth', ({ payload: { event } }) => {
       switch (event) {
         case 'signIn':
@@ -82,17 +91,26 @@ function App({ Component, pageProps }: AppProps) {
   }, []);
 
   return (
-    <ApolloProvider client={authenticated ? client : guestClient}>
-      <MuiThemeProvider theme={theme}>
-        <StyledProvider theme={theme}>
+    <CacheProvider value={emotionCache}>
+      <ApolloProvider client={authenticated ? client : guestClient}>
+        <MuiThemeProvider theme={theme}>
           <Head />
           <LoadingBar />
           <CssBaseline />
-          <GlobalStyle />
+          <GlobalStyles
+            styles={{
+              button: {
+                outline: 'none !important',
+              },
+              '.ck-balloon-panel_caret_se': {
+                zIndex: '99991 !important',
+              },
+            }}
+          />
           <Component {...pageProps} />
-        </StyledProvider>
-      </MuiThemeProvider>
-    </ApolloProvider>
+        </MuiThemeProvider>
+      </ApolloProvider>
+    </CacheProvider>
   );
 }
 

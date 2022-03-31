@@ -1,5 +1,5 @@
 import { fileUpload } from '@frontend/shared/utils/fileUpload';
-import Skeleton from '@material-ui/lab/Skeleton';
+import Skeleton from '@mui/material/Skeleton';
 import { useEffect, useRef, useState } from 'react';
 import { client } from '@frontend/shared/graphql';
 import { GET_MENTION_ITEMS } from '@frontend/shared/graphql/query/template';

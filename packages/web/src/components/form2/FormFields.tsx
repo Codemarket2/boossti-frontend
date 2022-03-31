@@ -1,23 +1,23 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/jsx-props-no-spreading */
-import Divider from '@material-ui/core/Divider';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import GridIcon from '@material-ui/icons/GridOn';
-import EditIcon from '@material-ui/icons/Edit';
-import SettingsIcon from '@material-ui/icons/Settings';
-// import ShareIcon from '@material-ui/icons/Share';
-// import FileCopyIcon from '@material-ui/icons/FileCopy';
+import Divider from '@mui/material/Divider';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import GridIcon from '@mui/icons-material/GridOn';
+import EditIcon from '@mui/icons-material/Edit';
+import SettingsIcon from '@mui/icons-material/Settings';
+// import ShareIcon from '@mui/icons-material/Share';
+// import FileCopyIcon from '@mui/icons-material/FileCopy';
 // import { generateObjectId } from '@frontend/shared/utils/objectId';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { useState } from 'react';
@@ -207,6 +207,7 @@ export default function FormFields({
                     <IconButton
                       color="primary"
                       onClick={() => setValues({ ...initialValues, showForm: true })}
+                      size="large"
                     >
                       <AddCircleIcon />
                     </IconButton>
@@ -266,6 +267,7 @@ export default function FormFields({
                                               [index]: !expanded,
                                             });
                                           }}
+                                          size="large"
                                         >
                                           {expanded ? '\u25BC' : '\u25B6'}
                                         </IconButton>
@@ -280,6 +282,7 @@ export default function FormFields({
                                               field,
                                             })
                                           }
+                                          size="large"
                                         >
                                           <MoreVertIcon />
                                         </IconButton>

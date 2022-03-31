@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import Tabs from '@material-ui/core/Tabs';
+import Tabs from '@mui/material/Tabs';
 import { useMention } from '@frontend/shared/hooks/template';
-import Skeleton from '@material-ui/lab/Skeleton';
-import Chip from '@material-ui/core/Chip';
+import Skeleton from '@mui/material/Skeleton';
+import Chip from '@mui/material/Chip';
 import ErrorLoading from '../common/ErrorLoading';
 import SelectTag from '../post/SelectTag';
 
@@ -18,7 +18,7 @@ export default function TagTabs({ handleSelectTag }: any) {
   if (error || !data || !data.getTemplates) {
     return (
       <ErrorLoading error={error}>
-        <Skeleton variant="rect" height={50} />
+        <Skeleton variant="rectangular" height={50} />
       </ErrorLoading>
     );
   }

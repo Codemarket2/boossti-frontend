@@ -1,12 +1,12 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/jsx-props-no-spreading */
-import Divider from '@material-ui/core/Divider';
-import Typography from '@material-ui/core/Typography';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-import TextField from '@material-ui/core/TextField';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import RefreshIcon from '@material-ui/icons/Refresh';
+import Divider from '@mui/material/Divider';
+import Typography from '@mui/material/Typography';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import TextField from '@mui/material/TextField';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 type TProps = {
   field: any;
@@ -44,13 +44,13 @@ export default function EditFieldGrid({ onFieldChange, field, onClose }: TProps)
     <>
       <Typography variant="h5" className="d-flex align-items-center">
         <Tooltip title="Go Back">
-          <IconButton onClick={onClose}>
+          <IconButton onClick={onClose} size="large">
             <ArrowBackIcon />
           </IconButton>
         </Tooltip>
         {field.label}
         <Tooltip title="Reset">
-          <IconButton onClick={handleReset}>
+          <IconButton onClick={handleReset} size="large">
             <RefreshIcon />
           </IconButton>
         </Tooltip>

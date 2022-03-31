@@ -1,10 +1,10 @@
 import { useCreateBulkResponse } from '@frontend/shared/hooks/response';
 import { useState } from 'react';
-import Typography from '@material-ui/core/Typography';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import { Button } from '@material-ui/core';
+import Typography from '@mui/material/Typography';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { Button } from '@mui/material';
 import * as XLSX from 'xlsx';
 import BulkUploadForm from './BulkUploadForm';
 import { fileUpload } from '../../../../shared/utils/fileUpload';
@@ -103,7 +103,11 @@ export default function BulkUploadAction({ form }: IProps) {
         File Upload ( .xlsx, .csv, .xls)
         {!state.showForm && (
           <Tooltip title="Add File Upload Action">
-            <IconButton color="primary" onClick={() => setState({ ...state, showForm: true })}>
+            <IconButton
+              color="primary"
+              onClick={() => setState({ ...state, showForm: true })}
+              size="large"
+            >
               <AddCircleIcon />
             </IconButton>
           </Tooltip>

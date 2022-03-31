@@ -1,40 +1,40 @@
 import React, { useEffect } from 'react';
-import {
-  TextField,
-  InputAdornment,
-  Popover,
-  makeStyles,
-  Theme,
-  createStyles,
-} from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import { TextField, InputAdornment, Popover, Theme } from '@mui/material';
 import { ChromePicker } from 'react-color';
 import MaterialColorPicker from './MaterialColorPicker';
 import { colorFromString } from './utils';
 
-export const ThemeValueChangeEvent = () => new Event('change-save-point');
+const PREFIX = 'ThemeValueChangeEvent';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    popoverPaper: {
-      display: 'flex',
-      flexDirection: 'column',
-      borderRadius: 0,
-      alignItems: 'center',
-    },
-    colorSampleAdornment: {
-      width: '1em',
-      height: '1em',
-      border: '1px solid grey',
-    },
-  }),
-);
+const classes = {
+  popoverPaper: `${PREFIX}-popoverPaper`,
+  colorSampleAdornment: `${PREFIX}-colorSampleAdornment`,
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')(({ theme }) => ({
+  [`& .${classes.popoverPaper}`]: {
+    display: 'flex',
+    flexDirection: 'column',
+    borderRadius: 0,
+    alignItems: 'center',
+  },
+
+  [`& .${classes.colorSampleAdornment}`]: {
+    width: '1em',
+    height: '1em',
+    border: '1px solid grey',
+  },
+}));
+
+export const ThemeValueChangeEvent = () => new Event('change-save-point');
 
 /**
  * The base TextField input for selecting colors.
  * onClick opens a popover with components to help pick colors
  */
 export default function ColorInput({ label, color, onColorChange }) {
-  const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<Element | null>(null);
 
   const handleOpenPopover = (event: React.MouseEvent) => {
@@ -130,13 +130,13 @@ function ColorPicker({ color, onChangeComplete }) {
   };
 
   return (
-    <>
+    <Root>
       <MaterialColorPicker color={inputValue} onChangeComplete={onChangeComplete} />
       <ChromePicker
         color={inputValue}
         onChange={handleChange}
         onChangeComplete={handleChangeComplete}
       />
-    </>
+    </Root>
   );
 }

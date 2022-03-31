@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { useTheme } from '@material-ui/core/styles';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
 import SignUpForm from '../components/auth/SignUpForm';
 import SignInForm from '../components/auth/SignInForm';
 
@@ -13,7 +13,7 @@ interface IProps {
 const AuthScreen = ({ signinSuccessCallback }: IProps) => {
   const [value, setValue] = useState<string>('Sign-In');
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.down('xs'));
+  const matches = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleChange = (event: any, newValue: string) => {
     setValue(newValue);

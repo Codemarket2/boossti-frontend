@@ -1,15 +1,15 @@
-import List from '@material-ui/core/List';
-import Paper from '@material-ui/core/Paper';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Typography from '@material-ui/core/Typography';
-import Tooltip from '@material-ui/core/Tooltip';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import IconButton from '@material-ui/core/IconButton';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
+import List from '@mui/material/List';
+import Paper from '@mui/material/Paper';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
+import Tooltip from '@mui/material/Tooltip';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import IconButton from '@mui/material/IconButton';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { useState } from 'react';
 import ActionForm from './ActionForm';
 import CRUDMenu from '../common/CRUDMenu';
@@ -50,7 +50,11 @@ export default function Actions({ fields, settings, onChange }: IProps) {
         Actions
         {!state.showForm && (
           <Tooltip title="Add New Action">
-            <IconButton color="primary" onClick={() => setState({ ...state, showForm: true })}>
+            <IconButton
+              color="primary"
+              onClick={() => setState({ ...state, showForm: true })}
+              size="large"
+            >
               <AddCircleIcon />
             </IconButton>
           </Tooltip>
@@ -92,6 +96,7 @@ export default function Actions({ fields, settings, onChange }: IProps) {
                       selectedItem: action,
                     })
                   }
+                  size="large"
                 >
                   <MoreVertIcon />
                 </IconButton>

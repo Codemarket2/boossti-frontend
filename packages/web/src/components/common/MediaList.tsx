@@ -1,11 +1,11 @@
-import IconButton from '@material-ui/core/IconButton';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import HighlightOff from '@material-ui/icons/HighlightOff';
+import IconButton from '@mui/material/IconButton';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import HighlightOff from '@mui/icons-material/HighlightOff';
 import MentionInput from '../common/MentionInput';
 import MentionParser from '../common/MentionParser';
-import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useEffect, useState } from 'react';
 
 interface IProps {
@@ -65,6 +65,7 @@ export const Media = ({ url, isVideo = false, selected, setSelected }: IMediaPro
               onClick={() => setIsSelected(!isSelected)}
               className="position-absolute p-0 bg-white ml-2 mt-2"
               edge="end"
+              size="large"
             >
               {isSelected ? <CheckCircleIcon /> : <RadioButtonUncheckedIcon />}
             </IconButton>
@@ -81,6 +82,7 @@ export const Media = ({ url, isVideo = false, selected, setSelected }: IMediaPro
               onClick={() => setIsSelected(!isSelected)}
               className="position-absolute p-0 bg-white ml-2 mt-2"
               edge="end"
+              size="large"
             >
               {isSelected ? <CheckCircleIcon /> : <RadioButtonUncheckedIcon />}
             </IconButton>

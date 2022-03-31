@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Divider from '@material-ui/core/Divider';
-import Paper from '@material-ui/core/Paper';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Divider from '@mui/material/Divider';
+import Paper from '@mui/material/Paper';
 import ProfileCard from './ProfileCard';
 import MyPostsList from '../post/MyPostsList';
 import BookmarkList from '../bookmark/BookmarkList';
@@ -25,7 +25,8 @@ export default function ProfileScreen() {
           textColor="primary"
           centered
           variant="scrollable"
-          scrollButtons="on"
+          scrollButtons
+          allowScrollButtonsMobile
         >
           <Tab label="Posts" value="posts" />
           <Tab label="My Story" value="about" />

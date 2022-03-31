@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import TextField from '@material-ui/core/TextField';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
+import TextField from '@mui/material/TextField';
+import CircularProgress from '@mui/material/CircularProgress';
+import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { useGetPagesByTemplate } from '@frontend/shared/hooks/template';
 import ItemFormDrawer from './PageFormDrawer';
 import ErrorLoading from '../common/ErrorLoading';
@@ -47,7 +47,7 @@ export default function SelectPage({
         loading={loading}
         disabled={disabled}
         value={value}
-        onChange={(event: any, newValue) => {
+        onChange={(event: any, newValue: any) => {
           if (newValue?.openDrawer) {
             onChange(null);
             setDrawer({ ...drawer, showDrawer: true });

@@ -1,9 +1,9 @@
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-import Button from '@material-ui/core/Button';
-import AddCircleIcon from '@material-ui/icons/Edit';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import AddCircleIcon from '@mui/icons-material/Edit';
 
 export default function Design({ onClickVariables, onClickEdit, value = '' }) {
   return (
@@ -12,7 +12,7 @@ export default function Design({ onClickVariables, onClickEdit, value = '' }) {
         <Typography variant="h5" className="d-flex align-items-center">
           Design
           <Tooltip title="Edit Design">
-            <IconButton edge="end" onClick={onClickEdit}>
+            <IconButton edge="end" onClick={onClickEdit} size="large">
               <AddCircleIcon />
             </IconButton>
           </Tooltip>

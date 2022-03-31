@@ -1,10 +1,10 @@
 import { useCRUDTemplates } from '@frontend/shared/hooks/template';
 import { useEffect } from 'react';
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
+import TextField from '@mui/material/TextField';
+import Paper from '@mui/material/Paper';
 import { useRouter } from 'next/router';
-import Button from '@material-ui/core/Button';
-import InputLabel from '@material-ui/core/InputLabel';
+import Button from '@mui/material/Button';
+import InputLabel from '@mui/material/InputLabel';
 import LoadingButton from '../common/LoadingButton';
 import InputGroup from '../common/InputGroup';
 import ImagePicker from '../common/ImagePicker';

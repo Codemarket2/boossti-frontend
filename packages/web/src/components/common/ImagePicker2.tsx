@@ -1,23 +1,23 @@
 import { generateObjectId } from '@frontend/shared/utils/objectId';
 import { useEffect, useRef, useState } from 'react';
-import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary';
-import MediaList from './MediaList';
-import { createStyles, Theme, makeStyles, useTheme } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Dialog, { DialogProps } from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
+import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
+import { useTheme, styled } from '@mui/material/styles';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import AppBar from '@mui/material/AppBar';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 import SwipeableViews from 'react-swipeable-views';
 import { useGetResponses } from '@frontend/shared/hooks/response';
+import SaveIcon from '@mui/icons-material/Save';
 import ImageList from '../post/ImageList';
-import SaveIcon from '@material-ui/icons/Save';
+import MediaList from './MediaList';
 
 interface IProps {
   label?: string;
@@ -60,41 +60,11 @@ function a11yProps(index: any) {
     'aria-controls': `full-width-tabpanel-${index}`,
   };
 }
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      backgroundColor: theme.palette.background.paper,
-      width: 500,
-    },
-    form: {
-      display: 'flex',
-      flexDirection: 'column',
-      margin: 'auto',
-      width: 'fit-content',
-    },
-    formControl: {
-      marginTop: theme.spacing(2),
-      minWidth: 120,
-    },
-    formControlLabel: {
-      marginTop: theme.spacing(1),
-    },
-    imageListRoot: {
-      display: 'flex',
-      flexWrap: 'wrap',
-      justifyContent: 'space-around',
-      overflow: 'hidden',
-      backgroundColor: theme.palette.background.paper,
-    },
-    imageList: {
-      width: 500,
-      height: 450,
-    },
-    button: {
-      margin: theme.spacing(1),
-    },
-  }),
-);
+
+const StyledDiv = styled('div')(({ theme }) => ({
+  backgroundColor: theme.palette.background.paper,
+  width: 500,
+}));
 
 export default function ImagePicker2({
   label = 'Select Image/Video',
@@ -108,7 +78,7 @@ export default function ImagePicker2({
   const ref: any = useRef();
   const newArray = state?.tempMedia?.length > 0 ? [...state.tempMedia] : [];
   const { data, error, loading, refetch } = useGetResponses(formId);
-  console.log('form data from useGetResponses : ', data);
+
   useEffect(() => {
     setId(generateObjectId());
   }, []);
@@ -159,7 +129,6 @@ export default function ImagePicker2({
     urlArray.splice(index, 1);
     setState({ ...state, tempMedia: urlArray, tempMediaFiles: fileArray });
   };
-  const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(0);
@@ -194,7 +163,6 @@ export default function ImagePicker2({
   const handleClose = () => {
     setOpen(false);
   };
-  console.log('state', state);
 
   return (
     <>
@@ -204,7 +172,7 @@ export default function ImagePicker2({
             Open Library
           </Button>
           <Dialog
-            fullWidth={true}
+            fullWidth
             maxWidth={'sm'}
             open={open}
             onClose={handleClose}
@@ -215,7 +183,7 @@ export default function ImagePicker2({
               <DialogContentText>
                 You can browse previous uploaded media files and upload new files.
               </DialogContentText>
-              <div className={classes.root}>
+              <StyledDiv>
                 <AppBar position="static" color="default">
                   <Tabs
                     value={value}
@@ -261,7 +229,7 @@ export default function ImagePicker2({
                       variant="contained"
                       color="primary"
                       size="small"
-                      className={classes.button}
+                      className="m-2"
                       startIcon={<SaveIcon />}
                     >
                       Save
@@ -291,7 +259,7 @@ export default function ImagePicker2({
                     />
                   </TabPanel>
                 </SwipeableViews>
-              </div>
+              </StyledDiv>
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose} color="primary">

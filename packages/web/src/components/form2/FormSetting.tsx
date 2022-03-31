@@ -1,9 +1,9 @@
-import Paper from '@material-ui/core/Paper';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import TextField from '@material-ui/core/TextField';
-import MenuItem from '@material-ui/core/MenuItem';
-import { Grid } from '@material-ui/core';
+import Paper from '@mui/material/Paper';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+import { Grid } from '@mui/material';
 import { useCreateVirtualForm } from '@frontend/shared/hooks/form';
 import { generateObjectId } from '@frontend/shared/utils/objectId';
 import { onAlert } from '../../utils/alert';

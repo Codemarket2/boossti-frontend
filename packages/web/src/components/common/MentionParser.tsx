@@ -1,15 +1,15 @@
 import parse from 'html-react-parser';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 import Link from 'next/link';
 import { useCreateBookmark } from '@frontend/shared/hooks/boomark';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Divider from '@material-ui/core/Divider';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
-import ListItemText from '@material-ui/core/ListItemText';
-import BookmarkIcon from '@material-ui/icons/Bookmark';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Divider from '@mui/material/Divider';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
+import ListItemText from '@mui/material/ListItemText';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 import { onAlert } from '../../utils/alert';
 import Backdrop from './Backdrop';
 

@@ -1,6 +1,6 @@
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import { useSignIn } from '@frontend/shared/hooks/auth';
 import VerifyEmailForm from './VerifyEmailForm';
 import LoadingButton from '../common/LoadingButton';

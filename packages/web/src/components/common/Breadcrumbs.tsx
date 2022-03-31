@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from 'next/link';
 import projectConfig from '@frontend/shared';
 

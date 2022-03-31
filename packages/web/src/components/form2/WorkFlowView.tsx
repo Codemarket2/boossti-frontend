@@ -1,10 +1,10 @@
 import { useGetSection } from '@frontend/shared/hooks/section';
 import { useState } from 'react';
-import { List, Paper, Typography } from '@material-ui/core';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import IconButton from '@material-ui/core/IconButton';
+import { List, Paper, Typography } from '@mui/material';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import IconButton from '@mui/material/IconButton';
 import DisplaySettings from './DisplaySettings';
 
 interface Row2 {
@@ -40,6 +40,7 @@ export default function WorkFlowView({ field, treeDepth }: IProps) {
               onClick={(event) => {
                 setRexpanded(!rexpanded);
               }}
+              size="large"
             >
               {rexpanded ? '\u25BC' : '\u25B6'}
             </IconButton>
@@ -63,6 +64,7 @@ export default function WorkFlowView({ field, treeDepth }: IProps) {
                               [index]: !expanded,
                             });
                           }}
+                          size="large"
                         >
                           {expanded ? '\u25BC' : '\u25B6'}
                         </IconButton>

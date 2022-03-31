@@ -1,7 +1,7 @@
 import { generateObjectId } from '@frontend/shared/utils/objectId';
 import { useEffect, useRef, useState } from 'react';
-import Button from '@material-ui/core/Button';
-import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary';
+import Button from '@mui/material/Button';
+import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
 import ImageList from '../post/ImageList';
 
 interface IProps {

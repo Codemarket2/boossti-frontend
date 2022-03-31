@@ -1,68 +1,79 @@
 import React from 'react';
+import { styled } from '@mui/material/styles';
 import {
-  makeStyles,
   Theme,
-  createStyles,
   ThemeProvider,
+  StyledEngineProvider,
   Typography,
   Paper,
   Grid,
-  createMuiTheme,
-} from '@material-ui/core';
+  createTheme,
+  adaptV4Theme,
+} from '@mui/material';
 import { useSelector } from 'react-redux';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    sampleAreaRoot: {
-      overflow: 'auto',
-      maxHeight: 200,
-      paddingLeft: 4,
-    },
-    sampleAreaPaper: {
-      padding: theme.spacing(0.5),
-    },
-    text: {
-      transition: theme.transitions.create('font-size'),
-    },
-    smallText: {
-      // used when the variant is minimized
-      fontSize: '1rem',
-    },
-  }),
-);
+const PREFIX = 'TypographySampleArea';
+
+const classes = {
+  sampleAreaRoot: `${PREFIX}-sampleAreaRoot`,
+  sampleAreaPaper: `${PREFIX}-sampleAreaPaper`,
+  text: `${PREFIX}-text`,
+  smallText: `${PREFIX}-smallText`,
+};
+
+const StyledStyledEngineProvider = styled(StyledEngineProvider)(({ theme }) => ({
+  [`& .${classes.sampleAreaRoot}`]: {
+    overflow: 'auto',
+    maxHeight: 200,
+    paddingLeft: 4,
+  },
+
+  [`& .${classes.sampleAreaPaper}`]: {
+    padding: theme.spacing(0.5),
+  },
+
+  [`& .${classes.text}`]: {
+    transition: theme.transitions.create('font-size'),
+  },
+
+  [`& .${classes.smallText}`]: {
+    // used when the variant is minimized
+    fontSize: '1rem',
+  },
+}));
 
 function TypographySampleArea({ variant, bgText, paperText, smallPreview, ...typographyProps }) {
-  const classes = useStyles();
-
-  const themeObject = createMuiTheme(useSelector(({ setting }: any) => setting.theme));
+  const themeObject = createTheme(adaptV4Theme(useSelector(({ setting }: any) => setting.theme)));
   const typographyClassName = `${typographyProps.className} ${classes.text} ${
     smallPreview ? classes.smallText : ''
   }`;
   return (
-    <ThemeProvider theme={themeObject}>
-      <Paper
-        variant="outlined"
-        className={classes.sampleAreaRoot}
-        style={{
-          backgroundColor: themeObject.palette.background.default,
-        }}
-      >
-        <Grid container wrap="nowrap" alignItems="baseline">
-          <Grid item>
-            <Typography variant={variant} {...typographyProps} className={typographyClassName}>
-              {bgText}
-            </Typography>
-          </Grid>
-          <Grid item>
-            <Paper variant="outlined" square className={classes.sampleAreaPaper}>
+    <StyledStyledEngineProvider injectFirst>
+      <ThemeProvider theme={themeObject}>
+        <Paper
+          variant="outlined"
+          className={classes.sampleAreaRoot}
+          style={{
+            backgroundColor: themeObject.palette.background.default,
+          }}
+        >
+          <Grid container wrap="nowrap" alignItems="baseline">
+            <Grid item>
               <Typography variant={variant} {...typographyProps} className={typographyClassName}>
-                {paperText}
+                {bgText}
               </Typography>
-            </Paper>
+            </Grid>
+            <Grid item>
+              <Paper variant="outlined" square className={classes.sampleAreaPaper}>
+                <Typography variant={variant} {...typographyProps} className={typographyClassName}>
+                  {paperText}
+                </Typography>
+              </Paper>
+            </Grid>
           </Grid>
-        </Grid>
-      </Paper>
-    </ThemeProvider>
+        </Paper>
+      </ThemeProvider>
+    </StyledStyledEngineProvider>
   );
 }
 
