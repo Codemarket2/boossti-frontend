@@ -15,12 +15,11 @@ import SelectResponse from '../response/SelectResponse';
 import Select from './Select';
 import SelectForm from './SelectForm';
 import SelectTemplate from '../template/SelectTemplate';
-
 import 'react-phone-input-2/lib/style.css';
-import InputGroup from '../common/InputGroup';
 import { SelectOptionType } from './EditField';
 import ImagePicker2 from '../common/ImagePicker2';
 import ColorInput from '../customMUI/ColorInput/ColorInput';
+import SelectFormFields from './SelectFormFields';
 
 interface IProps {
   disabled?: boolean;
@@ -180,6 +179,8 @@ export default function Field({
                     },
                   })
                 }
+                error={validation.error}
+                helperText={validation.errorMessage}
               />
             </div>
           )}
@@ -187,7 +188,7 @@ export default function Field({
             <>
               <SelectTemplate
                 label={null}
-                placeholder={label}
+                placeholder={`${label} template`}
                 value={value?.template || null}
                 onChange={(newValue) => onChange({ field: _id, template: newValue })}
                 error={validation.error}
@@ -199,7 +200,7 @@ export default function Field({
                     templateId={template?._id || value?.template?._id}
                     typeSlug={template?.slug || value?.template?.slug}
                     label={null}
-                    placeholder={label}
+                    placeholder={`${label} page`}
                     error={validation.error}
                     helperText={validation.errorMessage}
                     value={value ? value.page : null}
@@ -211,22 +212,42 @@ export default function Field({
             </>
           ) : optionsTemplate === 'existingForm' ? (
             <>
-              {form?._id ? (
-                <SelectResponse
-                  label={label}
-                  formId={form?._id}
-                  formField={options?.formField}
-                  value={value?.response}
-                  onChange={(newValue) => onChange({ field: _id, response: newValue })}
-                  error={validation.error}
-                  helperText={validation.errorMessage}
-                />
-              ) : (
+              {!form && (
                 <SelectForm
-                  placeholder={label}
+                  placeholder={`${label} form`}
                   label={null}
                   value={value?.form}
                   onChange={(newValue) => onChange({ field: _id, form: newValue })}
+                  error={validation.error}
+                  helperText={validation.errorMessage}
+                />
+              )}
+              {!form && value?.form?._id && (
+                <div className="my-2">
+                  <SelectFormFields
+                    formId={value.form?._id}
+                    value={value?.options?.formField}
+                    onChange={(newFormField) =>
+                      onChange({
+                        field: _id,
+                        options: {
+                          ...value?.options,
+                          formField: newFormField,
+                        },
+                      })
+                    }
+                    error={validation.error}
+                    helperText={validation.errorMessage}
+                  />
+                </div>
+              )}
+              {(form?._id || value?.form?._id) && (
+                <SelectResponse
+                  label={`${label} response`}
+                  formId={form?._id || value?.form?._id}
+                  formField={form?._id ? options?.formField : value?.options?.formField}
+                  value={value?.response}
+                  onChange={(newValue) => onChange({ field: _id, response: newValue })}
                   error={validation.error}
                   helperText={validation.errorMessage}
                 />

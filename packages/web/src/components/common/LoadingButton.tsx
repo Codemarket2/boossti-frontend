@@ -3,10 +3,10 @@ import Button, { ButtonProps } from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 interface IProps extends ButtonProps {
-  type?: 'button' | 'submit';
-  size?: 'small' | 'medium' | 'large';
-  variant?: 'contained' | 'outlined';
-  color?: 'primary' | 'secondary';
+  // type?: 'button' | 'submit';
+  // size?: 'small' | 'medium' | 'large';
+  // variant?: 'contained' | 'outlined';
+  // color?: 'primary' | 'secondary';
   loading?: boolean;
   className?: string;
   onClick?: () => void;
