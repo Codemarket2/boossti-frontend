@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Divider from '@material-ui/core/Divider';
-import Paper from '@material-ui/core/Paper';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Divider from '@mui/material/Divider';
+import Paper from '@mui/material/Paper';
 import ProfileCard from './ProfileCard';
 import UserPostList from '../post/UserPostList';
 import { useGetOneUser } from '@frontend/shared/hooks/user';
@@ -24,7 +24,8 @@ export default function ProfileScreen({ _id }: any) {
           textColor="primary"
           centered
           variant="scrollable"
-          scrollButtons="on"
+          scrollButtons
+          allowScrollButtonsMobile
         >
           <Tab label="Posts" value="posts" />
           <Tab label="About" value="about" />

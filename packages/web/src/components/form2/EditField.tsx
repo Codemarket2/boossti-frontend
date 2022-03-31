@@ -1,22 +1,22 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/jsx-props-no-spreading */
-import Divider from '@material-ui/core/Divider';
-import Typography from '@material-ui/core/Typography';
-import Tooltip from '@material-ui/core/Tooltip';
-import FormLabel from '@material-ui/core/FormLabel';
-import IconButton from '@material-ui/core/IconButton';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import DeleteIcon from '@material-ui/icons/Delete';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import FormHelperText from '@material-ui/core/FormHelperText';
+import Divider from '@mui/material/Divider';
+import Typography from '@mui/material/Typography';
+import Tooltip from '@mui/material/Tooltip';
+import FormLabel from '@mui/material/FormLabel';
+import IconButton from '@mui/material/IconButton';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import DeleteIcon from '@mui/icons-material/Delete';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputAdornment from '@mui/material/InputAdornment';
+import FormHelperText from '@mui/material/FormHelperText';
 import InputGroup from '../common/InputGroup';
 import { getFormFieldTypes, fieldTypes } from './fieldTypes';
 import SelectTemplate from '../template/SelectTemplate';
@@ -46,7 +46,7 @@ export default function FormFields({
     <>
       <Typography variant="h5" className="d-flex align-items-center">
         <Tooltip title="Go Back">
-          <IconButton onClick={onClose}>
+          <IconButton onClick={onClose} size="large">
             <ArrowBackIcon />
           </IconButton>
         </Tooltip>
@@ -232,6 +232,7 @@ export default function FormFields({
                               : [''],
                           })
                         }
+                        size="large"
                       >
                         <AddCircleIcon />
                       </IconButton>
@@ -271,12 +272,13 @@ export default function FormFields({
                                 })
                               }
                               edge="end"
+                              size="large"
                             >
                               <DeleteIcon />
                             </IconButton>
                           </InputAdornment>
                         }
-                        labelWidth={65}
+                        // labelWidth={65}
                       />
                     </FormControl>
                   ))}

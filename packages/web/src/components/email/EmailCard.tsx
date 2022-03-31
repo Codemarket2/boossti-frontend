@@ -1,26 +1,22 @@
 import React from 'react';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Paper from '@material-ui/core/Paper';
-import styled from 'styled-components';
-import { Typography } from '@material-ui/core';
+import Card from '@mui/material/Card';
+import Paper from '@mui/material/Paper';
+import { Typography } from '@mui/material';
 import parse from 'html-react-parser';
-
+import { styled } from '@mui/material/styles';
 import { useGetAllEmails } from '@frontend/shared/hooks/email/getEmail';
 import ErrorLoading from '../common/ErrorLoading';
 import Loading from '../common/Loading';
 
-// align-items: center;
-const StyledCard = styled(Card)`
-  height: 150px !important;
-  display: flex;
-  justify-content: center;
-  cursor: pointer;
-  flex-direction: column;
-  padding-left: 2%;
-  margin-bottom: 5px;
-`;
+const StyledCard = styled(Card)(({ theme }) => ({
+  height: '150px !important',
+  display: 'flex',
+  justifyContent: 'center',
+  cursor: 'pointer',
+  flexDirection: 'column',
+  paddingLeft: '2%',
+  marginBottom: '5px',
+}));
 
 export default function EmailCard() {
   const { data, error, loading } = useGetAllEmails();
@@ -30,9 +26,7 @@ export default function EmailCard() {
   if (error) {
     return <ErrorLoading error={error} />;
   }
-  if (data) {
-    console.log(data);
-  }
+
   return (
     <div>
       <Paper style={{ padding: 10 }}>

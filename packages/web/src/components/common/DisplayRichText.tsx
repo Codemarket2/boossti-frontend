@@ -1,5 +1,5 @@
 import parse from 'html-react-parser';
-import styled from 'styled-components';
+import { styled } from '@mui/material/styles';
 import { client } from '@frontend/shared/graphql';
 import { useRouter } from 'next/router';
 import { GET_PAGE_BY_ID } from '@frontend/shared/graphql/query/template';
@@ -8,21 +8,21 @@ type IProps = {
   value: string;
 };
 
-const StyledDiv = styled.div`
-  .iframe-container {
-    position: relative;
-    padding-bottom: 56.25%;
-    height: 0;
-    overflow: hidden;
-    iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-  }
-`;
+const StyledDiv = styled('div')(({ theme }) => ({
+  '& .iframe-container': {
+    position: 'relative',
+    paddingBottom: '56.25%',
+    height: 0,
+    overflow: 'hidden',
+  },
+  '& iframe': {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+  },
+}));
 
 export default function DisplayRichText({ value = '' }: IProps) {
   const router = useRouter();

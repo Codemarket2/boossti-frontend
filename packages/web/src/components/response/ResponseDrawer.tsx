@@ -1,4 +1,4 @@
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 import React, { useState } from 'react';
 import Overlay from '../common/Overlay';
 import { getLabel } from './SelectResponse';

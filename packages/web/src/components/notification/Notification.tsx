@@ -1,14 +1,14 @@
 import Link from 'next/link';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-import Popover from '@material-ui/core/Popover';
-import Snackbar from '@material-ui/core/Snackbar';
-import Alert from '@material-ui/lab/Alert';
-import Typography from '@material-ui/core/Typography';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import Badge from '@material-ui/core/Badge';
-import NotificationsIcon from '@material-ui/icons/Notifications';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import Popover from '@mui/material/Popover';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import Typography from '@mui/material/Typography';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Badge from '@mui/material/Badge';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import moment from 'moment';
 import {
   useGetMyNotifications,
@@ -17,32 +17,34 @@ import {
   useNotificationSub,
 } from '@frontend/shared/hooks/notification';
 import { useEffect, useState } from 'react';
-import Accordion from '@material-ui/core/Accordion';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import ListItemText from '@material-ui/core/ListItemText';
-import { ExpandMore } from '@material-ui/icons';
-import styled from 'styled-components';
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import ListItemText from '@mui/material/ListItemText';
+import { ExpandMore } from '@mui/icons-material';
+import { styled } from '@mui/material/styles';
 import CommentModel from './CommentModel';
 
-const StyledAvatar = styled(Avatar)`
-  min-width: 25px;
-  min-height: 25px;
-  margin: 0 auto;
-  border: 2px solid ${(props) => props.theme.palette.primary.main};
-`;
-const StyledPopover = styled(Popover)`
-  width: 90% !important;
-  ${(props) => props.theme.breakpoints.up('md')} {
-    width: 50% !important;
-  }
-`;
-const StyledSnackbar = styled(Snackbar)`
-  width: 90% !important;
-  ${(props) => props.theme.breakpoints.up('md')} {
-    width: 50% !important;
-  }
-`;
+const StyledAvatar = styled(Avatar)(({ theme }) => ({
+  minWidth: 25,
+  minHeight: 25,
+  margin: '0 auto',
+  border: `2px solid ${theme.palette.primary.main}`,
+}));
+
+const StyledPopover = styled(Popover)(({ theme }) => ({
+  width: '90% !important',
+  [theme.breakpoints.up('md')]: {
+    width: '50% !important',
+  },
+}));
+
+const StyledSnackbar = styled(Snackbar)(({ theme }) => ({
+  width: '90% !important',
+  [theme.breakpoints.up('md')]: {
+    width: '50% !important',
+  },
+}));
 
 export default function Notification() {
   const { state, setState } = useNotificationSub();
@@ -66,6 +68,7 @@ export default function Notification() {
         <IconButton
           onClick={(e) => setState({ ...state, showNotification: e.target })}
           color="inherit"
+          size="large"
         >
           <Badge badgeContent={total} color="primary">
             <NotificationsIcon />

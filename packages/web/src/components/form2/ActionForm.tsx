@@ -1,19 +1,19 @@
-import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
+import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { useEffect } from 'react';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import Switch from '@material-ui/core/Switch';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import DeleteIcon from '@material-ui/icons/Delete';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormHelperText from '@mui/material/FormHelperText';
+import Switch from '@mui/material/Switch';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useFormActions } from '@frontend/shared/hooks/form';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
@@ -188,6 +188,7 @@ export default function ActionForm({
                 }
                 return filtered;
               }}
+              options={[]}
               filterSelectedOptions
               renderInput={(params) => (
                 <TextField
@@ -302,6 +303,7 @@ export default function ActionForm({
                     { name: '', field: '' },
                   ])
                 }
+                size="large"
               >
                 <AddCircleIcon />
               </IconButton>
@@ -372,6 +374,7 @@ export default function ActionForm({
                       formik.values.variables.filter((sV, sI) => sI !== variableIndex),
                     )
                   }
+                  size="large"
                 >
                   <DeleteIcon />
                 </IconButton>
@@ -443,6 +446,7 @@ export default function ActionForm({
                     { field: '', formId: null, value: null },
                   ])
                 }
+                size="large"
               >
                 <AddCircleIcon />
               </IconButton>
@@ -493,6 +497,7 @@ export default function ActionForm({
                           formik.values.fields.filter((sV, sI) => sI !== variableIndex),
                         )
                       }
+                      size="large"
                     >
                       <DeleteIcon />
                     </IconButton>

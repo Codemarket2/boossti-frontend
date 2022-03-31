@@ -1,6 +1,6 @@
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import { useForgetPassword } from '@frontend/shared/hooks/auth';
 import PasswordInput from '../common/PasswordInput';
 import LoadingButton from '../common/LoadingButton';

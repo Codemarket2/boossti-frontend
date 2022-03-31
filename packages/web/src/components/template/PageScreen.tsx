@@ -1,20 +1,20 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import EditIcon from '@material-ui/icons/Edit';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import IconButton from '@material-ui/core/IconButton';
-import Paper from '@material-ui/core/Paper';
-import DeleteIcon from '@material-ui/icons/Delete';
-import Hidden from '@material-ui/core/Hidden';
-import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
-import { useTheme } from '@material-ui/core/styles';
-import ShareIcon from '@material-ui/icons/Share';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import EditIcon from '@mui/icons-material/Edit';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import IconButton from '@mui/material/IconButton';
+import Paper from '@mui/material/Paper';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Hidden from '@mui/material/Hidden';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+import { useTheme } from '@mui/material/styles';
+import ShareIcon from '@mui/icons-material/Share';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import { useSelector } from 'react-redux';
 import {
   useCRUDPages,
@@ -28,8 +28,8 @@ import {
   useGetTemplateBySlug,
 } from '@frontend/shared/hooks/template';
 import { useAuthorization } from '@frontend/shared/hooks/auth';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 import { onAlert } from '../../utils/alert';
 import InlineForm from './InlineForm';
 import Breadcrumbs from '../common/Breadcrumbs';
@@ -95,7 +95,7 @@ export default function ItemScreen({
 
   const router = useRouter();
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.down('xs'));
+  const matches = useMediaQuery(theme.breakpoints.down('sm'));
   const { auth } = useSelector((state: any) => state);
   const [state, setState] = useState(initialState);
   const authorized = useAuthorization([data?.getPageBySlug?.createdBy?._id], true);
@@ -182,6 +182,7 @@ export default function ItemScreen({
                     `${window?.location?.origin}/${data?.getPageBySlug?.template?.slug}/${data?.getPageBySlug?.slug}`,
                   )
                 }
+                size="large"
               >
                 <ShareIcon />
               </IconButton>
@@ -235,6 +236,7 @@ export default function ItemScreen({
                         handleDelete(data.getPageBySlug._id, deleteCallBack);
                       }
                     }}
+                    size="large"
                   >
                     <DeleteIcon />
                   </IconButton>
@@ -256,7 +258,7 @@ export default function ItemScreen({
               style={{ maxHeight: '50vh' }}
             />
           </Bottomsheet>
-          <Hidden xsDown>
+          <Hidden smDown>
             <Navigation
               templateFields={templateData?.getTemplateBySlug?.fields}
               page={data.getPageBySlug}
@@ -398,7 +400,7 @@ const Navigation = ({
             <ListItem button>
               <ListItemText primary="Seo" />
               <ListItemSecondaryAction>
-                <IconButton edge="end" aria-label="edit" onClick={editSeo}>
+                <IconButton edge="end" aria-label="edit" onClick={editSeo} size="large">
                   <EditIcon />
                 </IconButton>
               </ListItemSecondaryAction>

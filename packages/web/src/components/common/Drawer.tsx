@@ -1,25 +1,25 @@
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
 import { useMenuTemplates } from '@frontend/shared/hooks/template';
-import CloseIcon from '@material-ui/icons/Close';
+import CloseIcon from '@mui/icons-material/Close';
 import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
-import GroupIcon from '@material-ui/icons/Group';
-import ListIcon from '@material-ui/icons/List';
-import TuneIcon from '@material-ui/icons/Tune';
-import EmailIcon from '@material-ui/icons/Email';
-import Contacts from '@material-ui/icons/Contacts';
+import GroupIcon from '@mui/icons-material/Group';
+import ListIcon from '@mui/icons-material/List';
+import TuneIcon from '@mui/icons-material/Tune';
+import EmailIcon from '@mui/icons-material/Email';
+import Contacts from '@mui/icons-material/Contacts';
 import { useRouter } from 'next/router';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@mui/material/ListSubheader';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
 import Link from 'next/link';
-import AnalyticsIcon from '@material-ui/icons/Announcement';
+import AnalyticsIcon from '@mui/icons-material/Announcement';
 import DarkModeToggle from './DarkModeToggle';
-import BuildIcon from '@material-ui/icons/Build';
+import BuildIcon from '@mui/icons-material/Build';
 
 interface IProps {
   showDrawer: boolean;
@@ -59,7 +59,7 @@ export default function DrawerContent({ showDrawer, toggleDrawer, admin }: IProp
             alt={setting?.metaTags?.title}
           />
         </div>
-        <IconButton onClick={() => toggleDrawer(false)}>
+        <IconButton onClick={() => toggleDrawer(false)} size="large">
           <CloseIcon />
         </IconButton>
       </div>

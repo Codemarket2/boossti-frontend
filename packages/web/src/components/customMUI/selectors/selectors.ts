@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 import { getByPath } from '../utils';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { ThemeOptions, Theme } from '@material-ui/core';
+import { DeprecatedThemeOptions, Theme } from '@mui/material';
 
 /**
  * Return the value of in the theme at the specified path,
@@ -11,7 +11,11 @@ import { ThemeOptions, Theme } from '@material-ui/core';
  * @param themeOptions
  * @param themeObject
  */
-export const getThemeValueInfo = (path: string, themeOptions: ThemeOptions, themeObject: Theme) => {
+export const getThemeValueInfo = (
+  path: string,
+  themeOptions: DeprecatedThemeOptions,
+  themeObject: Theme,
+) => {
   const valFromSaved: any = getByPath(themeOptions, path);
   return {
     modifiedByUser: valFromSaved !== undefined,

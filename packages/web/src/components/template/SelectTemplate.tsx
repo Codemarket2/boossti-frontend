@@ -1,6 +1,6 @@
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+import CircularProgress from '@mui/material/CircularProgress';
 import { useGetTemplates } from '@frontend/shared/hooks/template';
 import ErrorLoading from '../common/ErrorLoading';
 

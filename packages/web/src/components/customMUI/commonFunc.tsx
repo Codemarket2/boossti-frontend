@@ -1,9 +1,9 @@
 import { store } from '@frontend/shared/redux';
 import { getByPath, removeByPath, setByPath } from './utils';
-import { createMuiTheme, Theme } from '@material-ui/core';
-import { ThemeOptions } from '@material-ui/core/styles/createMuiTheme';
+import { createTheme, Theme } from '@mui/material';
+import { DeprecatedThemeOptions } from '@mui/material/styles';
 
-export const defaultTheme: Theme = createMuiTheme();
+export const defaultTheme: Theme = createTheme();
 
 export const setDefaultTheme = async () => {
   const darkModePersisted = await localStorage.getItem('darkMode');
@@ -31,7 +31,7 @@ export const updateRemoveThemeOptions = (configs) => {
 };
 
 export const updateRemoveThemeOption = (path) => {
-  let updatedThemeOptions: ThemeOptions;
+  let updatedThemeOptions: DeprecatedThemeOptions;
 
   const parentPath = path.substring(0, path.lastIndexOf('.'));
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container } from '@material-ui/core';
+import { Container } from '@mui/material';
 import { useGetPost } from '@frontend/shared/hooks/post';
 import PostCard from '../../src/components/post/PostCard';
 import PostCardSkeleton from '../../src/components/post/PostCardSkeleton';

@@ -1,9 +1,9 @@
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import Skeleton from '@material-ui/lab/Skeleton';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import FormHelperText from '@mui/material/FormHelperText';
+import Skeleton from '@mui/material/Skeleton';
 import { useGetForm } from '@frontend/shared/hooks/form';
 import ErrorLoading from '../common/ErrorLoading';
 

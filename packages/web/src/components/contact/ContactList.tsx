@@ -5,10 +5,10 @@ import {
   DataGrid,
   GridSortDirection,
   GridSortModel,
-} from '@material-ui/data-grid';
+} from '@mui/x-data-grid';
 import { useGetAllContact } from '@frontend/shared/hooks/contact';
 import { useEffect } from 'react';
-import { Button, TextField } from '@material-ui/core';
+import { Button, TextField } from '@mui/material';
 import { useCreateMailingListFromContact } from '@frontend/shared/hooks/email/createMailingList';
 
 export default function ContactList() {

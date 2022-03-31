@@ -1,7 +1,7 @@
-import IconButton from '@material-ui/core/IconButton';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import HighlightOff from '@material-ui/icons/HighlightOff';
+import IconButton from '@mui/material/IconButton';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import HighlightOff from '@mui/icons-material/HighlightOff';
 import MentionInput from '../common/MentionInput';
 import MentionParser from '../common/MentionParser';
 
@@ -88,6 +88,7 @@ export const Media = ({
             onClick={onClick}
             className="position-absolute p-0 bg-danger ml-2 mt-2"
             edge="end"
+            size="large"
           >
             <HighlightOff className="text-light" fontSize="large" />
           </IconButton>

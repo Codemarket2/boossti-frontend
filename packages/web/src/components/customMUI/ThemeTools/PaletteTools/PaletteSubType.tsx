@@ -1,42 +1,53 @@
 import React from 'react';
+import { styled } from '@mui/material/styles';
 import {
   Accordion,
   AccordionSummary,
   Typography,
-  makeStyles,
-  createStyles,
   AccordionDetails,
   Theme,
-  createMuiTheme,
-} from '@material-ui/core';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+  createTheme,
+  adaptV4Theme,
+} from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import PaletteInput from './PaletteInput';
 import { getThemeValueInfo } from '../../selectors/selectors';
 import { useSelector } from 'react-redux';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    title: {
-      textTransform: 'capitalize',
+const PREFIX = 'PaletteSubType';
+
+const classes = {
+  title: `${PREFIX}-title`,
+  accordionDetails: `${PREFIX}-accordionDetails`,
+  thumbnailContainer: `${PREFIX}-thumbnailContainer`,
+  colorThumbnail: `${PREFIX}-colorThumbnail`,
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')(({ theme }) => ({
+  [`& .${classes.title}`]: {
+    textTransform: 'capitalize',
+  },
+
+  [`& .${classes.accordionDetails}`]: {
+    flexDirection: 'column',
+    '&> *': {
+      marginBottom: theme.spacing(2),
     },
-    accordionDetails: {
-      flexDirection: 'column',
-      '&> *': {
-        marginBottom: theme.spacing(2),
-      },
-    },
-    thumbnailContainer: {
-      display: 'flex',
-      alignSelf: 'stretch',
-    },
-    colorThumbnail: {
-      height: '100%',
-      width: 15,
-      marginLeft: 4,
-      border: '1px solid grey',
-    },
-  }),
-);
+  },
+
+  [`& .${classes.thumbnailContainer}`]: {
+    display: 'flex',
+    alignSelf: 'stretch',
+  },
+
+  [`& .${classes.colorThumbnail}`]: {
+    height: '100%',
+    width: 15,
+    marginLeft: 4,
+    border: '1px solid grey',
+  },
+}));
 
 interface PaletteSubTypeProps {
   title: string;
@@ -45,14 +56,13 @@ interface PaletteSubTypeProps {
 }
 
 export default function PaletteSubType({ title, path, paletteValues }: PaletteSubTypeProps) {
-  const classes = useStyles();
   // const themeValues = useThemeValue(path)
   const initialTheme = useSelector(({ setting }: any) => setting);
-  const themeOptions = createMuiTheme(initialTheme.theme);
+  const themeOptions = createTheme(adaptV4Theme(initialTheme.theme));
   const themeValues = getThemeValueInfo(path, themeOptions, initialTheme.theme).value;
 
   return (
-    <>
+    <Root>
       <Accordion style={{ margin: '0px' }}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography className={classes.title} variant="body2">
@@ -74,6 +84,6 @@ export default function PaletteSubType({ title, path, paletteValues }: PaletteSu
           ))}
         </AccordionDetails>
       </Accordion>
-    </>
+    </Root>
   );
 }

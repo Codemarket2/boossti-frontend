@@ -1,16 +1,16 @@
 import { ReactNode } from 'react';
 import { useSelector } from 'react-redux';
-import Paper from '@material-ui/core/Paper';
-import styled from 'styled-components';
+import Paper from '@mui/material/Paper';
+import { styled } from '@mui/material/styles';
 import AuthRequired from './AuthRequired';
 import AppBar from './AppBar';
 import BottomBar from './BottomBar';
 import Container from './Container';
 
-const StyledPaper = styled(Paper)`
-  background-color: ${(props) => props.theme.palette.background.level2} !important;
-  min-height: 100vh !important;
-`;
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  backgroundColor: `${theme.palette.background.default} !important`,
+  minHeight: '100vh !important',
+}));
 
 interface IProps {
   children: ReactNode;

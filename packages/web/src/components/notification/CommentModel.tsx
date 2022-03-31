@@ -1,30 +1,26 @@
 import React from 'react';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import Modal from '@material-ui/core/Modal';
-import Backdrop from '@material-ui/core/Backdrop';
-import Fade from '@material-ui/core/Fade';
+import { styled } from '@mui/material/styles';
+import Modal from '@mui/material/Modal';
+import Backdrop from '@mui/material/Backdrop';
+import Fade from '@mui/material/Fade';
 import Comment from '../comment/Comment';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    modal: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    paper: {
-      backgroundColor: theme.palette.background.paper,
-      border: '2px solid #eee',
-      boxShadow: theme.shadows[5],
-      padding: theme.spacing(2, 4, 3),
-      height: '70vh',
-      overflowY: 'scroll',
-    },
-  }),
-);
+const StyledModal = styled(Modal)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
 
-export default function CommentModel({ notification }) {
-  const classes = useStyles();
+const StyledPaper = styled('div')(({ theme }) => ({
+  backgroundColor: theme.palette.background.paper,
+  border: '2px solid #eee',
+  boxShadow: theme.shadows[5],
+  padding: theme.spacing(2, 4, 3),
+  height: '70vh',
+  overflowY: 'scroll',
+}));
+
+export default function CommentModel({ notification }: { notification: any }) {
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => {
@@ -38,10 +34,9 @@ export default function CommentModel({ notification }) {
   return (
     <>
       <div onClick={handleOpen}>{notification.title}</div>
-      <Modal
+      <StyledModal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
-        className={classes.modal}
         open={open}
         onClose={handleClose}
         closeAfterTransition
@@ -51,11 +46,11 @@ export default function CommentModel({ notification }) {
         }}
       >
         <Fade in={open}>
-          <div className={classes.paper}>
+          <StyledPaper>
             <Comment postId={notification.threadId} threadId={notification.threadId} />
-          </div>
+          </StyledPaper>
         </Fade>
-      </Modal>
+      </StyledModal>
     </>
   );
 }

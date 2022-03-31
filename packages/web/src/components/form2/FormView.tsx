@@ -1,17 +1,17 @@
 import { Auth } from 'aws-amplify';
 import { fileUpload } from '@frontend/shared/utils/fileUpload';
 import { useEffect, useState } from 'react';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
 import { useSelector } from 'react-redux';
-import IconButton from '@material-ui/core/IconButton';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import Skeleton from '@material-ui/lab/Skeleton';
-import EditIcon from '@material-ui/icons/Edit';
-import AddIcon from '@material-ui/icons/Add';
-import DeleteIcon from '@material-ui/icons/Delete';
-import { ArrowBackIosRounded, ArrowForwardIosRounded } from '@material-ui/icons';
+import IconButton from '@mui/material/IconButton';
+import FormHelperText from '@mui/material/FormHelperText';
+import Skeleton from '@mui/material/Skeleton';
+import EditIcon from '@mui/icons-material/Edit';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { ArrowBackIosRounded, ArrowForwardIosRounded } from '@mui/icons-material';
 import { useGetResponses } from '@frontend/shared/hooks/response/getResponse';
 import { useCreateUpdateResponse } from '@frontend/shared/hooks/response';
 import { validateForm, validateValue } from '@frontend/shared/utils/validate';
@@ -637,12 +637,14 @@ export function FormView({
                               onClick={() =>
                                 setEditValue({ fieldId: field._id, index: valueIndex })
                               }
+                              size="large"
                             >
                               <EditIcon />
                             </IconButton>
                             <IconButton
                               edge="end"
                               onClick={() => onRemoveOneValue(field._id, valueIndex)}
+                              size="large"
                             >
                               <DeleteIcon />
                             </IconButton>

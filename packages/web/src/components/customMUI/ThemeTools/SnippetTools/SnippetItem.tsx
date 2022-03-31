@@ -1,33 +1,29 @@
 import React, { useCallback } from 'react';
+import { styled } from '@mui/material/styles';
 import { SnippetModification } from './types';
 import { useSelector, useDispatch } from 'react-redux';
 import { getByPath } from '../../utils';
-import {
-  Link,
-  Tooltip,
-  makeStyles,
-  Theme,
-  createStyles,
-  Accordion,
-  AccordionSummary,
-  Typography,
-} from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
-import RemoveIcon from '@material-ui/icons/Remove';
-import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
+import { Link, Tooltip, Theme, Accordion, AccordionSummary, Typography } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 // import { setThemeOptions, removeThemeOptions } from "../../../../../../shared/redux/actions/muiActions"
 import { ThemeValueChangeEvent } from '../events';
 import { updateRemoveThemeOptions, updateSetThemeOptions } from '../../commonFunc';
 import { removeThemeOption, setThemeOption } from '@frontend/shared/redux/actions/setting';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    snippetTitle: {
-      marginLeft: theme.spacing(),
-      flexGrow: 1,
-    },
-  }),
-);
+const PREFIX = 'SnippetItem';
+
+const classes = {
+  snippetTitle: `${PREFIX}-snippetTitle`,
+};
+
+const StyledAccordion = styled(Accordion)(({ theme }) => ({
+  [`& .${classes.snippetTitle}`]: {
+    marginLeft: theme.spacing(),
+    flexGrow: 1,
+  },
+}));
 
 /**
  * Simple check of if the SnippetModification.configs are
@@ -45,7 +41,6 @@ const useIsSnippetIncluded = (configs: SnippetModification['configs']) => {
 };
 
 const SnippetItem = ({ snippet }) => {
-  const classes = useStyles();
   const dispatch = useDispatch();
   // const handleAddSnippet = useCallback(() => {
   //   dispatch(setThemeOptions(snippet.configs))
@@ -77,7 +72,7 @@ const SnippetItem = ({ snippet }) => {
     </div>
   );
   return (
-    <Accordion
+    <StyledAccordion
       disabled={isSnippetIncluded}
       onClick={isSnippetIncluded ? handleRemoveSnippet : handleAddSnippet}
       style={{ margin: '0px' }}
@@ -88,12 +83,12 @@ const SnippetItem = ({ snippet }) => {
           {title}
         </Typography>
         {info && (
-          <Tooltip title={toolTipContent} interactive arrow>
+          <Tooltip title={toolTipContent} arrow>
             <InfoOutlinedIcon />
           </Tooltip>
         )}
       </AccordionSummary>
-    </Accordion>
+    </StyledAccordion>
   );
 };
 

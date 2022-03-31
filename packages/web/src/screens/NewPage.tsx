@@ -1,4 +1,4 @@
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 import { useGetTemplateBySlug } from '@frontend/shared/hooks/template';
 import Link from 'next/link';
 import UserLayout from '../components/common/UserLayout';

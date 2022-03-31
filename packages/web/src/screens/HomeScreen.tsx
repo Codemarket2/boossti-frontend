@@ -1,32 +1,82 @@
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import Link from '@material-ui/core/Link';
-import StarIcon from '@material-ui/icons/Star';
-import CardHeader from '@material-ui/core/CardHeader';
+import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Link from '@mui/material/Link';
+import StarIcon from '@mui/icons-material/Star';
+import CardHeader from '@mui/material/CardHeader';
 import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
+import Avatar from '@mui/material/Avatar';
 
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 
-import Paper from '@material-ui/core/Paper';
-import Box from '@material-ui/core/Box';
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
 
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
 import AppBar from '../components/common/AppBar';
 import { FormPage } from '../../pages/forms/[slug]';
+
+const PREFIX = 'HomeScreen';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  image: `${PREFIX}-image`,
+  paper: `${PREFIX}-paper`,
+  avatar: `${PREFIX}-avatar`,
+  form: `${PREFIX}-form`,
+  submit: `${PREFIX}-submit`,
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')(({ theme }) => ({
+  [`& .${classes.root}`]: {
+    height: '100vh',
+  },
+
+  [`& .${classes.image}`]: {
+    backgroundImage: 'url("/handshake.png")',
+    // backgroundImage: 'url(https://source.unsplash.com/random)',
+    paddingBottom: '60%',
+    backgroundRepeat: 'no-repeat',
+    backgroundColor:
+      theme.palette.mode === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  },
+
+  [`& .${classes.paper}`]: {
+    margin: theme.spacing(8, 4),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+
+  [`& .${classes.avatar}`]: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+
+  [`& .${classes.form}`]: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+
+  [`& .${classes.submit}`]: {
+    margin: theme.spacing(3, 0, 2),
+  },
+}));
 
 function Copyright() {
   return (
@@ -41,41 +91,7 @@ function Copyright() {
   );
 }
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    height: '100vh',
-  },
-  image: {
-    backgroundImage: 'url("/handshake.png")',
-    // backgroundImage: 'url(https://source.unsplash.com/random)',
-    paddingBottom: '60%',
-    backgroundRepeat: 'no-repeat',
-    backgroundColor:
-      theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-  },
-  paper: {
-    margin: theme.spacing(8, 4),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
-
 export default function SignInSide() {
-  const classes = useStyles();
   const [value, setValue] = React.useState(2);
 
   const handleChange = (event, newValue) => {
@@ -83,7 +99,7 @@ export default function SignInSide() {
   };
 
   return (
-    <>
+    <Root>
       <AppBar />
       <Paper square>
         <Tabs
@@ -129,6 +145,6 @@ export default function SignInSide() {
           </div>
         </Grid>
       </Grid>
-    </>
+    </Root>
   );
 }

@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import Slider from '@material-ui/core/Slider';
-import { makeStyles, Theme, createStyles } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import Slider from '@mui/material/Slider';
+import { Theme } from '@mui/material';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    disabledText: {
-      fontStyle: 'italic',
-    },
-  }),
-);
+const PREFIX = 'LetterSpacingInput';
+
+const classes = {
+  disabledText: `${PREFIX}-disabledText`,
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')(({ theme }) => ({
+  [`& .${classes.disabledText}`]: {
+    fontStyle: 'italic',
+  },
+}));
 
 const getLetterSpacingValue = (letterSpacing: string) => {
   if (letterSpacing == null || letterSpacing.endsWith('rem') || !letterSpacing.endsWith('em')) {
@@ -20,7 +26,6 @@ const getLetterSpacingValue = (letterSpacing: string) => {
 };
 
 function LetterSpacingInput({ value, onChange, property }) {
-  const classes = useStyles();
   const [displayValue, setDisplayValue] = useState<number | undefined>(undefined);
 
   useEffect(() => setDisplayValue(getLetterSpacingValue(value)), [value]);
@@ -28,8 +33,8 @@ function LetterSpacingInput({ value, onChange, property }) {
   const disabled = displayValue == undefined;
 
   return (
-    <>
-      <Grid container justify="space-between" alignItems="baseline">
+    <Root>
+      <Grid container justifyContent="space-between" alignItems="baseline">
         <Grid item>
           <Typography variant="caption" color="textSecondary">
             Letter Spacing:
@@ -55,7 +60,7 @@ function LetterSpacingInput({ value, onChange, property }) {
           Only em units supported. Use the code editor to configure other types.
         </Typography>
       )}
-    </>
+    </Root>
   );
 }
 

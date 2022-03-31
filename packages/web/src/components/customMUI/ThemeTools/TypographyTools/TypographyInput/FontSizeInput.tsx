@@ -1,10 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import Slider from '@material-ui/core/Slider';
-import { makeStyles, Theme, createStyles } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import Slider from '@mui/material/Slider';
+import { Theme } from '@mui/material';
+
+const PREFIX = 'FontSizeInput';
+
+const classes = {
+  valueLabel: `${PREFIX}-valueLabel`,
+  disabledText: `${PREFIX}-disabledText`,
+};
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')(({ theme }) => ({
+  [`& .${classes.valueLabel}`]: {
+    marginRight: theme.spacing(),
+  },
+
+  [`& .${classes.disabledText}`]: {
+    fontStyle: 'italic',
+  },
+}));
 
 const supportedFontSizeTypes = ['rem', 'em', 'px', 'pt'];
 const fontSizeSliderProps: Record<string, object> = {
@@ -43,19 +62,7 @@ const titles: Record<string, string> = {
   htmlFontSize: 'HTML Font Size',
 };
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    valueLabel: {
-      marginRight: theme.spacing(),
-    },
-    disabledText: {
-      fontStyle: 'italic',
-    },
-  }),
-);
-
 function FontSizeInput({ value, onChange, property }) {
-  const classes = useStyles();
   const [fontSizeUnit, setFontSizeUnit] = useState<string | undefined>(getFontSizeUnit(value));
   const [displayValue, setDisplayValue] = useState(getFontSizeValue(value, fontSizeUnit));
 
@@ -69,8 +76,8 @@ function FontSizeInput({ value, onChange, property }) {
   const sliderProps = disabled ? {} : fontSizeSliderProps[fontSizeUnit!];
 
   return (
-    <>
-      <Grid container justify="space-between" alignItems="baseline">
+    <Root>
+      <Grid container justifyContent="space-between" alignItems="baseline">
         <Grid item>
           <Typography variant="caption" color="textSecondary">
             {titles[property]}
@@ -116,7 +123,7 @@ function FontSizeInput({ value, onChange, property }) {
           Only em units supported. Use the code editor to configure other types.
         </Typography>
       )}
-    </>
+    </Root>
   );
 }
 

@@ -1,10 +1,10 @@
-import Backdrop from '@material-ui/core/Backdrop';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import styled from 'styled-components';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
+import { styled } from '@mui/material/styles';
 
-const StyledBackdrop = styled(Backdrop)`
-  z-index: ${(props) => props.theme.zIndex.tooltip + 99991} !important;
-`;
+const StyledBackdrop = styled(Backdrop)(({ theme }) => ({
+  zIndex: `${theme.zIndex.tooltip + 99991} !important`,
+}));
 
 interface IProps {
   open: boolean;

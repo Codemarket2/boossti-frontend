@@ -1,4 +1,4 @@
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 import UserLayout from '../../components/common/UserLayout';
 import UsersList from '../../components/user/UsersList';
 import Breadcrumbs from '../../components/common/Breadcrumbs';

@@ -3,7 +3,7 @@ import InputGroup from '../common/InputGroup';
 import ErrorLoading from '../common/ErrorLoading';
 import LoadingButton from '../common/LoadingButton';
 import { onAlert } from '../../utils/alert';
-import Skeleton from '@material-ui/lab/Skeleton';
+import Skeleton from '@mui/material/Skeleton';
 import { useFacebookSDK } from '../facebook/fbsdk';
 import MentionInput from '../common/MentionInput';
 import ImagePicker from '../common/ImagePicker';
@@ -75,12 +75,12 @@ export default function PostScreen({ post, onClose = () => {} }: any) {
   if (fbsdkLoading) {
     return (
       <ErrorLoading>
-        <Skeleton variant="rect" height={100} className="my-2" />
+        <Skeleton variant="rectangular" height={100} className="my-2" />
         <div className="my-2 d-flex">
-          <Skeleton variant="rect" width={100} height={30} className="mr-2" />
-          <Skeleton variant="rect" width={100} height={30} />
+          <Skeleton variant="rectangular" width={100} height={30} className="mr-2" />
+          <Skeleton variant="rectangular" width={100} height={30} />
         </div>
-        <Skeleton variant="rect" height={30} />
+        <Skeleton variant="rectangular" height={30} />
       </ErrorLoading>
     );
   }

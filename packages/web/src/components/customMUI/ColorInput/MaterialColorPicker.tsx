@@ -1,13 +1,34 @@
 import React, { useEffect } from 'react';
-import * as colors from '@material-ui/core/colors';
-import { makeStyles, Theme, createStyles, Tooltip, Collapse } from '@material-ui/core';
+import { styled } from '@mui/material/styles';
+import * as colors from '@mui/material/colors';
+import { Tooltip, Collapse } from '@mui/material';
 
-import {
-  decomposeColor,
-  recomposeColor,
-  rgbToHex,
-  hslToRgb,
-} from '@material-ui/core/styles/colorManipulator';
+import { decomposeColor, recomposeColor, rgbToHex, hslToRgb } from '@mui/material/styles';
+
+const PREFIX = 'MaterialColorPicker';
+
+const classes = {
+  paletteContainer: `${PREFIX}-paletteContainer`,
+  colorType: `${PREFIX}-colorType`,
+  colorItem: `${PREFIX}-colorItem`,
+};
+
+const Root = styled('div')(({ theme }) => ({
+  [`& .${classes.paletteContainer}`]: {
+    display: 'flex',
+    flexDirection: 'row',
+    height: '1.5em',
+    '&$colorType': {
+      alignItems: 'flex-end',
+    },
+  },
+
+  [`& .${classes.colorType}`]: {},
+
+  [`& .${classes.colorItem}`]: {
+    transition: theme.transitions.create('height'),
+  },
+}));
 
 const muiHues = [
   'red',
@@ -61,27 +82,9 @@ const paletteWidth = 400;
 const colorTypeWidth = paletteWidth / muiHues.length;
 const colorStrengthWidth = paletteWidth / muiShades.length;
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    paletteContainer: {
-      display: 'flex',
-      flexDirection: 'row',
-      height: '1.5em',
-      '&$colorType': {
-        alignItems: 'flex-end',
-      },
-    },
-    colorType: {},
-    colorItem: {
-      transition: theme.transitions.create('height'),
-    },
-  }),
-);
-
 export default function MaterialColorPicker({ color, onChangeComplete }) {
   const [hue, setHue] = React.useState('red');
   const [shade, setShade] = React.useState<string | null>(null);
-  const classes = useStyles();
 
   useEffect(() => {
     // if incoming color maps to a Material UI color, change the input to match
@@ -131,7 +134,7 @@ export default function MaterialColorPicker({ color, onChangeComplete }) {
   }, [color]);
 
   return (
-    <div>
+    <Root>
       <div>
         <div className={`${classes.paletteContainer} ${classes.colorType}`}>
           {muiHues.map((c) => (
@@ -173,6 +176,6 @@ export default function MaterialColorPicker({ color, onChangeComplete }) {
           ))}
         </div>
       </div>
-    </div>
+    </Root>
   );
 }

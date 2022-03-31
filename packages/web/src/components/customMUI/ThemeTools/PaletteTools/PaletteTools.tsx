@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, AccordionSummary, Accordion } from '@material-ui/core';
+import { Typography, AccordionSummary, Accordion } from '@mui/material';
 import PaletteSubType from './PaletteSubType';
 
 const paletteColorTypes = ['primary', 'secondary', 'error', 'warning', 'info', 'success'];

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import TextField from '@material-ui/core/TextField';
+import TextField from '@mui/material/TextField';
 import { useSendEmail } from '@frontend/shared/hooks/email/sendEmail';
 import {
   MenuItem,
@@ -9,7 +9,7 @@ import {
   FormControl,
   InputLabel,
   Switch,
-} from '@material-ui/core';
+} from '@mui/material';
 import { useGetAllMailingList } from '@frontend/shared/hooks/email/createMailingList';
 import InputGroup from '../common/InputGroup';
 import RichTextarea from '../common/RichTextarea2';

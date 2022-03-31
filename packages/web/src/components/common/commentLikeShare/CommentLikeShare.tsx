@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import IconButton from '@material-ui/core/IconButton';
-import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
-import Divider from '@material-ui/core/Divider';
+import IconButton from '@mui/material/IconButton';
+import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
+import Divider from '@mui/material/Divider';
 import { useGetActionCounts } from '@frontend/shared/hooks/comment/getComment';
 import ErrorLoading from '../ErrorLoading';
 import LikeModal from '../../like/LikeModal';
@@ -69,13 +69,13 @@ export default function CommentLikeShare({
               )}
             </>
           ) : null}
-          <IconButton onClick={() => setShowComment(!showComment)}>
+          <IconButton onClick={() => setShowComment(!showComment)} size="large">
             <ChatBubbleIcon />
           </IconButton>
           {data?.getActionCounts?.commentCount && data.getActionCounts.commentCount > 0 ? (
             <span className="mr-2">{data.getActionCounts.commentCount}</span>
           ) : null}
-          <IconButton edge="end">
+          <IconButton edge="end" size="large">
             <Share
               index={index}
               itemSlug={itemSlug}
