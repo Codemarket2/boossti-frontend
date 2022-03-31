@@ -412,6 +412,7 @@ const Navigation = ({
         title="Sections"
         isSection
         previewMode
+        showWidgetExpand
       />
       <PagesFields page={page} previewMode={!authorized} />
     </div>
