@@ -255,11 +255,11 @@ export default function FormFields({
                                         field.fieldType)
                                     }
                                   />
-                                  {!(previewMode || snapshot.isDraggingOver) && (
+                                  {!snapshot.isDraggingOver && (
                                     <ListItemSecondaryAction>
                                       {showWidgetExpand && (
                                         <IconButton
-                                          edge="start"
+                                          edge="end"
                                           onClick={(event) => {
                                             setIsExpanded({
                                               ...isExpanded,
@@ -270,18 +270,20 @@ export default function FormFields({
                                           {expanded ? '\u25BC' : '\u25B6'}
                                         </IconButton>
                                       )}
-                                      <IconButton
-                                        edge="end"
-                                        onClick={(event) =>
-                                          setValues({
-                                            ...initialValues,
-                                            showMenu: event.currentTarget,
-                                            field,
-                                          })
-                                        }
-                                      >
-                                        <MoreVertIcon />
-                                      </IconButton>
+                                      {!previewMode && (
+                                        <IconButton
+                                          edge="end"
+                                          onClick={(event) =>
+                                            setValues({
+                                              ...initialValues,
+                                              showMenu: event.currentTarget,
+                                              field,
+                                            })
+                                          }
+                                        >
+                                          <MoreVertIcon />
+                                        </IconButton>
+                                      )}
                                     </ListItemSecondaryAction>
                                   )}
                                 </ListItem>
