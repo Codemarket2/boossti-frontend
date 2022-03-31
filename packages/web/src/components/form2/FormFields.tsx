@@ -259,7 +259,7 @@ export default function FormFields({
                                     <ListItemSecondaryAction>
                                       {showWidgetExpand && (
                                         <IconButton
-                                          edge="start"
+                                          edge="end"
                                           onClick={(event) => {
                                             setIsExpanded({
                                               ...isExpanded,

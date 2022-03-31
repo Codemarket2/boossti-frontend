@@ -16,6 +16,7 @@ export default function PageFields({ page, previewMode }: IProps) {
       title="Sections"
       isSection
       previewMode={previewMode}
+      showWidgetExpand
     />
   );
 }
