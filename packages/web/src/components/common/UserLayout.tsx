@@ -8,7 +8,7 @@ import BottomBar from './BottomBar';
 import Container from './Container';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
-  backgroundColor: `${theme.palette.background.default} !important`,
+  backgroundColor: `#F0F2F5 !important`,
   minHeight: '100vh !important',
 }));
 

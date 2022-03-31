@@ -21,6 +21,7 @@ import { onAlert } from '../../utils/alert';
 import RichTextarea from '../common/RichTextarea2';
 import Field from './Field';
 import { defualtValue } from './FormView';
+import { useSelector } from 'react-redux';
 
 const filter = createFilterOptions();
 
@@ -47,6 +48,27 @@ export default function ActionForm({
       setFormValues(action);
     }
   }, [action]);
+  const settingTheme = useSelector(({ setting }: any) => setting.theme);
+
+  useEffect(() => {
+    let array = [];
+    Object.keys(settingTheme.palette).map((key, index) => {
+      if (typeof settingTheme.palette[key] === 'string') {
+        array.push({ name: key, field: '' });
+      } else {
+        Object.keys(settingTheme.palette[key]).map((skey, index) =>
+          array.push({ name: key.concat(skey.charAt(0).toUpperCase() + skey.slice(1)), field: '' }),
+        );
+      }
+    });
+
+    console.log({ array });
+    formik.setFieldValue('colorValues', array);
+  }, []);
+
+  useEffect(() => {
+    formik.setFieldValue('variables', [formik.initialValues]);
+  }, [formik.values.actionType]);
 
   return (
     <form className="px-2" onSubmit={formik.handleSubmit}>
@@ -89,6 +111,7 @@ export default function ActionForm({
             <MenuItem value="updateFieldValue">Update field value</MenuItem>
             <MenuItem value="sendInAppNotification">Send In-App Notification</MenuItem>
             <MenuItem value="sendPushNotification">Send Push Notification</MenuItem>
+            <MenuItem value="onPaletteChange">On Palette Change</MenuItem>
           </Select>
           {formik.touched.actionType && formik.errors.actionType ? (
             <FormHelperText className="text-danger">{formik.errors.actionType}</FormHelperText>
@@ -290,97 +313,152 @@ export default function ActionForm({
           </FormControl>
         </InputGroup>
       )}
-      {formik.values.actionType !== 'updateFieldValue' && (
-        <InputGroup>
-          <Typography variant="h6" className="d-flex align-items-center pl-2">
-            Variables
-            <Tooltip title="Add New Action">
-              <IconButton
-                color="primary"
-                onClick={() =>
-                  formik.setFieldValue('variables', [
-                    ...formik.values.variables,
-                    { name: '', field: '' },
-                  ])
-                }
-                size="large"
-              >
-                <AddCircleIcon />
-              </IconButton>
-            </Tooltip>
-          </Typography>
-          <Typography>Inbuilt Variables - formName, createdBy, createdAt, pageName</Typography>
-          <InputLabel>
-            Define Variables and use it in email subject and body. example - {`{{email}}`}
-          </InputLabel>
-          {formik.values.variables.map((variable, variableIndex) => (
-            <div className="d-flex align-items-center" key={variableIndex}>
-              <TextField
-                fullWidth
-                className="mr-2"
-                label="Name"
-                variant="outlined"
-                name="name"
-                size="small"
-                disabled={formik.isSubmitting}
-                value={variable.name}
-                onChange={({ target }) =>
-                  formik.setFieldValue(
-                    'variables',
-                    formik.values.variables.map((sV, sI) =>
-                      sI === variableIndex ? { ...variable, name: target.value } : sV,
-                    ),
-                  )
-                }
-              />
-              <FormControl fullWidth variant="outlined" size="small">
-                <InputLabel id="variablefield-simple-select-outlined-label">Field</InputLabel>
-                <Select
-                  labelId="variablefield-simple-select-outlined-label"
-                  id="variablefield-simple-select-outlined"
-                  name="value"
-                  value={variable.field}
-                  onChange={({ target }) =>
-                    formik.setFieldValue(
-                      'variables',
-                      formik.values.variables.map((sV, sI) => {
-                        if (sI === variableIndex) {
-                          let payload = { ...variable, field: target.value, formId: null };
-                          const field = fields?.filter(
-                            (f) => f._id === target.value && f?.formId,
-                          )[0];
-                          if (field) {
-                            payload = { ...payload, formId: field.formId };
-                          }
-                          return payload;
-                        }
-                        return sV;
-                      }),
-                    )
-                  }
-                  label="Field"
-                >
-                  {fields?.map((field) => (
-                    <MenuItem value={field._id}>{field.label}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <Tooltip title="Delete Variable">
+      {formik.values.actionType !== 'updateFieldValue' &&
+        formik.values.actionType !== 'onPaletteChange' && (
+          <InputGroup>
+            <Typography variant="h6" className="d-flex align-items-center pl-2">
+              Variables
+              <Tooltip title="Add New Action">
                 <IconButton
                   color="primary"
                   onClick={() =>
-                    formik.setFieldValue(
-                      'variables',
-                      formik.values.variables.filter((sV, sI) => sI !== variableIndex),
-                    )
+                    formik.setFieldValue('variables', [
+                      ...formik.values.variables,
+                      { name: '', field: '' },
+                    ])
                   }
                   size="large"
                 >
-                  <DeleteIcon />
+                  <AddCircleIcon />
                 </IconButton>
               </Tooltip>
-            </div>
-          ))}
+            </Typography>
+            <Typography>Inbuilt Variables - formName, createdBy, createdAt, pageName</Typography>
+            <InputLabel>
+              Define Variables and use it in email subject and body. example - {`{{email}}`}
+            </InputLabel>
+            {formik.values.variables.map((variable, variableIndex) => (
+              <div className="d-flex align-items-center" key={variableIndex}>
+                <TextField
+                  fullWidth
+                  className="mr-2"
+                  label="Name"
+                  variant="outlined"
+                  name="name"
+                  size="small"
+                  disabled={formik.isSubmitting}
+                  value={variable.name}
+                  onChange={({ target }) =>
+                    formik.setFieldValue(
+                      'variables',
+                      formik.values.variables.map((sV, sI) =>
+                        sI === variableIndex ? { ...variable, name: target.value } : sV,
+                      ),
+                    )
+                  }
+                />
+                <FormControl fullWidth variant="outlined" size="small">
+                  <InputLabel id="variablefield-simple-select-outlined-label">Field</InputLabel>
+                  <Select
+                    labelId="variablefield-simple-select-outlined-label"
+                    id="variablefield-simple-select-outlined"
+                    name="value"
+                    value={variable.field}
+                    onChange={({ target }) =>
+                      formik.setFieldValue(
+                        'variables',
+                        formik.values.variables.map((sV, sI) => {
+                          if (sI === variableIndex) {
+                            let payload = { ...variable, field: target.value, formId: null };
+                            const field = fields?.filter(
+                              (f) => f._id === target.value && f?.formId,
+                            )[0];
+                            if (field) {
+                              payload = { ...payload, formId: field.formId };
+                            }
+                            return payload;
+                          }
+                          return sV;
+                        }),
+                      )
+                    }
+                    label="Field"
+                  >
+                    {fields?.map((field) => (
+                      <MenuItem value={field._id}>{field.label}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <Tooltip title="Delete Variable">
+                  <IconButton
+                    color="primary"
+                    onClick={() =>
+                      formik.setFieldValue(
+                        'variables',
+                        formik.values.variables.filter((sV, sI) => sI !== variableIndex),
+                      )
+                    }
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Tooltip>
+              </div>
+            ))}
+          </InputGroup>
+        )}
+      {formik.values.actionType === 'onPaletteChange' && (
+        <InputGroup>
+          <Typography variant="h6" className="d-flex align-items-center pl-2">
+            Color Values
+          </Typography>
+          {formik.values.colorValues.map((colorValues, colorValuesIndex) => {
+            return (
+              <div className="d-flex align-items-center pb-3" key={colorValuesIndex}>
+                <TextField
+                  fullWidth
+                  className="mr-2"
+                  label="Name"
+                  variant="outlined"
+                  name="name"
+                  size="small"
+                  disabled={true}
+                  value={colorValues.name}
+                />
+                <FormControl fullWidth variant="outlined" size="small">
+                  <InputLabel id="variablefield-simple-select-outlined-label">Field</InputLabel>
+                  <Select
+                    labelId="variablefield-simple-select-outlined-label"
+                    id="variablefield-simple-select-outlined"
+                    name="value"
+                    value={colorValues.field}
+                    onChange={({ target }) =>
+                      formik.setFieldValue(
+                        'colorValues',
+                        formik.values.colorValues.map((sV, sI) => {
+                          if (sI === colorValuesIndex) {
+                            let payload = { ...colorValues, field: target.value, formId: null };
+                            const field = fields?.filter(
+                              (f) => f._id === target.value && f?.formId,
+                            )[0];
+                            if (field) {
+                              payload = { ...payload, formId: field.formId };
+                            }
+                            return payload;
+                          }
+                          return sV;
+                        }),
+                      )
+                    }
+                    label="Field"
+                  >
+                    {fields?.map((field) => (
+                      <MenuItem value={field._id}>{field.label}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </div>
+            );
+          })}
         </InputGroup>
       )}
       {['sendEmail', 'generateNewUser'].includes(formik.values.actionType) && (
