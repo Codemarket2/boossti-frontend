@@ -93,7 +93,7 @@ export default function Pages({ templateId, slug, template }: IProps) {
               <ErrorLoading error={error} />
             ) : (
               <List dense className="p-0">
-                {data.getPages.data.map((lisItem, i) => (
+                {/* {data.getPages.data.map((lisItem, i) => (
                   <Fragment key={lisItem._id}>
                     {i > 0 && <Divider />}
                     <Link href={`/${lisItem.template.slug}/${lisItem.slug}`}>
@@ -113,7 +113,7 @@ export default function Pages({ templateId, slug, template }: IProps) {
                       </ListItem>
                     </Link>
                   </Fragment>
-                ))}
+                ))} */}
               </List>
             )}
           </>

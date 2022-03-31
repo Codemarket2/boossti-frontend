@@ -1,9 +1,5 @@
-import { useGetFormBySlug } from '@frontend/shared/hooks/form';
-import ErrorLoading from '../components/common/ErrorLoading';
-import NotFound from '../components/common/NotFound';
+// import Templates from '../components/template/Templates';
 import UserLayout from '../components/common/UserLayout';
-import ResponseList from '../components/response/ResponseList';
-import Templates from '../components/template/Templates';
 import { FormPage } from './HomeScreen-new';
 
 export default function TypesScreen() {

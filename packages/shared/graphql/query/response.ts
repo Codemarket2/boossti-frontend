@@ -99,6 +99,9 @@ export const GET_RESPONSE_BY_COUNT = gql`
           values {
             field
             value
+            form {
+              name
+            }
           }
         }
         options

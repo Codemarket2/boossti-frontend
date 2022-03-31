@@ -11,13 +11,14 @@ export default function TemplateWidgets({ template, previewMode }: IProps) {
   const { onTemplateChange } = useUpdateTemplate({ template, onAlert });
   return (
     <div>
-      {/* <FormFields
+      <FormFields
         fields={template?.fields}
         setFields={(fields) => onTemplateChange({ fields })}
         title="Widgets"
         previewMode={previewMode}
         isSection
-      /> */}
+        showWidgetExpand
+      />
     </div>
   );
 }

@@ -189,7 +189,17 @@ export default function Album() {
   );
 }
 
-export const FormPage = ({ slug, settings = {} }: { slug: string; settings?: any }) => {
+export const FormPage = ({
+  slug,
+  settings = {},
+  onCancel,
+  createCallback,
+}: {
+  slug: string;
+  settings?: any;
+  onCancel?: any;
+  createCallback?: (response: any) => void;
+}) => {
   const { data, error } = useGetFormBySlug(slug);
 
   if (error || !data) {
@@ -203,6 +213,8 @@ export const FormPage = ({ slug, settings = {} }: { slug: string; settings?: any
   return (
     <FormView
       form={{ ...data.getFormBySlug, settings: { ...data.getFormBySlug?.settings, ...settings } }}
+      onCancel={onCancel}
+      createCallback={createCallback}
     />
   );
 };

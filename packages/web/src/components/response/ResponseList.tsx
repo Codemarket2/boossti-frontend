@@ -208,7 +208,11 @@ export default function ResponseList({
                         <Tooltip title="Open Response">
                           <IconButton
                             onClick={() => {
-                              router.push(`/forms/${form.slug}/response/${response.count}`);
+                              if (form.slug === 'template') {
+                                router.push(`/${response.count}`);
+                              } else {
+                                router.push(`/forms/${form.slug}/response/${response.count}`);
+                              }
                             }}
                             edge="start"
                           >

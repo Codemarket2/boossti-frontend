@@ -37,6 +37,7 @@ interface IProps {
   createCallback?: (response: any) => void;
   setResponded?: () => void;
   isPageOwner?: boolean;
+  onCancel?: () => void;
 }
 
 export const defualtValue = {
@@ -73,6 +74,7 @@ export default function FormViewWrapper({
   createCallback,
   setResponded,
   isPageOwner,
+  onCancel,
 }: IProps): any {
   const { handleCreateUpdateResponse, createLoading } = useCreateUpdateResponse(
     { onAlert },
@@ -353,6 +355,7 @@ export default function FormViewWrapper({
                   loading={createLoading}
                   fieldWiseView={form?.settings?.formView === 'oneField'}
                   formId={form?._id}
+                  onCancel={onCancel}
                 />
               )}
             </>
@@ -543,11 +546,8 @@ export function FormView({
             <div style={field?.options?.style || {}}>
               <InputGroup key={field._id}>
                 <Typography>
-                  {field?.options?.required ? (
-                    <span className="text-danger">{`${field?.label}*`}</span>
-                  ) : (
-                    field?.label
-                  )}
+                  {field?.label}
+                  {field?.options?.required && <span className="text-danger">*</span>}
                 </Typography>
                 <>
                   <div className="w-100">
