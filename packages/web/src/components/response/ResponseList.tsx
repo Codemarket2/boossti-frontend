@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import DataGrid, { CopyEvent, PasteEvent, SelectColumn, TextEditor } from 'react-data-grid';
 import { useRouter } from 'next/router';
 import moment from 'moment';
@@ -24,6 +24,8 @@ import Authorization from '../common/Authorization';
 import DeleteButton from '../common/DeleteButton';
 import { ResponseChild3 } from './Response';
 import EditResponseDrawer from './EditResponseDrawer';
+import { CellExpanderFormatter } from './CellExpanderFormatter';
+import { DataTable } from './Table';
 
 interface IProps {
   form: any;
@@ -50,7 +52,6 @@ export default function ResponseList({
   const router = useRouter();
   const [selectedResponse, setSelectedResponse] = useState(null);
   const [rows, setRows] = useState([]);
-  const [colm, setColm] = useState([]);
   const [direction, setDirection] = useState<Direction>('ltr');
   const [selectedRows, setSelectedRows] = useState<ReadonlySet<string>>(() => new Set());
   /*
@@ -88,65 +89,64 @@ export default function ResponseList({
     return row.id;
   }
 
-  const createColm = (form) => {
-    const arr = [
-      SelectColumn,
-      { key: 'sno', name: 'S.No', resizable: true, frozen: true, width: 60 },
-    ];
-
-    form?.fields?.map((e) => {
-      const temp = {
-        key: '',
-        name: '',
-        resizable: true,
-        frozen: false,
-        editor: TextEditor,
-      };
-      temp.key = e._id;
-      temp.name = e.label;
-      arr.push(temp);
-    });
-    return arr;
-  };
-
   const createRows = (data) => {
-    const arr = [];
+    const rows = [];
     data?.getResponses?.data?.map((e, i) => {
-      const temp = { sno: i, id: i };
+      const tid = `${i + 1}`;
+      const temp = { id: tid, children: [] };
+      let sameFieldCount = 1;
       e?.values?.map((v) => {
-        temp[v.field] = v.value;
+        //find field
+        if (temp[v.field]) {
+          const innerTemp = {
+            id: `${tid}.${sameFieldCount}`,
+            parentId: tid,
+          };
+          innerTemp[v.field] = v.value
+            ? v.value
+            : v.valueNumber
+            ? v.valueNumber
+            : v.valueDate
+            ? v.valueDate
+            : v.valueBoolean;
+
+          temp.children.push(innerTemp);
+          sameFieldCount += 1;
+        } else
+          temp[v.field] = v.value
+            ? v.value
+            : v.valueNumber
+            ? v.valueNumber
+            : v.valueDate
+            ? v.valueDate
+            : v.valueBoolean;
       });
-      arr.push(temp);
+      rows.push(temp);
     });
-    return arr;
+    return rows;
   };
 
-  useEffect(() => {
-    setColm(createColm(form));
-  }, [form]);
   useEffect(() => {
     setRows(createRows(data));
   }, [form, data]);
+  const defaultRows = createRows(data);
   return (
     <>
       <Backdrop open={deleteLoading} />
       {form?.settings?.responsesView != 'vertical' && form?.settings?.responsesView == 'table' && (
-        <div style={{ height: 720, width: '100%' }}>
-          <DataGrid
-            rows={rows}
-            columns={colm}
-            rowHeight={40}
-            onRowsChange={setRows}
-            rowKeyGetter={rowKeyGetter}
-            selectedRows={selectedRows}
-            onSelectedRowsChange={setSelectedRows}
-            onFill={handleFill}
-            onCopy={handleCopy}
-            onPaste={handlePaste}
-            className="fill-grid"
-            direction={direction}
-          />
-        </div>
+        <DataTable
+          form={form}
+          rows={defaultRows}
+          rowHeight={40}
+          onRowsChange={setRows}
+          rowKeyGetter={rowKeyGetter}
+          selectedRows={selectedRows}
+          onSelectedRowsChange={setSelectedRows}
+          onFill={handleFill}
+          onCopy={handleCopy}
+          onPaste={handlePaste}
+          direction={direction}
+        />
       )}
       {form?.settings?.responsesView != 'vertical' && form?.settings?.responsesView != 'table' && (
         <TableContainer component={Paper} variant="outlined">
