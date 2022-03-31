@@ -67,6 +67,7 @@ interface IFormValues {
   nameFieldId: string;
   receiverEmails: string[];
   variables: TVariables[];
+  colorValues: any[];
   subject: string;
   body: string;
 }
@@ -82,6 +83,7 @@ const defaultFormValues = {
   nameFieldId: '',
   receiverEmails: [],
   variables: [{ name: '', field: '', formId: null }],
+  colorValues: [],
   fields: [{ field: '', formId: null, value: null }],
   subject: '',
   body: '',
@@ -123,6 +125,7 @@ export function useFormActions({ onAlert, onSave }: IProps) {
     formik.setFieldValue('receiverEmails', payload?.receiverEmails, false);
     formik.setFieldValue('phoneFieldId', payload.phoneFieldId, false);
     formik.setFieldValue('variables', payload.variables, false);
+    formik.setFieldValue('colorValues', payload.colorValues, false);
     formik.setFieldValue('subject', payload.subject, false);
     formik.setFieldValue('body', payload.body, false);
     formik.setFieldValue('fields', payload?.fields, false);

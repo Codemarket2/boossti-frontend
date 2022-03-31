@@ -20,6 +20,7 @@ import 'react-phone-input-2/lib/style.css';
 import InputGroup from '../common/InputGroup';
 import { SelectOptionType } from './EditField';
 import ImagePicker2 from '../common/ImagePicker2';
+import ColorInput from '../customMUI/ColorInput/ColorInput';
 
 interface IProps {
   disabled?: boolean;
@@ -299,6 +300,15 @@ export default function Field({
           onChange={({ target }) => onChange({ field: _id, valueNumber: target.value })}
           error={validation.error}
           helperText={validation.errorMessage}
+        />
+      );
+    }
+    case 'colorPicker': {
+      return (
+        <ColorInput
+          label=""
+          color={value ? value.value : ''}
+          onColorChange={(e: any) => onChange({ field: _id, value: e })}
         />
       );
     }
