@@ -1,8 +1,6 @@
 import { useGetSection } from '@frontend/shared/hooks/section';
-import { useState, useEffect, useMemo } from 'react';
-import DataGrid from 'react-data-grid';
+import { useState } from 'react';
 import { List, Paper, Typography } from '@material-ui/core';
-import type { Column } from 'react-data-grid';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
@@ -35,7 +33,7 @@ export default function WorkFlowView({ field, treeDepth }: IProps) {
     <>
       <div style={{ marginInlineStart: 10 }}>
         <ListItem button>
-          <ListItemText primary={'Response Section'} />
+          <ListItemText style={{ marginInlineStart: 5 }} primary={'WorkFlows'} />
           <ListItemSecondaryAction>
             <IconButton
               edge="start"
@@ -70,9 +68,7 @@ export default function WorkFlowView({ field, treeDepth }: IProps) {
                         </IconButton>
                       </ListItemSecondaryAction>
                     </ListItem>
-                    {f?.fieldType === 'form' && expanded && (
-                      <DisplaySettings field={f} treeDepth={treeDepth + 2} />
-                    )}
+                    {expanded && <DisplaySettings field={f} treeDepth={treeDepth + 2} />}
                   </div>
                 );
               })}

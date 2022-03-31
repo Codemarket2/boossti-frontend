@@ -1,4 +1,3 @@
-import { useGetSection } from '@frontend/shared/hooks/section';
 import { useState, useEffect, useMemo } from 'react';
 import DataGrid from 'react-data-grid';
 import { Tooltip, Box } from '@material-ui/core';
@@ -53,7 +52,7 @@ export default function TreeView({ field, treeDepth }: IProps) {
         name: 'settings',
         formatter({ row, isCellSelected }: any) {
           const hasChildren = row.children !== undefined;
-          const style = { marginInlineStart: 10 * (1 + row.treeDepth) };
+          const style = { marginInlineStart: 5 * (1 + row.treeDepth) };
           return (
             <>
               <ListItem style={style}>
@@ -78,8 +77,6 @@ export default function TreeView({ field, treeDepth }: IProps) {
     ];
   }, [rows]);
 
-  if (!field?.options?.settings) return <></>;
-
   return (
     <>
       <DataGrid
@@ -94,7 +91,7 @@ export default function TreeView({ field, treeDepth }: IProps) {
 }
 
 export const useCreateRows = (field: any, ITreeDepth = 0) => {
-  const { settings } = field.options;
+  let { settings } = field.options;
   const widgetTypes = {
     both: 'Display form & responses',
     form: 'Display only form',
@@ -124,141 +121,140 @@ export const useCreateRows = (field: any, ITreeDepth = 0) => {
     onlyPageOwner: 'Only page owner',
   };
   const trows: Row2[] = [];
-  if (settings) {
-    const {
-      formView,
-      minValue,
-      maxValue,
-      buttonLabel,
-      selectItemField,
-      whoCanSubmit,
-      viewAuthRequired,
-      multipleResponses,
-      widgetType,
-      editResponse,
-      whoCanViewResponses,
-      onlyMyResponses,
-      actions,
-      showFormTitle,
-    } = settings;
+  if (settings === undefined) settings = {};
+  const {
+    formView,
+    minValue,
+    maxValue,
+    buttonLabel,
+    selectItemField,
+    whoCanSubmit,
+    viewAuthRequired,
+    multipleResponses,
+    widgetType,
+    editResponse,
+    whoCanViewResponses,
+    onlyMyResponses,
+    actions,
+    showFormTitle,
+  } = settings;
+  trows.push({
+    id: '1',
+    name: widgetTypes[widgetType] || widgetTypes.both,
+    treeDepth: 0,
+  });
+  if (widgetType !== 'responses') {
     trows.push({
-      id: '1',
-      name: widgetTypes[settings?.widgetType] || widgetTypes.both,
+      id: '2',
+      name: formViewTypes[settings?.formView] || formViewTypes.fullForm,
       treeDepth: 0,
     });
-    if (widgetType !== 'responses') {
+    if (formView === 'leaderboard') {
       trows.push({
-        id: '2',
-        name: formViewTypes[settings?.formView] || formViewTypes.fullForm,
-        treeDepth: ITreeDepth,
-      });
-      if (formView === 'leaderboard') {
-        trows.push({
-          id: '3',
-          name: 'Leaderboard Settings',
-          treeDepth: ITreeDepth,
-          children: [
-            {
-              id: '4',
-              name: `Min Value ${minValue}`,
-              treeDepth: 1 + ITreeDepth,
-              parentId: '3',
-            },
-            {
-              id: '5',
-              name: `Max Value ${maxValue}`,
-              treeDepth: 1 + ITreeDepth,
-              parentId: '3',
-            },
-          ],
-        });
-      }
-      if (formView === 'button') {
-        trows.push({
-          id: '6',
-          name: `ButtonLabel: ${buttonLabel || 'Not Set'}`,
-          treeDepth: ITreeDepth,
-        });
-      }
-      if (formView === 'selectItem') {
-        trows.push({
-          id: '7',
-          name: `selectItem: ${selectItemField || 'Not Set'}`,
-          treeDepth: ITreeDepth,
-        });
-      }
-      trows.push({
-        id: '8',
-        name: `Who can submit: ${whoCanSubmitTypes[whoCanSubmit] || whoCanSubmitTypes.all}`,
-        treeDepth: ITreeDepth,
-      });
-      if (whoCanSubmit === 'all' && viewAuthRequired) {
-        trows.push({
-          id: '10',
-          name: `Authentication required to view form`,
-          treeDepth: ITreeDepth,
-        });
-      }
-      if (multipleResponses) {
-        trows.push({
-          id: '11',
-          name: `Multiple responses allowed`,
-          treeDepth: ITreeDepth,
-        });
-      }
-      if (editResponse) {
-        trows.push({
-          id: '12',
-          name: `Edit response`,
-          treeDepth: ITreeDepth,
-        });
-      }
-    }
-    if (widgetType !== 'form') {
-      trows.push(
-        {
-          id: '13',
-          name: `ResponseView: ${
-            responseViewTypes[settings?.responsesView] || responseViewTypes.button
-          }`,
-          treeDepth: ITreeDepth,
-        },
-        {
-          id: '14',
-          name: `Response Visibility: \n ${
-            whoCanSeeResponsesTypes[whoCanViewResponses] || whoCanSeeResponsesTypes.all
-          }`,
-          treeDepth: ITreeDepth,
-        },
-      );
-      if (onlyMyResponses) {
-        trows.push({
-          id: '15',
-          name: `Users can view only their own responses`,
-          treeDepth: ITreeDepth,
-        });
-      }
-    }
-    if (showFormTitle) {
-      trows.push({
-        id: '16',
-        name: `Show form title`,
-        treeDepth: ITreeDepth,
-      });
-    }
-    if (actions) {
-      trows.push({
-        id: '17',
-        name: `Actions`,
+        id: '3',
+        name: 'Leaderboard Settings',
         treeDepth: 0,
-        children: actions.map((action, index) => ({
-          id: `${index + 100}`,
-          name: `${action.name}`,
-          treeDepth: ITreeDepth + 1,
-          parentId: '17',
-        })),
+        children: [
+          {
+            id: '4',
+            name: `Min Value ${minValue}`,
+            treeDepth: 1,
+            parentId: '3',
+          },
+          {
+            id: '5',
+            name: `Max Value ${maxValue}`,
+            treeDepth: 1,
+            parentId: '3',
+          },
+        ],
       });
     }
+    if (formView === 'button') {
+      trows.push({
+        id: '6',
+        name: `ButtonLabel: ${buttonLabel || 'Not Set'}`,
+        treeDepth: 0,
+      });
+    }
+    if (formView === 'selectItem') {
+      trows.push({
+        id: '7',
+        name: `selectItem: ${selectItemField || 'Not Set'}`,
+        treeDepth: 0,
+      });
+    }
+    trows.push({
+      id: '8',
+      name: `Who can submit: ${whoCanSubmitTypes[whoCanSubmit] || whoCanSubmitTypes.all}`,
+      treeDepth: 0,
+    });
+    if (viewAuthRequired) {
+      trows.push({
+        id: '10',
+        name: `Authentication required to view form`,
+        treeDepth: 0,
+      });
+    }
+    if (multipleResponses) {
+      trows.push({
+        id: '11',
+        name: `Multiple responses allowed`,
+        treeDepth: 0,
+      });
+    }
+    if (editResponse) {
+      trows.push({
+        id: '12',
+        name: `Edit response`,
+        treeDepth: 0,
+      });
+    }
+  }
+  if (widgetType !== 'form') {
+    trows.push(
+      {
+        id: '13',
+        name: `ResponseView: ${
+          responseViewTypes[settings?.responsesView] || responseViewTypes.button
+        }`,
+        treeDepth: 0,
+      },
+      {
+        id: '14',
+        name: `Response Visibility: \n ${
+          whoCanSeeResponsesTypes[whoCanViewResponses] || whoCanSeeResponsesTypes.all
+        }`,
+        treeDepth: 0,
+      },
+    );
+    if (onlyMyResponses) {
+      trows.push({
+        id: '15',
+        name: `Users can view only their own responses`,
+        treeDepth: 0,
+      });
+    }
+  }
+  if (showFormTitle) {
+    trows.push({
+      id: '16',
+      name: `Show form title`,
+      treeDepth: 0,
+    });
+  }
+  if (actions) {
+    trows.push({
+      id: '17',
+      name: `Actions`,
+      treeDepth: 0,
+      children: actions.map((action, index) => ({
+        id: `${index + 100}`,
+        name: `${action.name}`,
+        treeDepth: 1,
+        parentId: '17',
+      })),
+    });
   }
 
   return trows;
