@@ -255,7 +255,7 @@ export default function FormFields({
                                         field.fieldType)
                                     }
                                   />
-                                  {!snapshot.isDraggingOver && (
+                                  {!(previewMode || snapshot.isDraggingOver) && (
                                     <ListItemSecondaryAction>
                                       {showWidgetExpand && (
                                         <IconButton
@@ -270,20 +270,18 @@ export default function FormFields({
                                           {expanded ? '\u25BC' : '\u25B6'}
                                         </IconButton>
                                       )}
-                                      {!previewMode && (
-                                        <IconButton
-                                          edge="end"
-                                          onClick={(event) =>
-                                            setValues({
-                                              ...initialValues,
-                                              showMenu: event.currentTarget,
-                                              field,
-                                            })
-                                          }
-                                        >
-                                          <MoreVertIcon />
-                                        </IconButton>
-                                      )}
+                                      <IconButton
+                                        edge="end"
+                                        onClick={(event) =>
+                                          setValues({
+                                            ...initialValues,
+                                            showMenu: event.currentTarget,
+                                            field,
+                                          })
+                                        }
+                                      >
+                                        <MoreVertIcon />
+                                      </IconButton>
                                     </ListItemSecondaryAction>
                                   )}
                                 </ListItem>
