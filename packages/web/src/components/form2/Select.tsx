@@ -1,5 +1,5 @@
-import TextField from '@material-ui/core/TextField';
-import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
+import TextField from '@mui/material/TextField';
+import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 
 interface IProps {
   options: string[];
@@ -26,9 +26,9 @@ export default function Select({
     <Autocomplete
       size="small"
       options={options}
-      getOptionLabel={(option) => option}
+      getOptionLabel={(option: string) => option}
       value={value}
-      onChange={(event: any, newValue) => {
+      onChange={(event: any, newValue: string) => {
         onChange(newValue);
       }}
       renderInput={(params) => (
@@ -41,7 +41,7 @@ export default function Select({
           helperText={helperText}
         />
       )}
-      filterOptions={(options2, params) => {
+      filterOptions={(options2: any, params: any) => {
         const filtered = filter(options2, params);
         if (params.inputValue !== '' && selectAllowCreate) {
           filtered.push(params.inputValue);

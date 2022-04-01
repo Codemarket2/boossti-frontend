@@ -1,24 +1,24 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import BottomNavigation from '@material-ui/core/BottomNavigation';
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import HomeIcon from '@material-ui/icons/Home';
-import styled from 'styled-components';
-import { routes } from '../../utils/routes';
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import HomeIcon from '@mui/icons-material/Home';
 import { useSelector, useDispatch } from 'react-redux';
+import { styled } from '@mui/material/styles';
 import { updateSettingAction } from '@frontend/shared/redux/actions/setting';
+import { routes } from '../../utils/routes';
 
-const StyledBottomNavigation = styled(BottomNavigation)`
-  position: fixed;
-  width: 100%;
-  bottom: 0px;
-  display: none !important;
-  ${(props) => props.theme.breakpoints.down('xs')} {
-    display: flex !important;
-  }
-`;
+const StyledBottomNavigation = styled(BottomNavigation)(({ theme }) => ({
+  position: 'fixed',
+  width: '100%',
+  bottom: 0,
+  display: 'none !important',
+  [theme.breakpoints.down('sm')]: {
+    display: 'flex !important',
+  },
+}));
 
 export default function SimpleBottomNavigation() {
   const router = useRouter();

@@ -4,55 +4,55 @@ import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import projectConfig from '@frontend/shared';
 import { useHandleLogout } from '@frontend/shared/hooks/auth';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import MenuIcon from '@material-ui/icons/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
-import Button from '@material-ui/core/Button';
-import AddIcon from '@material-ui/icons/Add';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import HomeIcon from '@material-ui/icons/Home';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Tooltip from '@material-ui/core/Tooltip';
-import styled from 'styled-components';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { useTheme } from '@material-ui/core/styles';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import MenuIcon from '@mui/icons-material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Menu from '@mui/material/Menu';
+import Button from '@mui/material/Button';
+// import AddIcon from '@mui/icons-material/Add';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+// import HomeIcon from '@mui/icons-material/Home';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Tooltip from '@mui/material/Tooltip';
+import { styled, useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import Notification from '../notification/Notification';
 import Drawer from './Drawer';
-import { routes } from '../../utils/routes';
+// import { routes } from '../../utils/routes';
 import { useDarkMode } from './DarkModeToggle';
 
-const setActiveRouteColor = (activeRoute, linkRoute) => {
-  return activeRoute === linkRoute ? 'primary' : 'default';
-};
+// const setActiveRouteColor = (activeRoute, linkRoute) => {
+//   return activeRoute === linkRoute ? 'primary' : 'default';
+// };
 
-const StyledTitle = styled(Typography)`
-  width: 100%;
-  cursor: pointer;
-  font-weight: bold !important;
-  ${(props) => props.theme.breakpoints.down('xs')} {
-    text-align: center !important;
-  }
-`;
-const StyledImageContainer = styled.div`
-  width: 100%;
-  cursor: pointer;
-  ${(props) => props.theme.breakpoints.down('xs')} {
-    text-align: center !important;
-  }
-`;
+const StyledTitle = styled(Typography)(({ theme }) => ({
+  width: '100%',
+  cursor: 'pointer',
+  fontWeight: 'bold !important',
+  [theme.breakpoints.down('sm')]: {
+    textAlign: 'center !important',
+  },
+}));
 
-const MenuWrapper = styled.div`
-  display: flex;
-  ${(props) => props.theme.breakpoints.down('xs')} {
-    display: none !important;
-  }
-`;
+const StyledImageContainer = styled('div')(({ theme }) => ({
+  width: '100%',
+  cursor: 'pointer',
+  [theme.breakpoints.down('sm')]: {
+    textAlign: 'center !important',
+  },
+}));
+
+const MenuWrapper = styled('div')(({ theme }) => ({
+  display: 'flex',
+  [theme.breakpoints.down('sm')]: {
+    display: 'none !important',
+  },
+}));
 
 export default function AppBarComponent() {
   const { authenticated, admin, attributes } = useSelector(({ auth }: any) => auth);
@@ -67,7 +67,7 @@ export default function AppBarComponent() {
   const open = Boolean(anchorEl);
 
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.down('xs'));
+  const matches = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -89,7 +89,7 @@ export default function AppBarComponent() {
         {authenticated ? (
           <>
             <Tooltip title="Menu">
-              <IconButton onClick={() => setShowDrawer(true)} color="inherit">
+              <IconButton onClick={() => setShowDrawer(true)} color="inherit" size="large">
                 <MenuIcon role="button" className="mr-0" />
               </IconButton>
             </Tooltip>
@@ -137,6 +137,7 @@ export default function AppBarComponent() {
                   aria-haspopup="true"
                   onClick={handleMenu}
                   color="inherit"
+                  size="large"
                 >
                   <AccountCircleIcon />
                 </IconButton>

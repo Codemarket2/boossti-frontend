@@ -1,6 +1,6 @@
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import DeleteIcon from '@material-ui/icons/Delete';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function DeleteButton({
   onClick,
@@ -21,6 +21,7 @@ export default function DeleteButton({
           }
         }}
         edge={edge}
+        size="large"
       >
         <DeleteIcon />
       </IconButton>

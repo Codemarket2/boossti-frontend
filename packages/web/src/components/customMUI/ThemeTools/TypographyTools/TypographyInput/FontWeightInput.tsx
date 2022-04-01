@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import Slider from '@material-ui/core/Slider';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import Slider from '@mui/material/Slider';
 
 const titles = {
   fontWeight: 'Font Weight',
@@ -18,7 +18,7 @@ function FontWeightInput({ value, onChange, property }) {
 
   return (
     <>
-      <Grid container justify="space-between" alignItems="baseline">
+      <Grid container justifyContent="space-between" alignItems="baseline">
         <Grid item>
           <Typography variant="caption" color="textSecondary">{`${titles[property]}:`}</Typography>
         </Grid>

@@ -1,19 +1,9 @@
-import IconButton from '@material-ui/core/IconButton';
-import TextField from '@material-ui/core/TextField';
-import Edit from '@material-ui/icons/Edit';
-import Close from '@material-ui/icons/Close';
-import Check from '@material-ui/icons/Check';
+import IconButton from '@mui/material/IconButton';
+import TextField from '@mui/material/TextField';
+import Edit from '@mui/icons-material/Edit';
+import Close from '@mui/icons-material/Close';
+import Check from '@mui/icons-material/Check';
 import { useState } from 'react';
-// import styled from 'styled-components';
-
-// const StyledInput = styled.input`
-//   color: ${(props) => props.theme.palette.text.primary};
-//   background: rgba(0, 0, 0, 0);
-//   border: none;
-//   outline: none;
-//   margin-right: 10px;
-//   width: ${(props) => props.width};
-// `;
 
 interface IProps {
   placeholder: string;

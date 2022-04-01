@@ -1,4 +1,4 @@
-import Skeleton from '@material-ui/lab/Skeleton';
+import Skeleton from '@mui/material/Skeleton';
 import { useCreateComment, useDeleteComment } from '@frontend/shared/hooks/comment/createComment';
 import { useGetComments } from '@frontend/shared/hooks/comment/getComment';
 import CommentInput from './CommentInput';

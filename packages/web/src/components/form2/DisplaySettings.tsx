@@ -1,48 +1,98 @@
-import { useUpdateSection } from '@frontend/shared/hooks/section';
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import {
-  Paper,
-  List,
-  ListItem,
-  Typography,
-  InputLabel,
-  ListItemIcon,
-  ListItemText,
-  Tooltip,
-  IconButton,
-  ListItemSecondaryAction,
-  Divider,
-} from '@material-ui/core';
-import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { onAlert } from '../../utils/alert';
-import { convertToSlug } from './FormFields';
+import { useState, useEffect, useMemo } from 'react';
+import DataGrid from 'react-data-grid';
+import { Tooltip, Box } from '@mui/material';
+import type { Column } from 'react-data-grid';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import IconButton from '@mui/material/IconButton';
+import WorkFlowView from './WorkFlowView';
 
-interface IProps {
-  settings: any;
-  formId: any;
-  isSection?: boolean;
-  fields?: any;
+interface Row2 {
+  id: string;
+  name: string;
+  treeDepth: number;
+  children?: Row2[];
+  parentId?: string;
+  isExpanded?: boolean;
+  rowHeight?: number;
 }
 
-const initialState = { showForm: false, selectedIndex: null, selectedItem: null, showMenu: null };
+interface IProps {
+  field?: any;
+  treeDepth?: number;
+}
 
-export default function DisplaySettings({ formId, settings, fields, isSection }: IProps): any {
-  const [state, setState] = useState(initialState);
-  const { onSectionChange, section, handleUpdateSection, error } = useUpdateSection({
-    onAlert,
-    _id: settings?.customSectionId,
-  });
-  const router = useRouter();
-  const handleNavigate = (fieldLabel) => {
-    if (isSection) {
-      const url = `${window.location.origin}${window.location.pathname}#${convertToSlug(
-        fieldLabel,
-      )}`;
-      router.push(url);
-    }
-  };
+function toggleSubRow(rows: Row2[], id: string): Row2[] {
+  const rowIndex = rows.findIndex((r) => r.id === id);
+  const row = rows[rowIndex];
+  const { children } = row;
+  if (!children) return rows;
+  const newRows = [...rows];
+  newRows[rowIndex] = { ...row, isExpanded: !row.isExpanded };
+  if (!row.isExpanded) {
+    newRows.splice(rowIndex + 1, 0, ...children);
+  } else {
+    newRows.splice(rowIndex + 1, children.length);
+  }
+  // console.log({ newRows }, 'kyle returned');
+  return newRows;
+}
+
+export default function TreeView({ field, treeDepth }: IProps) {
+  const trows = useCreateRows(field, treeDepth);
+  const [rows, setRows] = useState(trows);
+  useEffect(() => {
+    setRows(trows);
+  }, [field]);
+  const columns: Column<Row2>[] = useMemo(() => {
+    return [
+      {
+        key: 'widgets',
+        name: 'settings',
+        formatter({ row, isCellSelected }: any) {
+          const hasChildren = row.children !== undefined;
+          const style = { marginInlineStart: 5 * (1 + row.treeDepth) };
+          return (
+            <>
+              <ListItem style={style}>
+                <Tooltip title={row.name}>
+                  <ListItemText primary={row.name} />
+                </Tooltip>
+                <ListItemSecondaryAction hidden={!hasChildren}>
+                  <IconButton
+                    onClick={() => {
+                      const newR = toggleSubRow(rows, row.id);
+                      setRows(newR);
+                    }}
+                    size="large"
+                  >
+                    {row.isExpanded ? '\u25BC' : '\u25B6'}
+                  </IconButton>
+                </ListItemSecondaryAction>
+              </ListItem>
+            </>
+          );
+        },
+      },
+    ];
+  }, [rows]);
+
+  return (
+    <>
+      <DataGrid
+        style={{ height: !rows || rows.length === 0 ? undefined : rows.length * 35 + 5 }}
+        headerRowHeight={0}
+        columns={columns}
+        rows={rows}
+      />
+      <WorkFlowView field={field} treeDepth={treeDepth ? treeDepth + 1 : 1} />
+    </>
+  );
+}
+
+export const useCreateRows = (field: any, ITreeDepth = 0) => {
+  let { settings } = field.options;
   const widgetTypes = {
     both: 'Display form & responses',
     form: 'Display only form',
@@ -71,152 +121,142 @@ export default function DisplaySettings({ formId, settings, fields, isSection }:
     authUser: 'Only Authenticated users',
     onlyPageOwner: 'Only page owner',
   };
+  const trows: Row2[] = [];
+  if (settings === undefined) settings = {};
+  const {
+    formView,
+    minValue,
+    maxValue,
+    buttonLabel,
+    selectItemField,
+    whoCanSubmit,
+    viewAuthRequired,
+    multipleResponses,
+    widgetType,
+    editResponse,
+    whoCanViewResponses,
+    onlyMyResponses,
+    actions,
+    showFormTitle,
+  } = settings;
+  trows.push({
+    id: '1',
+    name: widgetTypes[widgetType] || widgetTypes.both,
+    treeDepth: 0,
+  });
+  if (widgetType !== 'responses') {
+    trows.push({
+      id: '2',
+      name: formViewTypes[settings?.formView] || formViewTypes.fullForm,
+      treeDepth: 0,
+    });
+    if (formView === 'leaderboard') {
+      trows.push({
+        id: '3',
+        name: 'Leaderboard Settings',
+        treeDepth: 0,
+        children: [
+          {
+            id: '4',
+            name: `Min Value ${minValue}`,
+            treeDepth: 1,
+            parentId: '3',
+          },
+          {
+            id: '5',
+            name: `Max Value ${maxValue}`,
+            treeDepth: 1,
+            parentId: '3',
+          },
+        ],
+      });
+    }
+    if (formView === 'button') {
+      trows.push({
+        id: '6',
+        name: `ButtonLabel: ${buttonLabel || 'Not Set'}`,
+        treeDepth: 0,
+      });
+    }
+    if (formView === 'selectItem') {
+      trows.push({
+        id: '7',
+        name: `selectItem: ${selectItemField || 'Not Set'}`,
+        treeDepth: 0,
+      });
+    }
+    trows.push({
+      id: '8',
+      name: `Who can submit: ${whoCanSubmitTypes[whoCanSubmit] || whoCanSubmitTypes.all}`,
+      treeDepth: 0,
+    });
+    if (viewAuthRequired) {
+      trows.push({
+        id: '10',
+        name: `Authentication required to view form`,
+        treeDepth: 0,
+      });
+    }
+    if (multipleResponses) {
+      trows.push({
+        id: '11',
+        name: `Multiple responses allowed`,
+        treeDepth: 0,
+      });
+    }
+    if (editResponse) {
+      trows.push({
+        id: '12',
+        name: `Edit response`,
+        treeDepth: 0,
+      });
+    }
+  }
+  if (widgetType !== 'form') {
+    trows.push(
+      {
+        id: '13',
+        name: `ResponseView: ${
+          responseViewTypes[settings?.responsesView] || responseViewTypes.button
+        }`,
+        treeDepth: 0,
+      },
+      {
+        id: '14',
+        name: `Response Visibility: \n ${
+          whoCanSeeResponsesTypes[whoCanViewResponses] || whoCanSeeResponsesTypes.all
+        }`,
+        treeDepth: 0,
+      },
+    );
+    if (onlyMyResponses) {
+      trows.push({
+        id: '15',
+        name: `Users can view only their own responses`,
+        treeDepth: 0,
+      });
+    }
+  }
+  if (showFormTitle) {
+    trows.push({
+      id: '16',
+      name: `Show form title`,
+      treeDepth: 0,
+    });
+  }
+  if (actions) {
+    trows.push({
+      id: '17',
+      name: `Actions`,
+      treeDepth: 0,
+      children: actions.map((action, index) => ({
+        id: `${index + 100}`,
+        name: `${action.name}`,
+        treeDepth: 1,
+        parentId: '17',
+      })),
+    });
+  }
 
-  return (
-    <Paper>
-      <>
-        <SPaper label="Widget Type">{widgetTypes[settings?.widgetType] || widgetTypes.both}</SPaper>
-        {settings?.widgetType !== 'responses' && (
-          <>
-            <SPaper label="Form view">
-              {formViewTypes[settings?.formView] || formViewTypes.fullForm}
-            </SPaper>
-            {/* ADD THE SELECT FORM FIELD  */}
-            {settings?.formView === 'leaderboard' && (settings.minValue || settings.maxValue) && (
-              <>
-                <h3>Leader Board</h3>
-                <div>
-                  {settings?.minValue && <SPaper label="min value">{settings?.minValue}</SPaper>}
-                  {settings?.maxValue && <SPaper label="max value">{settings?.maxValue}</SPaper>}
-                </div>
-              </>
-            )}
-            {settings?.formView === 'button' && (
-              <>
-                <SPaper label="Button label">{settings.buttonLabel || 'Not Set'}</SPaper>
-              </>
-            )}
-            {settings?.formView === 'selectItem' && (
-              <>
-                <SPaper label="Select Item Field">{settings?.selectItemField || 'Not Set'}</SPaper>
-              </>
-            )}
-            <>
-              <SPaper label="Who can submit the form">
-                {whoCanSubmitTypes[settings?.whoCanSubmit] || whoCanSubmitTypes.all}
-              </SPaper>
-            </>
-            {!(settings?.whoCanSubmit === 'all') && (
-              <>
-                {settings?.viewAuthRequired && (
-                  <SPaper>Authentication required to view form</SPaper>
-                )}
-              </>
-            )}
-            {settings?.multipleResponses && <SPaper>Multiple Responses Allowed</SPaper>}
-            {settings?.editResponse && <SPaper>Allow Editing of Response</SPaper>}
-          </>
-        )}
-        {settings?.widgetType !== 'form' && (
-          <>
-            <SPaper label="Response view">
-              {responseViewTypes[settings?.responsesView] || responseViewTypes.button}
-            </SPaper>
-            <SPaper label="Who can view responses">
-              {whoCanSeeResponsesTypes[settings?.whoCanViewResponses] ||
-                whoCanSeeResponsesTypes.all}
-            </SPaper>
-            {settings?.onlyMyResponses && <SPaper>Users can view only their own responses</SPaper>}
-          </>
-        )}
-        {settings?.showFormTitle && <SPaper>Show Form Title</SPaper>}
-      </>
-      <>
-        <Paper variant="outlined" style={{ margin: '1rem 0' }}>
-          <Typography variant="h5" className="d-flex align-items-center p-2">
-            Actions
-          </Typography>
-          <Divider />
-          <List>
-            {settings?.actions?.map((action: any, i: any) => (
-              <ListItem button key={i}>
-                <ListItemText primary={action.name} secondary={action?.actionType} />
-                {!action?.active && (
-                  <Tooltip title="Action is not active">
-                    <ListItemIcon className="text-danger">
-                      <ErrorOutlineIcon />
-                    </ListItemIcon>
-                  </Tooltip>
-                )}
-              </ListItem>
-            ))}
-          </List>
-        </Paper>
-      </>
-      <>
-        <Paper>
-          <Typography variant="h5" className="d-flex align-items-center p-2">
-            Response Section
-          </Typography>
-          <Divider />
-          <List>
-            {section !== undefined &&
-              section.fields?.map((field: any, i: any) => (
-                <div>
-                  <ListItem button onClick={() => handleNavigate(field.label)}>
-                    <ListItemText
-                      primary={field.label}
-                      secondary={
-                        (field?.fieldType === 'form' && field?.form?.name) || field.fieldType
-                      }
-                    />
-                  </ListItem>
-                  {field?.fieldType === 'form' && (
-                    <DisplaySettings
-                      fields={section?.fields}
-                      formId={field?.form?._id}
-                      isSection={isSection}
-                      key={field._id}
-                      settings={field?.options?.settings}
-                    />
-                  )}
-                </div>
-              ))}
-          </List>
-        </Paper>
-      </>
-    </Paper>
-  );
-}
-
-interface ISpaper {
-  children?: React.ReactNode;
-  label?: string;
-}
-export function SPaper({ children, label }: ISpaper) {
-  return (
-    <Paper
-      variant="outlined"
-      style={{ margin: '.8rem 0rem', padding: '0.5rem 1rem', position: 'relative' }}
-    >
-      {label && (
-        <InputLabel
-          style={{
-            top: 0,
-            left: 10,
-            position: 'absolute',
-            background: 'white',
-            margin: '0',
-            padding: '0px 4px',
-            transform: 'translate(0, -0.4rem)',
-            width: 'fit-content',
-            fontSize: '10px',
-          }}
-        >
-          {label}
-        </InputLabel>
-      )}
-      <Typography>{children}</Typography>
-    </Paper>
-  );
-}
+  return trows;
+};

@@ -1,8 +1,8 @@
 import { useUpdateSection } from '@frontend/shared/hooks/section';
-import Paper from '@material-ui/core/Paper';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Grid from '@material-ui/core/Grid';
-import Switch from '@material-ui/core/Switch';
+import Paper from '@mui/material/Paper';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Grid from '@mui/material/Grid';
+import Switch from '@mui/material/Switch';
 import { onAlert } from '../../utils/alert';
 import InputGroup from '../common/InputGroup';
 import FormFieldsValue from '../form2/FormFieldsValue';

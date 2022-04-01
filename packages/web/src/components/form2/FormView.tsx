@@ -1,20 +1,20 @@
 import { Auth } from 'aws-amplify';
 import { fileUpload } from '@frontend/shared/utils/fileUpload';
 import { useEffect, useState } from 'react';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
 import { useSelector } from 'react-redux';
-import IconButton from '@material-ui/core/IconButton';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import Skeleton from '@material-ui/lab/Skeleton';
-import EditIcon from '@material-ui/icons/Edit';
-import AddIcon from '@material-ui/icons/Add';
-import DeleteIcon from '@material-ui/icons/Delete';
-import { ArrowBackIosRounded, ArrowForwardIosRounded } from '@material-ui/icons';
+import IconButton from '@mui/material/IconButton';
+import FormHelperText from '@mui/material/FormHelperText';
+import Skeleton from '@mui/material/Skeleton';
+import EditIcon from '@mui/icons-material/Edit';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { ArrowBackIosRounded, ArrowForwardIosRounded } from '@mui/icons-material';
 import { useGetResponses } from '@frontend/shared/hooks/response/getResponse';
 import { useCreateUpdateResponse } from '@frontend/shared/hooks/response';
-import { validateValue } from '@frontend/shared/utils/validate';
+import { validateForm, validateValue } from '@frontend/shared/utils/validate';
 import ResponseList from '../response/ResponseList';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
@@ -459,25 +459,7 @@ export function FormView({
 
   const onSubmit = async () => {
     setSubmitState({ ...submitState, loading: true });
-    let validate = false;
-    fields?.every((field) => {
-      if (
-        field?.options?.required &&
-        values.filter((value) => value.field === field._id).length === 0
-      ) {
-        validate = true;
-      } else {
-        values
-          .filter((value) => value.field === field._id)
-          ?.map((tempValue) => {
-            if (validateValue(true, tempValue, field).error) {
-              validate = true;
-            }
-            return tempValue;
-          });
-      }
-      return !validate;
-    });
+    const validate = validateForm(fields, values);
     if (validate) {
       setSubmitState({ ...submitState, validate, loading: false });
     } else if (authRequired && !authenticated) {
@@ -561,7 +543,11 @@ export function FormView({
             <div style={field?.options?.style || {}}>
               <InputGroup key={field._id}>
                 <Typography>
-                  {field?.options?.required ? `${field?.label}*` : field?.label}
+                  {field?.options?.required ? (
+                    <span className="text-danger">{`${field?.label}*`}</span>
+                  ) : (
+                    field?.label
+                  )}
                 </Typography>
                 <>
                   <div className="w-100">
@@ -651,12 +637,14 @@ export function FormView({
                               onClick={() =>
                                 setEditValue({ fieldId: field._id, index: valueIndex })
                               }
+                              size="large"
                             >
                               <EditIcon />
                             </IconButton>
                             <IconButton
                               edge="end"
                               onClick={() => onRemoveOneValue(field._id, valueIndex)}
+                              size="large"
                             >
                               <DeleteIcon />
                             </IconButton>
@@ -720,6 +708,7 @@ export function FormView({
           <Grid item xs={12}>
             <InputGroup style={{ display: 'flex' }}>
               <LoadingButton
+                disabled={validateForm(fields, values)}
                 loading={submitState.loading || loading}
                 onClick={onSubmit}
                 variant="contained"

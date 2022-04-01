@@ -29,4 +29,5 @@ export const fieldTypes: FieldType[] = [
   // { label: 'Address', value: 'address' },
   { label: 'Static Text', value: 'label' },
   { label: 'Link', value: 'link' },
+  { label: 'Color Picker', value: 'colorPicker' },
 ];

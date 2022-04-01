@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import ShareIcon from '@material-ui/icons/Share';
-import { Tooltip } from '@material-ui/core/';
+import ShareIcon from '@mui/icons-material/Share';
+import { Tooltip } from '@mui/material/';
 
 interface IShare {
   itemSlug?: string;

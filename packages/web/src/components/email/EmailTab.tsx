@@ -1,22 +1,17 @@
 import React, { useState } from 'react';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Paper from '@material-ui/core/Paper';
-import styled from 'styled-components';
-
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Paper from '@mui/material/Paper';
 import EmailForm from './EmailForm';
 import EmailCard from './EmailCard';
 
-const StyledPaper = styled(Paper)`
-  margin-top: 20px !important;
-`;
 export default function EmailTab() {
   const [options, setOptions] = useState({
     currentTab: 'email',
   });
   return (
     <div>
-      <StyledPaper variant="outlined">
+      <Paper variant="outlined" className="mt-4">
         <Tabs
           variant="scrollable"
           value={options.currentTab}
@@ -27,7 +22,7 @@ export default function EmailTab() {
           <Tab label="Email" value="email" />
           <Tab label="Send Email" value="sendEmail" />
         </Tabs>
-      </StyledPaper>
+      </Paper>
       {options.currentTab === 'email' && (
         <Paper variant="outlined" className="px-2">
           <EmailForm />

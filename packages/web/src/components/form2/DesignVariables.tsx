@@ -1,15 +1,15 @@
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-import InputLabel from '@material-ui/core/InputLabel';
-import TextField from '@material-ui/core/TextField';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import DeleteIcon from '@material-ui/icons/Delete';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import InputLabel from '@mui/material/InputLabel';
+import TextField from '@mui/material/TextField';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import InputGroup from '../common/InputGroup';
 
 const defaultVariable = { name: '', field: null };
@@ -26,7 +26,7 @@ export default function DesignVariables({
       <Typography variant="h5" className="d-flex align-items-center">
         {!hideBackButton && (
           <Tooltip title="Back">
-            <IconButton edge="start" color="primary" onClick={onClickBack}>
+            <IconButton edge="start" color="primary" onClick={onClickBack} size="large">
               <ArrowBackIcon />
             </IconButton>
           </Tooltip>
@@ -37,6 +37,7 @@ export default function DesignVariables({
             edge="end"
             color="primary"
             onClick={() => onVariableChange([...variables, defaultVariable])}
+            size="large"
           >
             <AddCircleIcon />
           </IconButton>
@@ -90,6 +91,7 @@ export default function DesignVariables({
                 onClick={() => {
                   onVariableChange(variables.filter((sV, sI) => sI !== i));
                 }}
+                size="large"
               >
                 <DeleteIcon />
               </IconButton>

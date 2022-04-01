@@ -1,29 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
-import styled from 'styled-components';
-import DeleteIcon from '@material-ui/icons/Delete';
-import AddIcon from '@material-ui/icons/Add';
-import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
-import { Typography } from '@material-ui/core';
-
+import TextField from '@mui/material/TextField';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import { Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import { useContactForm } from '@frontend/shared/hooks/contact';
 import LoadingButton from '../common/LoadingButton';
 import InputGroup from '../common/InputGroup';
 
-// const StyledPaper = styled(Paper)`
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   flex-direction: column;
-//   margin-top: 1% !important;
-//   padding-top: 1%;
-//   padding-bottom: 1%;
-// `;
-const StyledPaper = styled.div`
-  padding: 1%;
-`;
+const StyledPaper = styled('div')(({ theme }) => ({
+  padding: '1%',
+}));
 
 export default function ContactForm() {
   const { formik, formLoading } = useContactForm();
@@ -240,12 +229,12 @@ export default function ContactForm() {
               style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
             >
               {index === 0 ? (
-                <IconButton onClick={() => addFormFields()}>
+                <IconButton onClick={() => addFormFields()} size="large">
                   <AddIcon />
                 </IconButton>
               ) : null}
               {index ? (
-                <IconButton onClick={() => removeFormFields(index)}>
+                <IconButton onClick={() => removeFormFields(index)} size="large">
                   <DeleteIcon />
                 </IconButton>
               ) : null}

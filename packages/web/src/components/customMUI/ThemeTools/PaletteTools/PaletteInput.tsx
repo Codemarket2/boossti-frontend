@@ -1,34 +1,33 @@
 import React, { useCallback } from 'react';
+import { styled } from '@mui/material/styles';
 import ColorInput from '../../ColorInput/ColorInput';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeThemeOption, setThemeOption } from '../../../../../../shared/redux/actions/setting';
-import {
-  Grid,
-  Typography,
-  Button,
-  makeStyles,
-  Theme,
-  createStyles,
-  createMuiTheme,
-} from '@material-ui/core';
+import { Grid, Typography, Button, Theme, createTheme, adaptV4Theme } from '@mui/material';
 import { getThemeValueInfo } from '../../selectors/selectors';
 import { updateSetThemeOption, updateRemoveThemeOption } from '../../commonFunc';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    resetButton: {
-      textTransform: 'capitalize',
-    },
-    disabledButton: {
-      fontStyle: 'italic',
-    },
-  }),
-);
+const PREFIX = 'PaletteInput';
+
+const classes = {
+  resetButton: `${PREFIX}-resetButton`,
+  disabledButton: `${PREFIX}-disabledButton`,
+};
+
+const StyledGrid = styled(Grid)(({ theme }) => ({
+  [`& .${classes.resetButton}`]: {
+    textTransform: 'capitalize',
+  },
+
+  [`& .${classes.disabledButton}`]: {
+    fontStyle: 'italic',
+  },
+}));
 
 export default function PaletteInput({ label, path }) {
   const initialTheme = useSelector(({ setting }: any) => setting);
-  const classes = useStyles();
-  const themeOptions = createMuiTheme(initialTheme.theme);
+
+  const themeOptions = createTheme(adaptV4Theme(initialTheme.theme));
   const themeValueInfo = getThemeValueInfo(path, themeOptions, initialTheme.theme);
   const dispatch = useDispatch();
 
@@ -43,7 +42,7 @@ export default function PaletteInput({ label, path }) {
   };
 
   return (
-    <Grid container justify="space-between" alignItems="flex-end">
+    <StyledGrid container justifyContent="space-between" alignItems="flex-end">
       <Grid item>
         <ColorInput
           label={label}
@@ -64,6 +63,6 @@ export default function PaletteInput({ label, path }) {
           {themeValueInfo.modifiedByUser ? 'Reset' : 'auto'}
         </Button>
       </Grid>
-    </Grid>
+    </StyledGrid>
   );
 }

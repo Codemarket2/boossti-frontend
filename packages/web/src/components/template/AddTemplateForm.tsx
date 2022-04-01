@@ -1,5 +1,5 @@
 import { useCreateTemplate } from '@frontend/shared/hooks/template';
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 import { useState } from 'react';
 import { onAlert } from '../../utils/alert';
 import Backdrop from '../common/Backdrop';

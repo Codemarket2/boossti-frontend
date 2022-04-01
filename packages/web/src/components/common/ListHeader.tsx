@@ -1,8 +1,8 @@
-import Paper from '@material-ui/core/Paper';
-import TextField from '@material-ui/core/TextField';
-import SearchIcon from '@material-ui/icons/Search';
+import Paper from '@mui/material/Paper';
+import TextField from '@mui/material/TextField';
+import SearchIcon from '@mui/icons-material/Search';
 import { ReactNode } from 'react';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import CircularProgress from '@mui/material/CircularProgress';
 import { QRButton } from '../qrcode/QRButton';
 const QRCode = require('qrcode.react');
 

@@ -1,4 +1,4 @@
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import Overlay from '../common/Overlay';
 import ItemScreen from './PageScreen';

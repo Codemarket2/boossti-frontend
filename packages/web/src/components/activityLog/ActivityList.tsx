@@ -1,9 +1,9 @@
 /* eslint-disable react/jsx-wrap-multilines */
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 import { useGetMyResponses } from '@frontend/shared/hooks/response';
 import Link from 'next/link';
-import { Accordion, AccordionDetails, AccordionSummary, Button } from '@material-ui/core';
-import { ExpandMore } from '@material-ui/icons';
+import { Accordion, AccordionDetails, AccordionSummary, Button } from '@mui/material';
+import { ExpandMore } from '@mui/icons-material';
 import ErrorLoading from '../common/ErrorLoading';
 import { ResponseChild2 } from '../response/Response';
 

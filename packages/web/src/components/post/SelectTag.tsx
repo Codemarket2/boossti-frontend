@@ -1,16 +1,16 @@
-import Dialog from '@material-ui/core/Dialog';
-import CloseIcon from '@material-ui/icons/Close';
-import IconButton from '@material-ui/core/IconButton';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import List from '@material-ui/core/List';
+import Dialog from '@mui/material/Dialog';
+import CloseIcon from '@mui/icons-material/Close';
+import IconButton from '@mui/material/IconButton';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import List from '@mui/material/List';
 import { useGetPagesByTemplate, useCreatePage } from '@frontend/shared/hooks/template';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import Tooltip from '@material-ui/core/Tooltip';
-import ListItemText from '@material-ui/core/ListItemText';
-import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import ListItem from '@mui/material/ListItem';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import Tooltip from '@mui/material/Tooltip';
+import ListItemText from '@mui/material/ListItemText';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import ErrorLoading from '../common/ErrorLoading';
 
 interface IProps {
@@ -35,7 +35,7 @@ export default function SelectTag({ open, onClose, templateId, title, onSelect }
     >
       <div className="d-flex justify-content-between align-content-center align-items-center">
         <DialogTitle id="scroll-dialog-title">Select {title}</DialogTitle>
-        <IconButton aria-label="close" onClick={onClose}>
+        <IconButton aria-label="close" onClick={onClose} size="large">
           <CloseIcon />
         </IconButton>
       </div>

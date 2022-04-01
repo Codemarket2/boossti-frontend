@@ -8,8 +8,8 @@ import {
   MenuItem,
   Tooltip,
   Typography,
-} from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
+} from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 
 function FontFamilyInput({ value, onChange }) {
   const [input, setInput] = useState(value);
@@ -70,6 +70,7 @@ function FontSelector({ onSelectFont }) {
         <IconButton
           onClick={(event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget)}
           aria-haspopup="true"
+          size="large"
         >
           <AddIcon />
         </IconButton>

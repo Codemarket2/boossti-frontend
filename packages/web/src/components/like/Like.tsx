@@ -1,5 +1,5 @@
-import { IconButton } from '@material-ui/core';
-import FavoriteIcon from '@material-ui/icons/Favorite';
+import { IconButton } from '@mui/material';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useLikeUnlike } from './utils/useLikeUnlikeHook';
 
 interface ILike {
@@ -16,7 +16,7 @@ export default function Like({ parentId, likedByUser, commentLike = false }: ILi
       {commentLike ? (
         <FavoriteIcon style={{ color: likedByUser && 'red' }} onClick={handleLikeDislike} />
       ) : (
-        <IconButton edge="start" aria-label="like" onClick={handleLikeDislike}>
+        <IconButton edge="start" aria-label="like" onClick={handleLikeDislike} size="large">
           <FavoriteIcon style={{ color: likedByUser && 'red' }} />
         </IconButton>
       )}

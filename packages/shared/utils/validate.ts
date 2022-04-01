@@ -71,23 +71,27 @@ export const validateValue = (validate: boolean, value: any, field: Field): IRet
       break;
     }
     case 'select': {
+      const optionsTemplate = options?.optionsTemplate || value?.options?.optionsTemplate;
       if (
-        options?.optionsTemplate === 'template' &&
+        optionsTemplate === 'template' &&
         options?.required &&
         ((!field?.template && !value?.template) || (field?.template && !value?.page))
       ) {
+        console.log('template error');
         result = { error: true, errorMessage: 'Required' };
       } else if (
-        options?.optionsTemplate === 'existingForm' &&
+        optionsTemplate === 'existingForm' &&
         options?.required &&
         ((!field?.form && !value?.form) || (field?.form && !value?.response))
       ) {
+        console.log('form error');
         result = { error: true, errorMessage: 'Required' };
       } else if (
-        !['template', 'existingForm'].includes(options?.optionsTemplate) &&
+        !['template', 'existingForm'].includes(optionsTemplate) &&
         options?.required &&
         !value?.value
       ) {
+        console.log('text error');
         if (options?.showAsCheckbox && value?.values?.length > 0) {
           result = { error: false, errorMessage: '' };
         } else {
@@ -110,3 +114,26 @@ function validateEmail(elementValue) {
   const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
   return emailPattern.test(elementValue);
 }
+
+export const validateForm = (fields, values): boolean => {
+  let validate = false;
+  fields?.every((field) => {
+    if (
+      field?.options?.required &&
+      values.filter((value) => value.field === field._id).length === 0
+    ) {
+      validate = true;
+    } else {
+      values
+        .filter((value) => value.field === field._id)
+        ?.map((tempValue) => {
+          if (validateValue(true, tempValue, field).error) {
+            validate = true;
+          }
+          return tempValue;
+        });
+    }
+    return !validate;
+  });
+  return validate;
+};

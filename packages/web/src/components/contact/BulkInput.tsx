@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
 import {
@@ -11,7 +11,7 @@ import {
   Select,
   TextField,
   Typography,
-} from '@material-ui/core';
+} from '@mui/material';
 import { fileUpload } from '@frontend/shared/utils/fileUpload';
 import { useCreateMailingList } from '@frontend/shared/hooks/email/createMailingList';
 import { useContactForm } from '@frontend/shared/hooks/contact';

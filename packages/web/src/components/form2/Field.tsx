@@ -1,13 +1,14 @@
 import moment from 'moment';
-import TextField from '@material-ui/core/TextField';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import MomentUtils from '@date-io/moment';
-import { MuiPickersUtilsProvider, DateTimePicker, DatePicker } from '@material-ui/pickers';
+import TextField from '@mui/material/TextField';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormHelperText from '@mui/material/FormHelperText';
+import AdapterMoment from '@mui/lab/AdapterMoment';
+import DateTimePicker from '@mui/lab/DateTimePicker';
+import DatePicker from '@mui/lab/DatePicker';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import PhoneInput from 'react-phone-input-2';
 import { validateValue } from '@frontend/shared/utils/validate';
-import ImagePicker from '../common/ImagePicker';
 import RichTextarea from '../common/RichTextarea2';
 import DisplayRichText from '../common/DisplayRichText';
 import SelectPage from '../template/SelectPage';
@@ -15,11 +16,11 @@ import SelectResponse from '../response/SelectResponse';
 import Select from './Select';
 import SelectForm from './SelectForm';
 import SelectTemplate from '../template/SelectTemplate';
-
 import 'react-phone-input-2/lib/style.css';
-import InputGroup from '../common/InputGroup';
 import { SelectOptionType } from './EditField';
 import ImagePicker2 from '../common/ImagePicker2';
+import ColorInput from '../customMUI/ColorInput/ColorInput';
+import SelectFormFields from './SelectFormFields';
 
 interface IProps {
   disabled?: boolean;
@@ -75,40 +76,64 @@ export default function Field({
     }
     case 'date': {
       return (
-        <MuiPickersUtilsProvider libInstance={moment} utils={MomentUtils}>
+        <LocalizationProvider
+          dateAdapter={AdapterMoment}
+          //  libInstance={moment} utils={MomentUtils}
+        >
           <DatePicker
             disabled={disabled}
-            fullWidth
-            size="small"
-            inputVariant="outlined"
-            placeholder={moment().format('L')}
-            format="MM/DD/YYYY"
+            // fullWidth
+            // size="small"
+            // inputVariant="outlined"
+            // placeholder={moment().format('L')}
+            inputFormat="MM/DD/YYYY"
             value={value && value?.valueDate ? moment(value.valueDate) : null}
             onChange={(newValue) => onChange({ field: _id, valueDate: moment(newValue) })}
-            animateYearScrolling
-            error={validation.error}
-            helperText={validation.errorMessage}
+            // animateYearScrolling
+            renderInput={(props) => (
+              <TextField
+                {...props}
+                fullWidth
+                size="small"
+                variant="outlined"
+                placeholder={moment().format('L')}
+                error={validation.error}
+                helperText={validation.errorMessage}
+              />
+            )}
           />
-        </MuiPickersUtilsProvider>
+        </LocalizationProvider>
       );
     }
     case 'dateTime': {
       return (
-        <MuiPickersUtilsProvider libInstance={moment} utils={MomentUtils}>
+        <LocalizationProvider
+          dateAdapter={AdapterMoment}
+          //  libInstance={moment} utils={MomentUtils}
+        >
           <DateTimePicker
             disabled={disabled}
-            fullWidth
-            size="small"
-            inputVariant="outlined"
-            placeholder={moment().format('L')}
-            format="lll"
+            // fullWidth
+            // size="small"
+            // inputVariant="outlined"
+            // placeholder={moment().format('L')}
+            inputFormat="lll"
             value={value && value?.valueDate ? moment(value.valueDate) : null}
             onChange={(newValue) => onChange({ field: _id, valueDate: moment(newValue) })}
-            animateYearScrolling
-            error={validation.error}
-            helperText={validation.errorMessage}
+            // animateYearScrolling
+            renderInput={(props) => (
+              <TextField
+                {...props}
+                fullWidth
+                size="small"
+                variant="outlined"
+                placeholder={moment().format('L')}
+                error={validation.error}
+                helperText={validation.errorMessage}
+              />
+            )}
           />
-        </MuiPickersUtilsProvider>
+        </LocalizationProvider>
       );
     }
     case 'richTextarea': {
@@ -179,6 +204,8 @@ export default function Field({
                     },
                   })
                 }
+                error={validation.error}
+                helperText={validation.errorMessage}
               />
             </div>
           )}
@@ -186,7 +213,7 @@ export default function Field({
             <>
               <SelectTemplate
                 label={null}
-                placeholder={label}
+                placeholder={`${label} template`}
                 value={value?.template || null}
                 onChange={(newValue) => onChange({ field: _id, template: newValue })}
                 error={validation.error}
@@ -198,7 +225,7 @@ export default function Field({
                     templateId={template?._id || value?.template?._id}
                     typeSlug={template?.slug || value?.template?.slug}
                     label={null}
-                    placeholder={label}
+                    placeholder={`${label} page`}
                     error={validation.error}
                     helperText={validation.errorMessage}
                     value={value ? value.page : null}
@@ -210,22 +237,42 @@ export default function Field({
             </>
           ) : optionsTemplate === 'existingForm' ? (
             <>
-              {form?._id ? (
-                <SelectResponse
-                  label={label}
-                  formId={form?._id}
-                  formField={options?.formField}
-                  value={value?.response}
-                  onChange={(newValue) => onChange({ field: _id, response: newValue })}
-                  error={validation.error}
-                  helperText={validation.errorMessage}
-                />
-              ) : (
+              {!form && (
                 <SelectForm
-                  placeholder={label}
+                  placeholder={`${label} form`}
                   label={null}
                   value={value?.form}
                   onChange={(newValue) => onChange({ field: _id, form: newValue })}
+                  error={validation.error}
+                  helperText={validation.errorMessage}
+                />
+              )}
+              {!form && value?.form?._id && (
+                <div className="my-2">
+                  <SelectFormFields
+                    formId={value.form?._id}
+                    value={value?.options?.formField}
+                    onChange={(newFormField) =>
+                      onChange({
+                        field: _id,
+                        options: {
+                          ...value?.options,
+                          formField: newFormField,
+                        },
+                      })
+                    }
+                    error={validation.error}
+                    helperText={validation.errorMessage}
+                  />
+                </div>
+              )}
+              {(form?._id || value?.form?._id) && (
+                <SelectResponse
+                  label={`${label} response`}
+                  formId={form?._id || value?.form?._id}
+                  formField={form?._id ? options?.formField : value?.options?.formField}
+                  value={value?.response}
+                  onChange={(newValue) => onChange({ field: _id, response: newValue })}
                   error={validation.error}
                   helperText={validation.errorMessage}
                 />
@@ -299,6 +346,15 @@ export default function Field({
           onChange={({ target }) => onChange({ field: _id, valueNumber: target.value })}
           error={validation.error}
           helperText={validation.errorMessage}
+        />
+      );
+    }
+    case 'colorPicker': {
+      return (
+        <ColorInput
+          label=""
+          color={value ? value.value : ''}
+          onColorChange={(e: any) => onChange({ field: _id, value: e })}
         />
       );
     }

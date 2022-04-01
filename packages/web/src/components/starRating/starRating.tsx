@@ -1,19 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Box } from '@material-ui/core';
-import styled from 'styled-components';
-import Rating from '@material-ui/lab/Rating';
-import {
-  useGetStarRating,
-  useGetUserStarRating,
-} from '@frontend/shared/hooks/starRating/getStarRating';
+import { Box } from '@mui/material';
+import Rating from '@mui/material/Rating';
+import { useGetUserStarRating } from '@frontend/shared/hooks/starRating/getStarRating';
 import { useStarRating } from './util/updateUserRating';
-
-const StyledBox = styled(Box)`
-  flex-direction: column !important;
-  ${(props) => props.theme.breakpoints.up('md')} {
-    flex-direction: row !important;
-  }
-`;
 
 interface StarRatingProps {
   parentId: string;

@@ -1,10 +1,11 @@
 import React, { useCallback } from 'react';
+import { styled } from '@mui/material/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   removeThemeOption,
   setThemeOption,
 } from '../../../../../../../shared/redux/actions/setting';
-import { Grid, Button, makeStyles, createStyles, createMuiTheme } from '@material-ui/core';
+import { Grid, Button, createTheme, adaptV4Theme } from '@mui/material';
 import { getThemeValueInfo } from '../../../selectors/selectors';
 import FontWeightInput from './FontWeightInput';
 import FontSizeInput from './FontSizeInput';
@@ -13,27 +14,34 @@ import LineHeightInput from './LineHeightInput';
 import LetterSpacingInput from './LetterSpacingInput';
 import { ThemeValueChangeEvent } from '../../events';
 import { updateRemoveThemeOption, updateSetThemeOption } from '../../../commonFunc';
-import { Theme } from '@material-ui/core';
+import { Theme } from '@mui/material';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    resetButton: {
-      textTransform: 'capitalize',
-    },
-    disabledButton: {
-      fontStyle: 'italic',
-    },
-    inputContainer: {
-      flex: 1,
-    },
-  }),
-);
+const PREFIX = 'TypographyInput';
+
+const classes = {
+  resetButton: `${PREFIX}-resetButton`,
+  disabledButton: `${PREFIX}-disabledButton`,
+  inputContainer: `${PREFIX}-inputContainer`,
+};
+
+const Root = styled('div')(({ theme }) => ({
+  [`& .${classes.resetButton}`]: {
+    textTransform: 'capitalize',
+  },
+
+  [`& .${classes.disabledButton}`]: {
+    fontStyle: 'italic',
+  },
+
+  [`& .${classes.inputContainer}`]: {
+    flex: 1,
+  },
+}));
 
 export default function TypographyInput({ label, variantPath, property }) {
-  const classes = useStyles();
   const path = `${variantPath}.${property}`;
   const initialTheme = useSelector(({ setting }: any) => setting);
-  const themeOptions = createMuiTheme(initialTheme.theme);
+  const themeOptions = createTheme(adaptV4Theme(initialTheme.theme));
   const themeValueInfo = getThemeValueInfo(path, themeOptions, initialTheme.theme);
   const dispatch = useDispatch();
 
@@ -60,7 +68,7 @@ export default function TypographyInput({ label, variantPath, property }) {
   };
 
   return (
-    <Grid container justify="space-between" alignItems="baseline">
+    <Grid container justifyContent="space-between" alignItems="baseline">
       <Grid item className={classes.inputContainer}>
         <TypographyPropertyInput
           property={property}
@@ -103,6 +111,6 @@ function TypographyPropertyInput({ property, value, onChange }) {
     case 'lineHeight':
       return <LineHeightInput value={value} onChange={onChange} />;
     default:
-      return <div></div>;
+      return <Root></Root>;
   }
 }

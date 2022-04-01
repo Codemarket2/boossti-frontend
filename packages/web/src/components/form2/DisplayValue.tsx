@@ -1,11 +1,11 @@
+import Link from 'next/link';
 import { Fragment } from 'react';
 import moment from 'moment';
-import Avatar from '@material-ui/core/Avatar';
+import Avatar from '@mui/material/Avatar';
 import DisplayRichText from '../common/DisplayRichText';
 import { ShowResponseLabel } from '../response/ResponseDrawer';
 import PageDrawer from '../template/PageDrawer';
 import ImageList from '../post/ImageList';
-import Link from 'next/link';
 
 interface IProps {
   field: any;
@@ -21,17 +21,31 @@ export default function DisplayValue({ field, value, imageAvatar }: IProps) {
     case 'email':
     case 'password':
       return <>{value?.value}</>;
-    case 'select':
-      if (field?.options?.optionsTemplate === 'template') {
-        if (field?.template?._id) {
+    case 'select': {
+      let optionsTemplate = field.options?.optionsTemplate || value?.options?.optionsTemplate;
+      let valueFormField = value?.options?.formField;
+      if (typeof value?.options === 'string') {
+        optionsTemplate =
+          field.options?.optionsTemplate || JSON.parse(value?.options)?.optionsTemplate;
+        valueFormField = JSON.parse(value?.options)?.formField;
+      }
+      if (optionsTemplate === 'template') {
+        if ((field?.template?._id || value.template?._id) && value.page) {
           return <PageDrawer title={value.page?.title} slug={value.page?.slug} />;
         }
         return <Link href={`/${value?.template?.slug}`}>{value?.template?.title}</Link>;
       }
-      if (field?.options?.optionsTemplate === 'existingForm') {
-        if (field?.form?._id && field?.options?.formField) {
+      if (optionsTemplate === 'existingForm') {
+        if (
+          ((field?.form?._id && field?.options?.formField) ||
+            (value?.form?._id && valueFormField)) &&
+          value?.response
+        ) {
           return (
-            <ShowResponseLabel formField={field?.options?.formField} response={value?.response} />
+            <ShowResponseLabel
+              formField={field?.form?._id ? field.options?.formField : valueFormField}
+              response={value?.response}
+            />
           );
         }
         return <>{value?.form?.name}</>;
@@ -48,7 +62,9 @@ export default function DisplayValue({ field, value, imageAvatar }: IProps) {
           </>
         );
       }
-      return <>{value?.value}</>;
+      return <DisplayValue field={{ fieldType: optionsTemplate }} value={value} />;
+      // return <>{value?.value}</>;
+    }
     case 'link':
       return <a href={value?.value}>{value?.value}</a>;
     case 'richTextarea':

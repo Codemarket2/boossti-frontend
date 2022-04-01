@@ -1,49 +1,63 @@
 import React, { useState } from 'react';
 
-import { makeStyles, createStyles, Theme } from '@material-ui/core';
-import BottomNavigation from '@material-ui/core/BottomNavigation';
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import { styled } from '@mui/material/styles';
+
+import { Theme } from '@mui/material';
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import PaletteTools from './PaletteTools/PaletteTools';
 
 import TypographyTools from './TypographyTools/TypographyTools';
 
-import PaletteIcon from '@material-ui/icons/Palette';
-import FontIcon from '@material-ui/icons/FontDownload';
-import TypographyIcon from '@material-ui/icons/TextFields';
-import SnippetsIcon from '@material-ui/icons/PlaylistAdd';
+import PaletteIcon from '@mui/icons-material/Palette';
+import FontIcon from '@mui/icons-material/FontDownload';
+import TypographyIcon from '@mui/icons-material/TextFields';
+import SnippetsIcon from '@mui/icons-material/PlaylistAdd';
 import ToolPanel from './ToolPanel';
 import FontTools from './FontTools/FontTools';
 import SnippetTools from './SnippetTools';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    themeToolsRoot: {
-      display: 'flex',
-      flexDirection: 'column',
-      height: '100%',
-      overflow: 'auto',
+const PREFIX = 'ThemeTools';
+
+const classes = {
+  themeToolsRoot: `${PREFIX}-themeToolsRoot`,
+  themeToolsBottomNavBar: `${PREFIX}-themeToolsBottomNavBar`,
+  selected: `${PREFIX}-selected`,
+  wrapper: `${PREFIX}-wrapper`,
+  root: `${PREFIX}-root`,
+};
+
+const Root = styled('div')(({ theme }) => ({
+  [`&.${classes.themeToolsRoot}`]: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    overflow: 'auto',
+  },
+
+  [`& .${classes.themeToolsBottomNavBar}`]: {
+    backgroundColor: theme.palette.background.default,
+    borderTop: '1px solid',
+    borderTopColor: theme.palette.divider,
+    width: 'calc(100% - 1px)', // to prevent scroll bar
+  },
+
+  [`& .${classes.selected}`]: {
+    // color: "#fff",
+    '&$root': {
+      backgroundColor: '#212121',
     },
-    themeToolsBottomNavBar: {
-      backgroundColor: theme.palette.background.default,
-      borderTop: '1px solid',
-      borderTopColor: theme.palette.divider,
-      width: 'calc(100% - 1px)', // to prevent scroll bar
+    '& $wrapper': {
+      color: '#fff',
     },
-    selected: {
-      // color: "#fff",
-      '&$root': {
-        backgroundColor: '#212121',
-      },
-      '& $wrapper': {
-        color: '#fff',
-      },
-    },
-    wrapper: {
-      color: theme.palette.text.disabled,
-    },
-    root: {},
-  }),
-);
+  },
+
+  [`& .${classes.wrapper}`]: {
+    color: theme.palette.text.disabled,
+  },
+
+  [`& .${classes.root}`]: {},
+}));
 
 export const paletteToolsId = 'palette-tools-nav';
 export const fontToolsId = 'font-tools-nav';
@@ -83,7 +97,6 @@ const toolPanels: Array<{
 ];
 
 export default function ThemeTools() {
-  const classes = useStyles();
   const [bottomNavIndex, setBottomNavIndex] = useState(0);
 
   const bottomNavActionClasses = {
@@ -95,7 +108,7 @@ export default function ThemeTools() {
   const currentTool = toolPanels[bottomNavIndex];
 
   return (
-    <div className={classes.themeToolsRoot}>
+    <Root className={classes.themeToolsRoot}>
       <ToolPanel panelTitle={currentTool.label}>
         <currentTool.tools />
       </ToolPanel>
@@ -117,6 +130,6 @@ export default function ThemeTools() {
           />
         ))}
       </BottomNavigation>
-    </div>
+    </Root>
   );
 }

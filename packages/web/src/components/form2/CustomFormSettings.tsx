@@ -1,16 +1,16 @@
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 import { generateObjectId } from '@frontend/shared/utils/objectId';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import { getForm } from '@frontend/shared/hooks/form/getForm';
-import Switch from '@material-ui/core/Switch';
+import Switch from '@mui/material/Switch';
 import { useEffect, useState } from 'react';
 import FormSetting from './FormSetting';
 import InputGroup from '../common/InputGroup';
 import Overlay from '../common/Overlay';
 import ResponseLayout from '../response/ResponseLayout';
 import { ActionsWrapper } from './Actions';
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 import FormFields from './FormFields';
 
 interface IProps {

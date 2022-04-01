@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
-import AddIcon from '@material-ui/icons/Add';
-import SearchIcon from '@material-ui/icons/Search';
-import TextField from '@material-ui/core/TextField';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import AddIcon from '@mui/icons-material/Add';
+import SearchIcon from '@mui/icons-material/Search';
+import TextField from '@mui/material/TextField';
+import CircularProgress from '@mui/material/CircularProgress';
 import LoadingButton from './LoadingButton';
 import Breadcrumbs from './Breadcrumbs';
 
@@ -32,7 +32,7 @@ export default function ListHeader2({
         <TextField
           size="small"
           variant="outlined"
-          placeholder="Search"
+          label="Search"
           InputProps={{
             endAdornment:
               searchLoading && search ? (

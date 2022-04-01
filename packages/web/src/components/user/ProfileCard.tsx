@@ -1,13 +1,13 @@
-import Avatar from '@material-ui/core/Avatar';
-import Typography from '@material-ui/core/Typography';
-import styled from 'styled-components';
+import Avatar from '@mui/material/Avatar';
+import Typography from '@mui/material/Typography';
+import { styled } from '@mui/material/styles';
 
-const StyledAvatar = styled(Avatar)`
-  min-width: 250px;
-  min-height: 250px;
-  margin: 0 auto;
-  border: 2px solid ${(props) => props.theme.palette.primary.main};
-`;
+const StyledAvatar = styled(Avatar)(({ theme }) => ({
+  minWidth: '250px',
+  minHeight: '250px',
+  margin: '0 auto',
+  border: `2px solid ${theme.palette.primary.main}`,
+}));
 
 interface IProps {
   user: {

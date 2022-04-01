@@ -1,5 +1,5 @@
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import UserLayout from '../components/common/UserLayout';

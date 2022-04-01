@@ -1,9 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 import { useDispatch, useSelector } from 'react-redux';
 // import { addFonts } from "../../../../../../shared/redux/actions/muiActions"
-import { Chip, Grid } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
+import { Chip, Grid } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 
 const defaultFonts = [
   'Lato',

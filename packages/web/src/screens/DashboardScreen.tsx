@@ -11,7 +11,7 @@ import {
   Card,
   CardContent,
   CardActions,
-} from '@material-ui/core';
+} from '@mui/material';
 
 export default function DashboardScreen() {
   const user = useSelector(({ auth }: any) => auth.user);

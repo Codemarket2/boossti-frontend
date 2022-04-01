@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import { useCreatePage, useDeletePage } from '@frontend/shared/hooks/template';
 import ItemScreen from './PageScreen';
 import Loading from '../common/Loading';

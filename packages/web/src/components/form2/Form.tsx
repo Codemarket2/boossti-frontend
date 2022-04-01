@@ -1,23 +1,23 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import IconButton from '@material-ui/core/IconButton';
-import ShareIcon from '@material-ui/icons/Share';
-import DeleteIcon from '@material-ui/icons/Delete';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Typography from '@material-ui/core/Typography';
-import Alert from '@material-ui/lab/Alert';
-import Snackbar from '@material-ui/core/Snackbar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Tooltip from '@material-ui/core/Tooltip';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import IconButton from '@mui/material/IconButton';
+import ShareIcon from '@mui/icons-material/Share';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CircularProgress from '@mui/material/CircularProgress';
+import Typography from '@mui/material/Typography';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Tooltip from '@mui/material/Tooltip';
 import { useUpdateForm, useDeleteForm } from '@frontend/shared/hooks/form';
 import { useAuthorization } from '@frontend/shared/hooks/auth';
 import Link from 'next/link';
-import Container from '@material-ui/core/Container';
+import Container from '@mui/material/Container';
 import ErrorLoading from '../common/ErrorLoading';
 import Breadcrumbs from '../common/Breadcrumbs';
 import Backdrop from '../common/Backdrop';
@@ -33,6 +33,7 @@ import ResponseLayout from '../response/ResponseLayout';
 import BulkUploadAction from './BulkUploadAction';
 import NotFound from '../common/NotFound';
 import UnAuthorised from '../common/UnAuthorised';
+import TextField from '@mui/material/TextField';
 
 interface IProps {
   _id: string;
@@ -139,7 +140,7 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
                 {updateLoading && <CircularProgress size={25} />}
                 <QRButton />
                 <Tooltip title="Copy form link">
-                  <IconButton className="ml-2" onClick={handleCopyLink}>
+                  <IconButton className="ml-2" onClick={handleCopyLink} size="large">
                     <ShareIcon />
                   </IconButton>
                 </Tooltip>
@@ -155,7 +156,7 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
                   label="Publish"
                 />
                 <Tooltip title="Delete">
-                  <IconButton edge="end" onClick={onDelete}>
+                  <IconButton edge="end" onClick={onDelete} size="large">
                     <DeleteIcon />
                   </IconButton>
                 </Tooltip>

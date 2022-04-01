@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { ThemeProvider as StyledProvider } from 'styled-components';
+// import { ThemeProvider as StyledProvider } from 'styled-components';
 import { AppProps } from 'next/app';
 import Amplify, { Hub } from 'aws-amplify';
 import { Provider, useSelector } from 'react-redux';
@@ -8,9 +8,9 @@ import { client, guestClient } from '@frontend/shared/graphql';
 import awsExports from '@frontend/shared/aws-exports';
 import { store } from '@frontend/shared/redux';
 import { useLogoHook } from '@frontend/shared/hooks/metaTags';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import CssBaseline from '@mui/material/CssBaseline';
 import { useCurrentAuthenticatedUser } from '@frontend/shared/hooks/auth';
-import { createMuiTheme, ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
+import { createMuiTheme, ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import LoadingBar from '../../src/components/common/LoadingBar';
 import Head from '../../src/components/common/Head';
 import { light, dark } from '../../src/utils/theme/palette';
@@ -44,7 +44,7 @@ function App({ Component, pageProps }: AppProps) {
 
   useLogoHook();
   const theme = createMuiTheme({
-    palette: darkMode ? dark.palette : light.palette,
+    // palette: darkMode ? dark.palette : light.palette,
     typography: {
       fontFamily: [
         '-apple-system',
@@ -92,12 +92,12 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={authenticated ? client : guestClient}>
       <MuiThemeProvider theme={theme}>
-        <StyledProvider theme={theme}>
-          <Head />
-          <LoadingBar />
-          <CssBaseline />
-          <Component {...pageProps} />
-        </StyledProvider>
+        {/* <StyledProvider theme={theme}> */}
+        <Head />
+        <LoadingBar />
+        <CssBaseline />
+        <Component {...pageProps} />
+        {/* </StyledProvider> */}
       </MuiThemeProvider>
     </ApolloProvider>
   );

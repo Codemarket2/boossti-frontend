@@ -1,23 +1,23 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/jsx-props-no-spreading */
-import Divider from '@material-ui/core/Divider';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import GridIcon from '@material-ui/icons/GridOn';
-import EditIcon from '@material-ui/icons/Edit';
-import SettingsIcon from '@material-ui/icons/Settings';
-// import ShareIcon from '@material-ui/icons/Share';
-// import FileCopyIcon from '@material-ui/icons/FileCopy';
+import Divider from '@mui/material/Divider';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import GridIcon from '@mui/icons-material/GridOn';
+import EditIcon from '@mui/icons-material/Edit';
+import SettingsIcon from '@mui/icons-material/Settings';
+// import ShareIcon from '@mui/icons-material/Share';
+// import FileCopyIcon from '@mui/icons-material/FileCopy';
 // import { generateObjectId } from '@frontend/shared/utils/objectId';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { useState } from 'react';
@@ -63,6 +63,7 @@ type IProps = {
   previewMode?: boolean;
   parentPageFields?: any;
   tabName?: string;
+  showWidgetExpand?: boolean;
 };
 
 export default function FormFields({
@@ -73,9 +74,11 @@ export default function FormFields({
   previewMode = false,
   parentPageFields = [],
   tabName = 'form',
+  showWidgetExpand = false,
 }: IProps): any {
   const [values, setValues] = useState(initialValues);
   const router = useRouter();
+  const [isExpanded, setIsExpanded] = useState<boolean[]>([]);
 
   function onDragEnd(result) {
     if (!result.destination) {
@@ -204,6 +207,7 @@ export default function FormFields({
                     <IconButton
                       color="primary"
                       onClick={() => setValues({ ...initialValues, showForm: true })}
+                      size="large"
                     >
                       <AddCircleIcon />
                     </IconButton>
@@ -226,62 +230,75 @@ export default function FormFields({
               <Droppable droppableId="list">
                 {(provided, snapshot) => (
                   <div ref={provided.innerRef} {...provided.droppableProps}>
-                    {fields?.map((field: any, index: number) => (
-                      <>
-                        <Draggable key={field._id} draggableId={field._id} index={index}>
-                          {(draggableProvided, draggableSnapshot) => (
-                            <div>
-                              <ListItem
-                                button
-                                onClick={() => handleNavigate(field.label)}
-                                selected={
-                                  draggableSnapshot.isDragging || field?._id === values?.field?._id
-                                }
-                                ref={draggableProvided.innerRef}
-                                {...draggableProvided.draggableProps}
-                                {...draggableProvided.dragHandleProps}
-                              >
-                                <ListItemText
-                                  primary={field.label}
-                                  secondary={
-                                    !previewMode &&
-                                    ((field?.fieldType === 'form' && field?.form?.name) ||
-                                      field.fieldType)
+                    {fields?.map((field: any, index: number) => {
+                      const expanded = isExpanded[index] || false;
+                      return (
+                        <>
+                          <Draggable key={field._id} draggableId={field._id} index={index}>
+                            {(draggableProvided, draggableSnapshot) => (
+                              <div>
+                                <ListItem
+                                  button
+                                  onClick={() => handleNavigate(field.label)}
+                                  selected={
+                                    draggableSnapshot.isDragging ||
+                                    field?._id === values?.field?._id
                                   }
-                                />
-                                {!(previewMode || snapshot.isDraggingOver) && (
-                                  <ListItemSecondaryAction>
-                                    <IconButton
-                                      edge="end"
-                                      onClick={(event) =>
-                                        setValues({
-                                          ...initialValues,
-                                          showMenu: event.currentTarget,
-                                          field,
-                                        })
-                                      }
-                                    >
-                                      <MoreVertIcon />
-                                    </IconButton>
-                                  </ListItemSecondaryAction>
-                                )}
-                              </ListItem>
-                              {field?.fieldType === 'form' && (
-                                <Paper variant="outlined" className="p-2">
-                                  <DisplaySettings
-                                    fields={fields}
-                                    formId={field?.form?._id}
-                                    isSection={isSection}
-                                    key={field._id}
-                                    settings={field?.options.settings}
+                                  ref={draggableProvided.innerRef}
+                                  {...draggableProvided.draggableProps}
+                                  {...draggableProvided.dragHandleProps}
+                                >
+                                  <ListItemText
+                                    primary={field.label}
+                                    secondary={
+                                      !previewMode &&
+                                      ((field?.fieldType === 'form' && field?.form?.name) ||
+                                        field.fieldType)
+                                    }
                                   />
-                                </Paper>
-                              )}
-                            </div>
-                          )}
-                        </Draggable>
-                      </>
-                    ))}
+                                  {!snapshot.isDraggingOver && (
+                                    <ListItemSecondaryAction>
+                                      {showWidgetExpand && (
+                                        <IconButton
+                                          edge="end"
+                                          onClick={(event) => {
+                                            setIsExpanded({
+                                              ...isExpanded,
+                                              [index]: !expanded,
+                                            });
+                                          }}
+                                          size="large"
+                                        >
+                                          {expanded ? '\u25BC' : '\u25B6'}
+                                        </IconButton>
+                                      )}
+                                      {!previewMode && (
+                                        <IconButton
+                                          edge="end"
+                                          onClick={(event) =>
+                                            setValues({
+                                              ...initialValues,
+                                              showMenu: event.currentTarget,
+                                              field,
+                                            })
+                                          }
+                                          size="large"
+                                        >
+                                          <MoreVertIcon />
+                                        </IconButton>
+                                      )}
+                                    </ListItemSecondaryAction>
+                                  )}
+                                </ListItem>
+                                {field?.fieldType === 'form' && expanded && (
+                                  <DisplaySettings field={field} />
+                                )}
+                              </div>
+                            )}
+                          </Draggable>
+                        </>
+                      );
+                    })}
                     {provided.placeholder}
                   </div>
                 )}

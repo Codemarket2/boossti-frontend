@@ -1,21 +1,21 @@
 import { useGetMyBookmarks } from '@frontend/shared/hooks/boomark';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Chip from '@material-ui/core/Chip';
-import Typography from '@material-ui/core/Typography';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Chip from '@mui/material/Chip';
+import Typography from '@mui/material/Typography';
 import moment from 'moment';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import DeleteIcon from '@material-ui/icons/Delete';
-import Paper from '@material-ui/core/Paper';
-import TextField from '@material-ui/core/TextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
-import SearchIcon from '@material-ui/icons/Search';
-import ClearIcon from '@material-ui/icons/Clear';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Paper from '@mui/material/Paper';
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import SearchIcon from '@mui/icons-material/Search';
+import ClearIcon from '@mui/icons-material/Clear';
 import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
@@ -53,6 +53,7 @@ export default function BookmarkList() {
                     onClick={() =>
                       bookmarkSetState({ ...bookmarkState, search: '', showSearch: false })
                     }
+                    size="large"
                   >
                     <ClearIcon />
                   </IconButton>
@@ -67,6 +68,7 @@ export default function BookmarkList() {
         ) : (
           <IconButton
             onClick={() => bookmarkSetState({ ...bookmarkState, search: '', showSearch: true })}
+            size="large"
           >
             <SearchIcon />
           </IconButton>
@@ -95,6 +97,7 @@ export default function BookmarkList() {
                       selectedBookmark: bookmark,
                     })
                   }
+                  size="large"
                 >
                   <MoreVertIcon />
                 </IconButton>

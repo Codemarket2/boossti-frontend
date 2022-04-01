@@ -2,19 +2,19 @@ import { useEffect, useReducer, useState } from 'react';
 import DataGrid, { CopyEvent, PasteEvent, SelectColumn, TextEditor } from 'react-data-grid';
 import { useRouter } from 'next/router';
 import moment from 'moment';
-import Paper from '@material-ui/core/Paper';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Tooltip from '@material-ui/core/Tooltip';
-import ListItemText from '@material-ui/core/ListItemText';
-import TablePagination from '@material-ui/core/TablePagination';
-import IconButton from '@material-ui/core/IconButton';
-import LaunchIcon from '@material-ui/icons/Launch';
-import EditIcon from '@material-ui/icons/Edit';
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Tooltip from '@mui/material/Tooltip';
+import ListItemText from '@mui/material/ListItemText';
+import TablePagination from '@mui/material/TablePagination';
+import IconButton from '@mui/material/IconButton';
+import LaunchIcon from '@mui/icons-material/Launch';
+import EditIcon from '@mui/icons-material/Edit';
 import { useGetResponses, useDeleteResponse } from '@frontend/shared/hooks/response';
 import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
@@ -156,8 +156,8 @@ export default function ResponseList({
             count={data?.getResponses?.count || 0}
             rowsPerPage={state.limit}
             page={state.page - 1}
-            onChangePage={(e, newPage) => setState({ ...state, page: newPage + 1 })}
-            onChangeRowsPerPage={(e) => setState({ ...state, limit: parseInt(e.target.value) })}
+            onPageChange={(e, newPage) => setState({ ...state, page: newPage + 1 })}
+            onRowsPerPageChange={(e) => setState({ ...state, limit: parseInt(e.target.value) })}
           />
           {error || !data || !data.getResponses ? (
             <Paper variant="outlined" className="p-5">
@@ -190,7 +190,11 @@ export default function ResponseList({
                             edge="start"
                           />
                           <Tooltip title="Open Response">
-                            <IconButton onClick={() => setSelectedResponse(response)} edge="start">
+                            <IconButton
+                              onClick={() => setSelectedResponse(response)}
+                              edge="start"
+                              size="large"
+                            >
                               <EditIcon />
                             </IconButton>
                           </Tooltip>
@@ -211,6 +215,7 @@ export default function ResponseList({
                               router.push(`/forms/${form.slug}/response/${response.count}`);
                             }}
                             edge="start"
+                            size="large"
                           >
                             <LaunchIcon />
                           </IconButton>

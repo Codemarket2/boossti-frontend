@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useGetResponses } from '@frontend/shared/hooks/response';
-import Typography from '@material-ui/core/Typography';
-import LinearProgress from '@material-ui/core/LinearProgress';
+import Typography from '@mui/material/Typography';
+import LinearProgress from '@mui/material/LinearProgress';
 import ErrorLoading from '../common/ErrorLoading';
 
 interface IProps {
