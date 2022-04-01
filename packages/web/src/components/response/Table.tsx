@@ -3,9 +3,10 @@ import { useMemo } from 'react';
 import { useEffect, useReducer, useState } from 'react';
 import DataGrid, { Column, SelectColumn, TextEditor } from 'react-data-grid';
 import { CellExpanderFormatter } from './CellExpanderFormatter';
-
+import DisplayValue from '../form2/DisplayValue';
 interface IDataTable {
   form: any;
+  data: any;
   rows: any;
   rowHeight: any;
   onRowsChange: any;
@@ -24,6 +25,7 @@ interface Action {
 
 export const DataTable = ({
   form,
+  data,
   rows,
   rowHeight,
   onRowsChange,
@@ -73,6 +75,7 @@ export const DataTable = ({
     ];
 
     form?.fields?.map((e) => {
+      // console.log('e', e);
       const temp = e?.options?.multipleValues
         ? {
             key: '',
@@ -81,6 +84,7 @@ export const DataTable = ({
             frozen: false,
             formatter({ row, isCellSelected }) {
               const hasChildren = row.children !== undefined;
+              const style = !hasChildren ? { marginInlineStart: 30 } : undefined;
               return (
                 <>
                   {hasChildren && (
@@ -90,6 +94,9 @@ export const DataTable = ({
                       onCellExpand={() => dispatch({ id: row.id, type: 'toggleSubRow' })}
                     />
                   )}
+                  <div>
+                    <div style={style}>{row[e._id]}</div>
+                  </div>
                 </>
               );
             },
@@ -115,6 +122,7 @@ export const DataTable = ({
     ];
 
     form?.fields?.map((e) => {
+      // console.log('e: ', e);
       const temp = e?.options?.multipleValues
         ? {
             key: '',
@@ -123,6 +131,9 @@ export const DataTable = ({
             frozen: false,
             formatter({ row, isCellSelected }) {
               const hasChildren = row.children !== undefined;
+              const style = !hasChildren ? { marginInlineStart: 30 } : undefined;
+              console.log({ Fieldtype: e.fieldType, Value: row[e._id] });
+
               return (
                 <>
                   {hasChildren && (
@@ -132,6 +143,11 @@ export const DataTable = ({
                       onCellExpand={() => dispatch({ id: row.id, type: 'toggleSubRow' })}
                     />
                   )}
+                  <div>
+                    <div style={style}>
+                      <DisplayValue field={e} value={row[e._id]} />
+                    </div>
+                  </div>
                 </>
               );
             },
@@ -142,6 +158,9 @@ export const DataTable = ({
             resizable: true,
             frozen: false,
             editor: TextEditor,
+            formatter({ row }) {
+              return <DisplayValue field={e} value={row[e._id]} />;
+            },
           };
       temp.key = e._id;
       temp.name = e.label;
@@ -151,9 +170,6 @@ export const DataTable = ({
   }, []);
 
   const [rowsf, dispatch] = useReducer(reducer, rows);
-
-  console.log('Rowsf', rowsf);
-  console.log('columns', columns);
 
   return (
     <div style={{ height: 720, width: '100%' }}>

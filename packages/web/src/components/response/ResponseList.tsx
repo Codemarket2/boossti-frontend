@@ -102,24 +102,11 @@ export default function ResponseList({
             id: `${tid}.${sameFieldCount}`,
             parentId: tid,
           };
-          innerTemp[v.field] = v.value
-            ? v.value
-            : v.valueNumber
-            ? v.valueNumber
-            : v.valueDate
-            ? v.valueDate
-            : v.valueBoolean;
+          innerTemp[v.field] = v;
 
           temp.children.push(innerTemp);
           sameFieldCount += 1;
-        } else
-          temp[v.field] = v.value
-            ? v.value
-            : v.valueNumber
-            ? v.valueNumber
-            : v.valueDate
-            ? v.valueDate
-            : v.valueBoolean;
+        } else temp[v.field] = v;
       });
       rows.push(temp);
     });
@@ -136,6 +123,7 @@ export default function ResponseList({
       {form?.settings?.responsesView != 'vertical' && form?.settings?.responsesView == 'table' && (
         <DataTable
           form={form}
+          data={data?.getResponses?.data}
           rows={defaultRows}
           rowHeight={40}
           onRowsChange={setRows}
