@@ -160,11 +160,9 @@ export default function Album() {
                   {cards2.map((card, i) => (
                     <Grid item key={i}>
                       <Card className={classes.card}>
-                        <CardMedia
-                          className={classes.cardMedia}
-                          image={card.image}
-                          title={card.title}
-                        />
+                        <div style={{ width: '100%' }}>
+                          <img src={card.image} alt={card.title} style={{ width: '100%' }} />
+                        </div>
                         <CardContent className={classes.cardContent}>
                           <Typography gutterBottom variant="h5" component="h2">
                             {card.title}
