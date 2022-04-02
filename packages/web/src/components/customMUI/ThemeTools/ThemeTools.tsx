@@ -5,14 +5,13 @@ import { styled } from '@mui/material/styles';
 import { Theme } from '@mui/material';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import PaletteTools from './PaletteTools/PaletteTools';
-
-import TypographyTools from './TypographyTools/TypographyTools';
 
 import PaletteIcon from '@mui/icons-material/Palette';
 import FontIcon from '@mui/icons-material/FontDownload';
 import TypographyIcon from '@mui/icons-material/TextFields';
 import SnippetsIcon from '@mui/icons-material/PlaylistAdd';
+import TypographyTools from './TypographyTools/TypographyTools';
+import PaletteTools from './PaletteTools/PaletteTools';
 import ToolPanel from './ToolPanel';
 import FontTools from './FontTools/FontTools';
 import SnippetTools from './SnippetTools';

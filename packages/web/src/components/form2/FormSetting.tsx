@@ -42,7 +42,7 @@ export default function FormSetting({
           value={settings?.widgetType ?? 'both'}
           onChange={({ target }) => onChange({ widgetType: target.value })}
         >
-          <MenuItem value="both">{`Display form & responses`}</MenuItem>
+          <MenuItem value="both">Display form & responses</MenuItem>
           <MenuItem value="form">Display only form</MenuItem>
           <MenuItem value="responses">Display only responses</MenuItem>
         </TextField>
@@ -152,7 +152,7 @@ export default function FormSetting({
               label="Who can submit the form"
               onChange={({ target }) => onChange({ whoCanSubmit: target.value })}
             >
-              <MenuItem value="all">{'Both authenticated & unauthenticated users'}</MenuItem>
+              <MenuItem value="all">Both authenticated & unauthenticated users</MenuItem>
               <MenuItem value="authUser">Only Authenticated users</MenuItem>
               {isSection && <MenuItem value="onlyPageOwner">Only page owner</MenuItem>}
             </TextField>
@@ -225,7 +225,7 @@ export default function FormSetting({
               value={settings?.whoCanViewResponses ?? 'authUser'}
               onChange={({ target }) => onChange({ whoCanViewResponses: target.value })}
             >
-              <MenuItem value="all">{'Both authenticated & unauthenticated users'}</MenuItem>
+              <MenuItem value="all">Both authenticated & unauthenticated users</MenuItem>
               <MenuItem value="authUser">Only Authenticated users</MenuItem>
               {isSection && <MenuItem value="onlyPageOwner">Only page owner</MenuItem>}
             </TextField>

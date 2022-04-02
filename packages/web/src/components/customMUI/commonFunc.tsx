@@ -1,7 +1,7 @@
 import { store } from '@frontend/shared/redux';
-import { getByPath, removeByPath, setByPath } from './utils';
 import { createTheme, Theme } from '@mui/material';
 import { DeprecatedThemeOptions } from '@mui/material/styles';
+import { getByPath, removeByPath, setByPath } from './utils';
 
 export const defaultTheme: Theme = createTheme();
 

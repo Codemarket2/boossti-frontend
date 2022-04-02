@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const withImages = require('next-images');
 const withPlugins = require('next-compose-plugins');
 
@@ -10,7 +11,15 @@ const withPlugins = require('next-compose-plugins');
 //   },
 // });
 
-const withTM = require('next-transpile-modules')(['@frontend/shared', '@frontend/ckeditor']);
+const withTM = require('next-transpile-modules')(['@frontend/shared']);
 
-module.exports = withPlugins([withTM, withImages]);
+module.exports = withPlugins([withTM, withImages], {
+  images: {
+    disableStaticImages: true,
+  },
+  experimental: {
+    emotion: true,
+  },
+});
+
 // module.exports = withPlugins([withPWA, withTM, withImages]);

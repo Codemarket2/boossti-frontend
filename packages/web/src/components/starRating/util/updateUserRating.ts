@@ -11,7 +11,7 @@ export const useStarRating = (parentId: string) => {
 
   const handleRating = (newValue: number | null, oldValue: number | null, id: string) => {
     if (newValue == null && oldValue == null) {
-      console.log('');
+      //
     } else if (newValue == null) {
       handleDelete();
     } else if (oldValue == null) {

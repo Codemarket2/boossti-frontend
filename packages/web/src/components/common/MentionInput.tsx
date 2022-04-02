@@ -1,6 +1,6 @@
 import { MentionsInput, Mention } from 'react-mentions';
-import classNames from '../../utils/mention.module.css';
 import { useMention } from '@frontend/shared/hooks/template';
+import classNames from '../../utils/mention.module.css';
 
 interface IProps {
   value: string;
@@ -18,6 +18,7 @@ export default function MentionInput({
   const { suggestions, state, setState, data } = useMention();
 
   const handleChange = ({ target }: any) => {
+    // eslint-disable-next-line no-param-reassign
     target.value = target.value.split('@@@^^^@@@__').join('@@@^^^ @@@__');
     setState({ ...state, showSubList: false });
     return onChange(target.value);
@@ -25,10 +26,9 @@ export default function MentionInput({
 
   const handleOnAdd = (id, display, startPos, endPos) => {
     if (!state.showSubList) {
-      let textBeforeCursorPosition = value.substring(0, startPos);
-      let textAfterCursorPosition = value.substring(startPos, endPos - 1);
-      let newString =
-        textBeforeCursorPosition + `@@@__${id}^^__${display}@@@^^^@` + textAfterCursorPosition;
+      const textBeforeCursorPosition = value.substring(0, startPos);
+      const textAfterCursorPosition = value.substring(startPos, endPos - 1);
+      const newString = `${textBeforeCursorPosition}@@@__${id}^^__${display}@@@^^^@${textAfterCursorPosition}`;
       setState({
         ...state,
         selectedType: id,

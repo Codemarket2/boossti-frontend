@@ -38,7 +38,7 @@ export function useCreateComment(postId: string, threadId: string) {
               },
             });
           } catch (error) {
-            console.error(error);
+            // console.error(error);
           }
         },
       });
@@ -95,7 +95,7 @@ export function useDeleteComment() {
           },
         });
 
-        let newData = produce(existingComment, (draft: any) => {
+        const newData = produce(existingComment, (draft: any) => {
           draft!.getCommentsByParentID!.data!.splice(index, 1);
         });
 

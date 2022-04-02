@@ -5,6 +5,7 @@ import * as yup from 'yup';
 import { useFormik } from 'formik';
 import projectConfig from '../../index';
 import { showLoading, hideLoading } from '../../redux/actions/loading';
+
 export { useSignIn } from './signIn';
 
 interface ISignUpState {
@@ -37,7 +38,7 @@ const signUpValues: ISignUpFormValues = {
   password: '',
 };
 
-export function useSignUp({ onAlert = () => {} }: ISignUpArgs) {
+export function useSignUp({ onAlert = () => null }: ISignUpArgs) {
   const dispatch = useDispatch();
   const [state, setState] = useState<ISignUpState>({
     email: '',

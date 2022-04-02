@@ -21,7 +21,7 @@ export default function LoadingButton({
   color = 'primary',
   loading = false,
   className = '',
-  onClick = () => {},
+  onClick = () => null,
   children,
   disabled = false,
   ...props

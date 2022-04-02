@@ -37,7 +37,7 @@ export function useCreateUpdateResponse(
 
       return response;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       onAlert('Error', error.message);
     }
   };

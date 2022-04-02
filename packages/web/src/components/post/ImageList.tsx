@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/media-has-caption */
 import IconButton from '@mui/material/IconButton';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -94,7 +95,7 @@ export const Media = ({
           </IconButton>
         )}
         {isVideo ? (
-          <video key={url} controls src={url + '#t=0.9'}>
+          <video key={url} controls src={`${url}#t=0.9`}>
             Your browser does not support HTML5 video.
           </video>
         ) : (

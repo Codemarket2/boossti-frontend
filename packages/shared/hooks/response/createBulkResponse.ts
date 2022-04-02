@@ -17,7 +17,7 @@ export function useCreateBulkResponse() {
         variables: { formId, fileData, fileUrl, map, parentId },
       });
     } catch (error) {
-      console.log('Error delete', error.message);
+      // console.log('Error delete', error.message);
     }
   };
 

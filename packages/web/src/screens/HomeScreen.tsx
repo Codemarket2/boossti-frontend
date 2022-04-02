@@ -85,8 +85,7 @@ function Copyright() {
       <Link color="inherit" href="https://www.boossti.com">
         Boossti
       </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
+      {new Date().getFullYear()}.
     </Typography>
   );
 }

@@ -9,7 +9,7 @@ interface IProps {
   state: any;
   setSeoState?: any;
   seoState?: any;
-  onCancel: () => void;
+  // onCancel: () => void;
   onSave: () => void;
   loading: boolean;
 }

@@ -69,8 +69,8 @@ export default function MyPostsList() {
           <PostCard
             key={post._id}
             post={post}
-            onClickMore={(target: any, post: any) =>
-              postsSetState({ ...postsState, showMenu: target, selectedPost: post })
+            onClickMore={(target: any, selectedPost: any) =>
+              postsSetState({ ...postsState, showMenu: target, selectedPost })
             }
           />
         ))

@@ -57,7 +57,7 @@ export default function Share({ itemSlug, index, commentId, fieldTitle }: IShare
   };
 
   return (
-    <React.Fragment>
+    <>
       <Tooltip
         open={open}
         onClose={handleClose}
@@ -66,6 +66,6 @@ export default function Share({ itemSlug, index, commentId, fieldTitle }: IShare
       >
         <ShareIcon onClick={handleCopyShareLink} />
       </Tooltip>
-    </React.Fragment>
+    </>
   );
 }

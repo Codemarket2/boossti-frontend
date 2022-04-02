@@ -32,14 +32,14 @@ function Table() {
 
   useEffect(() => {
     const allData = [];
-    data?.getAllContacts?.data?.map((d) => {
-      const temp = {};
-      temp['id'] = d._id;
-      temp['Email'] = d.email;
-      temp['Phone'] = d.phone;
-      temp['Group'] = d.groupName;
-      temp['Business'] = d.businessName;
-      temp['City'] = d.city;
+    data?.getAllContacts?.data?.forEach((d) => {
+      const temp: any = {};
+      temp.id = d._id;
+      temp.Email = d.email;
+      temp.Phone = d.phone;
+      temp.Group = d.groupName;
+      temp.Business = d.businessName;
+      temp.City = d.city;
       allData.push(temp);
     });
     setRowData([...allData]);
@@ -49,7 +49,6 @@ function Table() {
   const { handleCreateMailingList, createLoading } = useCreateMailingListFromContact();
   const [selectionModel, setSelectionModel] = React.useState([]);
   const [mailingList, setMailingList] = React.useState('');
-  console.log(mailingList);
 
   const createMailingListWithId = async (e) => {
     e.preventDefault();

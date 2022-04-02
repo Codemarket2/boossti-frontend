@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
@@ -6,14 +5,13 @@ import Typography from '@mui/material/Typography';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputGroup from '../common/InputGroup';
-import { Button } from '@mui/material';
 import LoadingButton from '../common/LoadingButton';
 
 interface IProps {
   fields: any[];
   fileData: any[];
   handleSubmit: any;
-  map: {};
+  map: any;
   setMap: any;
   createLoading: boolean;
 }
@@ -58,8 +56,8 @@ export default function BulkUploadForm({
                 }}
                 label="Field"
               >
-                {options?.map((keys, i) => (
-                  <MenuItem key={i} value={keys}>
+                {options?.map((keys, i2) => (
+                  <MenuItem key={i2} value={keys}>
                     {keys}
                   </MenuItem>
                 ))}

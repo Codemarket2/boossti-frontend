@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import { useSendEmail } from '@frontend/shared/hooks/email/sendEmail';
 import {
@@ -31,7 +31,7 @@ export default function EmailForm() {
   const handleChange = (event) => {
     setChecked(event.target.checked);
   };
-  console.log(formik.values);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     formik.handleSubmit();
@@ -130,7 +130,7 @@ export default function EmailForm() {
             >
               {mailingList?.map((list, i) => (
                 <MenuItem key={i} value={list.listName}>
-                  <em>{list.listName} - </em> {list.contacts.length} emails
+                  <em>{list.listName} -</em> {list.contacts.length} emails
                 </MenuItem>
               ))}
             </Select>

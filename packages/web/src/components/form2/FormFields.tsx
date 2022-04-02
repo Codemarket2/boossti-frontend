@@ -199,7 +199,7 @@ export default function FormFields({
             <>
               {!values.showFormSettings && tabName === 'setting' ? (
                 <Typography variant="h5" className="d-flex align-items-center pl-2">
-                  {`Manage Field Settings`}
+                  Manage Field Settings
                 </Typography>
               ) : (
                 <Typography variant="h5" className="d-flex align-items-center pl-2">

@@ -20,9 +20,7 @@ export default function ContactProfile({ _id }: IProps) {
   const { data, error, loading } = useGetContact(_id);
   const { handleDelete, loading: deleteLoading } = useDeleteContact(_id);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  React.useEffect(() => {
-    console.log('_id', _id);
-  }, [_id]);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -31,7 +29,7 @@ export default function ContactProfile({ _id }: IProps) {
   };
 
   const handleEdit = () => {
-    console.log('edit');
+    // console.log('edit');
   };
 
   if (loading) {

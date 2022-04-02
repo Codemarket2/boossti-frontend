@@ -42,7 +42,7 @@ export function useCreateVirtualForm({ onAlert }: IHooksProps) {
       });
       return res;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       onAlert('Error', error.message);
       return error;
     }

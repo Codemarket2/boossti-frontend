@@ -10,8 +10,6 @@ import InputGroup from '../common/InputGroup';
 import Overlay from '../common/Overlay';
 import ResponseLayout from '../response/ResponseLayout';
 import { ActionsWrapper } from './Actions';
-import { Grid } from '@mui/material';
-import FormFields from './FormFields';
 
 interface IProps {
   isSection?: boolean;
@@ -45,13 +43,15 @@ export default function CustomFormSettings({
   }, [fields]);
 
   useEffect(() => {
-    setState({ ['fields']: pageFields });
+    setState({ fields: pageFields });
   }, [pageFields]);
 
   const getFormFields = async () => {
     const formFields = fields?.filter((f) => f?.fieldType === 'form');
     let newPageFields = [];
+    // eslint-disable-next-line no-restricted-syntax
     for (const field of formFields) {
+      // eslint-disable-next-line no-await-in-loop
       const form = await getForm(field?.form?._id);
       if (form) {
         const pageField = form?.fields?.map((f) => ({

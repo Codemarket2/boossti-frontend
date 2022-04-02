@@ -3,7 +3,9 @@ import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import { ReactNode } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
-import { QRButton } from '../qrcode/QRButton';
+// import { QRButton } from '../qrcode/QRButton';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const QRCode = require('qrcode.react');
 
 interface IProps {

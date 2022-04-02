@@ -9,7 +9,7 @@ export function useCreateLike(parentId: string) {
     updateLikeInCache(parentId, 1);
     createLikeMutation({
       variables: {
-        parentId: parentId,
+        parentId,
       },
     });
   };
@@ -28,7 +28,7 @@ export const updateLikeInCache = async (parentId: string, countValue: number) =>
       getActionCounts: {
         ...data.getActionCounts,
         likeCount: data.getActionCounts.likeCount + countValue,
-        likedByUser: countValue === 1 ? true : false,
+        likedByUser: countValue === 1,
       },
     };
     await apolloClient.writeQuery({
@@ -45,7 +45,7 @@ export function useDeleteLike(parentId) {
     updateLikeInCache(parentId, -1);
     deleteLikeMutation({
       variables: {
-        parentId: parentId,
+        parentId,
       },
     });
   };

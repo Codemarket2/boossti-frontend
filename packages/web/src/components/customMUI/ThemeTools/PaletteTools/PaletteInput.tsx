@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react';
 import { styled } from '@mui/material/styles';
-import ColorInput from '../../ColorInput/ColorInput';
 import { useDispatch, useSelector } from 'react-redux';
-import { removeThemeOption, setThemeOption } from '../../../../../../shared/redux/actions/setting';
 import { Grid, Typography, Button, Theme, createTheme, adaptV4Theme } from '@mui/material';
+import ColorInput from '../../ColorInput/ColorInput';
+import { removeThemeOption, setThemeOption } from '../../../../../../shared/redux/actions/setting';
 import { getThemeValueInfo } from '../../selectors/selectors';
 import { updateSetThemeOption, updateRemoveThemeOption } from '../../commonFunc';
 

@@ -38,6 +38,7 @@ export default function CRUDMenu({
       {!hideDelete && (
         <MenuItem
           onClick={() => {
+            // eslint-disable-next-line no-restricted-globals
             const anwser = confirm('Are you sure you want delete?');
             if (anwser) {
               onDelete();

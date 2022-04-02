@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import { useFormik } from 'formik';
-import { CREATE_SEND_EMAIL } from '../../graphql/mutation/email';
 import { useMutation } from '@apollo/client';
+import { CREATE_SEND_EMAIL } from '../../graphql/mutation/email';
 
 const validationSchema = yup.object({
   sendEmailLabel: yup.string().required('Label for send email is required'),
@@ -56,17 +56,16 @@ export function useSendEmail(): any {
           sendIndividual: payload.sendIndividual,
         };
         await createSendEmail({ variables: newPayload });
-        console.log(payload);
+
         // await onSend(newPayload);
         formik.handleReset('');
-      } catch (error) {
-        alert(error.message);
+      } catch (err) {
+        alert(err.message);
       }
     },
   });
 
   const onSend = async (payload) => {
-    console.log('payload', payload);
     // const res = await createSendEmail({
     //   variables: payload,
     // });

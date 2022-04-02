@@ -40,7 +40,7 @@ export function useIsNotificationClicked() {
       });
       updateNotificationCache(_id, threadId);
     } catch (error) {
-      console.error(error.message);
+      // console.error(error.message);
     }
   };
   return {

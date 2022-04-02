@@ -55,7 +55,7 @@ export const useUpdateTemplate = ({ template, onAlert }: IProps) => {
         variables: payload,
       });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       onAlert('Error while auto saving', error.message);
     }
   };

@@ -5,7 +5,6 @@ import Typography from '@mui/material/Typography';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Slider from '@mui/material/Slider';
-import { Theme } from '@mui/material';
 
 const PREFIX = 'FontSizeInput';
 
@@ -37,13 +36,14 @@ const getFontSizeUnit = (value) => {
   if (typeof value === 'string') {
     if (value.endsWith('pt')) {
       return 'pt';
-    } else if (value.endsWith('rem')) {
-      return 'rem';
-    } else if (value.endsWith('em')) {
-      return 'em';
-    } else {
-      return undefined;
     }
+    if (value.endsWith('rem')) {
+      return 'rem';
+    }
+    if (value.endsWith('em')) {
+      return 'em';
+    }
+    return undefined;
   }
   return 'px';
 };

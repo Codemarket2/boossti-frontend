@@ -92,49 +92,48 @@ export default function ForgetPasswordForm({ handleShowSignInForm }: IProps) {
         </InputGroup>
       </form>
     );
-  } else {
-    return (
-      <form onSubmit={formik1.handleSubmit} data-testid="forget-password-form">
-        <InputGroup>
-          <Typography>Forgot Password</Typography>
-        </InputGroup>
-        <InputGroup>
-          <TextField
-            fullWidth
-            label="Email*"
-            variant="outlined"
-            name="email"
-            size="small"
-            disabled={formik1.isSubmitting}
-            value={formik1.values.email}
-            onChange={formik1.handleChange}
-            error={formik1.touched.email && Boolean(formik1.errors.email)}
-            helperText={formik1.touched.email && formik1.errors.email}
-          />
-        </InputGroup>
-        <InputGroup>
-          <LoadingButton
-            fullWidth
-            data-testid="reset-code-button"
-            type="submit"
-            loading={formik1.isSubmitting}
-          >
-            Get Password Reset Code
-          </LoadingButton>
-        </InputGroup>
-        <InputGroup>
-          <LoadingButton
-            fullWidth
-            data-testid="cancel-button"
-            type="button"
-            variant="outlined"
-            onClick={showSignInForm}
-            disabled={formik1.isSubmitting}
-          >
-            Cancel
-          </LoadingButton>
-        </InputGroup>
-      </form>
-    );
   }
+  return (
+    <form onSubmit={formik1.handleSubmit} data-testid="forget-password-form">
+      <InputGroup>
+        <Typography>Forgot Password</Typography>
+      </InputGroup>
+      <InputGroup>
+        <TextField
+          fullWidth
+          label="Email*"
+          variant="outlined"
+          name="email"
+          size="small"
+          disabled={formik1.isSubmitting}
+          value={formik1.values.email}
+          onChange={formik1.handleChange}
+          error={formik1.touched.email && Boolean(formik1.errors.email)}
+          helperText={formik1.touched.email && formik1.errors.email}
+        />
+      </InputGroup>
+      <InputGroup>
+        <LoadingButton
+          fullWidth
+          data-testid="reset-code-button"
+          type="submit"
+          loading={formik1.isSubmitting}
+        >
+          Get Password Reset Code
+        </LoadingButton>
+      </InputGroup>
+      <InputGroup>
+        <LoadingButton
+          fullWidth
+          data-testid="cancel-button"
+          type="button"
+          variant="outlined"
+          onClick={showSignInForm}
+          disabled={formik1.isSubmitting}
+        >
+          Cancel
+        </LoadingButton>
+      </InputGroup>
+    </form>
+  );
 }

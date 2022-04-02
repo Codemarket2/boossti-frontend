@@ -12,7 +12,7 @@ export interface IAttributes {
     title: string;
   };
   editMode?: boolean;
-  theme?: {};
+  theme?: any;
 }
 
 export function updateSettingAction(payload: IAttributes) {

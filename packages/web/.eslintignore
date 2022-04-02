@@ -1,0 +1,13 @@
+*.min.*
+*lock.*
+.history
+.next
+.vscode
+build
+dist
+node_modules
+src/components/common/ckeditor-build
+src/components/response/ResponseList.tsx
+src/components/customMUI
+public
+src/components/response/Table.tsx

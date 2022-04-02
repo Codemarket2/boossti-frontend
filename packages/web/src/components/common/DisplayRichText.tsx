@@ -27,19 +27,19 @@ const StyledDiv = styled('div')(({ theme }) => ({
 export default function DisplayRichText({ value = '' }: IProps) {
   const router = useRouter();
   const getData = async (id) => {
-    const page = await getPage(id);
-    router.push(`/page/${page['data'].getPage.slug}`);
+    const page: any = await getPage(id);
+    router.push(`/page/${page?.data?.getPage?.slug}`);
   };
   return (
     <StyledDiv className="ck-content">
       {parse(transform(value), {
         replace: (domNode: any) => {
-          if (domNode.name == 'a' && domNode.attribs.class == 'mention') {
+          if (domNode.name === 'a' && domNode.attribs.class === 'mention') {
             return (
               <span
                 style={{ cursor: 'pointer', color: 'blue' }}
                 onClick={() => {
-                  if (domNode.attribs['data-type'] == 'listitem') {
+                  if (domNode.attribs['data-type'] === 'listitem') {
                     getData(domNode.attribs['data-id']);
                   } else {
                     router.push(`/user/${domNode.attribs['data-id']}`);
@@ -60,12 +60,13 @@ export async function getPage(_id) {
   try {
     const response = await client.query({
       query: GET_PAGE_BY_ID,
-      variables: { _id: _id },
+      variables: { _id },
     });
     return new Promise((resolve) => {
       resolve(response);
     });
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.log(e);
   }
 }
