@@ -10,3 +10,4 @@ src/components/common/ckeditor-build
 src/components/response/ResponseList.tsx
 src/components/customMUI
 public
+src/components/response/Table.tsx

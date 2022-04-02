@@ -163,11 +163,6 @@ export default function Album() {
                         <div style={{ width: '100%' }}>
                           <img src={card.image} alt={card.title} style={{ width: '100%' }} />
                         </div>
-                        {/* <CardMedia
-                          className={classes.cardMedia}
-                          image={card.image}
-                          title={card.title}
-                        /> */}
                         <CardContent className={classes.cardContent}>
                           <Typography gutterBottom variant="h5" component="h2">
                             {card.title}
