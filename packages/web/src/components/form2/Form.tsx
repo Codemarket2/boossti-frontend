@@ -18,6 +18,7 @@ import { useUpdateForm, useDeleteForm } from '@frontend/shared/hooks/form';
 import { useAuthorization } from '@frontend/shared/hooks/auth';
 import Link from 'next/link';
 import Container from '@mui/material/Container';
+import TextField from '@mui/material/TextField';
 import ErrorLoading from '../common/ErrorLoading';
 import Breadcrumbs from '../common/Breadcrumbs';
 import Backdrop from '../common/Backdrop';
@@ -33,7 +34,6 @@ import ResponseLayout from '../response/ResponseLayout';
 import BulkUploadAction from './BulkUploadAction';
 import NotFound from '../common/NotFound';
 import UnAuthorised from '../common/UnAuthorised';
-import TextField from '@mui/material/TextField';
 
 interface IProps {
   _id: string;
@@ -82,6 +82,7 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
   };
 
   const onDelete = () => {
+    // eslint-disable-next-line no-restricted-globals
     const anwser = confirm('Are you sure you want to delete this form?');
     if (anwser) {
       setOptions({

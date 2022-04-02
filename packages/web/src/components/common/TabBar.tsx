@@ -21,7 +21,7 @@ export default function CenteredTabs() {
     }
   }, []);
 
-  const handleChange = (event: ChangeEvent<{}>, newValue: string) => {
+  const handleChange = (event: any, newValue: string) => {
     router.push(newValue);
   };
 

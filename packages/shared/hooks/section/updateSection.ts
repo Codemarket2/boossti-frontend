@@ -61,6 +61,7 @@ export function useUpdateSection({ onAlert, _id }: IProps): any {
       }
       return response;
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.log(err);
       onAlert('Error while auto saving', err.message);
     }
@@ -69,7 +70,7 @@ export function useUpdateSection({ onAlert, _id }: IProps): any {
   return { onSectionChange, section, handleUpdateSection, error, loading };
 }
 
-export const stringifyPayload = (oldPayload: any, removeId: boolean = false) => {
+export const stringifyPayload = (oldPayload: any, removeId = false) => {
   let payload = { ...oldPayload };
   if (payload?.fields) {
     payload = {
@@ -109,7 +110,7 @@ export const stringifyPayload = (oldPayload: any, removeId: boolean = false) => 
   return payload;
 };
 
-export const stringifyValues = (values, removeId: boolean = false) => {
+export const stringifyValues = (values, removeId = false) => {
   return values.map((m) => {
     let value = JSON.parse(JSON.stringify(m), omitTypename);
     if (removeId) {

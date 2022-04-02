@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import Compress from 'browser-image-compression';
 
 const options = {

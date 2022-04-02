@@ -1,5 +1,6 @@
 import { gql } from '@apollo/client';
 
+// eslint-disable-next-line camelcase
 export const Stripe_Retrieve_Account = gql`
   query StripeRetrieveAccount($userId: String!) {
     stripeRetrieveAccount(userId: $userId)

@@ -61,7 +61,7 @@ export default function DisplayComment({
           threadId={threadId}
           postId={postId}
           setEdit={setEdit}
-          showIcon={true}
+          showIcon
           itemSlug={itemSlug}
           shareIndex={shareIndex}
           fieldTitle={fieldTitle}

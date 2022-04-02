@@ -1,3 +1,6 @@
+/* eslint-disable global-require */
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable consistent-return */
 import { fileUpload } from '@frontend/shared/utils/fileUpload';
 import Skeleton from '@mui/material/Skeleton';
 import { useEffect, useRef, useState } from 'react';
@@ -11,18 +14,15 @@ export async function getPages(queryText) {
       variables: { search: queryText },
     });
     return new Promise((resolve) => {
-      console.log(response);
       let itemsToDisplay = response?.data?.getMentionItems;
-      itemsToDisplay = itemsToDisplay?.map(
-        (val) =>
-          (val = {
-            ...val,
-            id: `@${val?.title} | ${val.category}`,
-          }),
-      );
+      itemsToDisplay = itemsToDisplay?.map((val) => ({
+        ...val,
+        id: `@${val?.title} | ${val.category}`,
+      }));
       resolve(itemsToDisplay);
     });
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.log(e);
   }
 }
@@ -153,7 +153,6 @@ class MyUploadAdapter {
 
 function uploadPlugin(editor) {
   // eslint-disable-next-line no-param-reassign
-
   editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
     return new MyUploadAdapter(loader);
   };
@@ -176,7 +175,7 @@ export default function RichTextarea2({ value = '', onChange }: IProps) {
   useEffect(() => {
     editorRef.current = {
       CKEditor: require('@ckeditor/ckeditor5-react').CKEditor,
-      Editor: require('@frontend/ckeditor'),
+      Editor: require('./ckeditor-build/ckeditor'),
     };
     setLoading(true);
   }, []);

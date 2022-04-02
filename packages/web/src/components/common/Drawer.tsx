@@ -18,8 +18,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Link from 'next/link';
 import AnalyticsIcon from '@mui/icons-material/Announcement';
-import DarkModeToggle from './DarkModeToggle';
 import BuildIcon from '@mui/icons-material/Build';
+import DarkModeToggle from './DarkModeToggle';
 
 interface IProps {
   showDrawer: boolean;

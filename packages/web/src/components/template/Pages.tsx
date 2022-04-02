@@ -123,7 +123,7 @@ export default function Pages({ templateId, slug, template }: IProps) {
               authorized
               fields={template?.fields}
               values={[]}
-              handleValueChange={() => {}}
+              handleValueChange={() => null}
               pageId={template?._id}
               layouts={template?.options?.layouts || {}}
               disableGrid={!editMode}

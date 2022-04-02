@@ -83,7 +83,7 @@ export default function TemplateForm({ vType = null, updateCallBack, onCancel }:
               {formik.values.edit ? 'Update' : 'Create'}
             </LoadingButton>
             <Button
-              onClick={onCancel ? onCancel : defaultOnCancel}
+              onClick={onCancel || defaultOnCancel}
               className="ml-2"
               disabled={formik.isSubmitting}
               color="primary"

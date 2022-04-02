@@ -237,7 +237,7 @@ export function ResponseChild3({
               <ResponseSections
                 authorized={false}
                 section={section}
-                onSectionChange={(sec) => {}}
+                onSectionChange={(sec) => null}
               />
               <Paper variant="outlined">
                 <List dense component="nav">

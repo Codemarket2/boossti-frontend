@@ -36,7 +36,7 @@ export default function SignUpForm() {
         onLabelClick={() => setState({ ...state, verify: false })}
       />
     );
-  } else {
+  } 
     return (
       <form onSubmit={formik.handleSubmit} data-testid="signup-form">
         <InputGroup>
@@ -97,5 +97,5 @@ export default function SignUpForm() {
         <SocialSignIn signIn={false} />
       </form>
     );
-  }
+  
 }

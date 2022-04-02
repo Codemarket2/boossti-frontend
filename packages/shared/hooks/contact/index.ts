@@ -65,7 +65,7 @@ export function useContactForm(): any {
       const { getAllContacts } = client.readQuery({
         query: GET_ALL_CONTACTS,
       });
-      let newData = produce(getAllContacts, (draft: any) => {
+      const newData = produce(getAllContacts, (draft: any) => {
         draft.data.push(mutationResult?.data?.createContact);
       });
       client.writeQuery({
@@ -137,7 +137,7 @@ export const useDeleteContact = (_id: string) => {
     const { getAllContacts } = client.readQuery({
       query: GET_CONTACT,
     });
-    let newData = produce(getAllContacts, (draft: any) => {
+    const newData = produce(getAllContacts, (draft: any) => {
       draft.data.filter((c) => c._id !== _id);
     });
     client.writeQuery({

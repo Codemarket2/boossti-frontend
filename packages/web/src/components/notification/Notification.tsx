@@ -133,7 +133,7 @@ export default function Notification() {
   );
 }
 
-const NotificationPage = ({ list, store, setStore, state }) => {
+const NotificationPage = ({ list, store, setStore, state }: any) => {
   const { notifications } = useGetMyNotifications({ formId: list._id });
 
   useEffect(() => {
@@ -154,7 +154,7 @@ const NotificationPage = ({ list, store, setStore, state }) => {
       <AccordionDetails style={{ display: 'block' }}>
         {state.notifications[list._id]?.map((notification) => (
           <div key={notification._id}>
-            <NotificationItem notification={notification} onClose={() => {}} />
+            <NotificationItem notification={notification} onClose={() => null} />
           </div>
         ))}
       </AccordionDetails>

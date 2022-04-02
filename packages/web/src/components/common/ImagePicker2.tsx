@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable react/jsx-props-no-spreading */
 import { generateObjectId } from '@frontend/shared/utils/objectId';
 import { useEffect, useRef, useState } from 'react';
 import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
@@ -85,6 +87,7 @@ export default function ImagePicker2({
 
   const handleFileChange = (event) => {
     if (event.target.files.length > 0) {
+      // eslint-disable-next-line no-plusplus
       for (let i = 0; i < event.target.files.length; i++) {
         const item = {
           url: URL.createObjectURL(event.target.files[i]),
@@ -136,7 +139,7 @@ export default function ImagePicker2({
 
   useEffect(() => {
     const tempArr = [];
-    selected.map((select) => {
+    selected.forEach((select) => {
       const temp = {
         caption: '',
         type: 'image/jpeg',
@@ -145,10 +148,10 @@ export default function ImagePicker2({
       temp.url = select;
       tempArr.push(temp);
     });
-    setState({ ...state, ['media']: tempArr });
+    setState({ ...state, media: tempArr });
   }, [selected]);
 
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+  const handleChange = (event: any, newValue: number) => {
     setValue(newValue);
   };
 
@@ -173,7 +176,7 @@ export default function ImagePicker2({
           </Button>
           <Dialog
             fullWidth
-            maxWidth={'sm'}
+            maxWidth="sm"
             open={open}
             onClose={handleClose}
             aria-labelledby="max-width-dialog-title"
@@ -214,10 +217,10 @@ export default function ImagePicker2({
                       </ImageList>
                     </div> */}
                     {data?.getResponses?.data?.map((res) =>
-                      res?.values?.map((value) =>
-                        value?.media?.length >= 1 ? (
+                      res?.values?.map((v) =>
+                        v?.media?.length >= 1 ? (
                           <MediaList
-                            media={value?.media}
+                            media={v?.media}
                             selected={selected}
                             setSelected={setSelected}
                           />
@@ -245,7 +248,7 @@ export default function ImagePicker2({
                         className="mb-2"
                         startIcon={<PhotoLibraryIcon />}
                       >
-                        {`Select Image/Video`}
+                        Select Image/Video
                       </Button>
                     </label>
                     <input

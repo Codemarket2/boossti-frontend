@@ -117,11 +117,11 @@ function ColorPicker({ color, onChangeComplete }) {
     if (colorObject.rgb.a === 1) {
       setInputValue(colorObject.hex);
       return colorObject.hex;
-    } else {
+    } 
       const rgb = `rgba(${colorObject.rgb.r},${colorObject.rgb.g},${colorObject.rgb.b},${colorObject.rgb.a})`;
       setInputValue(rgb);
       return rgb;
-    }
+    
   };
 
   const handleChangeComplete = (colorObject, event) => {

@@ -12,13 +12,14 @@ import moment from 'moment';
 import ImageList from './ImageList';
 import MentionParser from '../common/MentionParser';
 import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
+
 interface IProps {
   post: any;
   onClickMore?: (arg1: any, arg2: any) => void;
   authenticated?: boolean;
 }
 
-export default function PostCard({ post, onClickMore = () => {}, authenticated = true }: IProps) {
+export default function PostCard({ post, onClickMore = () => null, authenticated = true }: IProps) {
   return (
     <>
       <Card className="my-3" variant="outlined">

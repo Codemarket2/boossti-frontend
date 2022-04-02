@@ -3,9 +3,9 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Divider from '@mui/material/Divider';
 import Paper from '@mui/material/Paper';
+import { useGetOneUser } from '@frontend/shared/hooks/user';
 import ProfileCard from './ProfileCard';
 import UserPostList from '../post/UserPostList';
-import { useGetOneUser } from '@frontend/shared/hooks/user';
 import UserProfileCardSkeleton from './UserProfileCardSkeleton';
 import About from './About';
 
@@ -19,7 +19,7 @@ export default function ProfileScreen({ _id }: any) {
         <Divider />
         <Tabs
           value={value}
-          onChange={(event: React.ChangeEvent<{}>, newValue: string) => setValue(newValue)}
+          onChange={(event: any, newValue: string) => setValue(newValue)}
           indicatorColor="primary"
           textColor="primary"
           centered

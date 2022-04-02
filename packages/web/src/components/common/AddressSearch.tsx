@@ -117,8 +117,8 @@ export default function GoogleMaps({ value, label, onChange }: IProps) {
 
   return (
     <Autocomplete
-      filterOptions={(options, params) => {
-        const filtered = filter(options, params);
+      filterOptions={(newOptions, params) => {
+        const filtered = filter(newOptions, params);
 
         // Suggest the creation of a new value
         if (params.inputValue !== '') {

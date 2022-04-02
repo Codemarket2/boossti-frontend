@@ -58,9 +58,9 @@ export default function MentionParser({
                 <Typography
                   className="mx-1 font-weight-bold"
                   onClick={(event) => {
-                    let selectedTag = tags.filter((t) => t.tag._id == tag._id)[0];
+                    let selectedTag = tags.filter((t) => t.tag._id === tag._id)[0];
                     selectedTag = selectedTag && selectedTag.tag ? selectedTag.tag : selectedTag;
-                    let url =
+                    const url =
                       selectedTag &&
                       selectedTag.types &&
                       Object.prototype.hasOwnProperty.call(selectedTag, 'types')
@@ -84,6 +84,7 @@ export default function MentionParser({
                 </Typography>
               );
             }
+            return domNode;
           },
         })}
         <Menu

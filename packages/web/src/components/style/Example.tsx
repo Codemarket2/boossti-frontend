@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import { useState } from 'react';
 import StyleDrawer from './StyleDrawer';
 

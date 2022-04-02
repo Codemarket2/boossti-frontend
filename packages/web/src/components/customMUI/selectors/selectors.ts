@@ -1,8 +1,8 @@
 import { createSelector } from 'reselect';
-import { getByPath } from '../utils';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { DeprecatedThemeOptions, Theme } from '@mui/material';
+import { getByPath } from '../utils';
 
 /**
  * Return the value of in the theme at the specified path,

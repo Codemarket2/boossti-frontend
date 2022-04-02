@@ -37,13 +37,13 @@ export default function DisplayCard({
   fieldTitle,
 }: IDisplayComment) {
   const { attributes } = useSelector(({ auth }: any) => auth);
-  //comment
+  // comment
   const [showReply, setShowReply] = useState(false);
   const [showCommentInput, setShowCommentInput] = useState(true);
   const { data: actionCountData, error } = useGetActionCounts(commentedUser._id);
   const [payload, setPayload] = useState<any>();
   const currentUserId = attributes['custom:_id'];
-  //like
+  // like
   const { data: likeData, error: likeError } = useGetLikes(commentedUser._id);
   // like modal state
   const [open, setOpen] = useState(false);
@@ -185,7 +185,7 @@ export default function DisplayCard({
                 itemSlug={itemSlug}
                 index={shareIndex}
                 fieldTitle={fieldTitle}
-                showOverlayOnce={true}
+                showOverlayOnce
               >
                 {currentUserId === commentedUser!.createdBy!._id && (
                   <>

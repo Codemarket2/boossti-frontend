@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import { useCreateBulkResponse } from '@frontend/shared/hooks/response';
 import { useState } from 'react';
 import Typography from '@mui/material/Typography';
@@ -37,11 +38,12 @@ export default function BulkUploadAction({ form }: IProps) {
     setIsFilePicked(false);
   };
   const changeHandler = (event) => {
-    const { files } = event.target;
-    files && handleFileUpload(event);
-    let allFiles = [];
-    for (let i = 0; i < files.length; i++) {
-      allFiles.push(files[i]);
+    const { files: newFiles } = event.target;
+    if (newFiles) handleFileUpload(event);
+    const allFiles = [];
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < newFiles.length; i++) {
+      allFiles.push(newFiles[i]);
     }
     setSelectedFile(allFiles);
     setIsFilePicked(true);
@@ -93,6 +95,7 @@ export default function BulkUploadAction({ form }: IProps) {
         }, 500);
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.log(error.message);
     }
   };

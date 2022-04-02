@@ -14,7 +14,7 @@ import Switch from '@mui/material/Switch';
 import GroupIcon from '@mui/icons-material/Group';
 import Avatar from '@mui/material/Avatar';
 import Loading from '../common/Loading';
-import { useFacebookSDK } from '../facebook/fbsdk';
+import { useFacebookSDK } from "./fbsdk";
 
 declare global {
   interface Window {
@@ -64,7 +64,7 @@ const SignInWithFacebook = ({ showUser = false }: IProps) => {
   const getGroups = () => {
     return new Promise((resolve) => {
       window.FB.api('/me/groups', { fields: 'name,administrator,picture{url}' }, (response) => {
-        let groups = response.data.filter((g) => g.administrator);
+        const groups = response.data.filter((g) => g.administrator);
         resolve(groups);
       });
     });
@@ -77,8 +77,8 @@ const SignInWithFacebook = ({ showUser = false }: IProps) => {
     setState({
       ...state,
       user,
-      groups: groups,
-      selectedGroups: selectedGroups ? selectedGroups : [],
+      groups,
+      selectedGroups: selectedGroups || [],
     });
   };
 

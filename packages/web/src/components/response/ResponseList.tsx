@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import DataGrid, { CopyEvent, PasteEvent, SelectColumn, TextEditor } from 'react-data-grid';
+import DataGrid, { SelectColumn, TextEditor } from 'react-data-grid';
 import { useRouter } from 'next/router';
 import moment from 'moment';
 import Paper from '@mui/material/Paper';

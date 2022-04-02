@@ -23,7 +23,7 @@ export default function SignInForm({ successCallback }: IProps) {
         handleShowSignInForm={() => setState({ ...state, showForgetPasswordForm: false })}
       />
     );
-  } else if (state.verify) {
+  } if (state.verify) {
     return (
       <VerifyEmailForm
         onSuccess={formik.handleSubmit}
@@ -32,7 +32,7 @@ export default function SignInForm({ successCallback }: IProps) {
         onLabelClick={() => setState({ ...state, verify: false })}
       />
     );
-  } else {
+  } 
     return (
       <form onSubmit={formik.handleSubmit} data-testid="signin-form">
         <InputGroup>
@@ -88,5 +88,5 @@ export default function SignInForm({ successCallback }: IProps) {
         <SocialSignIn />
       </form>
     );
-  }
+  
 }

@@ -19,11 +19,7 @@ export default function SingleComment({ _id, itemSlug, fieldTitle, setShowHideCo
   const [showSingleComment, setShowSingleComment] = useState(false);
   const { data, error, loading } = useGetComment(_id);
   useEffect(() => {
-    if (
-      query.hasOwnProperty('commentId') &&
-      query.hasOwnProperty('field') &&
-      query.hasOwnProperty('fieldTitle')
-    ) {
+    if (query?.commentId && query?.field && query?.fieldTitle) {
       if (
         (query.commentId as string) === _id &&
         itemSlug === query.field &&

@@ -26,9 +26,9 @@ interface IVerifyEmailArgs {
 }
 
 export function useVerifyEmail({
-  onAlert = () => {},
+  onAlert = () => null,
   email,
-  onSuccess = () => {},
+  onSuccess = () => null,
 }: IVerifyEmailArgs) {
   const dispatch = useDispatch();
 

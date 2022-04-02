@@ -1,12 +1,13 @@
+/* eslint-disable jsx-a11y/media-has-caption */
 import IconButton from '@mui/material/IconButton';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import HighlightOff from '@mui/icons-material/HighlightOff';
-import MentionInput from '../common/MentionInput';
-import MentionParser from '../common/MentionParser';
+// import HighlightOff from '@mui/icons-material/HighlightOff';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useEffect, useState } from 'react';
+// import MentionParser from "./MentionParser";
+// import MentionInput from "./MentionInput";
 
 interface IProps {
   media: [];
@@ -21,7 +22,6 @@ export default function MediaList({
   selected,
   setSelected,
 }: IProps): any {
-  console.log('selected', selected);
   return (
     <Grid container spacing={1}>
       {media.length > 0 &&
@@ -45,12 +45,16 @@ interface IMediaProps {
 
 export const Media = ({ url, isVideo = false, selected, setSelected }: IMediaProps): any => {
   const [isSelected, setIsSelected] = useState(false);
-  const removeSelected = (selected, data) => {
-    selected.splice(selected.indexOf(data), 1);
-    return selected;
+  const removeSelected = (newSelected, data) => {
+    newSelected.splice(newSelected.indexOf(data), 1);
+    return newSelected;
   };
   useEffect(() => {
-    isSelected ? setSelected([...selected, url]) : setSelected([...removeSelected(selected, url)]);
+    if (isSelected) {
+      setSelected([...selected, url]);
+    } else {
+      setSelected([...removeSelected(selected, url)]);
+    }
   }, [isSelected]);
 
   return (
@@ -69,7 +73,7 @@ export const Media = ({ url, isVideo = false, selected, setSelected }: IMediaPro
             >
               {isSelected ? <CheckCircleIcon /> : <RadioButtonUncheckedIcon />}
             </IconButton>
-            <video key={url} controls src={url + '#t=0.9'}>
+            <video key={url} controls src={`${url}#t=0.9`}>
               Your browser does not support HTML5 video.
             </video>
           </>

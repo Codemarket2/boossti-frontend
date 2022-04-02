@@ -77,21 +77,18 @@ export const validateValue = (validate: boolean, value: any, field: Field): IRet
         options?.required &&
         ((!field?.template && !value?.template) || (field?.template && !value?.page))
       ) {
-        console.log('template error');
         result = { error: true, errorMessage: 'Required' };
       } else if (
         optionsTemplate === 'existingForm' &&
         options?.required &&
         ((!field?.form && !value?.form) || (field?.form && !value?.response))
       ) {
-        console.log('form error');
         result = { error: true, errorMessage: 'Required' };
       } else if (
         !['template', 'existingForm'].includes(optionsTemplate) &&
         options?.required &&
         !value?.value
       ) {
-        console.log('text error');
         if (options?.showAsCheckbox && value?.values?.length > 0) {
           result = { error: false, errorMessage: '' };
         } else {

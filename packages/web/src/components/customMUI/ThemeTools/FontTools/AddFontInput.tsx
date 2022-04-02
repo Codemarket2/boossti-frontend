@@ -46,7 +46,7 @@ function AddFontInput() {
             <>
               {`Enter the name of a `}
               <Link href="https://fonts.google.com/" target="_blank" rel="noreferrer">
-                {`Google Font`}
+                Google Font
               </Link>
             </>
           )

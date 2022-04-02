@@ -1,5 +1,5 @@
-import { SnippetModification } from './types';
 import { grey } from '@mui/material/colors';
+import { SnippetModification } from './types';
 import { defaultTheme } from '../../siteTheme';
 
 const snippets: Array<SnippetModification> = [

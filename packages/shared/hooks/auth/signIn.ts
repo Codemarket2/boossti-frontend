@@ -37,7 +37,7 @@ const signInValues: ISignInFormValues = {
   password: '',
 };
 
-export function useSignIn({ onAlert = () => {}, successCallback }: ISignInArgs) {
+export function useSignIn({ onAlert = () => null, successCallback }: ISignInArgs) {
   const [state, setState] = useState<ISignInState>({
     email: '',
     verify: false,
@@ -55,8 +55,8 @@ export function useSignIn({ onAlert = () => {}, successCallback }: ISignInArgs) 
     },
   });
 
-  const onSubmit = async (payload: ISignInFormValues) => {
-    const { password, email } = payload;
+  const onSubmit = async (oldPayload: ISignInFormValues) => {
+    const { password, email } = oldPayload;
     try {
       dispatch(showLoading());
       const user = await Auth.signIn(email, password);

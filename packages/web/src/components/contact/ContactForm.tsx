@@ -17,17 +17,17 @@ const StyledPaper = styled('div')(({ theme }) => ({
 export default function ContactForm() {
   const { formik, formLoading } = useContactForm();
   const [formValues, setFormValues] = useState([{ fieldName: '', fieldValue: '' }]);
-  let addFormFields = () => {
+  const addFormFields = () => {
     setFormValues([...formValues, { fieldName: '', fieldValue: '' }]);
   };
-  let handleChange = (i, e) => {
-    let newFormValues = [...formValues];
+  const handleChange = (i, e) => {
+    const newFormValues = [...formValues];
     newFormValues[i][e.target.name] = e.target.value;
     setFormValues(newFormValues);
   };
 
-  let removeFormFields = (i) => {
-    let newFormValues = [...formValues];
+  const removeFormFields = (i) => {
+    const newFormValues = [...formValues];
     newFormValues.splice(i, 1);
     setFormValues(newFormValues);
   };

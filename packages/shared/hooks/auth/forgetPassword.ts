@@ -4,6 +4,7 @@ import { Auth } from 'aws-amplify';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { showLoading, hideLoading } from '../../redux/actions/loading';
+
 export { useSignIn } from './signIn';
 export { useSignUp } from './signUp';
 
@@ -60,8 +61,8 @@ const forgetPassword2Value: IForgetPassword2FormValues = {
 };
 
 export function useForgetPassword({
-  onAlert = () => {},
-  handleShowSignInForm = () => {},
+  onAlert = () => null,
+  handleShowSignInForm = () => null,
 }: IForgetPasswordArgs) {
   const dispatch = useDispatch();
   const [state, setState] = useState<IForgetPasswordState>({

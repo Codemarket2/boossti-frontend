@@ -57,7 +57,7 @@ export const setByPath = (object, path, value) => dotProp.set(object, path, valu
  */
 export function isSetEq(a: Set<any>, b: Set<any>) {
   if (a.size !== b.size) return false;
-  for (var x of a as any) if (!b.has(x)) return false;
+  for (const x of a as any) if (!b.has(x)) return false;
 
   return true;
 }

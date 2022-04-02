@@ -4,7 +4,7 @@ import { useMention } from '@frontend/shared/hooks/template';
 import Skeleton from '@mui/material/Skeleton';
 import Chip from '@mui/material/Chip';
 import ErrorLoading from '../common/ErrorLoading';
-import SelectTag from '../post/SelectTag';
+import SelectTag from "./SelectTag";
 
 const initialState = {
   showModel: false,

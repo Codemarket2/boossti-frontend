@@ -84,7 +84,7 @@ export default function SeoOverlay({
           <MediaForm
             state={crudState}
             setState={setCrudState}
-            onCancel={onCancel}
+            // onCancel={onCancel}
             onSave={formik.handleSubmit}
             loading={loading}
           />

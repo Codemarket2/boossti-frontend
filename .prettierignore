@@ -10,3 +10,5 @@ packages/mobile/android
 packages/mobile/ios
 packages/ckeditor
 packages/shared/amplify
+packages/web/src/components/common/ckeditor-build
+packages/web/public

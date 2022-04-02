@@ -231,6 +231,7 @@ export default function ItemScreen({
                   <IconButton
                     edge="end"
                     onClick={() => {
+                      // eslint-disable-next-line no-restricted-globals
                       const answer = confirm('Are you sure you want to delete?');
                       if (answer) {
                         handleDelete(data.getPageBySlug._id, deleteCallBack);
@@ -410,7 +411,7 @@ const Navigation = ({
       </Paper>
       <FormFields
         fields={templateFields}
-        setFields={(f: any) => {}}
+        setFields={(f: any) => null}
         title="Sections"
         isSection
         previewMode

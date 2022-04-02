@@ -25,7 +25,7 @@ export function useGetpageFieldMentions(_id) {
   const { data } = useQuery(GET_LIST_PAGE_MENTIONS, {
     variables: { _id },
   });
-  const pageMentionsField = data?.getListPageMentions?.data.map((val) => (val = val._id));
+  const pageMentionsField = data?.getListPageMentions?.data.map((val) => val._id);
 
   return { pageMentionsField };
 }
@@ -45,6 +45,7 @@ export async function getPage(_id) {
     });
     return response;
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.log(e);
   }
 }
@@ -197,7 +198,7 @@ export function useCRUDPages({ onAlert, template, createCallBack, updateCallBack
           const res = await onUpdate(newPayload);
           updateCallBack(res.data.updatePage.slug);
         } else {
-          let res = await onCreate(newPayload);
+          const res = await onCreate(newPayload);
           createCallBack(res.data.createPage.slug);
         }
       } catch (error) {
@@ -226,10 +227,11 @@ export function useCRUDPages({ onAlert, template, createCallBack, updateCallBack
     //     data: newData,
     //   });
     // };
-    return await createPageMutation({
+    const newRes = await createPageMutation({
       variables: payload,
       // update: createInCache,
     });
+    return newRes;
   };
 
   const onUpdate = async (payload) => {
@@ -248,10 +250,11 @@ export function useCRUDPages({ onAlert, template, createCallBack, updateCallBack
         data: newData,
       });
     };
-    return await updatePageMutation({
+    const newRes = await updatePageMutation({
       variables: payload,
       update: updateInCache,
     });
+    return newRes;
   };
 
   const setFormValues = (item) => {

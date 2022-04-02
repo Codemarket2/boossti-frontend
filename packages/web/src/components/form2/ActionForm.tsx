@@ -15,13 +15,13 @@ import Switch from '@mui/material/Switch';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useFormActions } from '@frontend/shared/hooks/form';
+import { useSelector } from 'react-redux';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
 import { onAlert } from '../../utils/alert';
 import RichTextarea from '../common/RichTextarea2';
 import Field from './Field';
 import { defualtValue } from './FormView';
-import { useSelector } from 'react-redux';
 
 const filter = createFilterOptions();
 
@@ -51,18 +51,17 @@ export default function ActionForm({
   const settingTheme = useSelector(({ setting }: any) => setting.theme);
 
   useEffect(() => {
-    let array = [];
-    Object.keys(settingTheme.palette).map((key, index) => {
+    const array = [];
+    Object.keys(settingTheme.palette).forEach((key, index) => {
       if (typeof settingTheme.palette[key] === 'string') {
         array.push({ name: key, field: '' });
       } else {
-        Object.keys(settingTheme.palette[key]).map((skey, index) =>
+        Object.keys(settingTheme.palette[key]).map((skey) =>
           array.push({ name: key.concat(skey.charAt(0).toUpperCase() + skey.slice(1)), field: '' }),
         );
       }
     });
 
-    console.log({ array });
     formik.setFieldValue('colorValues', array);
   }, []);
 
@@ -421,7 +420,7 @@ export default function ActionForm({
                   variant="outlined"
                   name="name"
                   size="small"
-                  disabled={true}
+                  disabled
                   value={colorValues.name}
                 />
                 <FormControl fullWidth variant="outlined" size="small">

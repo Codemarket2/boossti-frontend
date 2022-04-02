@@ -92,7 +92,7 @@ export default function ForgetPasswordForm({ handleShowSignInForm }: IProps) {
         </InputGroup>
       </form>
     );
-  } else {
+  } 
     return (
       <form onSubmit={formik1.handleSubmit} data-testid="forget-password-form">
         <InputGroup>
@@ -136,5 +136,5 @@ export default function ForgetPasswordForm({ handleShowSignInForm }: IProps) {
         </InputGroup>
       </form>
     );
-  }
+  
 }

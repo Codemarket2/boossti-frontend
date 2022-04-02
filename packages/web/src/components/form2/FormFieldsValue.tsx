@@ -17,6 +17,7 @@ import FormViewWrapper from './FormViewWrapper';
 import Overlay from '../common/Overlay';
 
 import 'react-grid-layout/css/styles.css';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import 'react-resizable/css/styles.css';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
@@ -54,7 +55,7 @@ export default function FormFieldsValue({
 }: IProps) {
   const [state, setState] = useState(initialState);
   const [showOverlay, setShowOverlay] = useState({ show: false, id: '' });
-  const [showViewMore, setShowViewMore] = useState({});
+  // const [showViewMore, setShowViewMore] = useState({});
   const setInitialState = () => setState(initialState);
   const [breakPoint, setBreakPoint] = useState('');
   const handleSubmit = async (tempValues: any) => {
@@ -88,8 +89,8 @@ export default function FormFieldsValue({
           newHeights = { ...newHeights, [key]: gridHeight };
         }
         // }
-        val = { ...val, height: gridHeight };
-        return val;
+        const newVal = { ...val, height: gridHeight };
+        return newVal;
       });
       setHeights(newHeights);
     }
@@ -202,7 +203,7 @@ export default function FormFieldsValue({
               {field?.options?.showCommentBox && <CommentLikeShare parentId={field._id} />}
               <StarRating parentId={field._id} />
             </div>
-            {showOverlay.show && showOverlay.id == field._id && (
+            {showOverlay.show && showOverlay.id === field._id && (
               <Overlay
                 open={showOverlay.show}
                 onClose={() => {

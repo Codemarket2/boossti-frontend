@@ -88,32 +88,24 @@ export function useGetResponseByCount(formId: string, count: number): any {
 
 export async function getResponseByParentId(formId, parentId) {
   let response = null;
-  try {
-    const res = await apolloClient.query({
-      query: GET_RESPONSES,
-      variables: { ...defaultQueryVariables, limit: 1, formId, parentId },
-    });
-    if (res?.data?.getResponses?.data?.length > 0) {
-      response = res?.data?.getResponses?.data[0];
-    }
-  } catch (error) {
-    console.log({ error });
+  const res = await apolloClient.query({
+    query: GET_RESPONSES,
+    variables: { ...defaultQueryVariables, limit: 1, formId, parentId },
+  });
+  if (res?.data?.getResponses?.data?.length > 0) {
+    response = res?.data?.getResponses?.data[0];
   }
   return response;
 }
 
 export async function getResponse(_id) {
   let response = null;
-  try {
-    const res = await apolloClient.query({
-      query: GET_RESPONSE,
-      variables: { _id },
-    });
-    if (res?.data?.getResponse) {
-      response = res?.data?.getResponse;
-    }
-  } catch (error) {
-    console.log({ error });
+  const res = await apolloClient.query({
+    query: GET_RESPONSE,
+    variables: { _id },
+  });
+  if (res?.data?.getResponse) {
+    response = res?.data?.getResponse;
   }
   return response;
 }

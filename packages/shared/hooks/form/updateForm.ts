@@ -57,6 +57,7 @@ export function useUpdateForm({ onAlert, _id }: IProps): any {
         variables: payload,
       });
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.log(err);
       onAlert('Error while auto saving', err.message);
     }
@@ -69,7 +70,7 @@ export function useUpdateForm({ onAlert, _id }: IProps): any {
       });
       return res?.data?.updateForm?.slug;
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       onAlert('Error while auto saving', err.message);
     }
   };
@@ -77,7 +78,7 @@ export function useUpdateForm({ onAlert, _id }: IProps): any {
   return { state: form, handleOnChange, error, updateLoading, handleUpdateForm, handleUpdateName };
 }
 
-export const stringifyForm = (form: any, removetemplate: boolean = false) => {
+export const stringifyForm = (form: any, removetemplate = false) => {
   let payload = { ...form };
   payload = {
     ...payload,
