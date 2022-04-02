@@ -168,6 +168,7 @@ export default function FormFields({
       ),
     );
   };
+  console.log('ken', fields);
 
   return (
     <Paper variant="outlined">

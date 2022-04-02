@@ -6,6 +6,7 @@ import { IHooksProps } from '../../types/common';
 const validationSchema = yup.object({
   active: yup.boolean(),
   actionType: yup.string().label('Action type').required(),
+  triggerType: yup.string().label('Trigger Type').required(),
   name: yup.string().label('Action name').required(),
   phoneFieldId: yup.string().when('actionType', {
     is: (value) => value === 'sendSms',
@@ -58,8 +59,10 @@ type TVariables = {
 
 interface IFormValues {
   active: boolean;
+  triggerType: string;
   actionType: string;
   name: string;
+  cognitoGroupName: string;
   phoneFieldId: string;
   senderEmail: string;
   receiverType: string;
@@ -74,8 +77,10 @@ interface IFormValues {
 
 const defaultFormValues = {
   active: true,
+  triggerType: 'onCreate',
   actionType: 'updateFieldValue', // 'sendEmail',
   name: '',
+  cognitoGroupName: '',
   phoneFieldId: '',
   senderEmail: '',
   receiverType: 'formOwner',
@@ -115,8 +120,10 @@ export function useFormActions({ onAlert, onSave }: IProps) {
 
   const setFormValues = (payload) => {
     setEdit(true);
+    formik.setFieldValue('triggerType', payload.triggerType, false);
     formik.setFieldValue('actionType', payload.actionType, false);
     formik.setFieldValue('active', payload.active, false);
+    formik.setFieldValue('cognitoGroupName', payload.cognitoGroupName, false);
     formik.setFieldValue('name', payload.name, false);
     formik.setFieldValue('senderEmail', payload.senderEmail, false);
     formik.setFieldValue('receiverType', payload?.receiverType, false);
