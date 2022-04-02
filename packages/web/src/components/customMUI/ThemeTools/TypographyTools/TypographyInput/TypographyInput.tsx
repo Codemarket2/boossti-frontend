@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { styled } from '@mui/material/styles';
 import { useDispatch, useSelector } from 'react-redux';
-import { Grid, Button, createTheme, adaptV4Theme , Theme } from '@mui/material';
+import { Grid, Button, createTheme, adaptV4Theme, Theme } from '@mui/material';
 import {
   removeThemeOption,
   setThemeOption,
@@ -14,7 +14,6 @@ import LineHeightInput from './LineHeightInput';
 import LetterSpacingInput from './LetterSpacingInput';
 import { ThemeValueChangeEvent } from '../../events';
 import { updateRemoveThemeOption, updateSetThemeOption } from '../../../commonFunc';
-
 
 const PREFIX = 'TypographyInput';
 

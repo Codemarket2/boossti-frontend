@@ -14,7 +14,7 @@ import Switch from '@mui/material/Switch';
 import GroupIcon from '@mui/icons-material/Group';
 import Avatar from '@mui/material/Avatar';
 import Loading from '../common/Loading';
-import { useFacebookSDK } from "./fbsdk";
+import { useFacebookSDK } from './fbsdk';
 
 declare global {
   interface Window {

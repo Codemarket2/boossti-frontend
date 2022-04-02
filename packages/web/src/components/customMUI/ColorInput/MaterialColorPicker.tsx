@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react';
-import { styled , decomposeColor, recomposeColor, rgbToHex, hslToRgb } from '@mui/material/styles';
+import { styled, decomposeColor, recomposeColor, rgbToHex, hslToRgb } from '@mui/material/styles';
 import * as colors from '@mui/material/colors';
 import { Tooltip, Collapse } from '@mui/material';
-
-
 
 const PREFIX = 'MaterialColorPicker';
 

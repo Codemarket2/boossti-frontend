@@ -6,7 +6,6 @@ import { Theme } from '@mui/material';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 
-
 import PaletteIcon from '@mui/icons-material/Palette';
 import FontIcon from '@mui/icons-material/FontDownload';
 import TypographyIcon from '@mui/icons-material/TextFields';
