@@ -4,9 +4,11 @@ import { useEffect, useReducer, useState } from 'react';
 import DataGrid, { Column, SelectColumn, TextEditor } from 'react-data-grid';
 import { CellExpanderFormatter } from './CellExpanderFormatter';
 import DisplayValue from '../form2/DisplayValue';
+import ResponseActions from './ResponseActions';
+
 interface IDataTable {
   form: any;
-  data: any;
+  refetch: any;
   rows: any;
   rowHeight: any;
   onRowsChange: any;
@@ -25,7 +27,7 @@ interface Action {
 
 export const DataTable = ({
   form,
-  data,
+  refetch,
   rows,
   rowHeight,
   onRowsChange,
@@ -37,11 +39,6 @@ export const DataTable = ({
   onPaste,
   direction,
 }: IDataTable) => {
-  const [colm, setColm] = useState([]);
-
-  useEffect(() => {
-    setColm(createColm(form));
-  }, [form]);
   function toggleSubRow(rows, id) {
     const rowIndex = rows.findIndex((r) => r.id === id);
     const row = rows[rowIndex];
@@ -68,61 +65,25 @@ export const DataTable = ({
     }
   }
 
-  const createColm = (form) => {
-    const arr = [
-      SelectColumn,
-      { key: 'id', name: 'S.No', resizable: true, frozen: true, width: 60 },
-    ];
-
-    form?.fields?.map((e) => {
-      // console.log('e', e);
-      const temp = e?.options?.multipleValues
-        ? {
-            key: '',
-            name: '',
-            resizable: true,
-            frozen: false,
-            formatter({ row, isCellSelected }) {
-              const hasChildren = row.children !== undefined;
-              const style = !hasChildren ? { marginInlineStart: 30 } : undefined;
-              return (
-                <>
-                  {hasChildren && (
-                    <CellExpanderFormatter
-                      isCellSelected={isCellSelected}
-                      expanded={row.isExpanded === true}
-                      onCellExpand={() => dispatch({ id: row.id, type: 'toggleSubRow' })}
-                    />
-                  )}
-                  <div>
-                    <div style={style}>{row[e._id]}</div>
-                  </div>
-                </>
-              );
-            },
-          }
-        : {
-            key: '',
-            name: '',
-            resizable: true,
-            frozen: false,
-            editor: TextEditor,
-          };
-      temp.key = e._id;
-      temp.name = e.label;
-      arr.push(temp);
-    });
-    return arr;
-  };
-
   const columns: Column<any>[] = useMemo(() => {
     const arr = [
       SelectColumn,
-      { key: 'id', name: 'S.No', resizable: true, frozen: true, width: 60 },
+      { key: 'id', name: 'S.No', resizable: true, frozen: true, width: 40 },
+      {
+        key: 'action',
+        name: 'Action',
+        resizable: false,
+        frozen: true,
+        width: 120,
+        formatter({ row }) {
+          const { action: response } = row;
+
+          return <ResponseActions response={response} form={form} refetch={refetch} />;
+        },
+      },
     ];
 
     form?.fields?.map((e) => {
-      // console.log('e: ', e);
       const temp = e?.options?.multipleValues
         ? {
             key: '',
@@ -132,17 +93,16 @@ export const DataTable = ({
             formatter({ row, isCellSelected }) {
               const hasChildren = row.children !== undefined;
               const style = !hasChildren ? { marginInlineStart: 30 } : undefined;
-              console.log({ Fieldtype: e.fieldType, Value: row[e._id] });
 
               return (
                 <>
-                  {hasChildren && (
+                  {/* {hasChildren && (
                     <CellExpanderFormatter
                       isCellSelected={isCellSelected}
                       expanded={row.isExpanded === true}
                       onCellExpand={() => dispatch({ id: row.id, type: 'toggleSubRow' })}
                     />
-                  )}
+                  )} */}
                   <div>
                     <div style={style}>
                       <DisplayValue field={e} value={row[e._id]} />

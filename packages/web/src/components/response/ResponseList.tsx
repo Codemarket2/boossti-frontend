@@ -1,5 +1,4 @@
 import { useEffect, useReducer, useState } from 'react';
-import DataGrid, { CopyEvent, PasteEvent, SelectColumn, TextEditor } from 'react-data-grid';
 import { useRouter } from 'next/router';
 import moment from 'moment';
 import Paper from '@mui/material/Paper';
@@ -89,14 +88,15 @@ export default function ResponseList({
     return row.id;
   }
 
-  const createRows = (data) => {
+  const createRows = () => {
     const rows = [];
     data?.getResponses?.data?.map((e, i) => {
       const tid = `${i + 1}`;
-      const temp = { id: tid, children: [] };
+      const temp = { id: tid, action: e, children: [] };
       let sameFieldCount = 1;
       e?.values?.map((v) => {
         //find field
+        const { fields } = form;
         if (temp[v.field]) {
           const innerTemp = {
             id: `${tid}.${sameFieldCount}`,
@@ -114,16 +114,16 @@ export default function ResponseList({
   };
 
   useEffect(() => {
-    setRows(createRows(data));
+    setRows(createRows());
   }, [form, data]);
-  const defaultRows = createRows(data);
+  const defaultRows = createRows();
   return (
     <>
       <Backdrop open={deleteLoading} />
       {form?.settings?.responsesView != 'vertical' && form?.settings?.responsesView == 'table' && (
         <DataTable
           form={form}
-          data={data?.getResponses?.data}
+          refetch={refetch}
           rows={defaultRows}
           rowHeight={40}
           onRowsChange={setRows}
