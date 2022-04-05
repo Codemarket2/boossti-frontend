@@ -41,7 +41,7 @@
     "immer": "^9.0.5",
     "jest": "^27.5.1",
     "moment": "2.29.1",
-    "next": "12",
+    "next": "12.1.4",
     "next-compose-plugins": "2.2.1",
     "next-images": "^1.8.4",
     "next-pwa": "^5.4.4",
