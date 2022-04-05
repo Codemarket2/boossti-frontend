@@ -1,7 +1,7 @@
-import { getTemplateMetaTags } from '@frontend/shared/hooks/metaTags';
+// import { getTemplateMetaTags } from '@frontend/shared/hooks/metaTags';
 import TypeScreen from '../../src/screens/TemplateScreen';
 import Loading from '../../src/components/common/Loading';
-import Head from '../../src/components/common/Head';
+// import Head from '../../src/components/common/Head';
 import UserLayout from '../../src/components/common/UserLayout';
 
 interface IProps {
@@ -11,7 +11,7 @@ interface IProps {
 export default function Page({ metaTags, slug }: IProps) {
   return (
     <>
-      <Head {...metaTags} />
+      {/* <Head {...metaTags} /> */}
       {slug ? (
         <UserLayout container={false} authRequired>
           <TypeScreen slug={slug.toString()} />
@@ -23,15 +23,15 @@ export default function Page({ metaTags, slug }: IProps) {
   );
 }
 
-export async function getServerSideProps(context) {
-  const { slug } = context.query;
+// export async function getServerSideProps(context) {
+//   const { slug } = context.query;
 
-  const metaTags = await getTemplateMetaTags(slug);
-  if (metaTags) {
-    metaTags.url = `/${slug}`;
-  }
+//   const metaTags = await getTemplateMetaTags(slug);
+//   if (metaTags) {
+//     metaTags.url = `/${slug}`;
+//   }
 
-  return {
-    props: { metaTags, slug },
-  };
-}
+//   return {
+//     props: { metaTags, slug },
+//   };
+// }
