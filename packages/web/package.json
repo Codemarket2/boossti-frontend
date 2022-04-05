@@ -9,7 +9,7 @@
     "build": "next build",
     "build:unix": "NODE_OPTIONS=--max-old-space-size=8192 next build",
     "start": "next start",
-    "deploy": "npx serverless@2.72.2",
+    "deploy": "npx serverless",
     "test": "jest",
     "cypress": "npx cypress run-ct",
     "cypress:open": "npx cypress open",
