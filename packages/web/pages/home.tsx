@@ -2,6 +2,7 @@ import projectConfig from '@frontend/shared';
 import React from 'react';
 
 export default function home() {
+  // home page
   return (
     <div>
       <h1>
