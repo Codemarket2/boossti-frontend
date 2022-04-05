@@ -1,2 +1,6 @@
 myNextApplication:
   component: '@sls-next/serverless-component@3.7.0'
+  inputs:
+    timeout:
+      defaultLambda: 30
+      imageLambda: 30
