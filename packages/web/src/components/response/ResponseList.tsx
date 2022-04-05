@@ -90,14 +90,16 @@ export default function ResponseList({
 
   const createRows = () => {
     const rows = [];
+
     data?.getResponses?.data?.map((e, i) => {
       const tid = `${i + 1}`;
       const temp = { id: tid, action: e, children: [] };
       let sameFieldCount = 1;
+
       e?.values?.map((v) => {
         //find field
         const { fields } = form;
-        if (temp[v.field]) {
+        if (temp[v.field] && v.value !== '' && v.value) {
           const innerTemp = {
             id: `${tid}.${sameFieldCount}`,
             parentId: tid,
@@ -122,6 +124,7 @@ export default function ResponseList({
       <Backdrop open={deleteLoading} />
       {form?.settings?.responsesView != 'vertical' && form?.settings?.responsesView == 'table' && (
         <DataTable
+          data={data}
           form={form}
           refetch={refetch}
           rows={defaultRows}
