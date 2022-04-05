@@ -49,3 +49,5 @@ cypress/videos/*
 **/public/sw.js.map
 **/public/workbox-*.js.map
 **/public/worker-*.js.map
+
+next.config.original.*.js
