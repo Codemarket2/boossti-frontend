@@ -101,8 +101,8 @@ export const DataTable = ({
     ];
     form?.fields?.map((e) => {
       const temp = {
-        key: '',
-        name: '',
+        key: e?._id,
+        name: e?.label,
         resizable: true,
         frozen: false,
         formatter({ row, isCellSelected }) {
@@ -116,7 +116,7 @@ export const DataTable = ({
           const hasChildren = value.children !== undefined;
           const style = !hasChildren ? { marginInlineStart: 30 } : undefined;
           return (
-            <>
+            <div key={row?.id || row?._id}>
               <div style={multipleValues ? { marginRight: '30px', overflow: 'hidden' } : null}>
                 <DisplayValue field={e} value={value} />
               </div>
@@ -139,7 +139,7 @@ export const DataTable = ({
               >
                 {value?.isExpanded ? '\u25BC' : '\u25B6'}
               </IconButton>
-            </>
+            </div>
           );
         },
       };
@@ -202,7 +202,7 @@ const createRows = (data, form) => {
           expanded: false,
           children: val.map((v) => {
             return {
-              id: '',
+              _id: v?._id,
               parentId: f._id,
               fields: [
                 {
