@@ -1,7 +1,7 @@
 import Paper from '@mui/material/Paper';
 // import FieldValues from '../field/FieldValues';
 
-export default function About({ userId, authorized = false }) {
+export default function About({ userId, authorized }: { userId: any; authorized?: boolean }) {
   return (
     <Paper variant="outlined" className="p-2">
       About

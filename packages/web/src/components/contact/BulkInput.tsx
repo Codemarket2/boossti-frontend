@@ -1,8 +1,7 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
 import Button from '@mui/material/Button';
-import InputGroup from '../common/InputGroup';
-import LoadingButton from '../common/LoadingButton';
 import {
   FormControl,
   Grid,
@@ -15,6 +14,8 @@ import {
 import { fileUpload } from '@frontend/shared/utils/fileUpload';
 import { useCreateMailingList } from '@frontend/shared/hooks/email/createMailingList';
 import { useContactForm } from '@frontend/shared/hooks/contact';
+import LoadingButton from '../common/LoadingButton';
+import InputGroup from '../common/InputGroup';
 
 const initialState = {
   showForm: false,
@@ -33,8 +34,6 @@ export default function BulkInput() {
 
   const { handleCreateList, createLoading } = useCreateMailingList();
 
-  console.log(map);
-
   const resetStates = () => {
     setState(initialState);
     setFiles([]);
@@ -43,11 +42,12 @@ export default function BulkInput() {
     setIsFilePicked(false);
   };
   const changeHandler = (event) => {
-    const { files } = event.target;
-    files && handleFileUpload(event);
-    let allFiles = [];
-    for (let i = 0; i < files.length; i++) {
-      allFiles.push(files[i]);
+    const { files: newFiles } = event.target;
+    if (newFiles) handleFileUpload(event);
+    const allFiles = [];
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < newFiles.length; i++) {
+      allFiles.push(newFiles[i]);
     }
     setSelectedFile(allFiles);
     setIsFilePicked(true);
@@ -84,7 +84,7 @@ export default function BulkInput() {
   const handleSubmit = async () => {
     try {
       const url = await fileUpload(selectedFile, '/csvDataFile');
-      console.log(url);
+
       if (url) {
         setState({ ...state, fileUrl: url });
 
@@ -94,13 +94,13 @@ export default function BulkInput() {
           map: JSON.stringify(map),
         };
 
-        console.log(payload);
         await handleCreateList(payload);
         setTimeout(() => {
           resetStates();
         }, 2500);
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.log(error.message);
     }
   };
@@ -185,8 +185,8 @@ export default function BulkInput() {
                           }}
                           label="Field"
                         >
-                          {files?.map((keys, i) => (
-                            <MenuItem key={i} value={keys}>
+                          {files?.map((keys, i2) => (
+                            <MenuItem key={i2} value={keys}>
                               {keys}
                             </MenuItem>
                           ))}
@@ -195,6 +195,7 @@ export default function BulkInput() {
                     </div>
                   );
                 }
+                return null;
               })}
             </InputGroup>
             <InputGroup>

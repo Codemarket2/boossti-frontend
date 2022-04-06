@@ -24,7 +24,7 @@ export function useGetMyFeeds() {
         const isUpdated = prev.getPosts.data.filter((post) => post._id === newFeedItem._id);
         if (isUpdated.length > 0) {
           newData = prev.getPosts.data.map((post) => {
-            post._id === newFeedItem._id ? newFeedItem : post;
+            return post._id === newFeedItem._id ? newFeedItem : post;
           });
         } else {
           newData = [newFeedItem, ...newData];
@@ -60,7 +60,7 @@ export function useUserFeeds({ userId }: any) {
     guestClient
       .query({
         query: GET_USER_POSTS,
-        variables: { userId: userId, limit: 20, page: 1, search: state.search },
+        variables: { userId, limit: 20, page: 1, search: state.search },
       })
       .then(({ data }) => setRes({ ...res, data, loading: false }))
       .catch((error) => setRes({ ...res, error, loading: false }));

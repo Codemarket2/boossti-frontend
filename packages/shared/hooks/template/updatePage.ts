@@ -58,6 +58,7 @@ export const useUpdatePageFields = ({ page, onAlert }: IProps) => {
       }
       return true;
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.log(error);
       onAlert('Error while auto saving', error.message);
     }

@@ -25,7 +25,7 @@ const reorder = (list, startIndex, endIndex) => {
   return result;
 };
 
-function Quote({ field, index }) {
+function Quote({ field, index }: any) {
   return (
     <Draggable draggableId={field._id} index={index}>
       {(provided) => (

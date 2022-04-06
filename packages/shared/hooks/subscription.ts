@@ -12,7 +12,7 @@ interface IProp {
   onAlert: (ar1: string, arg2: string) => void;
 }
 
-export function useSubscription({ onAlert = () => {} }: IProp) {
+export function useSubscription({ onAlert = () => null }: IProp) {
   const { sub, name } = useSelector(({ auth }: any) => auth.attributes);
   const [sendNotificationMutation] = useMutation(NotificationMutation);
   const [loading, setLoading] = useState(false);

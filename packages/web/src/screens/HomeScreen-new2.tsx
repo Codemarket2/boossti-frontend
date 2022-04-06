@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
@@ -86,8 +87,7 @@ function Copyright() {
       <Link color="inherit" href="https://www.boossti.com/">
         Boossti Inc.
       </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
+      {new Date().getFullYear()}.
     </Typography>
   );
 }
@@ -227,6 +227,7 @@ export default function Album() {
                   <CardActions>
                     <Button
                       fullWidth
+                      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                       // @ts-ignore
                       variant={tier.buttonVariant}
                       color="primary"

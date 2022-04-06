@@ -156,7 +156,7 @@ export default function PageForm({
               {formik.values.edit ? 'Submit' : 'Submit'}
             </LoadingButton>
             <Button
-              onClick={onCancel ? onCancel : defaultOnCancel}
+              onClick={onCancel || defaultOnCancel}
               className="ml-2"
               disabled={formik.isSubmitting}
               color="primary"

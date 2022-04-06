@@ -10,9 +10,9 @@ import {
   adaptV4Theme,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useSelector } from 'react-redux';
 import PaletteInput from './PaletteInput';
 import { getThemeValueInfo } from '../../selectors/selectors';
-import { useSelector } from 'react-redux';
 
 const PREFIX = 'PaletteSubType';
 

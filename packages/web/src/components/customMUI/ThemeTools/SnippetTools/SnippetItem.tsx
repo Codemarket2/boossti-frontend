@@ -1,16 +1,16 @@
 import React, { useCallback } from 'react';
 import { styled } from '@mui/material/styles';
-import { SnippetModification } from './types';
 import { useSelector, useDispatch } from 'react-redux';
-import { getByPath } from '../../utils';
 import { Link, Tooltip, Theme, Accordion, AccordionSummary, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 // import { setThemeOptions, removeThemeOptions } from "../../../../../../shared/redux/actions/muiActions"
+import { removeThemeOption, setThemeOption } from '@frontend/shared/redux/actions/setting';
 import { ThemeValueChangeEvent } from '../events';
 import { updateRemoveThemeOptions, updateSetThemeOptions } from '../../commonFunc';
-import { removeThemeOption, setThemeOption } from '@frontend/shared/redux/actions/setting';
+import { getByPath } from '../../utils';
+import { SnippetModification } from './types';
 
 const PREFIX = 'SnippetItem';
 

@@ -39,7 +39,7 @@ export default function SelectTag({ open, onClose, templateId, title, onSelect }
           <CloseIcon />
         </IconButton>
       </div>
-      <DialogContent dividers={true}>
+      <DialogContent dividers>
         {error || !data || !data.getPages ? (
           <ErrorLoading error={error} />
         ) : (

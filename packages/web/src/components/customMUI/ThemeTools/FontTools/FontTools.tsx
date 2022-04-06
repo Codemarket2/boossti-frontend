@@ -57,7 +57,7 @@ function FontTools() {
       {/* <Accordion defaultExpanded={currentFonts.length < 5}> */}
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          {`Fonts used in current theme`}
+          Fonts used in current theme
         </AccordionSummary>
         <AccordionDetails>
           <div className={classes.loadedFontContent}>
@@ -76,7 +76,7 @@ function FontTools() {
       <Accordion defaultExpanded>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           {/* {`Loaded and Available Fonts (${loadedFonts.size})`} */}
-          {`Loaded and Available Fonts`}
+          Loaded and Available Fonts
         </AccordionSummary>
         <AccordionDetails>
           <div className={classes.loadedFontContent}>

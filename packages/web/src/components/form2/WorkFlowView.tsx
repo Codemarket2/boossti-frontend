@@ -33,7 +33,7 @@ export default function WorkFlowView({ field, treeDepth }: IProps) {
     <>
       <div style={{ marginInlineStart: 10 }}>
         <ListItem button>
-          <ListItemText style={{ marginInlineStart: 5 }} primary={'WorkFlows'} />
+          <ListItemText style={{ marginInlineStart: 5 }} primary="WorkFlows" />
           <ListItemSecondaryAction>
             <IconButton
               edge="start"

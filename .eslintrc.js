@@ -8,6 +8,11 @@ module.exports = {
     'airbnb',
     'plugin:@typescript-eslint/recommended',
     'plugin:jsx-a11y/recommended',
+    // 'plugin:prettier/recommended',
+    'prettier',
+    'prettier/prettier',
+    'prettier/react',
+    'prettier/@typescript-eslint',
     'plugin:prettier/recommended',
   ],
   globals: {
@@ -57,6 +62,11 @@ module.exports = {
     'object-curly-newline': 0,
     'react/require-default-props': 'off',
     'react/jsx-wrap-multilines': 'off',
+    'react/jsx-one-expression-per-line': 0,
+    'react/no-array-index-key': 1,
+    'react/jsx-props-no-spreading': 1,
+    'consistent-return': 0,
+    'no-restricted-globals': 0,
   },
   settings: {
     'import/resolver': {

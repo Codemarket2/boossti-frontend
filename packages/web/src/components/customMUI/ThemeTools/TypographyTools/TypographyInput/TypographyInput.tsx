@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react';
 import { styled } from '@mui/material/styles';
 import { useDispatch, useSelector } from 'react-redux';
+import { Grid, Button, createTheme, adaptV4Theme, Theme } from '@mui/material';
 import {
   removeThemeOption,
   setThemeOption,
 } from '../../../../../../../shared/redux/actions/setting';
-import { Grid, Button, createTheme, adaptV4Theme } from '@mui/material';
 import { getThemeValueInfo } from '../../../selectors/selectors';
 import FontWeightInput from './FontWeightInput';
 import FontSizeInput from './FontSizeInput';
@@ -14,7 +14,6 @@ import LineHeightInput from './LineHeightInput';
 import LetterSpacingInput from './LetterSpacingInput';
 import { ThemeValueChangeEvent } from '../../events';
 import { updateRemoveThemeOption, updateSetThemeOption } from '../../../commonFunc';
-import { Theme } from '@mui/material';
 
 const PREFIX = 'TypographyInput';
 
@@ -111,6 +110,6 @@ function TypographyPropertyInput({ property, value, onChange }) {
     case 'lineHeight':
       return <LineHeightInput value={value} onChange={onChange} />;
     default:
-      return <Root></Root>;
+      return <Root />;
   }
 }

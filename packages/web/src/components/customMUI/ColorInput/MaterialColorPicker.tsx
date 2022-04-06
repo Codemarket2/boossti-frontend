@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react';
-import { styled } from '@mui/material/styles';
+import { styled, decomposeColor, recomposeColor, rgbToHex, hslToRgb } from '@mui/material/styles';
 import * as colors from '@mui/material/colors';
 import { Tooltip, Collapse } from '@mui/material';
-
-import { decomposeColor, recomposeColor, rgbToHex, hslToRgb } from '@mui/material/styles';
 
 const PREFIX = 'MaterialColorPicker';
 
@@ -71,7 +69,7 @@ const muiShades = [
 
 // record of {"#hexcode": ["hue", "shade"]}
 // for all colors in material-ui's spec
-let muiColorByHex: Record<string, [string, string]> = {};
+const muiColorByHex: Record<string, [string, string]> = {};
 for (let i = 0; i < muiHues.length; i++) {
   for (let j = 0; j < muiShades.length; j++) {
     muiColorByHex[colors[muiHues[i]][muiShades[j]]] = [muiHues[i], muiShades[j]];

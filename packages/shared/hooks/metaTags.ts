@@ -20,6 +20,7 @@ export async function getTemplateMetaTags(slug) {
       };
     }
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.log({ error });
   }
   return metaTags;
@@ -41,7 +42,7 @@ export async function getPageMetaTags(slug) {
       };
     }
   } catch (error) {
-    console.log({ error });
+    // console.log({ error });
   }
   return metaTags;
 }
@@ -76,7 +77,7 @@ export function useLogoHook() {
         dispatch(updateSettingAction({ metaTags }));
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 }

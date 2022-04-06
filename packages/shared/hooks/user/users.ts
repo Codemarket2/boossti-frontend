@@ -13,11 +13,12 @@ export function useGetOneUser({ _id }: any) {
       .query({
         query: GET_USER,
         variables: {
-          _id: _id,
+          _id,
         },
       })
       .then(({ data }) => setState({ ...state, data, loading: false }))
       .catch((error) => {
+        // eslint-disable-next-line no-console
         console.log('error', error);
         setState({ ...state, error, loading: false });
       });

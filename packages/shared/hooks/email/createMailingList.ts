@@ -13,7 +13,7 @@ export function useCreateMailingList() {
       });
       return res;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return error;
     }
   };
@@ -44,7 +44,7 @@ export function useCreateMailingListFromContact() {
       });
       return res;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return error;
     }
   };

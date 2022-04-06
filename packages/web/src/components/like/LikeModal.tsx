@@ -19,7 +19,7 @@ interface ILikeModal {
   parentId: string;
 }
 
-const BootstrapDialogTitle = (props) => {
+const BootstrapDialogTitle = (props: any) => {
   const { children, onClose, ...other } = props;
   return (
     <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
@@ -52,7 +52,7 @@ export default function LikeModal({
   const { data, error } = useGetLikes(parentId);
   return (
     <Dialog
-      fullWidth={true}
+      fullWidth
       open={open}
       onClose={handleCloseLikeModal}
       aria-labelledby="alert-dialog-title"

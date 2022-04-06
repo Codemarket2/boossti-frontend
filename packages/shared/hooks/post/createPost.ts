@@ -117,7 +117,7 @@ export function useCreatePost({ onAlert, onSuccess, post = defaultPost }: IProps
   const handleSelectTag = (_id, name) => {
     setState({
       ...state,
-      body: state.body + ` @@@__${_id}^^__${name}@@@^^^`,
+      body: `${state.body} @@@__${_id}^^__${name}@@@^^^`,
       showTagModel: false,
     });
   };

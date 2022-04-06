@@ -1,9 +1,10 @@
+/* eslint-disable global-require */
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
+// import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
@@ -90,29 +91,28 @@ function Copyright() {
       <Link color="inherit" href="https://www.boossti.com/">
         Boossti Inc.
       </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
+      {new Date().getFullYear()}.
     </Typography>
   );
 }
 
-const cards = [
-  {
-    image: require('../assets/images/web-design.png'),
-    title: 'Website Design',
-    description: 'Best responsive websites along with SEO and paid Google Ads',
-  },
-  {
-    image: require('../assets/images/instagram.png'),
-    title: 'Social Media',
-    description: 'Content for social media posts tailor made to your brand.',
-  },
-  {
-    image: require('../assets/images/shopify.png'),
-    title: 'E-Commerce',
-    description: 'Setup product pages with media and optemization',
-  },
-];
+// const cards = [
+//   {
+//     image: require('../assets/images/web-design.png'),
+//     title: 'Website Design',
+//     description: 'Best responsive websites along with SEO and paid Google Ads',
+//   },
+//   {
+//     image: require('../assets/images/instagram.png'),
+//     title: 'Social Media',
+//     description: 'Content for social media posts tailor made to your brand.',
+//   },
+//   {
+//     image: require('../assets/images/shopify.png'),
+//     title: 'E-Commerce',
+//     description: 'Setup product pages with media and optemization',
+//   },
+// ];
 
 const cards2 = [
   {
@@ -122,30 +122,30 @@ const cards2 = [
   },
 ];
 
-const tiers = [
-  {
-    title: 'Basic',
-    price: '499',
-    description: ['3 page website', '1 social media channel', '1 post/week', '1 newsletter/month'],
-    buttonText: '805-300-7217',
-    buttonVariant: 'outlined',
-  },
-  {
-    title: 'Pro',
-    subheader: 'Most popular',
-    price: '799',
-    description: ['5 page website', '2 social media channel', '2 post/week', '1 newsletter/month'],
-    buttonText: 'sumi@boossti.com',
-    buttonVariant: 'contained',
-  },
-  {
-    title: 'Grow',
-    price: '1,249',
-    description: ['10 page website', '3 social media channel', '4 post/week', '1 newsletter/month'],
-    buttonText: '805-300-7217',
-    buttonVariant: 'outlined',
-  },
-];
+// const tiers = [
+//   {
+//     title: 'Basic',
+//     price: '499',
+//     description: ['3 page website', '1 social media channel', '1 post/week', '1 newsletter/month'],
+//     buttonText: '805-300-7217',
+//     buttonVariant: 'outlined',
+//   },
+//   {
+//     title: 'Pro',
+//     subheader: 'Most popular',
+//     price: '799',
+//     description: ['5 page website', '2 social media channel', '2 post/week', '1 newsletter/month'],
+//     buttonText: 'sumi@boossti.com',
+//     buttonVariant: 'contained',
+//   },
+//   {
+//     title: 'Grow',
+//     price: '1,249',
+//     description: ['10 page website', '3 social media channel', '4 post/week', '1 newsletter/month'],
+//     buttonText: '805-300-7217',
+//     buttonVariant: 'outlined',
+//   },
+// ];
 
 export default function Album() {
   return (

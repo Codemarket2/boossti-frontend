@@ -24,14 +24,14 @@ export default function FilterProductTable({ products }: IProps) {
   const handleFilterTextChange = (filterText) => {
     setState({
       ...state,
-      filterText: filterText,
+      filterText,
     });
   };
 
   const handleInStockChange = (inStockOnly) => {
     setState({
       ...state,
-      inStockOnly: inStockOnly,
+      inStockOnly,
     });
   };
 

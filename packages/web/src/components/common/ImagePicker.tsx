@@ -29,6 +29,7 @@ export default function ImagePicker({
 
   const handleFileChange = (event) => {
     if (event.target.files.length > 0) {
+      // eslint-disable-next-line no-plusplus
       for (let i = 0; i < event.target.files.length; i++) {
         const item = {
           url: URL.createObjectURL(event.target.files[i]),

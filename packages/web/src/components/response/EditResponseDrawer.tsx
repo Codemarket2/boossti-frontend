@@ -23,8 +23,6 @@ export default function EditResponseDrawer({ form, response, open, onClose }: IP
     onClose();
   };
 
-  console.log({ response });
-
   return (
     <Overlay open={open} onClose={onClose} title="Edit Response">
       <div className="p-2">

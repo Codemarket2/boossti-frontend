@@ -294,7 +294,7 @@ export default function FormViewWrapper({
                     formId={form?._id}
                     formField={form?.settings?.selectItemField}
                     value={state.temp}
-                    onChange={function (temp: any): void {
+                    onChange={(temp: any) => {
                       setState({ ...state, temp });
                     }}
                     openDrawer={() => setState({ ...state, formModal: true })}
@@ -478,7 +478,11 @@ export function FormView({
               newMedia = await fileUpload(value.tempMediaFiles, '/form-response');
             }
             if (newMedia?.length > 0) {
-              newMedia = newMedia.map((n, i) => ({ url: n, caption: value?.tempMedia[i].caption }));
+              newMedia = newMedia.map((n, i2) => ({
+                url: n,
+                // caption: value?.tempMedia[i].caption,
+                caption: value?.tempMedia[i2].caption,
+              }));
               value.media = newMedia;
             }
           }

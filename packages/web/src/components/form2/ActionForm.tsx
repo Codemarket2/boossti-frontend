@@ -15,13 +15,13 @@ import Switch from '@mui/material/Switch';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useFormActions } from '@frontend/shared/hooks/form';
+import { useSelector } from 'react-redux';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
 import { onAlert } from '../../utils/alert';
 import RichTextarea from '../common/RichTextarea2';
 import Field from './Field';
 import { defualtValue } from './FormView';
-import { useSelector } from 'react-redux';
 
 const filter = createFilterOptions();
 
@@ -51,18 +51,17 @@ export default function ActionForm({
   const settingTheme = useSelector(({ setting }: any) => setting.theme);
 
   useEffect(() => {
-    let array = [];
-    Object.keys(settingTheme.palette).map((key, index) => {
+    const array = [];
+    Object.keys(settingTheme.palette).forEach((key, index) => {
       if (typeof settingTheme.palette[key] === 'string') {
         array.push({ name: key, field: '' });
       } else {
-        Object.keys(settingTheme.palette[key]).map((skey, index) =>
+        Object.keys(settingTheme.palette[key]).map((skey) =>
           array.push({ name: key.concat(skey.charAt(0).toUpperCase() + skey.slice(1)), field: '' }),
         );
       }
     });
 
-    console.log({ array });
     formik.setFieldValue('colorValues', array);
   }, []);
 
@@ -84,6 +83,31 @@ export default function ActionForm({
           }
           label="Activate Action"
         />
+      </InputGroup>
+      <InputGroup>
+        <FormControl
+          variant="outlined"
+          fullWidth
+          size="small"
+          error={Boolean(formik.touched.triggerType && formik.errors.triggerType)}
+        >
+          <InputLabel id="triggerType">Trigger Type</InputLabel>
+          <Select
+            labelId="triggerType"
+            name="triggerType"
+            value={formik.values.triggerType}
+            onChange={formik.handleChange}
+            label="Trigger Type"
+          >
+            <MenuItem value="onCreate">On Create</MenuItem>
+            <MenuItem value="onUpdate">On Update</MenuItem>
+            <MenuItem value="onDelete">On Delete</MenuItem>
+            <MenuItem value="onView">On View</MenuItem>
+          </Select>
+          {formik.touched.triggerType && formik.errors.triggerType && (
+            <FormHelperText className="text-danger">{formik.errors.triggerType}</FormHelperText>
+          )}
+        </FormControl>
       </InputGroup>
       <InputGroup>
         <FormControl
@@ -112,6 +136,9 @@ export default function ActionForm({
             <MenuItem value="sendInAppNotification">Send In-App Notification</MenuItem>
             <MenuItem value="sendPushNotification">Send Push Notification</MenuItem>
             <MenuItem value="onPaletteChange">On Palette Change</MenuItem>
+            <MenuItem value="createCognitoGroup">Create Cognito Group</MenuItem>
+            <MenuItem value="updateCognitoGroup">Update Cognito Group</MenuItem>
+            <MenuItem value="deleteCognitoGroup">Delete Cognito Group</MenuItem>
           </Select>
           {formik.touched.actionType && formik.errors.actionType ? (
             <FormHelperText className="text-danger">{formik.errors.actionType}</FormHelperText>
@@ -136,6 +163,32 @@ export default function ActionForm({
           helperText={formik.touched.name && formik.errors.name}
         />
       </InputGroup>
+      {['createCognitoGroup', 'updateCognitoGroup', 'deleteCognitoGroup']?.includes(
+        formik.values.actionType,
+      ) && (
+        <div className="d-flex align-items-center">
+          <Typography className="mr-2">Cognito Group Name</Typography>
+          <FormControl fullWidth variant="outlined" size="small">
+            <InputLabel id="groupName">Field</InputLabel>
+            <Select
+              labelId="groupName"
+              id="groupName"
+              name="cognitoGroupName"
+              onChange={formik.handleChange}
+              label="Field"
+            >
+              {fields?.map((field) => {
+                if (field?.label) {
+                  if (field?.label.toUpperCase().includes('ROLE')) {
+                    return <MenuItem value={field._id}>{field.label}</MenuItem>;
+                  }
+                }
+                return <></>;
+              })}
+            </Select>
+          </FormControl>
+        </div>
+      )}
       {['sendEmail', 'generateNewUser']?.includes(formik.values.actionType) && (
         <InputGroup>
           <TextField
@@ -313,99 +366,104 @@ export default function ActionForm({
           </FormControl>
         </InputGroup>
       )}
-      {formik.values.actionType !== 'updateFieldValue' &&
-        formik.values.actionType !== 'onPaletteChange' && (
-          <InputGroup>
-            <Typography variant="h6" className="d-flex align-items-center pl-2">
-              Variables
-              <Tooltip title="Add New Action">
-                <IconButton
-                  color="primary"
-                  onClick={() =>
-                    formik.setFieldValue('variables', [
-                      ...formik.values.variables,
-                      { name: '', field: '' },
-                    ])
-                  }
-                  size="large"
-                >
-                  <AddCircleIcon />
-                </IconButton>
-              </Tooltip>
-            </Typography>
-            <Typography>Inbuilt Variables - formName, createdBy, createdAt, pageName</Typography>
-            <InputLabel>
-              Define Variables and use it in email subject and body. example - {`{{email}}`}
-            </InputLabel>
-            {formik.values.variables.map((variable, variableIndex) => (
-              <div className="d-flex align-items-center" key={variableIndex}>
-                <TextField
-                  fullWidth
-                  className="mr-2"
-                  label="Name"
-                  variant="outlined"
-                  name="name"
-                  size="small"
-                  disabled={formik.isSubmitting}
-                  value={variable.name}
+      {![
+        'updateFieldValue',
+        'onPaletteChange',
+        'createCognitoGroup',
+        'updateCognitoGroup',
+        'deleteCognitoGroup',
+      ]?.includes(formik.values.actionType) && (
+        <InputGroup>
+          <Typography variant="h6" className="d-flex align-items-center pl-2">
+            Variables
+            <Tooltip title="Add New Action">
+              <IconButton
+                color="primary"
+                onClick={() =>
+                  formik.setFieldValue('variables', [
+                    ...formik.values.variables,
+                    { name: '', field: '' },
+                  ])
+                }
+                size="large"
+              >
+                <AddCircleIcon />
+              </IconButton>
+            </Tooltip>
+          </Typography>
+          <Typography>Inbuilt Variables - formName, createdBy, createdAt, pageName</Typography>
+          <InputLabel>
+            Define Variables and use it in email subject and body. example - {`{{email}}`}
+          </InputLabel>
+          {formik.values.variables.map((variable, variableIndex) => (
+            <div className="d-flex align-items-center" key={variableIndex}>
+              <TextField
+                fullWidth
+                className="mr-2"
+                label="Name"
+                variant="outlined"
+                name="name"
+                size="small"
+                disabled={formik.isSubmitting}
+                value={variable.name}
+                onChange={({ target }) =>
+                  formik.setFieldValue(
+                    'variables',
+                    formik.values.variables.map((sV, sI) =>
+                      sI === variableIndex ? { ...variable, name: target.value } : sV,
+                    ),
+                  )
+                }
+              />
+              <FormControl fullWidth variant="outlined" size="small">
+                <InputLabel id="variablefield-simple-select-outlined-label">Field</InputLabel>
+                <Select
+                  labelId="variablefield-simple-select-outlined-label"
+                  id="variablefield-simple-select-outlined"
+                  name="value"
+                  value={variable.field}
                   onChange={({ target }) =>
                     formik.setFieldValue(
                       'variables',
-                      formik.values.variables.map((sV, sI) =>
-                        sI === variableIndex ? { ...variable, name: target.value } : sV,
-                      ),
+                      formik.values.variables.map((sV, sI) => {
+                        if (sI === variableIndex) {
+                          let payload = { ...variable, field: target.value, formId: null };
+                          const field = fields?.filter(
+                            (f) => f._id === target.value && f?.formId,
+                          )[0];
+                          if (field) {
+                            payload = { ...payload, formId: field.formId };
+                          }
+                          return payload;
+                        }
+                        return sV;
+                      }),
                     )
                   }
-                />
-                <FormControl fullWidth variant="outlined" size="small">
-                  <InputLabel id="variablefield-simple-select-outlined-label">Field</InputLabel>
-                  <Select
-                    labelId="variablefield-simple-select-outlined-label"
-                    id="variablefield-simple-select-outlined"
-                    name="value"
-                    value={variable.field}
-                    onChange={({ target }) =>
-                      formik.setFieldValue(
-                        'variables',
-                        formik.values.variables.map((sV, sI) => {
-                          if (sI === variableIndex) {
-                            let payload = { ...variable, field: target.value, formId: null };
-                            const field = fields?.filter(
-                              (f) => f._id === target.value && f?.formId,
-                            )[0];
-                            if (field) {
-                              payload = { ...payload, formId: field.formId };
-                            }
-                            return payload;
-                          }
-                          return sV;
-                        }),
-                      )
-                    }
-                    label="Field"
-                  >
-                    {fields?.map((field) => (
-                      <MenuItem value={field._id}>{field.label}</MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-                <Tooltip title="Delete Variable">
-                  <IconButton
-                    color="primary"
-                    onClick={() =>
-                      formik.setFieldValue(
-                        'variables',
-                        formik.values.variables.filter((sV, sI) => sI !== variableIndex),
-                      )
-                    }
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </Tooltip>
-              </div>
-            ))}
-          </InputGroup>
-        )}
+                  label="Field"
+                >
+                  {fields?.map((field) => (
+                    <MenuItem value={field._id}>{field.label}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <Tooltip title="Delete Variable">
+                <IconButton
+                  color="primary"
+                  onClick={() =>
+                    formik.setFieldValue(
+                      'variables',
+                      formik.values.variables.filter((sV, sI) => sI !== variableIndex),
+                    )
+                  }
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </Tooltip>
+            </div>
+          ))}
+        </InputGroup>
+      )}
       {formik.values.actionType === 'onPaletteChange' && (
         <InputGroup>
           <Typography variant="h6" className="d-flex align-items-center pl-2">
@@ -421,7 +479,7 @@ export default function ActionForm({
                   variant="outlined"
                   name="name"
                   size="small"
-                  disabled={true}
+                  disabled
                   value={colorValues.name}
                 />
                 <FormControl fullWidth variant="outlined" size="small">

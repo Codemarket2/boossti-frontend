@@ -1,15 +1,15 @@
 import { useCreatePost } from '@frontend/shared/hooks/post';
+import Skeleton from '@mui/material/Skeleton';
 import InputGroup from '../common/InputGroup';
 import ErrorLoading from '../common/ErrorLoading';
 import LoadingButton from '../common/LoadingButton';
 import { onAlert } from '../../utils/alert';
-import Skeleton from '@mui/material/Skeleton';
 import { useFacebookSDK } from '../facebook/fbsdk';
 import MentionInput from '../common/MentionInput';
 import ImagePicker from '../common/ImagePicker';
 import TagTabs from './TagTabs';
 
-export default function PostScreen({ post, onClose = () => {} }: any) {
+export default function PostScreen({ post, onClose = () => null }: any) {
   const {
     fbsdk: { fbsdkLoading, fbsdkConnected },
   } = useFacebookSDK();
@@ -32,7 +32,7 @@ export default function PostScreen({ post, onClose = () => {} }: any) {
 
   const postToGroup = (groupId: string, message) => {
     return new Promise((resolve, reject) => {
-      window.FB.api(`/${groupId}/feed`, 'post', { message: message }, (response) => {
+      window.FB.api(`/${groupId}/feed`, 'post', { message }, (response) => {
         if (!response || response.error) {
           reject(response.error);
         } else {
@@ -56,8 +56,8 @@ export default function PostScreen({ post, onClose = () => {} }: any) {
         message = message.split('^^__');
         let newMessage = '';
         message.forEach((m) => {
-          m = m.split('@@@__')[0];
-          newMessage += m;
+          // eslint-disable-next-line prefer-destructuring
+          newMessage += m.split('@@@__')[0];
         });
         newMessage += '\n\nThis post was created by Vijaa www.vijaa.com';
         selectedGroups.forEach(async (groupId) => {

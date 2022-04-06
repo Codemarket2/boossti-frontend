@@ -5,7 +5,15 @@ import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import AddCircleIcon from '@mui/icons-material/Edit';
 
-export default function Design({ onClickVariables, onClickEdit, value = '' }) {
+export default function Design({
+  onClickVariables,
+  onClickEdit,
+  value = '',
+}: {
+  onClickVariables: any;
+  onClickEdit: any;
+  value: string;
+}) {
   return (
     <Paper variant="outlined" className="px-2">
       <div className="d-flex align-items-center justify-content-between">

@@ -44,7 +44,7 @@ export const parseForm = (form) => {
 };
 
 export function useGetForm(_id: string) {
-  const [getForm, setGetForm] = useState(null);
+  const [form, setForm] = useState(null);
   const { data, error, loading } = useQuery(GET_FORM, {
     variables: { _id },
   });
@@ -56,17 +56,17 @@ export function useGetForm(_id: string) {
   useEffect(() => {
     if (subscriptionData?.updatedForm) {
       const parsedForm = parseForm(subscriptionData?.updatedForm);
-      setGetForm({ ...getForm, ...parsedForm });
+      setForm({ ...form, ...parsedForm });
     }
   }, [subscriptionData]);
 
   useEffect(() => {
     if (data && data.getForm) {
-      setGetForm(parseForm(data.getForm));
+      setForm(parseForm(data.getForm));
     }
   }, [data]);
 
-  return { data: getForm ? { getForm } : null, error, loading };
+  return { data: form ? { getForm: form } : null, error, loading };
 }
 
 export function useGetFormBySlug(slug: string): any {
@@ -93,7 +93,7 @@ export async function getForm(_id) {
     });
     form = parseForm(response?.data?.getForm);
   } catch (error) {
-    console.log({ error });
+    // console.log({ error });
   }
   return form;
 }

@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Auth } from 'aws-amplify';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth/lib/types';
 import { useRouter } from 'next/router';
 import InitialLoading from '../src/components/common/InitialLoading';
 // import UserLayout from '../src/components/common/UserLayout';
 import HomeScreen from '../src/screens/HomeScreen-new';
-import { store } from '../../shared/redux';
 
 export default function Page() {
   const router = useRouter();

@@ -1,3 +1,4 @@
+/* eslint-disable radix */
 import Drawer from '@mui/material/Drawer';
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
@@ -23,9 +24,8 @@ interface IProps {
 const removePx = (value) => {
   if (value) {
     return parseInt(value.replace('px', ''));
-  } else {
-    return '';
   }
+  return '';
 };
 
 export default function StyleDrawer({

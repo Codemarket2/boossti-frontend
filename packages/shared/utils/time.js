@@ -1,3 +1,4 @@
+/* eslint-disable radix */
 import moment from 'moment';
 
 const oneMinute = 60000;
@@ -61,29 +62,27 @@ export const getDateRange = (startDate, endDate) => {
     'December',
   ];
 
-  let sDate = new Date(startDate);
-  let eDate = new Date(endDate);
+  const sDate = new Date(startDate);
+  const eDate = new Date(endDate);
   if (startDate !== '' && endDate !== '') {
     if (sDate.getMonth() === eDate.getMonth()) {
       return `${sDate.getDate()} - ${eDate.getDate()} ${monthNames[eDate.getMonth()]}`;
-    } else {
-      return `${sDate.getDate()} ${monthNames[sDate.getMonth()]} - ${eDate.getDate()} ${
-        monthNames[eDate.getMonth()]
-      }`;
     }
-  } else {
-    return `${new Date(startDate).getDate()} ${monthNames[new Date(startDate).getMonth()]}`;
+    return `${sDate.getDate()} ${monthNames[sDate.getMonth()]} - ${eDate.getDate()} ${
+      monthNames[eDate.getMonth()]
+    }`;
   }
+  return `${new Date(startDate).getDate()} ${monthNames[new Date(startDate).getMonth()]}`;
 };
 
 export function getRangeOfDates(startDate, stopDate) {
-  var dates = [],
-    currentDate = new Date(startDate),
-    addDays = function (days) {
-      var date = new Date(this.valueOf());
-      date.setDate(date.getDate() + days);
-      return date;
-    };
+  const dates = [];
+  let currentDate = new Date(startDate);
+  const addDays = function (days) {
+    const date = new Date(this.valueOf());
+    date.setDate(date.getDate() + days);
+    return date;
+  };
   while (
     currentDate <= new Date(stopDate) ||
     moment(currentDate).format('YYYY-MM-DD') === moment(stopDate).format('YYYY-MM-DD')
@@ -106,21 +105,19 @@ export const saveDateAndTime = (startDate, endDate, startTime, endTime) => {
       startTime: new Date(st),
       endTime: new Date(et),
     };
-  } else {
-    if (st.getDate() === et.getDate() && st.getHours() + 2 <= 22) {
-      et.setHours(st.getHours() + 2);
-      return {
-        startTime: st.toString(),
-        endTime: et.toString(),
-      };
-    } else {
-      et.setDate(st.getDate() + 1);
-      return {
-        startTime: st.toString(),
-        endTime: et.toString(),
-      };
-    }
   }
+  if (st.getDate() === et.getDate() && st.getHours() + 2 <= 22) {
+    et.setHours(st.getHours() + 2);
+    return {
+      startTime: st.toString(),
+      endTime: et.toString(),
+    };
+  }
+  et.setDate(st.getDate() + 1);
+  return {
+    startTime: st.toString(),
+    endTime: et.toString(),
+  };
 };
 
 export const saveDateWithTime = (startDate, endDate, startTime, endTime) => {
@@ -151,15 +148,13 @@ export const changeToNewRoundOfDateTime = (newdate) => {
     roundate.setMinutes(30);
   } else if (roundate.getMinutes() > 30 && roundate.getMinutes() <= 45) {
     roundate.setMinutes(45);
+  } else if (roundate.getHours() <= 23) {
+    roundate.setHours(roundate.getHours() + 1);
+    roundate.setMinutes(0);
   } else {
-    if (roundate.getHours() <= 23) {
-      roundate.setHours(roundate.getHours() + 1);
-      roundate.setMinutes(0);
-    } else {
-      roundate.setDate(roundate.getDate() + 1);
-      roundate.setHours(0);
-      roundate.setMinutes(0);
-    }
+    roundate.setDate(roundate.getDate() + 1);
+    roundate.setHours(0);
+    roundate.setMinutes(0);
   }
   return new Date(roundate);
 };
@@ -170,8 +165,8 @@ export const dateFormatInString = (newdate, format) => {
 };
 
 export const convertStringToDate = (dateString) => {
-  let utcTime = new Date(dateString).toUTCString();
-  let currentSelectedDay = moment(utcTime).utc().format('ll');
+  const utcTime = new Date(dateString).toUTCString();
+  const currentSelectedDay = moment(utcTime).utc().format('ll');
   return currentSelectedDay;
 };
 
@@ -181,11 +176,11 @@ export const roundTime = (time, minutesToRound) => {
   minutes = parseInt(minutes);
 
   // Convert hours and minutes to time in minutes
-  time = hours * 60 + minutes;
+  const newTime = hours * 60 + minutes;
 
-  let rounded = Math.ceil(time / minutesToRound) * minutesToRound;
-  let rHr = '' + Math.floor(rounded / 60);
-  let rMin = '' + (rounded % 60);
+  const rounded = Math.ceil(newTime / minutesToRound) * minutesToRound;
+  const rHr = `${Math.floor(rounded / 60)}`;
+  const rMin = `${rounded % 60}`;
 
-  return rHr.padStart(2, '0') + ':' + rMin.padStart(2, '0');
+  return `${rHr.padStart(2, '0')}:${rMin.padStart(2, '0')}`;
 };

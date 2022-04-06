@@ -20,7 +20,9 @@ export default function ProfileScreen() {
         <Divider />
         <Tabs
           value={value}
-          onChange={(event: React.ChangeEvent<{}>, newValue: string) => setValue(newValue)}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>, newValue: string) =>
+            setValue(newValue)
+          }
           indicatorColor="primary"
           textColor="primary"
           centered
@@ -37,7 +39,7 @@ export default function ProfileScreen() {
       {value === 'posts' && <MyPostsList />}
       {value === 'about' && <About userId={attributes['custom:_id']} />}
       {value === 'bookmarks' && <BookmarkList />}
-      {value === 'facebookPostSetting' && <FBSettings showUser={true} />}
+      {value === 'facebookPostSetting' && <FBSettings showUser />}
     </div>
   );
 }

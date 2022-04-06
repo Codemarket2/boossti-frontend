@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+/* eslint-disable no-useless-escape */
+import React, { useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import Chip from '@mui/material/Chip';
 
@@ -61,7 +62,7 @@ export default function index({ formik, state, setState }: IProps) {
   const handleKeyDown = (e) => {
     if (['Enter', 'Tab', ','].includes(e.key)) {
       e.preventDefault();
-      let email = state.value.trim();
+      const email = state.value.trim();
       if (email && isValid(email)) {
         setState({
           ...state,
@@ -76,11 +77,11 @@ export default function index({ formik, state, setState }: IProps) {
   const handlePaste = (e) => {
     e.preventDefault();
 
-    var paste = e.clipboardData.getData('text');
-    var emails = paste.match(/[\w\d\.-]+@[\w\d\.-]+\.[\w\d\.-]+/g);
+    const paste = e.clipboardData.getData('text');
+    const emails = paste.match(/[\w\d\.-]+@[\w\d\.-]+\.[\w\d\.-]+/g);
 
     if (emails) {
-      var toBeAdded = emails.filter((email) => !isInList(email));
+      const toBeAdded = emails.filter((email) => !isInList(email));
 
       setState({ ...state, receiverEmail: [...state.receiverEmail, ...toBeAdded] });
     }

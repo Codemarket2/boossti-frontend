@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import ImageIcon from '@mui/icons-material/Image';
 import { onboarding } from '@frontend/shared/config/onboarding';
 
-export default function Step2({ handleContinue }) {
+export default function Step2({ handleContinue }: any) {
   return (
     <div>
       <Typography variant="h1" align="center" color="primary" className="mb-5">

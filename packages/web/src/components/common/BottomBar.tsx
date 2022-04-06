@@ -24,9 +24,9 @@ export default function SimpleBottomNavigation() {
   const router = useRouter();
   const dispatch = useDispatch();
   const [activeRoute, setActiveRoute] = useState('/');
-  const { attributes, setting } = useSelector(({ auth, setting }: any) => ({
-    attributes: auth.attributes,
-    setting,
+  const { attributes, setting } = useSelector((state: any) => ({
+    attributes: state.auth.attributes,
+    setting: state.settings,
   }));
 
   useEffect(() => {

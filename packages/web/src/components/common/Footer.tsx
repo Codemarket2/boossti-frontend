@@ -12,32 +12,31 @@ export default function Footer() {
           <ul style={{ listStyleType: 'none' }} className="d-flex pl-2 m-0 p-0">
             <li>
               <a className="text-dark mx-2" href="https://www.facebook.com/">
-                <i style={{ fontSize: '20px' }} className="icon ion-social-facebook"></i>
+                <i style={{ fontSize: '20px' }} className="icon ion-social-facebook" />
               </a>
             </li>
             <li>
               <a className="text-dark mx-2" href="https://www.pinterest.com/">
-                <i style={{ fontSize: '20px' }} className="icon ion-social-pinterest"></i>
+                <i style={{ fontSize: '20px' }} className="icon ion-social-pinterest" />
               </a>
             </li>
             <li>
               <a className="text-dark mx-2" href="https://www.instagram.com/">
-                <i style={{ fontSize: '20px' }} className="icon ion-social-instagram"></i>
+                <i style={{ fontSize: '20px' }} className="icon ion-social-instagram" />
               </a>
             </li>
             <li>
               <a className="text-dark mx-2" href="https://twitter.com/">
-                <i style={{ fontSize: '20px' }} className="icon ion-social-twitter"></i>
+                <i style={{ fontSize: '20px' }} className="icon ion-social-twitter" />
               </a>
             </li>
             <li>
-              <a className="text-dark mx-2" href="#">
-                <img
-                  className="m-0 p-0"
-                  width="14px"
-                  src="https://katelesterinteriors.com/wp-content/uploads/2020/11/houzz-logo.png"
-                />
-              </a>
+              <img
+                alt="footer-img"
+                className="m-0 p-0"
+                width="14px"
+                src="https://katelesterinteriors.com/wp-content/uploads/2020/11/houzz-logo.png"
+              />
             </li>
           </ul>
         </div>

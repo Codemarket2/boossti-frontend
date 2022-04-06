@@ -15,6 +15,7 @@ export default function DeleteButton({
     <Tooltip title={tooltip}>
       <IconButton
         onClick={() => {
+          // eslint-disable-next-line no-restricted-globals
           const anwser = confirm('Are you sure you want to delete this response');
           if (anwser) {
             onClick();

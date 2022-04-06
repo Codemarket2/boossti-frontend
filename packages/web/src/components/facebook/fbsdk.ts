@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 import { useEffect, useState } from 'react';
 
 export function useFacebookSDK() {
@@ -19,8 +20,8 @@ export function useFacebookSDK() {
     }
 
     (function (d, s, id) {
-      var js,
-        fjs = d.getElementsByTagName(s)[0];
+      let js;
+      const fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) {
         return;
       }
