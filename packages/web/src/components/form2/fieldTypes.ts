@@ -27,7 +27,7 @@ export const fieldTypes: FieldType[] = [
   { label: 'Image', value: 'image' },
   // { label: 'Media (Images/Video)', value: 'media' },
   // { label: 'Address', value: 'address' },
-  { label: 'Static Text', value: 'label' },
+//  { label: 'Static Text', value: 'label' },
   { label: 'Link', value: 'link' },
   { label: 'Color Picker', value: 'colorPicker' },
 ];
