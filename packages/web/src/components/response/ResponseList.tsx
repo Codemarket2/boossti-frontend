@@ -119,9 +119,7 @@ export default function ResponseList({
     setRows(createRows());
   }, [form, data]);
   const defaultRows = createRows();
-  useEffect(() => {
-    console.log('kennyb', form);
-  }, []);
+
   return (
     <>
       <Backdrop open={deleteLoading} />
