@@ -20,6 +20,9 @@ module.exports = withPlugins([withTM, withImages], {
   experimental: {
     emotion: true,
   },
+  eslint: {
+    ignoreDuringBuild: true,
+  },
 });
 
 // module.exports = withPlugins([withPWA, withTM, withImages]);

@@ -8,9 +8,8 @@ import Typography from '@mui/material/Typography';
 import parse from 'autosuggest-highlight/parse';
 import apiKeys from '@frontend/shared/config/apiKeys';
 import throttle from 'lodash/throttle';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Geocode from 'react-geocode';
-import { useState } from 'react';
 
 // This key was created specifically for the demo in mui.com.
 // You need to create a new one for your application.
@@ -44,7 +43,12 @@ interface PlaceType {
   structured_formatting: StructuredFormatting;
 }
 
-export default function AddressSearch({ _id, onChange }) {
+interface IProps {
+  _id: string;
+  onChange: (arg: any) => void;
+}
+
+export default function AddressSearch({ _id, onChange }: IProps) {
   const [value, setValue] = useState<PlaceType | null>(null);
   const [inputValue, setInputValue] = useState('');
   const [options, setOptions] = useState<readonly PlaceType[]>([]);
@@ -108,7 +112,7 @@ export default function AddressSearch({ _id, onChange }) {
       active = false;
     };
   }, [value, inputValue, fetch]);
-  
+
   useEffect(() => {
     onChange({
       field: _id,
@@ -125,13 +129,19 @@ export default function AddressSearch({ _id, onChange }) {
   useEffect(() => {
     if (options.length > 0) {
       Geocode.fromAddress(options[0]?.description).then(
-        (response) => {
-          const { lat, lng } = response.results[0].geometry.location;
+        (res: any) => {
+          const { lat, lng } = res.results[0].geometry.location;
           Geocode.fromLatLng(lat, lng).then(
-            (response) => {
-              let city, state, country;
-              for (let i = 0; i < response.results[0].address_components.length; i++) {
-                for (let j = 0; j < response.results[0].address_components[i].types.length; j++) {
+            (response: any) => {
+              let city: string;
+              let state: string;
+              let country: string;
+              for (let i = 0; i < response.results[0].address_components.length; i += 1) {
+                for (
+                  let j = 0;
+                  j < response.results[0].address_components[i].types.length;
+                  j += 1
+                ) {
                   switch (response.results[0].address_components[i].types[j]) {
                     case 'locality':
                       city = response.results[0].address_components[i].long_name;
@@ -142,23 +152,25 @@ export default function AddressSearch({ _id, onChange }) {
                     case 'country':
                       country = response.results[0].address_components[i].long_name;
                       break;
+                    default:
+                      break;
                   }
                 }
               }
               setAddress((prevState) => ({
                 ...prevState,
-                city: city,
-                state: state,
-                country: country,
+                city,
+                state,
+                country,
               }));
             },
-            (error) => {
-              console.error(error);
+            (error: any) => {
+              alert(error);
             },
           );
         },
-        (error) => {
-          console.error(error);
+        (error: any) => {
+          alert(error);
         },
       );
     }
