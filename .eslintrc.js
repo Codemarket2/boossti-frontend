@@ -67,6 +67,19 @@ module.exports = {
     'react/jsx-props-no-spreading': 1,
     'consistent-return': 0,
     'no-restricted-globals': 0,
+    camelcase: [
+      'error',
+      {
+        allow: [
+          'main_text',
+          'secondary_text',
+          'main_text_matched_substrings',
+          'structured_formatting',
+          'return_scopes',
+          'safari_web_id',
+        ],
+      },
+    ],
   },
   settings: {
     'import/resolver': {
