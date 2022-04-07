@@ -119,10 +119,13 @@ export default function ResponseList({
     setRows(createRows());
   }, [form, data]);
   const defaultRows = createRows();
+  useEffect(() => {
+    console.log('kennyb', form);
+  }, []);
   return (
     <>
       <Backdrop open={deleteLoading} />
-      {form?.settings?.responsesView != 'vertical' && form?.settings?.responsesView == 'table' && (
+      {form?.settings?.responsesView != 'vertical' && form?.settings?.responsesView != 'button' && (
         <DataTable
           data={data}
           form={form}
@@ -139,7 +142,7 @@ export default function ResponseList({
           direction={direction}
         />
       )}
-      {form?.settings?.responsesView != 'vertical' && form?.settings?.responsesView != 'table' && (
+      {form?.settings?.responsesView != 'button' && (
         <TableContainer component={Paper} variant="outlined">
           <TablePagination
             component="div"
