@@ -21,6 +21,7 @@ import { SelectOptionType } from './EditField';
 import ImagePicker2 from '../common/ImagePicker2';
 import ColorInput from '../customMUI/ColorInput/ColorInput';
 import SelectFormFields from './SelectFormFields';
+import AddressSearch from '../common/AddressSearch';
 
 interface IProps {
   disabled?: boolean;
@@ -357,6 +358,9 @@ export default function Field({
           onColorChange={(e: any) => onChange({ field: _id, value: e })}
         />
       );
+    }
+    case 'address': {
+      return <AddressSearch _id={_id} onChange={onChange} />;
     }
     default: {
       const textValidation = validateValue(validate, value, {

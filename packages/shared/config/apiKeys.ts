@@ -1,5 +1,5 @@
-const GOGGLE = 'AIzaSyALDWfMt9NNQVgHEmu_K_C5dqmxbWADG8M';
+const GOOGLE = 'AIzaSyB07zlQZ0WbRYbkdMBWesCbPo1yGPxN3Vw';
 
 export default {
-  GOGGLE,
+  GOOGLE,
 };
