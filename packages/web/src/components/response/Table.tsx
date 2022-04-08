@@ -117,7 +117,7 @@ export const DataTable = ({
           const style = !hasChildren ? { marginInlineStart: 30 } : undefined;
           return (
             <div key={row?.id || row?._id}>
-              <div style={multipleValues ? { marginRight: '30px', overflow: 'hidden' } : null}>
+              <div style={multipleValues ? { marginRight: '30px' } : null}>
                 <DisplayValue field={e} value={value} />
               </div>
               <IconButton

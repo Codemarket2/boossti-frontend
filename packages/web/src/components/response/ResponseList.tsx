@@ -140,7 +140,7 @@ export default function ResponseList({
           direction={direction}
         />
       )}
-      {form?.settings?.responsesView != 'button' && (
+      {form?.settings?.responsesView === 'button' && (
         <TableContainer component={Paper} variant="outlined">
           <TablePagination
             component="div"
