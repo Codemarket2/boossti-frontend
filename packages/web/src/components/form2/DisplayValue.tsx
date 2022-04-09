@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Fragment } from 'react';
 import moment from 'moment';
 import Avatar from '@mui/material/Avatar';
+import { Box, Typography } from '@mui/material';
 import DisplayRichText from '../common/DisplayRichText';
 import { ShowResponseLabel } from '../response/ResponseDrawer';
 import PageDrawer from '../template/PageDrawer';
@@ -14,6 +15,9 @@ interface IProps {
 }
 
 export default function DisplayValue({ field, value, imageAvatar }: IProps) {
+  const address = value?.value.split('+');
+  const addressKey = ['Address', 'Landmark', 'City', 'State', 'Country'];
+
   switch (field.fieldType) {
     case 'text':
     case 'textarea':
@@ -92,6 +96,19 @@ export default function DisplayValue({ field, value, imageAvatar }: IProps) {
         <ImageList
           media={value?.tempMedia ? [...value?.media, ...value?.tempMedia] : value?.media}
         />
+      );
+    case 'address':
+      return (
+        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+          {address.map((res, index) => (
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <b>{res !== '' && `${addressKey[index]}: `} </b>
+              <Typography sx={{ marginLeft: '5px' }} key={index}>
+                {res !== '' && `${res},`}
+              </Typography>
+            </Box>
+          ))}
+        </Box>
       );
     default:
       return <>{value?.value}</>;

@@ -360,7 +360,7 @@ export default function Field({
       );
     }
     case 'address': {
-      return <AddressSearch _id={_id} onChange={onChange} />;
+      return <AddressSearch _id={_id} onChange={onChange} values={value} />;
     }
     default: {
       const textValidation = validateValue(validate, value, {

@@ -46,9 +46,10 @@ interface PlaceType {
 interface IProps {
   _id: string;
   onChange: (arg: any) => void;
+  values: any;
 }
 
-export default function AddressSearch({ _id, onChange }: IProps) {
+export default function AddressSearch({ _id, onChange, values }: IProps) {
   const [value, setValue] = useState<PlaceType | null>(null);
   const [inputValue, setInputValue] = useState('');
   const [options, setOptions] = useState<readonly PlaceType[]>([]);
@@ -77,6 +78,8 @@ export default function AddressSearch({ _id, onChange }: IProps) {
       }, 200),
     [],
   );
+
+  const fvalues = values.value?.split('+');
 
   useEffect(() => {
     let active = true;
@@ -113,17 +116,15 @@ export default function AddressSearch({ _id, onChange }: IProps) {
     };
   }, [value, inputValue, fetch]);
 
+  const finalRes = `${value?.description}+${address.landmark}+${address.city}+${address.state}+${address.country}`;
+
   useEffect(() => {
-    onChange({
-      field: _id,
-      value: {
-        Address: value,
-        Landmark: address.landmark,
-        City: address.city,
-        State: address.state,
-        Country: address.country,
-      },
-    });
+    if (value?.description !== undefined) {
+      onChange({
+        field: _id,
+        value: finalRes,
+      });
+    }
   }, [address, value]);
 
   useEffect(() => {
@@ -190,7 +191,7 @@ export default function AddressSearch({ _id, onChange }: IProps) {
         autoComplete
         includeInputInList
         filterSelectedOptions
-        value={value}
+        value={fvalues[0]}
         onChange={(event: any, newValue: PlaceType | null) => {
           setOptions(newValue ? [newValue, ...options] : options);
           setValue(newValue);
@@ -240,7 +241,7 @@ export default function AddressSearch({ _id, onChange }: IProps) {
         name="valueNumber"
         size="small"
         type="text"
-        value={address.landmark}
+        value={fvalues[1] === 'undefined' ? '' : fvalues[1]}
         onChange={({ target }) =>
           setAddress((prevState) => ({
             ...prevState,
@@ -261,7 +262,7 @@ export default function AddressSearch({ _id, onChange }: IProps) {
           name="valueNumber"
           size="small"
           type="text"
-          value={address.city}
+          value={fvalues[2] === 'undefined' ? '' : fvalues[2]}
           onChange={({ target }) =>
             setAddress((prevState) => ({
               ...prevState,
@@ -277,7 +278,7 @@ export default function AddressSearch({ _id, onChange }: IProps) {
           name="valueNumber"
           size="small"
           type="text"
-          value={address.state}
+          value={fvalues[3] === 'undefined' ? '' : fvalues[3]}
           onChange={({ target }) =>
             setAddress((prevState) => ({
               ...prevState,
@@ -292,7 +293,7 @@ export default function AddressSearch({ _id, onChange }: IProps) {
           name="valueNumber"
           size="small"
           type="text"
-          value={address.country}
+          value={fvalues[4] === 'undefined' ? '' : fvalues[4]}
           onChange={({ target }) =>
             setAddress((prevState) => ({
               ...prevState,
