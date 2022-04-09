@@ -30,4 +30,5 @@ export const fieldTypes: FieldType[] = [
   { label: 'Static Text', value: 'label' },
   { label: 'Link', value: 'link' },
   { label: 'Color Picker', value: 'colorPicker' },
+  { label: 'Barcode Scanner', value: 'barcodeScanner' },
 ];

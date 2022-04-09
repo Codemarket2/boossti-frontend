@@ -22,6 +22,7 @@ import ImagePicker2 from '../common/ImagePicker2';
 import ColorInput from '../customMUI/ColorInput/ColorInput';
 import SelectFormFields from './SelectFormFields';
 import AddressSearch from '../common/AddressSearch';
+import BarcodeInput from '../customMUI/BarcodeInput/BarcodeInput';
 
 interface IProps {
   disabled?: boolean;
@@ -359,6 +360,17 @@ export default function Field({
         />
       );
     }
+
+    case 'barcodeScanner': {
+      return (
+        <BarcodeInput
+        // label=""
+        // barcode={value ? value.value : ''}
+        // onBarcodeChange={(e: any) => onChange({ field: _id, value: e })}
+        />
+      );
+    }
+
     case 'address': {
       return <AddressSearch _id={_id} onChange={onChange} />;
     }
