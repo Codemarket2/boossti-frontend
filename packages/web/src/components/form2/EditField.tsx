@@ -106,6 +106,19 @@ export default function FormFields({
                 label="Mutiple values"
               />
             </InputGroup>
+            <InputGroup>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={field?.options?.unique}
+                    onChange={({ target }) => onOptionChange({ unique: target.checked })}
+                    name="unique"
+                    color="primary"
+                  />
+                }
+                label="Unique"
+              />
+            </InputGroup>
           </>
         )}
         {field.fieldType === 'label' && (
