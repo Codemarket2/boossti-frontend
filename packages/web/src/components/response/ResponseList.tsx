@@ -50,7 +50,6 @@ export default function ResponseList({
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
   const router = useRouter();
   const [selectedResponse, setSelectedResponse] = useState(null);
-  const [rows, setRows] = useState([]);
   const [direction, setDirection] = useState<Direction>('ltr');
   const [selectedRows, setSelectedRows] = useState<ReadonlySet<string>>(() => new Set());
   /*
@@ -88,59 +87,26 @@ export default function ResponseList({
     return row.id;
   }
 
-  const createRows = () => {
-    const rows = [];
-
-    data?.getResponses?.data?.map((e, i) => {
-      const tid = `${i + 1}`;
-      const temp = { id: tid, action: e, children: [] };
-      let sameFieldCount = 1;
-
-      e?.values?.map((v) => {
-        //find field
-        const { fields } = form;
-        if (temp[v.field] && v.value !== '' && v.value) {
-          const innerTemp = {
-            id: `${tid}.${sameFieldCount}`,
-            parentId: tid,
-          };
-          innerTemp[v.field] = v;
-
-          temp.children.push(innerTemp);
-          sameFieldCount += 1;
-        } else temp[v.field] = v;
-      });
-      rows.push(temp);
-    });
-    return rows;
-  };
-
-  useEffect(() => {
-    setRows(createRows());
-  }, [form, data]);
-  const defaultRows = createRows();
-
   return (
     <>
       <Backdrop open={deleteLoading} />
-      {form?.settings?.responsesView != 'vertical' && form?.settings?.responsesView != 'button' && (
-        <DataTable
-          data={data}
-          form={form}
-          refetch={refetch}
-          rows={defaultRows}
-          rowHeight={40}
-          onRowsChange={setRows}
-          rowKeyGetter={rowKeyGetter}
-          selectedRows={selectedRows}
-          onSelectedRowsChange={setSelectedRows}
-          onFill={handleFill}
-          onCopy={handleCopy}
-          onPaste={handlePaste}
-          direction={direction}
-        />
-      )}
-      {form?.settings?.responsesView === 'button' && (
+      {form?.settings?.responsesView != 'vertical' &&
+        form?.settings?.responsesView !== 'button' && (
+          <DataTable
+            data={data}
+            form={form}
+            refetch={refetch}
+            rowHeight={40}
+            rowKeyGetter={rowKeyGetter}
+            selectedRows={selectedRows}
+            onSelectedRowsChange={setSelectedRows}
+            onFill={handleFill}
+            onCopy={handleCopy}
+            onPaste={handlePaste}
+            direction={direction}
+          />
+        )}
+      {form?.settings?.responsesView === 'butcton' && (
         <TableContainer component={Paper} variant="outlined">
           <TablePagination
             component="div"

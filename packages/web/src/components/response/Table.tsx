@@ -14,9 +14,7 @@ interface IDataTable {
   form: any;
   data: any;
   refetch: any;
-  rows: any;
   rowHeight: any;
-  onRowsChange: any;
   rowKeyGetter: any;
   selectedRows: any;
   onSelectedRowsChange: any;
@@ -33,9 +31,7 @@ interface Action {
 export const DataTable = ({
   form,
   refetch,
-  rows,
   rowHeight,
-  onRowsChange,
   rowKeyGetter,
   selectedRows,
   onSelectedRowsChange,
@@ -48,7 +44,7 @@ export const DataTable = ({
   const trows = createRows(data, form);
   const [frows, setfRows] = useState(trows);
   useEffect(() => {
-    setfRows(trows);
+    setfRows(createRows(data, form));
   }, [data]);
   function toggleSubRow(row_index, field_index) {
     const rows = trows;
@@ -118,7 +114,7 @@ export const DataTable = ({
           return (
             <div key={row?.id || row?._id}>
               <div style={multipleValues ? { marginRight: '30px' } : null}>
-                <DisplayValue field={e} value={value} />
+                <DisplayValue field={e} value={value?.value} />
               </div>
               <IconButton
                 hidden={!multipleValues}
@@ -132,7 +128,6 @@ export const DataTable = ({
                 }}
                 onClick={() => {
                   const newR = toggleSubRow(rowIndex, index);
-                  // console.log({ newR }, 'kennyb setted');
                   setfRows(newR);
                 }}
                 size="large"
@@ -156,8 +151,7 @@ export const DataTable = ({
         <DataGrid
           rows={frows}
           columns={columns}
-          rowHeight={rowHeight}
-          onRowsChange={onRowsChange}
+          rowHeight={rowHeights}
           rowKeyGetter={rowKeyGetter}
           selectedRows={selectedRows}
           onSelectedRowsChange={onSelectedRowsChange}
@@ -172,32 +166,42 @@ export const DataTable = ({
   );
 };
 
+const rowHeights = (args) => {
+  let max = 0;
+  args?.row?.fields?.forEach((e) => {
+    return 0;
+  });
+  return 40;
+};
+
 const createRows = (data, form) => {
   const rows = [];
 
   data?.getResponses?.data?.map((e, i) => {
     //group rows by e.fieldId
-
     const tid = `${i + 1}`;
     const temp = { id: tid, action: e, fields: [] };
     const tr = {};
     let sameFieldCount = 1;
     form?.fields.map((f) => {
-      const val = e?.values?.filter((v) => v.field === f._id && v.value !== '');
+      const val = e?.values?.filter((v) => v.field === f._id);
       if (val?.length == 1) {
         const v = val[0];
         const t = {
           _id: f._id,
           label: f.label,
           multipleValues: false,
-          value: v.value,
+          value: v,
         };
         temp.fields.push(t);
       } else if (val?.length > 1) {
+        const first = val.shift();
+        val.pop();
+        //last element is empty so remove it
         const t = {
           _id: f._id,
           label: f.label,
-          value: 'expand',
+          value: first,
           multipleValues: true,
           expanded: false,
           children: val.map((v) => {
@@ -209,7 +213,7 @@ const createRows = (data, form) => {
                   _id: f._id,
                   label: f.label,
                   multipleValues: false,
-                  value: v.value,
+                  value: v,
                 },
               ],
             };
