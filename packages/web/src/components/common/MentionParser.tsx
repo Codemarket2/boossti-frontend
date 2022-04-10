@@ -29,7 +29,11 @@ export default function MentionParser({
   authenticated,
   tags = [],
 }: IProps) {
-  const { handleBookmark, state: bookmarkState, setState: bookmarkSetState } = useCreateBookmark({
+  const {
+    handleBookmark,
+    state: bookmarkState,
+    setState: bookmarkSetState,
+  } = useCreateBookmark({
     onAlert,
   });
   let newValue = value;

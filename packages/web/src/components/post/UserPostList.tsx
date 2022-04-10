@@ -5,7 +5,13 @@ import PostCardSkeleton from './PostCardSkeleton';
 import ListHeader from '../common/ListHeader';
 
 export default function FeedsList({ userId }: { userId: string }) {
-  const { data, error, loading, state: postsState, setState: postsSetState } = useUserFeeds({
+  const {
+    data,
+    error,
+    loading,
+    state: postsState,
+    setState: postsSetState,
+  } = useUserFeeds({
     userId,
   });
 

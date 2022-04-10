@@ -364,9 +364,9 @@ export default function Field({
     case 'barcodeScanner': {
       return (
         <BarcodeInput
-        // label=""
-        // barcode={value ? value.value : ''}
-        // onBarcodeChange={(e: any) => onChange({ field: _id, value: e })}
+          label=""
+          barcode={value ? value.value : ''}
+          onBarcodeChange={(e: any) => onChange({ field: _id, value: e })}
         />
       );
     }

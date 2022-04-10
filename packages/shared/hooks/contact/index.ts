@@ -7,7 +7,8 @@ import produce from 'immer';
 import { CREATE_CONTACT, DELETE_CONTACT } from '../../graphql/mutation/contact';
 import { GET_ALL_CONTACTS, GET_CONTACT } from '../../graphql/query/contact';
 
-const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+const phoneRegExp =
+  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
 const validationSchema = yup.object({
   title: yup.string(),

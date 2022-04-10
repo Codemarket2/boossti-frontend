@@ -25,10 +25,12 @@ export default function Comment({
   shareIndex,
   fieldTitle,
 }: IComment) {
-  const { handleSave, inputVal, setInputVal, loading: submitLoading } = useCreateComment(
-    postId,
-    threadId,
-  );
+  const {
+    handleSave,
+    inputVal,
+    setInputVal,
+    loading: submitLoading,
+  } = useCreateComment(postId, threadId);
   const { handleDelete, loading: deleteLoading } = useDeleteComment();
   const { data, error } = useGetComments(postId);
 
