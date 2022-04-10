@@ -137,8 +137,7 @@ export const emojis = [
 export const customEmojis = [
   {
     code: '♋',
-    img:
-      'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/160/apple/237/father-christmas_1f385.png',
+    img: 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/160/apple/237/father-christmas_1f385.png',
     name: 'santa',
     category: 'Cancer Emoji',
     sort_order: 1,
@@ -146,8 +145,7 @@ export const customEmojis = [
   },
   {
     code: '🎅🏼',
-    img:
-      'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/160/apple/237/father-christmas_1f385.png',
+    img: 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/160/apple/237/father-christmas_1f385.png',
     name: 'santa',
     category: 'Spa Emoji',
     sort_order: 1,
@@ -155,8 +153,7 @@ export const customEmojis = [
   },
   {
     code: '🎅🏼',
-    img:
-      'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/160/apple/237/father-christmas_1f385.png',
+    img: 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/160/apple/237/father-christmas_1f385.png',
     name: 'santa',
     category: 'Doctor Emoji',
     sort_order: 1,

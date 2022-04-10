@@ -62,6 +62,7 @@
     "react-mentions": "^4.3.0",
     "react-onesignal": "^2.0.2",
     "react-phone-input-2": "^2.14.0",
+    "react-qr-barcode-scanner": "^1.0.6",
     "react-redux": "7.2.4",
     "react-share": "4.3.1",
     "react-swipeable-views": "^0.14.0",
@@ -85,6 +86,8 @@
     "@types/react": "17.0.43",
     "@types/react-dom": "17.0.14",
     "babel-loader": "^8.2.4",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "typescript": "4.6.3",
     "webpack": "^5.71.0"
   }
