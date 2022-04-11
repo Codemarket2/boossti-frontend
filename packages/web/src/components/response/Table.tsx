@@ -59,6 +59,16 @@ export const DataTable = ({
       const newRows = [...rows];
       const state = frows[row_index]?.fields[field_index]?.isExpanded;
       const rowState = frows[row_index]?.expanded;
+      const otherFields = frows[row_index]?.fields.flatMap((f, index) => {
+        if (index === field_index) {
+          return [];
+        }
+        const newF = { ...f, multipleValues: false, children: [] };
+        return newF;
+      });
+      const newChildren = children.map((c, index) => {
+        return { ...c, fields: [...c.fields, ...otherFields] };
+      });
       newRows[row_index] = {
         ...row,
         expanded: !rowState,
