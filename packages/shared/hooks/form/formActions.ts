@@ -49,6 +49,7 @@ const validationSchema = yup.object({
     then: yup.string().required('This is a required field'),
     otherwise: yup.string(),
   }),
+  userPoolId: yup.string().required(),
 });
 
 type TVariables = {
@@ -73,6 +74,7 @@ interface IFormValues {
   colorValues: any[];
   subject: string;
   body: string;
+  userPoolId: string;
 }
 
 const defaultFormValues = {
@@ -92,6 +94,7 @@ const defaultFormValues = {
   fields: [{ field: '', formId: null, value: null }],
   subject: '',
   body: '',
+  userPoolId: '',
 };
 
 interface IProps extends IHooksProps {
@@ -136,6 +139,7 @@ export function useFormActions({ onAlert, onSave }: IProps) {
     formik.setFieldValue('subject', payload.subject, false);
     formik.setFieldValue('body', payload.body, false);
     formik.setFieldValue('fields', payload?.fields, false);
+    formik.setFieldValue('userPoolId', payload?.userPoolId, false);
   };
 
   return { formik, setFormValues };
