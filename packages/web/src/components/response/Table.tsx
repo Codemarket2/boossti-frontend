@@ -82,7 +82,7 @@ export const DataTable = ({
         }),
       };
       if (!state) {
-        newRows.splice(row_index + 1, 0, ...children);
+        newRows.splice(row_index + 1, 0, ...newChildren);
       }
       return newRows;
     }
