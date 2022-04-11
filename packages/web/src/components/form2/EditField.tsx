@@ -110,19 +110,6 @@ export default function FormFields({
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={field?.options?.output}
-                    onChange={({ target }) => onOptionChange({ output: target.checked })}
-                    name="output"
-                    color="primary"
-                  />
-                }
-                label="Output"
-              />
-            </InputGroup>
-            <InputGroup>
-              <FormControlLabel
-                control={
-                  <Checkbox
                     checked={field?.options?.unique}
                     onChange={({ target }) => onOptionChange({ unique: target.checked })}
                     name="unique"
