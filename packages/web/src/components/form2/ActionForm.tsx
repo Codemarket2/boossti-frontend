@@ -166,28 +166,45 @@ export default function ActionForm({
       {['createCognitoGroup', 'updateCognitoGroup', 'deleteCognitoGroup']?.includes(
         formik.values.actionType,
       ) && (
-        <div className="d-flex align-items-center">
-          <Typography className="mr-2">Cognito Group Name</Typography>
-          <FormControl fullWidth variant="outlined" size="small">
-            <InputLabel id="groupName">Field</InputLabel>
-            <Select
-              labelId="groupName"
-              id="groupName"
-              name="cognitoGroupName"
-              onChange={formik.handleChange}
-              label="Field"
-            >
-              {fields?.map((field) => {
-                if (field?.label) {
-                  if (field?.label.toUpperCase().includes('ROLE')) {
-                    return <MenuItem value={field._id}>{field.label}</MenuItem>;
+        <>
+          <div className="d-flex align-items-center">
+            <Typography className="mr-2">Cognito Group Name</Typography>
+            <FormControl fullWidth variant="outlined" size="small">
+              <InputLabel id="groupName">Field</InputLabel>
+              <Select
+                labelId="groupName"
+                id="groupName"
+                name="cognitoGroupName"
+                onChange={formik.handleChange}
+                label="Field"
+              >
+                {fields?.map((field) => {
+                  if (field?.label) {
+                    if (field?.label.toUpperCase().includes('ROLE')) {
+                      return <MenuItem value={field._id}>{field.label}</MenuItem>;
+                    }
                   }
-                }
-                return <></>;
-              })}
-            </Select>
-          </FormControl>
-        </div>
+                  return <></>;
+                })}
+              </Select>
+            </FormControl>
+          </div>
+          <InputGroup>
+            <TextField
+              fullWidth
+              label="User Pool Id*"
+              variant="outlined"
+              name="userPoolId"
+              size="small"
+              // type="email"
+              disabled={formik.isSubmitting}
+              value={formik.values.userPoolId}
+              onChange={formik.handleChange}
+              error={formik.touched.userPoolId && Boolean(formik.errors.userPoolId)}
+              helperText={formik.touched.userPoolId && formik.errors.userPoolId}
+            />
+          </InputGroup>
+        </>
       )}
       {['sendEmail', 'generateNewUser']?.includes(formik.values.actionType) && (
         <InputGroup>
