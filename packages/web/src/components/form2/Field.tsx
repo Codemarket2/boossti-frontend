@@ -1,3 +1,4 @@
+import React from 'react';
 import moment from 'moment';
 import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
@@ -22,6 +23,8 @@ import ImagePicker2 from '../common/ImagePicker2';
 import ColorInput from '../customMUI/ColorInput/ColorInput';
 import SelectFormFields from './SelectFormFields';
 import AddressSearch from '../common/AddressSearch';
+
+// import React from 'react';
 
 interface IProps {
   disabled?: boolean;
@@ -52,10 +55,38 @@ export default function Field({
   form,
   formId,
 }: IProps): any {
+
+  const [total,set_total]= React.useState<any>('');
+  const [num1,setNum1]= React.useState<number>(0);
+  const [num2,setNum2]= React.useState<any>('');
   const onChange = (payload) => {
-    onChangeValue({ ...value, ...payload });
+     onChangeValue({ ...value, ...payload });
+    // console.log(payload)
+    const total ={...payload}
+    set_total(total)
+    // calc_total(total)
   };
 
+  const calc_total = (newValues) => {
+    const newe = {...newValues};
+    // const index = newe.map(e => e)
+    // console.log(newe.field)
+    set_total(newe.field)
+   
+   
+}
+ 
+  // onChange({ field: _id, valueNumber: target.value })
+  const values_handler = (payload) => {
+    let value= {...payload};
+    const newValues = {
+        ...value
+    } 
+    setNum2(newValues)
+
+    // Calling the method to sum the value
+    calc_total(newValues) 
+}
   const onChangeCheckbox = ({ target }) => {
     let newValues = [];
     if (value.values) {
@@ -330,6 +361,29 @@ export default function Field({
           {validation.error && (
             <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
           )}
+        </>
+      );
+    }
+    case 'sum': {
+      return (
+        <>
+        <TextField
+          fullWidth
+          placeholder={label}
+          variant="outlined"
+          name="valueNumber"
+          size="small"
+          type="number"
+          disabled={disabled}
+          value={value ? value.valueNumber : ''}
+          // onChange={(target) =>values_handler({ field: _id, valueNumber: target })}
+          onChange={({ target }) => onChange({ field: _id, valueNumber: target.value })}
+          error={validation.error}
+          helperText={validation.errorMessage}
+          
+        />
+
+        {/* <h1>{value.valueNumber + value.valueNumber}</h1> */}
         </>
       );
     }

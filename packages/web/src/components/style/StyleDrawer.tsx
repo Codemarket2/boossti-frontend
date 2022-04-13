@@ -10,6 +10,7 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputGroup from '../common/InputGroup';
 import { defaultStyles } from './defaultStyles';
+import { ImageList } from '@mui/material';
 
 interface IProps {
   onClose: () => void;
@@ -27,6 +28,7 @@ const removePx = (value) => {
   }
   return '';
 };
+const headers = <h1 />
 
 export default function StyleDrawer({
   open,
@@ -36,6 +38,9 @@ export default function StyleDrawer({
   removeStyle,
   handleResetStyle,
 }: IProps) {
+  const Heading = (e) => {
+    onStyleChange({ name: e.target.value });
+}
   return (
     <Drawer
       ModalProps={{ BackdropProps: { invisible: true } }}
@@ -147,6 +152,46 @@ export default function StyleDrawer({
               }
             }}
             value={styles.backgroundColor}
+          />
+        </InputGroup>
+        <InputGroup>
+          <FormControl size="small" variant="outlined" fullWidth>
+            <InputLabel id="demo-simple-select-outlined-label">heading</InputLabel>
+            
+            <Select
+              labelId="demo-simple-select-outlined-label"
+              id="demo-simple-select-outlined"
+              value={styles.headers}
+              onChange={(e) => {  
+                onStyleChange({headers: e.target.value} );
+               
+              }}
+              label="heading"
+            >
+              <MenuItem value="headers"><h1>h1</h1></MenuItem>
+              <MenuItem value="h2"><h2>h2</h2></MenuItem>
+              <MenuItem value="h3"><h3>h3</h3></MenuItem>
+              <MenuItem value="h4"><h4>h4</h4></MenuItem>
+              <MenuItem value="h5"><h5>h5</h5></MenuItem>
+              <MenuItem value="h6"><h6>h6</h6></MenuItem>
+            </Select>
+          </FormControl>
+        </InputGroup>
+         <InputGroup>
+          <TextField
+            size="small"
+            type="text"
+            label="Image"
+            variant="outlined"
+            fullWidth
+            onChange={(e) => {
+              if (parseInt(e.target.value) > 0) {
+                onStyleChange({ backgroundImage: `url(${e.target.value})` });
+              } else {
+                removeStyle('backgroundImage');
+              }
+            }}
+            value={styles.backgroundImage}
           />
         </InputGroup>
       </div>

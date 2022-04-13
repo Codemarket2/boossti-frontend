@@ -15,6 +15,7 @@ export const sectionFieldTypes: FieldType[] = [{ label: 'Form', value: 'form' }]
 export const fieldTypes: FieldType[] = [
   { label: 'Text', value: 'text' },
   { label: 'Number', value: 'number' },
+  { label: 'Sum', value: 'sum' },
   { label: 'Password', value: 'password' },
   { label: 'Textarea', value: 'textarea' },
   { label: 'Rich Textarea', value: 'richTextarea' },

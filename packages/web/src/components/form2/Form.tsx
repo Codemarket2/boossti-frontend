@@ -112,7 +112,7 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
               {options.snackBar}
             </Alert>
           </Snackbar>
-          {drawerMode ? (
+          {drawerMode ? ( 
             <Typography variant="h5" className="py-2">
               <InlineInput
                 placeholder="Form Name"
