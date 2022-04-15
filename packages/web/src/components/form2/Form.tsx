@@ -34,6 +34,7 @@ import ResponseLayout from '../response/ResponseLayout';
 import BulkUploadAction from './BulkUploadAction';
 import NotFound from '../common/NotFound';
 import UnAuthorised from '../common/UnAuthorised';
+import Permissions from './Permissions';
 
 interface IProps {
   _id: string;
@@ -185,6 +186,7 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
                   <Tab label="Actions" value="actions" />
                   <Tab label="Workflows" value="workflows" />
                   <Tab label="Responses" value="responses" />
+                  <Tab label="Permissions" value="permissions" />
                 </Tabs>
               </Paper>
               {options.currentTab === 'preview' && (
@@ -225,6 +227,7 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
                   </Paper>
                 </>
               )}
+              {options.currentTab === 'permissions' && <Permissions />}
             </Grid>
           </Grid>
         </div>
