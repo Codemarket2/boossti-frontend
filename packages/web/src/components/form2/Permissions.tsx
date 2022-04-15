@@ -27,6 +27,8 @@ function createData(
   return { name, create, view, update, remove };
 }
 
+// This data will remove after getting data from backend
+// this data is taken for testing Permission table working
 const sampleData = [
   {
     name: 'superadmin',
@@ -65,13 +67,6 @@ const sampleData = [
   },
 ];
 
-const rows = [
-  createData('superadmin', true, true, true, true),
-  createData('admin', true, true, false, false),
-  createData('manager', true, false, true, false),
-  createData('developer', false, true, false, false),
-  createData('user', false, true, false, false),
-];
 export default function Permissions() {
   const [permissions, setPermissions] = useState<IPermission[]>([]);
 
