@@ -5,7 +5,6 @@ import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import { Grid } from '@mui/material';
 import { useCreateVirtualForm } from '@frontend/shared/hooks/form';
-import { generateObjectId } from '@frontend/shared/utils/objectId';
 import { onAlert } from '../../utils/alert';
 import InputGroup from '../common/InputGroup';
 import SelectFormFields from './SelectFormFields';
@@ -212,6 +211,7 @@ export default function FormSetting({
             >
               <MenuItem value="button">Button</MenuItem>
               <MenuItem value="table">Table</MenuItem>
+              <MenuItem value="table2">Table 2</MenuItem>
               <MenuItem value="vertical">Vertical</MenuItem>
             </TextField>
           </InputGroup>
