@@ -6,8 +6,19 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { useState } from 'react';
-import { Checkbox, FormControlLabel, Switch } from '@mui/material';
+import { useEffect, useState } from 'react';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Checkbox,
+  FormControlLabel,
+  Switch,
+  Typography,
+} from '@mui/material';
+import { useGetResponses } from '@frontend/shared/hooks/response';
+import ErrorLoading from '../common/ErrorLoading';
 
 interface IPermission {
   name: string;
@@ -15,6 +26,14 @@ interface IPermission {
   view: boolean;
   update: boolean;
   remove: boolean;
+  createAll: boolean;
+  viewAll: boolean;
+  updateAll: boolean;
+  removeAll: boolean;
+}
+interface IPermissionProps {
+  formId: string;
+  form: any;
 }
 
 function createData(
@@ -27,55 +46,32 @@ function createData(
   return { name, create, view, update, remove };
 }
 
-// This data will remove after getting data from backend
-// this data is taken for testing Permission table working
-const sampleData = [
-  {
-    name: 'superadmin',
-    create: true,
-    view: true,
-    update: true,
-    remove: true,
-  },
-  {
-    name: 'admin',
-    create: true,
-    view: true,
-    update: true,
-    remove: false,
-  },
-  {
-    name: 'manager',
-    create: true,
-    view: true,
-    update: false,
-    remove: false,
-  },
-  {
-    name: 'developer',
-    create: true,
-    view: true,
-    update: true,
-    remove: false,
-  },
-  {
-    name: 'user',
-    create: false,
-    view: true,
-    update: false,
-    remove: false,
-  },
-];
-
-export default function Permissions() {
+export default function Permissions(props: IPermissionProps) {
+  const { form, formId } = props;
   const [permissions, setPermissions] = useState<IPermission[]>([]);
+  const { data, error, loading, state, setState, refetch } = useGetResponses(formId);
 
-  // if (error || !section) {
-  //   return <ErrorLoading error={error} />;
-  // }
-  React.useEffect(() => {
-    setPermissions(sampleData);
-  }, [sampleData]);
+  if (error) return <ErrorLoading error={error} />;
+
+  useEffect(() => {
+    const responses = data?.getResponses?.data;
+    const fieldId = form?.settings?.actions[0]?.cognitoGroupName;
+    const tempPermissions: IPermission[] = responses?.map((response) => {
+      const n = response?.values?.filter((e) => e.field === fieldId)[0]?.value;
+      return {
+        name: n,
+        create: true,
+        view: true,
+        update: true,
+        remove: true,
+        createAll: true,
+        viewAll: true,
+        updateAll: true,
+        removeAll: true,
+      };
+    });
+    setPermissions(tempPermissions);
+  }, [data]);
 
   const handleChecked = (e) => {
     const { id } = e.target;
@@ -92,11 +88,11 @@ export default function Permissions() {
           <Table sx={{ minWidth: 650 }} aria-label="permission table">
             <TableHead>
               <TableRow hover>
-                <TableCell>Users Group</TableCell>
-                <TableCell align="left">Create</TableCell>
-                <TableCell align="left">View</TableCell>
-                <TableCell align="left">Update</TableCell>
-                <TableCell align="left">Delete</TableCell>
+                <TableCell align="left">Users Group</TableCell>
+                <TableCell align="center">Create</TableCell>
+                <TableCell align="center">View</TableCell>
+                <TableCell align="center">Update</TableCell>
+                <TableCell align="center">Delete</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -105,37 +101,129 @@ export default function Permissions() {
                   <TableCell component="th" scope="row">
                     {row.name}
                   </TableCell>
-                  <TableCell align="left">
-                    <Checkbox
-                      id={`create-${i}`}
-                      onChange={handleChecked}
-                      checked={row.create}
-                      sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
-                    />
+                  <TableCell padding="checkbox" align="center">
+                    <Accordion
+                      sx={{
+                        minWidth: 200,
+                        margin: 'auto',
+                      }}
+                    >
+                      <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                      >
+                        <Checkbox
+                          id={`create-${i}`}
+                          onChange={handleChecked}
+                          checked={row.create}
+                          sx={{ '& .MuiSvgIcon-root': { fontSize: 20 } }}
+                        />
+                        <Typography align="center">Current</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Checkbox
+                          id={`createAll-${i}`}
+                          onChange={handleChecked}
+                          checked={row.createAll}
+                          sx={{ '& .MuiSvgIcon-root': { fontSize: 20 } }}
+                        />
+                        <Typography align="center">All</Typography>
+                      </AccordionDetails>
+                    </Accordion>
                   </TableCell>
-                  <TableCell align="left">
-                    <Checkbox
-                      id={`view-${i}`}
-                      onChange={handleChecked}
-                      checked={row.view}
-                      sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
-                    />
+                  <TableCell padding="checkbox" align="center">
+                    <Accordion
+                      sx={{
+                        minWidth: 200,
+                        margin: 'auto',
+                      }}
+                    >
+                      <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                      >
+                        <Checkbox
+                          id={`view-${i}`}
+                          onChange={handleChecked}
+                          checked={row.view}
+                          sx={{ '& .MuiSvgIcon-root': { fontSize: 20 } }}
+                        />
+                        <Typography align="center">Current</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Checkbox
+                          id={`viewAll-${i}`}
+                          onChange={handleChecked}
+                          checked={row.viewAll}
+                          sx={{ '& .MuiSvgIcon-root': { fontSize: 20 } }}
+                        />
+                        <Typography align="center">All</Typography>
+                      </AccordionDetails>
+                    </Accordion>
                   </TableCell>
-                  <TableCell align="left">
-                    <Checkbox
-                      id={`update-${i}`}
-                      onChange={handleChecked}
-                      checked={row.update}
-                      sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
-                    />
+                  <TableCell padding="checkbox" align="center">
+                    <Accordion
+                      sx={{
+                        minWidth: 200,
+                        margin: 'auto',
+                      }}
+                    >
+                      <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                      >
+                        <Checkbox
+                          id={`update-${i}`}
+                          onChange={handleChecked}
+                          checked={row.update}
+                          sx={{ '& .MuiSvgIcon-root': { fontSize: 20 } }}
+                        />
+                        <Typography align="center">Current</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Checkbox
+                          id={`updateAll-${i}`}
+                          onChange={handleChecked}
+                          checked={row.updateAll}
+                          sx={{ '& .MuiSvgIcon-root': { fontSize: 20 } }}
+                        />
+                        <Typography align="center">All</Typography>
+                      </AccordionDetails>
+                    </Accordion>
                   </TableCell>
-                  <TableCell align="left">
-                    <Checkbox
-                      id={`remove-${i}`}
-                      onChange={handleChecked}
-                      checked={row.remove}
-                      sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
-                    />
+                  <TableCell padding="checkbox" align="center">
+                    <Accordion
+                      sx={{
+                        minWidth: 200,
+                        margin: 'auto',
+                      }}
+                    >
+                      <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                      >
+                        <Checkbox
+                          id={`remove-${i}`}
+                          onChange={handleChecked}
+                          checked={row.remove}
+                          sx={{ '& .MuiSvgIcon-root': { fontSize: 20 } }}
+                        />
+                        <Typography align="center">Current</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Checkbox
+                          id={`removeAll-${i}`}
+                          onChange={handleChecked}
+                          checked={row.removeAll}
+                          sx={{ '& .MuiSvgIcon-root': { fontSize: 20 } }}
+                        />
+                        <Typography align="center">All</Typography>
+                      </AccordionDetails>
+                    </Accordion>
                   </TableCell>
                 </TableRow>
               ))}

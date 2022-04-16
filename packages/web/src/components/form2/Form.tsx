@@ -227,7 +227,7 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
                   </Paper>
                 </>
               )}
-              {options.currentTab === 'permissions' && <Permissions />}
+              {options.currentTab === 'permissions' && <Permissions formId={_id} form={state} />}
             </Grid>
           </Grid>
         </div>
