@@ -90,23 +90,42 @@ export default function ResponseList({
   return (
     <>
       <Backdrop open={deleteLoading} />
-      {form?.settings?.responsesView != 'vertical' &&
-        form?.settings?.responsesView !== 'button' && (
-          <DataTable
-            data={data}
-            form={form}
-            refetch={refetch}
-            rowHeight={40}
-            rowKeyGetter={rowKeyGetter}
-            selectedRows={selectedRows}
-            onSelectedRowsChange={setSelectedRows}
-            onFill={handleFill}
-            onCopy={handleCopy}
-            onPaste={handlePaste}
-            direction={direction}
+      {form?.settings?.responsesView === 'table2' ? (
+        <DataTable
+          data={data}
+          form={form}
+          refetch={refetch}
+          rowHeight={40}
+          rowKeyGetter={rowKeyGetter}
+          selectedRows={selectedRows}
+          onSelectedRowsChange={setSelectedRows}
+          onFill={handleFill}
+          onCopy={handleCopy}
+          onPaste={handlePaste}
+          direction={direction}
+        />
+      ) : form?.settings?.responsesView === 'vertical' ? (
+        <>
+          {data?.getResponses?.data?.map((response) => (
+            <ResponseChild3
+              key={response?._id}
+              hideBreadcrumbs
+              form={form}
+              response={response}
+              deleteCallBack={() => refetch()}
+            />
+          ))}
+          <TablePagination
+            component="div"
+            rowsPerPageOptions={[10, 25, 50]}
+            count={data?.getResponses?.count || 0}
+            rowsPerPage={state.limit}
+            page={state.page - 1}
+            onPageChange={(e, newPage) => setState({ ...state, page: newPage + 1 })}
+            onRowsPerPageChange={(e) => setState({ ...state, limit: parseInt(e.target.value) })}
           />
-        )}
-      {form?.settings?.responsesView === 'butcton' && (
+        </>
+      ) : (
         <TableContainer component={Paper} variant="outlined">
           <TablePagination
             component="div"
@@ -204,19 +223,6 @@ export default function ResponseList({
             </Table>
           )}
         </TableContainer>
-      )}
-      {form?.settings?.responsesView === 'vertical' && (
-        <>
-          {data?.getResponses?.data?.map((response) => (
-            <ResponseChild3
-              key={response?._id}
-              hideBreadcrumbs
-              form={form}
-              response={response}
-              deleteCallBack={() => refetch()}
-            />
-          ))}
-        </>
       )}
     </>
   );
