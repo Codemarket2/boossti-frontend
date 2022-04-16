@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import moment from 'moment';
 import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
@@ -9,6 +10,7 @@ import DatePicker from '@mui/lab/DatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import PhoneInput from 'react-phone-input-2';
 import { validateValue } from '@frontend/shared/utils/validate';
+import { checkUnique } from '@frontend/shared/hooks/form/checkUnique';
 import RichTextarea from '../common/RichTextarea2';
 import DisplayRichText from '../common/DisplayRichText';
 import SelectPage from '../template/SelectPage';
@@ -38,6 +40,8 @@ interface IProps {
   setMediaState: any;
   form: any;
   formId?: any;
+  unique: boolean;
+  setUnique: any;
 }
 
 export default function Field({
@@ -52,9 +56,25 @@ export default function Field({
   onChangeValue,
   form,
   formId,
+  setUnique,
 }: IProps): any {
   const onChange = (payload) => {
     onChangeValue({ ...value, ...payload });
+    setUnique(false);
+  };
+
+  useEffect(() => {
+    if (options?.unique && value?.value?.length > 0) {
+      setTimeout(() => handleCheckUnique(), 1500);
+    }
+  }, [value]);
+
+  const handleCheckUnique = async () => {
+    await checkUnique(value.value, value?.field, formId).then((res) => {
+      if (res.data.getCheckUnique.res) {
+        setUnique(true);
+      }
+    });
   };
 
   const onChangeCheckbox = ({ target }) => {
