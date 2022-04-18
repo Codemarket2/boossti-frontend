@@ -548,13 +548,13 @@ export function FormView({
             <div style={field?.options?.style || {}}>
               <InputGroup key={field._id}>
                 <Typography>
-                  {field?.options?.required ? (
+                  {unique && field?.options?.unique && field?.options?.required ? (
+                    <span className="text-danger">
+                      {`${field?.label}*`} This field must be unique*
+                    </span>
+                  ) : field?.options?.required ||
+                    (field?.options?.unique && field?.options?.required) ? (
                     <span className="text-danger">{`${field?.label}*`}</span>
-                  ) : field?.options?.unique && unique ? (
-                    <>
-                      {field?.label}
-                      <span className="text-danger"> This field must be unique*</span>
-                    </>
                   ) : (
                     field?.label
                   )}
