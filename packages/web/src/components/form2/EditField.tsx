@@ -1,5 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/jsx-props-no-spreading */
+import { useEffect, useState } from 'react';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
@@ -24,6 +25,7 @@ import InlineInput from '../common/InlineInput';
 import SelectForm from './SelectForm';
 import SelectFormFields from './SelectFormFields';
 import RichTextarea from '../common/RichTextarea2';
+// import ActionForm from './ActionForm';
 
 type TProps = {
   field: any;
@@ -31,6 +33,8 @@ type TProps = {
   onClose: () => void;
   isSection?: boolean;
 };
+
+const initialState = { showForm: false };
 
 export default function FormFields({
   onFieldChange,
@@ -41,6 +45,11 @@ export default function FormFields({
   const onOptionChange = (updatedOption) => {
     onFieldChange({ ...field, options: { ...field.options, ...updatedOption } });
   };
+
+  const [state, setState] = useState(initialState);
+  useEffect(() => {
+    setState(initialState);
+  }, [field.fieldType]);
 
   return (
     <>
@@ -300,6 +309,46 @@ export default function FormFields({
             </InputGroup>
           </>
         )}
+
+        <Typography variant="h6" className="d-flex align-items-center">
+          Rules
+          {!(state.showForm && field.fieldType === 'number') && (
+            <Tooltip title="Add New Action">
+              <IconButton
+                color="primary"
+                onClick={() => {
+                  if (field.fieldType === 'number') setState({ ...state, showForm: true });
+                }}
+                size="large"
+              >
+                <AddCircleIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+        </Typography>
+
+        {state.showForm && field.fieldType === 'number' && (
+          // <ActionForm
+          //   emailFields={fields?.filter(
+          //     (field) => field.fieldType === 'email' && field.options.required,
+          //   )}
+          //   nameFields={fields?.filter(
+          //     (field) => field.fieldType === 'text' && field.options.required,
+          //   )}
+          //   fields={fields}
+          //   onCancel={() => setState(initialState)}
+          //   onSave={onSave}
+          //   action={state.selectedItem}
+          // />
+
+          <InputGroup>
+            <SelectOptionType
+              usedFor="rules"
+              value={field?.options?.optionsTemplate}
+              onChange={(optionsTemplate) => onOptionChange({ optionsTemplate })}
+            />
+          </InputGroup>
+        )}
       </div>
     </>
   );
@@ -311,12 +360,16 @@ const optionsTemplates = [
   ...fieldTypes,
 ];
 
+const ruleOptionsTemplates = [{ label: 'is Equal to', value: 'isEqualTo' }];
+
 export const SelectOptionType = ({
+  usedFor,
   value,
   onChange,
   error,
   helperText,
 }: {
+  usedFor?: string;
   value: string;
   onChange: (newValue: any) => void;
   error?: boolean;
@@ -324,19 +377,21 @@ export const SelectOptionType = ({
 }) => {
   return (
     <FormControl variant="outlined" fullWidth size="small" error={error}>
-      <InputLabel id="fieldType-simple-select-outlined-label">Options list type</InputLabel>
+      <InputLabel id="fieldType-simple-select-outlined-label">
+        {usedFor === 'rules' ? 'Condition' : 'Options list type'}
+      </InputLabel>
       <Select
         labelId="fieldType-simple-select-outlined-label"
         id="fieldType-simple-select-outlined"
         name="fieldType"
         value={value}
         onChange={({ target }) => onChange(target.value)}
-        label="Options list type"
+        label={` ${usedFor === 'rules' ? 'Condition' : 'Options list type'} `}
       >
         <MenuItem value="">
           <em>None</em>
         </MenuItem>
-        {optionsTemplates?.map((option, index) => (
+        {(usedFor === 'rules' ? ruleOptionsTemplates : optionsTemplates)?.map((option, index) => (
           <MenuItem key={index} value={option?.value}>
             {option?.label}
           </MenuItem>
