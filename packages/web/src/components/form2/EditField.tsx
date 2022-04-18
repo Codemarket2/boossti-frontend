@@ -25,13 +25,14 @@ import InlineInput from '../common/InlineInput';
 import SelectForm from './SelectForm';
 import SelectFormFields from './SelectFormFields';
 import RichTextarea from '../common/RichTextarea2';
-// import ActionForm from './ActionForm';
+import RulesForm from './RulesForm';
 
 type TProps = {
   field: any;
   onFieldChange: (newValue: any) => void;
   onClose: () => void;
   isSection?: boolean;
+  fields: any[];
 };
 
 const initialState = { showForm: false };
@@ -41,6 +42,7 @@ export default function FormFields({
   field,
   onClose,
   isSection = false,
+  fields,
 }: TProps): any {
   const onOptionChange = (updatedOption) => {
     onFieldChange({ ...field, options: { ...field.options, ...updatedOption } });
@@ -313,7 +315,7 @@ export default function FormFields({
         <Typography variant="h6" className="d-flex align-items-center">
           Rules
           {!(state.showForm && field.fieldType === 'number') && (
-            <Tooltip title="Add New Action">
+            <Tooltip title="Add New Rule">
               <IconButton
                 color="primary"
                 onClick={() => {
@@ -328,26 +330,7 @@ export default function FormFields({
         </Typography>
 
         {state.showForm && field.fieldType === 'number' && (
-          // <ActionForm
-          //   emailFields={fields?.filter(
-          //     (field) => field.fieldType === 'email' && field.options.required,
-          //   )}
-          //   nameFields={fields?.filter(
-          //     (field) => field.fieldType === 'text' && field.options.required,
-          //   )}
-          //   fields={fields}
-          //   onCancel={() => setState(initialState)}
-          //   onSave={onSave}
-          //   action={state.selectedItem}
-          // />
-
-          <InputGroup>
-            <SelectOptionType
-              usedFor="rules"
-              value={field?.options?.optionsTemplate}
-              onChange={(optionsTemplate) => onOptionChange({ optionsTemplate })}
-            />
-          </InputGroup>
+          <RulesForm onCancel={() => setState(initialState)} fields={fields} />
         )}
       </div>
     </>
@@ -360,16 +343,12 @@ const optionsTemplates = [
   ...fieldTypes,
 ];
 
-const ruleOptionsTemplates = [{ label: 'is Equal to', value: 'isEqualTo' }];
-
 export const SelectOptionType = ({
-  usedFor,
   value,
   onChange,
   error,
   helperText,
 }: {
-  usedFor?: string;
   value: string;
   onChange: (newValue: any) => void;
   error?: boolean;
@@ -377,21 +356,19 @@ export const SelectOptionType = ({
 }) => {
   return (
     <FormControl variant="outlined" fullWidth size="small" error={error}>
-      <InputLabel id="fieldType-simple-select-outlined-label">
-        {usedFor === 'rules' ? 'Condition' : 'Options list type'}
-      </InputLabel>
+      <InputLabel id="fieldType-simple-select-outlined-label">Options list type</InputLabel>
       <Select
         labelId="fieldType-simple-select-outlined-label"
         id="fieldType-simple-select-outlined"
         name="fieldType"
         value={value}
         onChange={({ target }) => onChange(target.value)}
-        label={` ${usedFor === 'rules' ? 'Condition' : 'Options list type'} `}
+        label="Options list type"
       >
         <MenuItem value="">
           <em>None</em>
         </MenuItem>
-        {(usedFor === 'rules' ? ruleOptionsTemplates : optionsTemplates)?.map((option, index) => (
+        {optionsTemplates?.map((option, index) => (
           <MenuItem key={index} value={option?.value}>
             {option?.label}
           </MenuItem>

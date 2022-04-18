@@ -191,6 +191,7 @@ export default function FormFields({
           }}
           onClose={() => setValues(initialValues)}
           isSection={isSection}
+          fields={fields}
         />
       ) : (
         <>
