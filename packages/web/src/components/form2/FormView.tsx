@@ -429,6 +429,7 @@ export function FormView({
 
   const [page, setPage] = useState(0);
   const [hideField, setHideField] = useState(false);
+  const [unique, setUnique] = useState(false);
 
   useEffect(() => {
     if (hideField) {
@@ -547,7 +548,12 @@ export function FormView({
             <div style={field?.options?.style || {}}>
               <InputGroup key={field._id}>
                 <Typography>
-                  {field?.options?.required ? (
+                  {unique && field?.options?.unique && field?.options?.required ? (
+                    <span className="text-danger">
+                      {`${field?.label}*`} This field must be unique*
+                    </span>
+                  ) : field?.options?.required ||
+                    (field?.options?.unique && field?.options?.required) ? (
                     <span className="text-danger">{`${field?.label}*`}</span>
                   ) : (
                     field?.label
@@ -569,6 +575,8 @@ export function FormView({
                             filterValues(values, field)?.length - 1,
                           )
                         }
+                        unique={unique}
+                        setUnique={setUnique}
                         value={filterValues(values, field)[filterValues(values, field)?.length - 1]}
                         formId={formId}
                       />
@@ -612,6 +620,8 @@ export function FormView({
                                   onChangeValue={(changedValue) =>
                                     onChange({ ...changedValue, field: field._id }, valueIndex)
                                   }
+                                  unique={unique}
+                                  setUnique={setUnique}
                                   value={value}
                                   formId={formId}
                                 />
@@ -712,7 +722,7 @@ export function FormView({
           <Grid item xs={12}>
             <InputGroup style={{ display: 'flex' }}>
               <LoadingButton
-                disabled={validateForm(fields, values)}
+                disabled={validateForm(fields, values) || unique}
                 loading={submitState.loading || loading}
                 onClick={onSubmit}
                 variant="contained"

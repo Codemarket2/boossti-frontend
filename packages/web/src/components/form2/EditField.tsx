@@ -111,7 +111,10 @@ export default function FormFields({
                 control={
                   <Checkbox
                     checked={field?.options?.unique}
-                    onChange={({ target }) => onOptionChange({ unique: target.checked })}
+                    onChange={({ target }) => {
+                      onOptionChange({ unique: target.checked });
+                      onOptionChange({ required: target.checked });
+                    }}
                     name="unique"
                     color="primary"
                   />
