@@ -32,6 +32,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import { onAlert } from '../../utils/alert';
 import InlineForm from './InlineForm';
+import GridTable from '../form2/GridTable';
 import Breadcrumbs from '../common/Breadcrumbs';
 import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
@@ -333,14 +334,15 @@ export default function ItemScreen({
             )}
           </>
           {templateData?.getTemplateBySlug?.fields && (
-            <FormFieldsValue
-              authorized={authorized}
-              fields={templateData?.getTemplateBySlug?.fields}
-              values={data?.getPageBySlug?.values}
-              handleValueChange={handleUpdate}
-              pageId={data?.getPageBySlug?._id}
-              layouts={templateData?.getTemplateBySlug?.options?.layouts || {}}
-            />
+            // <FormFieldsValue
+            //   authorized={authorized}
+            //   fields={templateData?.getTemplateBySlug?.fields}
+            //   values={data?.getPageBySlug?.values}
+            //   handleValueChange={handleUpdate}
+            //   pageId={data?.getPageBySlug?._id}
+            //   layouts={templateData?.getTemplateBySlug?.options?.layouts || {}}
+            // />
+            <GridTable />
           )}
           <FormFieldsValue
             authorized={authorized}
