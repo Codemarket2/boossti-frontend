@@ -168,23 +168,25 @@ export default function ActionForm({
       ) && (
         <>
           <div className="d-flex align-items-center">
-            <Typography className="mr-2">Cognito Group Name</Typography>
-            <FormControl fullWidth variant="outlined" size="small">
-              <InputLabel id="groupName">Field</InputLabel>
+            <FormControl
+              fullWidth
+              variant="outlined"
+              size="small"
+              error={Boolean(formik.touched.cognitoGroupName && formik.errors.cognitoGroupName)}
+            >
+              <InputLabel id="groupName">Cognito Group Name</InputLabel>
               <Select
                 labelId="groupName"
                 id="groupName"
                 name="cognitoGroupName"
                 onChange={formik.handleChange}
-                label="Field"
+                label="Cognito Group Name"
               >
                 {fields?.map((field) => {
                   if (field?.label) {
-                    if (field?.label.toUpperCase().includes('ROLE')) {
-                      return <MenuItem value={field._id}>{field.label}</MenuItem>;
-                    }
+                    return <MenuItem value={field._id}>{field.label}</MenuItem>;
                   }
-                  return <></>;
+                  return null;
                 })}
               </Select>
             </FormControl>
