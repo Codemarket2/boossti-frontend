@@ -45,11 +45,23 @@ const validationSchema = yup.object({
     otherwise: yup.string(),
   }),
   body: yup.string().when('actionType', {
-    is: (value) => value !== 'updateFieldValue',
+    is: (value) =>
+      ![
+        'onPaletteChange',
+        'updateFieldValue',
+        'createCognitoGroup',
+        'updateCognitoGroup',
+        'deleteCognitoGroup',
+      ].includes(value),
     then: yup.string().required('This is a required field'),
     otherwise: yup.string(),
   }),
-  userPoolId: yup.string().required(),
+  userPoolId: yup.string().when('actionType', {
+    is: (value) =>
+      ['createCognitoGroup', 'updateCognitoGroup', 'deleteCognitoGroup'].includes(value),
+    then: yup.string().required('Userpoll Id is required for this action'),
+    otherwise: yup.string(),
+  }),
 });
 
 type TVariables = {
