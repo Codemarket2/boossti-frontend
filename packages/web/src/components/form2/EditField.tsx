@@ -25,7 +25,7 @@ import InlineInput from '../common/InlineInput';
 import SelectForm from './SelectForm';
 import SelectFormFields from './SelectFormFields';
 import RichTextarea from '../common/RichTextarea2';
-import RulesForm from './RulesForm';
+import FormFieldRules from './Rules/FormFieldRules';
 
 type TProps = {
   field: any;
@@ -330,7 +330,7 @@ export default function FormFields({
         </Typography>
 
         {state.showForm && field.fieldType === 'number' && (
-          <RulesForm onCancel={() => setState(initialState)} fields={fields} />
+          <FormFieldRules onCancel={() => setState(initialState)} fields={fields} />
         )}
       </div>
     </>
