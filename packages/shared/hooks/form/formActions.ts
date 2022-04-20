@@ -62,6 +62,18 @@ const validationSchema = yup.object({
     then: yup.string().required('Userpoll Id is required for this action'),
     otherwise: yup.string(),
   }),
+  cognitoGroupName: yup.string().when('actionType', {
+    is: (value) =>
+      ['createCognitoGroup', 'updateCognitoGroup', 'deleteCognitoGroup'].includes(value),
+    then: yup.string().required('Cognito Group Name is required for this action'),
+    otherwise: yup.string(),
+  }),
+  cognitoGroupDesc: yup.string().when('actionType', {
+    is: (value) =>
+      ['createCognitoGroup', 'updateCognitoGroup', 'deleteCognitoGroup'].includes(value),
+    then: yup.string().required('Cognito Group Description is required for this action'),
+    otherwise: yup.string(),
+  }),
 });
 
 type TVariables = {
@@ -76,6 +88,7 @@ interface IFormValues {
   actionType: string;
   name: string;
   cognitoGroupName: string;
+  cognitoGroupDesc: string;
   phoneFieldId: string;
   senderEmail: string;
   receiverType: string;
@@ -95,6 +108,7 @@ const defaultFormValues = {
   actionType: 'updateFieldValue', // 'sendEmail',
   name: '',
   cognitoGroupName: '',
+  cognitoGroupDesc: '',
   phoneFieldId: '',
   senderEmail: '',
   receiverType: 'formOwner',
@@ -139,6 +153,7 @@ export function useFormActions({ onAlert, onSave }: IProps) {
     formik.setFieldValue('actionType', payload.actionType, false);
     formik.setFieldValue('active', payload.active, false);
     formik.setFieldValue('cognitoGroupName', payload.cognitoGroupName, false);
+    formik.setFieldValue('cognitoGroupDesc', payload.cognitoGroupDesc, false);
     formik.setFieldValue('name', payload.name, false);
     formik.setFieldValue('senderEmail', payload.senderEmail, false);
     formik.setFieldValue('receiverType', payload?.receiverType, false);

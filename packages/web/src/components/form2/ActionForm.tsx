@@ -179,12 +179,42 @@ export default function ActionForm({
                 labelId="groupName"
                 id="groupName"
                 name="cognitoGroupName"
+                value={formik.values.cognitoGroupName}
                 onChange={formik.handleChange}
                 label="Cognito Group Name"
               >
                 {fields?.map((field) => {
                   if (field?.label) {
-                    return <MenuItem value={field._id}>{field.label}</MenuItem>;
+                    if (field?.label.toUpperCase().includes('NAME')) {
+                      return <MenuItem value={field._id}>{field.label}</MenuItem>;
+                    }
+                  }
+                  return null;
+                })}
+              </Select>
+            </FormControl>
+          </div>
+          <div className="d-flex align-items-center mt-3">
+            <FormControl
+              fullWidth
+              variant="outlined"
+              size="small"
+              error={Boolean(formik.touched.cognitoGroupDesc && formik.errors.cognitoGroupDesc)}
+            >
+              <InputLabel id="groupDesc">Cognito Group Description</InputLabel>
+              <Select
+                labelId="groupDesc"
+                id="groupDesc"
+                name="cognitoGroupDesc"
+                value={formik.values.cognitoGroupDesc}
+                onChange={formik.handleChange}
+                label="Cognito Group Description"
+              >
+                {fields?.map((field) => {
+                  if (field?.label) {
+                    if (field?.label.toUpperCase().includes('DESCRIPTION')) {
+                      return <MenuItem value={field._id}>{field.label}</MenuItem>;
+                    }
                   }
                   return null;
                 })}
