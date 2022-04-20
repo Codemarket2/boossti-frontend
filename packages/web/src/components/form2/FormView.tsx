@@ -382,6 +382,7 @@ interface IProps2 {
   authRequired?: boolean;
   fieldWiseView?: boolean;
   formId?: any;
+  edit?: boolean;
 }
 
 const initialSubmitState = {
@@ -420,6 +421,7 @@ export function FormView({
   authRequired = false,
   fieldWiseView = false,
   formId,
+  edit,
 }: IProps2): any {
   const [values, setValues] = useState(initialValues);
   const [editValue, setEditValue] = useState({ fieldId: null, index: null });
@@ -566,7 +568,11 @@ export function FormView({
                     ) : (
                       <Field
                         {...field}
-                        disabled={submitState.loading}
+                        disabled={
+                          edit && field.options.notEditable
+                            ? submitState.loading || field.options.notEditable
+                            : submitState.loading
+                        }
                         validate={submitState.validate}
                         label={field?.options?.required ? `${field?.label}*` : field?.label}
                         onChangeValue={(changedValue) =>
