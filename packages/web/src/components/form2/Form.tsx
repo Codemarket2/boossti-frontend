@@ -186,7 +186,9 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
                   <Tab label="Actions" value="actions" />
                   <Tab label="Workflows" value="workflows" />
                   <Tab label="Responses" value="responses" />
-                  <Tab label="Permissions" value="permissions" />
+                  {state?.name?.toUpperCase().includes('ROLE') && (
+                    <Tab label="Permissions" value="permissions" />
+                  )}
                 </Tabs>
               </Paper>
               {options.currentTab === 'preview' && (

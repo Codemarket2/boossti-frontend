@@ -172,6 +172,19 @@ export default function FormFields({
             label="Show Star Ratings"
           />
         </InputGroup>
+        <InputGroup>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={field?.options?.notEditable}
+                onChange={({ target }) => onOptionChange({ notEditable: target.checked })}
+                name="notEditable"
+                color="primary"
+              />
+            }
+            label="Response Not Editable"
+          />
+        </InputGroup>
         {field.fieldType === 'select' && (
           <>
             <InputGroup>
