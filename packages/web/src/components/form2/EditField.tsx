@@ -53,6 +53,10 @@ export default function FormFields({
     setState(initialState);
   }, [field.fieldType]);
 
+  useEffect(() => {
+    if (field?.options?.rules) setState({ showForm: true });
+  }, [field]);
+
   return (
     <>
       <Typography variant="h5" className="d-flex align-items-center">
@@ -333,7 +337,12 @@ export default function FormFields({
         </Typography>
 
         {state.showForm && field.fieldType === 'number' && (
-          <FormFieldRules onCancel={() => setState(initialState)} fields={fields} />
+          <FormFieldRules
+            onCancel={() => setState(initialState)}
+            onOptionChange={onOptionChange}
+            fields={fields}
+            data={field?.options?.rules || 'no data'}
+          />
         )}
       </div>
     </>

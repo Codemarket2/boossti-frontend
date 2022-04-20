@@ -12,15 +12,16 @@ import LoadingButton from '../../common/LoadingButton';
 
 interface IProps {
   onCancel?: () => void;
-  // onSave?: (payload: any, operation: string) => void;
+  onOptionChange: (newValue: any) => void;
   fields: any[];
+  data: any;
 }
 
 const ruleListInitialState = [
-  { id: 1, operation: '', field: '', customValue: '', addMore: false, next: false },
+  { operation: '', field: '', customValue: '', addMore: false, next: false },
 ];
 
-const FormFieldRules = ({ onCancel, fields }: IProps) => {
+const FormFieldRules = ({ onCancel, onOptionChange, fields, data }: IProps) => {
   const ruleConditionOptions = [{ label: 'is Equal to', value: 'isEqualTo' }];
 
   const ruleOperationOptions = [
@@ -29,24 +30,24 @@ const FormFieldRules = ({ onCancel, fields }: IProps) => {
     { value: 'x', label: 'Multiply ( x )' },
     { value: '/', label: 'Divide ( / )' },
   ];
-  const [condition, setCondition] = useState('');
-  const [fieldSelected, setFieldSelected] = useState('');
-  const [customValue, setCustomValue] = useState('');
-  const [operation, setOperation] = useState('');
-  const [ruleList, setRuleList] = useState(ruleListInitialState);
-
-  // useEffect(() => {
-  //   console.table(ruleList);
-  // }, [ruleList]);
+  const [condition, setCondition] = useState(data ? data?.condition : '');
+  const [ruleList, setRuleList] = useState(data ? data?.ruleList : ruleListInitialState);
+  const [dataChange, setDataChange] = useState(false);
 
   useEffect(() => {
     if (!ruleList.length) setRuleList(ruleListInitialState);
   }, [ruleList]);
 
-  function createOperationList() {
+  useEffect(() => {
+    // console.log('datachange:', dataChange);
+    if (data?.condition === condition && data?.condition === ruleList) setDataChange(false);
+    else setDataChange(true);
+  }, [data, condition, ruleList]);
+
+  function createOperationList(ruleIndex: number) {
     return (
       <>
-        {(ruleList[0].field || ruleList[0].customValue) && (
+        {condition && (ruleList[0].field || ruleList[0].customValue) && (
           <InputGroup className="my-4 ml-5">
             <FormControl style={{ minWidth: 120 }} variant="outlined" size="small">
               <InputLabel id="condition-simple-select-outlined-label">Operation</InputLabel>
@@ -54,13 +55,15 @@ const FormFieldRules = ({ onCancel, fields }: IProps) => {
                 labelId="operation-simple-select-outlined-label"
                 id="operation-simple-select-outlined"
                 name="operation"
-                value={operation}
+                value={ruleList[ruleIndex].operation}
                 onChange={({ target }) => {
-                  setOperation(target.value);
-                  if (target.value) {
+                  const temp = [...ruleList];
+                  temp[ruleIndex].operation = target.value;
+                  setRuleList(temp);
+
+                  if (ruleList[ruleList.length - 1].field !== '' && target.value) {
                     const newState = [...ruleList];
                     newState.push({
-                      id: 0,
                       operation: '',
                       field: '',
                       customValue: '',
@@ -88,32 +91,33 @@ const FormFieldRules = ({ onCancel, fields }: IProps) => {
     );
   }
 
-  function fieldList(index: number) {
+  function fieldList(ruleIndex: number) {
     return (
       <>
         <div className="d-flex align-items-center">
           <FormControl fullWidth variant="outlined" size="small" className="pl-2">
-            {!(ruleList[index].field === 'custom') && (
+            {!(ruleList[ruleIndex].field === 'custom') && (
               <InputLabel id="variablefield-simple-select-outlined-label">Field</InputLabel>
             )}
             <Select
               labelId="variablefield-simple-select-outlined-label"
               id="variablefield-simple-select-outlined"
               name="value"
-              value={ruleList[index].field}
+              value={ruleList[ruleIndex].field}
               onChange={({ target }) => {
-                setFieldSelected(target.value);
-
                 const newState = [...ruleList];
-                newState[index].customValue = '';
-                newState[index].field = target.value;
-                newState[index].addMore = true;
+                newState[ruleIndex].customValue = '';
+                newState[ruleIndex].field = target.value;
+                if (ruleList[ruleIndex + 1]) newState[ruleIndex].addMore = false;
+                else newState[ruleIndex].addMore = true;
                 setRuleList(newState);
               }}
               label="Field"
             >
-              {fields?.map((field) => (
-                <MenuItem value={field._id}>{field.label}</MenuItem>
+              {fields?.map((field, i) => (
+                <MenuItem key={i} value={field._id}>
+                  {field.label}
+                </MenuItem>
               ))}
 
               <MenuItem value="custom">
@@ -122,12 +126,19 @@ const FormFieldRules = ({ onCancel, fields }: IProps) => {
             </Select>
           </FormControl>
 
-          {index > 0 && (
+          {ruleIndex > 0 && (
             <Tooltip title="Delete Rule item">
               <IconButton
                 color="primary"
                 onClick={() => {
-                  setRuleList(ruleList.filter((item) => item.field && item.customValue !== ''));
+                  setRuleList(
+                    ruleList.filter((item) => item.field !== '' && item.customValue !== ''),
+                  );
+                  const newState = [...ruleList];
+                  newState[ruleIndex - 1].addMore = true;
+                  newState[ruleIndex - 1].next = false;
+                  newState.length = ruleIndex;
+                  setRuleList(newState);
                 }}
                 size="large"
               >
@@ -137,24 +148,21 @@ const FormFieldRules = ({ onCancel, fields }: IProps) => {
           )}
         </div>
 
-        {fieldSelected === 'custom' && (
+        {ruleList[ruleIndex].field === 'custom' && (
           <OutlinedInput
             className="ml-4"
             type="text"
-            value={customValue}
+            value={ruleList[ruleIndex].customValue}
             placeholder="Enter custom value"
             onChange={({ target }) => {
-              setCustomValue(target.value);
-
               const newState = [...ruleList];
-              newState[index].field = '';
-              newState[index].customValue = target.value;
+              newState[ruleIndex].customValue = target.value;
               setRuleList(newState);
             }}
           />
         )}
 
-        {ruleList[index].addMore && ruleList[index].field && (
+        {ruleList[ruleIndex].addMore && ruleList[ruleIndex].field && (
           <div className="flex">
             <FormLabel className="justify-center mt-2 ml-5">
               Add more
@@ -162,11 +170,11 @@ const FormFieldRules = ({ onCancel, fields }: IProps) => {
                 <IconButton
                   color="primary"
                   onClick={() => {
-                    createOperationList();
+                    createOperationList(ruleIndex);
 
                     const newState = [...ruleList];
-                    newState[index].next = true;
-                    newState[index].addMore = false;
+                    newState[ruleIndex].next = true;
+                    newState[ruleIndex].addMore = false;
                     setRuleList(newState);
                   }}
                   size="large"
@@ -181,12 +189,23 @@ const FormFieldRules = ({ onCancel, fields }: IProps) => {
     );
   }
 
+  const submitHandler = (event) => {
+    event.preventDefault();
+
+    const rulesData = {
+      condition,
+      ruleList,
+    };
+
+    onOptionChange({ rules: rulesData });
+    setDataChange(false);
+  };
+
   return (
-    <form className="px-2 mt-3">
+    <form className="px-2 mt-3" onSubmit={submitHandler}>
       {ruleList.map((item, ruleIndex) => {
-        const { id } = item;
         return (
-          <div key={id}>
+          <div key={ruleIndex}>
             {ruleIndex === 0 && (
               <InputGroup>
                 <FormControl variant="outlined" fullWidth size="small">
@@ -213,24 +232,19 @@ const FormFieldRules = ({ onCancel, fields }: IProps) => {
             )}
             <InputGroup>{condition && fieldList(ruleIndex)}</InputGroup>
 
-            {item.next && createOperationList()}
+            {item.next && createOperationList(ruleIndex)}
           </div>
         );
       })}
 
       <InputGroup className="mt-4">
-        <LoadingButton
-          type="submit"
-          size="small"
-          // loading={formik.isSubmitting}
-        >
+        <LoadingButton type="submit" size="small" disabled={!dataChange}>
           Save
         </LoadingButton>
         <Button
           className="ml-2"
           variant="outlined"
           size="small"
-          // disabled={formik.isSubmitting}
           onClick={() => {
             setRuleList(ruleListInitialState);
             onCancel();
