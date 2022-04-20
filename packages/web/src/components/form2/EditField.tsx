@@ -1,5 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/jsx-props-no-spreading */
+import { useEffect, useState } from 'react';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
@@ -24,23 +25,37 @@ import InlineInput from '../common/InlineInput';
 import SelectForm from './SelectForm';
 import SelectFormFields from './SelectFormFields';
 import RichTextarea from '../common/RichTextarea2';
+import FormFieldRules from './Rules/FormFieldRules';
 
 type TProps = {
   field: any;
   onFieldChange: (newValue: any) => void;
   onClose: () => void;
   isSection?: boolean;
+  fields: any[];
 };
+
+const initialState = { showForm: false };
 
 export default function FormFields({
   onFieldChange,
   field,
   onClose,
   isSection = false,
+  fields,
 }: TProps): any {
   const onOptionChange = (updatedOption) => {
     onFieldChange({ ...field, options: { ...field.options, ...updatedOption } });
   };
+
+  const [state, setState] = useState(initialState);
+  useEffect(() => {
+    setState(initialState);
+  }, [field.fieldType]);
+
+  useEffect(() => {
+    if (field?.options?.rules) setState({ showForm: true });
+  }, [field]);
 
   return (
     <>
@@ -315,6 +330,32 @@ export default function FormFields({
               )}
             </InputGroup>
           </>
+        )}
+
+        <Typography variant="h6" className="d-flex align-items-center">
+          Rules
+          {!(state.showForm && field.fieldType === 'number') && (
+            <Tooltip title="Add New Rule">
+              <IconButton
+                color="primary"
+                onClick={() => {
+                  if (field.fieldType === 'number') setState({ ...state, showForm: true });
+                }}
+                size="large"
+              >
+                <AddCircleIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+        </Typography>
+
+        {state.showForm && field.fieldType === 'number' && (
+          <FormFieldRules
+            onCancel={() => setState(initialState)}
+            onOptionChange={onOptionChange}
+            fields={fields}
+            data={field?.options?.rules || 'no data'}
+          />
         )}
       </div>
     </>
