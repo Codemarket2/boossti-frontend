@@ -14,6 +14,7 @@ interface IProps {
   onCancel?: () => void;
   onOptionChange: (newValue: any) => void;
   fields: any[];
+  activeField: any;
   data: any;
 }
 
@@ -21,7 +22,7 @@ const ruleListInitialState = [
   { operation: '', field: '', customValue: '', addMore: false, next: false },
 ];
 
-const FormFieldRules = ({ onCancel, onOptionChange, fields, data }: IProps) => {
+const FormFieldRules = ({ onCancel, onOptionChange, fields, activeField, data }: IProps) => {
   const ruleConditionOptions = [{ label: 'is Equal to', value: 'isEqualTo' }];
 
   const ruleOperationOptions = [
@@ -32,17 +33,10 @@ const FormFieldRules = ({ onCancel, onOptionChange, fields, data }: IProps) => {
   ];
   const [condition, setCondition] = useState(data ? data?.condition : '');
   const [ruleList, setRuleList] = useState(data ? data?.ruleList : ruleListInitialState);
-  const [dataChange, setDataChange] = useState(false);
 
   useEffect(() => {
-    if (!ruleList.length) setRuleList(ruleListInitialState);
+    if (!ruleList?.length) setRuleList(ruleListInitialState);
   }, [ruleList]);
-
-  useEffect(() => {
-    // console.log('datachange:', dataChange);
-    if (data?.condition === condition && data?.condition === ruleList) setDataChange(false);
-    else setDataChange(true);
-  }, [data, condition, ruleList]);
 
   function createOperationList(ruleIndex: number) {
     return (
@@ -61,7 +55,11 @@ const FormFieldRules = ({ onCancel, onOptionChange, fields, data }: IProps) => {
                   temp[ruleIndex].operation = target.value;
                   setRuleList(temp);
 
-                  if (ruleList[ruleList.length - 1].field !== '' && target.value) {
+                  if (
+                    ruleList[ruleList.length - 1].field !== '' &&
+                    ruleList.length - 1 === ruleIndex &&
+                    target.value
+                  ) {
                     const newState = [...ruleList];
                     newState.push({
                       operation: '',
@@ -114,11 +112,16 @@ const FormFieldRules = ({ onCancel, onOptionChange, fields, data }: IProps) => {
               }}
               label="Field"
             >
-              {fields?.map((field, i) => (
-                <MenuItem key={i} value={field._id}>
-                  {field.label}
-                </MenuItem>
-              ))}
+              {fields?.map((field, i) => {
+                if (field?._id !== activeField?._id && field.fieldType === 'number')
+                  return (
+                    <MenuItem key={i} value={field._id}>
+                      {field.label}
+                    </MenuItem>
+                  );
+
+                return null;
+              })}
 
               <MenuItem value="custom">
                 <em>Custom Value</em>
@@ -171,7 +174,6 @@ const FormFieldRules = ({ onCancel, onOptionChange, fields, data }: IProps) => {
                   color="primary"
                   onClick={() => {
                     createOperationList(ruleIndex);
-
                     const newState = [...ruleList];
                     newState[ruleIndex].next = true;
                     newState[ruleIndex].addMore = false;
@@ -198,12 +200,12 @@ const FormFieldRules = ({ onCancel, onOptionChange, fields, data }: IProps) => {
     };
 
     onOptionChange({ rules: rulesData });
-    setDataChange(false);
+    onCancel();
   };
 
   return (
     <form className="px-2 mt-3" onSubmit={submitHandler}>
-      {ruleList.map((item, ruleIndex) => {
+      {ruleList?.map((item, ruleIndex) => {
         return (
           <div key={ruleIndex}>
             {ruleIndex === 0 && (
@@ -215,7 +217,10 @@ const FormFieldRules = ({ onCancel, onOptionChange, fields, data }: IProps) => {
                     id="condition-simple-select-outlined"
                     name="condition"
                     value={condition}
-                    onChange={({ target }) => setCondition(target.value)}
+                    onChange={({ target }) => {
+                      setCondition(target.value);
+                      if (target.value === '') setRuleList(ruleListInitialState);
+                    }}
                     label={` Condition `}
                   >
                     <MenuItem value="">
@@ -238,7 +243,7 @@ const FormFieldRules = ({ onCancel, onOptionChange, fields, data }: IProps) => {
       })}
 
       <InputGroup className="mt-4">
-        <LoadingButton type="submit" size="small" disabled={!dataChange}>
+        <LoadingButton type="submit" size="small">
           Save
         </LoadingButton>
         <Button

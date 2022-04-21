@@ -11,6 +11,7 @@ import MenuItem from '@mui/material/MenuItem';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
@@ -52,10 +53,6 @@ export default function FormFields({
   useEffect(() => {
     setState(initialState);
   }, [field.fieldType]);
-
-  useEffect(() => {
-    if (field?.options?.rules) setState({ showForm: true });
-  }, [field]);
 
   return (
     <>
@@ -343,7 +340,7 @@ export default function FormFields({
                 }}
                 size="large"
               >
-                <AddCircleIcon />
+                {field?.options?.rules ? <EditOutlinedIcon /> : <AddCircleIcon />}
               </IconButton>
             </Tooltip>
           )}
@@ -354,6 +351,7 @@ export default function FormFields({
             onCancel={() => setState(initialState)}
             onOptionChange={onOptionChange}
             fields={fields}
+            activeField={field}
             data={field?.options?.rules || 'no data'}
           />
         )}
