@@ -25,6 +25,7 @@ import { ResponseChild3 } from './Response';
 import EditResponseDrawer from './EditResponseDrawer';
 import { CellExpanderFormatter } from './CellExpanderFormatter';
 import { DataTable } from './Table';
+import GridTable from '../form2/GridTable';
 
 interface IProps {
   form: any;
@@ -146,7 +147,7 @@ export default function ResponseList({
               size="small"
               style={{ overflow: 'scroll', width: '100%' }}
             >
-              <TableHead>
+              {/* <TableHead>
                 <TableRow>
                   <TableCell>Action</TableCell>
                   {form?.fields?.map((field, i) => (
@@ -219,7 +220,8 @@ export default function ResponseList({
                     ))}
                   </TableRow>
                 ))}
-              </TableBody>
+              </TableBody> */}
+              <GridTable fields={form?.fields} rowValues={data?.getResponses.data} />
             </Table>
           )}
         </TableContainer>

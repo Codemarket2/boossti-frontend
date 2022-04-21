@@ -334,15 +334,15 @@ export default function ItemScreen({
             )}
           </>
           {templateData?.getTemplateBySlug?.fields && (
-            // <FormFieldsValue
-            //   authorized={authorized}
-            //   fields={templateData?.getTemplateBySlug?.fields}
-            //   values={data?.getPageBySlug?.values}
-            //   handleValueChange={handleUpdate}
-            //   pageId={data?.getPageBySlug?._id}
-            //   layouts={templateData?.getTemplateBySlug?.options?.layouts || {}}
-            // />
-            <GridTable />
+            <FormFieldsValue
+              authorized={authorized}
+              fields={templateData?.getTemplateBySlug?.fields}
+              values={data?.getPageBySlug?.values}
+              handleValueChange={handleUpdate}
+              pageId={data?.getPageBySlug?._id}
+              layouts={templateData?.getTemplateBySlug?.options?.layouts || {}}
+            />
+            // <GridTable />
           )}
           <FormFieldsValue
             authorized={authorized}
