@@ -142,87 +142,88 @@ export default function ResponseList({
               <ErrorLoading error={error} />
             </Paper>
           ) : (
-            <Table
-              aria-label="response table"
-              size="small"
-              style={{ overflow: 'scroll', width: '100%' }}
-            >
-              {/* <TableHead>
-                <TableRow>
-                  <TableCell>Action</TableCell>
-                  {form?.fields?.map((field, i) => (
-                    <TableCell key={i}>{field.label}</TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {data?.getResponses?.data?.map((response) => (
-                  <TableRow key={response._id}>
-                    <TableCell>
-                      <div className="d-flex">
-                        <Authorization _id={[response?.createdBy?._id]} allowAdmin returnNull>
-                          <DeleteButton
-                            onClick={async () => {
-                              await handleDelete(response._id, refetch);
-                            }}
-                            edge="start"
-                          />
-                          <Tooltip title="Open Response">
-                            <IconButton
-                              onClick={() => setSelectedResponse(response)}
-                              edge="start"
-                              size="large"
-                            >
-                              <EditIcon />
-                            </IconButton>
-                          </Tooltip>
-                          {selectedResponse?._id === response?._id && (
-                            <>
-                              <EditResponseDrawer
-                                open
-                                form={form}
-                                response={selectedResponse}
-                                onClose={() => setSelectedResponse(null)}
-                              />
-                            </>
-                          )}
-                        </Authorization>
-                        <Tooltip title="Open Response">
-                          <IconButton
-                            onClick={() => {
-                              router.push(`/forms/${form.slug}/response/${response.count}`);
-                            }}
-                            edge="start"
-                            size="large"
-                          >
-                            <LaunchIcon />
-                          </IconButton>
-                        </Tooltip>
-                        <ListItemText
-                          className="m-0 p-0"
-                          primary={response?.createdBy?.name}
-                          secondary={`${moment(response.createdAt).format('l')} ${moment(
-                            response.createdAt,
-                          ).format('LT')}`}
-                        />
-                      </div>
-                    </TableCell>
-                    {form?.fields?.map((field, i) => (
-                      <TableCell key={i}>
-                        {response?.values
-                          ?.filter((v) => v.field === field._id)
-                          ?.map((value) => (
-                            <div key={value?._id}>
-                              <DisplayValue field={field} value={value} />
-                            </div>
-                          ))}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))}
-              </TableBody> */}
-              <GridTable fields={form?.fields} rowValues={data?.getResponses.data} />
-            </Table>
+            // <Table
+            //   aria-label="response table"
+            //   size="small"
+            //   style={{ overflow: 'scroll', width: '100%' }}
+            // >
+            //    <TableHead>
+            //     <TableRow>
+            //       <TableCell>Action</TableCell>
+            //       {form?.fields?.map((field, i) => (
+            //         <TableCell key={i}>{field.label}</TableCell>
+            //       ))}
+            //     </TableRow>
+            //   </TableHead>
+            //   <TableBody>
+            //     {data?.getResponses?.data?.map((response) => (
+            //       <TableRow key={response._id}>
+            //         <TableCell>
+            //           <div className="d-flex">
+            //             <Authorization _id={[response?.createdBy?._id]} allowAdmin returnNull>
+            //               <DeleteButton
+            //                 onClick={async () => {
+            //                   await handleDelete(response._id, refetch);
+            //                 }}
+            //                 edge="start"
+            //               />
+            //               <Tooltip title="Open Response">
+            //                 <IconButton
+            //                   onClick={() => setSelectedResponse(response)}
+            //                   edge="start"
+            //                   size="large"
+            //                 >
+            //                   <EditIcon />
+            //                 </IconButton>
+            //               </Tooltip>
+            //               {selectedResponse?._id === response?._id && (
+            //                 <>
+            //                   <EditResponseDrawer
+            //                     open
+            //                     form={form}
+            //                     response={selectedResponse}
+            //                     onClose={() => setSelectedResponse(null)}
+            //                   />
+            //                 </>
+            //               )}
+            //             </Authorization>
+            //             <Tooltip title="Open Response">
+            //               <IconButton
+            //                 onClick={() => {
+            //                   router.push(`/forms/${form.slug}/response/${response.count}`);
+            //                 }}
+            //                 edge="start"
+            //                 size="large"
+            //               >
+            //                 <LaunchIcon />
+            //               </IconButton>
+            //             </Tooltip>
+            //             <ListItemText
+            //               className="m-0 p-0"
+            //               primary={response?.createdBy?.name}
+            //               secondary={`${moment(response.createdAt).format('l')} ${moment(
+            //                 response.createdAt,
+            //               ).format('LT')}`}
+            //             />
+            //           </div>
+            //         </TableCell>
+            //         {form?.fields?.map((field, i) => (
+            //           <TableCell key={i}>
+            //             {response?.values
+            //               ?.filter((v) => v.field === field._id)
+            //               ?.map((value) => (
+            //                 <div key={value?._id}>
+            //                   <DisplayValue field={field} value={value} />
+            //                 </div>
+            //               ))}
+            //           </TableCell>
+            //         ))}
+            //       </TableRow>
+            //     ))}
+            //   </TableBody>
+
+            // </Table>
+            <GridTable fields={form?.fields} rowValues={data?.getResponses.data} />
           )}
         </TableContainer>
       )}

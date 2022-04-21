@@ -33,7 +33,6 @@ export default function GridTable({ fields, rowValues }: IProps) {
         });
     }, rows.push(myobj));
   });
-
   return (
     <div style={{ height: 400, width: '100%' }}>
       <DataGrid
