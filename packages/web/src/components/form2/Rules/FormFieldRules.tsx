@@ -19,7 +19,7 @@ interface IProps {
 }
 
 const ruleListInitialState = [
-  { operation: '', field: '', customValue: '', addMore: false, next: false },
+  { field: '', operation: '', customValue: '', addMore: false, next: false },
 ];
 
 const FormFieldRules = ({ onCancel, onOptionChange, fields, activeField, data }: IProps) => {
@@ -36,7 +36,13 @@ const FormFieldRules = ({ onCancel, onOptionChange, fields, activeField, data }:
 
   useEffect(() => {
     if (!ruleList?.length) setRuleList(ruleListInitialState);
-  }, [ruleList]);
+    if (condition === '') setRuleList(ruleListInitialState);
+  }, [ruleList, condition]);
+
+  // useEffect(() => {
+  //   console.log('condition:', condition);
+  //   console.table(ruleList);
+  // }, [ruleList, condition]);
 
   function createOperationList(ruleIndex: number) {
     return (
@@ -62,8 +68,8 @@ const FormFieldRules = ({ onCancel, onOptionChange, fields, activeField, data }:
                   ) {
                     const newState = [...ruleList];
                     newState.push({
-                      operation: '',
                       field: '',
+                      operation: '',
                       customValue: '',
                       addMore: false,
                       next: false,
@@ -154,7 +160,7 @@ const FormFieldRules = ({ onCancel, onOptionChange, fields, activeField, data }:
         {ruleList[ruleIndex].field === 'custom' && (
           <OutlinedInput
             className="ml-4"
-            type="text"
+            type="number"
             value={ruleList[ruleIndex].customValue}
             placeholder="Enter custom value"
             onChange={({ target }) => {
@@ -194,12 +200,30 @@ const FormFieldRules = ({ onCancel, onOptionChange, fields, activeField, data }:
   const submitHandler = (event) => {
     event.preventDefault();
 
+    // let ruleCondition = condition || '';
+    // if (ruleList[0].field === '') ruleCondition = '';
+
+    if (
+      ruleList[ruleList.length - 1].field === '' &&
+      ruleList[ruleList.length - 1].operation === ''
+    ) {
+      const newState = [...ruleList];
+      newState.length = ruleList.length - 1;
+      const rulesData = {
+        condition,
+        newState,
+      };
+      onOptionChange({ rules: rulesData });
+      onCancel();
+      return null;
+    }
+
     const rulesData = {
       condition,
       ruleList,
     };
-
     onOptionChange({ rules: rulesData });
+
     onCancel();
   };
 
@@ -216,7 +240,7 @@ const FormFieldRules = ({ onCancel, onOptionChange, fields, activeField, data }:
                     labelId="condition-simple-select-outlined-label"
                     id="condition-simple-select-outlined"
                     name="condition"
-                    value={condition}
+                    value={condition || ''}
                     onChange={({ target }) => {
                       setCondition(target.value);
                       if (target.value === '') setRuleList(ruleListInitialState);
@@ -251,9 +275,11 @@ const FormFieldRules = ({ onCancel, onOptionChange, fields, activeField, data }:
           variant="outlined"
           size="small"
           onClick={() => {
-            setRuleList(ruleListInitialState);
+            setRuleList(data ? data?.ruleList : ruleListInitialState);
             onCancel();
           }}
+
+          // onClick={() => setRuleList(ruleListInitialState)}
         >
           Cancel
         </Button>
