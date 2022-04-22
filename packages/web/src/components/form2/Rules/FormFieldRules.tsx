@@ -44,6 +44,18 @@ const FormFieldRules = ({ onCancel, onOptionChange, fields, activeField, data }:
   //   console.table(ruleList);
   // }, [ruleList, condition]);
 
+  // useEffect(() => {
+  //   console.log('data:', data);
+  // }, [data]);
+
+  // useEffect(() => {
+  //   console.log('fields:', fields);
+  // }, [fields]);
+
+  // useEffect(() => {
+  //   console.log('activeField:', activeField);
+  // }, [activeField]);
+
   function createOperationList(ruleIndex: number) {
     return (
       <>
