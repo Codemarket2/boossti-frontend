@@ -213,6 +213,10 @@ export default function FormSetting({
               <MenuItem value="table">Table</MenuItem>
               <MenuItem value="table2">Table 2</MenuItem>
               <MenuItem value="vertical">Vertical</MenuItem>
+              <MenuItem value="reactTable">React Table</MenuItem>
+              <MenuItem value="MuiDataGrid">Mui Data Grid</MenuItem>
+              {/* <MenuItem value="reactSpreadSheet">React SpreadSheet</MenuItem> */}
+              <MenuItem value="reactDataSheet">React DataSheet</MenuItem>
             </TextField>
           </InputGroup>
           <InputGroup>
