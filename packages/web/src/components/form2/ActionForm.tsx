@@ -139,6 +139,9 @@ export default function ActionForm({
             <MenuItem value="createCognitoGroup">Create Cognito Group</MenuItem>
             <MenuItem value="updateCognitoGroup">Update Cognito Group</MenuItem>
             <MenuItem value="deleteCognitoGroup">Delete Cognito Group</MenuItem>
+            <MenuItem value="createCognitoUser">Create Cognito User</MenuItem>
+            <MenuItem value="updateCognitoUser">Update Cognito User</MenuItem>
+            <MenuItem value="deleteCognitoUser">Delete Cognito User</MenuItem>
           </Select>
           {formik.touched.actionType && formik.errors.actionType ? (
             <FormHelperText className="text-danger">{formik.errors.actionType}</FormHelperText>
