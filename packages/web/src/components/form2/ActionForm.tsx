@@ -224,6 +224,104 @@ export default function ActionForm({
               </Select>
             </FormControl>
           </div>
+        </>
+      )}
+      {['createCognitoUser', 'updateCognitoUser', 'deleteCognitoUser']?.includes(
+        formik?.values?.actionType,
+      ) && (
+        <>
+          <div className="d-flex mt-3 align-items-center">
+            <FormControl
+              fullWidth
+              variant="outlined"
+              size="small"
+              error={Boolean(formik.touched.cognitoGroupName && formik.errors.cognitoGroupName)}
+            >
+              <InputLabel id="firstName">First Name</InputLabel>
+              <Select
+                labelId="firstName"
+                id="firstName"
+                name="firstName"
+                value={formik.values.firstName}
+                onChange={formik.handleChange}
+                label="First Name"
+              >
+                {fields?.map((field) => {
+                  if (field?.label) {
+                    if (field?.label.toUpperCase().includes('NAME')) {
+                      return <MenuItem value={field._id}>{field.label}</MenuItem>;
+                    }
+                  }
+                  return null;
+                })}
+              </Select>
+            </FormControl>
+          </div>
+          <div className="d-flex mt-3 align-items-center">
+            <FormControl
+              fullWidth
+              variant="outlined"
+              size="small"
+              error={Boolean(formik.touched.cognitoGroupName && formik.errors.cognitoGroupName)}
+            >
+              <InputLabel id="lastName">Last Name</InputLabel>
+              <Select
+                labelId="lastName"
+                id="lastName"
+                name="lastName"
+                value={formik.values.lastName}
+                onChange={formik.handleChange}
+                label="Last Name"
+              >
+                {fields?.map((field) => {
+                  if (field?.label) {
+                    if (field?.label.toUpperCase().includes('NAME')) {
+                      return <MenuItem value={field._id}>{field.label}</MenuItem>;
+                    }
+                  }
+                  return null;
+                })}
+              </Select>
+            </FormControl>
+          </div>
+          <div className="d-flex mt-3 align-items-center">
+            <FormControl
+              fullWidth
+              variant="outlined"
+              size="small"
+              error={Boolean(formik.touched.cognitoGroupName && formik.errors.cognitoGroupName)}
+            >
+              <InputLabel id="userEmail">User Email</InputLabel>
+              <Select
+                labelId="userEmail"
+                id="userEmail"
+                name="userEmail"
+                value={formik.values.userEmail}
+                onChange={formik.handleChange}
+                label="User Email"
+              >
+                {fields?.map((field) => {
+                  if (field?.label) {
+                    if (field?.label.toUpperCase().includes('EMAIL')) {
+                      return <MenuItem value={field._id}>{field.label}</MenuItem>;
+                    }
+                  }
+                  return null;
+                })}
+              </Select>
+            </FormControl>
+          </div>
+        </>
+      )}
+      {[
+        'createCognitoGroup',
+        'updateCognitoGroup',
+        'deleteCognitoGroup',
+        'createCognitoUser',
+        'updateCognitoUser',
+        'deleteCognitoUser',
+      ]?.includes(formik?.values?.actionType) && (
+        <>
           <InputGroup>
             <TextField
               fullWidth
@@ -424,6 +522,9 @@ export default function ActionForm({
         'createCognitoGroup',
         'updateCognitoGroup',
         'deleteCognitoGroup',
+        'createCognitoUser',
+        'updateCognitoUser',
+        'deleteCognitoUser',
       ]?.includes(formik.values.actionType) && (
         <InputGroup>
           <Typography variant="h6" className="d-flex align-items-center pl-2">

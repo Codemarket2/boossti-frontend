@@ -103,6 +103,9 @@ interface IFormValues {
   subject: string;
   body: string;
   userPoolId: string;
+  firstName: string;
+  lastName: string;
+  userEmail: string;
 }
 
 const defaultFormValues = {
@@ -124,6 +127,9 @@ const defaultFormValues = {
   subject: '',
   body: '',
   userPoolId: '',
+  firstName: '',
+  lastName: '',
+  userEmail: '',
 };
 
 interface IProps extends IHooksProps {
@@ -170,6 +176,9 @@ export function useFormActions({ onAlert, onSave }: IProps) {
     formik.setFieldValue('body', payload.body, false);
     formik.setFieldValue('fields', payload?.fields, false);
     formik.setFieldValue('userPoolId', payload?.userPoolId, false);
+    formik.setFieldValue('firstName', payload?.firstName, false);
+    formik.setFieldValue('lastName', payload?.lastName, false);
+    formik.setFieldValue('userEmail', payload?.userEmail, false);
   };
 
   return { formik, setFormValues };
