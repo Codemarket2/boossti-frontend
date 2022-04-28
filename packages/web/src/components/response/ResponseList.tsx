@@ -28,7 +28,7 @@ import { DataTable } from './Table';
 import DataGrid from '../common/MuiDataGrid';
 import Example from '../common/ReactDataSheet';
 import UsersGrid from '../common/ReactSpreadsheet';
-import App from '../common/ReactTable';
+import App from '../common/react-Table/ReactTable';
 
 interface IProps {
   form: any;
@@ -94,8 +94,6 @@ export default function ResponseList({
       );
     }
   }, []);
-
-  console.log('row', columns);
 
   return (
     <>
