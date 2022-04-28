@@ -41,7 +41,7 @@ export default function ResponseList({
   showOnlyMyResponses,
 }: IProps): any {
   const { data, error, state, setState, refetch } = useGetResponses(
-    form._id,
+    form?._id,
     parentId,
     null,
     showOnlyMyResponses,
