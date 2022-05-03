@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@apollo/client": "3.3.21",
-    "aws-amplify": "4.1.1",
+    "aws-amplify": "4.3.20",
     "aws-appsync-auth-link": "^3.0.5",
     "aws-appsync-subscription-link": "^3.0.7",
     "formik": "2.2.9",

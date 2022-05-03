@@ -85,7 +85,7 @@ export default function BulkInput() {
     try {
       const url = await fileUpload(selectedFile, '/csvDataFile');
 
-      if (url) {
+      if (url.length > 0) {
         setState({ ...state, fileUrl: url });
 
         const payload = {
@@ -101,7 +101,7 @@ export default function BulkInput() {
       }
     } catch (error) {
       // eslint-disable-next-line no-console
-      console.log(error.message);
+      console.log(error);
     }
   };
 
