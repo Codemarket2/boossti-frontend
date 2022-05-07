@@ -51,5 +51,3 @@ cypress/videos/*
 **/public/worker-*.js.map
 
 next.config.original.*.js
-
-public/storybook
