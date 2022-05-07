@@ -14,7 +14,7 @@
     "cypress": "npx cypress run-ct",
     "cypress:open": "npx cypress open",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook -o public/storybook"
   },
   "dependencies": {
     "@apollo/client": "3.3.21",

@@ -24,6 +24,7 @@
     "web:test:head": "yarn workspace @frontend/web run test:head",
     "web:cypress": "yarn workspace @frontend/web run cypress",
     "web:storybook": "yarn workspace @frontend/web run storybook",
+    "web:storybook:build": "yarn workspace @frontend/web run build-storybook",
     "shared:test": "yarn workspace @frontend/shared test",
     "lint": "eslint --quiet --fix ./packages",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json}\"",
