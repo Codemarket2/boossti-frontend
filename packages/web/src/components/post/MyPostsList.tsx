@@ -82,7 +82,7 @@ export default function MyPostsList() {
         onClose={() => postsSetState({ ...postsState, showMenu: null, selectedPost: null })}
       >
         <MenuItem onClick={() => postsSetState({ ...postsState, showEditModal: true })}>
-          <ListItemIcon className="mr-n4">
+          <ListItemIcon className="mr-n3">
             <EditIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="Edit" />
@@ -93,7 +93,7 @@ export default function MyPostsList() {
             alert('Post deleted!');
           }}
         >
-          <ListItemIcon className="mr-n4">
+          <ListItemIcon className="mr-n3">
             <DeleteIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="Delete" />

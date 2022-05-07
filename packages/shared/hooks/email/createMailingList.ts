@@ -3,19 +3,14 @@ import { CREATE_MAILING_LIST_FROM_CONTACT } from '../../graphql/mutation/contact
 import { CREATE_MAILING_LIST } from '../../graphql/mutation/email';
 import { GET_ALL_MAILING_LIST } from '../../graphql/query/contact';
 
-export function useCreateMailingList() {
+export function useCreateMailingList({ onAlert }) {
   const [createMutation, { loading: createLoading }] = useMutation(CREATE_MAILING_LIST);
 
   const handleCreateList = async (payload: any) => {
-    try {
-      const res = await createMutation({
-        variables: payload,
-      });
-      return res;
-    } catch (error) {
-      // console.log(error);
-      return error;
-    }
+    const res = await createMutation({
+      variables: payload,
+    });
+    return res;
   };
   return { handleCreateList, createLoading };
 }

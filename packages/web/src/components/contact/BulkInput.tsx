@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
-import Button from '@mui/material/Button';
 import {
   FormControl,
   Grid,
@@ -16,6 +15,7 @@ import { useCreateMailingList } from '@frontend/shared/hooks/email/createMailing
 import { useContactForm } from '@frontend/shared/hooks/contact';
 import LoadingButton from '../common/LoadingButton';
 import InputGroup from '../common/InputGroup';
+import { onAlert } from '../../utils/alert';
 
 const initialState = {
   showForm: false,
@@ -24,6 +24,7 @@ const initialState = {
 };
 
 export default function BulkInput() {
+  const [loading, setLoading] = useState(false);
   const [state, setState] = useState(initialState);
   const [files, setFiles] = useState([]);
   const [map, setMap] = useState({});
@@ -32,7 +33,7 @@ export default function BulkInput() {
   const [cName, setCname] = useState('');
   const { formik, formLoading } = useContactForm();
 
-  const { handleCreateList, createLoading } = useCreateMailingList();
+  const { handleCreateList, createLoading } = useCreateMailingList({ onAlert });
 
   const resetStates = () => {
     setState(initialState);
@@ -83,25 +84,23 @@ export default function BulkInput() {
 
   const handleSubmit = async () => {
     try {
+      setLoading(true);
       const url = await fileUpload(selectedFile, '/csvDataFile');
-
       if (url) {
         setState({ ...state, fileUrl: url });
-
         const payload = {
           fileUrl: url[0],
           collectionName: cName,
           map: JSON.stringify(map),
         };
-
-        await handleCreateList(payload);
-        setTimeout(() => {
-          resetStates();
-        }, 2500);
+        const res = await handleCreateList(payload);
+        setLoading(false);
+        resetStates();
+        // debugger;
       }
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error.message);
+      setLoading(false);
+      alert(`Error while uploading contacts, ${error.message}`);
     }
   };
 
@@ -200,7 +199,7 @@ export default function BulkInput() {
             </InputGroup>
             <InputGroup>
               <LoadingButton
-                loading={createLoading}
+                loading={createLoading || loading}
                 onClick={handleSubmit}
                 type="button"
                 variant="contained"

@@ -25,6 +25,8 @@ import ColorInput from '../customMUI/ColorInput/ColorInput';
 import SelectFormFields from './SelectFormFields';
 import AddressSearch from '../common/AddressSearch';
 import BarcodeInput from '../customMUI/BarcodeInput/BarcodeInput';
+import FileUpload from '../fileLibrary/FileUpload';
+import DisplayFiles from '../fileLibrary/DisplayFiles';
 
 interface IProps {
   disabled?: boolean;
@@ -209,6 +211,25 @@ export default function Field({
         </div>
       );
     }
+
+    case 'file': {
+      return (
+        <div>
+          {value?.value ? (
+            <DisplayFiles
+              urls={[value?.value]}
+              onDelete={(url) => onChange({ field: _id, value: '' })}
+            />
+          ) : (
+            <FileUpload onUpload={(fileUrls) => onChange({ field: _id, value: fileUrls[0] })} />
+          )}
+          {validation.error && (
+            <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
+          )}
+        </div>
+      );
+    }
+
     case 'select': {
       const optionsTemplate = options?.optionsTemplate || value?.options?.optionsTemplate;
       return (

@@ -25,6 +25,7 @@ export const fieldTypes: FieldType[] = [
   { label: 'Date', value: 'date' },
   { label: 'Date & Time', value: 'dateTime' },
   { label: 'Image', value: 'image' },
+  { label: 'File', value: 'file' },
   // { label: 'Media (Images/Video)', value: 'media' },
   { label: 'Address', value: 'address' },
   { label: 'Static Text', value: 'label' },

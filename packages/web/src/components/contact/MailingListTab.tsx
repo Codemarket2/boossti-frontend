@@ -6,7 +6,7 @@ import BulkInput from './BulkInput';
 
 export default function MailingListTab() {
   const [options, setOptions] = useState({
-    currentTab: 'mailingList',
+    currentTab: 'addMailingList',
   });
 
   return (
@@ -28,7 +28,6 @@ export default function MailingListTab() {
           <BulkInput />
         </Paper>
       )}
-      {options.currentTab === 'mailingList' && 'mailingList'}
     </div>
   );
 }

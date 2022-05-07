@@ -319,13 +319,13 @@ export default function FormFields({
             }}
           >
             <MenuItem onClick={() => setValues({ ...values, showMenu: false, editStyle: true })}>
-              <ListItemIcon className="mr-n4">
+              <ListItemIcon className="mr-n3">
                 <EditIcon fontSize="small" />
               </ListItemIcon>
               <ListItemText primary="Edit Style" />
             </MenuItem>
             <MenuItem onClick={() => setValues({ ...values, showMenu: false, editGrid: true })}>
-              <ListItemIcon className="mr-n4">
+              <ListItemIcon className="mr-n3">
                 <GridIcon fontSize="small" />
               </ListItemIcon>
               <ListItemText primary="Grid" />
@@ -337,7 +337,7 @@ export default function FormFields({
                     <MenuItem
                       onClick={() => setValues({ ...values, showMenu: false, editForm: true })}
                     >
-                      <ListItemIcon className="mr-n4">
+                      <ListItemIcon className="mr-n3">
                         <EditIcon fontSize="small" />
                       </ListItemIcon>
                       <ListItemText primary="Edit Form" />
@@ -347,7 +347,7 @@ export default function FormFields({
                         setValues({ ...values, showMenu: false, showFormSettings: true })
                       }
                     >
-                      <ListItemIcon className="mr-n4">
+                      <ListItemIcon className="mr-n3">
                         <SettingsIcon fontSize="small" />
                       </ListItemIcon>
                       <ListItemText primary="Form Settings" />
@@ -357,14 +357,14 @@ export default function FormFields({
               </>
             )}
             {/* <MenuItem onClick={handleDuplicateField}>
-              <ListItemIcon className="mr-n4">
+              <ListItemIcon className="mr-n3">
                 <FileCopyIcon fontSize="small" />
               </ListItemIcon>
               <ListItemText primary="Duplicate" />
             </MenuItem>
             {isSection && (
               <MenuItem onClick={() => handleShareSection(values?.field?.label)}>
-                <ListItemIcon className="mr-n4">
+                <ListItemIcon className="mr-n3">
                   <ShareIcon fontSize="small" />
                 </ListItemIcon>
                 <ListItemText primary="Share" />
