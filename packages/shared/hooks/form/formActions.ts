@@ -55,6 +55,7 @@ const validationSchema = yup.object({
         'createCognitoUser',
         'updateCognitoUser',
         'deleteCognitoUser',
+        'createSeoReport',
       ].includes(value),
     then: yup.string().required('This is a required field'),
     otherwise: yup.string(),
@@ -106,6 +107,7 @@ interface IFormValues {
   firstName: string;
   lastName: string;
   userEmail: string;
+  websiteUrl: string;
 }
 
 const defaultFormValues = {
@@ -130,6 +132,7 @@ const defaultFormValues = {
   firstName: '',
   lastName: '',
   userEmail: '',
+  websiteUrl: '',
 };
 
 interface IProps extends IHooksProps {
@@ -179,6 +182,7 @@ export function useFormActions({ onAlert, onSave }: IProps) {
     formik.setFieldValue('firstName', payload?.firstName, false);
     formik.setFieldValue('lastName', payload?.lastName, false);
     formik.setFieldValue('userEmail', payload?.userEmail, false);
+    formik.setFieldValue('websiteUrl', payload?.websiteUrl, false);
   };
 
   return { formik, setFormValues };
