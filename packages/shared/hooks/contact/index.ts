@@ -111,6 +111,7 @@ export function useContactForm(): any {
 
 export const useGetAllContact = () => {
   const { data, error, loading } = useQuery(GET_ALL_CONTACTS, {
+    variables: { page: 1, limit: 1000 },
     fetchPolicy: 'cache-and-network',
   });
 

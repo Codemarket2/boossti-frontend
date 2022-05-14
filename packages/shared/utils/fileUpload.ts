@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable no-await-in-loop */
 import { Storage } from 'aws-amplify';
 import { v4 as uuid } from 'uuid';
@@ -36,3 +37,11 @@ export const fileUpload = async (files: any, path = '/common', compressedFile?: 
 export const getFileName = (url: string): string => {
   return url?.split('/')?.pop()?.split('name-')?.pop();
 };
+
+// export const makeCopyOfFiles = async (urls: any[]) => {
+//   const newUrls = [];
+//   for (const url of urls) {
+//     const oldKey = url.split('.amazonaws.com/public/')?.pop();
+//     await Storage.copy({ key: 'src' }, { key: 'dest' });
+//   }
+// };
