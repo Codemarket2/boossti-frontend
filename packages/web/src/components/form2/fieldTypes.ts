@@ -13,6 +13,7 @@ type FieldType = {
 export const sectionFieldTypes: FieldType[] = [{ label: 'Form', value: 'form' }];
 
 export const fieldTypes: FieldType[] = [
+  { label: 'Existing Form', value: 'existingForm' },
   { label: 'Text', value: 'text' },
   { label: 'Number', value: 'number' },
   { label: 'Password', value: 'password' },
