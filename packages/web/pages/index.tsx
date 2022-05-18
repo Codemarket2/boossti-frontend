@@ -1,6 +1,9 @@
-import { useEffect } from 'react';
+import Card from '@mui/material/Card';
+import CircularProgress from '@mui/material/CircularProgress';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Auth } from 'aws-amplify';
+import axios from 'axios';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth/lib/types';
 import { useRouter } from 'next/router';
@@ -27,5 +30,58 @@ export default function Page() {
     return <InitialLoading />;
   }
 
-  return <HomeScreen />;
+  return (
+    <>
+      <HomeScreen />
+      <DisplayLighthouseData />
+    </>
+  );
 }
+
+const DisplayLighthouseData = () => {
+  const { data, loading } = useGetLightHouseData();
+
+  return (
+    <div className="container pb-5">
+      {loading ? (
+        <Card variant="outlined">
+          <CircularProgress size={20} /> - Loading lighthouse data
+        </Card>
+      ) : (
+        Object.keys(data).map((keyName, i) => (
+          <Card variant="outlined" className="p-2">
+            <b>{keyName}</b>
+            <br />
+            {JSON.stringify(data[keyName])}
+          </Card>
+        ))
+      )}
+    </div>
+  );
+};
+
+const useGetLightHouseData = () => {
+  const [data, setData] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  const getData = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        'https://us-central1-boossti.cloudfunctions.net/lightHouseHTTP',
+        { params: { url: 'https://www.boossti.com', id: 2 } },
+      );
+      setData(response.data);
+    } catch (error) {
+      alert(`Error while fetching the data, ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  return { data, loading };
+};
