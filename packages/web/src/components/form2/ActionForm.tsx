@@ -182,20 +182,45 @@ export default function ActionForm({
               size="small"
               error={Boolean(formik.touched.websiteUrl && formik.errors.websiteUrl)}
             >
-              <InputLabel id="websiteUrl">Website URL</InputLabel>
+              <InputLabel id="websiteUrl">Website URL Field</InputLabel>
               <Select
                 labelId="websiteUrl"
                 id="websiteUrl"
                 name="websiteUrl"
                 value={formik.values.websiteUrl}
                 onChange={formik.handleChange}
-                label="Website URL"
+                label="Website URL Field"
               >
                 {fields?.map((field) => {
                   if (field?.label) {
                     if (field?.label.toUpperCase().includes('URL')) {
                       return <MenuItem value={field._id}>{field.label}</MenuItem>;
                     }
+                  }
+                  return null;
+                })}
+              </Select>
+            </FormControl>
+          </div>
+          <div className="d-flex align-items-center mt-3">
+            <FormControl
+              fullWidth
+              variant="outlined"
+              size="small"
+              error={Boolean(formik.touched.report && formik.errors.report)}
+            >
+              <InputLabel id="report">Lighthouse Report Field</InputLabel>
+              <Select
+                labelId="report"
+                id="report"
+                name="report"
+                value={formik.values.report}
+                onChange={formik.handleChange}
+                label="Lighthouse Report Field"
+              >
+                {fields?.map((field) => {
+                  if (field?.fieldType === 'output') {
+                    return <MenuItem value={field._id}>{field.label}</MenuItem>;
                   }
                   return null;
                 })}

@@ -173,7 +173,7 @@ export default function FormViewWrapper({
           'https://us-central1-boossti.cloudfunctions.net/lightHouseHTTP',
           { params: { url, id: 2 } },
         );
-        values.push({ value: seoReportResponse.data, field: form?.fields[1]?._id });
+        values.push({ value: seoReportResponse.data, field: actionforSeoReport?.report });
       }
     }
     payload = {

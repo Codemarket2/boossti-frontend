@@ -108,6 +108,7 @@ interface IFormValues {
   lastName: string;
   userEmail: string;
   websiteUrl: string;
+  report: string;
 }
 
 const defaultFormValues = {
@@ -133,6 +134,7 @@ const defaultFormValues = {
   lastName: '',
   userEmail: '',
   websiteUrl: '',
+  report: '',
 };
 
 interface IProps extends IHooksProps {
@@ -183,6 +185,7 @@ export function useFormActions({ onAlert, onSave }: IProps) {
     formik.setFieldValue('lastName', payload?.lastName, false);
     formik.setFieldValue('userEmail', payload?.userEmail, false);
     formik.setFieldValue('websiteUrl', payload?.websiteUrl, false);
+    formik.setFieldValue('report', payload?.report, false);
   };
 
   return { formik, setFormValues };
