@@ -35,6 +35,7 @@ import BulkUploadAction from './BulkUploadAction';
 import NotFound from '../common/NotFound';
 import UnAuthorised from '../common/UnAuthorised';
 import Permissions from './Permissions';
+import AuditLog from '../auditLog/AuditLog';
 
 interface IProps {
   _id: string;
@@ -186,6 +187,7 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
                   <Tab label="Actions" value="actions" />
                   <Tab label="Workflows" value="workflows" />
                   <Tab label="Responses" value="responses" />
+                  <Tab label="Activity" value="activity" />
                   {state?.name?.toUpperCase().includes('ROLE') && (
                     <Tab label="Permissions" value="permissions" />
                   )}
@@ -230,6 +232,7 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
                 </>
               )}
               {options.currentTab === 'permissions' && <Permissions formId={_id} form={state} />}
+              {options.currentTab === 'activity' && <AuditLog documentId={_id} formId={_id} />}
             </Grid>
           </Grid>
         </div>
