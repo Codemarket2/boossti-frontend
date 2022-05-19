@@ -14656,6 +14656,11 @@ react-is@^18.0.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.0.0.tgz#026f6c4a27dbe33bf4a35655b9e1327c4e55e3f5"
   integrity sha512-yUcBYdBBbo3QiPsgYDcfQcIkGZHfxOaoE6HLSnr1sPzMhdyxusbfKOSUbSd/ocGi32dxcj366PsTj+5oggeKKw==
 
+react-lighthouse-viewer@^6.0.2:
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/react-lighthouse-viewer/-/react-lighthouse-viewer-6.0.2.tgz#da5089ee32248f86e2d777c690d1ab01b8a1fe6f"
+  integrity sha512-sr4uYN9pnN50tTfpFHNXHoSWoaSVTAXsO5X+T0ojR0iCUtfT39ZRFQvL2u89w7p40yob3baDZtBIMouStK/ycg==
+
 react-material-ui-carousel@^2.3.5:
   version "2.3.11"
   resolved "https://registry.yarnpkg.com/react-material-ui-carousel/-/react-material-ui-carousel-2.3.11.tgz#0523d4a97caa2fd7d21d803e165b9f3120fe7693"

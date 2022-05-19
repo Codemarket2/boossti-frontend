@@ -142,7 +142,13 @@ export default function ActionForm({
             <MenuItem value="createCognitoUser">Create Cognito User</MenuItem>
             <MenuItem value="updateCognitoUser">Update Cognito User</MenuItem>
             <MenuItem value="deleteCognitoUser">Delete Cognito User</MenuItem>
-            <MenuItem value="createSeoReport">Create Lighthouse SEO Audit Report</MenuItem>
+            {fields?.some((field) => field?.fieldType === 'link' && field?.options?.required) ? (
+              <MenuItem value="createSeoReport">Create Lighthouse SEO Audit Report</MenuItem>
+            ) : (
+              <MenuItem disabled value="createSeoReport">
+                Create Lighthouse SEO Audit Report
+              </MenuItem>
+            )}
           </Select>
           {formik.touched.actionType && formik.errors.actionType ? (
             <FormHelperText className="text-danger">{formik.errors.actionType}</FormHelperText>
