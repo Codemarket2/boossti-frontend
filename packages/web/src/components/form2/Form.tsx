@@ -18,7 +18,6 @@ import { useUpdateForm, useDeleteForm } from '@frontend/shared/hooks/form';
 import { useAuthorization } from '@frontend/shared/hooks/auth';
 import Link from 'next/link';
 import Container from '@mui/material/Container';
-import TextField from '@mui/material/TextField';
 import ErrorLoading from '../common/ErrorLoading';
 import Breadcrumbs from '../common/Breadcrumbs';
 import Backdrop from '../common/Backdrop';
@@ -53,7 +52,7 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
   });
 
   const [options, setOptions] = useState({
-    currentTab: 'preview',
+    currentTab: 'activity',
     snackBar: '',
     backdrop: false,
   });

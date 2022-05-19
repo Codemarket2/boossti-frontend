@@ -13,6 +13,7 @@ export const GET_AUDIT_LOGS = gql`
           name
         }
         model
+        diff
       }
     }
   }
