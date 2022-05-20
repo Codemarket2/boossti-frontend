@@ -31,5 +31,5 @@ export const fieldTypes: FieldType[] = [
   { label: 'Link', value: 'link' },
   { label: 'Color Picker', value: 'colorPicker' },
   { label: 'Barcode Scanner', value: 'barcodeScanner' },
-  { label: 'Output', value: 'output' },
+  { label: 'Lighthouse Report', value: 'lighthouseReport' },
 ];

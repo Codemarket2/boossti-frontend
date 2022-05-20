@@ -111,8 +111,16 @@ export default function DisplayValue({ field, value, imageAvatar }: IProps) {
           ))}
         </Box>
       );
-    case 'output':
-      return <LighthouseReport report={value?.value} />;
+    case 'lighthouseReport':
+      return (
+        <>
+          {field?.options?.output ? (
+            <LighthouseReport report={value?.value} />
+          ) : (
+            <>{value?.value}</>
+          )}
+        </>
+      );
     default:
       return <>{value?.value}</>;
   }
