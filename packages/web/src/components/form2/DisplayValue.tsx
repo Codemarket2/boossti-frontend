@@ -7,6 +7,7 @@ import DisplayRichText from '../common/DisplayRichText';
 import { ShowResponseLabel } from '../response/ResponseDrawer';
 import PageDrawer from '../template/PageDrawer';
 import ImageList from '../post/ImageList';
+import { LighthouseReport } from './LighthouseReportRendrer';
 
 interface IProps {
   field: any;
@@ -109,6 +110,16 @@ export default function DisplayValue({ field, value, imageAvatar }: IProps) {
             </Box>
           ))}
         </Box>
+      );
+    case 'lighthouseReport':
+      return (
+        <>
+          {field?.options?.output ? (
+            <LighthouseReport report={value?.value} />
+          ) : (
+            <>{value?.value}</>
+          )}
+        </>
       );
     default:
       return <>{value?.value}</>;

@@ -219,7 +219,7 @@ export default function ActionForm({
                 label="Lighthouse Report Field"
               >
                 {fields?.map((field) => {
-                  if (field?.fieldType === 'output') {
+                  if (field?.fieldType === 'lighthouseReport') {
                     return <MenuItem value={field._id}>{field.label}</MenuItem>;
                   }
                   return null;
