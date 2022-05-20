@@ -394,6 +394,24 @@ export default function Field({
     case 'address': {
       return <AddressSearch _id={_id} onChange={onChange} values={value} />;
     }
+    case 'output': {
+      return (
+        <TextField
+          style={{ display: 'none' }}
+          multiline
+          rows={6}
+          fullWidth
+          placeholder={label}
+          variant="outlined"
+          name="value"
+          size="small"
+          type={['email', 'password'].includes(fieldType) ? fieldType : 'text'}
+          disabled={disabled}
+          value={value ? value.value : ''}
+          onChange={({ target }) => onChange({ field: _id, value: target.value })}
+        />
+      );
+    }
     default: {
       const textValidation = validateValue(validate, value, {
         options,

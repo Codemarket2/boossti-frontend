@@ -15,6 +15,7 @@ import { ArrowBackIosRounded, ArrowForwardIosRounded } from '@mui/icons-material
 import { useGetResponses } from '@frontend/shared/hooks/response/getResponse';
 import { useCreateUpdateResponse } from '@frontend/shared/hooks/response';
 import { validateForm, validateValue } from '@frontend/shared/utils/validate';
+import axios from 'axios';
 import ResponseList from '../response/ResponseList';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
@@ -156,6 +157,24 @@ export default function FormViewWrapper({
         password: nPassword,
         generateNewUserEmail: checkNewUser,
       };
+    }
+
+    if (
+      form?.settings?.actions?.length > 0 &&
+      form?.settings?.actions?.find((e) => e?.actionType === 'createSeoReport')
+    ) {
+      const actionforSeoReport = form?.settings?.actions?.find(
+        (e) => e?.actionType === 'createSeoReport',
+      );
+      const valueOfSeoReport = values?.find((v) => v?.field === actionforSeoReport?.websiteUrl);
+      const url = valueOfSeoReport?.value;
+      if (url) {
+        const seoReportResponse = await axios.get(
+          'https://us-central1-boossti.cloudfunctions.net/lightHouseHTTP',
+          { params: { url, id: 2 } },
+        );
+        values.push({ value: seoReportResponse.data, field: actionforSeoReport?.report });
+      }
     }
     payload = {
       ...payload,

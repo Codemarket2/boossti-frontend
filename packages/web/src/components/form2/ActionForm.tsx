@@ -142,6 +142,13 @@ export default function ActionForm({
             <MenuItem value="createCognitoUser">Create Cognito User</MenuItem>
             <MenuItem value="updateCognitoUser">Update Cognito User</MenuItem>
             <MenuItem value="deleteCognitoUser">Delete Cognito User</MenuItem>
+            {fields?.some((field) => field?.fieldType === 'link' && field?.options?.required) ? (
+              <MenuItem value="createSeoReport">Create Lighthouse SEO Audit Report</MenuItem>
+            ) : (
+              <MenuItem disabled value="createSeoReport">
+                Create Lighthouse SEO Audit Report
+              </MenuItem>
+            )}
           </Select>
           {formik.touched.actionType && formik.errors.actionType ? (
             <FormHelperText className="text-danger">{formik.errors.actionType}</FormHelperText>
@@ -166,6 +173,62 @@ export default function ActionForm({
           helperText={formik.touched.name && formik.errors.name}
         />
       </InputGroup>
+      {['createSeoReport']?.includes(formik.values.actionType) && (
+        <>
+          <div className="d-flex align-items-center">
+            <FormControl
+              fullWidth
+              variant="outlined"
+              size="small"
+              error={Boolean(formik.touched.websiteUrl && formik.errors.websiteUrl)}
+            >
+              <InputLabel id="websiteUrl">Website URL Field</InputLabel>
+              <Select
+                labelId="websiteUrl"
+                id="websiteUrl"
+                name="websiteUrl"
+                value={formik.values.websiteUrl}
+                onChange={formik.handleChange}
+                label="Website URL Field"
+              >
+                {fields?.map((field) => {
+                  if (field?.label) {
+                    if (field?.label.toUpperCase().includes('URL')) {
+                      return <MenuItem value={field._id}>{field.label}</MenuItem>;
+                    }
+                  }
+                  return null;
+                })}
+              </Select>
+            </FormControl>
+          </div>
+          <div className="d-flex align-items-center mt-3">
+            <FormControl
+              fullWidth
+              variant="outlined"
+              size="small"
+              error={Boolean(formik.touched.report && formik.errors.report)}
+            >
+              <InputLabel id="report">Lighthouse Report Field</InputLabel>
+              <Select
+                labelId="report"
+                id="report"
+                name="report"
+                value={formik.values.report}
+                onChange={formik.handleChange}
+                label="Lighthouse Report Field"
+              >
+                {fields?.map((field) => {
+                  if (field?.fieldType === 'output') {
+                    return <MenuItem value={field._id}>{field.label}</MenuItem>;
+                  }
+                  return null;
+                })}
+              </Select>
+            </FormControl>
+          </div>
+        </>
+      )}
       {['createCognitoGroup', 'updateCognitoGroup', 'deleteCognitoGroup']?.includes(
         formik.values.actionType,
       ) && (
@@ -525,6 +588,7 @@ export default function ActionForm({
         'createCognitoUser',
         'updateCognitoUser',
         'deleteCognitoUser',
+        'createSeoReport',
       ]?.includes(formik.values.actionType) && (
         <InputGroup>
           <Typography variant="h6" className="d-flex align-items-center pl-2">
