@@ -7,6 +7,7 @@ import DisplayRichText from '../common/DisplayRichText';
 import { ShowResponseLabel } from '../response/ResponseDrawer';
 import PageDrawer from '../template/PageDrawer';
 import ImageList from '../post/ImageList';
+import DisplayFiles from '../fileLibrary/DisplayFiles';
 import { LighthouseReport } from './LighthouseReportRendrer';
 
 interface IProps {
@@ -98,6 +99,9 @@ export default function DisplayValue({ field, value, imageAvatar }: IProps) {
           media={value?.tempMedia ? [...value?.media, ...value?.tempMedia] : value?.media}
         />
       );
+    case 'file': {
+      return <DisplayFiles urls={[value?.value]} />;
+    }
     case 'address':
       return (
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>

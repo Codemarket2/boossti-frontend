@@ -70,7 +70,7 @@ export function useGetForm(_id: string) {
 }
 
 export function useGetFormBySlug(slug: string): any {
-  const [getFormBySlug, setGetFormBySlug] = useState(null);
+  const [getFormBySlug2, setGetFormBySlug] = useState(null);
   const { data, error, loading } = useQuery(GET_FORM_BY_SLUG, {
     variables: { slug },
   });
@@ -81,7 +81,7 @@ export function useGetFormBySlug(slug: string): any {
     }
   }, [data]);
 
-  return { data: getFormBySlug ? { getFormBySlug } : null, error, loading };
+  return { data: getFormBySlug2 ? { getFormBySlug: getFormBySlug2 } : null, error, loading };
 }
 
 export async function getForm(_id) {
@@ -95,5 +95,15 @@ export async function getForm(_id) {
   } catch (error) {
     // console.log({ error });
   }
+  return form;
+}
+
+export async function getFormBySlug(slug: string) {
+  let form = null;
+  const response = await apolloClient.query({
+    query: GET_FORM_BY_SLUG,
+    variables: { slug },
+  });
+  form = parseForm(response?.data?.getFormBySlug);
   return form;
 }

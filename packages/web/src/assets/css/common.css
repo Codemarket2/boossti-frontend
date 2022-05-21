@@ -3,3 +3,24 @@
     display: block !important;
   }
 }
+
+/* Theming */
+.gjs-one-bg {
+  background-color: #ffffff !important;
+  /* color: #000000 !important; */
+}
+
+.gjs-two-color {
+  color: #000000 !important;
+}
+
+.gjs-three-bg {
+  background-color: #6101ee !important;
+  color: white !important;
+}
+
+.gjs-four-color,
+.gjs-four-color-h:hover {
+  color: #6101ee !important;
+  background-color: #eff2f5 !important;
+}

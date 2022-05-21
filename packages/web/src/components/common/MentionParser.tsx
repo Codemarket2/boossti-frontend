@@ -120,7 +120,7 @@ export default function MentionParser({
               }
             }}
           >
-            <ListItemIcon className="mr-n4">
+            <ListItemIcon className="mr-n3">
               <BookmarkIcon fontSize="small" />
             </ListItemIcon>
             <ListItemText primary="Save Tag" />

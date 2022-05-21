@@ -120,7 +120,7 @@ export default function BookmarkList() {
             alert('Bookmark deleted!');
           }}
         >
-          <ListItemIcon className="mr-n4">
+          <ListItemIcon className="mr-n3">
             <DeleteIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="Delete" />
