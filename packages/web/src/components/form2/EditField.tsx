@@ -197,6 +197,19 @@ export default function FormFields({
             label="Response Not Editable"
           />
         </InputGroup>
+        <InputGroup>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={field?.options?.output}
+                onChange={({ target }) => onOptionChange({ output: target.checked })}
+                name="output"
+                color="primary"
+              />
+            }
+            label="Output"
+          />
+        </InputGroup>
         {field.fieldType === 'select' && (
           <>
             <InputGroup>

@@ -15275,6 +15275,11 @@ react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
+  
+react-lighthouse-viewer@^6.0.2:
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/react-lighthouse-viewer/-/react-lighthouse-viewer-6.0.2.tgz#da5089ee32248f86e2d777c690d1ab01b8a1fe6f"
+  integrity sha512-sr4uYN9pnN50tTfpFHNXHoSWoaSVTAXsO5X+T0ojR0iCUtfT39ZRFQvL2u89w7p40yob3baDZtBIMouStK/ycg==
 
 react-material-ui-carousel@^2.3.5:
   version "2.3.11"
@@ -16892,6 +16897,13 @@ store2@^2.12.0:
   version "2.13.2"
   resolved "https://registry.yarnpkg.com/store2/-/store2-2.13.2.tgz#01ad8802ca5b445b9c316b55e72645c13a3cd7e3"
   integrity sha512-CMtO2Uneg3SAz/d6fZ/6qbqqQHi2ynq6/KzMD/26gTkiEShCcpqFfTHgOxsE0egAq6SX3FmN4CeSqn8BzXQkJg==
+
+storybook-addon-apollo-client@^4.0.11:
+  version "4.0.11"
+  resolved "https://registry.yarnpkg.com/storybook-addon-apollo-client/-/storybook-addon-apollo-client-4.0.11.tgz#3f46cb2d62fc6e34f6183bde8decf2787c1a3ee6"
+  integrity sha512-8vDK+egG2WzlXiLELY3mVuSKUCI8FfuJ7PMz5SbwnCcmP1s3GLpzDl5xr7nJitnk7UCMQeQQh327J8IphaS5PA==
+  dependencies:
+    tslib "^2.3.0"
 
 stream-browserify@^2.0.1:
   version "2.0.2"

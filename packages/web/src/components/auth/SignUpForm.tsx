@@ -9,6 +9,7 @@ import SocialSignIn from './SocialSignIn';
 import PasswordInput from '../common/PasswordInput';
 import InputGroup from '../common/InputGroup';
 import FormView from '../form2/FormView';
+import { FormPage } from '../form2/FormPage';
 
 export default function SignUpForm() {
   const slug = 'users';
@@ -109,7 +110,7 @@ export default function SignUpForm() {
     //   </InputGroup>
     // </form>
     <>
-      <FormView form={form} />
+      <FormPage slug={slug} />
       <SocialSignIn signIn={false} />
     </>
   );
