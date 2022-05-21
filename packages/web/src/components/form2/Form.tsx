@@ -52,7 +52,7 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
   });
 
   const [options, setOptions] = useState({
-    currentTab: 'activity',
+    currentTab: 'preview',
     snackBar: '',
     backdrop: false,
   });

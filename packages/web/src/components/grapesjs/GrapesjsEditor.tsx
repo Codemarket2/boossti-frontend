@@ -6,6 +6,7 @@ import 'grapesjs-preset-newsletter';
 
 import 'grapesjs/dist/css/grapes.min.css';
 import { Button } from '@mui/material';
+import { addTagToLink } from './addTagToLink';
 
 export default function GrapesjsEditor() {
   const [state, setState] = useState({ showLibrary: false, props: null });
@@ -23,6 +24,7 @@ export default function GrapesjsEditor() {
       //     close(props) {},
       //   },
       // },
+      storageManager: false,
     });
 
     editor.Panels.addButton('options', {
@@ -30,6 +32,10 @@ export default function GrapesjsEditor() {
       attributes: { title: 'Save' },
       label: 'Save',
       command(editor2) {
+        let html = editor2.runCommand('gjs-get-inlined-html');
+        html = addTagToLink(html);
+        // eslint-disable-next-line no-console
+        console.log(html);
         alert('Saving to database');
       },
     });

@@ -1,6 +1,6 @@
 // import dynamic from 'next/dynamic';
 import React from 'react';
-import GrapesjsEditor from '../src/components/common/GrapesjsEditor';
+import GrapesjsEditor from '../src/components/grapesjs/GrapesjsEditor';
 // const GrapesjsEditor = dynamic(() => import('../src/components/common/GrapesjsEditor'), {
 //   ssr: false,
 // });
