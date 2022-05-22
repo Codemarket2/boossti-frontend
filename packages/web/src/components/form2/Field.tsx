@@ -427,6 +427,29 @@ export default function Field({
         </div>
       );
     }
+    case 'link': {
+      const textValidation = validateValue(validate, value, {
+        options,
+        fieldType: ['link'].includes(fieldType) ? 'url' : 'text',
+      });
+      return (
+        <div style={{ display: options?.output && 'none' }}>
+          <TextField
+            fullWidth
+            placeholder={label}
+            variant="outlined"
+            name="value"
+            size="small"
+            type="url"
+            disabled={disabled}
+            value={value ? value.value : ''}
+            onChange={({ target }) => onChange({ field: _id, value: target.value })}
+            error={textValidation.error}
+            helperText={textValidation.errorMessage}
+          />
+        </div>
+      );
+    }
     default: {
       const textValidation = validateValue(validate, value, {
         options,

@@ -572,15 +572,20 @@ export function FormView({
             <div style={field?.options?.style || {}}>
               <InputGroup key={field._id}>
                 <Typography>
-                  {unique && field?.options?.unique && field?.options?.required ? (
+                  {unique &&
+                  field?.options?.unique &&
+                  field?.options?.required &&
+                  !field?.options?.output ? (
                     <span className="text-danger">
                       {`${field?.label}*`} This field must be unique*
                     </span>
                   ) : field?.options?.required ||
-                    (field?.options?.unique && field?.options?.required) ? (
+                    (field?.options?.unique &&
+                      field?.options?.required &&
+                      !field?.options?.output) ? (
                     <span className="text-danger">{`${field?.label}*`}</span>
                   ) : (
-                    field?.label
+                    !field?.options?.output && field?.label
                   )}
                 </Typography>
                 <>
@@ -596,7 +601,11 @@ export function FormView({
                             : submitState.loading
                         }
                         validate={submitState.validate}
-                        label={field?.options?.required ? `${field?.label}*` : field?.label}
+                        label={
+                          field?.options?.required && !field?.options?.output
+                            ? `${field?.label}*`
+                            : field?.label
+                        }
                         onChangeValue={(changedValue) =>
                           onChange(
                             { ...changedValue, field: field._id },

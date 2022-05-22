@@ -227,6 +227,56 @@ export default function ActionForm({
               </Select>
             </FormControl>
           </div>
+          <div className="d-flex align-items-center mt-3">
+            <FormControl
+              fullWidth
+              variant="outlined"
+              size="small"
+              error={Boolean(formik.touched.responseLink && formik.errors.responseLink)}
+            >
+              <InputLabel id="responseLink">Response Link</InputLabel>
+              <Select
+                labelId="responseLink"
+                id="responseLink"
+                name="responseLink"
+                value={formik.values.responseLink}
+                onChange={formik.handleChange}
+                label="Response Link"
+              >
+                {fields?.map((field) => {
+                  if (field?.fieldType === 'link') {
+                    return <MenuItem value={field._id}>{field.label}</MenuItem>;
+                  }
+                  return null;
+                })}
+              </Select>
+            </FormControl>
+          </div>
+          <div className="d-flex align-items-center mt-3">
+            <FormControl
+              fullWidth
+              variant="outlined"
+              size="small"
+              error={Boolean(formik.touched.reportScreenshoot && formik.errors.reportScreenshoot)}
+            >
+              <InputLabel id="reportScreenshoot">Report Screenshoot Field</InputLabel>
+              <Select
+                labelId="reportScreenshoot"
+                id="reportScreenshoot"
+                name="reportScreenshoot"
+                value={formik.values.reportScreenshoot}
+                onChange={formik.handleChange}
+                label="Report Screenshoot Field"
+              >
+                {fields?.map((field) => {
+                  if (field?.fieldType === 'image') {
+                    return <MenuItem value={field._id}>{field.label}</MenuItem>;
+                  }
+                  return null;
+                })}
+              </Select>
+            </FormControl>
+          </div>
         </>
       )}
       {['createCognitoGroup', 'updateCognitoGroup', 'deleteCognitoGroup']?.includes(
