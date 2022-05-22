@@ -1,9 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import moment from 'moment';
 import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
+import Button from '@mui/material/Button';
 import AdapterMoment from '@mui/lab/AdapterMoment';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import DatePicker from '@mui/lab/DatePicker';
@@ -25,6 +26,9 @@ import ColorInput from '../customMUI/ColorInput/ColorInput';
 import SelectFormFields from './SelectFormFields';
 import AddressSearch from '../common/AddressSearch';
 import BarcodeInput from '../customMUI/BarcodeInput/BarcodeInput';
+import CreateResponseDrawer from '../response/CreateResponseDrawer';
+import FileUpload from '../fileLibrary/FileUpload';
+import DisplayFiles from '../fileLibrary/DisplayFiles';
 
 interface IProps {
   disabled?: boolean;
@@ -68,6 +72,8 @@ export default function Field({
       setTimeout(() => handleCheckUnique(), 1500);
     }
   }, [value]);
+
+  const [addOption, setAddOption] = useState({ showDrawer: false });
 
   const handleCheckUnique = async () => {
     await checkUnique(value.value, value?.field, formId).then((res) => {
@@ -213,6 +219,25 @@ export default function Field({
         </div>
       );
     }
+
+    case 'file': {
+      return (
+        <div>
+          {value?.value ? (
+            <DisplayFiles
+              urls={[value?.value]}
+              onDelete={(url) => onChange({ field: _id, value: '' })}
+            />
+          ) : (
+            <FileUpload onUpload={(fileUrls) => onChange({ field: _id, value: fileUrls[0] })} />
+          )}
+          {validation.error && (
+            <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
+          )}
+        </div>
+      );
+    }
+
     case 'select': {
       const optionsTemplate = options?.optionsTemplate || value?.options?.optionsTemplate;
       return (
@@ -450,6 +475,35 @@ export default function Field({
         </div>
       );
     }
+
+    case 'existingForm': {
+      return (
+        <>
+          {(form?._id || value?.form?._id) && (
+            <CreateResponseDrawer
+              open={addOption?.showDrawer}
+              onClose={() => setAddOption({ ...addOption, showDrawer: false })}
+              title={label}
+              formId={form?._id}
+              createCallback={(newResponse) => {
+                setAddOption({ ...addOption, showDrawer: false });
+              }}
+            />
+          )}
+          <Button
+            variant="contained"
+            size="small"
+            className="mt-2"
+            onClick={() => {
+              setAddOption({ ...addOption, showDrawer: true });
+            }}
+          >
+            Add
+          </Button>
+        </>
+      );
+    }
+
     default: {
       const textValidation = validateValue(validate, value, {
         options,

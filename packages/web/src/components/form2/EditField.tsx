@@ -158,6 +158,33 @@ export default function FormFields({
             />
           </InputGroup>
         )}
+        {field.fieldType === 'existingForm' && (
+          <InputGroup>
+            <SelectForm
+              value={field.form}
+              onChange={(newValue) =>
+                onFieldChange({
+                  ...field,
+                  form: newValue,
+                  options: { ...field.options, formField: '' },
+                })
+              }
+              error={!field.form}
+              helperText={!field.form && 'required'}
+            />
+            {field.form && (
+              <div className="mt-3">
+                <SelectFormFields
+                  formId={field.form?._id}
+                  value={field?.options?.formField}
+                  onChange={(newValue) => onOptionChange({ formField: newValue })}
+                  error={!field?.options?.formField}
+                  helperText={!field?.options?.formField && 'required'}
+                />
+              </div>
+            )}
+          </InputGroup>
+        )}
         <InputGroup>
           <FormControlLabel
             control={
@@ -207,7 +234,22 @@ export default function FormFields({
                 color="primary"
               />
             }
-            label="Output"
+            label="System Calculated & Saved"
+          />
+        </InputGroup>
+        <InputGroup>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={field?.options?.systemCalculatedAndView}
+                onChange={({ target }) =>
+                  onOptionChange({ systemCalculatedAndView: target.checked })
+                }
+                name="systemCalculatedAndView"
+                color="primary"
+              />
+            }
+            label="System Calculated & View"
           />
         </InputGroup>
         {field.fieldType === 'select' && (

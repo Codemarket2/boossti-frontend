@@ -13,6 +13,7 @@ type FieldType = {
 export const sectionFieldTypes: FieldType[] = [{ label: 'Form', value: 'form' }];
 
 export const fieldTypes: FieldType[] = [
+  { label: 'Existing Form', value: 'existingForm' },
   { label: 'Text', value: 'text' },
   { label: 'Number', value: 'number' },
   { label: 'Password', value: 'password' },
@@ -25,6 +26,7 @@ export const fieldTypes: FieldType[] = [
   { label: 'Date', value: 'date' },
   { label: 'Date & Time', value: 'dateTime' },
   { label: 'Image', value: 'image' },
+  { label: 'File', value: 'file' },
   // { label: 'Media (Images/Video)', value: 'media' },
   { label: 'Address', value: 'address' },
   { label: 'Static Text', value: 'label' },
