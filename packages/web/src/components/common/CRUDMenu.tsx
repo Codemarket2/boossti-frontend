@@ -29,7 +29,7 @@ export default function CRUDMenu({
     <Menu anchorEl={show} keepMounted open={Boolean(show)} onClose={onClose}>
       {!hideEdit && (
         <MenuItem onClick={onEdit}>
-          <ListItemIcon className="mr-n4">
+          <ListItemIcon className="mr-n3">
             <EditIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="Edit" />
@@ -45,7 +45,7 @@ export default function CRUDMenu({
             }
           }}
         >
-          <ListItemIcon className="mr-n4">
+          <ListItemIcon className="mr-n3">
             <DeleteIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText primary="Delete" />

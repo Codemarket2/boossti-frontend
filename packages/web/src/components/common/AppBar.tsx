@@ -159,7 +159,7 @@ export default function AppBarComponent() {
               >
                 {/* <Link href={`/user/${attributes['custom:_id']}`}>
                   <MenuItem>
-                    <ListItemIcon className="mr-n4">
+                    <ListItemIcon className="mr-n3">
                       <AccountCircleIcon fontSize="small" />
                     </ListItemIcon>
                     <ListItemText primary="Profile" />
@@ -167,14 +167,14 @@ export default function AppBarComponent() {
                 </Link>
                 <Link href="/create-post" passHref>
                   <MenuItem>
-                    <ListItemIcon className="mr-n4">
+                    <ListItemIcon className="mr-n3">
                       <AddIcon fontSize="small" />
                     </ListItemIcon>
                     <ListItemText primary="Create Post" />
                   </MenuItem>
                 </Link> */}
                 <MenuItem onClick={handleLogout}>
-                  <ListItemIcon className="mr-n4">
+                  <ListItemIcon className="mr-n3">
                     <ExitToAppIcon fontSize="small" />
                   </ListItemIcon>
                   <ListItemText primary="Logout" />
