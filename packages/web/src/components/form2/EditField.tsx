@@ -234,7 +234,22 @@ export default function FormFields({
                 color="primary"
               />
             }
-            label="Output"
+            label="System Calculated & Saved"
+          />
+        </InputGroup>
+        <InputGroup>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={field?.options?.systemCalculatedAndView}
+                onChange={({ target }) =>
+                  onOptionChange({ systemCalculatedAndView: target.checked })
+                }
+                name="systemCalculatedAndView"
+                color="primary"
+              />
+            }
+            label="System Calculated & View"
           />
         </InputGroup>
         {field.fieldType === 'select' && (
