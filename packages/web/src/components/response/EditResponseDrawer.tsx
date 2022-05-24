@@ -33,6 +33,8 @@ export default function EditResponseDrawer({ form, response, open, onClose }: IP
             handleSubmit={handleSubmit}
             loading={updateLoading}
             edit
+            formId={form?._id}
+            responseId={response?._id}
           />
         </Authorization>
       </div>

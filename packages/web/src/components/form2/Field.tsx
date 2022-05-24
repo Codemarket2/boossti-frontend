@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import moment from 'moment';
 import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
@@ -9,9 +9,9 @@ import AdapterMoment from '@mui/lab/AdapterMoment';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import DatePicker from '@mui/lab/DatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { useCheckUnique } from '@frontend/shared/hooks/response';
 import PhoneInput from 'react-phone-input-2';
 import { validateValue } from '@frontend/shared/utils/validate';
-import { checkUnique } from '@frontend/shared/hooks/form/checkUnique';
 import RichTextarea from '../common/RichTextarea2';
 import DisplayRichText from '../common/DisplayRichText';
 import SelectPage from '../template/SelectPage';
@@ -29,6 +29,7 @@ import BarcodeInput from '../customMUI/BarcodeInput/BarcodeInput';
 import CreateResponseDrawer from '../response/CreateResponseDrawer';
 import FileUpload from '../fileLibrary/FileUpload';
 import DisplayFiles from '../fileLibrary/DisplayFiles';
+import { onAlert } from '../../utils/alert';
 
 interface IProps {
   disabled?: boolean;
@@ -44,8 +45,9 @@ interface IProps {
   setMediaState: any;
   form: any;
   formId?: any;
-  unique: boolean;
   setUnique: any;
+  responseId?: string;
+  setUniqueLoading?: (args: boolean) => void;
 }
 
 export default function Field({
@@ -61,27 +63,21 @@ export default function Field({
   form,
   formId,
   setUnique,
+  responseId,
+  setUniqueLoading,
 }: IProps): any {
-  const onChange = (payload) => {
-    onChangeValue({ ...value, ...payload });
-    setUnique(false);
-  };
+  useCheckUnique({ formId, value, options, setUnique, onAlert, responseId, setUniqueLoading });
 
-  useEffect(() => {
+  const onChange = (payload) => {
+    // debugger;
+    onChangeValue({ ...value, ...payload });
     if (options?.unique && value?.value?.length > 0) {
-      setTimeout(() => handleCheckUnique(), 1500);
+      setUnique(false);
+      setUniqueLoading(true);
     }
-  }, [value]);
+  };
 
   const [addOption, setAddOption] = useState({ showDrawer: false });
-
-  const handleCheckUnique = async () => {
-    await checkUnique(value.value, value?.field, formId).then((res) => {
-      if (res.data.getCheckUnique.res) {
-        setUnique(true);
-      }
-    });
-  };
 
   const onChangeCheckbox = ({ target }) => {
     let newValues = [];

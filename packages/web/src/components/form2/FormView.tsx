@@ -405,6 +405,7 @@ interface IProps2 {
   fieldWiseView?: boolean;
   formId?: any;
   edit?: boolean;
+  responseId?: string;
 }
 
 const initialSubmitState = {
@@ -444,6 +445,7 @@ export function FormView({
   fieldWiseView = false,
   formId,
   edit,
+  responseId,
 }: IProps2): any {
   const [values, setValues] = useState(initialValues);
   const [editValue, setEditValue] = useState({ fieldId: null, index: null });
@@ -454,6 +456,7 @@ export function FormView({
   const [page, setPage] = useState(0);
   const [hideField, setHideField] = useState(false);
   const [unique, setUnique] = useState(false);
+  const [uniqueLoading, setUniqueLoading] = useState(false);
 
   useEffect(() => {
     if (hideField) {
@@ -549,6 +552,13 @@ export function FormView({
     setValues([...oldValues, ...newValues]);
   };
 
+  const fieldProps = {
+    formId,
+    responseId,
+    setUniqueLoading,
+    setUnique,
+  };
+
   return (
     <div className="position-relative">
       {!authenticated && showAuthModal && (
@@ -587,6 +597,7 @@ export function FormView({
                   ) : (
                     !field?.options?.output && field?.label
                   )}
+                  {/* {uniqueLoading && <span>Unique loading</span>} */}
                 </Typography>
                 <>
                   <div className="w-100">
@@ -595,6 +606,7 @@ export function FormView({
                     ) : (
                       <Field
                         {...field}
+                        {...fieldProps}
                         disabled={
                           edit && field.options.notEditable
                             ? submitState.loading || field.options.notEditable
@@ -612,10 +624,7 @@ export function FormView({
                             filterValues(values, field)?.length - 1,
                           )
                         }
-                        unique={unique}
-                        setUnique={setUnique}
                         value={filterValues(values, field)[filterValues(values, field)?.length - 1]}
-                        formId={formId}
                       />
                     )}
                   </div>
@@ -649,6 +658,7 @@ export function FormView({
                               ) : (
                                 <Field
                                   {...field}
+                                  {...fieldProps}
                                   disabled={submitState.loading}
                                   validate={submitState.validate}
                                   label={
@@ -657,10 +667,7 @@ export function FormView({
                                   onChangeValue={(changedValue) =>
                                     onChange({ ...changedValue, field: field._id }, valueIndex)
                                   }
-                                  unique={unique}
-                                  setUnique={setUnique}
                                   value={value}
-                                  formId={formId}
                                 />
                               )}
                             </div>
@@ -759,7 +766,7 @@ export function FormView({
           <Grid item xs={12}>
             <InputGroup style={{ display: 'flex' }}>
               <LoadingButton
-                disabled={validateForm(fields, values) || unique}
+                disabled={validateForm(fields, values) || unique || uniqueLoading}
                 loading={submitState.loading || loading}
                 onClick={onSubmit}
                 variant="contained"
