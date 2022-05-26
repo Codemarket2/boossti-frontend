@@ -1,8 +1,8 @@
 import { styled } from '@mui/material/styles';
 
 const InputGroup = styled('div')(({ theme }) => ({
-  marginTop: 8,
-  marginBottom: 8,
+  marginTop: 10,
+  marginBottom: 10,
 }));
 
 export default InputGroup;

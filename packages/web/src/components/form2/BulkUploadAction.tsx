@@ -102,10 +102,10 @@ export default function BulkUploadAction({ form }: IProps) {
 
   return (
     <>
-      <Typography variant="h5" className="d-flex align-items-center pl-2">
-        File Upload ( .xlsx, .csv, .xls)
+      <Typography variant="h6" className="d-flex align-items-center pl-2">
+        Bulk upload responses from file ( .xlsx, .csv, .xls)
         {!state.showForm && (
-          <Tooltip title="Add File Upload Action">
+          <Tooltip title="bulk upload responses">
             <IconButton
               color="primary"
               onClick={() => setState({ ...state, showForm: true })}
@@ -117,7 +117,7 @@ export default function BulkUploadAction({ form }: IProps) {
         )}
       </Typography>
       {state.showForm && (
-        <div style={{ margin: '35px', padding: '15px' }}>
+        <div className="p-4">
           <input
             accept=".csv,.xlsx,.xls"
             style={{ display: 'none' }}
@@ -131,6 +131,9 @@ export default function BulkUploadAction({ form }: IProps) {
               Select File
             </Button>
           </label>
+          <Button color="error" onClick={() => setState({ ...state, showForm: false })}>
+            Cancel
+          </Button>
           {isFilePicked ? (
             selectedFile?.map((File, i) => (
               <div key={i} style={{ padding: '25px' }}>

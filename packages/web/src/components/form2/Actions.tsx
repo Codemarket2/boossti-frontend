@@ -45,21 +45,7 @@ export default function Actions({ fields, settings, onChange }: IProps) {
   };
 
   return (
-    <Paper variant="outlined">
-      <Typography variant="h5" className="d-flex align-items-center pl-2">
-        Actions
-        {!state.showForm && (
-          <Tooltip title="Add New Action">
-            <IconButton
-              color="primary"
-              onClick={() => setState({ ...state, showForm: true })}
-              size="large"
-            >
-              <AddCircleIcon />
-            </IconButton>
-          </Tooltip>
-        )}
-      </Typography>
+    <>
       {state.showForm ? (
         <ActionForm
           emailFields={fields?.filter(
@@ -74,50 +60,68 @@ export default function Actions({ fields, settings, onChange }: IProps) {
           action={state.selectedItem}
         />
       ) : (
-        <List>
-          {settings?.actions?.map((action, i) => (
-            <ListItem button key={i}>
-              <ListItemText primary={action.name} secondary={action?.actionType} />
-              {!action?.active && (
-                <Tooltip title="Action is not active">
-                  <ListItemIcon className="text-danger">
-                    <ErrorOutlineIcon />
-                  </ListItemIcon>
-                </Tooltip>
-              )}
-              <ListItemSecondaryAction>
+        <Paper variant="outlined">
+          <Typography variant="h5" className="d-flex align-items-center pl-2">
+            Actions
+            {!state.showForm && (
+              <Tooltip title="Add New Action">
                 <IconButton
-                  edge="end"
-                  onClick={(event) =>
-                    setState({
-                      ...initialState,
-                      showMenu: event.currentTarget,
-                      selectedIndex: i,
-                      selectedItem: action,
-                    })
-                  }
+                  color="primary"
+                  onClick={() => setState({ ...state, showForm: true })}
                   size="large"
                 >
-                  <MoreVertIcon />
+                  <AddCircleIcon />
                 </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-          ))}
-          <CRUDMenu
-            show={state.showMenu}
-            onClose={() => setState(initialState)}
-            onDelete={onDelete}
-            onEdit={() =>
-              setState({
-                ...state,
-                showMenu: null,
-                showForm: true,
-              })
-            }
-          />
-        </List>
+              </Tooltip>
+            )}
+          </Typography>
+          {!state.showForm && (
+            <List>
+              {settings?.actions?.map((action, i) => (
+                <ListItem button key={i}>
+                  <ListItemText primary={action.name} secondary={action?.actionType} />
+                  {!action?.active && (
+                    <Tooltip title="Action is not active">
+                      <ListItemIcon className="text-danger">
+                        <ErrorOutlineIcon />
+                      </ListItemIcon>
+                    </Tooltip>
+                  )}
+                  <ListItemSecondaryAction>
+                    <IconButton
+                      edge="end"
+                      onClick={(event) =>
+                        setState({
+                          ...initialState,
+                          showMenu: event.currentTarget,
+                          selectedIndex: i,
+                          selectedItem: action,
+                        })
+                      }
+                      size="large"
+                    >
+                      <MoreVertIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              ))}
+              <CRUDMenu
+                show={state.showMenu}
+                onClose={() => setState(initialState)}
+                onDelete={onDelete}
+                onEdit={() =>
+                  setState({
+                    ...state,
+                    showMenu: null,
+                    showForm: true,
+                  })
+                }
+              />
+            </List>
+          )}
+        </Paper>
       )}
-    </Paper>
+    </>
   );
 }
 

@@ -193,5 +193,5 @@ export function useFormActions({ onAlert, onSave }: IProps) {
     formik.setValues(newValues);
   };
 
-  return { formik, setFormValues };
+  return { formik, setFormValues, edit };
 }
