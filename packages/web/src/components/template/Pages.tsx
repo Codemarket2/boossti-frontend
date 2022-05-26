@@ -72,7 +72,7 @@ export default function Pages({ templateId, slug, template }: IProps) {
               loading={createLoading}
               startIcon={<AddIcon />}
             >
-              Create New Page
+              Create New {template?.title}
             </LoadingButton>
           </Tooltip>
         </div>

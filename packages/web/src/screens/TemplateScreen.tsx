@@ -27,9 +27,10 @@ import { onAlert } from '../utils/alert';
 import InlineForm from '../components/template/InlineForm';
 import SeoOverlay from '../components/template/SeoOverlay';
 import { QRButton } from '../components/qrcode/QRButton';
-import TemplateFields from '../components/template/TemplateFields';
+import TemplateWidgets from '../components/template/TemplateWidgets';
 import EditMode from '../components/common/EditMode';
 import DeleteButton from '../components/common/DeleteButton';
+import TemplateIntances from '../components/template/TemplateIntances';
 
 interface IProps {
   slug: string;
@@ -198,7 +199,7 @@ export default function Screen({ slug }: IProps) {
             )}
             {authorized && (
               <>
-                <Typography>
+                {/* <Typography>
                   SEO
                   <Tooltip title="Edit seo">
                     <IconButton
@@ -208,7 +209,7 @@ export default function Screen({ slug }: IProps) {
                       <EditIcon fontSize="small" />
                     </IconButton>
                   </Tooltip>
-                </Typography>
+                </Typography> */}
                 {state.showSeoOverlay && (
                   <SeoOverlay
                     open={state.showSeoOverlay}
@@ -227,14 +228,15 @@ export default function Screen({ slug }: IProps) {
               </>
             )}
           </Paper>
-          <TemplateFields template={data.getTemplateBySlug} previewMode={!authorized} />
+          <TemplateWidgets template={data.getTemplateBySlug} previewMode={!authorized} />
         </Grid>
         <Grid item xs>
-          <Pages
+          <TemplateIntances template={data.getTemplateBySlug} />
+          {/* <Pages
             templateId={data.getTemplateBySlug._id}
             slug={data.getTemplateBySlug.slug}
             template={data.getTemplateBySlug}
-          />
+          /> */}
         </Grid>
       </Grid>
       <Backdrop open={deleteLoading || CRUDLoading} />

@@ -49,7 +49,7 @@ function createData(
 export default function Permissions(props: IPermissionProps) {
   const { form, formId } = props;
   const [permissions, setPermissions] = useState<IPermission[]>([]);
-  const { data, error, loading, state, setState, refetch } = useGetResponses(formId);
+  const { data, error, loading, state, setState, refetch } = useGetResponses({ formId });
 
   if (error) return <ErrorLoading error={error} />;
 

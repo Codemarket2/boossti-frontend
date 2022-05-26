@@ -31,12 +31,14 @@ export function useGetForms({ page = 1, limit = 20 }: IProps) {
 export const parseForm = (form) => {
   const parsedForm = {
     ...form,
-    fields: form?.fields?.map((m) => {
+  };
+  if (form?.fields) {
+    parsedForm.fields = form?.fields?.map((m) => {
       const field = { ...m };
       field.options = JSON.parse(field.options);
       return field;
-    }),
-  };
+    });
+  }
   if (form?.settings) {
     parsedForm.settings = JSON.parse(form?.settings);
   }

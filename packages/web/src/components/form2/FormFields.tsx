@@ -253,8 +253,14 @@ export default function FormFields({
                                     primary={field.label}
                                     secondary={
                                       !previewMode &&
-                                      ((field?.fieldType === 'form' && field?.form?.name) ||
-                                        field.fieldType)
+                                      `${field.fieldType} ${
+                                        field?.fieldType === 'form' ? field?.form?.name : ''
+                                      }
+                                      ${
+                                        field?.fieldType === 'template'
+                                          ? field?.template?.title
+                                          : ''
+                                      }`
                                     }
                                   />
                                   {!snapshot.isDraggingOver && (

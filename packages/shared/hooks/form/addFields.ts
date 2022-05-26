@@ -6,11 +6,11 @@ import { generateObjectId } from '../../utils/objectId';
 const validationSchema = yup.object({
   label: yup.string().required('Label is required'),
   fieldType: yup.string().required('Field Type is required'),
-  // template: yup.object().when('fieldType', {
-  //   is: (value) => value === 'type',
-  //   then: yup.object().nullable(true).required('Type is required'),
-  //   otherwise: yup.object().nullable(true),
-  // }),
+  template: yup.object().when('fieldType', {
+    is: (value) => value === 'template',
+    then: yup.object().nullable(true).required('Template is required'),
+    otherwise: yup.object().nullable(true),
+  }),
   form: yup.object().when('fieldType', {
     is: (value) => value === 'form',
     then: yup.object().nullable(true).required('Select Form is required'),
@@ -99,7 +99,7 @@ export function useAddFields({ onAlert, onSave }: ICRUDProps): any {
     formik.setFieldValue('required', field.options?.required, false);
     formik.setFieldValue('_id', field._id, false);
     formik.setFieldValue('staticText', field.options?.staticText, false);
-    // formik.setFieldValue('template', field.template, false);
+    formik.setFieldValue('template', field?.template, false);
     formik.setFieldValue('form', field?.form, false);
     // formik.setFieldValue('formField', field.options?.formField, false);
   };

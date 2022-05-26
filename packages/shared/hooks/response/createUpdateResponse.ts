@@ -4,11 +4,18 @@ import { IHooksProps } from '../../types/common';
 import { omitTypename } from '../../utils/omitTypename';
 import { stringifyValues } from '../section/updateSection';
 
-export function useCreateUpdateResponse(
-  { onAlert }: IHooksProps,
+interface IProps extends IHooksProps {
+  parentId?: string;
+  workFlowFormReponseParentId?: string;
+  templateId?: string;
+}
+
+export function useCreateUpdateResponse({
+  onAlert,
   parentId,
-  workFlowFormReponseParentId?: string,
-) {
+  workFlowFormReponseParentId,
+  templateId,
+}: IProps) {
   const [createMutation, { loading: createLoading }] = useMutation(CREATE_RESPONSE);
   const [updateMutation, { loading: updateLoading }] = useMutation(UPDATE_RESPONSE);
 
@@ -21,6 +28,7 @@ export function useCreateUpdateResponse(
         values: values.map((m) => JSON.parse(JSON.stringify(m), omitTypename)),
         parentId,
         workFlowFormReponseParentId,
+        templateId,
       };
       let response = null;
       if (edit) {

@@ -11,7 +11,7 @@ interface IProps {
 }
 
 export default function Leaderboard({ formId, parentId, settings }: IProps): any {
-  const { data, error } = useGetResponses(formId, parentId);
+  const { data, error } = useGetResponses({ formId, parentId });
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {

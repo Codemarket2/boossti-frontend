@@ -12,7 +12,7 @@ interface IProps {
 }
 
 export default function EditResponseDrawer({ form, response, open, onClose }: IProps): any {
-  const { handleCreateUpdateResponse, updateLoading } = useCreateUpdateResponse({ onAlert }, null);
+  const { handleCreateUpdateResponse, updateLoading } = useCreateUpdateResponse({ onAlert });
 
   const handleSubmit = async (values: any[]) => {
     const payload = {

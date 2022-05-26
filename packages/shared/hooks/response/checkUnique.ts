@@ -60,6 +60,7 @@ async function checkUnique(value: any, formId: string, responseId: string) {
       formId,
       responseId,
     },
+    fetchPolicy: 'network-only',
   });
   return response;
 }

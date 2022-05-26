@@ -14,13 +14,23 @@ export const defaultQueryVariables = {
   onlyMy: false,
 };
 
-export function useGetResponses(
-  formId: string,
-  parentId: string = null,
+interface IProps {
+  formId: string;
+  parentId?: string;
+  formField?: string;
+  onlyMy?: boolean;
+  workFlowFormReponseParentId?: string;
+  templateId?: string;
+}
+
+export function useGetResponses({
+  formId,
+  parentId = null,
   formField = null,
   onlyMy = false,
-  workFlowFormReponseParentId: string = null,
-) {
+  workFlowFormReponseParentId = null,
+  templateId,
+}: IProps) {
   const [subsribed, setSubsribed] = useState(false);
   const [state, setState] = useState({
     ...defaultQueryVariables,
@@ -29,7 +39,14 @@ export function useGetResponses(
   });
 
   const { data, error, loading, subscribeToMore, refetch } = useQuery(GET_RESPONSES, {
-    variables: { ...state, formId, parentId, workFlowFormReponseParentId, onlyMy },
+    variables: {
+      ...state,
+      formId,
+      parentId,
+      workFlowFormReponseParentId,
+      onlyMy,
+      templateId,
+    },
     fetchPolicy: 'cache-and-network',
   });
 

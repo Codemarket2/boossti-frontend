@@ -6,7 +6,7 @@ import UserLayout from '../components/common/UserLayout';
 import Breadcrumbs from '../components/common/Breadcrumbs';
 import AddTemplateForm from '../components/template/AddTemplateForm';
 
-export default function Screen() {
+export default function NewTemplate() {
   const router = useRouter();
   return (
     <UserLayout authRequired>

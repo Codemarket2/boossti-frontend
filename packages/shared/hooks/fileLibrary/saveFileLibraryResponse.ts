@@ -10,7 +10,7 @@ interface IPayload {
 }
 
 export const useSaveFileLibraryResponse = ({ onAlert }: IHooksProps) => {
-  const { handleCreateUpdateResponse } = useCreateUpdateResponse({ onAlert }, null);
+  const { handleCreateUpdateResponse } = useCreateUpdateResponse({ onAlert });
   const handleSaveFileLibraryResponse = async ({ url, alt, type, size }: IPayload) => {
     const form = await getFormBySlug('file-library');
     if (!form) {

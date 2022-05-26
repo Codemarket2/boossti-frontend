@@ -79,7 +79,7 @@ export default function ImagePicker2({
   const [id, setId] = useState('');
   const ref: any = useRef();
   const newArray = state?.tempMedia?.length > 0 ? [...state.tempMedia] : [];
-  const { data, error, loading, refetch } = useGetResponses(formId);
+  const { data, error, loading, refetch } = useGetResponses({ formId });
 
   useEffect(() => {
     setId(generateObjectId());

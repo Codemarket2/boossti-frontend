@@ -89,7 +89,15 @@ export default function FormFields({
             </Select>
           </FormControl>
         </InputGroup>
-        {!['label', 'form'].includes(field.fieldType) && (
+        {field.fieldType === 'template' && (
+          <InputGroup>
+            <SelectTemplate
+              value={field.template}
+              onChange={(newTemplate) => onFieldChange({ ...field, template: newTemplate })}
+            />
+          </InputGroup>
+        )}
+        {!['label', 'form', 'template'].includes(field.fieldType) && (
           <>
             <InputGroup>
               <FormControlLabel

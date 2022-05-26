@@ -31,6 +31,7 @@ interface IProps {
   parentId?: string;
   workFlowFormReponseParentId?: string;
   showOnlyMyResponses?: boolean;
+  templateId?: string;
 }
 type Direction = 'ltr' | 'rtl';
 
@@ -39,14 +40,15 @@ export default function ResponseList({
   parentId,
   workFlowFormReponseParentId,
   showOnlyMyResponses,
+  templateId,
 }: IProps): any {
-  const { data, error, state, setState, refetch } = useGetResponses(
-    form?._id,
+  const { data, error, state, setState, refetch } = useGetResponses({
+    formId: form?._id,
     parentId,
-    null,
-    showOnlyMyResponses,
+    onlyMy: showOnlyMyResponses,
     workFlowFormReponseParentId,
-  );
+    templateId,
+  });
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
   const router = useRouter();
   const [selectedResponse, setSelectedResponse] = useState(null);

@@ -9,6 +9,7 @@ import { client, guestClient } from '@frontend/shared/graphql';
 import { setDefaultThemeAction } from '@frontend/shared/redux/actions/setting';
 import awsExports from '@frontend/shared/aws-exports';
 import { store } from '@frontend/shared/redux';
+import { useInitializeSystem } from '@frontend/shared/hooks/form';
 import { useLogoHook } from '@frontend/shared/hooks/metaTags';
 import CssBaseline from '@mui/material/CssBaseline';
 import { useCurrentAuthenticatedUser } from '@frontend/shared/hooks/auth';
@@ -59,6 +60,7 @@ function App({ Component, pageProps, emotionCache = clientSideEmotionCache }: My
   const { darkMode, authenticated } = useSelector(({ auth }: any) => auth);
   const settings = useSelector(({ setting }: any) => setting);
   const dispatch = useDispatch();
+  useInitializeSystem();
 
   useOneSignal();
   useLogoHook();

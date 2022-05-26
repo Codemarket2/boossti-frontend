@@ -34,6 +34,7 @@ import projectConfig from '../../../../shared/index';
 interface IProps {
   form: any;
   parentId?: string;
+  templateId?: string;
   workFlowFormReponseParentId?: string;
   createCallback?: (response: any) => void;
   setResponded?: () => void;
@@ -74,22 +75,23 @@ export default function FormViewWrapper({
   createCallback,
   setResponded,
   isPageOwner,
+  templateId,
 }: IProps): any {
-  const { handleCreateUpdateResponse, createLoading } = useCreateUpdateResponse(
-    { onAlert },
+  const { handleCreateUpdateResponse, createLoading } = useCreateUpdateResponse({
+    onAlert,
     parentId,
     workFlowFormReponseParentId,
-  );
+    templateId,
+  });
 
   const showOnlyMyResponses = !isPageOwner && form?.settings?.onlyMyResponses;
 
-  const { data, error, refetch } = useGetResponses(
-    form?._id,
+  const { data, error, refetch } = useGetResponses({
+    formId: form?._id,
     parentId,
-    null,
-    showOnlyMyResponses,
+    onlyMy: showOnlyMyResponses,
     workFlowFormReponseParentId,
-  );
+  });
   const [state, setState] = useState(initialState);
   const authenticated = useSelector(({ auth }: any) => auth.authenticated);
   const [showOverlayResult, setShowOverlayResult] = useState(true);
@@ -247,7 +249,7 @@ export default function FormViewWrapper({
                 open={state.drawer}
                 onClose={() => setState({ ...state, drawer: false })}
               >
-                <ResponseList form={form} parentId={parentId} />
+                <ResponseList form={form} parentId={parentId} templateId={templateId} />
               </Overlay>
             )}
           </>
@@ -389,6 +391,7 @@ export default function FormViewWrapper({
             parentId={parentId}
             workFlowFormReponseParentId={workFlowFormReponseParentId}
             showOnlyMyResponses={showOnlyMyResponses}
+            templateId={templateId}
           />
         )}
     </div>

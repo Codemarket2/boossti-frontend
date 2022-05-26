@@ -33,11 +33,10 @@ export default function SelectResponse({
   formField,
   openDrawer,
 }: IProps) {
-  const { data, error: queryError, loading, state, setState } = useGetResponses(
+  const { data, error: queryError, loading, state, setState } = useGetResponses({
     formId,
-    null,
     formField,
-  );
+  });
   const [addOption, setAddOption] = useState({ showDrawer: false });
 
   useEffect(() => {

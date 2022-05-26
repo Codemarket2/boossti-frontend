@@ -46,16 +46,13 @@ const validationSchema = yup.object({
   }),
   body: yup.string().when('actionType', {
     is: (value) =>
-      ![
-        'onPaletteChange',
-        'updateFieldValue',
-        'createCognitoGroup',
-        'updateCognitoGroup',
-        'deleteCognitoGroup',
-        'createCognitoUser',
-        'updateCognitoUser',
-        'deleteCognitoUser',
-        'createSeoReport',
+      [
+        'showMessage',
+        'sendEmail',
+        'sendSms',
+        'generateNewUser',
+        'sendInAppNotification',
+        'sendPushNotification',
       ].includes(value),
     then: yup.string().required('This is a required field'),
     otherwise: yup.string(),
@@ -76,6 +73,22 @@ const validationSchema = yup.object({
     is: (value) =>
       ['createCognitoGroup', 'updateCognitoGroup', 'deleteCognitoGroup'].includes(value),
     then: yup.string().required('Cognito Group Description is required for this action'),
+    otherwise: yup.string(),
+  }),
+  domain: yup.string().when('actionType', {
+    is: (value) =>
+      ['createSubDomainRoute53', 'updateSubDomainRoute53', 'deleteSubDomainRoute53'].includes(
+        value,
+      ),
+    then: yup.string().required('Select Domain name field'),
+    otherwise: yup.string(),
+  }),
+  distributionId: yup.string().when('actionType', {
+    is: (value) =>
+      ['createSubDomainRoute53', 'updateSubDomainRoute53', 'deleteSubDomainRoute53'].includes(
+        value,
+      ),
+    then: yup.string().required('Select Cloudfront distributionId field'),
     otherwise: yup.string(),
   }),
 });
@@ -111,12 +124,14 @@ interface IFormValues {
   report: string;
   responseLink: string;
   reportScreenshoot: string;
+  domain: string;
+  distributionId: string;
 }
 
 const defaultFormValues = {
   active: true,
   triggerType: 'onCreate',
-  actionType: 'updateFieldValue', // 'sendEmail',
+  actionType: 'sendEmail',
   name: '',
   cognitoGroupName: '',
   cognitoGroupDesc: '',
@@ -139,6 +154,8 @@ const defaultFormValues = {
   report: '',
   responseLink: '',
   reportScreenshoot: '',
+  domain: '',
+  distributionId: '',
 };
 
 interface IProps extends IHooksProps {
@@ -167,31 +184,13 @@ export function useFormActions({ onAlert, onSave }: IProps) {
 
   const setFormValues = (payload) => {
     setEdit(true);
-    formik.setFieldValue('triggerType', payload.triggerType, false);
-    formik.setFieldValue('actionType', payload.actionType, false);
-    formik.setFieldValue('active', payload.active, false);
-    formik.setFieldValue('cognitoGroupName', payload.cognitoGroupName, false);
-    formik.setFieldValue('cognitoGroupDesc', payload.cognitoGroupDesc, false);
-    formik.setFieldValue('name', payload.name, false);
-    formik.setFieldValue('senderEmail', payload.senderEmail, false);
-    formik.setFieldValue('receiverType', payload?.receiverType, false);
-    formik.setFieldValue('emailFieldId', payload.emailFieldId, false);
-    formik.setFieldValue('nameFieldId', payload?.nameFieldId, false);
-    formik.setFieldValue('receiverEmails', payload?.receiverEmails, false);
-    formik.setFieldValue('phoneFieldId', payload.phoneFieldId, false);
-    formik.setFieldValue('variables', payload.variables, false);
-    formik.setFieldValue('colorValues', payload.colorValues, false);
-    formik.setFieldValue('subject', payload.subject, false);
-    formik.setFieldValue('body', payload.body, false);
-    formik.setFieldValue('fields', payload?.fields, false);
-    formik.setFieldValue('userPoolId', payload?.userPoolId, false);
-    formik.setFieldValue('firstName', payload?.firstName, false);
-    formik.setFieldValue('lastName', payload?.lastName, false);
-    formik.setFieldValue('userEmail', payload?.userEmail, false);
-    formik.setFieldValue('websiteUrl', payload?.websiteUrl, false);
-    formik.setFieldValue('report', payload?.report, false);
-    formik.setFieldValue('responseLink', payload?.responseLink, false);
-    formik.setFieldValue('reportScreenshoot', payload?.reportScreenshoot, false);
+    const newValues: any = { ...defaultFormValues };
+    Object.keys(defaultFormValues).forEach((key) => {
+      if (payload[key]) {
+        newValues[key] = payload[key] || defaultFormValues[key];
+      }
+    });
+    formik.setValues(newValues);
   };
 
   return { formik, setFormValues };

@@ -1,5 +1,5 @@
-import NewType from '../../src/screens/NewTemplate';
+import NewTemplate from '../../src/screens/NewTemplate';
 
 export default function Page() {
-  return <NewType />;
+  return <NewTemplate />;
 }

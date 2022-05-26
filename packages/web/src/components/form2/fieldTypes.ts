@@ -1,6 +1,6 @@
-export const getFormFieldTypes = (isSection: boolean): FieldType[] => {
-  if (isSection) {
-    return sectionFieldTypes;
+export const getFormFieldTypes = (isWidget: boolean): FieldType[] => {
+  if (isWidget) {
+    return templateWidgetTypes;
   }
   return fieldTypes;
 };
@@ -10,7 +10,10 @@ type FieldType = {
   value: string;
 };
 
-export const sectionFieldTypes: FieldType[] = [{ label: 'Form', value: 'form' }];
+export const templateWidgetTypes: FieldType[] = [
+  { label: 'Form', value: 'form' },
+  { label: 'Template', value: 'template' },
+];
 
 export const fieldTypes: FieldType[] = [
   { label: 'Existing Form', value: 'existingForm' },

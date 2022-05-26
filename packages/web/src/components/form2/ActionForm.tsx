@@ -65,10 +65,6 @@ export default function ActionForm({
     formik.setFieldValue('colorValues', array);
   }, []);
 
-  useEffect(() => {
-    formik.setFieldValue('variables', [formik.initialValues]);
-  }, [formik.values.actionType]);
-
   return (
     <form className="px-2" onSubmit={formik.handleSubmit}>
       <InputGroup>
@@ -149,6 +145,9 @@ export default function ActionForm({
                 Create Lighthouse SEO Audit Report
               </MenuItem>
             )}
+            <MenuItem value="createSubDomainRoute53">Create sub domain on AWS route53</MenuItem>
+            <MenuItem value="updateSubDomainRoute53">Update sub domain on AWS route53</MenuItem>
+            <MenuItem value="deleteSubDomainRoute53">Delete sub domain on AWS route53</MenuItem>
           </Select>
           {formik.touched.actionType && formik.errors.actionType ? (
             <FormHelperText className="text-danger">{formik.errors.actionType}</FormHelperText>
@@ -194,7 +193,11 @@ export default function ActionForm({
                 {fields?.map((field) => {
                   if (field?.label) {
                     if (field?.label.toUpperCase().includes('URL')) {
-                      return <MenuItem value={field._id}>{field.label}</MenuItem>;
+                      return (
+                        <MenuItem value={field._id} key={field._id}>
+                          {field.label}
+                        </MenuItem>
+                      );
                     }
                   }
                   return null;
@@ -220,7 +223,11 @@ export default function ActionForm({
               >
                 {fields?.map((field) => {
                   if (field?.fieldType === 'lighthouseReport') {
-                    return <MenuItem value={field._id}>{field.label}</MenuItem>;
+                    return (
+                      <MenuItem value={field._id} key={field._id}>
+                        {field.label}
+                      </MenuItem>
+                    );
                   }
                   return null;
                 })}
@@ -245,7 +252,11 @@ export default function ActionForm({
               >
                 {fields?.map((field) => {
                   if (field?.fieldType === 'link') {
-                    return <MenuItem value={field._id}>{field.label}</MenuItem>;
+                    return (
+                      <MenuItem value={field._id} key={field._id}>
+                        {field.label}
+                      </MenuItem>
+                    );
                   }
                   return null;
                 })}
@@ -270,7 +281,11 @@ export default function ActionForm({
               >
                 {fields?.map((field) => {
                   if (field?.fieldType === 'image') {
-                    return <MenuItem value={field._id}>{field.label}</MenuItem>;
+                    return (
+                      <MenuItem value={field._id} key={field._id}>
+                        {field.label}
+                      </MenuItem>
+                    );
                   }
                   return null;
                 })}
@@ -302,7 +317,11 @@ export default function ActionForm({
                 {fields?.map((field) => {
                   if (field?.label) {
                     if (field?.label.toUpperCase().includes('NAME')) {
-                      return <MenuItem value={field._id}>{field.label}</MenuItem>;
+                      return (
+                        <MenuItem value={field._id} key={field._id}>
+                          {field.label}
+                        </MenuItem>
+                      );
                     }
                   }
                   return null;
@@ -329,7 +348,11 @@ export default function ActionForm({
                 {fields?.map((field) => {
                   if (field?.label) {
                     if (field?.label.toUpperCase().includes('DESCRIPTION')) {
-                      return <MenuItem value={field._id}>{field.label}</MenuItem>;
+                      return (
+                        <MenuItem value={field._id} key={field._id}>
+                          {field.label}
+                        </MenuItem>
+                      );
                     }
                   }
                   return null;
@@ -362,7 +385,11 @@ export default function ActionForm({
                 {fields?.map((field) => {
                   if (field?.label) {
                     if (field?.label.toUpperCase().includes('NAME')) {
-                      return <MenuItem value={field._id}>{field.label}</MenuItem>;
+                      return (
+                        <MenuItem value={field._id} key={field._id}>
+                          {field.label}
+                        </MenuItem>
+                      );
                     }
                   }
                   return null;
@@ -389,7 +416,11 @@ export default function ActionForm({
                 {fields?.map((field) => {
                   if (field?.label) {
                     if (field?.label.toUpperCase().includes('NAME')) {
-                      return <MenuItem value={field._id}>{field.label}</MenuItem>;
+                      return (
+                        <MenuItem value={field._id} key={field._id}>
+                          {field.label}
+                        </MenuItem>
+                      );
                     }
                   }
                   return null;
@@ -416,7 +447,11 @@ export default function ActionForm({
                 {fields?.map((field) => {
                   if (field?.label) {
                     if (field?.label.toUpperCase().includes('EMAIL')) {
-                      return <MenuItem value={field._id}>{field.label}</MenuItem>;
+                      return (
+                        <MenuItem value={field._id} key={field._id}>
+                          {field.label}
+                        </MenuItem>
+                      );
                     }
                   }
                   return null;
@@ -562,7 +597,9 @@ export default function ActionForm({
               label="Email Field"
             >
               {emailFields?.map((field) => (
-                <MenuItem value={field._id}>{field.label}</MenuItem>
+                <MenuItem value={field._id} key={field._id}>
+                  {field.label}
+                </MenuItem>
               ))}
             </Select>
             {formik.touched.emailFieldId && formik.errors.emailFieldId && (
@@ -589,7 +626,9 @@ export default function ActionForm({
               label="Name Field"
             >
               {nameFields?.map((field) => (
-                <MenuItem value={field._id}>{field.label}</MenuItem>
+                <MenuItem value={field._id} key={field._id}>
+                  {field.label}
+                </MenuItem>
               ))}
             </Select>
             {formik.touched.nameFieldId && formik.errors.nameFieldId && (
@@ -620,7 +659,9 @@ export default function ActionForm({
               {fields
                 ?.filter((f) => f.fieldType === 'phoneNumber' && f?.options?.required)
                 ?.map((field) => (
-                  <MenuItem value={field._id}>{field.label}</MenuItem>
+                  <MenuItem value={field._id} key={field._id}>
+                    {field.label}
+                  </MenuItem>
                 ))}
             </Select>
             {formik.touched.phoneFieldId && formik.errors.phoneFieldId && (
@@ -629,16 +670,13 @@ export default function ActionForm({
           </FormControl>
         </InputGroup>
       )}
-      {![
-        'updateFieldValue',
-        'onPaletteChange',
-        'createCognitoGroup',
-        'updateCognitoGroup',
-        'deleteCognitoGroup',
-        'createCognitoUser',
-        'updateCognitoUser',
-        'deleteCognitoUser',
-        'createSeoReport',
+      {[
+        'showMessage',
+        'sendEmail',
+        'sendSms',
+        'generateNewUser',
+        'sendInAppNotification',
+        'sendPushNotification',
       ]?.includes(formik.values.actionType) && (
         <InputGroup>
           <Typography variant="h6" className="d-flex align-items-center pl-2">
@@ -710,7 +748,9 @@ export default function ActionForm({
                   label="Field"
                 >
                   {fields?.map((field) => (
-                    <MenuItem value={field._id}>{field.label}</MenuItem>
+                    <MenuItem value={field._id} key={field._id}>
+                      {field.label}
+                    </MenuItem>
                   ))}
                 </Select>
               </FormControl>
@@ -777,7 +817,9 @@ export default function ActionForm({
                     label="Field"
                   >
                     {fields?.map((field) => (
-                      <MenuItem value={field._id}>{field.label}</MenuItem>
+                      <MenuItem value={field._id} key={field._id}>
+                        {field.label}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
@@ -887,7 +929,9 @@ export default function ActionForm({
                       label="Field"
                     >
                       {fields?.map((field) => (
-                        <MenuItem value={field._id}>{field.label}</MenuItem>
+                        <MenuItem value={field._id} key={field._id}>
+                          {field.label}
+                        </MenuItem>
                       ))}
                     </Select>
                   </FormControl>
@@ -927,6 +971,74 @@ export default function ActionForm({
           ))}
         </InputGroup>
       )}
+      {['createSubDomainRoute53', 'updateSubDomainRoute53', 'deleteSubDomainRoute53'].includes(
+        formik.values.actionType,
+      ) && (
+        <>
+          <InputGroup>
+            <FormControl
+              variant="outlined"
+              fullWidth
+              size="small"
+              error={Boolean(formik.touched.domain && formik.errors.domain)}
+            >
+              <InputLabel id="domain-simple-select-outlined-label">Domain name</InputLabel>
+              <Select
+                labelId="domain-simple-select-outlined-label"
+                id="domain-simple-select-outlined"
+                name="domain"
+                value={formik.values.domain}
+                onChange={formik.handleChange}
+                label="Domain name"
+              >
+                {fields
+                  ?.filter((f) => f.fieldType === 'text' && f?.options?.required)
+                  ?.map((field) => (
+                    <MenuItem value={field._id} key={field._id}>
+                      {field.label}
+                    </MenuItem>
+                  ))}
+              </Select>
+              {formik.touched.domain && formik.errors.domain && (
+                <FormHelperText className="text-danger">{formik.errors.domain}</FormHelperText>
+              )}
+            </FormControl>
+          </InputGroup>
+          <InputGroup>
+            <FormControl
+              variant="outlined"
+              fullWidth
+              size="small"
+              error={Boolean(formik.touched.distributionId && formik.errors.distributionId)}
+            >
+              <InputLabel id="distributionId-simple-select-outlined-label">
+                Distribution ID
+              </InputLabel>
+              <Select
+                labelId="distributionId-simple-select-outlined-label"
+                id="distributionId-simple-select-outlined"
+                name="distributionId"
+                value={formik.values.distributionId}
+                onChange={formik.handleChange}
+                label="Distribution ID"
+              >
+                {fields
+                  ?.filter((f) => f.fieldType === 'text')
+                  ?.map((field) => (
+                    <MenuItem value={field._id} key={field._id}>
+                      {field.label}
+                    </MenuItem>
+                  ))}
+              </Select>
+              {formik.touched.distributionId && formik.errors.distributionId && (
+                <FormHelperText className="text-danger">
+                  {formik.errors.distributionId}
+                </FormHelperText>
+              )}
+            </FormControl>
+          </InputGroup>
+        </>
+      )}
       <InputGroup>
         <LoadingButton type="submit" size="small" loading={formik.isSubmitting}>
           Save
@@ -944,3 +1056,24 @@ export default function ActionForm({
     </form>
   );
 }
+
+const actionTypes = [
+  'showMessage',
+  'sendEmail',
+  'sendSms',
+  'generateNewUser',
+  'updateFieldValue',
+  'sendInAppNotification',
+  'sendPushNotification',
+  'onPaletteChange',
+  'createCognitoGroup',
+  'updateCognitoGroup',
+  'deleteCognitoGroup',
+  'createCognitoUser',
+  'updateCognitoUser',
+  'deleteCognitoUser',
+  'createSeoReport',
+  'createSubDomainRoute53',
+  'updateSubDomainRoute53',
+  'deleteSubDomainRoute53',
+];
