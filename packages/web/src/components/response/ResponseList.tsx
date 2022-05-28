@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import moment from 'moment';
 import Paper from '@mui/material/Paper';
@@ -23,7 +23,6 @@ import Authorization from '../common/Authorization';
 import DeleteButton from '../common/DeleteButton';
 import { ResponseChild3 } from './Response';
 import EditResponseDrawer from './EditResponseDrawer';
-import { CellExpanderFormatter } from './CellExpanderFormatter';
 import { DataTable } from './Table';
 
 interface IProps {
@@ -189,15 +188,28 @@ export default function ResponseList({
                           )}
                         </Authorization>
                         <Tooltip title="Open Response">
-                          <IconButton
-                            onClick={() => {
-                              router.push(`/forms/${form.slug}/response/${response.count}`);
-                            }}
-                            edge="start"
-                            size="large"
-                          >
-                            <LaunchIcon />
-                          </IconButton>
+                          {form?.name?.toLowerCase() === 'account' ? (
+                            <a
+                              href={`https://${
+                                getFieldValueByLabel('name', form?.fields, response?.values)?.value
+                              }.boossti.com`}
+                              target="_blank"
+                            >
+                              <IconButton edge="start" size="large">
+                                <LaunchIcon />
+                              </IconButton>
+                            </a>
+                          ) : (
+                            <IconButton
+                              onClick={() => {
+                                router.push(`/forms/${form.slug}/response/${response.count}`);
+                              }}
+                              edge="start"
+                              size="large"
+                            >
+                              <LaunchIcon />
+                            </IconButton>
+                          )}
                         </Tooltip>
                         <ListItemText
                           className="m-0 p-0"
@@ -229,3 +241,12 @@ export default function ResponseList({
     </>
   );
 }
+
+const getFieldValueByLabel = (label: string, fields: any[], values: any[] = []) => {
+  let value;
+  const field = fields.find((f) => f?.label?.toLowerCase() === label?.toLowerCase());
+  if (field) {
+    value = values.find((v) => v?.field === field?._id);
+  }
+  return value;
+};

@@ -21,7 +21,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Tooltip from '@mui/material/Tooltip';
 import { styled, useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import Notification from '../notification/Notification';
+// import Notification from '../notification/Notification';
 import Drawer from './Drawer';
 // import { routes } from '../../utils/routes';
 import { useDarkMode } from './DarkModeToggle';
@@ -118,7 +118,7 @@ export default function AppBarComponent() {
         </Link>
         {authenticated ? (
           <>
-            <Notification />
+            {/* <Notification /> */}
             <MenuWrapper>
               {/* <Tooltip title="Home">
                 <IconButton

@@ -58,6 +58,7 @@ export default function Notification() {
     }
     setTotal(t);
   }, [notificationList]);
+
   useEffect(() => {
     setState({ ...state, notifications: store });
   }, [store]);
