@@ -104,9 +104,6 @@ export default function Album() {
             <Grid container spacing={1}>
               <Grid item xs={12} sm={12} md={12} lg={12}>
                 <div className="text-center">
-                  <Button variant="contained" color="primary" className="m-2">
-                    Create Your website performance report
-                  </Button>
                   <FormPage slug="website-performance-report" />
                 </div>
               </Grid>
