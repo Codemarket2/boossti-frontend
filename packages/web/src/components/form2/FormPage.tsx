@@ -16,9 +16,10 @@ interface IProps {
   slug: string;
   settings?: ISettings;
   templateId?: string;
+  modifyForm?: (form: any) => void;
 }
 
-export const FormPage = ({ slug, settings, templateId }: IProps) => {
+export const FormPage = ({ slug, settings = {}, templateId = null, modifyForm }: IProps) => {
   const { data, error } = useGetFormBySlug(slug);
 
   if (error || !data) {
@@ -29,10 +30,11 @@ export const FormPage = ({ slug, settings, templateId }: IProps) => {
     return <NotFound />;
   }
 
-  return (
-    <StyledFormView
-      form={{ ...data.getFormBySlug, settings: { ...data.getFormBySlug.settings, ...settings } }}
-      templateId={templateId}
-    />
-  );
+  let form = { ...data.getFormBySlug, settings: { ...data.getFormBySlug.settings, ...settings } };
+
+  if (modifyForm) {
+    form = modifyForm(form);
+  }
+
+  return <StyledFormView form={form} templateId={templateId} />;
 };

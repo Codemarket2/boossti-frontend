@@ -250,7 +250,7 @@ export default function FormFields({
                                   {...draggableProvided.dragHandleProps}
                                 >
                                   <ListItemText
-                                    primary={field.label}
+                                    primary={`${field.label}${field?.options?.required ? '*' : ''}`}
                                     secondary={
                                       !previewMode &&
                                       `${field.fieldType} ${

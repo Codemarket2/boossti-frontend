@@ -21,6 +21,7 @@ interface IProps {
   onlyMy?: boolean;
   workFlowFormReponseParentId?: string;
   templateId?: string;
+  search?: string;
 }
 
 export function useGetResponses({
@@ -30,6 +31,7 @@ export function useGetResponses({
   onlyMy = false,
   workFlowFormReponseParentId = null,
   templateId,
+  search = null,
 }: IProps) {
   const [subsribed, setSubsribed] = useState(false);
   const [state, setState] = useState({
@@ -41,6 +43,8 @@ export function useGetResponses({
   const { data, error, loading, subscribeToMore, refetch } = useQuery(GET_RESPONSES, {
     variables: {
       ...state,
+      search: search || state.formField,
+      formField: formField || state.formField,
       formId,
       parentId,
       workFlowFormReponseParentId,

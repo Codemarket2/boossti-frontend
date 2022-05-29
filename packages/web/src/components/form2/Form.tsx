@@ -215,7 +215,6 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
               {options.currentTab === 'workflows' && <ResponseLayout _id={_id} />}
               {options.currentTab === 'responses' && (
                 <>
-                  List of responses
                   <Paper variant="outlined">
                     <BulkUploadAction form={state} />
                   </Paper>

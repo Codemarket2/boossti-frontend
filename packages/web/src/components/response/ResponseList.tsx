@@ -192,7 +192,7 @@ export default function ResponseList({
                             <a
                               href={`https://${
                                 getFieldValueByLabel('name', form?.fields, response?.values)?.value
-                              }.boossti.com`}
+                              }.boossti.com/admin`}
                               target="_blank"
                             >
                               <IconButton edge="start" size="large">

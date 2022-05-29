@@ -4,8 +4,8 @@ import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import { Grid } from '@mui/material';
-import { useCreateVirtualForm } from '@frontend/shared/hooks/form';
-import { onAlert } from '../../utils/alert';
+// import { useCreateVirtualForm } from '@frontend/shared/hooks/form';
+// import { onAlert } from '../../utils/alert';
 import InputGroup from '../common/InputGroup';
 import SelectFormFields from './SelectFormFields';
 import FormFields from './FormFields';
@@ -27,7 +27,7 @@ export default function FormSetting({
   handleOnChange,
   state,
 }: IProps): any {
-  const { handleCreateVirtualForm, createLoading } = useCreateVirtualForm({ onAlert });
+  // const { handleCreateVirtualForm, createLoading } = useCreateVirtualForm({ onAlert });
 
   return (
     <Paper variant="outlined" className="p-2">

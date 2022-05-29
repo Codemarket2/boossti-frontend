@@ -1,30 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import TextField from '@mui/material/TextField';
+// import TextField from '@mui/material/TextField';
 import { useSignUp, useSignIn } from '@frontend/shared/hooks/auth';
-import { useGetFormBySlug } from '@frontend/shared/hooks/form';
-import LoadingButton from '../common/LoadingButton';
+// import { useGetFormBySlug } from '@frontend/shared/hooks/form';
+// import LoadingButton from '../common/LoadingButton';
 import VerifyEmailForm from './VerifyEmailForm';
 import { onAlert } from '../../utils/alert';
 import SocialSignIn from './SocialSignIn';
-import PasswordInput from '../common/PasswordInput';
-import InputGroup from '../common/InputGroup';
-import FormView from '../form2/FormView';
+// import PasswordInput from '../common/PasswordInput';
+// import InputGroup from '../common/InputGroup';
+// import FormView from '../form2/FormView';
 import { FormPage } from '../form2/FormPage';
 
 export default function SignUpForm() {
-  const slug = 'users';
+  // const slug = 'users';
   const { state, setState, formik } = useSignUp({ onAlert });
-  const { data, error } = useGetFormBySlug(slug);
   const { onSubmit } = useSignIn({ onAlert });
-  const [form, setForm] = useState<any[]>([]);
+  // const { data, error } = useGetFormBySlug(slug);
+  // const [form, setForm] = useState<any[]>([]);
 
-  useEffect(() => {
-    const tempForm = {
-      ...data?.getFormBySlug,
-      fields: data?.getFormBySlug?.fields?.filter((e) => !e?.label.toUpperCase().includes('ROLE')),
-    };
-    setForm(tempForm);
-  }, [data]);
+  // useEffect(() => {
+  //   const tempForm = {
+  //     ...data?.getFormBySlug,
+  //     fields: data?.getFormBySlug?.fields?.filter((e) => !e?.label.toUpperCase().includes('ROLE')),
+  //   };
+  //   setForm(tempForm);
+  // }, [data]);
 
   if (state.verify) {
     return (
@@ -51,6 +51,7 @@ export default function SignUpForm() {
       />
     );
   }
+
   return (
     // <form onSubmit={formik.handleSubmit} data-testid="signup-form">
     //   <InputGroup>
@@ -110,7 +111,21 @@ export default function SignUpForm() {
     //   </InputGroup>
     // </form>
     <>
-      <FormPage slug={slug} />
+      <FormPage
+        slug="users"
+        settings={{ widgetType: 'form', whoCanSubmit: 'all' }}
+        modifyForm={(form) => {
+          const newForm: any = { ...form };
+          newForm.fields = newForm?.fields?.map((field) => {
+            const newField = { ...field };
+            if (newField?.label?.toLowerCase() === 'roles') {
+              newField.options.hidden = true;
+            }
+            return newField;
+          });
+          return newForm;
+        }}
+      />
       <SocialSignIn signIn={false} />
     </>
   );

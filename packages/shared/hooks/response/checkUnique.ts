@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { GET_CHECK_UNIQUE } from '../../graphql/query/unique';
-import { client as apolloClient } from '../../graphql';
+import { guestClient as apolloClient } from '../../graphql';
 import { IHooksProps } from '../../types/common';
 
 interface IProps extends IHooksProps {
@@ -33,6 +33,7 @@ export const useCheckUnique = ({
       setUniqueLoading(false);
     } catch (error) {
       setUniqueLoading(false);
+      setUnique(true);
       onAlert('Error unique check', error.message);
     }
   };

@@ -3,7 +3,7 @@ import UserLayout from '../../src/components/common/UserLayout';
 
 export default function Form(): any {
   return (
-    <UserLayout authRequired>
+    <UserLayout authRequired mustAdmin>
       <FormList />
     </UserLayout>
   );

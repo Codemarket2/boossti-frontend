@@ -3,7 +3,7 @@ import Templates from '../components/template/Templates';
 
 export default function TypesScreen() {
   return (
-    <UserLayout authRequired>
+    <UserLayout authRequired mustAdmin>
       <Templates />
     </UserLayout>
   );

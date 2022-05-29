@@ -1,6 +1,6 @@
 // import { useRouter } from 'next/router';
 import { getTemplateMetaTags } from '@frontend/shared/hooks/metaTags';
-import TypeScreen from '../../src/screens/TemplateScreen';
+import TemplateScreen from '../../src/screens/TemplateScreen';
 import Loading from '../../src/components/common/Loading';
 import Head from '../../src/components/common/Head';
 import UserLayout from '../../src/components/common/UserLayout';
@@ -17,7 +17,7 @@ export default function Page({ metaTags, slug }: IProps) {
     <>
       <Head {...metaTags} />
       <UserLayout container={false} authRequired>
-        {slug ? <TypeScreen slug={slug.toString()} /> : <Loading />}{' '}
+        {slug ? <TemplateScreen slug={slug.toString()} /> : <Loading />}
       </UserLayout>
     </>
   );

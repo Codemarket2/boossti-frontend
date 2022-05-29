@@ -259,6 +259,19 @@ export default function FormFields({
             label="System Calculated & View"
           />
         </InputGroup>
+        <InputGroup>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={field?.options?.hidden}
+                onChange={({ target }) => onOptionChange({ hidden: target.checked })}
+                name="hidden"
+                color="primary"
+              />
+            }
+            label="Hidden"
+          />
+        </InputGroup>
         {field.fieldType === 'select' && (
           <>
             <InputGroup>
@@ -366,7 +379,7 @@ export default function FormFields({
                         endAdornment={
                           <InputAdornment position="end">
                             <IconButton
-                              aria-label="toggle password visibility"
+                              aria-label="delete"
                               onClick={() =>
                                 onOptionChange({
                                   selectOptions: field?.options?.selectOptions?.filter(

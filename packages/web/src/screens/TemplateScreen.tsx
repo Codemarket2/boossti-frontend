@@ -12,28 +12,33 @@ import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import Grid from '@mui/material/Grid';
 import EditIcon from '@mui/icons-material/Edit';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import StarIcon from '@mui/icons-material/Star';
 import Share from '@mui/icons-material/Share';
 import { useAuthorization } from '@frontend/shared/hooks/auth';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+import Link from 'next/link';
 import Breadcrumbs from '../components/common/Breadcrumbs';
 import ErrorLoading from '../components/common/ErrorLoading';
-import Pages from '../components/template/Pages';
+// import Pages from '../components/template/Pages';
 import NotFound from '../components/common/NotFound';
 import Backdrop from '../components/common/Backdrop';
 import { onAlert } from '../utils/alert';
 import InlineForm from '../components/template/InlineForm';
-import SeoOverlay from '../components/template/SeoOverlay';
+// import SeoOverlay from '../components/template/SeoOverlay';
 import { QRButton } from '../components/qrcode/QRButton';
 import TemplateWidgets from '../components/template/TemplateWidgets';
-import EditMode from '../components/common/EditMode';
+// import EditMode from '../components/common/EditMode';
 import DeleteButton from '../components/common/DeleteButton';
-import TemplateIntances from '../components/template/TemplateIntances';
+import TemplateInstances from '../components/template/TemplateInstances';
+import TemplatePreview from '../components/template/TemplatePreview';
 
 interface IProps {
   slug: string;
+  preview?: boolean;
 }
 
 const initialState = {
@@ -43,8 +48,10 @@ const initialState = {
   selectedIndex: 0,
 };
 
-export default function Screen({ slug }: IProps) {
+export default function Screen({ slug, preview }: IProps) {
   const router = useRouter();
+
+  // const [preview, setPreview] = useState(false);
 
   const [state, setState] = useState(initialState);
 
@@ -99,7 +106,12 @@ export default function Screen({ slug }: IProps) {
           </Typography>
         </Breadcrumbs>
         <div className="d-flex align-items-center">
-          {authorized && <EditMode />}
+          {/* {authorized && <EditMode />} */}
+          <Link href={preview ? `/${slug}` : `/${slug}/preview`}>
+            <Tooltip title="Preview template">
+              <IconButton>{preview ? <VisibilityOffIcon /> : <VisibilityIcon />}</IconButton>
+            </Tooltip>
+          </Link>
           <QRButton />
           <Tooltip title="Copy page link">
             <IconButton
@@ -163,43 +175,44 @@ export default function Screen({ slug }: IProps) {
       </div>
       <Grid container spacing={1}>
         <Grid item sm={2} xs={12}>
-          <Paper variant="outlined" className="p-2 mb-2">
-            {state.fieldName === 'title' ? (
-              <InlineForm
-                fieldName={state.fieldName}
-                label="Title"
-                onCancel={onCancel}
-                formik={formik}
-                formLoading={CRUDLoading}
-              />
-            ) : (
-              <div>
-                <Typography className="d-flex align-items-center">
-                  Title
-                  {authorized && (
-                    <Tooltip title="Edit Title">
-                      <IconButton
-                        onClick={() => {
-                          setFormValues(data.getTemplateBySlug);
-                          setState({ ...initialState, fieldName: 'title' });
-                        }}
-                        size="large"
-                      >
-                        <EditIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                  )}
-                </Typography>
-                <Typography variant="h4" className="d-flex align-items-center">
-                  {data.getTemplateBySlug.title.includes('-n-e-w')
-                    ? 'Title'
-                    : data.getTemplateBySlug.title}
-                </Typography>
-              </div>
-            )}
-            {authorized && (
+          {!preview && (
+            <Paper variant="outlined" className="p-2 mb-2">
+              {state.fieldName === 'title' ? (
+                <InlineForm
+                  fieldName={state.fieldName}
+                  label="Title"
+                  onCancel={onCancel}
+                  formik={formik}
+                  formLoading={CRUDLoading}
+                />
+              ) : (
+                <div>
+                  <Typography className="d-flex align-items-center">
+                    Title
+                    {authorized && (
+                      <Tooltip title="Edit Title">
+                        <IconButton
+                          onClick={() => {
+                            setFormValues(data.getTemplateBySlug);
+                            setState({ ...initialState, fieldName: 'title' });
+                          }}
+                          size="large"
+                        >
+                          <EditIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  </Typography>
+                  <Typography variant="h4" className="d-flex align-items-center">
+                    {data.getTemplateBySlug.title.includes('-n-e-w')
+                      ? 'Title'
+                      : data.getTemplateBySlug.title}
+                  </Typography>
+                </div>
+              )}
+              {/* {authorized && (
               <>
-                {/* <Typography>
+                <Typography>
                   SEO
                   <Tooltip title="Edit seo">
                     <IconButton
@@ -209,7 +222,7 @@ export default function Screen({ slug }: IProps) {
                       <EditIcon fontSize="small" />
                     </IconButton>
                   </Tooltip>
-                </Typography> */}
+                </Typography>
                 {state.showSeoOverlay && (
                   <SeoOverlay
                     open={state.showSeoOverlay}
@@ -226,17 +239,17 @@ export default function Screen({ slug }: IProps) {
                   />
                 )}
               </>
-            )}
-          </Paper>
-          <TemplateWidgets template={data.getTemplateBySlug} previewMode={!authorized} />
+            )} */}
+            </Paper>
+          )}
+          <TemplateWidgets template={data.getTemplateBySlug} previewMode={!authorized || preview} />
         </Grid>
         <Grid item xs>
-          <TemplateIntances template={data.getTemplateBySlug} />
-          {/* <Pages
-            templateId={data.getTemplateBySlug._id}
-            slug={data.getTemplateBySlug.slug}
-            template={data.getTemplateBySlug}
-          /> */}
+          {preview ? (
+            <TemplatePreview template={data.getTemplateBySlug} />
+          ) : (
+            <TemplateInstances template={data.getTemplateBySlug} />
+          )}
         </Grid>
       </Grid>
       <Backdrop open={deleteLoading || CRUDLoading} />
