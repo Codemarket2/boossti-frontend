@@ -35,6 +35,7 @@ export default function EditResponseDrawer({ form, response, open, onClose }: IP
             edit
             formId={form?._id}
             responseId={response?._id}
+            onCancel={onClose}
           />
         </Authorization>
       </div>

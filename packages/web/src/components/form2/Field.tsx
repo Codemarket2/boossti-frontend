@@ -71,7 +71,7 @@ export default function Field({
   const onChange = (payload) => {
     // debugger;
     onChangeValue({ ...value, ...payload });
-    if (options?.unique && value?.value?.length > 0) {
+    if (options?.unique) {
       setUnique(false);
       setUniqueLoading(true);
     }

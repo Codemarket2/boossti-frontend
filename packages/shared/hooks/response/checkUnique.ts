@@ -21,11 +21,14 @@ export const useCheckUnique = ({
   responseId,
   setUniqueLoading,
 }: IProps) => {
-  // const [loading, setLoading] = useState(false);
   const handleCheckUnique = async () => {
     try {
-      // setUniqueLoading(true);
-      const { data } = await checkUnique(value, formId, responseId);
+      const { data } = await checkUnique({
+        value,
+        formId,
+        responseId,
+        caseInsensitiveUnique: options?.caseInsensitiveUnique,
+      });
       // debugger;
       if (data.getCheckUnique) {
         setUnique(data.getCheckUnique);
@@ -48,7 +51,14 @@ export const useCheckUnique = ({
   // return { loading };
 };
 
-async function checkUnique(value: any, formId: string, responseId: string) {
+interface IPayload {
+  value: any;
+  formId: string;
+  responseId: string;
+  caseInsensitiveUnique?: boolean;
+}
+
+async function checkUnique({ value, formId, responseId, caseInsensitiveUnique }: IPayload) {
   const response = await apolloClient.query({
     query: GET_CHECK_UNIQUE,
     variables: {
@@ -60,6 +70,7 @@ async function checkUnique(value: any, formId: string, responseId: string) {
       },
       formId,
       responseId,
+      caseInsensitiveUnique,
     },
     fetchPolicy: 'network-only',
   });

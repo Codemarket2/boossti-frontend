@@ -132,7 +132,10 @@ export default function FormFields({
                   <Checkbox
                     checked={field?.options?.unique}
                     onChange={({ target }) => {
-                      onOptionChange({ unique: target.checked, required: target.checked });
+                      onOptionChange({
+                        unique: target.checked,
+                        required: target.checked ? true : field?.options?.required,
+                      });
                     }}
                     name="unique"
                     color="primary"
@@ -141,6 +144,25 @@ export default function FormFields({
                 label="Unique"
               />
             </InputGroup>
+            {field?.options?.unique && (
+              <div className="pl-3 mt-n3">
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={field?.options?.caseInsensitiveUnique}
+                      onChange={({ target }) => {
+                        onOptionChange({
+                          caseInsensitiveUnique: target.checked,
+                        });
+                      }}
+                      name="caseInsensitiveUnique"
+                      color="primary"
+                    />
+                  }
+                  label="Case insensitive unique"
+                />{' '}
+              </div>
+            )}
           </>
         )}
         {field.fieldType === 'label' && (

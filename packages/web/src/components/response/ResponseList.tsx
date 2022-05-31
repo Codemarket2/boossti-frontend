@@ -31,6 +31,7 @@ interface IProps {
   workFlowFormReponseParentId?: string;
   showOnlyMyResponses?: boolean;
   templateId?: string;
+  isTemplateInstance?: string;
 }
 type Direction = 'ltr' | 'rtl';
 
@@ -40,6 +41,7 @@ export default function ResponseList({
   workFlowFormReponseParentId,
   showOnlyMyResponses,
   templateId,
+  isTemplateInstance,
 }: IProps): any {
   const { data, error, state, setState, refetch } = useGetResponses({
     formId: form?._id,
@@ -187,29 +189,34 @@ export default function ResponseList({
                             </>
                           )}
                         </Authorization>
-                        <Tooltip title="Open Response">
-                          {form?.name?.toLowerCase() === 'account' ? (
-                            <a
-                              href={`https://${
-                                getFieldValueByLabel('name', form?.fields, response?.values)?.value
-                              }.boossti.com/admin`}
-                              target="_blank"
-                            >
-                              <IconButton edge="start" size="large">
-                                <LaunchIcon />
-                              </IconButton>
-                            </a>
-                          ) : (
-                            <IconButton
-                              onClick={() => {
-                                router.push(`/forms/${form.slug}/response/${response.count}`);
-                              }}
-                              edge="start"
-                              size="large"
-                            >
+                        {/* {form?.name?.toLowerCase() === 'account' && (
+                          <a
+                            href={`https://${
+                              getFieldValueByLabel('name', form?.fields, response?.values)?.value
+                            }.boossti.com/admin`}
+                            target="_blank"
+                          >
+                            <IconButton edge="start" size="large">
                               <LaunchIcon />
                             </IconButton>
-                          )}
+                          </a>
+                        )} */}
+                        <Tooltip title="Open Response">
+                          <IconButton
+                            onClick={() => {
+                              let route = '';
+                              if (isTemplateInstance) {
+                                route = `/${isTemplateInstance}/${response.count}`;
+                              } else {
+                                route = `/forms/${form.slug}/response/${response.count}`;
+                              }
+                              router.push(route);
+                            }}
+                            edge="start"
+                            size="large"
+                          >
+                            <LaunchIcon />
+                          </IconButton>
                         </Tooltip>
                         <ListItemText
                           className="m-0 p-0"
@@ -242,11 +249,11 @@ export default function ResponseList({
   );
 }
 
-const getFieldValueByLabel = (label: string, fields: any[], values: any[] = []) => {
-  let value;
-  const field = fields.find((f) => f?.label?.toLowerCase() === label?.toLowerCase());
-  if (field) {
-    value = values.find((v) => v?.field === field?._id);
-  }
-  return value;
-};
+// const getFieldValueByLabel = (label: string, fields: any[], values: any[] = []) => {
+//   let value;
+//   const field = fields.find((f) => f?.label?.toLowerCase() === label?.toLowerCase());
+//   if (field) {
+//     value = values.find((v) => v?.field === field?._id);
+//   }
+//   return value;
+// };

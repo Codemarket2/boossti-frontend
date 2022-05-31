@@ -21,11 +21,14 @@ export default function TemplateIntances({ template }: IProps) {
         slug={slug}
         settings={{
           ...customSettings,
+          widgetType: 'both',
           formView: 'button',
           onlyMyResponses: true,
           buttonLabel: `Create ${template?.title}`,
+          responsesView: 'table',
         }}
         templateId={template?._id}
+        isTemplateInstance={template?.slug}
       />
     </Card>
   );

@@ -16,6 +16,7 @@ import { useGetResponses } from '@frontend/shared/hooks/response/getResponse';
 import { useCreateUpdateResponse } from '@frontend/shared/hooks/response';
 import { validateForm, validateValue } from '@frontend/shared/utils/validate';
 import axios from 'axios';
+import CircularProgress from '@mui/material/CircularProgress';
 import ResponseList from '../response/ResponseList';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
@@ -39,6 +40,7 @@ interface IProps {
   createCallback?: (response: any) => void;
   setResponded?: () => void;
   isPageOwner?: boolean;
+  isTemplateInstance?: string;
 }
 
 export const defualtValue = {
@@ -76,6 +78,7 @@ export default function FormViewWrapper({
   setResponded,
   isPageOwner,
   templateId,
+  isTemplateInstance = '',
 }: IProps): any {
   const isAdmin = useSelector(({ auth }: any) => auth?.admin);
   const { handleCreateUpdateResponse, createLoading } = useCreateUpdateResponse({
@@ -234,27 +237,6 @@ export default function FormViewWrapper({
           <Typography variant="h4">{form?.name}</Typography>
         </InputGroup>
       )}
-      {canViewResponses &&
-        form?.settings?.widgetType !== 'form' &&
-        form?.settings?.responsesView === 'button' && (
-          <>
-            <div className="text-center">
-              <Button variant="outlined" onClick={() => setState({ ...state, drawer: true })}>
-                {`${data?.getResponses?.count} Responses`}
-              </Button>
-            </div>
-            {state.drawer && (
-              <Overlay
-                minWidth="85vw"
-                title="Responses"
-                open={state.drawer}
-                onClose={() => setState({ ...state, drawer: false })}
-              >
-                <ResponseList form={form} parentId={parentId} templateId={templateId} />
-              </Overlay>
-            )}
-          </>
-        )}
       {canSubmit && form?.settings?.widgetType !== 'responses' && (
         <>
           {state.formModal && (
@@ -270,6 +252,7 @@ export default function FormViewWrapper({
                   loading={createLoading}
                   fieldWiseView={form?.settings?.formView === 'oneField'}
                   formId={form?._id}
+                  onCancel={() => setState({ ...state, formModal: false })}
                 />
               </div>
             </Overlay>
@@ -384,17 +367,45 @@ export default function FormViewWrapper({
           )}
         </>
       )}
-      {canViewResponses &&
-        form?.settings?.widgetType !== 'form' &&
-        form?.settings?.responsesView !== 'button' && (
-          <ResponseList
-            form={form}
-            parentId={parentId}
-            workFlowFormReponseParentId={workFlowFormReponseParentId}
-            showOnlyMyResponses={showOnlyMyResponses}
-            templateId={templateId}
-          />
-        )}
+      {canViewResponses && form?.settings?.widgetType !== 'form' && (
+        <>
+          {form?.settings?.responsesView === 'button' ? (
+            <>
+              <div className="text-center">
+                <Button variant="outlined" onClick={() => setState({ ...state, drawer: true })}>
+                  {`${data?.getResponses?.count} Responses`}
+                </Button>
+              </div>
+              {state.drawer && (
+                <Overlay
+                  minWidth="85vw"
+                  title="Responses"
+                  open={state.drawer}
+                  onClose={() => setState({ ...state, drawer: false })}
+                >
+                  <ResponseList
+                    form={form}
+                    parentId={parentId}
+                    workFlowFormReponseParentId={workFlowFormReponseParentId}
+                    showOnlyMyResponses={showOnlyMyResponses}
+                    templateId={templateId}
+                    isTemplateInstance={isTemplateInstance}
+                  />
+                </Overlay>
+              )}
+            </>
+          ) : (
+            <ResponseList
+              form={form}
+              parentId={parentId}
+              workFlowFormReponseParentId={workFlowFormReponseParentId}
+              showOnlyMyResponses={showOnlyMyResponses}
+              templateId={templateId}
+              isTemplateInstance={isTemplateInstance}
+            />
+          )}
+        </>
+      )}
     </div>
   );
 }
@@ -593,7 +604,7 @@ export function FormView({
                     field?.options?.required &&
                     !field?.options?.output ? (
                       <span className="text-danger">
-                        {`${field?.label}*`} This field must be unique*
+                        {`${field?.label}*`} This field must be unique
                       </span>
                     ) : field?.options?.required ||
                       (field?.options?.unique &&
@@ -603,7 +614,11 @@ export function FormView({
                     ) : (
                       !field?.options?.output && field?.label
                     )}
-                    {/* {uniqueLoading && <span>Unique loading</span>} */}
+                    {uniqueLoading && field?.options?.unique && (
+                      <span className="ml-2">
+                        <CircularProgress size={10} />
+                      </span>
+                    )}
                   </Typography>
                   <>
                     <div className="w-100">

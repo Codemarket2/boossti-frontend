@@ -6,10 +6,12 @@ export default function DeleteButton({
   onClick,
   tooltip = 'Delete',
   edge = false,
+  size = 'medium',
 }: {
   onClick: () => void;
   tooltip?: string;
   edge?: any;
+  size?: 'small' | 'medium' | 'large';
 }) {
   return (
     <Tooltip title={tooltip}>
@@ -22,7 +24,7 @@ export default function DeleteButton({
           }
         }}
         edge={edge}
-        size="large"
+        size={size}
       >
         <DeleteIcon />
       </IconButton>

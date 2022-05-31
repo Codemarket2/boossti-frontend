@@ -63,7 +63,12 @@ export default function NewForm() {
           </InputGroup>
           <Typography>Default Form Field</Typography>
         </div>
-        <AddField isDefault field={state.field} onSave={onSave} />
+        <AddField
+          isDefault
+          field={state.field}
+          onSave={onSave}
+          onCancel={() => router.push('/forms')}
+        />
       </Paper>
       <BackdropComponent open={showBackdrop || createLoading} />
     </div>
