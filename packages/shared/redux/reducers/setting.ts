@@ -10,6 +10,7 @@ export const initialState: IAttributes = {
   },
   editMode: false,
   theme: {},
+  userForm: {},
 };
 
 const setting = (state: IAttributes = initialState, action: AnyAction) => {

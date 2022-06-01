@@ -13,6 +13,7 @@ export interface IAttributes {
   };
   editMode?: boolean;
   theme?: any;
+  userForm?: any;
 }
 
 export function updateSettingAction(payload: IAttributes) {

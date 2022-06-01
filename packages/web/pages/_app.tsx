@@ -13,6 +13,7 @@ import { useInitializeSystem } from '@frontend/shared/hooks/form';
 import { useLogoHook } from '@frontend/shared/hooks/metaTags';
 import CssBaseline from '@mui/material/CssBaseline';
 import { useCurrentAuthenticatedUser } from '@frontend/shared/hooks/auth';
+import { useGetUserForm } from '@frontend/shared/hooks/user/getUserForm';
 import { createTheme, ThemeProvider as MuiThemeProvider, adaptV4Theme } from '@mui/material/styles';
 import { CacheProvider, EmotionCache } from '@emotion/react';
 import GlobalStyles from '@mui/material/GlobalStyles';
@@ -98,6 +99,7 @@ function App({ Component, pageProps, emotionCache = clientSideEmotionCache }: My
         <MuiThemeProvider theme={theme}>
           <Head />
           <LoadingBar />
+          <LoadUserForm />
           <CssBaseline />
           <GlobalStyles
             styles={{
@@ -122,4 +124,9 @@ export default function NewApp(props) {
       <App {...props} />
     </Provider>
   );
+}
+
+function LoadUserForm() {
+  useGetUserForm();
+  return null;
 }

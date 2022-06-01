@@ -48,8 +48,8 @@ export const RESPONSE_SUB = gql`
       }
       createdBy {
         _id
-        picture
-        name
+        # picture
+        # name
       }
       createdAt
     }

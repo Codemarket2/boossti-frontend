@@ -53,7 +53,7 @@ export const UPDATED_TEMPLATE = gql`
       createdAt
       createdBy {
         _id
-        name
+        # name
       }
     }
   }

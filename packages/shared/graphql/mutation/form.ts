@@ -38,8 +38,8 @@ export const CREATE_FORM = gql`
       published
       createdBy {
         _id
-        picture
-        name
+        # picture
+        # name
       }
       createdAt
     }
@@ -78,8 +78,8 @@ export const UPDATE_FORM = gql`
       published
       createdBy {
         _id
-        picture
-        name
+        # picture
+        # name
       }
       createdAt
     }

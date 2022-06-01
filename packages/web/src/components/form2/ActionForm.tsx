@@ -563,14 +563,10 @@ export default function ActionForm({
                   >
                     <MenuItem value="formOwner">Form owner</MenuItem>
                     <MenuItem value="responseSubmitter">Response submitter</MenuItem>
-                    {formik.values.actionType === 'sendEmail' && (
-                      <>
-                        <MenuItem value="customEmail">Custom email</MenuItem>
-                        {emailFields?.length > 0 && (
-                          <MenuItem value="emailField">Form email field</MenuItem>
-                        )}
-                      </>
-                    )}
+                    <MenuItem value="customEmail">Custom email</MenuItem>
+                    <MenuItem value="emailField" disabled={!(emailFields?.length > 0)}>
+                      Form email field
+                    </MenuItem>
                   </Select>
                   {formik.touched.receiverType && formik.errors.receiverType ? (
                     <FormHelperText className="text-danger">

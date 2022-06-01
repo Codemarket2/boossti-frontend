@@ -106,8 +106,12 @@ export const GET_RESPONSE_BY_COUNT = gql`
       }
       createdBy {
         _id
-        picture
-        name
+        values {
+          field
+          value
+        }
+        # picture
+        # name
       }
       createdAt
       options
@@ -185,8 +189,16 @@ export const GET_RESPONSES = gql`
         }
         createdBy {
           _id
-          picture
-          name
+          values {
+            field
+            value
+          }
+          # values {
+          #   field
+          #   value
+          # }
+          # picture
+          # name
         }
         createdAt
         options

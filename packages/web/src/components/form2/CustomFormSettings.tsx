@@ -10,6 +10,7 @@ import InputGroup from '../common/InputGroup';
 import Overlay from '../common/Overlay';
 import ResponseLayout from '../response/ResponseLayout';
 import { ActionsWrapper } from './Actions';
+import BackdropComponent from '../common/Backdrop';
 
 interface IProps {
   isSection?: boolean;
@@ -35,6 +36,7 @@ export default function CustomFormSettings({
   const [tab, setTab] = useState('settings');
   const [pageFields, setPageFields] = useState([]);
   const [state, setState] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!(pageFields?.length > 0)) {
@@ -66,17 +68,28 @@ export default function CustomFormSettings({
     setPageFields(newPageFields);
   };
 
+  const toggleCustomSettings = async (e) => {
+    onSettingsChange({ ...settings, active: e.target.checked });
+    if (e.target.checked && Object.keys(settings).length < 2) {
+      await getDefaultSetting();
+    }
+  };
+
+  const getDefaultSetting = async () => {
+    setLoading(true);
+    const defaultFormSetting = (await getForm(formId))?.settings || {};
+    onSettingsChange({ ...settings, ...defaultFormSetting, active: true });
+    setLoading(false);
+  };
+
   return (
     <Overlay title="Form Settings" open={open} onClose={onClose}>
+      <BackdropComponent open={loading} />
       <InputGroup className="pl-2">
         <FormControlLabel
           label="Use custom form settings"
           control={
-            <Switch
-              color="primary"
-              checked={settings?.active}
-              onChange={(e) => onSettingsChange({ ...settings, active: e.target.checked })}
-            />
+            <Switch color="primary" checked={settings?.active} onChange={toggleCustomSettings} />
           }
         />
       </InputGroup>

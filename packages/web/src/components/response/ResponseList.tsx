@@ -15,6 +15,7 @@ import IconButton from '@mui/material/IconButton';
 import LaunchIcon from '@mui/icons-material/Launch';
 import EditIcon from '@mui/icons-material/Edit';
 import { useGetResponses, useDeleteResponse } from '@frontend/shared/hooks/response';
+import { getUserAttributes } from '@frontend/shared/hooks/user/getUserForm';
 import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
@@ -24,6 +25,7 @@ import DeleteButton from '../common/DeleteButton';
 import { ResponseChild3 } from './Response';
 import EditResponseDrawer from './EditResponseDrawer';
 import { DataTable } from './Table';
+import { useSelector } from 'react-redux';
 
 interface IProps {
   form: any;
@@ -55,12 +57,9 @@ export default function ResponseList({
   const [selectedResponse, setSelectedResponse] = useState(null);
   const [direction, setDirection] = useState<Direction>('ltr');
   const [selectedRows, setSelectedRows] = useState<ReadonlySet<string>>(() => new Set());
-  /*
-    const columns: GridColDef[] = [
-      { field: 'col1', headerName: 'Column 1', width: 150 },
-      { field: 'col2', headerName: 'Column 2', width: 150 },
-    ];   
-   */
+
+  const userForm = useSelector(({ setting }: any) => setting.userForm);
+
   function handleFill({ columnKey, sourceRow, targetRow }) {
     return { ...targetRow, [columnKey]: sourceRow[columnKey] };
   }
@@ -220,7 +219,9 @@ export default function ResponseList({
                         </Tooltip>
                         <ListItemText
                           className="m-0 p-0"
-                          primary={response?.createdBy?.name}
+                          primary={`${
+                            getUserAttributes(userForm, response?.createdBy)?.firstName
+                          } ${getUserAttributes(userForm, response?.createdBy)?.lastName}`}
                           secondary={`${moment(response.createdAt).format('l')} ${moment(
                             response.createdAt,
                           ).format('LT')}`}

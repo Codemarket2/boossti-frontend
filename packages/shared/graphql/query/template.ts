@@ -58,7 +58,7 @@ export const GET_TEMPLATE_BY_SLUG = gql`
       createdAt
       createdBy {
         _id
-        name
+        # name
       }
     }
   }
