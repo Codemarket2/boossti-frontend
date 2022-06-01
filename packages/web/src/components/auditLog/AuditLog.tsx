@@ -10,7 +10,9 @@ import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 import dynamic from 'next/dynamic';
 import TimelineItem from '@mui/lab/TimelineItem';
 import TimelineSeparator from '@mui/lab/TimelineSeparator';
+import { getUserAttributes } from '@frontend/shared/hooks/user/getUserForm';
 import TimelineConnector from '@mui/lab/TimelineConnector';
+import { useSelector } from 'react-redux';
 import TimelineDot from '@mui/lab/TimelineDot';
 import ErrorLoading from '../common/ErrorLoading';
 import Response from '../response/Response';
@@ -24,7 +26,7 @@ interface IProps {
 
 export default function AuditLog({ documentId, formId }: IProps) {
   const { data, loading, error, hadNextPage } = useGetAuditLogs({ documentId, formId });
-
+  const userForm = useSelector(({ setting }: any) => setting.userForm);
   return (
     <Card variant="outlined" className="p-2">
       <Typography variant="h6">Activity Logs</Typography>
@@ -38,7 +40,7 @@ export default function AuditLog({ documentId, formId }: IProps) {
         position="left"
       >
         {data?.getAuditLogs?.data?.map((auditLog, index) => (
-          <Item key={auditLog._id} auditLog={auditLog} />
+          <Item key={auditLog._id} auditLog={auditLog} userForm={userForm} />
         ))}
       </Timeline>
       {hadNextPage && (
@@ -50,7 +52,12 @@ export default function AuditLog({ documentId, formId }: IProps) {
   );
 }
 
-const Item = ({ auditLog }: any) => {
+interface IProps2 {
+  auditLog: any;
+  userForm: any;
+}
+
+const Item = ({ auditLog, userForm }: IProps2) => {
   const [showChanges, setShowChanges] = useState(false);
 
   const isCreateResponse = auditLog.action === 'CREATE' && auditLog.model === 'Response';
@@ -60,7 +67,11 @@ const Item = ({ auditLog }: any) => {
       <TimelineOppositeContent sx={{ pt: '8px', pb: 3, px: 2 }}>
         <Typography>
           {auditLog.action} {auditLog.model} by{' '}
-          <span className="font-weight-bold">{auditLog.createdBy?.name}</span>
+          <span className="font-weight-bold">
+            {`${getUserAttributes(userForm, auditLog?.createdBy)?.firstName} ${
+              getUserAttributes(userForm, auditLog?.createdBy)?.lastName
+            }`}
+          </span>
         </Typography>
         <Typography variant="body2" component="span">
           {moment(auditLog.createdAt).format('lll')}

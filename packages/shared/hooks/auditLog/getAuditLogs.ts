@@ -9,7 +9,7 @@ interface IProps {
 
 export const useGetAuditLogs = ({ documentId, formId }: IProps) => {
   const [input, setInput] = useState({ page: 1, limit: 30 });
-  const { data, error, loading } = useQuery(GET_AUDIT_LOGS, {
+  const { data, error, loading, refetch } = useQuery(GET_AUDIT_LOGS, {
     variables: { ...input, documentId, formId },
     fetchPolicy: 'cache-and-network',
   });

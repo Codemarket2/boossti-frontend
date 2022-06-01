@@ -10,7 +10,10 @@ export const GET_AUDIT_LOGS = gql`
         createdAt
         createdBy {
           _id
-          name
+          values {
+            field
+            value
+          }
         }
         model
         diff

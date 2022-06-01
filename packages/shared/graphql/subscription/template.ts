@@ -14,7 +14,10 @@ export const ADDED_TEMPLATE = gql`
       createdAt
       createdBy {
         _id
-        name
+        values {
+          field
+          value
+        }
       }
     }
   }
@@ -53,7 +56,10 @@ export const UPDATED_TEMPLATE = gql`
       createdAt
       createdBy {
         _id
-        # name
+        values {
+          field
+          value
+        }
       }
     }
   }

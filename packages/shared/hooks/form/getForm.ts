@@ -1,6 +1,6 @@
 import { useQuery, useSubscription } from '@apollo/client';
 import { useEffect, useState } from 'react';
-import { UPDATED_FORM } from '../../graphql/subscription/form';
+import { FORM_SUB, UPDATED_FORM } from '../../graphql/subscription/form';
 import { client as apolloClient } from '../../graphql';
 import { GET_FORMS, GET_FORM, GET_FORM_BY_SLUG } from '../../graphql/query/form';
 
@@ -19,11 +19,45 @@ export function useGetForms({ page = 1, limit = 20 }: IProps) {
     search: '',
     showSearch: false,
   });
+  const [subscribed, setSubscribed] = useState(false);
 
-  const { data, error, loading } = useQuery(GET_FORMS, {
+  const { data, error, loading, subscribeToMore } = useQuery(GET_FORMS, {
     variables: { ...state },
     fetchPolicy: 'cache-and-network',
   });
+
+  useEffect(() => {
+    let unsubscribe = () => null;
+    if (!subscribed) {
+      setSubscribed(true);
+      unsubscribe = subscribeToMore({
+        document: FORM_SUB,
+        updateQuery: (prev, { subscriptionData }) => {
+          if (!subscriptionData.data) return prev;
+          const newForm = subscriptionData.data.formSub;
+          let isNew = true;
+          let newData = prev?.getForms?.data?.map((t) => {
+            if (t._id === newForm._id) {
+              isNew = false;
+              return newForm;
+            }
+            return t;
+          });
+          if (isNew) {
+            newData = [...prev?.getForms?.data, newForm];
+          }
+          return {
+            ...prev,
+            getForms: {
+              ...prev.getForms,
+              data: newData,
+            },
+          };
+        },
+      });
+    }
+    return () => unsubscribe();
+  }, []);
 
   return { data, error, loading, state, setState };
 }
