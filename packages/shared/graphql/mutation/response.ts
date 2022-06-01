@@ -63,8 +63,10 @@ export const CREATE_RESPONSE = gql`
       }
       createdBy {
         _id
-        # picture
-        # name
+        values {
+          field
+          value
+        }
       }
       createdAt
       options

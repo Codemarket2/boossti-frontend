@@ -33,7 +33,10 @@ export const CREATE_TEMPLATE = gql`
       createdAt
       createdBy {
         _id
-        name
+        values {
+          field
+          value
+        }
       }
     }
   }
@@ -84,7 +87,10 @@ export const UPDATE_TEMPLATE = gql`
       createdAt
       createdBy {
         _id
-        name
+        values {
+          field
+          value
+        }
       }
     }
   }
@@ -123,7 +129,10 @@ export const PUBLISH_TEMPLATE = gql`
       createdAt
       createdBy {
         _id
-        name
+        values {
+          field
+          value
+        }
       }
     }
   }
@@ -162,7 +171,10 @@ export const UPDATE_TEMPLATE_FIELDS = gql`
       createdAt
       createdBy {
         _id
-        name
+        values {
+          field
+          value
+        }
       }
     }
   }
@@ -211,7 +223,10 @@ export const CREATE_PAGE = gql`
       createdAt
       createdBy {
         _id
-        name
+        values {
+          field
+          value
+        }
       }
       values {
         _id
@@ -289,7 +304,10 @@ export const UPDATE_PAGE_FIELDS = gql`
       createdAt
       createdBy {
         _id
-        name
+        values {
+          field
+          value
+        }
       }
       values {
         _id
@@ -373,7 +391,10 @@ export const UPDATE_PAGE = gql`
       createdAt
       createdBy {
         _id
-        name
+        values {
+          field
+          value
+        }
       }
       values {
         _id
@@ -451,7 +472,10 @@ export const PUBLISH_PAGE = gql`
       createdAt
       createdBy {
         _id
-        name
+        values {
+          field
+          value
+        }
       }
       values {
         _id

@@ -10,12 +10,16 @@ import ListItem from '@mui/material/ListItem';
 import Paper from '@mui/material/Paper';
 import ListItemText from '@mui/material/ListItemText';
 import { getCreatedAtDate } from '@frontend/shared/utils/date';
+import { getUserAttributes } from '@frontend/shared/hooks/user/getUserForm';
+import { useSelector } from 'react-redux';
 import ErrorLoading from '../common/ErrorLoading';
 import ListHeader2 from '../common/ListHeader2';
 
 export default function FormList(): any {
   const { data, error, loading, state, setState } = useGetForms({});
   const router = useRouter();
+
+  const userForm = useSelector(({ setting }: any) => setting.userForm);
 
   return (
     <>
@@ -39,7 +43,9 @@ export default function FormList(): any {
                   <ListItem button>
                     <ListItemText
                       primary={form.name}
-                      secondary={`${form.createdBy?.name} ${getCreatedAtDate(form.createdAt)}`}
+                      secondary={`${getUserAttributes(userForm, form.createdBy)?.firstName} ${
+                        getUserAttributes(userForm, form.createdBy)?.lastName
+                      } ${getCreatedAtDate(form.createdAt)}`}
                     />
                   </ListItem>
                 </Link>

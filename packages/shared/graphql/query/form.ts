@@ -26,8 +26,10 @@ export const GET_FORM = gql`
       published
       createdBy {
         _id
-        # picture
-        # name
+        values {
+          field
+          value
+        }
       }
       createdAt
     }
@@ -84,8 +86,10 @@ export const GET_FORMS = gql`
         # published
         createdBy {
           _id
-          # picture
-          # name
+          values {
+            field
+            value
+          }
         }
         createdAt
       }

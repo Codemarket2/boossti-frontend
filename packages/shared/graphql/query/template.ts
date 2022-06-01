@@ -18,7 +18,11 @@ export const GET_TEMPLATES = gql`
         createdAt
         createdBy {
           _id
-          name
+          values {
+            field
+            value
+          }
+          # name
         }
       }
     }
@@ -58,7 +62,10 @@ export const GET_TEMPLATE_BY_SLUG = gql`
       createdAt
       createdBy {
         _id
-        # name
+        values {
+          field
+          value
+        }
       }
     }
   }
@@ -95,7 +102,10 @@ export const GET_PAGES_BY_TYPE = gql`
         createdAt
         createdBy {
           _id
-          name
+          values {
+            field
+            value
+          }
         }
       }
     }
@@ -169,7 +179,10 @@ export const GET_PAGE_BY_SLUG = gql`
       createdAt
       createdBy {
         _id
-        name
+        values {
+          field
+          value
+        }
       }
       values {
         _id

@@ -11,6 +11,8 @@ import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import { useGetTemplates } from '@frontend/shared/hooks/template';
+import { useSelector } from 'react-redux';
+import { getUserAttributes } from '@frontend/shared/hooks/user/getUserForm';
 import ErrorLoading from '../common/ErrorLoading';
 import ListHeader2 from '../common/ListHeader2';
 import AddTemplateForm from './AddTemplateForm';
@@ -24,6 +26,8 @@ export default function Templates(): any {
   const createCallback = (slug) => {
     router.push(`/${slug}`);
   };
+
+  const userForm = useSelector(({ setting }: any) => setting.userForm);
 
   return (
     <>
@@ -59,9 +63,11 @@ export default function Templates(): any {
                     </ListItemAvatar>
                     <ListItemText
                       primary={template.title.includes('-n-e-w') ? 'Title' : template.title}
-                      secondary={`By ${template.createdBy?.name} ${getCreatedAtDate(
-                        template.createdAt,
-                      )}`}
+                      secondary={`By ${
+                        getUserAttributes(userForm, template?.createdBy)?.firstName
+                      } ${
+                        getUserAttributes(userForm, template?.createdBy)?.lastName
+                      } ${getCreatedAtDate(template.createdAt)}`}
                     />
                   </ListItem>
                 </Link>
