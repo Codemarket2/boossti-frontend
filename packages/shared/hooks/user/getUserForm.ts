@@ -31,5 +31,5 @@ export const getUserAttributes = (userForm, userResponse) => {
   const firstName = userResponse?.values?.find((v) => v?.field === userForm?.firstNameFieldId)
     ?.value;
   const lastName = userResponse?.values?.find((v) => v?.field === userForm?.lastNameFieldId)?.value;
-  return { email, firstName, lastName };
+  return { email, firstName, lastName, _id: userResponse?._id };
 };

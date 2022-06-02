@@ -13,6 +13,7 @@ import ListItemText from '@mui/material/ListItemText';
 import moment from 'moment';
 import { Paper, Box, Grid, List, ListItem, IconButton, Tooltip } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { getUserAttributes } from '@frontend/shared/hooks/user/getUserForm';
 import EditResponseDrawer from './EditResponseDrawer';
 import Breadcrumbs from '../common/Breadcrumbs';
 import DisplayValue from '../form2/DisplayValue';
@@ -141,6 +142,8 @@ export function ResponseChild3({
   });
   const { editMode } = useSelector(({ setting }: any) => setting);
   const router = useRouter();
+
+  const userForm = useSelector(({ setting }: any) => setting.userForm);
 
   const redirectToPage = async (_id) => {
     setState({ ...state, showBackdrop: true });
@@ -289,7 +292,13 @@ export function ResponseChild3({
               {!hideAuthor && (
                 <>
                   <Typography variant="body1">
-                    {`by ${response?.createdBy ? response?.createdBy?.name : 'Unauthorised user'} `}
+                    {`by ${
+                      getUserAttributes(userForm, response?.createdBy)?._id
+                        ? `${getUserAttributes(userForm, response?.createdBy)?.firstName} ${
+                            getUserAttributes(userForm, response?.createdBy)?.lastName
+                          }`
+                        : 'Unauthorised user'
+                    } `}
                     {response?.parentId?.title && (
                       <span>
                         {'from '}

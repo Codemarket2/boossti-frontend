@@ -70,7 +70,7 @@ export default function CustomFormSettings({
 
   const toggleCustomSettings = async (e) => {
     onSettingsChange({ ...settings, active: e.target.checked });
-    if (e.target.checked && Object.keys(settings).length < 2) {
+    if (e.target.checked && Object.keys(settings)?.length < 2) {
       await getDefaultSetting();
     }
   };

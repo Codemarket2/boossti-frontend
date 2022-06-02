@@ -27,6 +27,7 @@ interface IProps {
 export default function AuditLog({ documentId, formId }: IProps) {
   const { data, loading, error, hadNextPage } = useGetAuditLogs({ documentId, formId });
   const userForm = useSelector(({ setting }: any) => setting.userForm);
+
   return (
     <Card variant="outlined" className="p-2">
       <Typography variant="h6">Activity Logs</Typography>
@@ -66,9 +67,9 @@ const Item = ({ auditLog, userForm }: IProps2) => {
     <TimelineItem>
       <TimelineOppositeContent sx={{ pt: '8px', pb: 3, px: 2 }}>
         <Typography>
-          {auditLog.action} {auditLog.model} by{' '}
+          {auditLog.action} {auditLog.model} by
           <span className="font-weight-bold">
-            {`${getUserAttributes(userForm, auditLog?.createdBy)?.firstName} ${
+            {` ${getUserAttributes(userForm, auditLog?.createdBy)?.firstName} ${
               getUserAttributes(userForm, auditLog?.createdBy)?.lastName
             }`}
           </span>
