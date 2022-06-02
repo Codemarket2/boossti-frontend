@@ -186,8 +186,8 @@ export function useFormActions({ onAlert, onSave }: IProps) {
     setEdit(true);
     const newValues: any = { ...defaultFormValues };
     Object.keys(defaultFormValues).forEach((key) => {
-      if (payload[key]) {
-        newValues[key] = payload[key] || defaultFormValues[key];
+      if (payload[key] !== undefined) {
+        newValues[key] = payload[key];
       }
     });
     formik.setValues(newValues);

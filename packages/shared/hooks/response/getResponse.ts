@@ -43,7 +43,7 @@ export function useGetResponses({
   const { data, error, loading, subscribeToMore, refetch } = useQuery(GET_RESPONSES, {
     variables: {
       ...state,
-      search: search || state.formField,
+      search: search || state.search,
       formField: formField || state.formField,
       formId,
       parentId,

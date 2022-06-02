@@ -120,7 +120,7 @@ export const GET_RESPONSE_BY_COUNT = gql`
 `;
 
 export const GET_RESPONSES = gql`
-  query MyQuery(
+  query getResponses(
     $formId: ID!
     $parentId: ID
     $templateId: ID
