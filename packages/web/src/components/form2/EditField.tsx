@@ -20,7 +20,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormHelperText from '@mui/material/FormHelperText';
 import InputGroup from '../common/InputGroup';
-import { getFormFieldTypes, fieldTypes } from './fieldTypes';
+import { getFormFieldTypes, fieldTypes, selectOptionsTypes } from './fieldTypes';
 import SelectTemplate from '../template/SelectTemplate';
 import InlineInput from '../common/InlineInput';
 import SelectForm from './SelectForm';
@@ -457,12 +457,6 @@ export default function FormFields({
   );
 }
 
-const optionsTemplates = [
-  { label: 'Existing Form', value: 'existingForm' },
-  { label: 'Existing Template', value: 'template' },
-  ...fieldTypes,
-];
-
 export const SelectOptionType = ({
   value,
   onChange,
@@ -488,7 +482,7 @@ export const SelectOptionType = ({
         <MenuItem value="">
           <em>None</em>
         </MenuItem>
-        {optionsTemplates?.map((option, index) => (
+        {selectOptionsTypes?.map((option, index) => (
           <MenuItem key={index} value={option?.value}>
             {option?.label}
           </MenuItem>

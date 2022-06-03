@@ -45,7 +45,7 @@ export const validateValue = (validate: boolean, value: any, field: Field): IRet
       }
       break;
     }
-    case 'checkbox': {
+    case 'boolean': {
       if (options?.required && !value?.valueBoolean) {
         result = { error: true, errorMessage: 'Required' };
       }

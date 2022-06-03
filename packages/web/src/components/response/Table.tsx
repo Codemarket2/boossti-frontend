@@ -1,14 +1,15 @@
 import * as React from 'react';
+import { groupBy as rowGrouper } from 'lodash';
 import { useMemo, useCallback, useEffect, useReducer, useState } from 'react';
 import DataGrid, { Column, SelectColumn, TextEditor } from 'react-data-grid';
-import { ListItem, Tooltip } from '@mui/material';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
-import { CellExpanderFormatter } from './CellExpanderFormatter';
+// import { ListItem, Tooltip } from '@mui/material';
+// import ListItemText from '@mui/material/ListItemText';
+// import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+// import { CellExpanderFormatter } from './CellExpanderFormatter';
 import DisplayValue from '../form2/DisplayValue';
 import ResponseActions from './ResponseActions';
 import IconButton from '@mui/material/IconButton';
-import { flushSync } from 'react-dom';
+// import { flushSync } from 'react-dom';
 
 interface IDataTable {
   form: any;
@@ -158,8 +159,10 @@ export const DataTable = ({
           onFill={onFill}
           onCopy={onCopy}
           onPaste={onPaste}
-          className="fill-grid"
+          className="fill-grid rdg-light"
           direction={direction}
+          groupBy={['country']}
+          rowGrouper={rowGrouper}
         />
       </div>
     </div>

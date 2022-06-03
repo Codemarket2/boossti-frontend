@@ -87,7 +87,7 @@ const getValue = (field, value) => {
     case 'dateTime': {
       return value?.valueDate && moment(value?.valueDate).format('lll');
     }
-    case 'checkbox': {
+    case 'boolean': {
       return value.valueBoolean?.toString();
     }
     case 'select': {

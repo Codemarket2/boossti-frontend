@@ -26,6 +26,7 @@ import { ResponseChild3 } from './Response';
 import EditResponseDrawer from './EditResponseDrawer';
 import { DataTable } from './Table';
 import { useSelector } from 'react-redux';
+import ReactDataGrid from './ReactDataGrid';
 
 interface IProps {
   form: any;
@@ -93,19 +94,22 @@ export default function ResponseList({
     <>
       <Backdrop open={deleteLoading} />
       {form?.settings?.responsesView === 'table2' ? (
-        <DataTable
-          data={data}
-          form={form}
-          refetch={refetch}
-          rowHeight={40}
-          rowKeyGetter={rowKeyGetter}
-          selectedRows={selectedRows}
-          onSelectedRowsChange={setSelectedRows}
-          onFill={handleFill}
-          onCopy={handleCopy}
-          onPaste={handlePaste}
-          direction={direction}
-        />
+        <>
+          <ReactDataGrid form={form} responses={data?.getResponses?.data} />
+          {/* <DataTable
+            data={data}
+            form={form}
+            refetch={refetch}
+            rowHeight={40}
+            rowKeyGetter={rowKeyGetter}
+            selectedRows={selectedRows}
+            onSelectedRowsChange={setSelectedRows}
+            onFill={handleFill}
+            onCopy={handleCopy}
+            onPaste={handlePaste}
+            direction={direction}
+          /> */}
+        </>
       ) : form?.settings?.responsesView === 'vertical' ? (
         <>
           {data?.getResponses?.data?.map((response) => (

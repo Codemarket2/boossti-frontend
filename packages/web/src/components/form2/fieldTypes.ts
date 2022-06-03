@@ -22,7 +22,7 @@ export const fieldTypes: FieldType[] = [
   { label: 'Password', value: 'password' },
   { label: 'Textarea', value: 'textarea' },
   { label: 'Rich Textarea', value: 'richTextarea' },
-  { label: 'Checkbox', value: 'checkbox' },
+  { label: 'Boolean', value: 'boolean' },
   { label: 'Select', value: 'select' },
   { label: 'Email', value: 'email' },
   { label: 'Phone Number', value: 'phoneNumber' },
@@ -37,4 +37,9 @@ export const fieldTypes: FieldType[] = [
   { label: 'Color Picker', value: 'colorPicker' },
   { label: 'Barcode Scanner', value: 'barcodeScanner' },
   { label: 'Lighthouse Report', value: 'lighthouseReport' },
+];
+
+export const selectOptionsTypes = [
+  { label: 'Existing Template', value: 'template' },
+  ...fieldTypes?.filter((t) => t.value !== 'select'),
 ];

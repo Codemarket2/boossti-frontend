@@ -39,7 +39,10 @@ export default function DisplayValue({ field, value, imageAvatar }: IProps) {
         if ((field?.template?._id || value.template?._id) && value.page) {
           return <PageDrawer title={value.page?.title} slug={value.page?.slug} />;
         }
-        return <Link href={`/${value?.template?.slug}`}>{value?.template?.title}</Link>;
+        if (value?.template?.slug && value?.template?.title) {
+          return <Link href={`/${value?.template?.slug}`}>{value?.template?.title}</Link>;
+        }
+        return null;
       }
       if (optionsTemplate === 'existingForm') {
         if (
@@ -69,7 +72,6 @@ export default function DisplayValue({ field, value, imageAvatar }: IProps) {
         );
       }
       return <DisplayValue field={{ fieldType: optionsTemplate }} value={value} />;
-      // return <>{value?.value}</>;
     }
     case 'link':
       return <a href={value?.value}>{value?.value}</a>;
@@ -82,8 +84,8 @@ export default function DisplayValue({ field, value, imageAvatar }: IProps) {
     case 'number':
     case 'phoneNumber':
       return <>{value?.valueNumber}</>;
-    case 'checkbox':
-      return <>{value?.valueBoolean?.toString()}</>;
+    case 'boolean':
+      return <>{value?.valueBoolean ? 'Yes' : 'No'}</>;
     case 'image':
       if (imageAvatar) {
         return (

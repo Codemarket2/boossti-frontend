@@ -15275,7 +15275,7 @@ react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
-  
+
 react-lighthouse-viewer@^6.0.2:
   version "6.0.2"
   resolved "https://registry.yarnpkg.com/react-lighthouse-viewer/-/react-lighthouse-viewer-6.0.2.tgz#da5089ee32248f86e2d777c690d1ab01b8a1fe6f"

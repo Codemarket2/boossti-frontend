@@ -47,13 +47,12 @@ export default function SelectFormFields({
         }
         label="Select form field"
       >
-        {data?.getForm?.fields
-          ?.filter((f) => ['text', 'email'].includes(f.fieldType))
-          .map((f) => (
-            <MenuItem key={f?._id} value={f?._id}>
-              {f?.label}
-            </MenuItem>
-          ))}
+        {/* ?.filter((f) => ['text', 'email'].includes(f.fieldType)) */}
+        {data?.getForm?.fields?.map((f) => (
+          <MenuItem key={f?._id} value={f?._id}>
+            {f?.label}
+          </MenuItem>
+        ))}
       </Select>
       {error && <FormHelperText className="text-danger">{helperText}</FormHelperText>}
     </FormControl>
