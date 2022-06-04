@@ -9,7 +9,10 @@ interface IProps {
 
 export default function TemplateIntances({ template }: IProps) {
   const defaultWidget = template?.fields?.[0];
-  const slug = slugify(defaultWidget?.form?.name, { lower: true });
+  let slug;
+  if (defaultWidget?.form?.name) {
+    slug = slugify(defaultWidget?.form?.name, { lower: true });
+  }
   let customSettings = {};
   if (defaultWidget?.options?.settings?.active) {
     customSettings = { ...defaultWidget?.options?.settings };
@@ -17,19 +20,21 @@ export default function TemplateIntances({ template }: IProps) {
 
   return (
     <Card variant="outlined" className="p-2">
-      <FormPage
-        slug={slug}
-        settings={{
-          ...customSettings,
-          widgetType: 'both',
-          formView: 'button',
-          onlyMyResponses: true,
-          buttonLabel: `Create ${template?.title}`,
-          responsesView: 'table',
-        }}
-        templateId={template?._id}
-        isTemplateInstance={template?.slug}
-      />
+      {slug && (
+        <FormPage
+          slug={slug}
+          settings={{
+            ...customSettings,
+            widgetType: 'both',
+            formView: 'button',
+            onlyMyResponses: true,
+            buttonLabel: `Create ${template?.title}`,
+            responsesView: 'table',
+          }}
+          templateId={template?._id}
+          isTemplateInstance={template?.slug}
+        />
+      )}
     </Card>
   );
 }
