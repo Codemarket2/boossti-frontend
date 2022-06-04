@@ -17,9 +17,6 @@ interface IProps {
 }
 
 export default function DisplayValue({ field, value, imageAvatar }: IProps) {
-  const address = value?.value.split('+');
-  const addressKey = ['Address', 'Landmark', 'City', 'State', 'Country'];
-
   switch (field.fieldType) {
     case 'text':
     case 'textarea':
@@ -104,7 +101,9 @@ export default function DisplayValue({ field, value, imageAvatar }: IProps) {
     case 'file': {
       return <DisplayFiles urls={[value?.value]} />;
     }
-    case 'address':
+    case 'address': {
+      const address = value?.value?.split('+');
+      const addressKey = ['Address', 'Landmark', 'City', 'State', 'Country'];
       return (
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
           {address.map((res, index) => (
@@ -117,6 +116,7 @@ export default function DisplayValue({ field, value, imageAvatar }: IProps) {
           ))}
         </Box>
       );
+    }
     case 'lighthouseReport':
       return (
         <>

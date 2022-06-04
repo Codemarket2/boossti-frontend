@@ -46,7 +46,7 @@ export default function ResponseList({
   templateId,
   isTemplateInstance,
 }: IProps): any {
-  const { data, error, state, setState, refetch } = useGetResponses({
+  const { data, error, state, setState, refetch, handleUpdateResponse } = useGetResponses({
     formId: form?._id,
     parentId,
     onlyMy: showOnlyMyResponses,
@@ -95,7 +95,11 @@ export default function ResponseList({
       <Backdrop open={deleteLoading} />
       {form?.settings?.responsesView === 'table2' ? (
         <>
-          <ReactDataGrid form={form} responses={data?.getResponses?.data} />
+          <ReactDataGrid
+            form={form}
+            responses={data?.getResponses?.data}
+            onRowChange={handleUpdateResponse}
+          />
           {/* <DataTable
             data={data}
             form={form}
