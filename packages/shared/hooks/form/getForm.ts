@@ -1,7 +1,7 @@
 import { useQuery, useSubscription } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { FORM_SUB, UPDATED_FORM } from '../../graphql/subscription/form';
-import { client as apolloClient } from '../../graphql';
+import { client as apolloClient, guestClient } from '../../graphql';
 import { GET_FORMS, GET_FORM, GET_FORM_BY_SLUG } from '../../graphql/query/form';
 
 interface IProps {
@@ -136,7 +136,7 @@ export async function getForm(_id) {
 
 export async function getFormBySlug(slug: string) {
   let form = null;
-  const response = await apolloClient.query({
+  const response = await guestClient.query({
     query: GET_FORM_BY_SLUG,
     variables: { slug },
   });

@@ -35,13 +35,25 @@ import NotFound from '../common/NotFound';
 import UnAuthorised from '../common/UnAuthorised';
 import Permissions from './Permissions';
 import AuditLog from '../auditLog/AuditLog';
-import Constraints from './Constaints/Constraints';
+import Constraints from './Constraints/Constraints';
+import ShopifySettings from './shopify/ShopifySettings';
 
 interface IProps {
   _id: string;
   drawerMode?: boolean;
   onSlugChange?: (newSlug: string) => void;
 }
+
+const tabs = [
+  'Preview',
+  'Settings',
+  'Actions',
+  'Workflows',
+  'Responses',
+  'Constraints',
+  'Activity',
+  'Shopify',
+];
 
 export default function Form({ _id, drawerMode = false, onSlugChange }: IProps): any {
   const { error, state, handleOnChange, updateLoading, handleUpdateName } = useUpdateForm({
@@ -53,7 +65,7 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
   });
 
   const [options, setOptions] = useState({
-    currentTab: 'preview',
+    currentTab: 'Preview',
     snackBar: '',
     backdrop: false,
   });
@@ -182,24 +194,20 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
                   textColor="primary"
                   onChange={(event, newValue) => setOptions({ ...options, currentTab: newValue })}
                 >
-                  <Tab label="Preview" value="preview" />
-                  <Tab label="Settings" value="settings" />
-                  <Tab label="Actions" value="actions" />
-                  <Tab label="Workflows" value="workflows" />
-                  <Tab label="Responses" value="responses" />
-                  <Tab label="Constraints" value="constraints" />
-                  <Tab label="Activity" value="activity" />
+                  {tabs.map((label) => (
+                    <Tab key={label} label={label} value={label} />
+                  ))}
                   {state?.name?.toUpperCase().includes('ROLE') && (
                     <Tab label="Permissions" value="permissions" />
                   )}
                 </Tabs>
               </Paper>
-              {options.currentTab === 'preview' && (
+              {options.currentTab === 'Preview' && (
                 <Paper variant="outlined" className="px-2">
                   <FormView form={state} />
                 </Paper>
               )}
-              {options.currentTab === 'settings' && (
+              {options.currentTab === 'Settings' && (
                 <>
                   <FormSetting
                     formId={_id}
@@ -214,8 +222,8 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
                   />
                 </>
               )}
-              {options.currentTab === 'workflows' && <ResponseLayout _id={_id} />}
-              {options.currentTab === 'responses' && (
+              {options.currentTab === 'Workflows' && <ResponseLayout _id={_id} />}
+              {options.currentTab === 'Responses' && (
                 <>
                   <Paper variant="outlined">
                     <BulkUploadAction form={state} />
@@ -223,7 +231,7 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
                   <ResponseList form={state} />
                 </>
               )}
-              {options.currentTab === 'actions' && (
+              {options.currentTab === 'Actions' && (
                 <Actions
                   fields={state?.fields}
                   settings={state?.settings}
@@ -234,9 +242,9 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
                   }
                 />
               )}
-              {options.currentTab === 'permissions' && <Permissions formId={_id} form={state} />}
-              {options.currentTab === 'activity' && <AuditLog documentId={_id} formId={_id} />}
-              {options.currentTab === 'constraints' && (
+              {options.currentTab === 'Permissions' && <Permissions formId={_id} form={state} />}
+              {options.currentTab === 'Activity' && <AuditLog documentId={_id} formId={_id} />}
+              {options.currentTab === 'Constraints' && (
                 <Constraints
                   form={state}
                   onConstraintChange={(constraints) => {
@@ -244,6 +252,14 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
                       settings: { ...state.settings, constraints },
                     });
                   }}
+                />
+              )}
+              {options.currentTab === 'Shopify' && (
+                <ShopifySettings
+                  shopify={state?.settings?.shopify}
+                  onShopifyChange={(shopify) =>
+                    handleOnChange({ settings: { ...state.settings, shopify } })
+                  }
                 />
               )}
             </Grid>

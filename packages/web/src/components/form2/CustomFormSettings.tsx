@@ -11,6 +11,7 @@ import Overlay from '../common/Overlay';
 import ResponseLayout from '../response/ResponseLayout';
 import { ActionsWrapper } from './Actions';
 import BackdropComponent from '../common/Backdrop';
+import ShopifySettings from './shopify/ShopifySettings';
 
 interface IProps {
   isSection?: boolean;
@@ -29,7 +30,7 @@ export default function CustomFormSettings({
   formId,
   open,
   onClose,
-  settings,
+  settings = {},
   onSettingsChange,
   parentPageFields = [],
 }: IProps): any {
@@ -70,7 +71,7 @@ export default function CustomFormSettings({
 
   const toggleCustomSettings = async (e) => {
     onSettingsChange({ ...settings, active: e.target.checked });
-    if (e.target.checked && Object.keys(settings)?.length < 2) {
+    if (e.target.checked && Object.keys(settings || {})?.length < 2) {
       await getDefaultSetting();
     }
   };
@@ -105,6 +106,7 @@ export default function CustomFormSettings({
             <Tab label="Settings" value="settings" />
             <Tab label="Actions" value="actions" />
             <Tab label="Workflows" value="workflows" />
+            <Tab label="Shopify" value="Shopify" />
           </Tabs>
           {tab === 'settings' && (
             <FormSetting
@@ -148,6 +150,12 @@ export default function CustomFormSettings({
               pageFields={[...pageFields, ...parentPageFields]}
               settings={settings}
               onChange={(actions) => onSettingsChange({ ...settings, actions })}
+            />
+          )}
+          {tab === 'Shopify' && (
+            <ShopifySettings
+              shopify={settings?.shopify}
+              onShopifyChange={(shopify) => onSettingsChange({ ...settings, shopify })}
             />
           )}
         </>
