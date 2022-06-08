@@ -12,6 +12,7 @@ import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import Grid from '@mui/material/Grid';
 import EditIcon from '@mui/icons-material/Edit';
+import { Provider } from '@shopify/app-bridge-react';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
@@ -36,9 +37,54 @@ import DeleteButton from '../components/common/DeleteButton';
 import TemplateInstances from '../components/template/TemplateInstances';
 import TemplatePreview from '../components/template/TemplatePreview';
 
+export default function TemplateScreenWrapper({
+  slug,
+  preview,
+}: {
+  slug: string;
+  preview?: boolean;
+}) {
+  const { data, error } = useGetTemplateBySlug({ slug });
+  const authorized = useAuthorization([data?.getTemplateBySlug?.createdBy?._id], true);
+
+  if (error || !data) {
+    return <ErrorLoading error={error} />;
+  }
+
+  if (!data?.getTemplateBySlug || (!authorized && !data?.getTemplateBySlug?.active)) {
+    return <NotFound />;
+  }
+
+  const host = new URL(window?.location?.href).searchParams.get('host');
+  if (slug === 'shopify-product-favorite-app-2' && (host || !authorized)) {
+    const defaultWidget = data?.getTemplateBySlug?.fields?.find((field) => field?.options?.default);
+    const apiKey = defaultWidget?.options?.settings?.shopify?.credentials?.apiKey;
+    return (
+      <Provider
+        config={{
+          apiKey,
+          host,
+          forceRedirect: true,
+        }}
+      >
+        Embedded App
+        <TemplateScreen data={data} slug={slug} preview={preview} authorized={authorized} />
+      </Provider>
+    );
+  }
+
+  return (
+    <>
+      <TemplateScreen data={data} slug={slug} preview={preview} authorized={authorized} />
+    </>
+  );
+}
+
 interface IProps {
   slug: string;
   preview?: boolean;
+  data: any;
+  authorized: boolean;
 }
 
 const initialState = {
@@ -48,7 +94,7 @@ const initialState = {
   selectedIndex: 0,
 };
 
-export default function Screen({ slug, preview }: IProps) {
+function TemplateScreen({ slug, preview, data, authorized }: IProps) {
   const router = useRouter();
 
   // const [preview, setPreview] = useState(false);
@@ -68,9 +114,7 @@ export default function Screen({ slug, preview }: IProps) {
     }
   };
 
-  const { data, error } = useGetTemplateBySlug({ slug });
   const { handleDelete, deleteLoading } = useDeleteTemplate({ onAlert });
-  const authorized = useAuthorization([data?.getTemplateBySlug?.createdBy?._id], true);
 
   const {
     state: crudState,
@@ -86,14 +130,6 @@ export default function Screen({ slug, preview }: IProps) {
   const onCancel = () => {
     setState({ ...state, fieldName: '' });
   };
-
-  if (error || !data) {
-    return <ErrorLoading error={error} />;
-  }
-
-  if (!data?.getTemplateBySlug || (!authorized && !data?.getTemplateBySlug?.active)) {
-    return <NotFound />;
-  }
 
   return (
     <div>
