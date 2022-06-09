@@ -11,6 +11,7 @@
     "aws-amplify": "4.1.1",
     "aws-appsync-auth-link": "^3.0.5",
     "aws-appsync-subscription-link": "^3.0.7",
+    "axios": "^0.22.0",
     "formik": "2.2.9",
     "graphql": "15.5.0",
     "immer": "^9.0.5",

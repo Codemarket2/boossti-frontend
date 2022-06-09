@@ -15,14 +15,14 @@ import TemplateInstanceView from '../../../src/components/template/TemplateInsta
 //   slug: string;
 // }
 
-export default function Page() {
+export default function InstancePage() {
   const router = useRouter();
   const { slug, instanceCount } = router.query;
   const { data, error } = useGetTemplateBySlug({ slug });
 
   return (
     <>
-      <UserLayout container={false} authRequired>
+      <UserLayout container={false}>
         {error || !data ? (
           <ErrorLoading error={error} />
         ) : !data.getTemplateBySlug ? (

@@ -2,7 +2,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { GET_RESPONSE_BY_COUNT, GET_RESPONSES, GET_RESPONSE } from '../../graphql/query/response';
 import { RESPONSE_SUB } from '../../graphql/subscription/response';
-import { client as apolloClient } from '../../graphql';
+import { client as apolloClient, guestClient } from '../../graphql';
 import { UPDATE_RESPONSE } from '../../graphql/mutation/response';
 
 export const defaultQueryVariables = {
@@ -96,6 +96,14 @@ export function useGetResponses({
   }, []);
 
   return { data, error, loading, state, setState, refetch, handleUpdateResponse };
+}
+
+export async function getResponses(formId: string, formField: string, search: string) {
+  const { data } = await guestClient.query({
+    query: GET_RESPONSES,
+    variables: { formId, formField, search },
+  });
+  return data?.getResponses;
 }
 
 export function useGetResponse(_id: string): any {

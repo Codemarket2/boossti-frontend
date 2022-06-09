@@ -16,7 +16,7 @@ export default function Page({ metaTags, slug }: IProps) {
   return (
     <>
       <Head {...metaTags} />
-      <UserLayout container={false} authRequired>
+      <UserLayout container={false}>
         {slug ? <TemplateScreen slug={slug.toString()} /> : <Loading />}
       </UserLayout>
     </>

@@ -12,7 +12,6 @@ import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import Grid from '@mui/material/Grid';
 import EditIcon from '@mui/icons-material/Edit';
-import { Provider } from '@shopify/app-bridge-react';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
@@ -36,6 +35,7 @@ import TemplateWidgets from '../components/template/TemplateWidgets';
 import DeleteButton from '../components/common/DeleteButton';
 import TemplateInstances from '../components/template/TemplateInstances';
 import TemplatePreview from '../components/template/TemplatePreview';
+import ShopifyProvider from '../components/shopify/ShopifyProvider';
 
 export default function TemplateScreenWrapper({
   slug,
@@ -56,20 +56,22 @@ export default function TemplateScreenWrapper({
   }
 
   const host = new URL(window?.location?.href).searchParams.get('host');
-  if (slug === 'shopify-product-favorite-app-2' && (host || !authorized)) {
+  const shop = new URL(window?.location?.href).searchParams.get('shop');
+  // && (host || !authorized)
+  if (slug === process.env.NEXT_PUBLIC_SHOPIFY_PRODUCT_FAVORITE_TEMPLATE && (host || shop)) {
     const defaultWidget = data?.getTemplateBySlug?.fields?.find((field) => field?.options?.default);
     const apiKey = defaultWidget?.options?.settings?.shopify?.credentials?.apiKey;
     return (
-      <Provider
-        config={{
-          apiKey,
-          host,
-          forceRedirect: true,
-        }}
-      >
-        Embedded App
-        <TemplateScreen data={data} slug={slug} preview={preview} authorized={authorized} />
-      </Provider>
+      <>
+        <ShopifyProvider
+          apiKey={apiKey}
+          defaultWidgetFormId={defaultWidget?.form?._id}
+          template={data?.getTemplateBySlug}
+        >
+          Embedded App
+          <TemplateScreen data={data} slug={slug} preview={preview} authorized={authorized} />
+        </ShopifyProvider>
+      </>
     );
   }
 
