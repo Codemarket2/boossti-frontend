@@ -30,65 +30,65 @@ import ReactDataGrid from './ReactDataGrid';
 
 interface IProps {
   form: any;
-  parentId?: string;
   workFlowFormReponseParentId?: string;
   showOnlyMyResponses?: boolean;
   templateId?: string;
+  templateInstanceId?: string;
   isTemplateInstance?: string;
 }
 type Direction = 'ltr' | 'rtl';
 
 export default function ResponseList({
   form,
-  parentId,
   workFlowFormReponseParentId,
   showOnlyMyResponses,
   templateId,
   isTemplateInstance,
+  templateInstanceId,
 }: IProps): any {
   const { data, error, state, setState, refetch, handleUpdateResponse } = useGetResponses({
     formId: form?._id,
-    parentId,
     onlyMy: showOnlyMyResponses,
     workFlowFormReponseParentId,
     templateId,
+    templateInstanceId,
   });
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
   const router = useRouter();
   const [selectedResponse, setSelectedResponse] = useState(null);
-  const [direction, setDirection] = useState<Direction>('ltr');
-  const [selectedRows, setSelectedRows] = useState<ReadonlySet<string>>(() => new Set());
+  // const [direction, setDirection] = useState<Direction>('ltr');
+  // const [selectedRows, setSelectedRows] = useState<ReadonlySet<string>>(() => new Set());
 
   const userForm = useSelector(({ setting }: any) => setting.userForm);
 
-  function handleFill({ columnKey, sourceRow, targetRow }) {
-    return { ...targetRow, [columnKey]: sourceRow[columnKey] };
-  }
+  // function handleFill({ columnKey, sourceRow, targetRow }) {
+  //   return { ...targetRow, [columnKey]: sourceRow[columnKey] };
+  // }
 
-  function handlePaste({ sourceColumnKey, sourceRow, targetColumnKey, targetRow }) {
-    const incompatibleColumns = ['email', 'zipCode', 'date'];
-    if (
-      sourceColumnKey === 'avatar' ||
-      ['id', 'avatar'].includes(targetColumnKey) ||
-      ((incompatibleColumns.includes(targetColumnKey) ||
-        incompatibleColumns.includes(sourceColumnKey)) &&
-        sourceColumnKey !== targetColumnKey)
-    ) {
-      return targetRow;
-    }
+  // function handlePaste({ sourceColumnKey, sourceRow, targetColumnKey, targetRow }) {
+  //   const incompatibleColumns = ['email', 'zipCode', 'date'];
+  //   if (
+  //     sourceColumnKey === 'avatar' ||
+  //     ['id', 'avatar'].includes(targetColumnKey) ||
+  //     ((incompatibleColumns.includes(targetColumnKey) ||
+  //       incompatibleColumns.includes(sourceColumnKey)) &&
+  //       sourceColumnKey !== targetColumnKey)
+  //   ) {
+  //     return targetRow;
+  //   }
 
-    return { ...targetRow, [targetColumnKey]: sourceRow[sourceColumnKey] };
-  }
+  //   return { ...targetRow, [targetColumnKey]: sourceRow[sourceColumnKey] };
+  // }
 
-  function handleCopy({ sourceRow, sourceColumnKey }) {
-    if (window.isSecureContext) {
-      navigator.clipboard.writeText(sourceRow[sourceColumnKey]);
-    }
-  }
+  // function handleCopy({ sourceRow, sourceColumnKey }) {
+  //   if (window.isSecureContext) {
+  //     navigator.clipboard.writeText(sourceRow[sourceColumnKey]);
+  //   }
+  // }
 
-  function rowKeyGetter(row) {
-    return row.id;
-  }
+  // function rowKeyGetter(row) {
+  //   return row.id;
+  // }
 
   return (
     <>

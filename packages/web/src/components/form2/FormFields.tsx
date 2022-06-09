@@ -64,6 +64,7 @@ type IProps = {
   parentPageFields?: any;
   tabName?: string;
   showWidgetExpand?: boolean;
+  selectedField?: string;
 };
 
 export default function FormFields({
@@ -75,6 +76,7 @@ export default function FormFields({
   parentPageFields = [],
   tabName = 'form',
   showWidgetExpand = false,
+  selectedField,
 }: IProps): any {
   const [values, setValues] = useState(initialValues);
   const router = useRouter();
@@ -243,7 +245,8 @@ export default function FormFields({
                                   onClick={() => handleNavigate(field.label)}
                                   selected={
                                     draggableSnapshot.isDragging ||
-                                    field?._id === values?.field?._id
+                                    field?._id === values?.field?._id ||
+                                    selectedField === convertToSlug(field.label)
                                   }
                                   ref={draggableProvided.innerRef}
                                   {...draggableProvided.draggableProps}

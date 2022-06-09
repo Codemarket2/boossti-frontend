@@ -1,4 +1,3 @@
-// import { useRouter } from 'next/router';
 import { getTemplateMetaTags } from '@frontend/shared/hooks/metaTags';
 import TemplateScreen from '../../src/screens/TemplateScreen';
 import Loading from '../../src/components/common/Loading';
@@ -11,8 +10,6 @@ interface IProps {
 }
 
 export default function Page({ metaTags, slug }: IProps) {
-  // const router = useRouter();
-  // const { slug } = router.query;
   return (
     <>
       <Head {...metaTags} />

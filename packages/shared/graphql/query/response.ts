@@ -6,10 +6,6 @@ export const GET_RESPONSE = gql`
       _id
       formId
       count
-      parentId {
-        _id
-        title
-      }
       workFlowFormReponseParentId
       values {
         _id
@@ -66,10 +62,6 @@ export const GET_RESPONSE_BY_COUNT = gql`
       formId
       count
       templateId
-      parentId {
-        _id
-        title
-      }
       workFlowFormReponseParentId
       values {
         _id
@@ -122,8 +114,8 @@ export const GET_RESPONSE_BY_COUNT = gql`
 export const GET_RESPONSES = gql`
   query getResponses(
     $formId: ID!
-    $parentId: ID
     $templateId: ID
+    $templateInstanceId: ID
     $workFlowFormReponseParentId: ID
     $page: Int
     $limit: Int
@@ -133,8 +125,8 @@ export const GET_RESPONSES = gql`
   ) {
     getResponses(
       formId: $formId
-      parentId: $parentId
       templateId: $templateId
+      templateInstanceId: $templateInstanceId
       workFlowFormReponseParentId: $workFlowFormReponseParentId
       page: $page
       limit: $limit
@@ -147,10 +139,6 @@ export const GET_RESPONSES = gql`
         _id
         formId
         count
-        parentId {
-          _id
-          title
-        }
         workFlowFormReponseParentId
         values {
           _id
@@ -212,10 +200,6 @@ export const GET_MY_RESPONSES = gql`
           name
         }
         count
-        parentId {
-          _id
-          title
-        }
         workFlowFormReponseParentId
         values {
           _id

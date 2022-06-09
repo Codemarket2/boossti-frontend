@@ -51,28 +51,26 @@ export default function TemplateScreenWrapper({
     return <ErrorLoading error={error} />;
   }
 
-  if (!data?.getTemplateBySlug || (!authorized && !data?.getTemplateBySlug?.active)) {
+  if (!data?.getTemplateBySlug) {
     return <NotFound />;
   }
 
   const host = new URL(window?.location?.href).searchParams.get('host');
   const shop = new URL(window?.location?.href).searchParams.get('shop');
-  // && (host || !authorized)
   if (slug === process.env.NEXT_PUBLIC_SHOPIFY_PRODUCT_FAVORITE_TEMPLATE && (host || shop)) {
     const defaultWidget = data?.getTemplateBySlug?.fields?.find((field) => field?.options?.default);
     const apiKey = defaultWidget?.options?.settings?.shopify?.credentials?.apiKey;
     return (
       <>
-        <ShopifyProvider
-          apiKey={apiKey}
-          defaultWidgetFormId={defaultWidget?.form?._id}
-          template={data?.getTemplateBySlug}
-        >
-          Embedded App
+        <ShopifyProvider apiKey={apiKey} template={data?.getTemplateBySlug}>
           <TemplateScreen data={data} slug={slug} preview={preview} authorized={authorized} />
         </ShopifyProvider>
       </>
     );
+  }
+
+  if (!authorized && !data?.getTemplateBySlug?.active) {
+    return <NotFound />;
   }
 
   return (
@@ -98,8 +96,6 @@ const initialState = {
 
 function TemplateScreen({ slug, preview, data, authorized }: IProps) {
   const router = useRouter();
-
-  // const [preview, setPreview] = useState(false);
 
   const [state, setState] = useState(initialState);
 

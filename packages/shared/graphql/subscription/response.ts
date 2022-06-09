@@ -6,10 +6,6 @@ export const RESPONSE_SUB = gql`
       _id
       formId
       count
-      parentId {
-        _id
-        title
-      }
       workFlowFormReponseParentId
       values {
         _id

@@ -10,16 +10,10 @@ import NotFound from '../common/NotFound';
 interface IProps {
   children: React.ReactNode;
   apiKey: string;
-  defaultWidgetFormId: string;
-  template: any;
+  template?: any;
 }
 
-export default function ShopifyProvider({
-  children,
-  apiKey,
-  defaultWidgetFormId,
-  template,
-}: IProps) {
+export default function ShopifyProvider({ children, apiKey, template }: IProps) {
   const [host, setHost] = useState('');
 
   const getHost = async () => {
@@ -54,9 +48,7 @@ export default function ShopifyProvider({
             forceRedirect: true,
           }}
         >
-          <Shopify defaultWidgetFormId={defaultWidgetFormId} template={template}>
-            {children}
-          </Shopify>
+          <Shopify template={template}>{children}</Shopify>
         </AppBridgeProvider>
       ) : (
         <Loading />
@@ -67,11 +59,10 @@ export default function ShopifyProvider({
 
 interface IProps2 {
   children: ReactNode;
-  defaultWidgetFormId: string;
-  template: any;
+  template?: any;
 }
 
-const Shopify = ({ children, defaultWidgetFormId, template }: IProps2) => {
+const Shopify = ({ children, template }: IProps2) => {
   const app = useAppBridge();
   const router = useRouter();
   const [token, setToken] = useState('');
@@ -81,9 +72,10 @@ const Shopify = ({ children, defaultWidgetFormId, template }: IProps2) => {
       const url = new URL(window.location.href);
       const shop = url.searchParams.get('shop');
       const sessionToken = await getSessionToken(app);
-      const response = await getShopResponse({ shop, formId: defaultWidgetFormId });
-      const instanceUrl = `/${template?.slug}/${response?.count}`;
-      if (instanceUrl) {
+      if (template?._id) {
+        const defaultWidget = template?.fields?.find((field) => field?.options?.default);
+        const response = await getShopResponse({ shop, formId: defaultWidget?.form?._id });
+        const instanceUrl = `/${template?.slug}/${response?.count}`;
         router.push(instanceUrl);
       } else {
         setToken(sessionToken);

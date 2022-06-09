@@ -80,6 +80,7 @@ interface IProps2 {
   hideNavigation?: boolean;
   hideAuthor?: boolean;
   hideWorkflow?: boolean;
+  isAuthorized?: boolean;
 }
 
 export function ResponseChild2({
@@ -89,6 +90,7 @@ export function ResponseChild2({
   hideNavigation,
   hideAuthor,
   hideWorkflow,
+  isAuthorized,
 }: IProps2) {
   const { data, error, loading } = useGetForm(formId);
 
@@ -108,6 +110,7 @@ export function ResponseChild2({
       hideNavigation={hideNavigation}
       hideAuthor={hideAuthor}
       hideWorkflow={hideWorkflow}
+      isAuthorized={isAuthorized}
     />
   );
 }
@@ -120,6 +123,7 @@ interface IProps3 {
   hideAuthor?: boolean;
   hideWorkflow?: boolean;
   deleteCallBack?: () => void;
+  isAuthorized?: boolean;
 }
 
 export function ResponseChild3({
@@ -130,11 +134,13 @@ export function ResponseChild3({
   hideAuthor,
   hideWorkflow,
   deleteCallBack,
+  isAuthorized,
 }: IProps3) {
   const [state, setState] = useState({ showMenu: null, edit: false, showBackdrop: false });
 
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
-  const authorized = useAuthorization([response?.createdBy?._id, form?.createdBy?._id], true);
+  const authorized =
+    useAuthorization([response?.createdBy?._id, form?.createdBy?._id], true) || isAuthorized;
   const authorized2 = useAuthorization([form?.createdBy?._id], true);
   const { section, onSectionChange, handleUpdateSection } = useUpdateSection({
     onAlert,

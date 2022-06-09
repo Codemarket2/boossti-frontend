@@ -133,7 +133,6 @@ export default function FormFieldsValue({
                   {field.form?._id && (
                     <FormViewWrapper
                       formId={field.form?._id}
-                      parentId={pageId}
                       workFlowFormReponseParentId={workFlowFormReponseParentId}
                       layouts={layouts}
                       customSettings={field?.options?.settings?.active && field?.options?.settings}
@@ -217,7 +216,6 @@ export default function FormFieldsValue({
                       {field.form?._id && (
                         <FormViewWrapper
                           formId={field.form?._id}
-                          parentId={pageId}
                           layouts={layouts}
                           customSettings={
                             field?.options?.settings?.active && field?.options?.settings

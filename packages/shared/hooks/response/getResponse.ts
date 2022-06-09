@@ -7,7 +7,6 @@ import { UPDATE_RESPONSE } from '../../graphql/mutation/response';
 
 export const defaultQueryVariables = {
   formId: null,
-  parentId: null,
   page: 1,
   limit: 10,
   search: '',
@@ -17,21 +16,21 @@ export const defaultQueryVariables = {
 
 interface IProps {
   formId: string;
-  parentId?: string;
   formField?: string;
   onlyMy?: boolean;
   workFlowFormReponseParentId?: string;
   templateId?: string;
+  templateInstanceId?: string;
   search?: string;
 }
 
 export function useGetResponses({
   formId,
-  parentId = null,
   formField = null,
   onlyMy = false,
   workFlowFormReponseParentId = null,
   templateId,
+  templateInstanceId,
   search = null,
 }: IProps) {
   const [subsribed, setSubsribed] = useState(false);
@@ -47,10 +46,10 @@ export function useGetResponses({
       search: search || state.search,
       formField: formField || state.formField,
       formId,
-      parentId,
       workFlowFormReponseParentId,
       onlyMy,
       templateId,
+      templateInstanceId,
     },
     fetchPolicy: 'cache-and-network',
   });

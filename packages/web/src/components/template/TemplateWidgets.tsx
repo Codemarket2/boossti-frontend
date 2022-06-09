@@ -5,9 +5,10 @@ import FormFields from '../form2/FormFields';
 interface IProps {
   template: any;
   previewMode?: boolean;
+  selectedWidget?: string;
 }
 
-export default function TemplateWidgets({ template, previewMode }: IProps) {
+export default function TemplateWidgets({ template, previewMode, selectedWidget }: IProps) {
   const { onTemplateChange } = useUpdateTemplate({ template, onAlert });
   return (
     <FormFields
@@ -17,6 +18,7 @@ export default function TemplateWidgets({ template, previewMode }: IProps) {
       previewMode={previewMode}
       isSection
       showWidgetExpand
+      selectedField={selectedWidget}
     />
   );
 }

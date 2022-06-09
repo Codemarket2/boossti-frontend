@@ -13,7 +13,7 @@ export default function TemplateIntances({ template }: IProps) {
   if (defaultWidget?.form?.name) {
     slug = slugify(defaultWidget?.form?.name, { lower: true });
   }
-  let customSettings = {};
+  let customSettings: any = {};
   if (defaultWidget?.options?.settings?.active) {
     customSettings = { ...defaultWidget?.options?.settings };
   }
@@ -28,7 +28,7 @@ export default function TemplateIntances({ template }: IProps) {
             widgetType: 'both',
             formView: 'button',
             onlyMyResponses: true,
-            buttonLabel: `Create ${template?.title}`,
+            buttonLabel: customSettings?.buttonLabel || `Create ${template?.title}`,
             responsesView: 'table',
           }}
           templateId={template?._id}

@@ -6,12 +6,11 @@ import ErrorLoading from '../common/ErrorLoading';
 
 interface IProps {
   formId: any;
-  parentId?: string;
   settings?: any;
 }
 
-export default function Leaderboard({ formId, parentId, settings }: IProps): any {
-  const { data, error } = useGetResponses({ formId, parentId });
+export default function Leaderboard({ formId, settings }: IProps): any {
+  const { data, error } = useGetResponses({ formId });
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {

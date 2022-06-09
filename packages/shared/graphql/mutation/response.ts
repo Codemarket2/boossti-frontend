@@ -3,16 +3,16 @@ import { gql } from '@apollo/client';
 export const CREATE_RESPONSE = gql`
   mutation MyMutation(
     $formId: ID!
-    $parentId: ID
     $templateId: ID
+    $templateInstanceId: ID
     $workFlowFormReponseParentId: ID
     $values: [ValueInput]
     $options: AWSJSON
   ) {
     createResponse(
       formId: $formId
-      parentId: $parentId
       templateId: $templateId
+      templateInstanceId: $templateInstanceId
       workFlowFormReponseParentId: $workFlowFormReponseParentId
       values: $values
       options: $options
@@ -20,11 +20,8 @@ export const CREATE_RESPONSE = gql`
       _id
       formId
       count
-      parentId {
-        _id
-        title
-      }
       templateId
+      templateInstanceId
       workFlowFormReponseParentId
       values {
         _id
@@ -124,19 +121,7 @@ export const DELETE_RESPONSE = gql`
 `;
 
 export const CREATE_BULK_RESPONSE = gql`
-  mutation MyMutation(
-    $formId: ID!
-    $fileUrl: String!
-    $map: AWSJSON!
-    $parentId: ID
-    $fileData: AWSJSON
-  ) {
-    createBulkResponses(
-      formId: $formId
-      fileUrl: $fileUrl
-      map: $map
-      parentId: $parentId
-      fileData: $fileData
-    )
+  mutation MyMutation($formId: ID!, $fileUrl: String!, $map: AWSJSON!, $fileData: AWSJSON) {
+    createBulkResponses(formId: $formId, fileUrl: $fileUrl, map: $map, fileData: $fileData)
   }
 `;

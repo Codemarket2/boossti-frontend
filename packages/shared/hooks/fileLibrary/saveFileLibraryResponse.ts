@@ -38,11 +38,7 @@ export const useSaveFileLibraryResponse = ({ onAlert }: IHooksProps) => {
     });
     //   create response
     // debugger;
-    const response = await handleCreateUpdateResponse(
-      { formId: form?._id, values },
-      form?.fields,
-      false,
-    );
+    const response = await handleCreateUpdateResponse({ payload: { formId: form?._id, values } });
     return response;
   };
   return { handleSaveFileLibraryResponse };

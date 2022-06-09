@@ -5,30 +5,36 @@ import { omitTypename } from '../../utils/omitTypename';
 import { stringifyValues } from '../section/updateSection';
 
 interface IProps extends IHooksProps {
-  parentId?: string;
   workFlowFormReponseParentId?: string;
   templateId?: string;
+  templateInstanceId?: string;
 }
 
 export function useCreateUpdateResponse({
   onAlert,
-  parentId,
   workFlowFormReponseParentId,
   templateId,
+  templateInstanceId,
 }: IProps) {
   const [createMutation, { loading: createLoading }] = useMutation(CREATE_RESPONSE);
   const [updateMutation, { loading: updateLoading }] = useMutation(UPDATE_RESPONSE);
 
-  const handleCreateUpdateResponse = async (tPayload, fields, edit = false) => {
+  const handleCreateUpdateResponse = async ({
+    payload: tPayload,
+    edit = false,
+  }: {
+    payload: any;
+    edit?: boolean;
+  }) => {
     try {
       let payload = { ...tPayload };
       const values = stringifyValues(payload.values, true);
       payload = {
         ...payload,
         values: values.map((m) => JSON.parse(JSON.stringify(m), omitTypename)),
-        parentId,
         workFlowFormReponseParentId,
         templateId,
+        templateInstanceId,
       };
       let response = null;
       if (edit) {

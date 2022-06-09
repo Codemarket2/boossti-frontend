@@ -9,6 +9,7 @@ interface ISettings {
   formView?: 'fullForm' | 'oneField' | 'leaderboard' | 'button' | 'selectItem';
   whoCanSubmit?: 'all' | 'authUser';
   responsesView?: 'button' | 'table' | 'table2' | 'vertical';
+  whoCanViewResponses?: 'all' | 'authUser';
   onlyMyResponses?: boolean;
   buttonLabel?: string;
 }
@@ -16,6 +17,7 @@ interface ISettings {
 interface IFormPage {
   settings?: ISettings;
   templateId?: string;
+  templateInstanceId?: string;
   modifyForm?: (form: any) => void;
   isTemplateInstance?: string;
 }
@@ -27,7 +29,8 @@ interface IProps extends IFormPage {
 export const FormPage = ({
   slug,
   settings = {},
-  templateId = null,
+  templateId,
+  templateInstanceId,
   modifyForm,
   isTemplateInstance = '',
 }: IProps) => {
@@ -47,19 +50,29 @@ export const FormPage = ({
     form = modifyForm(form);
   }
 
-  return <FormView form={form} templateId={templateId} isTemplateInstance={isTemplateInstance} />;
+  return (
+    <FormView
+      form={form}
+      templateId={templateId}
+      isTemplateInstance={isTemplateInstance}
+      templateInstanceId={templateInstanceId}
+    />
+  );
 };
 
 interface IFormPageByIdProps extends IFormPage {
   _id: string;
+  isAuthorized?: boolean;
 }
 
 export const FormPageById = ({
   _id,
   settings = {},
-  templateId = null,
+  templateId,
+  templateInstanceId,
   modifyForm,
   isTemplateInstance = '',
+  isAuthorized,
 }: IFormPageByIdProps) => {
   const { data, error } = useGetForm(_id);
 
@@ -77,5 +90,13 @@ export const FormPageById = ({
     form = modifyForm(form);
   }
 
-  return <FormView form={form} templateId={templateId} isTemplateInstance={isTemplateInstance} />;
+  return (
+    <FormView
+      form={form}
+      templateId={templateId}
+      isTemplateInstance={isTemplateInstance}
+      templateInstanceId={templateInstanceId}
+      isAuthorized={isAuthorized}
+    />
+  );
 };

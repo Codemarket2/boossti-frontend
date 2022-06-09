@@ -34,13 +34,14 @@ import projectConfig from '../../../../shared/index';
 
 interface IProps {
   form: any;
-  parentId?: string;
   templateId?: string;
+  templateInstanceId?: string;
   workFlowFormReponseParentId?: string;
   createCallback?: (response: any) => void;
   setResponded?: () => void;
   isPageOwner?: boolean;
   isTemplateInstance?: string;
+  isAuthorized?: boolean;
 }
 
 export const defualtValue = {
@@ -72,32 +73,37 @@ const initialState = {
 
 export default function FormViewWrapper({
   form,
-  parentId,
   workFlowFormReponseParentId,
   createCallback,
   setResponded,
   isPageOwner,
   templateId,
+  templateInstanceId,
   isTemplateInstance = '',
+  isAuthorized,
 }: IProps): any {
   const isAdmin = useSelector(({ auth }: any) => auth?.admin);
   const { handleCreateUpdateResponse, createLoading } = useCreateUpdateResponse({
     onAlert,
-    parentId,
     workFlowFormReponseParentId,
     templateId,
+    templateInstanceId,
   });
 
   const showOnlyMyResponses = !(isAdmin || isPageOwner) && form?.settings?.onlyMyResponses;
 
   const { data, error, refetch } = useGetResponses({
     formId: form?._id,
-    parentId,
     onlyMy: showOnlyMyResponses,
     workFlowFormReponseParentId,
+    templateId,
+    templateInstanceId,
   });
   const [state, setState] = useState(initialState);
-  const authenticated = useSelector(({ auth }: any) => auth.authenticated);
+  let authenticated = useSelector(({ auth }: any) => auth.authenticated);
+  if (isAuthorized) {
+    authenticated = isAuthorized;
+  }
   const [showOverlayResult, setShowOverlayResult] = useState(true);
   const [checkNewUser, setCheckNewUser] = useState(true);
 
@@ -190,7 +196,7 @@ export default function FormViewWrapper({
       options: JSON.stringify(options),
     };
 
-    const response = await handleCreateUpdateResponse(payload, form?.fields);
+    const response = await handleCreateUpdateResponse({ payload });
     if (response) {
       let messages = [];
       if (form?.settings?.actions?.length > 0) {
@@ -278,7 +284,7 @@ export default function FormViewWrapper({
           ) : (
             <>
               {form?.settings?.formView === 'leaderboard' ? (
-                <Leaderboard formId={form?._id} settings={form?.settings} parentId={parentId} />
+                <Leaderboard formId={form?._id} settings={form?.settings} />
               ) : form?.settings?.formView === 'button' ? (
                 <>
                   <div className="text-center">
@@ -385,11 +391,11 @@ export default function FormViewWrapper({
                 >
                   <ResponseList
                     form={form}
-                    parentId={parentId}
                     workFlowFormReponseParentId={workFlowFormReponseParentId}
                     showOnlyMyResponses={showOnlyMyResponses}
                     templateId={templateId}
                     isTemplateInstance={isTemplateInstance}
+                    templateInstanceId={templateInstanceId}
                   />
                 </Overlay>
               )}
@@ -397,11 +403,11 @@ export default function FormViewWrapper({
           ) : (
             <ResponseList
               form={form}
-              parentId={parentId}
               workFlowFormReponseParentId={workFlowFormReponseParentId}
               showOnlyMyResponses={showOnlyMyResponses}
               templateId={templateId}
               isTemplateInstance={isTemplateInstance}
+              templateInstanceId={templateInstanceId}
             />
           )}
         </>

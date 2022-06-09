@@ -5,22 +5,22 @@ import NotFound from '../common/NotFound';
 
 interface IProps {
   formId: string;
-  parentId?: string;
   workFlowFormReponseParentId?: string;
   createCallback?: (response: any) => void;
   customSettings?: any;
   isPageOwner?: boolean;
   layouts?: any;
+  templateInstanceId?: string;
 }
 
 export default function FormViewWrapper({
   formId,
-  parentId,
   workFlowFormReponseParentId,
   createCallback,
   customSettings,
   isPageOwner,
   layouts,
+  templateInstanceId,
 }: IProps): any {
   const { error, data } = useGetForm(formId);
 
@@ -35,10 +35,10 @@ export default function FormViewWrapper({
   return (
     <FormView
       form={{ ...data.getForm, settings: customSettings || data.getForm?.settings }}
-      parentId={parentId}
       workFlowFormReponseParentId={workFlowFormReponseParentId}
       createCallback={createCallback}
       isPageOwner={isPageOwner}
+      templateInstanceId={templateInstanceId}
     />
   );
 }
