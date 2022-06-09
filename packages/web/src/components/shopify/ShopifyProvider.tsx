@@ -20,9 +20,9 @@ export default function ShopifyProvider({ children, apiKey, template }: IProps) 
     const url = new URL(window.location.href);
     const hostValue = url.searchParams.get('host');
     const shop = url.searchParams.get('shop');
-    const res = await checkValidShop(shop);
+    const res: any = await checkValidShop(shop);
 
-    if (!res?.shopIsValidated) {
+    if (res && !res?.shopIsValidated) {
       window.location.replace(res?.redirectUrl);
     }
     // If host is not set, than the page is being loaded outside of App Bridge
