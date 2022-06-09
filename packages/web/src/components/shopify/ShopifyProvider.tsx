@@ -21,7 +21,6 @@ export default function ShopifyProvider({ children, apiKey, template }: IProps) 
     const hostValue = url.searchParams.get('host');
     const shop = url.searchParams.get('shop');
     const res: any = await checkValidShop(shop);
-
     if (res && !res?.shopIsValidated) {
       window.location.replace(res?.redirectUrl);
     }
