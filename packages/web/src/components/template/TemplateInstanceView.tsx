@@ -165,6 +165,7 @@ function TemplateInstanceView({ template, response, hideBreadcrumbs }: IProps2) 
                       formView: 'button',
                       onlyMyResponses: true,
                     }}
+                    isAuthorized
                     // isAuthorized={true}
                   />
                 ) : (

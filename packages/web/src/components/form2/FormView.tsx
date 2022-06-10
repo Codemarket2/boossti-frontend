@@ -252,7 +252,7 @@ export default function FormViewWrapper({
             >
               <div className="p-2">
                 <FormView
-                  authRequired={form?.settings?.whoCanSubmit !== 'all'}
+                  authRequired={form?.settings?.whoCanSubmit !== 'all' && !isAuthorized}
                   fields={form?.fields}
                   handleSubmit={handleSubmit}
                   loading={createLoading}

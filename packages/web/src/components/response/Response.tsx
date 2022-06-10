@@ -329,8 +329,8 @@ export function ResponseChild3({
               )}
               {form?.fields?.map((field, index) => {
                 return (
-                  <div key={field?._id}>
-                    <Typography>{field?.label}</Typography>
+                  <div key={field?._id} className="mt-2">
+                    <Typography fontWeight="bold">- {field?.label}</Typography>
                     {response?.values
                       ?.filter((v) => v.field === field._id)
                       .map((value) => (
