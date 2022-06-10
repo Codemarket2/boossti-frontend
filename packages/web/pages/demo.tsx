@@ -1,10 +1,10 @@
 import React from 'react';
-import EmailEditor from '../src/components/common/ReactEmailEditor';
+import Demo from '../__mocks__/Demo';
 
 export default function demo() {
   return (
     <div>
-      <EmailEditor />
+      <Demo />
     </div>
   );
 }

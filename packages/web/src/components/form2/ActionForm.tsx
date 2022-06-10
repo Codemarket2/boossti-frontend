@@ -9,6 +9,7 @@ import InputLabel from '@mui/material/InputLabel';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
+// import LoadingButton from '@mui/lab/LoadingButton';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -18,8 +19,8 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useFormActions } from '@frontend/shared/hooks/form';
 import { useSelector } from 'react-redux';
-import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
+import InputGroup from '../common/InputGroup';
 import { onAlert } from '../../utils/alert';
 import RichTextarea from '../common/RichTextarea2';
 import Field from './Field';
@@ -50,28 +51,33 @@ export default function ActionForm({
       setFormValues(action);
     }
   }, [action]);
+
   const settingTheme = useSelector(({ setting }: any) => setting.theme);
 
   useEffect(() => {
     const array = [];
-    Object.keys(settingTheme.palette).forEach((key, index) => {
-      if (typeof settingTheme.palette[key] === 'string') {
-        array.push({ name: key, field: '' });
-      } else {
-        Object.keys(settingTheme.palette[key]).map((skey) =>
-          array.push({ name: key.concat(skey.charAt(0).toUpperCase() + skey.slice(1)), field: '' }),
-        );
-      }
-    });
-
-    formik.setFieldValue('colorValues', array);
+    if (settingTheme.palette) {
+      Object.keys(settingTheme.palette).forEach((key, index) => {
+        if (typeof settingTheme.palette[key] === 'string') {
+          array.push({ name: key, field: '' });
+        } else {
+          Object.keys(settingTheme.palette[key]).map((skey) =>
+            array.push({
+              name: key.concat(skey.charAt(0).toUpperCase() + skey.slice(1)),
+              field: '',
+            }),
+          );
+        }
+      });
+      formik.setFieldValue('colorValues', array);
+    }
   }, []);
 
   return (
     <>
       <Paper variant="outlined" className="bg-light">
         <form className="px-2" onSubmit={formik.handleSubmit}>
-          <Typography variant="h5" className="pt-2 pl-2">
+          <Typography variant="h5" className="pt-2 pl-2" data-testid="action-form-title">
             {edit ? 'Edit' : 'Add'} Action
           </Typography>
           <InputGroup>
@@ -90,6 +96,7 @@ export default function ActionForm({
           <Card className="p-2 my-2" variant="outlined">
             <InputGroup>
               <TextField
+                inputProps={{ 'data-testid': 'action-name-input' }}
                 fullWidth
                 label="Action Name*"
                 variant="outlined"
@@ -113,6 +120,7 @@ export default function ActionForm({
               >
                 <InputLabel id="triggerType">Trigger Type</InputLabel>
                 <Select
+                  inputProps={{ 'data-testid': 'trigger-type-input' }}
                   labelId="triggerType"
                   name="triggerType"
                   value={formik.values.triggerType}
@@ -142,6 +150,7 @@ export default function ActionForm({
               >
                 <InputLabel id="actionType">Action Type*</InputLabel>
                 <Select
+                  inputProps={{ 'data-testid': 'action-type-input' }}
                   labelId="actionType"
                   name="actionType"
                   value={formik.values.actionType}
@@ -529,6 +538,7 @@ export default function ActionForm({
             {['sendEmail', 'generateNewUser']?.includes(formik.values.actionType) && (
               <InputGroup>
                 <TextField
+                  inputProps={{ 'data-testid': 'sender-email-input' }}
                   fullWidth
                   label="Sender Email*"
                   variant="outlined"
@@ -555,6 +565,7 @@ export default function ActionForm({
                 >
                   <InputLabel id="receiverType">Receiver*</InputLabel>
                   <Select
+                    inputProps={{ 'data-testid': 'receiver-type-input' }}
                     labelId="receiverType"
                     name="receiverType"
                     value={formik.values.receiverType}
@@ -797,7 +808,7 @@ export default function ActionForm({
                         label="Field"
                       >
                         {fields?.map((field) => (
-                          <MenuItem value={field._id} key={field._id}>
+                          <MenuItem value={field._id} key={`field-${field._id}`}>
                             {field.label}
                           </MenuItem>
                         ))}
@@ -886,6 +897,7 @@ export default function ActionForm({
             {['sendEmail', 'generateNewUser'].includes(formik.values.actionType) && (
               <InputGroup>
                 <TextField
+                  inputProps={{ 'data-testid': 'subject-input' }}
                   fullWidth
                   label="Email Subject*"
                   variant="outlined"
@@ -910,6 +922,7 @@ export default function ActionForm({
                   *
                 </InputLabel>
                 <RichTextarea
+                  testId="body-input"
                   value={formik.values.body}
                   onChange={(newValue) => formik.setFieldValue('body', newValue)}
                 />
@@ -1112,10 +1125,16 @@ export default function ActionForm({
             </Card>
           )}
           <InputGroup>
-            <LoadingButton type="submit" size="small" loading={formik.isSubmitting}>
+            <LoadingButton
+              data-testid="save-button"
+              type="submit"
+              size="small"
+              loading={formik.isSubmitting}
+            >
               Save
             </LoadingButton>
             <Button
+              data-testid="cancel-button"
               className="ml-2"
               variant="outlined"
               size="small"

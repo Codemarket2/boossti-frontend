@@ -6,6 +6,7 @@ import Skeleton from '@mui/material/Skeleton';
 import { useEffect, useRef, useState } from 'react';
 import { client } from '@frontend/shared/graphql';
 import { GET_MENTION_ITEMS } from '@frontend/shared/graphql/query/template';
+import { TextField } from '@mui/material';
 
 export async function getPages(queryText) {
   try {
@@ -165,35 +166,51 @@ function uploadPlugin(editor) {
 interface IProps {
   value: string;
   onChange: (arg: string) => void;
+  testId?: string;
 }
 
-export default function RichTextarea2({ value = '', onChange }: IProps) {
+export default function RichTextarea2({ value = '', onChange, testId }: IProps) {
   const [loading, setLoading] = useState(false);
   const editorRef: any = useRef();
   const { CKEditor, Editor } = editorRef.current || {};
 
   useEffect(() => {
-    editorRef.current = {
-      CKEditor: require('@ckeditor/ckeditor5-react').CKEditor,
-      Editor: require('./ckeditor-build/ckeditor'),
-    };
-    setLoading(true);
+    if (process.env.NODE_ENV !== 'test') {
+      editorRef.current = {
+        CKEditor: require('@ckeditor/ckeditor5-react').CKEditor,
+        Editor: require('./ckeditor-build/ckeditor'),
+      };
+      setLoading(true);
+    }
   }, []);
 
   return (
     <div>
-      {loading ? (
-        <CKEditor
-          config={editorConfiguration}
-          editor={Editor}
-          data={value}
-          onChange={(event, editor) => {
-            const data = editor.getData();
-            onChange(data);
-          }}
-        />
+      {process.env.NODE_ENV !== 'test' ? (
+        <>
+          {loading ? (
+            <CKEditor
+              config={editorConfiguration}
+              editor={Editor}
+              data={value}
+              onChange={(event, editor) => {
+                const data = editor.getData();
+                onChange(data);
+              }}
+            />
+          ) : (
+            <Skeleton height={200} />
+          )}
+        </>
       ) : (
-        <Skeleton height={200} />
+        <TextField
+          fullWidth
+          value={value}
+          onChange={({ target }) => onChange(target.value)}
+          multiline
+          rows={4}
+          inputProps={{ 'data-testid': testId }}
+        />
       )}
     </div>
   );

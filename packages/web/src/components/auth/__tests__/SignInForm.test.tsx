@@ -15,6 +15,6 @@ describe('Home', () => {
     // const heading = screen.getByRole('heading');
     // fireEvent.click(screen.getByTestId('signin-button'));
     const button = screen.getByTestId('signin-button');
-    // expect(button).to;
+    expect(button).toBeEnabled();
   });
 });

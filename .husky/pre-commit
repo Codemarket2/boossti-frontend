@@ -3,7 +3,7 @@
 
 yarn lint
 yarn web:build
-# yarn web:test
+yarn web:test
 yarn shared:test
 yarn format
 git add .

@@ -20,7 +20,12 @@ interface IProps {
   onChange: any;
 }
 
-const initialState = { showForm: false, selectedIndex: null, selectedItem: null, showMenu: null };
+const initialState = {
+  showForm: false,
+  selectedIndex: null,
+  selectedItem: null,
+  showMenu: null,
+};
 
 export default function Actions({ fields, settings, onChange }: IProps) {
   const [state, setState] = useState(initialState);
@@ -47,25 +52,32 @@ export default function Actions({ fields, settings, onChange }: IProps) {
   return (
     <>
       {state.showForm ? (
-        <ActionForm
-          emailFields={fields?.filter(
-            (field) => field.fieldType === 'email' && field.options.required,
-          )}
-          nameFields={fields?.filter(
-            (field) => field.fieldType === 'text' && field.options.required,
-          )}
-          fields={fields}
-          onCancel={() => setState(initialState)}
-          onSave={onSave}
-          action={state.selectedItem}
-        />
+        <>
+          <ActionForm
+            emailFields={fields?.filter(
+              (field) => field.fieldType === 'email' && field.options?.required,
+            )}
+            nameFields={fields?.filter(
+              (field) => field.fieldType === 'text' && field.options?.required,
+            )}
+            fields={fields}
+            onCancel={() => setState(initialState)}
+            onSave={onSave}
+            action={state.selectedItem}
+          />
+        </>
       ) : (
         <Paper variant="outlined">
-          <Typography variant="h5" className="d-flex align-items-center pl-2">
+          <Typography
+            variant="h5"
+            className="d-flex align-items-center pl-2"
+            data-testid="actions-title"
+          >
             Actions
             {!state.showForm && (
               <Tooltip title="Add New Action">
                 <IconButton
+                  data-testid="add-new-action-button"
                   color="primary"
                   onClick={() => setState({ ...state, showForm: true })}
                   size="large"
@@ -79,7 +91,11 @@ export default function Actions({ fields, settings, onChange }: IProps) {
             <List>
               {settings?.actions?.map((action, i) => (
                 <ListItem button key={i}>
-                  <ListItemText primary={action.name} secondary={action?.actionType} />
+                  <ListItemText
+                    data-testid="action-item"
+                    primary={action.name}
+                    secondary={action?.actionType}
+                  />
                   {!action?.active && (
                     <Tooltip title="Action is not active">
                       <ListItemIcon className="text-danger">
@@ -89,6 +105,7 @@ export default function Actions({ fields, settings, onChange }: IProps) {
                   )}
                   <ListItemSecondaryAction>
                     <IconButton
+                      data-testid="action-more-button"
                       edge="end"
                       onClick={(event) =>
                         setState({

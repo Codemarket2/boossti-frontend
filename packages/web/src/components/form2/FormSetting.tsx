@@ -114,27 +114,7 @@ export default function FormSetting({
                 formId={formId}
                 value={settings?.selectItemField}
                 onChange={async (newValue, label) => {
-                  // console.log({ settings, selectItemField: newValue, formId, label });
                   onChange({ selectItemField: newValue });
-                  // if an existing value is selected from dropdown list then (do not add into VForm, instead add update the
-                  // response parent id array of that selected response by adding the current page id)
-                  /*   const res = await handleCreateVirtualForm(`VForm ${generateObjectId()}`, {
-                    fields: [
-                      {
-                        label,
-                        fieldType: 'select',
-                        options: JSON.stringify({
-                          optionsTemplate: 'existingForm',
-                          formField: newValue,
-                        }),
-                        form: formId,
-                      },
-                    ],
-                  }); */
-
-                  /*  onChange({
-                    selectItemForm: res?.data?.createForm?._id,
-                  }); */
                 }}
                 error={!settings?.selectItemField}
                 helperText={!settings?.selectItemField && 'required'}
