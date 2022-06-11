@@ -34,9 +34,15 @@ type TProps = {
   onClose: () => void;
   isSection?: boolean;
   fields: any[];
+  parentFields?: any[];
 };
 
 const initialState = { showForm: false };
+
+const globalFields = [
+  { label: 'User name', globalState: true, _id: 'userName' },
+  { label: 'User email', globalState: true, _id: 'userEmail' },
+];
 
 export default function FormFields({
   onFieldChange,
@@ -44,6 +50,7 @@ export default function FormFields({
   onClose,
   isSection = false,
   fields,
+  parentFields: tParentFields,
 }: TProps): any {
   const onOptionChange = (updatedOption) => {
     onFieldChange({ ...field, options: { ...field.options, ...updatedOption } });
@@ -53,6 +60,8 @@ export default function FormFields({
   useEffect(() => {
     setState(initialState);
   }, [field.fieldType]);
+
+  const parentFields = [...tParentFields, ...globalFields];
 
   return (
     <>
@@ -266,6 +275,43 @@ export default function FormFields({
             label="System Calculated & Saved"
           />
         </InputGroup>
+        {field?.options?.output && (
+          <InputGroup>
+            <FormControl fullWidth size="small">
+              <InputLabel id="system-value-select-label">System value</InputLabel>
+              <Select
+                labelId="system-value-select-label"
+                id="system-value-select"
+                value={field?.options?.systemValue?.fieldId}
+                label="System value"
+                onChange={({ target }) => {
+                  let systemValue = {};
+                  if (globalFields?.find((g) => g._id === target.value)) {
+                    systemValue = {
+                      fieldId: target?.value,
+                      globalState: true,
+                    };
+                  } else {
+                    const selectedField = parentFields?.find((f) => f?._id === target?.value);
+                    systemValue = {
+                      fieldId: target?.value,
+                      formId: selectedField?.formId,
+                    };
+                  }
+                  onOptionChange({ systemValue });
+                }}
+              >
+                {parentFields
+                  ?.filter((f) => f?._id !== field?._id)
+                  ?.map((formField) => (
+                    <MenuItem key={formField?._id} value={formField?._id}>
+                      {formField?.label}
+                    </MenuItem>
+                  ))}
+              </Select>
+            </FormControl>
+          </InputGroup>
+        )}
         <InputGroup>
           <FormControlLabel
             control={
@@ -425,7 +471,6 @@ export default function FormFields({
             </InputGroup>
           </>
         )}
-
         <Typography variant="h6" className="d-flex align-items-center">
           Rules
           {!(state.showForm && field.fieldType === 'number') && (
@@ -442,7 +487,6 @@ export default function FormFields({
             </Tooltip>
           )}
         </Typography>
-
         {state.showForm && field.fieldType === 'number' && (
           <FormFieldRules
             onCancel={() => setState(initialState)}

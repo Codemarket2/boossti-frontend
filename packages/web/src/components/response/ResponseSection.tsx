@@ -12,14 +12,14 @@ export default function ResponseSections({
   section,
   onSectionChange,
   authorized,
-  title,
+  title = 'Sections',
   parentPageFields = [],
 }: IProps) {
   return (
     <FormFields
       fields={section?.fields}
       setFields={(fields: any) => onSectionChange({ fields })}
-      title={title || 'Sections'}
+      title={title}
       previewMode={!authorized}
       isSection
       parentPageFields={parentPageFields}

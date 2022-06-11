@@ -183,6 +183,11 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
               <FormFields
                 fields={state.fields}
                 setFields={(newFields) => handleOnChange({ fields: newFields })}
+                parentFields={state.fields?.map((f) => ({
+                  ...f,
+                  formId: state._id,
+                  label: `${state?.name} - ${f?.label}`,
+                }))}
               />
             </Grid>
             <Grid item xs={12} md={8}>
@@ -212,7 +217,6 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
                   <FormSetting
                     formId={_id}
                     settings={state.settings}
-                    handleOnChange={handleOnChange}
                     state={state}
                     onChange={(settings) =>
                       handleOnChange({

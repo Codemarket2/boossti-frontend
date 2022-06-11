@@ -196,7 +196,7 @@ export default function FormViewWrapper({
       options: JSON.stringify(options),
     };
 
-    const response = await handleCreateUpdateResponse({ payload });
+    const response = await handleCreateUpdateResponse({ payload, fields: form?.fields });
     if (response) {
       let messages = [];
       if (form?.settings?.actions?.length > 0) {
@@ -591,7 +591,7 @@ export function FormView({
       )}
       <Grid container spacing={0}>
         {(fieldWiseView && fields?.length > 1 ? [fields[page]] : fields)
-          ?.filter((field) => !field?.options?.hidden)
+          ?.filter((field) => !field?.options?.hidden && !field?.options?.output)
           ?.map((field) => (
             <Grid
               item
@@ -604,22 +604,10 @@ export function FormView({
             >
               <div style={field?.options?.style || {}}>
                 <InputGroup key={field._id}>
-                  <Typography>
-                    {unique &&
-                    field?.options?.unique &&
-                    field?.options?.required &&
-                    !field?.options?.output ? (
-                      <span className="text-danger">
-                        {`${field?.label}*`} This field must be unique
-                      </span>
-                    ) : field?.options?.required ||
-                      (field?.options?.unique &&
-                        field?.options?.required &&
-                        !field?.options?.output) ? (
-                      <span className="text-danger">{`${field?.label}*`}</span>
-                    ) : (
-                      !field?.options?.output && field?.label
-                    )}
+                  <Typography className={field?.options?.required ? 'text-danger' : ''}>
+                    {field?.label}
+                    {field?.options?.required && '*'}
+                    {unique && field?.options?.unique && ' This field must be unique'}
                     {uniqueLoading && field?.options?.unique && (
                       <span className="ml-2">
                         <CircularProgress size={10} />
@@ -640,11 +628,7 @@ export function FormView({
                               : submitState.loading
                           }
                           validate={submitState.validate}
-                          label={
-                            field?.options?.required && !field?.options?.output
-                              ? `${field?.label}*`
-                              : field?.label
-                          }
+                          label={field?.options?.required ? `${field?.label}*` : field?.label}
                           onChangeValue={(changedValue) =>
                             onChange(
                               { ...changedValue, field: field._id },

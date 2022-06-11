@@ -1,8 +1,10 @@
 import { useMutation } from '@apollo/client';
+import { useSelector } from 'react-redux';
 import { CREATE_RESPONSE, UPDATE_RESPONSE } from '../../graphql/mutation/response';
 import { IHooksProps } from '../../types/common';
 import { omitTypename } from '../../utils/omitTypename';
 import { stringifyValues } from '../section/updateSection';
+import { calculateSystemValues } from './calculateSystemValues';
 
 interface IProps extends IHooksProps {
   workFlowFormResponseParentId?: string;
@@ -18,25 +20,30 @@ export function useCreateUpdateResponse({
 }: IProps) {
   const [createMutation, { loading: createLoading }] = useMutation(CREATE_RESPONSE);
   const [updateMutation, { loading: updateLoading }] = useMutation(UPDATE_RESPONSE);
-
+  const globalState = useSelector((state) => state);
   const handleCreateUpdateResponse = async ({
     payload: tPayload,
     edit = false,
+    fields = [],
   }: {
     payload: any;
     edit?: boolean;
+    fields?: any[];
   }) => {
     try {
       let payload = { ...tPayload };
-      const values = stringifyValues(payload.values, true);
+      payload.values = calculateSystemValues({ values: payload?.values, fields, globalState });
       payload = {
         ...payload,
-        values: values.map((m) => JSON.parse(JSON.stringify(m), omitTypename)),
+        values: stringifyValues(payload.values, true).map((m) =>
+          JSON.parse(JSON.stringify(m), omitTypename),
+        ),
         workFlowFormResponseParentId,
         templateId,
         templateDefaultWidgetResponseId,
       };
-      let response = null;
+
+      let response;
       if (edit) {
         response = await updateMutation({
           variables: payload,
@@ -48,7 +55,6 @@ export function useCreateUpdateResponse({
         });
         response = response?.data?.createResponse;
       }
-
       return response;
     } catch (error) {
       // console.log(error);

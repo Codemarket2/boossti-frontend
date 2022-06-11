@@ -95,11 +95,7 @@ export default function Field({
 
   switch (fieldType) {
     case 'label': {
-      return (
-        <div style={{ display: options?.output && 'none' }}>
-          <DisplayRichText value={options?.staticText} />;
-        </div>
-      );
+      return <DisplayRichText value={options?.staticText} />;
     }
     case 'date': {
       return (
@@ -165,7 +161,7 @@ export default function Field({
     }
     case 'richTextarea': {
       return (
-        <div style={{ display: options?.output && 'none' }}>
+        <>
           <RichTextarea
             value={value?.value || ''}
             onChange={(newValue) => onChange({ value: newValue })}
@@ -173,12 +169,12 @@ export default function Field({
           {validation.error && (
             <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
           )}
-        </div>
+        </>
       );
     }
     case 'boolean': {
       return (
-        <div style={{ display: options?.output && 'none' }}>
+        <>
           <FormControlLabel
             disabled={disabled}
             control={
@@ -194,12 +190,12 @@ export default function Field({
           {validation.error && (
             <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
           )}
-        </div>
+        </>
       );
     }
     case 'image': {
       return (
-        <div style={{ display: options?.output && 'none' }}>
+        <>
           <ImagePicker2
             label="Select Image"
             fileType="image/*"
@@ -211,7 +207,7 @@ export default function Field({
           {validation.error && (
             <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
           )}
-        </div>
+        </>
       );
     }
 
@@ -343,7 +339,7 @@ export default function Field({
     }
     case 'phoneNumber': {
       return (
-        <div style={{ display: options?.output && 'none' }}>
+        <>
           <PhoneInput
             countryCodeEditable={false}
             country="us"
@@ -356,76 +352,64 @@ export default function Field({
           {validation.error && (
             <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
           )}
-        </div>
+        </>
       );
     }
     case 'number': {
       return (
-        <div style={{ display: options?.output && 'none' }}>
-          <TextField
-            fullWidth
-            placeholder={label}
-            variant="outlined"
-            name="valueNumber"
-            size="small"
-            type="number"
-            disabled={disabled}
-            value={value ? value.valueNumber : ''}
-            onChange={({ target }) => onChange({ field: _id, valueNumber: target.value })}
-            error={validation.error}
-            helperText={validation.errorMessage}
-          />
-        </div>
+        <TextField
+          fullWidth
+          placeholder={label}
+          variant="outlined"
+          name="valueNumber"
+          size="small"
+          type="number"
+          disabled={disabled}
+          value={value ? value.valueNumber : ''}
+          onChange={({ target }) => onChange({ field: _id, valueNumber: target.value })}
+          error={validation.error}
+          helperText={validation.errorMessage}
+        />
       );
     }
     case 'colorPicker': {
       return (
-        <div style={{ display: options?.output && 'none' }}>
-          <ColorInput
-            label=""
-            color={value ? value.value : ''}
-            onColorChange={(e: any) => onChange({ field: _id, value: e })}
-          />
-        </div>
+        <ColorInput
+          label=""
+          color={value ? value.value : ''}
+          onColorChange={(e: any) => onChange({ field: _id, value: e })}
+        />
       );
     }
 
     case 'barcodeScanner': {
       return (
-        <div style={{ display: options?.output && 'none' }}>
-          <BarcodeInput
-            label=""
-            barcode={value ? value.value : ''}
-            onBarcodeChange={(e: any) => onChange({ field: _id, value: e })}
-          />
-        </div>
+        <BarcodeInput
+          label=""
+          barcode={value ? value.value : ''}
+          onBarcodeChange={(e: any) => onChange({ field: _id, value: e })}
+        />
       );
     }
 
     case 'address': {
-      return (
-        <div style={{ display: options?.output && 'none' }}>
-          <AddressSearch _id={_id} onChange={onChange} values={value} />;
-        </div>
-      );
+      return <AddressSearch _id={_id} onChange={onChange} values={value} />;
     }
     case 'lighthouseReport': {
       return (
-        <div style={{ display: options?.output && 'none' }}>
-          <TextField
-            multiline
-            rows={6}
-            fullWidth
-            placeholder={label}
-            variant="outlined"
-            name="value"
-            size="small"
-            type={['email', 'password'].includes(fieldType) ? fieldType : 'text'}
-            disabled
-            value={value ? value.value : ''}
-            onChange={({ target }) => onChange({ field: _id, value: target.value })}
-          />
-        </div>
+        <TextField
+          multiline
+          rows={6}
+          fullWidth
+          placeholder={label}
+          variant="outlined"
+          name="value"
+          size="small"
+          type={['email', 'password'].includes(fieldType) ? fieldType : 'text'}
+          disabled
+          value={value ? value.value : ''}
+          onChange={({ target }) => onChange({ field: _id, value: target.value })}
+        />
       );
     }
     case 'link': {
@@ -434,21 +418,19 @@ export default function Field({
         fieldType: ['link'].includes(fieldType) ? 'url' : 'text',
       });
       return (
-        <div style={{ display: options?.output && 'none' }}>
-          <TextField
-            fullWidth
-            placeholder={label}
-            variant="outlined"
-            name="value"
-            size="small"
-            type="url"
-            disabled={disabled}
-            value={value ? value.value : ''}
-            onChange={({ target }) => onChange({ field: _id, value: target.value })}
-            error={textValidation.error}
-            helperText={textValidation.errorMessage}
-          />
-        </div>
+        <TextField
+          fullWidth
+          placeholder={label}
+          variant="outlined"
+          name="value"
+          size="small"
+          type="url"
+          disabled={disabled}
+          value={value ? value.value : ''}
+          onChange={({ target }) => onChange({ field: _id, value: target.value })}
+          error={textValidation.error}
+          helperText={textValidation.errorMessage}
+        />
       );
     }
 
@@ -486,23 +468,21 @@ export default function Field({
         fieldType: ['email'].includes(fieldType) ? fieldType : 'text',
       });
       return (
-        <div style={{ display: options?.output && 'none' }}>
-          <TextField
-            multiline={fieldType === 'textarea'}
-            rows={fieldType === 'textarea' && 6}
-            fullWidth
-            placeholder={label}
-            variant="outlined"
-            name="value"
-            size="small"
-            type={['email', 'password'].includes(fieldType) ? fieldType : 'text'}
-            disabled={disabled}
-            value={value ? value.value : ''}
-            onChange={({ target }) => onChange({ field: _id, value: target.value })}
-            error={textValidation.error}
-            helperText={textValidation.errorMessage}
-          />
-        </div>
+        <TextField
+          multiline={fieldType === 'textarea'}
+          rows={fieldType === 'textarea' && 6}
+          fullWidth
+          placeholder={label}
+          variant="outlined"
+          name="value"
+          size="small"
+          type={['email', 'password'].includes(fieldType) ? fieldType : 'text'}
+          disabled={disabled}
+          value={value ? value.value : ''}
+          onChange={({ target }) => onChange({ field: _id, value: target.value })}
+          error={textValidation.error}
+          helperText={textValidation.errorMessage}
+        />
       );
     }
   }

@@ -20,7 +20,7 @@ export default function EditResponseDrawer({ form, response, open, onClose }: IP
       values,
       _id: response?._id,
     };
-    await handleCreateUpdateResponse({ payload, edit: true });
+    await handleCreateUpdateResponse({ payload, edit: true, fields: form?.fields });
     onClose();
   };
 

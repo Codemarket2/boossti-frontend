@@ -62,6 +62,7 @@ type IProps = {
   isSection?: boolean;
   previewMode?: boolean;
   parentPageFields?: any;
+  parentFields?: any;
   tabName?: string;
   showWidgetExpand?: boolean;
   selectedField?: string;
@@ -77,6 +78,7 @@ export default function FormFields({
   tabName = 'form',
   showWidgetExpand = false,
   selectedField,
+  parentFields = [],
 }: IProps): any {
   const [values, setValues] = useState(initialValues);
   const router = useRouter();
@@ -185,6 +187,7 @@ export default function FormFields({
         />
       ) : values.showForm && values.field ? (
         <EditField
+          fields={fields}
           field={fields.filter((f) => f._id === values.field._id)[0]}
           onFieldChange={(updatedField) => {
             setFields(
@@ -193,7 +196,7 @@ export default function FormFields({
           }}
           onClose={() => setValues(initialValues)}
           isSection={isSection}
-          fields={fields}
+          parentFields={parentFields}
         />
       ) : (
         <>

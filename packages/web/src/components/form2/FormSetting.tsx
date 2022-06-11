@@ -3,9 +3,6 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
-import { Grid } from '@mui/material';
-// import { useCreateVirtualForm } from '@frontend/shared/hooks/form';
-// import { onAlert } from '../../utils/alert';
 import InputGroup from '../common/InputGroup';
 import SelectFormFields from './SelectFormFields';
 import FormFields from './FormFields';
@@ -15,20 +12,10 @@ interface IProps {
   settings: any;
   onChange: (val: any) => void;
   formId: any;
-  handleOnChange?: any;
   state?: any;
 }
 
-export default function FormSetting({
-  formId,
-  settings,
-  onChange,
-  isSection,
-  handleOnChange,
-  state,
-}: IProps): any {
-  // const { handleCreateVirtualForm, createLoading } = useCreateVirtualForm({ onAlert });
-
+export default function FormSetting({ formId, settings, onChange, isSection, state }: IProps): any {
   return (
     <Paper variant="outlined" className="p-2">
       <InputGroup>
@@ -223,7 +210,6 @@ export default function FormSetting({
           />
         </>
       )}
-      <br />
       <FormControlLabel
         control={
           <Checkbox
@@ -235,14 +221,19 @@ export default function FormSetting({
         }
         label="Show form title"
       />
-      <br />
-      <Grid item xs={12} md={8}>
+      {isSection && (
         <FormFields
-          fields={state?.fields}
-          setFields={(newFields) => handleOnChange({ fields: newFields })}
+          fields={state?.fields?.map((field) => {
+            const fieldOverride = settings?.fieldsOverride?.find((f) => f?._id === field?._id);
+            if (fieldOverride) {
+              return fieldOverride;
+            }
+            return field;
+          })}
+          setFields={(newFields) => onChange({ fieldsOverride: newFields })}
           tabName="setting"
         />
-      </Grid>
+      )}
     </Paper>
   );
 }
