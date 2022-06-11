@@ -30,28 +30,28 @@ import ReactDataGrid from './ReactDataGrid';
 
 interface IProps {
   form: any;
-  workFlowFormReponseParentId?: string;
+  workFlowFormResponseParentId?: string;
   showOnlyMyResponses?: boolean;
   templateId?: string;
-  templateInstanceId?: string;
+  templateDefaultWidgetResponseId?: string;
   isTemplateInstance?: string;
 }
 type Direction = 'ltr' | 'rtl';
 
 export default function ResponseList({
   form,
-  workFlowFormReponseParentId,
+  workFlowFormResponseParentId,
   showOnlyMyResponses,
   templateId,
   isTemplateInstance,
-  templateInstanceId,
+  templateDefaultWidgetResponseId,
 }: IProps): any {
   const { data, error, state, setState, refetch, handleUpdateResponse } = useGetResponses({
     formId: form?._id,
     onlyMy: showOnlyMyResponses,
-    workFlowFormReponseParentId,
+    workFlowFormResponseParentId,
     templateId,
-    templateInstanceId,
+    templateDefaultWidgetResponseId,
   });
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
   const router = useRouter();

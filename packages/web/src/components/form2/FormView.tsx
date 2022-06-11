@@ -35,8 +35,8 @@ import projectConfig from '../../../../shared/index';
 interface IProps {
   form: any;
   templateId?: string;
-  templateInstanceId?: string;
-  workFlowFormReponseParentId?: string;
+  templateDefaultWidgetResponseId?: string;
+  workFlowFormResponseParentId?: string;
   createCallback?: (response: any) => void;
   setResponded?: () => void;
   isPageOwner?: boolean;
@@ -73,21 +73,21 @@ const initialState = {
 
 export default function FormViewWrapper({
   form,
-  workFlowFormReponseParentId,
+  workFlowFormResponseParentId,
   createCallback,
   setResponded,
   isPageOwner,
   templateId,
-  templateInstanceId,
+  templateDefaultWidgetResponseId,
   isTemplateInstance = '',
   isAuthorized,
 }: IProps): any {
   const isAdmin = useSelector(({ auth }: any) => auth?.admin);
   const { handleCreateUpdateResponse, createLoading } = useCreateUpdateResponse({
     onAlert,
-    workFlowFormReponseParentId,
+    workFlowFormResponseParentId,
     templateId,
-    templateInstanceId,
+    templateDefaultWidgetResponseId,
   });
 
   const showOnlyMyResponses = !(isAdmin || isPageOwner) && form?.settings?.onlyMyResponses;
@@ -95,9 +95,9 @@ export default function FormViewWrapper({
   const { data, error, refetch } = useGetResponses({
     formId: form?._id,
     onlyMy: showOnlyMyResponses,
-    workFlowFormReponseParentId,
+    workFlowFormResponseParentId,
     templateId,
-    templateInstanceId,
+    templateDefaultWidgetResponseId,
   });
   const [state, setState] = useState(initialState);
   let authenticated = useSelector(({ auth }: any) => auth.authenticated);
@@ -391,11 +391,11 @@ export default function FormViewWrapper({
                 >
                   <ResponseList
                     form={form}
-                    workFlowFormReponseParentId={workFlowFormReponseParentId}
+                    workFlowFormResponseParentId={workFlowFormResponseParentId}
                     showOnlyMyResponses={showOnlyMyResponses}
                     templateId={templateId}
                     isTemplateInstance={isTemplateInstance}
-                    templateInstanceId={templateInstanceId}
+                    templateDefaultWidgetResponseId={templateDefaultWidgetResponseId}
                   />
                 </Overlay>
               )}
@@ -403,11 +403,11 @@ export default function FormViewWrapper({
           ) : (
             <ResponseList
               form={form}
-              workFlowFormReponseParentId={workFlowFormReponseParentId}
+              workFlowFormResponseParentId={workFlowFormResponseParentId}
               showOnlyMyResponses={showOnlyMyResponses}
               templateId={templateId}
               isTemplateInstance={isTemplateInstance}
-              templateInstanceId={templateInstanceId}
+              templateDefaultWidgetResponseId={templateDefaultWidgetResponseId}
             />
           )}
         </>

@@ -11,8 +11,8 @@ const getResponseById = async (responseId) => {
   if (response && form) {
     forms.push({ ...form, response });
   }
-  if (response?.workFlowFormReponseParentId) {
-    const newForms = await getResponseById(response?.workFlowFormReponseParentId);
+  if (response?.workFlowFormResponseParentId) {
+    const newForms = await getResponseById(response?.workFlowFormResponseParentId);
     if (newForms?.length > 0) {
       forms = [...forms, ...newForms];
     }
@@ -43,8 +43,8 @@ export const replaceVariables = async (oldBody, oldVariables, mainForm, mainResp
         forms.push({ ...form, response });
       }
     }
-  } else if (mainResponse?.workFlowFormReponseParentId) {
-    const newForms = await getResponseById(mainResponse?.workFlowFormReponseParentId);
+  } else if (mainResponse?.workFlowFormResponseParentId) {
+    const newForms = await getResponseById(mainResponse?.workFlowFormResponseParentId);
     if (newForms?.length > 0) {
       forms = [...forms, ...newForms];
     }

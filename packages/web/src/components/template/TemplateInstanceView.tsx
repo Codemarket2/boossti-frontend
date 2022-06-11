@@ -158,7 +158,7 @@ function TemplateInstanceView({ template, response, hideBreadcrumbs }: IProps2) 
                 {selectedWidget?.fieldType === 'form' ? (
                   <FormPageById
                     _id={selectedWidget?.form?._id}
-                    templateInstanceId={response?._id}
+                    templateDefaultWidgetResponseId={response?._id}
                     settings={{
                       ...customSettings,
                       widgetType: 'both',

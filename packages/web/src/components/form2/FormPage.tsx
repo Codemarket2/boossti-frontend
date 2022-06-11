@@ -17,7 +17,7 @@ interface ISettings {
 interface IFormPage {
   settings?: ISettings;
   templateId?: string;
-  templateInstanceId?: string;
+  templateDefaultWidgetResponseId?: string;
   modifyForm?: (form: any) => void;
   isTemplateInstance?: string;
 }
@@ -30,7 +30,7 @@ export const FormPage = ({
   slug,
   settings = {},
   templateId,
-  templateInstanceId,
+  templateDefaultWidgetResponseId,
   modifyForm,
   isTemplateInstance = '',
 }: IProps) => {
@@ -55,7 +55,7 @@ export const FormPage = ({
       form={form}
       templateId={templateId}
       isTemplateInstance={isTemplateInstance}
-      templateInstanceId={templateInstanceId}
+      templateDefaultWidgetResponseId={templateDefaultWidgetResponseId}
     />
   );
 };
@@ -69,7 +69,7 @@ export const FormPageById = ({
   _id,
   settings = {},
   templateId,
-  templateInstanceId,
+  templateDefaultWidgetResponseId,
   modifyForm,
   isTemplateInstance = '',
   isAuthorized,
@@ -95,7 +95,7 @@ export const FormPageById = ({
       form={form}
       templateId={templateId}
       isTemplateInstance={isTemplateInstance}
-      templateInstanceId={templateInstanceId}
+      templateDefaultWidgetResponseId={templateDefaultWidgetResponseId}
       isAuthorized={isAuthorized}
     />
   );

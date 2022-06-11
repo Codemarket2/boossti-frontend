@@ -18,9 +18,9 @@ interface IProps {
   formId: string;
   formField?: string;
   onlyMy?: boolean;
-  workFlowFormReponseParentId?: string;
+  workFlowFormResponseParentId?: string;
   templateId?: string;
-  templateInstanceId?: string;
+  templateDefaultWidgetResponseId?: string;
   search?: string;
 }
 
@@ -28,9 +28,9 @@ export function useGetResponses({
   formId,
   formField = null,
   onlyMy = false,
-  workFlowFormReponseParentId = null,
+  workFlowFormResponseParentId = null,
   templateId,
-  templateInstanceId,
+  templateDefaultWidgetResponseId,
   search = null,
 }: IProps) {
   const [subsribed, setSubsribed] = useState(false);
@@ -46,10 +46,10 @@ export function useGetResponses({
       search: search || state.search,
       formField: formField || state.formField,
       formId,
-      workFlowFormReponseParentId,
+      workFlowFormResponseParentId,
       onlyMy,
       templateId,
-      templateInstanceId,
+      templateDefaultWidgetResponseId,
     },
     fetchPolicy: 'cache-and-network',
   });

@@ -5,16 +5,16 @@ import { omitTypename } from '../../utils/omitTypename';
 import { stringifyValues } from '../section/updateSection';
 
 interface IProps extends IHooksProps {
-  workFlowFormReponseParentId?: string;
+  workFlowFormResponseParentId?: string;
   templateId?: string;
-  templateInstanceId?: string;
+  templateDefaultWidgetResponseId?: string;
 }
 
 export function useCreateUpdateResponse({
   onAlert,
-  workFlowFormReponseParentId,
+  workFlowFormResponseParentId,
   templateId,
-  templateInstanceId,
+  templateDefaultWidgetResponseId,
 }: IProps) {
   const [createMutation, { loading: createLoading }] = useMutation(CREATE_RESPONSE);
   const [updateMutation, { loading: updateLoading }] = useMutation(UPDATE_RESPONSE);
@@ -32,9 +32,9 @@ export function useCreateUpdateResponse({
       payload = {
         ...payload,
         values: values.map((m) => JSON.parse(JSON.stringify(m), omitTypename)),
-        workFlowFormReponseParentId,
+        workFlowFormResponseParentId,
         templateId,
-        templateInstanceId,
+        templateDefaultWidgetResponseId,
       };
       let response = null;
       if (edit) {

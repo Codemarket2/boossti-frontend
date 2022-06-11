@@ -9,7 +9,7 @@ import CreateResponseDrawer from './CreateResponseDrawer';
 interface IProps {
   label: string;
   formId: string;
-  templateInstanceId?: string;
+  templateDefaultWidgetResponseId?: string;
   value: any;
   onChange: (form) => void;
   error?: boolean;
@@ -24,7 +24,7 @@ const filter = createFilterOptions();
 export default function SelectResponse({
   label,
   formId,
-  templateInstanceId,
+  templateDefaultWidgetResponseId,
   value = null,
   onChange,
   error = false,
@@ -111,7 +111,7 @@ export default function SelectResponse({
           onClose={() => setAddOption({ ...addOption, showDrawer: false })}
           title={label}
           formId={formId}
-          templateInstanceId={templateInstanceId}
+          templateDefaultWidgetResponseId={templateDefaultWidgetResponseId}
           createCallback={(newResponse) => {
             onChange(getLabels(formField, [newResponse])?.pop());
             setAddOption({ ...addOption, showDrawer: false });

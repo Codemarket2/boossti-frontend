@@ -28,7 +28,7 @@ interface IProps {
   handleValueChange: any;
   authorized: boolean;
   pageId?: string;
-  workFlowFormReponseParentId?: string;
+  workFlowFormResponseParentId?: string;
   layouts: any;
   disableGrid?: boolean;
   onLayoutChange?: (layouts: any) => void;
@@ -48,7 +48,7 @@ export default function FormFieldsValue({
   handleValueChange,
   authorized,
   pageId,
-  workFlowFormReponseParentId,
+  workFlowFormResponseParentId,
   layouts = {},
   disableGrid = true,
   onLayoutChange,
@@ -133,7 +133,7 @@ export default function FormFieldsValue({
                   {field.form?._id && (
                     <FormViewWrapper
                       formId={field.form?._id}
-                      workFlowFormReponseParentId={workFlowFormReponseParentId}
+                      workFlowFormResponseParentId={workFlowFormResponseParentId}
                       layouts={layouts}
                       customSettings={field?.options?.settings?.active && field?.options?.settings}
                       isPageOwner={authorized}

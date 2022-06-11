@@ -264,9 +264,9 @@ export function ResponseChild3({
           </Grid>
         )}
         <Grid item xs={!hideLeftNavigation ? 12 : 9}>
-          {response?.workFlowFormReponseParentId && section?.options?.showRelation && (
+          {response?.workFlowFormResponseParentId && section?.options?.showRelation && (
             <Response
-              responseId={response?.workFlowFormReponseParentId}
+              responseId={response?.workFlowFormResponseParentId}
               hideBreadcrumbs
               hideWorkflow
             />
@@ -291,7 +291,7 @@ export function ResponseChild3({
                     options: { ...section?.options, layouts },
                   })
                 }
-                workFlowFormReponseParentId={response?._id}
+                workFlowFormResponseParentId={response?._id}
               />
             )}
             <div className="p-2">
