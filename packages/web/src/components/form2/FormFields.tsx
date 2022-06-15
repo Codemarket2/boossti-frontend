@@ -98,7 +98,7 @@ export default function FormFields({
   const onSave = (field, action) => {
     if (action === 'create') {
       setFields([...fields, field]);
-    } else {
+    } else if (action === 'update') {
       setFields(
         fields.map((oldField) => {
           if (oldField._id === field._id) {
@@ -173,6 +173,21 @@ export default function FormFields({
     );
   };
 
+  // : values.showForm && values.field ? (
+  //   <EditField
+  //     fields={fields}
+  //     field={fields.filter((f) => f._id === values.field._id)[0]}
+  //     onFieldChange={(updatedField) => {
+  //       setFields(
+  //         fields?.map((field) => (field._id === updatedField._id ? updatedField : field)),
+  //       );
+  //     }}
+  //     onClose={() => setValues(initialValues)}
+  //     isSection={isSection}
+  //     parentFields={parentFields}
+  //   />
+  // )
+
   return (
     <Paper variant="outlined">
       {values.editGrid ? (
@@ -184,19 +199,6 @@ export default function FormFields({
             );
           }}
           onClose={() => setValues(initialValues)}
-        />
-      ) : values.showForm && values.field ? (
-        <EditField
-          fields={fields}
-          field={fields.filter((f) => f._id === values.field._id)[0]}
-          onFieldChange={(updatedField) => {
-            setFields(
-              fields?.map((field) => (field._id === updatedField._id ? updatedField : field)),
-            );
-          }}
-          onClose={() => setValues(initialValues)}
-          isSection={isSection}
-          parentFields={parentFields}
         />
       ) : (
         <>
@@ -211,6 +213,7 @@ export default function FormFields({
                   {title}
                   <Tooltip title="Add New Field">
                     <IconButton
+                      disabled={values.showForm}
                       color="primary"
                       onClick={() => setValues({ ...initialValues, showForm: true })}
                       size="large"
@@ -229,6 +232,7 @@ export default function FormFields({
               onSave={onSave}
               onCancel={() => setValues(initialValues)}
               isSection={isSection}
+              parentFields={parentFields}
             />
           )}
           <List dense>

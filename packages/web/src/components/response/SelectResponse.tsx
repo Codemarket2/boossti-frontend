@@ -17,6 +17,7 @@ interface IProps {
   disabled?: boolean;
   formField?: string;
   openDrawer?: any;
+  allowCreate?: boolean;
 }
 
 const filter = createFilterOptions();
@@ -32,6 +33,7 @@ export default function SelectResponse({
   disabled,
   formField,
   openDrawer,
+  allowCreate,
 }: IProps) {
   const { data, error: queryError, loading, state, setState } = useGetResponses({
     formId,
@@ -76,7 +78,7 @@ export default function SelectResponse({
         }}
         filterOptions={(options, params) => {
           const filtered = filter(options, params);
-          if (params.inputValue !== '' && !loading) {
+          if (params.inputValue !== '' && !loading && allowCreate) {
             filtered.push({
               inputValue: params.inputValue,
               label: `Add "${params.inputValue}"`,

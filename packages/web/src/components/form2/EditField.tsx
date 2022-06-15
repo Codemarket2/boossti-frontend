@@ -266,16 +266,18 @@ export default function FormFields({
           <FormControlLabel
             control={
               <Checkbox
-                checked={field?.options?.output}
-                onChange={({ target }) => onOptionChange({ output: target.checked })}
-                name="output"
+                checked={field?.options?.systemCalculatedAndSaved}
+                onChange={({ target }) =>
+                  onOptionChange({ systemCalculatedAndSaved: target.checked })
+                }
+                name="systemCalculatedAndSaved"
                 color="primary"
               />
             }
             label="System Calculated & Saved"
           />
         </InputGroup>
-        {field?.options?.output && (
+        {field?.options?.systemCalculatedAndSaved && (
           <InputGroup>
             <FormControl fullWidth size="small">
               <InputLabel id="system-value-select-label">System value</InputLabel>
@@ -325,19 +327,6 @@ export default function FormFields({
               />
             }
             label="System Calculated & View"
-          />
-        </InputGroup>
-        <InputGroup>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={field?.options?.hidden}
-                onChange={({ target }) => onOptionChange({ hidden: target.checked })}
-                name="hidden"
-                color="primary"
-              />
-            }
-            label="Hidden"
           />
         </InputGroup>
         {field.fieldType === 'select' && (

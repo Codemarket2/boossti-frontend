@@ -42,6 +42,7 @@ interface IProps {
   hideNavigation?: boolean;
   hideAuthor?: boolean;
   hideWorkflow?: boolean;
+  deleteCallBack?: () => void;
 }
 
 export default function Response({
@@ -50,6 +51,7 @@ export default function Response({
   hideNavigation,
   hideAuthor,
   hideWorkflow,
+  deleteCallBack,
 }: IProps) {
   const { data, error } = useGetResponse(responseId);
 
@@ -69,6 +71,7 @@ export default function Response({
       hideNavigation={hideNavigation}
       hideAuthor={hideAuthor}
       hideWorkflow={hideWorkflow}
+      deleteCallBack={deleteCallBack}
     />
   );
 }
@@ -81,6 +84,7 @@ interface IProps2 {
   hideAuthor?: boolean;
   hideWorkflow?: boolean;
   isAuthorized?: boolean;
+  deleteCallBack?: () => void;
 }
 
 export function ResponseChild2({
@@ -91,6 +95,7 @@ export function ResponseChild2({
   hideAuthor,
   hideWorkflow,
   isAuthorized,
+  deleteCallBack,
 }: IProps2) {
   const { data, error, loading } = useGetForm(formId);
 
@@ -111,6 +116,7 @@ export function ResponseChild2({
       hideAuthor={hideAuthor}
       hideWorkflow={hideWorkflow}
       isAuthorized={isAuthorized}
+      deleteCallBack={deleteCallBack}
     />
   );
 }

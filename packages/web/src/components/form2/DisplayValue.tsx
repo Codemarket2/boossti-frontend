@@ -24,52 +24,54 @@ export default function DisplayValue({ field, value, imageAvatar }: IProps) {
     case 'email':
     case 'password':
       return <>{value?.value}</>;
-    case 'select': {
-      let optionsTemplate = field.options?.optionsTemplate || value?.options?.optionsTemplate;
-      let valueFormField = value?.options?.formField;
-      if (typeof value?.options === 'string') {
-        optionsTemplate =
-          field.options?.optionsTemplate || JSON.parse(value?.options)?.optionsTemplate;
-        valueFormField = JSON.parse(value?.options)?.formField;
-      }
-      if (optionsTemplate === 'template') {
-        if ((field?.template?._id || value.template?._id) && value.page) {
-          return <PageDrawer title={value.page?.title} slug={value.page?.slug} />;
-        }
-        if (value?.template?.slug && value?.template?.title) {
-          return <Link href={`/${value?.template?.slug}`}>{value?.template?.title}</Link>;
-        }
-        return null;
-      }
-      if (optionsTemplate === 'existingForm') {
-        if (
-          ((field?.form?._id && field?.options?.formField) ||
-            (value?.form?._id && valueFormField)) &&
-          value?.response
-        ) {
-          return (
-            <ShowResponseLabel
-              formField={field?.form?._id ? field.options?.formField : valueFormField}
-              response={value?.response}
-            />
-          );
-        }
-        return <>{value?.form?.name}</>;
-      }
-      if (field?.options?.showAsCheckbox) {
-        return (
-          <>
-            {value?.values?.map((v, i) => (
-              <Fragment key={i}>
-                {v}
-                <br />
-              </Fragment>
-            ))}
-          </>
-        );
-      }
-      return <DisplayValue field={{ fieldType: optionsTemplate }} value={value} />;
-    }
+    case 'existingForm':
+      return <ShowResponseLabel formField={field.options?.formField} response={value?.response} />;
+    // case 'select': {
+    //   let optionsTemplate = field.options?.optionsTemplate || value?.options?.optionsTemplate;
+    //   let valueFormField = value?.options?.formField;
+    //   if (typeof value?.options === 'string') {
+    //     optionsTemplate =
+    //       field.options?.optionsTemplate || JSON.parse(value?.options)?.optionsTemplate;
+    //     valueFormField = JSON.parse(value?.options)?.formField;
+    //   }
+    //   if (optionsTemplate === 'template') {
+    //     if ((field?.template?._id || value.template?._id) && value.page) {
+    //       return <PageDrawer title={value.page?.title} slug={value.page?.slug} />;
+    //     }
+    //     if (value?.template?.slug && value?.template?.title) {
+    //       return <Link href={`/${value?.template?.slug}`}>{value?.template?.title}</Link>;
+    //     }
+    //     return null;
+    //   }
+    //   if (optionsTemplate === 'existingForm') {
+    //     if (
+    //       ((field?.form?._id && field?.options?.formField) ||
+    //         (value?.form?._id && valueFormField)) &&
+    //       value?.response
+    //     ) {
+    //       return (
+    //         <ShowResponseLabel
+    //           formField={field?.form?._id ? field.options?.formField : valueFormField}
+    //           response={value?.response}
+    //         />
+    //       );
+    //     }
+    //     return <>{value?.form?.name}</>;
+    //   }
+    //   if (field?.options?.showAsCheckbox) {
+    //     return (
+    //       <>
+    //         {value?.values?.map((v, i) => (
+    //           <Fragment key={i}>
+    //             {v}
+    //             <br />
+    //           </Fragment>
+    //         ))}
+    //       </>
+    //     );
+    //   }
+    //   return <DisplayValue field={{ fieldType: optionsTemplate }} value={value} />;
+    // }
     case 'link':
       return <a href={value?.value}>{value?.value}</a>;
     case 'richTextarea':
@@ -120,7 +122,7 @@ export default function DisplayValue({ field, value, imageAvatar }: IProps) {
     case 'lighthouseReport':
       return (
         <>
-          {field?.options?.output ? (
+          {field?.options?.systemCalculatedAndSaved ? (
             <LighthouseReport report={value?.value} />
           ) : (
             <>{value?.value}</>

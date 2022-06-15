@@ -179,7 +179,7 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
             </div>
           )}
           <Grid container spacing={1} style={{ minHeight: 'calc(100vh - 130px)' }}>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} sm={4}>
               <FormFields
                 fields={state.fields}
                 setFields={(newFields) => handleOnChange({ fields: newFields })}
@@ -190,7 +190,7 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
                 }))}
               />
             </Grid>
-            <Grid item xs={12} md={8}>
+            <Grid item xs={12} sm={8}>
               <Paper variant="outlined">
                 <Tabs
                   variant="scrollable"

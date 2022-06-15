@@ -70,33 +70,39 @@ export const validateValue = (validate: boolean, value: any, field: Field): IRet
       }
       break;
     }
-    case 'select': {
-      const optionsTemplate = options?.optionsTemplate || value?.options?.optionsTemplate;
-      if (
-        optionsTemplate === 'template' &&
-        options?.required &&
-        ((!field?.template && !value?.template) || (field?.template && !value?.page))
-      ) {
+    case 'existingForm': {
+      if (options?.required && !value?.response?._id) {
         result = { error: true, errorMessage: 'Required' };
-      } else if (
-        optionsTemplate === 'existingForm' &&
-        options?.required &&
-        ((!field?.form && !value?.form) || (field?.form && !value?.response))
-      ) {
-        result = { error: true, errorMessage: 'Required' };
-      } else if (
-        !['template', 'existingForm'].includes(optionsTemplate) &&
-        options?.required &&
-        !value?.value
-      ) {
-        if (options?.showAsCheckbox && value?.values?.length > 0) {
-          result = { error: false, errorMessage: '' };
-        } else {
-          result = { error: true, errorMessage: 'Required' };
-        }
       }
       break;
     }
+    // case 'select': {
+    //   const optionsTemplate = options?.optionsTemplate || value?.options?.optionsTemplate;
+    //   if (
+    //     optionsTemplate === 'template' &&
+    //     options?.required &&
+    //     ((!field?.template && !value?.template) || (field?.template && !value?.page))
+    //   ) {
+    //     result = { error: true, errorMessage: 'Required' };
+    //   } else if (
+    //     optionsTemplate === 'existingForm' &&
+    //     options?.required &&
+    //     ((!field?.form && !value?.form) || (field?.form && !value?.response))
+    //   ) {
+    //     result = { error: true, errorMessage: 'Required' };
+    //   } else if (
+    //     !['template', 'existingForm'].includes(optionsTemplate) &&
+    //     options?.required &&
+    //     !value?.value
+    //   ) {
+    //     if (options?.showAsCheckbox && value?.values?.length > 0) {
+    //       result = { error: false, errorMessage: '' };
+    //     } else {
+    //       result = { error: true, errorMessage: 'Required' };
+    //     }
+    //   }
+    //   break;
+    // }
     default: {
       if (options?.required && !value?.value) {
         result = { error: true, errorMessage: 'Required' };

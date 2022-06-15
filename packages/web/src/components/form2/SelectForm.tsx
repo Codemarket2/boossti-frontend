@@ -73,7 +73,7 @@ interface IProps {
   value: any;
   onChange: (form) => void;
   error?: boolean;
-  helperText?: string;
+  helperText?: any;
   disabled?: boolean;
   placeholder?: string;
   label?: string;

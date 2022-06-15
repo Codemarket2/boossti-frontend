@@ -23,7 +23,7 @@ export const fieldTypes: FieldType[] = [
   { label: 'Textarea', value: 'textarea' },
   { label: 'Rich Textarea', value: 'richTextarea' },
   { label: 'Boolean', value: 'boolean' },
-  { label: 'Select', value: 'select' },
+  // { label: 'Select', value: 'select' },
   { label: 'Email', value: 'email' },
   { label: 'Phone Number', value: 'phoneNumber' },
   { label: 'Date', value: 'date' },

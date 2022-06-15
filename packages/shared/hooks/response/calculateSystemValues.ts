@@ -8,7 +8,7 @@ export const calculateSystemValues = ({ fields = [], values = [], globalState = 
   let newValues = [...values];
 
   const systemFields = fields?.filter(
-    (field) => field?.options?.output && field?.options?.systemValue?.fieldId,
+    (field) => field?.options?.systemCalculatedAndSaved && field?.options?.systemValue?.fieldId,
   );
   systemFields?.forEach((field) => {
     let value;

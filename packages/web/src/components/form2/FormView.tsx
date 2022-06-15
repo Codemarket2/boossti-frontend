@@ -591,7 +591,7 @@ export function FormView({
       )}
       <Grid container spacing={0}>
         {(fieldWiseView && fields?.length > 1 ? [fields[page]] : fields)
-          ?.filter((field) => !field?.options?.hidden && !field?.options?.output)
+          ?.filter((field) => !field?.options?.systemCalculatedAndSaved)
           ?.map((field) => (
             <Grid
               item
