@@ -117,8 +117,8 @@ export const stringifyValues = (values, removeId = false) => {
       if (value?.template?._id) {
         value = { ...value, template: value?.template?._id || null };
       }
-      if (value?.page?._id) {
-        value = { ...value, page: value?.page?._id || null };
+      if (value?.templateInstance?._id) {
+        value = { ...value, templateInstance: value?.templateInstance?._id || null };
       }
       if (value?.form?._id) {
         value = { ...value, form: value?.form?._id || null };

@@ -24,10 +24,10 @@ export const GET_RESPONSE = gql`
           title
           slug
         }
-        page {
+        templateInstance {
           _id
-          title
-          slug
+          # title
+          # slug
         }
         form {
           _id
@@ -81,10 +81,10 @@ export const GET_RESPONSE_BY_COUNT = gql`
           title
           slug
         }
-        page {
+        templateInstance {
           _id
-          title
-          slug
+          # title
+          # slug
         }
         form {
           _id
@@ -117,7 +117,7 @@ export const GET_RESPONSES = gql`
   query getResponses(
     $formId: ID!
     $templateId: ID
-    $templateDefaultWidgetResponseId: ID
+    # $templateDefaultWidgetResponseId: ID
     $workFlowFormResponseParentId: ID
     $page: Int
     $limit: Int
@@ -128,7 +128,7 @@ export const GET_RESPONSES = gql`
     getResponses(
       formId: $formId
       templateId: $templateId
-      templateDefaultWidgetResponseId: $templateDefaultWidgetResponseId
+      # templateDefaultWidgetResponseId: $templateDefaultWidgetResponseId
       workFlowFormResponseParentId: $workFlowFormResponseParentId
       page: $page
       limit: $limit
@@ -159,10 +159,10 @@ export const GET_RESPONSES = gql`
             title
             slug
           }
-          page {
+          templateInstance {
             _id
-            title
-            slug
+            # title
+            # slug
           }
           form {
             _id
@@ -221,10 +221,10 @@ export const GET_MY_RESPONSES = gql`
             title
             slug
           }
-          page {
+          templateInstance {
             _id
-            title
-            slug
+            # title
+            # slug
           }
           form {
             _id

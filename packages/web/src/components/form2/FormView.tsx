@@ -44,7 +44,7 @@ interface IProps {
   isAuthorized?: boolean;
 }
 
-export const defualtValue = {
+export const defaultValue = {
   field: '',
   value: '',
   valueNumber: null,
@@ -53,7 +53,7 @@ export const defualtValue = {
   media: [],
   values: [],
   template: null,
-  page: null,
+  templateInstance: null,
   form: null,
   response: null,
   options: { option: false },
@@ -435,7 +435,7 @@ const initialSubmitState = {
 };
 
 export const filterValues = (values, field) => {
-  let newValues = [{ ...defualtValue, field: field._id }];
+  let newValues = [{ ...defaultValue, field: field._id }];
   if (values.some((f) => f.field === field._id)) {
     if (field?.options?.multipleValues) {
       newValues = values.filter((f) => f.field === field._id);
@@ -486,7 +486,7 @@ export function FormView({
   }, [values]);
 
   const onChange = (sValue, valueIndex) => {
-    const newValue = { ...defualtValue, ...sValue };
+    const newValue = { ...defaultValue, ...sValue };
     let newValues = [];
     let changed = false;
     let tempValueIndex = -1;
@@ -551,7 +551,7 @@ export function FormView({
 
   const onAddOneMoreValue = (field) => {
     let newValues = [];
-    const newValue = { ...defualtValue, field: field._id, value: '' };
+    const newValue = { ...defaultValue, field: field._id, value: '' };
     const fieldValues = values.filter((f) => f.field === field._id);
     if (
       fieldValues.length > 0 &&

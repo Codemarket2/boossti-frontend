@@ -24,10 +24,10 @@ export const RESPONSE_SUB = gql`
           title
           slug
         }
-        page {
+        templateInstance {
           _id
-          title
-          slug
+          # title
+          # slug
         }
         form {
           _id
