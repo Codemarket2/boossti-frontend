@@ -4,7 +4,6 @@ export const UPDATED_FORM = gql`
   subscription MySubscription($_id: ID!) {
     updatedForm(_id: $_id) {
       _id
-      parentId
       name
       slug
       fields {
@@ -35,11 +34,11 @@ export const UPDATED_FORM = gql`
     }
   }
 `;
+
 export const FORM_SUB = gql`
   subscription MySubscription {
     formSub {
       _id
-      parentId
       name
       slug
       fields {

@@ -1,5 +1,5 @@
 import Overlay from '../common/Overlay';
-import FormViewWrapper from '../form2/FormViewWrapper';
+import { FormPageById } from '../form2/FormPage';
 
 interface IProps {
   open: boolean;
@@ -21,11 +21,11 @@ export default function CreateResponseDrawer({
   return (
     <Overlay open={open} onClose={onClose} title={`Create new ${title}`}>
       <div className="p-2">
-        <FormViewWrapper
-          formId={formId}
+        <FormPageById
+          _id={formId}
           createCallback={createCallback}
-          customSettings={null}
           templateDefaultWidgetResponseId={templateDefaultWidgetResponseId}
+          settings={{ widgetType: 'form' }}
         />
       </div>
     </Overlay>

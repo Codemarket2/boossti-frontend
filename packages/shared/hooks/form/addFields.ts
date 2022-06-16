@@ -34,9 +34,9 @@ const validationSchema = yup.object().shape({
 
 const defaultOptions: IFieldOptions = {
   default: false,
-  dependentRelation: false,
   selectItem: false,
-  dataSource: 'options',
+  showOptionCreatedByUser: false,
+  showOptionCreatedOnTemplate: false,
   required: false,
   multipleValues: false,
   unique: false,
@@ -54,17 +54,12 @@ const defaultOptions: IFieldOptions = {
   selectOptions: [''],
 };
 
-const defaultFieldValues = {
+const defaultFieldValue: IField = {
   _id: '',
-  edit: false,
-  parentId: '',
   label: '',
   fieldType: '',
-  multipleValues: false,
-  required: false,
   template: null,
   form: null,
-  formField: '',
   options: defaultOptions,
 };
 
@@ -75,7 +70,7 @@ interface ICRUDProps extends IHooksProps {
 export function useAddFields({ onAlert, onSave }: ICRUDProps) {
   const [edit, setEdit] = useState(false);
   const formik = useFormik({
-    initialValues: defaultFieldValues,
+    initialValues: defaultFieldValue,
     validationSchema,
     onSubmit: async (payload: IField) => {
       try {
@@ -97,8 +92,8 @@ export function useAddFields({ onAlert, onSave }: ICRUDProps) {
 
   const setFormValues = (oldField) => {
     setEdit(true);
-    const newValues: IField = { ...defaultFieldValues };
-    Object.keys(defaultFieldValues).forEach((key) => {
+    const newValues: IField = { ...defaultFieldValue };
+    Object.keys(defaultFieldValue).forEach((key) => {
       if (oldField[key] !== undefined) {
         newValues[key] = oldField[key];
       }
@@ -112,5 +107,5 @@ export function useAddFields({ onAlert, onSave }: ICRUDProps) {
 
   const formLoading = formik.isSubmitting;
 
-  return { formik, formLoading, setFormValues, edit, onOptionChange };
+  return { formik, formLoading, setFormValues, onOptionChange };
 }

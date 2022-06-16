@@ -24,7 +24,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import CRUDMenu from '../common/CRUDMenu';
 import AddField from './AddField';
-import EditField from './EditField';
+// import EditField from './EditField';
 import EditFieldGrid from './EditFieldGrid';
 import EditFormDrawer from './EditFormDrawer';
 import CustomFormSettings from './CustomFormSettings';

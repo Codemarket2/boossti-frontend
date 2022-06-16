@@ -4,7 +4,6 @@ export const GET_FORM = gql`
   query MyQuery($_id: ID!) {
     getForm(_id: $_id) {
       _id
-      parentId
       name
       slug
       fields {
@@ -68,7 +67,6 @@ export const GET_FORMS = gql`
       count
       data {
         _id
-        # parentId
         name
         slug
         # fields {

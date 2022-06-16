@@ -18,6 +18,7 @@ interface IProps {
   formField?: string;
   openDrawer?: any;
   allowCreate?: boolean;
+  onlyMyResponses?: boolean;
 }
 
 const filter = createFilterOptions();
@@ -34,10 +35,12 @@ export default function SelectResponse({
   formField,
   openDrawer,
   allowCreate,
+  onlyMyResponses,
 }: IProps) {
   const { data, error: queryError, loading, state, setState } = useGetResponses({
     formId,
     formField,
+    onlyMy: onlyMyResponses,
   });
   const [addOption, setAddOption] = useState({ showDrawer: false });
 
@@ -77,7 +80,10 @@ export default function SelectResponse({
           setState({ ...state, search: newInputValue });
         }}
         filterOptions={(options, params) => {
-          const filtered = filter(options, params);
+          let filtered = filter(options, params);
+          filtered = filtered.map((option: any) => {
+            return { ...option, label: option?.label?.split('{{}}')?.[0] };
+          });
           if (params.inputValue !== '' && !loading && allowCreate) {
             filtered.push({
               inputValue: params.inputValue,
@@ -127,13 +133,23 @@ export default function SelectResponse({
 const getLabels = (formField: string, responses: any[]) => {
   const labels = [];
   responses?.forEach((response) => {
-    const fieldValues = response?.values?.filter((value) => value?.field === formField);
     let label = '';
-    fieldValues?.forEach((f, i) => {
-      if (f?.value) {
-        label += i > 0 ? `${f?.value}` : f?.value;
+    response?.values?.forEach((value, i) => {
+      const fieldValue = value?.value || value?.valueNumber;
+      if (fieldValue) {
+        if (value?.field?.toString() === formField) {
+          label = fieldValue + label;
+        } else {
+          label += `{{}} ${fieldValue}`;
+        }
       }
     });
+    // const fieldValues = response?.values?.filter((value) => value?.field === formField);
+    // fieldValues?.forEach((f, i) => {
+    //   if (f?.value) {
+    //     label += i > 0 ? `${f?.value}` : f?.value;
+    //   }
+    // });
     if (label) {
       return labels.push({ label, _id: response?._id });
     }
@@ -143,11 +159,13 @@ const getLabels = (formField: string, responses: any[]) => {
 
 export const getLabel = (formField: string, response: any): string => {
   let label = '';
-  const fieldValues = response?.values?.filter((value) => value?.field === formField);
-  fieldValues?.forEach((f, i) => {
-    if (f?.value) {
-      label += i > 0 ? `${f?.value}` : f?.value;
-    }
-  });
+  response?.values
+    ?.filter((value) => value?.field === formField)
+    ?.forEach((value, i) => {
+      const fieldValue = value?.value || value?.valueNumber;
+      if (fieldValue) {
+        label += i > 0 ? ` ${fieldValue}` : fieldValue;
+      }
+    });
   return label || response?.label;
 };

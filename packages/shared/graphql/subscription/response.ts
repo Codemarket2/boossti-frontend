@@ -38,6 +38,7 @@ export const RESPONSE_SUB = gql`
           values {
             field
             value
+            valueNumber
           }
         }
         options

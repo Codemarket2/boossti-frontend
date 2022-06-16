@@ -25,10 +25,10 @@ export default function NewForm() {
     setShowBackdrop(false);
   };
 
-  const onSave = async (newfield) => {
+  const onSave = async (newField) => {
     const field = {
-      ...newfield,
-      options: JSON.stringify({ ...newfield.options, default: true, required: true }),
+      ...newField,
+      options: JSON.stringify({ ...newField.options, default: true, required: true }),
     };
     if (!state.name) {
       setState({ ...state, field, validate: true });

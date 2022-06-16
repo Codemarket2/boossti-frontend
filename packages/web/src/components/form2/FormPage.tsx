@@ -20,6 +20,9 @@ interface IFormPage {
   templateDefaultWidgetResponseId?: string;
   modifyForm?: (form: any) => void;
   isTemplateInstance?: string;
+  createCallback?: (response: any) => void;
+  isPageOwner?: boolean;
+  workFlowFormResponseParentId?: string;
 }
 
 interface IProps extends IFormPage {
@@ -33,6 +36,9 @@ export const FormPage = ({
   templateDefaultWidgetResponseId,
   modifyForm,
   isTemplateInstance = '',
+  createCallback,
+  isPageOwner,
+  workFlowFormResponseParentId,
 }: IProps) => {
   const { data, error } = useGetFormBySlug(slug);
 
@@ -56,6 +62,9 @@ export const FormPage = ({
       templateId={templateId}
       isTemplateInstance={isTemplateInstance}
       templateDefaultWidgetResponseId={templateDefaultWidgetResponseId}
+      createCallback={createCallback}
+      isPageOwner={isPageOwner}
+      workFlowFormResponseParentId={workFlowFormResponseParentId}
     />
   );
 };
@@ -73,6 +82,9 @@ export const FormPageById = ({
   modifyForm,
   isTemplateInstance = '',
   isAuthorized,
+  createCallback,
+  isPageOwner,
+  workFlowFormResponseParentId,
 }: IFormPageByIdProps) => {
   const { data, error } = useGetForm(_id);
 
@@ -97,6 +109,9 @@ export const FormPageById = ({
       isTemplateInstance={isTemplateInstance}
       templateDefaultWidgetResponseId={templateDefaultWidgetResponseId}
       isAuthorized={isAuthorized}
+      createCallback={createCallback}
+      isPageOwner={isPageOwner}
+      workFlowFormResponseParentId={workFlowFormResponseParentId}
     />
   );
 };

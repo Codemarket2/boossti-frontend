@@ -209,7 +209,9 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
               </Paper>
               {options.currentTab === 'Preview' && (
                 <Paper variant="outlined" className="px-2">
-                  <FormView form={state} />
+                  <FormView
+                    form={{ ...state, settings: { ...state.settings, widgetType: 'form' } }}
+                  />
                 </Paper>
               )}
               {options.currentTab === 'Settings' && (

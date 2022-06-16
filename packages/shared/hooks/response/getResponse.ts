@@ -1,9 +1,9 @@
-import { useMutation, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { GET_RESPONSE_BY_COUNT, GET_RESPONSES, GET_RESPONSE } from '../../graphql/query/response';
 import { RESPONSE_SUB } from '../../graphql/subscription/response';
 import { client as apolloClient, guestClient } from '../../graphql';
-import { UPDATE_RESPONSE } from '../../graphql/mutation/response';
+// import { UPDATE_RESPONSE } from '../../graphql/mutation/response';
 
 export const defaultQueryVariables = {
   formId: null,

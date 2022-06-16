@@ -6,9 +6,9 @@ export interface IForm {
 
 export interface IFieldOptions {
   default: boolean;
-  dependentRelation: boolean;
   selectItem: boolean;
-  dataSource: string;
+  showOptionCreatedByUser: boolean;
+  showOptionCreatedOnTemplate: boolean;
   required: boolean;
   multipleValues: boolean;
   unique: boolean;

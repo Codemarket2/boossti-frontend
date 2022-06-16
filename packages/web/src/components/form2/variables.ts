@@ -90,15 +90,18 @@ const getValue = (field, value) => {
     case 'boolean': {
       return value.valueBoolean?.toString();
     }
-    case 'select': {
-      if (field?.options?.optionsTemplate === 'type') {
-        return value?.page?.title;
-      }
-      if (field?.options?.optionsTemplate === 'existingForm') {
-        return getLabel(field?.options?.formField, value?.response);
-      }
-      return value?.value;
+    case 'existingForm': {
+      return getLabel(field?.options?.formField, value?.response);
     }
+    // case 'select': {
+    //   if (field?.options?.optionsTemplate === 'type') {
+    //     return value?.page?.title;
+    //   }
+    //   if (field?.options?.optionsTemplate === 'existingForm') {
+    //     return getLabel(field?.options?.formField, value?.response);
+    //   }
+    //   return value?.value;
+    // }
     default: {
       return value.value;
     }

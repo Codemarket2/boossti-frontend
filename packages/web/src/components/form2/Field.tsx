@@ -15,12 +15,12 @@ import { validateValue } from '@frontend/shared/utils/validate';
 import { IFieldOptions } from '@frontend/shared/types/form';
 import RichTextarea from '../common/RichTextarea2';
 import DisplayRichText from '../common/DisplayRichText';
-import SelectPage from '../template/SelectPage';
+// import SelectPage from '../template/SelectPage';
 import SelectResponse from '../response/SelectResponse';
 import Select from './Select';
-import SelectForm from './SelectForm';
-import SelectTemplate from '../template/SelectTemplate';
-import { SelectOptionType } from './EditField';
+// import SelectForm from './SelectForm';
+// import SelectTemplate from '../template/SelectTemplate';
+// import { SelectOptionType } from './EditField';
 import ImagePicker2 from '../common/ImagePicker2';
 import ColorInput from '../customMUI/ColorInput/ColorInput';
 import AddressSearch from '../common/AddressSearch';
@@ -109,13 +109,42 @@ export default function Field({
             error={validation.error}
             helperText={validation.errorMessage}
             allowCreate={options?.selectAllowCreate}
+            onlyMyResponses={options?.showOptionCreatedByUser}
           />
+        ) : options?.showAsCheckbox ? (
+          <>
+            {options?.selectOptions?.map((option, i) => (
+              <FormControlLabel
+                disabled={disabled}
+                key={i}
+                control={
+                  <Checkbox
+                    name={option}
+                    checked={value?.values?.includes(option)}
+                    onChange={onChangeCheckbox}
+                  />
+                }
+                label={option}
+              />
+            ))}
+            {validation.error && (
+              <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
+            )}
+          </>
         ) : (
           <Select
             label={label}
             options={options?.selectOptions}
-            value={value ? value?.value : ''}
-            onChange={(newValue) => onChange({ field: _id, value: newValue })}
+            value={value?.value || value?.valueNumber || ''}
+            onChange={(newValue) => {
+              let valueObject: any = {};
+              if (fieldType === 'number') {
+                valueObject = { valueNumber: newValue };
+              } else {
+                valueObject = { value: newValue };
+              }
+              onChange(valueObject);
+            }}
             selectAllowCreate={options?.selectAllowCreate}
             error={validation.error}
             helperText={validation.errorMessage}

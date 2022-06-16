@@ -54,6 +54,7 @@ export const CREATE_RESPONSE = gql`
           values {
             field
             value
+            valueNumber
           }
         }
         options
@@ -106,6 +107,7 @@ export const UPDATE_RESPONSE = gql`
           values {
             field
             value
+            valueNumber
           }
         }
         options

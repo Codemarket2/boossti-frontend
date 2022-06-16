@@ -152,20 +152,6 @@ export default function FieldForm({
       )}
       {!isSection && !['label', 'form', 'template'].includes(formik.values.fieldType) && (
         <>
-          {formik.values.fieldType === 'existingForm' && (
-            <FormControlLabel
-              disabled={formik.isSubmitting}
-              control={
-                <Checkbox
-                  checked={formik.values.options?.dependentRelation}
-                  onChange={({ target }) => onOptionChange({ dependentRelation: target.checked })}
-                  name="dependentRelation"
-                  color="primary"
-                />
-              }
-              label="Dependent relation"
-            />
-          )}
           <FormControlLabel
             disabled={formik.isSubmitting}
             control={
@@ -176,106 +162,145 @@ export default function FieldForm({
                 color="primary"
               />
             }
-            label="Select Item"
+            label={`Select Item ${
+              formik.values.fieldType === 'existingForm' ? '(Independent relation)' : ''
+            }`}
           />
           {formik.values.options?.selectItem && (
-            <FormControlLabel
-              disabled={formik.isSubmitting}
-              control={
-                <Checkbox
-                  checked={formik.values.options?.selectAllowCreate}
-                  onChange={({ target }) => onOptionChange({ selectAllowCreate: target.checked })}
-                  name="selectAllowCreate"
-                  color="primary"
-                />
-              }
-              label="Can create new option"
-            />
-          )}
-          {formik.values.options?.selectItem && formik.values.fieldType !== 'existingForm' && (
-            <div className="mb-3">
-              <InputGroup>
-                <FormControl
-                  variant="outlined"
-                  fullWidth
-                  size="small"
-                  error={!formik.values.options?.dataSource}
-                >
-                  <InputLabel id="dataSource-select-outlined-label">Data source*</InputLabel>
-                  <Select
-                    labelId="dataSource-select-outlined-label"
-                    id="dataSource-select-outlined"
-                    name="dataSource"
-                    value={formik.values.options?.dataSource}
-                    onChange={({ target }) => onOptionChange({ dataSource: target.value })}
-                    label="Data source*"
-                  >
-                    <MenuItem value="options">Options</MenuItem>
-                    <MenuItem value="response">Form response</MenuItem>
-                  </Select>
-                  {!formik.values.options?.dataSource && (
-                    <FormHelperText className="text-danger">Required</FormHelperText>
-                  )}
-                </FormControl>
-              </InputGroup>
-              <FormLabel>
-                Select Options
-                <Tooltip title="Add New Option">
-                  <IconButton
+            <>
+              <FormControlLabel
+                className="mt-n2 ml-2"
+                disabled={formik.isSubmitting}
+                control={
+                  <Checkbox
+                    checked={formik.values.options?.selectAllowCreate}
+                    onChange={({ target }) => onOptionChange({ selectAllowCreate: target.checked })}
+                    name="selectAllowCreate"
                     color="primary"
-                    onClick={() =>
-                      onOptionChange({
-                        selectOptions:
-                          formik.values.options?.selectOptions?.length > 0
-                            ? [...formik.values?.options?.selectOptions, '']
-                            : [''],
-                      })
-                    }
-                  >
-                    <AddCircleIcon />
-                  </IconButton>
-                </Tooltip>
-              </FormLabel>
-              {formik.values.options?.selectOptions?.map((option, index) => (
-                <FormControl variant="outlined" fullWidth size="small" key={index} className="mt-2">
-                  <InputLabel htmlFor={`outlined-adornment-${index + 1}`}>
-                    Option {index + 1}*
-                  </InputLabel>
-                  <OutlinedInput
-                    id={`outlined-adornment-${index + 1}`}
-                    type="text"
-                    error={!option}
-                    value={option}
-                    onChange={({ target }) =>
-                      onOptionChange({
-                        selectOptions: formik.values.options?.selectOptions?.map((m, i) =>
-                          i === index ? target.value : m,
-                        ),
-                      })
-                    }
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="delete"
-                          onClick={() =>
-                            onOptionChange({
-                              selectOptions: formik.values.options?.selectOptions?.filter(
-                                (m, i) => i !== index,
-                              ),
-                            })
-                          }
-                          edge="end"
-                          size="large"
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                    // labelWidth={65}
                   />
-                </FormControl>
-              ))}
-            </div>
+                }
+                label="Can create new option"
+              />
+              <FormControlLabel
+                className="mt-n2 ml-2"
+                disabled={formik.isSubmitting}
+                control={
+                  <Checkbox
+                    checked={formik.values.options?.showAsCheckbox}
+                    onChange={({ target }) => onOptionChange({ showAsCheckbox: target.checked })}
+                    name="showAsCheckbox"
+                    color="primary"
+                  />
+                }
+                label="Show as checkbox"
+              />
+            </>
+          )}
+          {formik.values.options?.selectItem && (
+            <>
+              {formik.values.fieldType === 'existingForm' ? (
+                <div className="ml-3">
+                  <FormLabel>Show Options</FormLabel>
+                  <br />
+                  <FormControlLabel
+                    className="mt-n2"
+                    disabled={formik.isSubmitting}
+                    control={
+                      <Checkbox
+                        checked={formik.values.options?.showOptionCreatedByUser}
+                        onChange={({ target }) =>
+                          onOptionChange({ showOptionCreatedByUser: target.checked })
+                        }
+                        name="showOptionCreatedByUser"
+                        color="primary"
+                      />
+                    }
+                    label="Created by user"
+                  />
+                  <FormControlLabel
+                    className="mt-n2"
+                    disabled={formik.isSubmitting}
+                    control={
+                      <Checkbox
+                        checked={formik.values.options?.showOptionCreatedOnTemplate}
+                        onChange={({ target }) =>
+                          onOptionChange({ showOptionCreatedOnTemplate: target.checked })
+                        }
+                        name="showOptionCreatedOnTemplate"
+                        color="primary"
+                      />
+                    }
+                    label="Created on template"
+                  />
+                </div>
+              ) : (
+                <div className="mb-3">
+                  <FormLabel>
+                    Select Options
+                    <Tooltip title="Add New Option">
+                      <IconButton
+                        color="primary"
+                        onClick={() =>
+                          onOptionChange({
+                            selectOptions:
+                              formik.values.options?.selectOptions?.length > 0
+                                ? [...formik.values?.options?.selectOptions, '']
+                                : [''],
+                          })
+                        }
+                      >
+                        <AddCircleIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </FormLabel>
+                  {formik.values.options?.selectOptions?.map((option, index) => (
+                    <FormControl
+                      variant="outlined"
+                      fullWidth
+                      size="small"
+                      key={index}
+                      className="mt-2"
+                    >
+                      <InputLabel htmlFor={`outlined-adornment-${index + 1}`}>
+                        Option {index + 1}*
+                      </InputLabel>
+                      <OutlinedInput
+                        id={`outlined-adornment-${index + 1}`}
+                        type={formik.values?.fieldType === 'number' ? 'number' : 'text'}
+                        error={!option}
+                        value={option}
+                        onChange={({ target }) =>
+                          onOptionChange({
+                            selectOptions: formik.values.options?.selectOptions?.map((m, i) =>
+                              i === index ? target.value : m,
+                            ),
+                          })
+                        }
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="delete"
+                              onClick={() =>
+                                onOptionChange({
+                                  selectOptions: formik.values.options?.selectOptions?.filter(
+                                    (m, i) => i !== index,
+                                  ),
+                                })
+                              }
+                              edge="end"
+                              size="large"
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </InputAdornment>
+                        }
+                        // labelWidth={65}
+                      />
+                    </FormControl>
+                  ))}
+                </div>
+              )}
+            </>
           )}
           <div>
             <FormControlLabel

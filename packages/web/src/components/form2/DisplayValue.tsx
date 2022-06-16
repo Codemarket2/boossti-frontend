@@ -1,22 +1,39 @@
-import Link from 'next/link';
+// import Link from 'next/link';
 import { Fragment } from 'react';
 import moment from 'moment';
 import Avatar from '@mui/material/Avatar';
 import { Box, Typography } from '@mui/material';
+import { IField } from '@frontend/shared/types/form';
 import DisplayRichText from '../common/DisplayRichText';
 import { ShowResponseLabel } from '../response/ResponseDrawer';
-import PageDrawer from '../template/PageDrawer';
+// import PageDrawer from '../template/PageDrawer';
 import ImageList from '../post/ImageList';
 import DisplayFiles from '../fileLibrary/DisplayFiles';
 import { LighthouseReport } from './LighthouseReportRendrer';
 
 interface IProps {
-  field: any;
+  field: Partial<IField>;
   value: any;
   imageAvatar?: boolean;
 }
 
 export default function DisplayValue({ field, value, imageAvatar }: IProps) {
+  if (
+    field?.options?.selectItem &&
+    field?.options?.showAsCheckbox &&
+    field.fieldType !== 'existingForm'
+  ) {
+    return (
+      <>
+        {value?.values?.map((v, i) => (
+          <Fragment key={i}>
+            {v}
+            <br />
+          </Fragment>
+        ))}
+      </>
+    );
+  }
   switch (field.fieldType) {
     case 'text':
     case 'textarea':
