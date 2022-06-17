@@ -14,7 +14,7 @@ export default function PageFields({ page, previewMode }: IProps) {
       fields={page?.fields || []}
       setFields={(fields) => onPageChange({ fields })}
       title="Sections"
-      isSection
+      isWidget
       previewMode={previewMode}
       showWidgetExpand
     />

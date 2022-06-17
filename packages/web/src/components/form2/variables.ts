@@ -90,14 +90,14 @@ const getValue = (field, value) => {
     case 'boolean': {
       return value.valueBoolean?.toString();
     }
-    case 'existingForm': {
+    case 'response': {
       return getLabel(field?.options?.formField, value?.response);
     }
     // case 'select': {
     //   if (field?.options?.optionsTemplate === 'type') {
     //     return value?.page?.title;
     //   }
-    //   if (field?.options?.optionsTemplate === 'existingForm') {
+    //   if (field?.options?.optionsTemplate === 'response') {
     //     return getLabel(field?.options?.formField, value?.response);
     //   }
     //   return value?.value;

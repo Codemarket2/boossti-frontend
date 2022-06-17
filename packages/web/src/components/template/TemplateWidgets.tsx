@@ -16,7 +16,7 @@ export default function TemplateWidgets({ template, previewMode, selectedWidget 
       setFields={(fields) => onTemplateChange({ fields })}
       title="Widgets"
       previewMode={previewMode}
-      isSection
+      isWidget
       showWidgetExpand
       selectedField={selectedWidget}
     />

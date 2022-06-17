@@ -59,7 +59,7 @@ type IProps = {
   fields: any[];
   setFields: (newFields: any[]) => void;
   title?: string;
-  isSection?: boolean;
+  isWidget?: boolean;
   previewMode?: boolean;
   parentPageFields?: any;
   parentFields?: any;
@@ -72,7 +72,7 @@ export default function FormFields({
   fields = [],
   setFields,
   title = 'Fields',
-  isSection = false,
+  isWidget = false,
   previewMode = false,
   parentPageFields = [],
   tabName = 'form',
@@ -116,7 +116,7 @@ export default function FormFields({
   };
 
   const handleNavigate = (fieldLabel) => {
-    if (isSection) {
+    if (isWidget) {
       const url = `${window.location.origin}${window.location.pathname}#${convertToSlug(
         fieldLabel,
       )}`;
@@ -145,7 +145,7 @@ export default function FormFields({
   // };
 
   // const handleShareSection = (fieldLabel) => {
-  //   if (isSection && fieldLabel) {
+  //   if (isWidget && fieldLabel) {
   //     const url = `${window.location.origin}/page/${router.query?.itemSlug}#${convertToSlug(
   //       fieldLabel,
   //     )}`;
@@ -183,7 +183,7 @@ export default function FormFields({
   //       );
   //     }}
   //     onClose={() => setValues(initialValues)}
-  //     isSection={isSection}
+  //     isWidget={isWidget}
   //     parentFields={parentFields}
   //   />
   // )
@@ -231,7 +231,7 @@ export default function FormFields({
               field={values.field}
               onSave={onSave}
               onCancel={() => setValues(initialValues)}
-              isSection={isSection}
+              isWidget={isWidget}
               parentFields={parentFields}
             />
           )}
@@ -264,12 +264,14 @@ export default function FormFields({
                                     secondary={
                                       !previewMode &&
                                       `${field.fieldType} ${
-                                        field?.fieldType === 'form' ? field?.form?.name : ''
+                                        (['form', 'response'].includes(field?.fieldType) &&
+                                          field?.form?.name) ||
+                                        ''
                                       }
                                       ${
-                                        field?.fieldType === 'template'
-                                          ? field?.template?.title
-                                          : ''
+                                        (field?.fieldType === 'template' &&
+                                          field?.template?.title) ||
+                                        ''
                                       }`
                                     }
                                   />
@@ -378,7 +380,7 @@ export default function FormFields({
               </ListItemIcon>
               <ListItemText primary="Duplicate" />
             </MenuItem>
-            {isSection && (
+            {isWidget && (
               <MenuItem onClick={() => handleShareSection(values?.field?.label)}>
                 <ListItemIcon className="mr-n3">
                   <ShareIcon fontSize="small" />
@@ -415,7 +417,7 @@ export default function FormFields({
       )}
       {values.showFormSettings && (
         <CustomFormSettings
-          isSection={isSection}
+          isWidget={isWidget}
           fields={fields}
           formId={values.field?.form?._id}
           open={values.showFormSettings}

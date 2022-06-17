@@ -16,7 +16,8 @@ export const templateWidgetTypes: FieldType[] = [
 ];
 
 export const fieldTypes: FieldType[] = [
-  { label: 'Existing Form', value: 'existingForm' },
+  { label: 'Form', value: 'form' },
+  { label: 'Form Response', value: 'response' },
   { label: 'Text', value: 'text' },
   { label: 'Number', value: 'number' },
   { label: 'Password', value: 'password' },

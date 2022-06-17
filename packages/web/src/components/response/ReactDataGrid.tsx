@@ -141,7 +141,7 @@ const getValue = (field, value) => {
     }
     case 'select': {
       if (
-        field?.options?.optionsTemplate === 'existingForm' &&
+        field?.options?.optionsTemplate === 'response' &&
         field?.form &&
         field?.options?.formField
       ) {
@@ -151,7 +151,7 @@ const getValue = (field, value) => {
         return resValue?.value || resValue?.valueNumber;
       }
       if (
-        field?.options?.optionsTemplate === 'existingForm' &&
+        field?.options?.optionsTemplate === 'response' &&
         !field?.form &&
         !field?.options?.formField
       ) {

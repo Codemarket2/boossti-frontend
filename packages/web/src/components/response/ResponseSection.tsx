@@ -21,7 +21,7 @@ export default function ResponseSections({
       setFields={(fields: any) => onSectionChange({ fields })}
       title={title}
       previewMode={!authorized}
-      isSection
+      isWidget
       parentPageFields={parentPageFields}
     />
   );

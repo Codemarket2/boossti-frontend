@@ -8,14 +8,14 @@ import SelectFormFields from './SelectFormFields';
 import FormFields from './FormFields';
 
 interface IProps {
-  isSection?: boolean;
+  isWidget?: boolean;
   settings: any;
   onChange: (val: any) => void;
   formId: any;
   state?: any;
 }
 
-export default function FormSetting({ formId, settings, onChange, isSection, state }: IProps): any {
+export default function FormSetting({ formId, settings, onChange, isWidget, state }: IProps): any {
   return (
     <Paper variant="outlined" className="p-2">
       <InputGroup>
@@ -120,7 +120,7 @@ export default function FormSetting({ formId, settings, onChange, isSection, sta
             >
               <MenuItem value="all">Both authenticated & unauthenticated users</MenuItem>
               <MenuItem value="authUser">Only Authenticated users</MenuItem>
-              {isSection && <MenuItem value="onlyPageOwner">Only page owner</MenuItem>}
+              {isWidget && <MenuItem value="onlyPageOwner">Only page owner</MenuItem>}
             </TextField>
           </InputGroup>
           {!(settings?.whoCanSubmit === 'all') && (
@@ -194,7 +194,7 @@ export default function FormSetting({ formId, settings, onChange, isSection, sta
             >
               <MenuItem value="all">Both authenticated & unauthenticated users</MenuItem>
               <MenuItem value="authUser">Only Authenticated users</MenuItem>
-              {isSection && <MenuItem value="onlyPageOwner">Only page owner</MenuItem>}
+              {isWidget && <MenuItem value="onlyPageOwner">Only page owner</MenuItem>}
             </TextField>
           </InputGroup>
           <FormControlLabel
@@ -221,7 +221,7 @@ export default function FormSetting({ formId, settings, onChange, isSection, sta
         }
         label="Show form title"
       />
-      {isSection && (
+      {isWidget && (
         <FormFields
           fields={state?.fields?.map((field) => {
             const fieldOverride = settings?.fieldsOverride?.find((f) => f?._id === field?._id);

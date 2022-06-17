@@ -18,7 +18,7 @@ import DisplayRichText from '../common/DisplayRichText';
 // import SelectPage from '../template/SelectPage';
 import SelectResponse from '../response/SelectResponse';
 import Select from './Select';
-// import SelectForm from './SelectForm';
+import SelectForm from './SelectForm';
 // import SelectTemplate from '../template/SelectTemplate';
 // import { SelectOptionType } from './EditField';
 import ImagePicker2 from '../common/ImagePicker2';
@@ -96,10 +96,10 @@ export default function Field({
 
   const validation = validateValue(validate, value, { options, fieldType, template, form });
 
-  if (options.selectItem) {
+  if (options.selectItem && fieldType !== 'form') {
     return (
       <>
-        {fieldType === 'existingForm' ? (
+        {fieldType === 'response' ? (
           <SelectResponse
             label={`${label} response`}
             formId={form?._id}
@@ -338,7 +338,7 @@ export default function Field({
     //             </div>
     //           )}
     //         </>
-    //       ) : optionsTemplate === 'existingForm' ? (
+    //       ) : optionsTemplate === 'response' ? (
     //         <>
     //           {!form && (
     //             <SelectForm
@@ -496,7 +496,7 @@ export default function Field({
       );
     }
 
-    case 'existingForm': {
+    case 'response': {
       return (
         <>
           {value?.response?._id ? (
@@ -529,6 +529,20 @@ export default function Field({
               </Button>
             </>
           )}
+        </>
+      );
+    }
+    case 'form': {
+      return (
+        <>
+          <SelectForm
+            placeholder={`${label} form`}
+            label={null}
+            value={value?.form}
+            onChange={(newValue) => onChange({ field: _id, form: newValue })}
+            error={validation.error}
+            helperText={validation.errorMessage}
+          />
         </>
       );
     }

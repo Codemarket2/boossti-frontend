@@ -413,7 +413,7 @@ const Navigation = ({
         fields={templateFields}
         setFields={(f: any) => null}
         title="Sections"
-        isSection
+        isWidget
         previewMode
         showWidgetExpand
       />

@@ -4,6 +4,8 @@ import moment from 'moment';
 import Avatar from '@mui/material/Avatar';
 import { Box, Typography } from '@mui/material';
 import { IField } from '@frontend/shared/types/form';
+import slugify from 'slugify';
+import Link from 'next/link';
 import DisplayRichText from '../common/DisplayRichText';
 import { ShowResponseLabel } from '../response/ResponseDrawer';
 // import PageDrawer from '../template/PageDrawer';
@@ -21,7 +23,7 @@ export default function DisplayValue({ field, value, imageAvatar }: IProps) {
   if (
     field?.options?.selectItem &&
     field?.options?.showAsCheckbox &&
-    field.fieldType !== 'existingForm'
+    !['response'].includes(field.fieldType)
   ) {
     return (
       <>
@@ -41,8 +43,16 @@ export default function DisplayValue({ field, value, imageAvatar }: IProps) {
     case 'email':
     case 'password':
       return <>{value?.value}</>;
-    case 'existingForm':
+    case 'response':
       return <ShowResponseLabel formField={field.options?.formField} response={value?.response} />;
+    case 'form':
+      return (
+        <Link href={`/forms/${slugify(value?.form?.name, { lower: true })}`}>
+          <a>
+            <Typography color="primary">{value?.form?.name}</Typography>
+          </a>
+        </Link>
+      );
     // case 'select': {
     //   let optionsTemplate = field.options?.optionsTemplate || value?.options?.optionsTemplate;
     //   let valueFormField = value?.options?.formField;
@@ -60,7 +70,7 @@ export default function DisplayValue({ field, value, imageAvatar }: IProps) {
     //     }
     //     return null;
     //   }
-    //   if (optionsTemplate === 'existingForm') {
+    //   if (optionsTemplate === 'response') {
     //     if (
     //       ((field?.form?._id && field?.options?.formField) ||
     //         (value?.form?._id && valueFormField)) &&

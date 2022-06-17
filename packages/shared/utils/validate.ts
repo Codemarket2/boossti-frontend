@@ -70,7 +70,7 @@ export const validateValue = (validate: boolean, value: any, field: Field): IRet
       }
       break;
     }
-    case 'existingForm': {
+    case 'response': {
       if (options?.required && !value?.response?._id) {
         result = { error: true, errorMessage: 'Required' };
       }
@@ -85,13 +85,13 @@ export const validateValue = (validate: boolean, value: any, field: Field): IRet
     //   ) {
     //     result = { error: true, errorMessage: 'Required' };
     //   } else if (
-    //     optionsTemplate === 'existingForm' &&
+    //     optionsTemplate === 'response' &&
     //     options?.required &&
     //     ((!field?.form && !value?.form) || (field?.form && !value?.response))
     //   ) {
     //     result = { error: true, errorMessage: 'Required' };
     //   } else if (
-    //     !['template', 'existingForm'].includes(optionsTemplate) &&
+    //     !['template', 'response'].includes(optionsTemplate) &&
     //     options?.required &&
     //     !value?.value
     //   ) {

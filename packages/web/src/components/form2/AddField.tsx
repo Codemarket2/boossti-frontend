@@ -31,7 +31,7 @@ interface IProps {
   onCancel?: () => void;
   onSave: (field: any, action: string) => void;
   field: any;
-  isSection?: boolean;
+  isWidget?: boolean;
   isDefault?: boolean;
   parentFields?: any[];
 }
@@ -41,11 +41,11 @@ const globalFields = [
   { label: 'User email', globalState: true, _id: 'userEmail' },
 ];
 
-export default function FieldForm({
+export default function AddField({
   onCancel,
   onSave,
   field = null,
-  isSection = false,
+  isWidget = false,
   isDefault,
   parentFields: tParentFields = [],
 }: IProps): any {
@@ -62,6 +62,14 @@ export default function FieldForm({
       window.scrollTo(0, 0);
     }
   }, [field]);
+
+  useEffect(() => {
+    if (isWidget) {
+      formik.setFieldValue('isWidget', true);
+    }
+  }, [isWidget]);
+
+  const isWidgetForm = formik.values.fieldType === 'form' && isWidget;
 
   return (
     <form className="px-2" onSubmit={formik.handleSubmit}>
@@ -96,7 +104,7 @@ export default function FieldForm({
             onChange={formik.handleChange}
             label="Field Type*"
           >
-            {getFormFieldTypes(isSection)?.map((option, index) => (
+            {getFormFieldTypes(isWidget)?.map((option, index) => (
               <MenuItem value={option.value} key={index}>
                 {option.label}
               </MenuItem>
@@ -107,7 +115,7 @@ export default function FieldForm({
           )}
         </FormControl>
       </InputGroup>
-      {['form', 'existingForm'].includes(formik.values.fieldType) && (
+      {(['response'].includes(formik.values.fieldType) || isWidgetForm) && (
         <InputGroup>
           <SelectForm
             value={formik.values.form}
@@ -121,7 +129,7 @@ export default function FieldForm({
             error={formik.touched.form && Boolean(formik.errors.form)}
             helperText={formik.touched.form && formik.errors.form}
           />
-          {formik.values.form && formik.values.fieldType === 'existingForm' && (
+          {formik.values.form && formik.values.fieldType === 'response' && (
             <div className="mt-3">
               <SelectFormFields
                 formId={formik.values.form?._id}
@@ -150,23 +158,23 @@ export default function FieldForm({
           onChange={(newValue) => onOptionChange({ staticText: newValue })}
         />
       )}
-      {!isSection && !['label', 'form', 'template'].includes(formik.values.fieldType) && (
+      {!isWidget && !isWidgetForm && !['label', 'template'].includes(formik.values.fieldType) && (
         <>
           <FormControlLabel
-            disabled={formik.isSubmitting}
+            disabled={formik.values.fieldType === 'form' || formik.isSubmitting}
             control={
               <Checkbox
-                checked={formik.values.options?.selectItem}
+                checked={formik.values.fieldType === 'form' || formik.values.options?.selectItem}
                 onChange={({ target }) => onOptionChange({ selectItem: target.checked })}
                 name="selectItem"
                 color="primary"
               />
             }
             label={`Select Item ${
-              formik.values.fieldType === 'existingForm' ? '(Independent relation)' : ''
+              formik.values.fieldType === 'response' ? '(Independent relation)' : ''
             }`}
           />
-          {formik.values.options?.selectItem && (
+          {formik.values.fieldType !== 'form' && formik.values.options?.selectItem && (
             <>
               <FormControlLabel
                 className="mt-n2 ml-2"
@@ -181,24 +189,8 @@ export default function FieldForm({
                 }
                 label="Can create new option"
               />
-              <FormControlLabel
-                className="mt-n2 ml-2"
-                disabled={formik.isSubmitting}
-                control={
-                  <Checkbox
-                    checked={formik.values.options?.showAsCheckbox}
-                    onChange={({ target }) => onOptionChange({ showAsCheckbox: target.checked })}
-                    name="showAsCheckbox"
-                    color="primary"
-                  />
-                }
-                label="Show as checkbox"
-              />
-            </>
-          )}
-          {formik.values.options?.selectItem && (
-            <>
-              {formik.values.fieldType === 'existingForm' ? (
+
+              {formik.values.fieldType === 'response' ? (
                 <div className="ml-3">
                   <FormLabel>Show Options</FormLabel>
                   <br />
@@ -234,71 +226,88 @@ export default function FieldForm({
                   />
                 </div>
               ) : (
-                <div className="mb-3">
-                  <FormLabel>
-                    Select Options
-                    <Tooltip title="Add New Option">
-                      <IconButton
-                        color="primary"
-                        onClick={() =>
-                          onOptionChange({
-                            selectOptions:
-                              formik.values.options?.selectOptions?.length > 0
-                                ? [...formik.values?.options?.selectOptions, '']
-                                : [''],
-                          })
-                        }
-                      >
-                        <AddCircleIcon />
-                      </IconButton>
-                    </Tooltip>
-                  </FormLabel>
-                  {formik.values.options?.selectOptions?.map((option, index) => (
-                    <FormControl
-                      variant="outlined"
-                      fullWidth
-                      size="small"
-                      key={index}
-                      className="mt-2"
-                    >
-                      <InputLabel htmlFor={`outlined-adornment-${index + 1}`}>
-                        Option {index + 1}*
-                      </InputLabel>
-                      <OutlinedInput
-                        id={`outlined-adornment-${index + 1}`}
-                        type={formik.values?.fieldType === 'number' ? 'number' : 'text'}
-                        error={!option}
-                        value={option}
+                <>
+                  <FormControlLabel
+                    className="mt-n2 ml-2"
+                    disabled={formik.isSubmitting}
+                    control={
+                      <Checkbox
+                        checked={formik.values.options?.showAsCheckbox}
                         onChange={({ target }) =>
-                          onOptionChange({
-                            selectOptions: formik.values.options?.selectOptions?.map((m, i) =>
-                              i === index ? target.value : m,
-                            ),
-                          })
+                          onOptionChange({ showAsCheckbox: target.checked })
                         }
-                        endAdornment={
-                          <InputAdornment position="end">
-                            <IconButton
-                              aria-label="delete"
-                              onClick={() =>
-                                onOptionChange({
-                                  selectOptions: formik.values.options?.selectOptions?.filter(
-                                    (m, i) => i !== index,
-                                  ),
-                                })
-                              }
-                              edge="end"
-                              size="large"
-                            >
-                              <DeleteIcon />
-                            </IconButton>
-                          </InputAdornment>
-                        }
-                        // labelWidth={65}
+                        name="showAsCheckbox"
+                        color="primary"
                       />
-                    </FormControl>
-                  ))}
-                </div>
+                    }
+                    label="Show as checkbox"
+                  />
+                  <div className="mb-3">
+                    <FormLabel>
+                      Select Options
+                      <Tooltip title="Add New Option">
+                        <IconButton
+                          color="primary"
+                          onClick={() =>
+                            onOptionChange({
+                              selectOptions:
+                                formik.values.options?.selectOptions?.length > 0
+                                  ? [...formik.values?.options?.selectOptions, '']
+                                  : [''],
+                            })
+                          }
+                        >
+                          <AddCircleIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </FormLabel>
+                    {formik.values.options?.selectOptions?.map((option, index) => (
+                      <FormControl
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        key={index}
+                        className="mt-2"
+                      >
+                        <InputLabel htmlFor={`outlined-adornment-${index + 1}`}>
+                          Option {index + 1}*
+                        </InputLabel>
+                        <OutlinedInput
+                          id={`outlined-adornment-${index + 1}`}
+                          type={formik.values?.fieldType === 'number' ? 'number' : 'text'}
+                          error={!option}
+                          value={option}
+                          onChange={({ target }) =>
+                            onOptionChange({
+                              selectOptions: formik.values.options?.selectOptions?.map((m, i) =>
+                                i === index ? target.value : m,
+                              ),
+                            })
+                          }
+                          endAdornment={
+                            <InputAdornment position="end">
+                              <IconButton
+                                aria-label="delete"
+                                onClick={() =>
+                                  onOptionChange({
+                                    selectOptions: formik.values.options?.selectOptions?.filter(
+                                      (m, i) => i !== index,
+                                    ),
+                                  })
+                                }
+                                edge="end"
+                                size="large"
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            </InputAdornment>
+                          }
+                          // labelWidth={65}
+                        />
+                      </FormControl>
+                    ))}
+                  </div>
+                </>
               )}
             </>
           )}

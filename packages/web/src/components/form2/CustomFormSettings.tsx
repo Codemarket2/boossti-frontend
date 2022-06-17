@@ -14,7 +14,7 @@ import BackdropComponent from '../common/Backdrop';
 import ShopifySettings from './shopify/ShopifySettings';
 
 interface IProps {
-  isSection?: boolean;
+  isWidget?: boolean;
   fields: any;
   formId: string;
   open: boolean;
@@ -25,7 +25,7 @@ interface IProps {
 }
 
 export default function CustomFormSettings({
-  isSection = false,
+  isWidget = false,
   fields,
   formId,
   open,
@@ -113,7 +113,7 @@ export default function CustomFormSettings({
               formId={formId}
               settings={settings}
               onChange={(val) => onSettingsChange({ ...settings, ...val })}
-              isSection={isSection}
+              isWidget={isWidget}
               state={state}
             />
           )}
