@@ -5,6 +5,8 @@ export interface IForm {
 }
 
 export interface IFieldOptions {
+  physicalQuantity: string;
+  unit: string;
   default: boolean;
   selectItem: boolean;
   showOptionCreatedByUser: boolean;

@@ -14,23 +14,29 @@ export const validateValue = (validate: boolean, value: any, field: Field): IRet
   let result = { error: false, errorMessage: '' };
   const { options, fieldType } = field;
 
-  if (!validate) {
+  if (!validate || !options?.required) {
     return result;
   }
 
-  if (options?.required && !value) {
+  if (!value) {
     return { error: true, errorMessage: 'Required' };
   }
 
   switch (fieldType) {
     case 'number': {
-      if (options?.required && !value?.valueNumber) {
+      if (!value?.valueNumber) {
+        result = { error: true, errorMessage: 'Required' };
+      }
+      break;
+    }
+    case 'unitQuantity': {
+      if (!value?.valueNumber || !value?.options?.unit) {
         result = { error: true, errorMessage: 'Required' };
       }
       break;
     }
     case 'email': {
-      if (options?.required && !value?.value) {
+      if (!value?.value) {
         result = { error: true, errorMessage: 'Required' };
       } else if (value?.value && !validateEmail(value?.value)) {
         result = { error: true, errorMessage: 'Invalid Email' };
@@ -38,7 +44,7 @@ export const validateValue = (validate: boolean, value: any, field: Field): IRet
       break;
     }
     case 'phoneNumber': {
-      if (options?.required && !value?.valueNumber) {
+      if (!value?.valueNumber) {
         result = { error: true, errorMessage: 'Required' };
       } else if (value?.valueNumber && !(value?.valueNumber?.toString().length >= 11)) {
         result = { error: true, errorMessage: 'Invalid Phone Number' };
@@ -46,32 +52,32 @@ export const validateValue = (validate: boolean, value: any, field: Field): IRet
       break;
     }
     case 'boolean': {
-      if (options?.required && !value?.valueBoolean) {
+      if (!value?.valueBoolean) {
         result = { error: true, errorMessage: 'Required' };
       }
       break;
     }
     case 'date':
     case 'dateTime': {
-      if (options?.required && !value?.valueDate) {
+      if (!value?.valueDate) {
         result = { error: true, errorMessage: 'Required' };
       }
       break;
     }
     case 'image': {
-      if (options?.required && !(value?.tempMedia?.length > 0)) {
+      if (!(value?.tempMedia?.length > 0)) {
         result = { error: true, errorMessage: 'Required' };
       }
       break;
     }
     case 'media': {
-      if (options?.required && !value?.valueDate) {
+      if (!value?.valueDate) {
         result = { error: true, errorMessage: 'Required' };
       }
       break;
     }
     case 'response': {
-      if (options?.required && !value?.response?._id) {
+      if (!value?.response?._id) {
         result = { error: true, errorMessage: 'Required' };
       }
       break;
@@ -80,19 +86,19 @@ export const validateValue = (validate: boolean, value: any, field: Field): IRet
     //   const optionsTemplate = options?.optionsTemplate || value?.options?.optionsTemplate;
     //   if (
     //     optionsTemplate === 'template' &&
-    //     options?.required &&
+    //
     //     ((!field?.template && !value?.template) || (field?.template && !value?.page))
     //   ) {
     //     result = { error: true, errorMessage: 'Required' };
     //   } else if (
     //     optionsTemplate === 'response' &&
-    //     options?.required &&
+    //
     //     ((!field?.form && !value?.form) || (field?.form && !value?.response))
     //   ) {
     //     result = { error: true, errorMessage: 'Required' };
     //   } else if (
     //     !['template', 'response'].includes(optionsTemplate) &&
-    //     options?.required &&
+    //
     //     !value?.value
     //   ) {
     //     if (options?.showAsCheckbox && value?.values?.length > 0) {
@@ -104,7 +110,7 @@ export const validateValue = (validate: boolean, value: any, field: Field): IRet
     //   break;
     // }
     default: {
-      if (options?.required && !value?.value) {
+      if (!value?.value) {
         result = { error: true, errorMessage: 'Required' };
       }
       break;

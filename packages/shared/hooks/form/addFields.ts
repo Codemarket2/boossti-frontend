@@ -34,6 +34,8 @@ const validationSchema = yup.object().shape({
 });
 
 const defaultOptions: IFieldOptions = {
+  physicalQuantity: '',
+  unit: '',
   default: false,
   selectItem: false,
   showOptionCreatedByUser: false,

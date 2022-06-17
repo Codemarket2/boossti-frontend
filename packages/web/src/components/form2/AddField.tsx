@@ -18,6 +18,7 @@ import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import { useAddFields } from '@frontend/shared/hooks/form';
+import { quantities } from '@frontend/shared/utils/quantities';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
 import { onAlert } from '../../utils/alert';
@@ -158,6 +159,66 @@ export default function AddField({
           onChange={(newValue) => onOptionChange({ staticText: newValue })}
         />
       )}
+      {formik?.values?.fieldType === 'unitQuantity' && (
+        <>
+          <InputGroup>
+            <FormControl
+              variant="outlined"
+              fullWidth
+              size="small"
+              error={Boolean(!formik.values.options?.physicalQuantity)}
+            >
+              <InputLabel id="physical-quantity-select-outlined-label">
+                Physical Quantity*
+              </InputLabel>
+              <Select
+                labelId="physical-quantity-select-outlined-label"
+                id="physical-quantity-select-outlined"
+                name="physicalQuantity"
+                value={formik.values.options?.physicalQuantity}
+                onChange={({ target }) =>
+                  onOptionChange({ physicalQuantity: target.value, unit: '' })
+                }
+                label="Physical Quantity*"
+              >
+                {Object.keys(quantities)?.map((physicalQuantity, i) => (
+                  <MenuItem value={physicalQuantity} key={i}>
+                    {physicalQuantity}
+                  </MenuItem>
+                ))}
+              </Select>
+              {!formik.values.options?.physicalQuantity && (
+                <FormHelperText className="text-danger">Required</FormHelperText>
+              )}
+            </FormControl>
+          </InputGroup>
+          {formik.values.options?.physicalQuantity && (
+            <InputGroup>
+              <FormControl variant="outlined" fullWidth size="small">
+                <InputLabel id="unit-select-outlined-label">Unit</InputLabel>
+                <Select
+                  labelId="unit-select-outlined-label"
+                  id="unit-select-outlined"
+                  name="unit"
+                  value={formik.values.options?.unit}
+                  onChange={({ target }) => onOptionChange({ unit: target.value })}
+                  label="Unit"
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  {quantities?.[formik.values.options?.physicalQuantity]?.map((unit, i) => (
+                    <MenuItem value={unit} key={i}>
+                      {unit}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </InputGroup>
+          )}
+        </>
+      )}
+
       {!isWidget && !isWidgetForm && !['label', 'template'].includes(formik.values.fieldType) && (
         <>
           <FormControlLabel

@@ -32,6 +32,7 @@ import { onAlert } from '../../utils/alert';
 
 import 'react-phone-input-2/lib/style.css';
 import Response from '../response/Response';
+import UnitQuantityInput from './UnitQuantityInput';
 
 interface IProps {
   disabled?: boolean;
@@ -542,6 +543,18 @@ export default function Field({
             onChange={(newValue) => onChange({ field: _id, form: newValue })}
             error={validation.error}
             helperText={validation.errorMessage}
+          />
+        </>
+      );
+    }
+    case 'unitQuantity': {
+      return (
+        <>
+          <UnitQuantityInput
+            value={value}
+            label={label}
+            options={options}
+            onChange={(newValue) => onChange({ field: _id, ...newValue })}
           />
         </>
       );

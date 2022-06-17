@@ -261,19 +261,7 @@ export default function FormFields({
                                 >
                                   <ListItemText
                                     primary={`${field.label}${field?.options?.required ? '*' : ''}`}
-                                    secondary={
-                                      !previewMode &&
-                                      `${field.fieldType} ${
-                                        (['form', 'response'].includes(field?.fieldType) &&
-                                          field?.form?.name) ||
-                                        ''
-                                      }
-                                      ${
-                                        (field?.fieldType === 'template' &&
-                                          field?.template?.title) ||
-                                        ''
-                                      }`
-                                    }
+                                    secondary={!previewMode && getFieldSecondaryText(field)}
                                   />
                                   {!snapshot.isDraggingOver && (
                                     <ListItemSecondaryAction>
@@ -430,3 +418,19 @@ export default function FormFields({
     </Paper>
   );
 }
+
+const getFieldSecondaryText = (field) => {
+  let secondaryText = field?.fieldType;
+
+  if (['form', 'response'].includes(field?.fieldType) && field?.form?.name) {
+    secondaryText += ` ${field?.form?.name}`;
+  } else if (field?.fieldType === 'template' && field?.template?.title) {
+    secondaryText += ` ${field?.template?.title}`;
+  } else if (field?.fieldType === 'unitQuantity' && field?.options?.physicalQuantity) {
+    secondaryText += ` ${field?.options?.physicalQuantity}`;
+    if (field?.options?.unit) {
+      secondaryText += ` ${field?.options?.unit}`;
+    }
+  }
+  return secondaryText;
+};

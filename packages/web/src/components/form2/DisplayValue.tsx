@@ -19,7 +19,11 @@ interface IProps {
   imageAvatar?: boolean;
 }
 
-export default function DisplayValue({ field, value, imageAvatar }: IProps) {
+export default function DisplayValue({ field, value: tempValue, imageAvatar }: IProps) {
+  const value: any = { ...tempValue };
+  if (typeof value?.options === 'string') {
+    value.options = JSON.parse(value?.options);
+  }
   if (
     field?.options?.selectItem &&
     field?.options?.showAsCheckbox &&
@@ -110,6 +114,12 @@ export default function DisplayValue({ field, value, imageAvatar }: IProps) {
     case 'number':
     case 'phoneNumber':
       return <>{value?.valueNumber}</>;
+    case 'unitQuantity':
+      return (
+        <>
+          {value?.valueNumber} {value?.options?.unit}
+        </>
+      );
     case 'boolean':
       return <>{value?.valueBoolean ? 'Yes' : 'No'}</>;
     case 'image':
