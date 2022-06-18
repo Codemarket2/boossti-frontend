@@ -39,6 +39,7 @@ export const fieldTypes: FieldType[] = [
   { label: 'Color Picker', value: 'colorPicker' },
   { label: 'Barcode Scanner', value: 'barcodeScanner' },
   { label: 'Lighthouse Report', value: 'lighthouseReport' },
+  { label: 'Board', value: 'board' },
 ];
 
 export const selectOptionsTypes = [
