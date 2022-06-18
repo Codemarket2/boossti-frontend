@@ -33,6 +33,8 @@ import { onAlert } from '../../utils/alert';
 import 'react-phone-input-2/lib/style.css';
 import Response from '../response/Response';
 import UnitQuantityInput from './UnitQuantityInput';
+import Board from './board/Board';
+import { defaultBoard } from './board/defaultBoard';
 
 interface IProps {
   disabled?: boolean;
@@ -554,7 +556,18 @@ export default function Field({
             value={value}
             label={label}
             options={options}
-            onChange={(newValue) => onChange({ field: _id, ...newValue })}
+            onChange={(newValue) => onChange({ ...newValue })}
+          />
+        </>
+      );
+    }
+    case 'board': {
+      return (
+        <>
+          <Board
+            editMode
+            board={value?.options?.board || defaultBoard}
+            onBoardChange={(board) => onChange({ options: { board } })}
           />
         </>
       );

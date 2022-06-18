@@ -12,6 +12,7 @@ import { ShowResponseLabel } from '../response/ResponseDrawer';
 import ImageList from '../post/ImageList';
 import DisplayFiles from '../fileLibrary/DisplayFiles';
 import { LighthouseReport } from './LighthouseReportRendrer';
+import DisplayBoard from './board/DisplayBoard';
 
 interface IProps {
   field: Partial<IField>;
@@ -166,6 +167,8 @@ export default function DisplayValue({ field, value: tempValue, imageAvatar }: I
           )}
         </>
       );
+    case 'board':
+      return <DisplayBoard board={value?.options?.board} />;
     default:
       return <>{value?.value}</>;
   }

@@ -82,6 +82,12 @@ export const validateValue = (validate: boolean, value: any, field: Field): IRet
       }
       break;
     }
+    case 'board': {
+      if (!value?.options?.board) {
+        result = { error: true, errorMessage: 'Required' };
+      }
+      break;
+    }
     // case 'select': {
     //   const optionsTemplate = options?.optionsTemplate || value?.options?.optionsTemplate;
     //   if (

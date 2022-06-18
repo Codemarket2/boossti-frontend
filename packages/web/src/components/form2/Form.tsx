@@ -37,6 +37,7 @@ import Permissions from './Permissions';
 import AuditLog from '../auditLog/AuditLog';
 import Constraints from './Constraints/Constraints';
 import ShopifySettings from './shopify/ShopifySettings';
+import BoardsTab from './board/BoardsTab';
 
 interface IProps {
   _id: string;
@@ -50,8 +51,9 @@ const tabs = [
   'Actions',
   'Workflows',
   'Responses',
-  'Constraints',
+  'Boards',
   'Activity',
+  'Constraints',
   'Shopify',
 ];
 
@@ -265,6 +267,14 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
                   shopify={state?.settings?.shopify}
                   onShopifyChange={(shopify) =>
                     handleOnChange({ settings: { ...state.settings, shopify } })
+                  }
+                />
+              )}
+              {options.currentTab === 'Boards' && (
+                <BoardsTab
+                  boards={state?.settings?.boards}
+                  onBoardsChange={(boards) =>
+                    handleOnChange({ settings: { ...state.settings, boards } })
                   }
                 />
               )}
