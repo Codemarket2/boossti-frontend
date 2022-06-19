@@ -31,6 +31,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import '../src/assets/css/ckeditor.css';
 import '../src/assets/css/common.css';
+import '../src/components/react-flow/styles.css';
 
 const customsSignInUrl =
   process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : 'https://www.boossti.com/';

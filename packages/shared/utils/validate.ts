@@ -76,6 +76,12 @@ export const validateValue = (validate: boolean, value: any, field: Field): IRet
       }
       break;
     }
+    case 'form': {
+      if (!value?.form?._id) {
+        result = { error: true, errorMessage: 'Required' };
+      }
+      break;
+    }
     case 'response': {
       if (!value?.response?._id) {
         result = { error: true, errorMessage: 'Required' };
