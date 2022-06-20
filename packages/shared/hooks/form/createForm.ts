@@ -1,6 +1,7 @@
 import { useMutation } from '@apollo/client';
 import { CREATE_FORM } from '../../graphql/mutation/form';
 import { IHooksProps } from '../../types/common';
+import { stringifyForm } from './updateForm';
 
 export function useCreateForm({ onAlert }: IHooksProps) {
   const [createMutation, { loading: createLoading }] = useMutation(CREATE_FORM);
@@ -12,7 +13,7 @@ export function useCreateForm({ onAlert }: IHooksProps) {
   ) => {
     try {
       const res = await createMutation({
-        variables: payload,
+        variables: stringifyForm(payload, true),
       });
       if (onSuccess) {
         onSuccess(res?.data?.createForm);

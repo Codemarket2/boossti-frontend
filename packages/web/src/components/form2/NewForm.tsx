@@ -28,7 +28,7 @@ export default function NewForm() {
   const onSave = async (newField) => {
     const field = {
       ...newField,
-      options: JSON.stringify({ ...newField.options, default: true, required: true }),
+      options: { ...newField.options, default: true, required: true },
     };
     delete field?.isWidget;
     if (!state.name) {

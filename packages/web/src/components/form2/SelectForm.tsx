@@ -98,10 +98,10 @@ export default function SelectForm({
         {
           label: 'Field 1',
           fieldType: 'text',
-          options: JSON.stringify({
+          options: {
             required: true,
             default: true,
-          }),
+          },
         },
       ],
     };
