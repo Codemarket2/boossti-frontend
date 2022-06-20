@@ -15,7 +15,13 @@ import { useSelector } from 'react-redux';
 import ErrorLoading from '../common/ErrorLoading';
 import ListHeader2 from '../common/ListHeader2';
 
-export default function FormList(): any {
+interface IProps {
+  hideHeader?: boolean;
+  customLink?: (form: any) => string;
+  selectedForm?: string;
+}
+
+export default function FormList({ hideHeader, customLink, selectedForm }: IProps): any {
   const { data, error, loading, state, setState } = useGetForms({});
   const router = useRouter();
 
@@ -24,6 +30,7 @@ export default function FormList(): any {
   return (
     <>
       <ListHeader2
+        hideBreadcrumbs={hideHeader}
         search={state.search}
         onSearchChange={(newSearch) => setState({ ...state, search: newSearch })}
         searchLoading={loading}
@@ -39,8 +46,8 @@ export default function FormList(): any {
             {data.getForms.data.map((form, i) => (
               <Fragment key={form._id}>
                 {i > 0 && <Divider />}
-                <Link href={`/forms/${form.slug}`}>
-                  <ListItem button>
+                <Link href={customLink ? customLink(form) : `/forms/${form.slug}`}>
+                  <ListItem button selected={form?.slug === selectedForm}>
                     <ListItemText
                       primary={form.name}
                       secondary={`${getUserAttributes(userForm, form.createdBy)?.firstName} ${

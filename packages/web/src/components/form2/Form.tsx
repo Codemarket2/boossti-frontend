@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import Grid from '@mui/material/Grid';
@@ -43,6 +43,7 @@ interface IProps {
   _id: string;
   drawerMode?: boolean;
   onSlugChange?: (newSlug: string) => void;
+  hideFields?: boolean;
 }
 
 const tabs = [
@@ -57,7 +58,7 @@ const tabs = [
   'Shopify',
 ];
 
-export default function Form({ _id, drawerMode = false, onSlugChange }: IProps): any {
+export default function Form({ _id, drawerMode = false, onSlugChange, hideFields }: IProps): any {
   const { error, state, handleOnChange, updateLoading, handleUpdateName } = useUpdateForm({
     onAlert,
     _id,
@@ -74,6 +75,12 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
 
   const router = useRouter();
   const authorized = useAuthorization([state?.createdBy?._id], true);
+
+  useEffect(() => {
+    if (router?.query?.tab) {
+      setOptions({ ...options, currentTab: router?.query?.tab?.toString() });
+    }
+  }, [router?.query?.tab]);
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window?.location?.href);
@@ -180,26 +187,31 @@ export default function Form({ _id, drawerMode = false, onSlugChange }: IProps):
               </div>
             </div>
           )}
-          <Grid container spacing={1} style={{ minHeight: 'calc(100vh - 130px)' }}>
-            <Grid item xs={12} sm={4}>
-              <FormFields
-                fields={state.fields}
-                setFields={(newFields) => handleOnChange({ fields: newFields })}
-                parentFields={state.fields?.map((f) => ({
-                  ...f,
-                  formId: state._id,
-                  label: `${state?.name} - ${f?.label}`,
-                }))}
-              />
-            </Grid>
-            <Grid item xs={12} sm={8}>
+          <Grid container spacing={1}>
+            {!hideFields && (
+              <Grid item xs={12} sm={4}>
+                <FormFields
+                  fields={state.fields}
+                  setFields={(newFields) => handleOnChange({ fields: newFields })}
+                  parentFields={state.fields?.map((f) => ({
+                    ...f,
+                    formId: state._id,
+                    label: `${state?.name} - ${f?.label}`,
+                  }))}
+                />
+              </Grid>
+            )}
+            <Grid item xs={12} sm={hideFields ? 12 : 8}>
               <Paper variant="outlined">
                 <Tabs
                   variant="scrollable"
                   value={options.currentTab}
                   indicatorColor="primary"
                   textColor="primary"
-                  onChange={(event, newValue) => setOptions({ ...options, currentTab: newValue })}
+                  onChange={(event, newValue) => {
+                    router.query.tab = newValue;
+                    router.push(router);
+                  }}
                 >
                   {tabs.map((label) => (
                     <Tab key={label} label={label} value={label} />

@@ -14,6 +14,7 @@ interface IProps {
   handleAddNew?: () => void;
   addNewLoading?: boolean;
   buttons?: ReactNode;
+  hideBreadcrumbs?: boolean;
 }
 
 export default function ListHeader2({
@@ -24,10 +25,11 @@ export default function ListHeader2({
   addNewLoading,
   children,
   buttons,
+  hideBreadcrumbs = false,
 }: IProps): any {
   return (
     <div className="d-sm-flex justify-content-between align-items-center">
-      <Breadcrumbs>{children}</Breadcrumbs>
+      {!hideBreadcrumbs && <Breadcrumbs>{children}</Breadcrumbs>}
       <div className="d-flex justify-content-between align-items-center my-1">
         <TextField
           size="small"
