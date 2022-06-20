@@ -1,3 +1,4 @@
+import { Close } from '@mui/icons-material';
 import AddCircle from '@mui/icons-material/AddCircle';
 import {
   Button,
@@ -35,15 +36,6 @@ export default function BoardsTab({ boards = [], onBoardsChange }: IProps) {
     setState({ ...state, selectedBoard: newBoard });
   };
 
-  const handleSave = () => {
-    onBoardsChange(
-      boards?.map((board) =>
-        board?._id === state.selectedBoard?._id ? state.selectedBoard : board,
-      ),
-    );
-    setState(initialState);
-  };
-
   const handleDelete = (_id) => {
     onBoardsChange(boards?.filter((board) => board?._id !== _id));
   };
@@ -53,23 +45,33 @@ export default function BoardsTab({ boards = [], onBoardsChange }: IProps) {
       {state.selectedBoard ? (
         <div className="p-1">
           <InputGroup>
-            <Button size="small" variant="contained" onClick={handleSave}>
-              Save
-            </Button>
             <Button
+              startIcon={<Close />}
               size="small"
-              variant="outlined"
+              color="error"
               onClick={() => setState(initialState)}
               className="ml-2"
             >
-              Cancel
+              Close
             </Button>
           </InputGroup>
-          <Board
-            editMode
-            board={state.selectedBoard}
-            onBoardChange={(selectedBoard) => setState({ ...state, selectedBoard })}
-          />
+          {boards?.find((board) => board?._id === state.selectedBoard?._id) ? (
+            <Board
+              editMode
+              board={boards?.find((board) => board?._id === state.selectedBoard?._id)}
+              onBoardChange={(newBoard) =>
+                onBoardsChange(
+                  boards?.map((board) =>
+                    board?._id === state.selectedBoard?._id ? newBoard : board,
+                  ),
+                )
+              }
+            />
+          ) : (
+            <Typography textAlign="center" color="error">
+              Board not found, maybe was delete by other user
+            </Typography>
+          )}
         </div>
       ) : (
         <>
@@ -84,7 +86,7 @@ export default function BoardsTab({ boards = [], onBoardsChange }: IProps) {
           <List>
             {boards?.map((board, i) => (
               <ListItem button key={i} onClick={() => setState({ ...state, selectedBoard: board })}>
-                <ListItemText primary={board?.title || 'Board Title'} />
+                <ListItemText primary={`${i + 1}) ${board?.title || 'Board Title'}`} />
                 <ListItemSecondaryAction>
                   <DeleteButton onClick={() => handleDelete(board?._id)} />
                 </ListItemSecondaryAction>

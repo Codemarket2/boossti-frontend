@@ -7,12 +7,6 @@ const defaultItems = [
     description: 'Task description...',
     backgroundColor: '#FCFE7D',
   },
-  // {
-  //   _id: generateObjectId(),
-  //   title: 'Title 2',
-  //   description: 'Second task',
-  //   backgroundColor: '#FCFE7D',
-  // },
 ];
 
 const defaultColumns = {
@@ -30,6 +24,6 @@ const defaultColumns = {
 
 export const defaultBoard = {
   _id: generateObjectId(),
-  title: 'New board',
+  title: 'Board',
   columns: defaultColumns,
 };

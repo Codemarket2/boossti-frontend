@@ -140,6 +140,8 @@ export default function Board({ editMode: tempEditMode = false, board, onBoardCh
         {editMode && (
           <Tooltip title="Add column">
             <IconButton
+              edge="start"
+              size="small"
               color="primary"
               onClick={(event) => setState({ ...initialState, anchorEl: event.currentTarget })}
               disabled={Boolean(state.anchorEl)}
@@ -151,6 +153,8 @@ export default function Board({ editMode: tempEditMode = false, board, onBoardCh
         {(editMode || state.previewMode) && (
           <Tooltip title="Toggle preview mode">
             <IconButton
+              edge="end"
+              size="small"
               onClick={(event) => setState({ ...initialState, previewMode: !state.previewMode })}
               disabled={Boolean(state.anchorEl)}
             >
@@ -242,7 +246,7 @@ export default function Board({ editMode: tempEditMode = false, board, onBoardCh
                   {column.title}
                   {editMode && (
                     <IconButton
-                      color="primary"
+                      size="small"
                       onClick={(event) =>
                         setState({
                           ...initialState,
@@ -253,7 +257,7 @@ export default function Board({ editMode: tempEditMode = false, board, onBoardCh
                       }
                       disabled={Boolean(state.columnMenuAnchor)}
                     >
-                      <MoreHoriz />
+                      <MoreHoriz fontSize="small" />
                     </IconButton>
                   )}
                 </Typography>
@@ -293,13 +297,10 @@ export default function Board({ editMode: tempEditMode = false, board, onBoardCh
                                       className="p-1 mt-1"
                                       style={{
                                         userSelect: 'none',
-                                        // padding: 16,
-                                        // margin: '0 0 8px 0',
                                         minHeight: '50px',
                                         backgroundColor: snapshot2.isDragging
                                           ? '#d3d8db'
                                           : item.backgroundColor || 'white',
-                                        // color: 'white',
                                         ...provided2.draggableProps.style,
                                       }}
                                     >
@@ -308,7 +309,6 @@ export default function Board({ editMode: tempEditMode = false, board, onBoardCh
                                         {editMode && (
                                           <IconButton
                                             size="small"
-                                            color="primary"
                                             onClick={(event) =>
                                               setState({
                                                 ...initialState,
@@ -320,7 +320,7 @@ export default function Board({ editMode: tempEditMode = false, board, onBoardCh
                                             }
                                             disabled={Boolean(state.columnMenuAnchor)}
                                           >
-                                            <MoreHoriz />
+                                            <MoreHoriz fontSize="small" />
                                           </IconButton>
                                         )}
                                       </Typography>
