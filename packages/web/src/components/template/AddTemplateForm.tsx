@@ -17,9 +17,11 @@ export default function AddTemplateForm({ createCallback }: IProps) {
   const [showBackdrop, setShowBackdrop] = useState(false);
   const [title, setTitle] = useState({ value: '', error: false });
 
-  const handleSave = async (widget) => {
+  const handleSave = async (newWidget) => {
     if (title.value) {
       setShowBackdrop(true);
+      const widget = { ...newWidget };
+      delete widget?.isWidget;
       await handleCreate(
         {
           title: title.value,
