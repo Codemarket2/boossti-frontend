@@ -7,8 +7,11 @@ import Collapse from '@mui/material/Collapse';
 import Typography from '@mui/material/Typography';
 import Timeline from '@mui/lab/Timeline';
 import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
-import dynamic from 'next/dynamic';
+// import dynamic from 'next/dynamic';
 import TimelineItem from '@mui/lab/TimelineItem';
+import IconButton from '@mui/material/IconButton';
+import ArrowRight from '@mui/icons-material/ArrowRight';
+import { ArrowDropDown } from '@mui/icons-material';
 import TimelineSeparator from '@mui/lab/TimelineSeparator';
 import { getUserAttributes } from '@frontend/shared/hooks/user/getUserForm';
 import TimelineConnector from '@mui/lab/TimelineConnector';
@@ -17,7 +20,7 @@ import TimelineDot from '@mui/lab/TimelineDot';
 import ErrorLoading from '../common/ErrorLoading';
 import Response from '../response/Response';
 
-const ReactJson = dynamic(() => import('react-json-view'), { ssr: false });
+// const ReactJson = dynamic(() => import('react-json-view'), { ssr: false });
 
 interface IProps {
   documentId: string;
@@ -67,15 +70,7 @@ const Item = ({ auditLog, userForm }: IProps2) => {
     <TimelineItem>
       <TimelineOppositeContent sx={{ pt: '8px', pb: 3, px: 2 }}>
         <Typography>
-          {auditLog.action} {auditLog.model} by
-          <span className="font-weight-bold">
-            {` ${getUserAttributes(userForm, auditLog?.createdBy)?.firstName} ${
-              getUserAttributes(userForm, auditLog?.createdBy)?.lastName
-            }`}
-          </span>
-        </Typography>
-        <Typography variant="body2" component="span">
-          {moment(auditLog.createdAt).format('lll')}
+          {auditLog.action} {auditLog.model}
         </Typography>
         <Button className="ml-2" size="small" onClick={() => setShowChanges(!showChanges)}>
           {showChanges ? 'Hide' : 'View'} {isCreateResponse ? 'Response' : 'Changes'}
@@ -85,14 +80,29 @@ const Item = ({ auditLog, userForm }: IProps2) => {
             {isCreateResponse ? (
               <Response responseId={JSON.parse(auditLog?.diff)?._id} hideBreadcrumbs />
             ) : (
-              <ReactJson
-                src={JSON.parse(auditLog?.diff)}
-                name={auditLog?.model?.toLowerCase()}
-                enableClipboard={false}
-              />
+              <>
+                {/* <DisplayDiff value={JSON.parse(auditLog?.diff)} initial level={1} /> */}
+                {Object.keys(JSON.parse(auditLog?.diff) || {})?.map((key, index) => (
+                  <DisplayDiff
+                    objectKey={key}
+                    value={JSON.parse(auditLog?.diff)[key]}
+                    key={index}
+                    level={1}
+                  />
+                ))}
+              </>
             )}
           </Collapse>
         )}
+        <Typography className="mt-1">
+          by
+          <span className="font-weight-bold">
+            {` ${getUserAttributes(userForm, auditLog?.createdBy)?.firstName} ${
+              getUserAttributes(userForm, auditLog?.createdBy)?.lastName
+            }`}
+          </span>
+          <Typography component="span">{` ${moment(auditLog.createdAt).format('lll')}`}</Typography>
+        </Typography>
       </TimelineOppositeContent>
       <TimelineSeparator>
         <TimelineDot />
@@ -100,4 +110,73 @@ const Item = ({ auditLog, userForm }: IProps2) => {
       </TimelineSeparator>
     </TimelineItem>
   );
+};
+
+const DisplayDiff = ({
+  objectKey,
+  value,
+  initial,
+  level,
+}: {
+  value: any;
+  objectKey?: string;
+  initial?: boolean;
+  level: number;
+}) => {
+  const [expand, setExpand] = useState(false);
+  if (objectKey === 'updatedAt') {
+    return null;
+  }
+  if (typeof value === 'object') {
+    if (Array.isArray(value)) {
+      return (
+        <>
+          {objectKey && (
+            <Typography fontWeight="bold" className="mt-1">
+              {objectKey}
+              <IconButton size="small" edge="end" onClick={() => setExpand(!expand)}>
+                {expand ? <ArrowDropDown /> : <ArrowRight />}
+              </IconButton>
+            </Typography>
+          )}
+          {expand && (
+            <div className="ml-3">
+              {value?.map((v, i) => (
+                <DisplayDiff key={i} value={v} level={level + 1} objectKey={`${i + 1})`} />
+              ))}
+            </div>
+          )}
+        </>
+      );
+    }
+    return (
+      <>
+        {objectKey && (
+          <Typography fontWeight="bold" className="mt-1">
+            {objectKey}
+            <IconButton size="small" edge="end" onClick={() => setExpand(!expand)}>
+              {expand ? <ArrowDropDown /> : <ArrowRight />}
+            </IconButton>
+          </Typography>
+        )}
+        {expand && (
+          <div className={initial ? '' : 'ml-3'}>
+            {Object.keys(value || {})?.map((key, index) => (
+              <DisplayDiff objectKey={key} value={value[key]} key={index} level={level + 1} />
+            ))}
+          </div>
+        )}
+      </>
+    );
+  }
+  if (['string', 'number', 'boolean'].includes(typeof value)) {
+    return (
+      <div className="mt-1">
+        <Typography>
+          <b>{objectKey}</b> - {typeof value === 'string' ? value || '""' : `${value}`}
+        </Typography>
+      </div>
+    );
+  }
+  return <Typography>{objectKey} - NA</Typography>;
 };
