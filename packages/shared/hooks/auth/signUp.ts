@@ -63,7 +63,7 @@ export function useSignUp({ onAlert = () => null }: ISignUpArgs) {
         attributes: {
           email,
           name,
-          picture: projectConfig.defaultProfile,
+          // picture: projectConfig.defaultProfile,
         },
       });
       // formik.handleReset('');
