@@ -1,5 +1,5 @@
 {
-  "projectName": "boossti",
+  "projectName": "vijaa",
   "version": "3.1",
   "frontend": "javascript",
   "javascript": {
@@ -11,7 +11,5 @@
       "StartCommand": "npm run-script start"
     }
   },
-  "providers": [
-    "awscloudformation"
-  ]
+  "providers": ["awscloudformation"]
 }

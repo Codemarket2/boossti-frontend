@@ -4,3 +4,6 @@ myNextApplication:
     timeout:
       defaultLambda: 30
       imageLambda: 30
+    build:
+      env:
+        NEXT_PUBLIC_GRAPHQL_URL: https://example.cloudfront.net
