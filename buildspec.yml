@@ -9,8 +9,8 @@ phases:
   pre_build:
     commands:
       # - yarn web:test
-      - aws s3 sync s3://boossti-codepipeline-artifacts/boossti/$STAGE/.serverless packages/web/.serverless --delete
-      - echo "STAGE=$STAGE\nNEXT_PUBLIC_GRAPHQL_ENDPOINT=$GRAPHQL_ENDPOINT\nNEXT_PUBLIC_GRAPHQL_APIKEY=$GRAPHQL_APIKEY\nNEXT_PUBLIC_ONE_SIGNAL_APP_ID=$ONE_SIGNAL_APP_ID\nNEXT_PUBLIC_REDIRECT_URL=$REDIRECT_URL\nNEXT_PUBLIC_USER_FORM_SLUG=users\nNEXT_PUBLIC_SHOPIFY_PRODUCT_FAVORITE_TEMPLATE=shopify-product-favorite-app-2" > ./packages/web/.env.production
+      - aws s3 sync s3://boossti-codepipeline-artifacts/boossti/${CODEBUILD_INITIATOR#*codepipeline/}/.serverless packages/web/.serverless --delete
+      - echo "STAGE=${CODEBUILD_INITIATOR#*codepipeline/}\nNEXT_PUBLIC_GRAPHQL_ENDPOINT=$GRAPHQL_ENDPOINT\nNEXT_PUBLIC_GRAPHQL_APIKEY=$GRAPHQL_APIKEY\nNEXT_PUBLIC_ONE_SIGNAL_APP_ID=$ONE_SIGNAL_APP_ID\nNEXT_PUBLIC_REDIRECT_URL=$REDIRECT_URL\nNEXT_PUBLIC_USER_FORM_SLUG=users\nNEXT_PUBLIC_SHOPIFY_PRODUCT_FAVORITE_TEMPLATE=shopify-product-favorite-app-2" > ./packages/web/.env.production
       # - yarn web:storybook:build
       - echo Build completed on `date`
   build:
@@ -19,5 +19,5 @@ phases:
 
   post_build:
     commands:
-      - aws s3 sync packages/web/.serverless s3://boossti-codepipeline-artifacts/boossti/$STAGE/.serverless --delete
+      - aws s3 sync packages/web/.serverless s3://boossti-codepipeline-artifacts/boossti/${CODEBUILD_INITIATOR#*codepipeline/}/.serverless --delete
       - echo Deploy completed on `date`
