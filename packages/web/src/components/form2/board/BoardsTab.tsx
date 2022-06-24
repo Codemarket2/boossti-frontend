@@ -1,3 +1,4 @@
+import { generateObjectId } from '@frontend/shared/utils/objectId';
 import { Close } from '@mui/icons-material';
 import AddCircle from '@mui/icons-material/AddCircle';
 import {
@@ -30,7 +31,7 @@ export default function BoardsTab({ boards = [], onBoardsChange }: IProps) {
   const [state, setState] = useState(initialState);
 
   const handleAddBoard = () => {
-    const newBoard = defaultBoard;
+    const newBoard = { ...defaultBoard, _id: generateObjectId() };
     const newBoards = [...boards, newBoard];
     onBoardsChange(newBoards);
     setState({ ...state, selectedBoard: newBoard });

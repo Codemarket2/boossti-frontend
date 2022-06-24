@@ -54,7 +54,7 @@ export default function SignUpForm() {
 
   return (
     <>
-      <form onSubmit={formik.handleSubmit} data-testid="signup-form">
+      {/* <form onSubmit={formik.handleSubmit} data-testid="signup-form">
         <InputGroup>
           <TextField
             fullWidth
@@ -110,7 +110,7 @@ export default function SignUpForm() {
             Sign Up
           </LoadingButton>
         </InputGroup>
-      </form>
+      </form> */}
       <>
         <FormPage
           slug="users"
