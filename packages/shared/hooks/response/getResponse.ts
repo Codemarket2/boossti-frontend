@@ -22,6 +22,7 @@ interface IProps {
   templateId?: string;
   templateDefaultWidgetResponseId?: string;
   search?: string;
+  valueFilter?: any;
 }
 
 export function useGetResponses({
@@ -32,24 +33,42 @@ export function useGetResponses({
   templateId,
   templateDefaultWidgetResponseId,
   search = null,
+  valueFilter,
 }: IProps) {
-  const [subsribed, setSubsribed] = useState(false);
+  const [subscribed, setSubscribed] = useState(false);
   const [state, setState] = useState({
     ...defaultQueryVariables,
     showSearch: false,
     formField,
   });
 
+  let filter;
+  if (search || state.search) {
+    let templateFilter = {};
+    const searchValue = search || state.search;
+    if (valueFilter) {
+      templateFilter = {
+        $and: [{ ...valueFilter }, { 'values.value': { $regex: searchValue, $options: 'i' } }],
+      };
+    } else {
+      templateFilter = { 'values.value': { $regex: searchValue, $options: 'i' } };
+    }
+    filter = JSON.stringify(templateFilter);
+  } else if (valueFilter) {
+    filter = JSON.stringify(valueFilter);
+  }
+
   const { data, error, loading, subscribeToMore, refetch } = useQuery(GET_RESPONSES, {
     variables: {
       ...state,
-      search: search || state.search,
-      formField: formField || state.formField,
+      // search: search || state.search,
+      // formField: formField || state.formField,
       formId,
       workFlowFormResponseParentId,
       onlyMy,
       templateId,
       templateDefaultWidgetResponseId,
+      valueFilter: filter,
     },
     fetchPolicy: 'cache-and-network',
   });
@@ -61,8 +80,8 @@ export function useGetResponses({
   };
 
   useEffect(() => {
-    if (!subsribed) {
-      setSubsribed(true);
+    if (!subscribed) {
+      setSubscribed(true);
       subscribeToMore({
         document: RESPONSE_SUB,
         variables: {

@@ -1,8 +1,9 @@
+/* eslint-disable react/destructuring-assignment */
 import { useGetForm, useGetFormBySlug } from '@frontend/shared/hooks/form';
+import { ISystemValues } from '@frontend/shared/hooks/response/calculateSystemValues';
 import ErrorLoading from '../common/ErrorLoading';
 import NotFound from '../common/NotFound';
 import FormView from './FormView';
-// import { StyledFormView } from './StyledFormView';
 
 interface ISettings {
   widgetType?: 'both' | 'form' | 'response';
@@ -23,6 +24,9 @@ interface IFormPage {
   createCallback?: (response: any) => void;
   isPageOwner?: boolean;
   workFlowFormResponseParentId?: string;
+  isAuthorized?: boolean;
+  systemValues?: ISystemValues;
+  valueFilter?: any;
 }
 
 interface IProps extends IFormPage {
@@ -39,6 +43,9 @@ export const FormPage = ({
   createCallback,
   isPageOwner,
   workFlowFormResponseParentId,
+  isAuthorized,
+  systemValues,
+  valueFilter,
 }: IProps) => {
   const { data, error } = useGetFormBySlug(slug);
 
@@ -65,13 +72,14 @@ export const FormPage = ({
       createCallback={createCallback}
       isPageOwner={isPageOwner}
       workFlowFormResponseParentId={workFlowFormResponseParentId}
+      systemValues={systemValues}
+      valueFilter={valueFilter}
     />
   );
 };
 
 interface IFormPageByIdProps extends IFormPage {
   _id: string;
-  isAuthorized?: boolean;
 }
 
 export const FormPageById = ({
@@ -85,6 +93,8 @@ export const FormPageById = ({
   createCallback,
   isPageOwner,
   workFlowFormResponseParentId,
+  systemValues,
+  valueFilter,
 }: IFormPageByIdProps) => {
   const { data, error } = useGetForm(_id);
 
@@ -112,6 +122,20 @@ export const FormPageById = ({
       createCallback={createCallback}
       isPageOwner={isPageOwner}
       workFlowFormResponseParentId={workFlowFormResponseParentId}
+      systemValues={systemValues}
+      valueFilter={valueFilter}
     />
   );
+};
+
+interface IDisplayFormProps extends IFormPage {
+  slug?: string;
+  _id?: string;
+}
+
+export const DisplayForm = (props: IDisplayFormProps) => {
+  if (props._id) {
+    return <FormPageById {...props} _id={props._id} />;
+  }
+  return <FormPage {...props} slug={props.slug} />;
 };

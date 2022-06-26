@@ -51,12 +51,14 @@ export default function DisplayValue({ field, value: tempValue, imageAvatar }: I
     case 'response':
       return <ShowResponseLabel formField={field.options?.formField} response={value?.response} />;
     case 'form':
-      return (
+      return value?.form?.name ? (
         <Link href={`/forms/${slugify(value?.form?.name, { lower: true })}`}>
           <a>
             <Typography color="primary">{value?.form?.name}</Typography>
           </a>
         </Link>
+      ) : (
+        <Typography>NA</Typography>
       );
     // case 'select': {
     //   let optionsTemplate = field.options?.optionsTemplate || value?.options?.optionsTemplate;

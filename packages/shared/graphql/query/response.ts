@@ -124,6 +124,7 @@ export const GET_RESPONSES = gql`
     $search: String
     $formField: ID
     $onlyMy: Boolean
+    $valueFilter: AWSJSON
   ) {
     getResponses(
       formId: $formId
@@ -135,6 +136,7 @@ export const GET_RESPONSES = gql`
       search: $search
       formField: $formField
       onlyMy: $onlyMy
+      valueFilter: $valueFilter
     ) {
       count
       data {

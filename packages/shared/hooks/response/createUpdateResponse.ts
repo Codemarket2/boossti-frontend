@@ -4,12 +4,13 @@ import { CREATE_RESPONSE, UPDATE_RESPONSE } from '../../graphql/mutation/respons
 import { IHooksProps } from '../../types/common';
 import { omitTypename } from '../../utils/omitTypename';
 import { stringifyValues } from '../section/updateSection';
-import { calculateSystemValues } from './calculateSystemValues';
+import { calculateSystemValues, ISystemValues } from './calculateSystemValues';
 
 interface IProps extends IHooksProps {
   workFlowFormResponseParentId?: string;
   templateId?: string;
   templateDefaultWidgetResponseId?: string;
+  systemValues?: ISystemValues;
 }
 
 export function useCreateUpdateResponse({
@@ -17,6 +18,7 @@ export function useCreateUpdateResponse({
   workFlowFormResponseParentId,
   templateId,
   templateDefaultWidgetResponseId,
+  systemValues,
 }: IProps) {
   const [createMutation, { loading: createLoading }] = useMutation(CREATE_RESPONSE);
   const [updateMutation, { loading: updateLoading }] = useMutation(UPDATE_RESPONSE);
@@ -32,7 +34,12 @@ export function useCreateUpdateResponse({
   }) => {
     try {
       let payload = { ...tPayload };
-      payload.values = calculateSystemValues({ values: payload?.values, fields, globalState });
+      payload.values = calculateSystemValues({
+        values: payload?.values,
+        fields,
+        globalState,
+        systemValues,
+      });
       payload = {
         ...payload,
         values: stringifyValues(payload.values, true).map((m) =>
@@ -42,7 +49,6 @@ export function useCreateUpdateResponse({
         templateId,
         templateDefaultWidgetResponseId,
       };
-
       let response;
       if (edit) {
         response = await updateMutation({

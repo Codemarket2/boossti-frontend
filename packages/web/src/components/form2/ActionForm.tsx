@@ -24,7 +24,7 @@ import InputGroup from '../common/InputGroup';
 import { onAlert } from '../../utils/alert';
 import RichTextarea from '../common/RichTextarea2';
 import Field from './Field';
-import { defualtValue } from './FormView';
+import { defaultValue } from './FormView';
 
 const filter = createFilterOptions();
 
@@ -1037,7 +1037,7 @@ export default function ActionForm({
                             'fields',
                             formik.values.fields.map((sV, sI) =>
                               sI === variableIndex
-                                ? { ...variable, value: { ...defualtValue, ...newValue } }
+                                ? { ...variable, value: { ...defaultValue, ...newValue } }
                                 : sV,
                             ),
                           )

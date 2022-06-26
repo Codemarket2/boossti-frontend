@@ -14,11 +14,12 @@ import {
 } from '@mui/material';
 import React, { useState } from 'react';
 import DeleteButton from '../../common/DeleteButton';
-import InputGroup from '../../common/InputGroup';
+import { DisplayForm } from '../DisplayForm';
 import Board from './Board';
 import { defaultBoard } from './defaultBoard';
 
 interface IProps {
+  formId: string;
   boards: any[];
   onBoardsChange: (boards: any) => void;
 }
@@ -27,7 +28,7 @@ const initialState = {
   selectedBoard: null,
 };
 
-export default function BoardsTab({ boards = [], onBoardsChange }: IProps) {
+export default function BoardsTab({ formId, boards = [], onBoardsChange }: IProps) {
   const [state, setState] = useState(initialState);
 
   const handleAddBoard = () => {
@@ -42,20 +43,15 @@ export default function BoardsTab({ boards = [], onBoardsChange }: IProps) {
   };
 
   return (
-    <Paper variant="outlined">
-      {state.selectedBoard ? (
+    <Paper variant="outlined" className="p-1">
+      <DisplayForm
+        slug="form-boards"
+        systemValues={{ Form: formId }}
+        settings={{ formView: 'button', buttonLabel: 'Add Board' }}
+        valueFilter={{ 'values.form': formId }}
+      />
+      {/* {state.selectedBoard ? (
         <div className="p-1">
-          <InputGroup>
-            <Button
-              startIcon={<Close />}
-              size="small"
-              color="error"
-              onClick={() => setState(initialState)}
-              className="ml-2"
-            >
-              Close
-            </Button>
-          </InputGroup>
           {boards?.find((board) => board?._id === state.selectedBoard?._id) ? (
             <Board
               editMode
@@ -67,6 +63,7 @@ export default function BoardsTab({ boards = [], onBoardsChange }: IProps) {
                   ),
                 )
               }
+              onClose={() => setState(initialState)}
             />
           ) : (
             <Typography textAlign="center" color="error">
@@ -95,7 +92,7 @@ export default function BoardsTab({ boards = [], onBoardsChange }: IProps) {
             ))}
           </List>
         </>
-      )}
+      )} */}
     </Paper>
   );
 }

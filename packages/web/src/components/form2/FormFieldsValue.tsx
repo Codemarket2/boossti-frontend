@@ -18,7 +18,7 @@ import Overlay from '../common/Overlay';
 import 'react-grid-layout/css/styles.css';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'react-resizable/css/styles.css';
-import { FormPageById } from './FormPage';
+import { DisplayForm } from './DisplayForm';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
@@ -130,7 +130,7 @@ export default function FormFieldsValue({
                   <Typography className="mt-2">{field.label}</Typography>
                   {/* <h1>{JSON.stringify(showViewMore)}</h1> */}
                   {field.form?._id && (
-                    <FormPageById
+                    <DisplayForm
                       _id={field.form?._id}
                       workFlowFormResponseParentId={workFlowFormResponseParentId}
                       // layouts={layouts}
@@ -213,7 +213,7 @@ export default function FormFieldsValue({
                     <>
                       <Typography className="mt-2">{field.label}</Typography>
                       {field.form?._id && (
-                        <FormPageById
+                        <DisplayForm
                           _id={field.form?._id}
                           // layouts={layouts}
                           settings={field?.options?.settings?.active && field?.options?.settings}

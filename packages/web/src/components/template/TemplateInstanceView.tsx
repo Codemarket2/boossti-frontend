@@ -12,7 +12,7 @@ import slugify from 'slugify';
 import Breadcrumbs from '../common/Breadcrumbs';
 import DeleteButton from '../common/DeleteButton';
 import ErrorLoading from '../common/ErrorLoading';
-import { FormPageById } from '../form2/FormPage';
+import { DisplayForm } from '../form2/DisplayForm';
 import { QRButton } from '../qrcode/QRButton';
 import { ResponseChild2 } from '../response/Response';
 import TemplateWidgets from './TemplateWidgets';
@@ -156,7 +156,7 @@ function TemplateInstanceView({ template, response, hideBreadcrumbs }: IProps2) 
             ) : (
               <div>
                 {selectedWidget?.fieldType === 'form' ? (
-                  <FormPageById
+                  <DisplayForm
                     _id={selectedWidget?.form?._id}
                     templateDefaultWidgetResponseId={response?._id}
                     settings={{

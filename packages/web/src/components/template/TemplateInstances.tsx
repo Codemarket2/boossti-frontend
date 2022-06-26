@@ -1,7 +1,7 @@
 import { Card } from '@mui/material';
 import React from 'react';
 import slugify from 'slugify';
-import { FormPage } from '../form2/FormPage';
+import { DisplayForm } from '../form2/DisplayForm';
 
 interface IProps {
   template: any;
@@ -21,7 +21,7 @@ export default function TemplateIntances({ template }: IProps) {
   return (
     <Card variant="outlined" className="p-2">
       {slug && (
-        <FormPage
+        <DisplayForm
           slug={slug}
           settings={{
             ...customSettings,

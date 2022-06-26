@@ -284,6 +284,7 @@ export default function Form({ _id, drawerMode = false, onSlugChange, hideFields
               )}
               {options.currentTab === 'Boards' && (
                 <BoardsTab
+                  formId={state?._id}
                   boards={state?.settings?.boards}
                   onBoardsChange={(boards) =>
                     handleOnChange({ settings: { ...state.settings, boards } })

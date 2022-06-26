@@ -1,5 +1,5 @@
 import Overlay from '../common/Overlay';
-import { FormPageById } from '../form2/FormPage';
+import { DisplayForm } from '../form2/DisplayForm';
 
 interface IProps {
   open: boolean;
@@ -21,7 +21,7 @@ export default function CreateResponseDrawer({
   return (
     <Overlay open={open} onClose={onClose} title={`Create new ${title}`}>
       <div className="p-2">
-        <FormPageById
+        <DisplayForm
           _id={formId}
           createCallback={createCallback}
           templateDefaultWidgetResponseId={templateDefaultWidgetResponseId}

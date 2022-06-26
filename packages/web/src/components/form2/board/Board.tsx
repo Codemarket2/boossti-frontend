@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { generateObjectId } from '@frontend/shared/utils/objectId';
 import {
+  Button,
   Card,
   Dialog,
   IconButton,
@@ -15,8 +16,11 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
+import Edit from '@mui/icons-material/Edit';
+import Close from '@mui/icons-material/Close';
 import BoardForm from './ColumnForm';
 import DisplayRichText from '../../common/DisplayRichText';
+import InputGroup from '../../common/InputGroup';
 
 const onDragEnd = (result, columns, setColumns) => {
   if (!result.destination) return;
@@ -69,9 +73,15 @@ interface IProps {
   board: any;
   onBoardChange?: (board: any) => void;
   editMode?: boolean;
+  onClose?: () => void;
 }
 
-export default function Board({ editMode: tempEditMode = false, board, onBoardChange }: IProps) {
+export default function Board({
+  editMode: tempEditMode = false,
+  board,
+  onBoardChange,
+  onClose,
+}: IProps) {
   const [state, setState] = useState(initialState);
   const editMode = tempEditMode && state.previewMode ? !state.previewMode : tempEditMode;
 
@@ -136,32 +146,57 @@ export default function Board({ editMode: tempEditMode = false, board, onBoardCh
 
   return (
     <div style={{ width: '100%', overflowX: 'scroll' }}>
-      <div className="position-absolute">
-        {editMode && (
-          <Tooltip title="Add column">
-            <IconButton
-              edge="start"
+      <div className="d-flex align-items-center position-absolute">
+        {onClose && (
+          <>
+            <Button
+              startIcon={<Close />}
               size="small"
-              color="primary"
-              onClick={(event) => setState({ ...initialState, anchorEl: event.currentTarget })}
-              disabled={Boolean(state.anchorEl)}
+              color="error"
+              onClick={onClose}
+              className="mr-2"
             >
-              <AddCircle />
-            </IconButton>
-          </Tooltip>
+              Close
+            </Button>
+            <Typography variant="h6">
+              {board.title || 'Title'}
+              {editMode && (
+                <Tooltip title="Edit board title">
+                  <IconButton size="small">
+                    <Edit fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+              )}
+            </Typography>
+          </>
         )}
-        {(editMode || state.previewMode) && (
-          <Tooltip title="Toggle preview mode">
-            <IconButton
-              edge="end"
-              size="small"
-              onClick={(event) => setState({ ...initialState, previewMode: !state.previewMode })}
-              disabled={Boolean(state.anchorEl)}
-            >
-              {state.previewMode ? <VisibilityOff /> : <Visibility />}
-            </IconButton>
-          </Tooltip>
-        )}
+
+        <div className="position-absolut">
+          {editMode && (
+            <Tooltip title="Add column">
+              <IconButton
+                size="small"
+                color="primary"
+                onClick={(event) => setState({ ...initialState, anchorEl: event.currentTarget })}
+                disabled={Boolean(state.anchorEl)}
+              >
+                <AddCircle />
+              </IconButton>
+            </Tooltip>
+          )}
+          {(editMode || state.previewMode) && (
+            <Tooltip title="Toggle preview mode">
+              <IconButton
+                edge="end"
+                size="small"
+                onClick={(event) => setState({ ...initialState, previewMode: !state.previewMode })}
+                disabled={Boolean(state.anchorEl)}
+              >
+                {state.previewMode ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </Tooltip>
+          )}
+        </div>
       </div>
       {editMode && columns.length < 1 && (
         <Typography textAlign="center" className="mt-5">
@@ -230,7 +265,7 @@ export default function Board({ editMode: tempEditMode = false, board, onBoardCh
           )}
         </>
       )}
-      <div className="d-flex">
+      <div className="d-flex mt-5">
         <DragDropContext onDragEnd={(result) => onDragEnd(result, columns, setColumns)}>
           {Object.entries(columns).map(([columnId, column]: any) => {
             return (

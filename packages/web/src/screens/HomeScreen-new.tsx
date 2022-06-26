@@ -15,7 +15,7 @@ import AppBar from '../components/common/AppBar';
 import ErrorLoading from '../components/common/ErrorLoading';
 import FormView from '../components/form2/FormView';
 import NotFound from '../components/common/NotFound';
-import { FormPage } from '../components/form2/FormPage';
+import { DisplayForm } from '../components/form2/DisplayForm';
 
 const PREFIX = 'FormPage';
 const classes = {
@@ -107,7 +107,7 @@ export default function Album() {
                   <Button variant="contained" color="primary" className="m-2">
                     Create Your website performance report
                   </Button>
-                  <FormPage slug="website-performance-report" />
+                  <DisplayForm slug="website-performance-report" />
                 </div>
               </Grid>
               <Grid xs={12} sm={12} md={6} lg={6}>
@@ -143,7 +143,7 @@ export default function Album() {
                   <Button variant="contained" color="primary" className="m-2">
                     Tell Us About Your Project
                   </Button>
-                  <FormPage slug="boossti-interest-form" />
+                  <DisplayForm slug="boossti-interest-form" />
                 </div>
               </Grid>
             </Grid>
@@ -166,15 +166,3 @@ export default function Album() {
     </>
   );
 }
-// export const FormPage = ({ slug }: { slug: string }) => {
-//   const { data, error } = useGetFormBySlug(slug);
-
-//   if (error || !data) {
-//     return <ErrorLoading error={error} />;
-//   }
-
-//   if (!data?.getFormBySlug) {
-//     return <NotFound />;
-//   }
-//   return <StyledFormView form={data.getFormBySlug} />;
-// };

@@ -1,6 +1,7 @@
 import { generateObjectId } from '@frontend/shared/utils/objectId';
+import { IBoard, IBoardItem, IBoardColumns } from './boardType';
 
-const defaultItems = [
+const defaultItems: IBoardItem[] = [
   {
     _id: generateObjectId(),
     title: 'First task',
@@ -9,7 +10,7 @@ const defaultItems = [
   },
 ];
 
-const defaultColumns = {
+const defaultColumns: IBoardColumns = {
   [generateObjectId()]: {
     title: 'To do',
     backgroundColor: '#D3D3D3',
@@ -22,7 +23,7 @@ const defaultColumns = {
   },
 };
 
-export const defaultBoard = {
+export const defaultBoard: IBoard = {
   _id: generateObjectId(),
   title: 'Board',
   columns: defaultColumns,

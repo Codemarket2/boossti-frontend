@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import AuthScreen from '../src/screens/AuthScreen';
 import InitialLoading from '../src/components/common/InitialLoading';
 import UserLayout from '../src/components/common/UserLayout';
-import { FormPage } from '../src/components/form2/FormPage';
 
 interface IProps {
   initial: boolean;

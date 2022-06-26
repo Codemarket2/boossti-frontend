@@ -17,6 +17,7 @@ import { useCreateUpdateResponse } from '@frontend/shared/hooks/response';
 import { validateForm, validateValue } from '@frontend/shared/utils/validate';
 import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
+import { ISystemValues } from '@frontend/shared/hooks/response/calculateSystemValues';
 import ResponseList from '../response/ResponseList';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
@@ -42,9 +43,11 @@ interface IProps {
   isPageOwner?: boolean;
   isTemplateInstance?: string;
   isAuthorized?: boolean;
+  systemValues?: ISystemValues;
+  valueFilter?: any;
 }
 
-export const defualtValue = {
+export const defaultValue = {
   field: '',
   value: '',
   valueNumber: null,
@@ -81,6 +84,8 @@ export default function FormViewWrapper({
   templateDefaultWidgetResponseId,
   isTemplateInstance = '',
   isAuthorized,
+  systemValues,
+  valueFilter,
 }: IProps): any {
   const isAdmin = useSelector(({ auth }: any) => auth?.admin);
   const { handleCreateUpdateResponse, createLoading } = useCreateUpdateResponse({
@@ -88,6 +93,7 @@ export default function FormViewWrapper({
     workFlowFormResponseParentId,
     templateId,
     templateDefaultWidgetResponseId,
+    systemValues,
   });
 
   const showOnlyMyResponses = !(isAdmin || isPageOwner) && form?.settings?.onlyMyResponses;
@@ -98,7 +104,9 @@ export default function FormViewWrapper({
     workFlowFormResponseParentId,
     templateId,
     templateDefaultWidgetResponseId,
+    valueFilter,
   });
+
   const [state, setState] = useState(initialState);
   let authenticated = useSelector(({ auth }: any) => auth.authenticated);
   if (isAuthorized) {
@@ -290,7 +298,7 @@ export default function FormViewWrapper({
                   <div className="text-center">
                     <Button
                       variant="contained"
-                      // color="primary"
+                      className="mb-2"
                       onClick={() => setState({ ...state, formModal: true })}
                     >
                       {form?.settings?.buttonLabel || form?.name}
@@ -396,6 +404,7 @@ export default function FormViewWrapper({
                     templateId={templateId}
                     isTemplateInstance={isTemplateInstance}
                     templateDefaultWidgetResponseId={templateDefaultWidgetResponseId}
+                    valueFilter={valueFilter}
                   />
                 </Overlay>
               )}
@@ -408,6 +417,7 @@ export default function FormViewWrapper({
               templateId={templateId}
               isTemplateInstance={isTemplateInstance}
               templateDefaultWidgetResponseId={templateDefaultWidgetResponseId}
+              valueFilter={valueFilter}
             />
           )}
         </>
@@ -435,7 +445,7 @@ const initialSubmitState = {
 };
 
 export const filterValues = (values, field) => {
-  let newValues = [{ ...defualtValue, field: field._id }];
+  let newValues = [{ ...defaultValue, field: field._id }];
   if (values.some((f) => f.field === field._id)) {
     if (field?.options?.multipleValues) {
       newValues = values.filter((f) => f.field === field._id);
@@ -486,7 +496,7 @@ export function FormView({
   }, [values]);
 
   const onChange = (sValue, valueIndex) => {
-    const newValue = { ...defualtValue, ...sValue };
+    const newValue = { ...defaultValue, ...sValue };
     let newValues = [];
     let changed = false;
     let tempValueIndex = -1;
@@ -551,7 +561,7 @@ export function FormView({
 
   const onAddOneMoreValue = (field) => {
     let newValues = [];
-    const newValue = { ...defualtValue, field: field._id, value: '' };
+    const newValue = { ...defaultValue, field: field._id, value: '' };
     const fieldValues = values.filter((f) => f.field === field._id);
     if (
       fieldValues.length > 0 &&

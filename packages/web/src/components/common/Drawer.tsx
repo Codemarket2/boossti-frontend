@@ -83,6 +83,14 @@ export default function DrawerContent({ showDrawer, toggleDrawer, admin }: IProp
             <ListItemText primary="Forms" />
           </ListItem>
         </Link>
+        <Link href="/feeds">
+          <ListItem button selected={checkActiveRoute(activeRoute, '/feeds')}>
+            <ListItemIcon>
+              <TuneIcon />
+            </ListItemIcon>
+            <ListItemText primary="Feeds" />
+          </ListItem>
+        </Link>
         <Link href="/emails">
           <ListItem button selected={checkActiveRoute(activeRoute, '/emails')}>
             <ListItemIcon>

@@ -40,6 +40,7 @@ interface IProps {
 const globalFields = [
   { label: 'User name', globalState: true, _id: 'userName' },
   { label: 'User email', globalState: true, _id: 'userEmail' },
+  { label: 'props', props: true, _id: 'props' },
 ];
 
 export default function AddField({
@@ -55,7 +56,12 @@ export default function AddField({
     onSave,
   });
 
-  const parentFields = [...tParentFields, ...globalFields];
+  const parentFields = [
+    ...tParentFields,
+    ...globalFields.map((f) =>
+      f.props ? { ...f, label: `props systemValue["${formik.values.label || field?.label}"]` } : f,
+    ),
+  ];
 
   useEffect(() => {
     if (field) {
@@ -492,41 +498,33 @@ export default function AddField({
             label="System calculated & saved"
           />
           {formik.values.options?.systemCalculatedAndSaved && (
-            <InputGroup>
-              <FormControl fullWidth size="small">
-                <InputLabel id="system-value-select-label">System value</InputLabel>
-                <Select
-                  labelId="system-value-select-label"
-                  id="system-value-select"
-                  value={field?.options?.systemValue?.fieldId}
-                  label="System value"
-                  onChange={({ target }) => {
-                    let systemValue = {};
-                    if (globalFields?.find((g) => g._id === target.value)) {
-                      systemValue = {
-                        fieldId: target?.value,
-                        globalState: true,
-                      };
-                    } else {
+            <>
+              <InputGroup>
+                <FormControl fullWidth size="small">
+                  <InputLabel id="system-value-select-label">System value</InputLabel>
+                  <Select
+                    labelId="system-value-select-label"
+                    id="system-value-select"
+                    value={field?.options?.systemValue?._id}
+                    label="System value"
+                    onChange={({ target }) => {
                       const selectedField = parentFields?.find((f) => f?._id === target?.value);
-                      systemValue = {
-                        fieldId: target?.value,
-                        formId: selectedField?.formId,
-                      };
-                    }
-                    onOptionChange({ systemValue });
-                  }}
-                >
-                  {parentFields
-                    ?.filter((f) => f?._id !== field?._id)
-                    ?.map((formField) => (
-                      <MenuItem key={formField?._id} value={formField?._id}>
-                        {formField?.label}
-                      </MenuItem>
-                    ))}
-                </Select>
-              </FormControl>
-            </InputGroup>
+                      if (selectedField?._id) {
+                        onOptionChange({ systemValue: selectedField });
+                      }
+                    }}
+                  >
+                    {parentFields
+                      ?.filter((f) => f?._id !== field?._id)
+                      ?.map((formField) => (
+                        <MenuItem key={formField?._id} value={formField?._id}>
+                          {formField?.label}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+              </InputGroup>
+            </>
           )}
           <div>
             <FormControlLabel

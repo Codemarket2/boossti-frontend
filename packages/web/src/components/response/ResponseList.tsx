@@ -27,6 +27,9 @@ import EditResponseDrawer from './EditResponseDrawer';
 import { DataTable } from './Table';
 import { useSelector } from 'react-redux';
 import ReactDataGrid from './ReactDataGrid';
+import TextField from '@mui/material/TextField';
+import CircularProgress from '@mui/material/CircularProgress';
+import { Search } from '@mui/icons-material';
 
 interface IProps {
   form: any;
@@ -35,6 +38,7 @@ interface IProps {
   templateId?: string;
   templateDefaultWidgetResponseId?: string;
   isTemplateInstance?: string;
+  valueFilter?: any;
 }
 type Direction = 'ltr' | 'rtl';
 
@@ -45,13 +49,15 @@ export default function ResponseList({
   templateId,
   isTemplateInstance,
   templateDefaultWidgetResponseId,
+  valueFilter,
 }: IProps): any {
-  const { data, error, state, setState, refetch, handleUpdateResponse } = useGetResponses({
+  const { data, error, loading, state, setState, refetch, handleUpdateResponse } = useGetResponses({
     formId: form?._id,
     onlyMy: showOnlyMyResponses,
     workFlowFormResponseParentId,
     templateId,
     templateDefaultWidgetResponseId,
+    valueFilter,
   });
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
   const router = useRouter();
@@ -137,15 +143,33 @@ export default function ResponseList({
         </>
       ) : (
         <TableContainer component={Paper} variant="outlined">
-          <TablePagination
-            component="div"
-            rowsPerPageOptions={[10, 25, 50]}
-            count={data?.getResponses?.count || 0}
-            rowsPerPage={state.limit}
-            page={state.page - 1}
-            onPageChange={(e, newPage) => setState({ ...state, page: newPage + 1 })}
-            onRowsPerPageChange={(e) => setState({ ...state, limit: parseInt(e.target.value) })}
-          />
+          <div className="d-flex justify-content-between align-items-center">
+            <TextField
+              className="ml-2"
+              size="small"
+              variant="outlined"
+              label="Search"
+              InputProps={{
+                endAdornment:
+                  state.search && loading ? (
+                    <CircularProgress color="inherit" size={20} />
+                  ) : (
+                    <Search />
+                  ),
+              }}
+              value={state.search}
+              onChange={({ target: { value } }) => setState({ ...state, search: value })}
+            />
+            <TablePagination
+              component="div"
+              rowsPerPageOptions={[10, 25, 50]}
+              count={data?.getResponses?.count || 0}
+              rowsPerPage={state.limit}
+              page={state.page - 1}
+              onPageChange={(e, newPage) => setState({ ...state, page: newPage + 1 })}
+              onRowsPerPageChange={(e) => setState({ ...state, limit: parseInt(e.target.value) })}
+            />
+          </div>
           {error || !data || !data.getResponses ? (
             <Paper variant="outlined" className="p-5">
               <ErrorLoading error={error} />
