@@ -33,3 +33,19 @@ export const getUserAttributes = (userForm, userResponse) => {
   const lastName = userResponse?.values?.find((v) => v?.field === userForm?.lastNameFieldId)?.value;
   return { email, firstName, lastName, _id: userResponse?._id };
 };
+
+export const getUserName = (userForm, userResponse) => {
+  let fullName = '';
+  if (!userResponse?._id) {
+    fullName = 'Unauthorized';
+  } else {
+    const user = getUserAttributes(userForm, userResponse);
+    if (user?.firstName) {
+      fullName = user?.firstName;
+      if (user?.lastName) {
+        fullName += ` ${user?.lastName}`;
+      }
+    }
+  }
+  return fullName;
+};

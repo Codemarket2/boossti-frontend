@@ -45,6 +45,7 @@ export const RESPONSE_SUB = gql`
       }
       createdBy {
         _id
+        count
         values {
           field
           value

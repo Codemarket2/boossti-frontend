@@ -61,6 +61,7 @@ export const CREATE_RESPONSE = gql`
       }
       createdBy {
         _id
+        count
         values {
           field
           value
@@ -104,6 +105,7 @@ export const UPDATE_RESPONSE = gql`
         }
         response {
           _id
+          count
           values {
             field
             value

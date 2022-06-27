@@ -9,7 +9,7 @@ interface IProps {
   onRowChange: (responseId, value) => void;
 }
 
-export default function ReactDataGridWrapper({ form, responses = [], onRowChange }: IProps) {
+export default function Table2Wrapper({ form, responses = [], onRowChange }: IProps) {
   const [state, setState] = useState({
     options: [],
     columns: [],
@@ -50,7 +50,7 @@ export default function ReactDataGridWrapper({ form, responses = [], onRowChange
 
   return (
     <>
-      <ReactDataGrid
+      <Table2
         options={state.options}
         columns={state.columns}
         rows={state.rows}
@@ -67,7 +67,7 @@ interface IProps2 {
   onRowChange: (responseId, value) => void;
 }
 
-function ReactDataGrid({ options, columns, rows, onRowChange }: IProps2) {
+function Table2({ options, columns, rows, onRowChange }: IProps2) {
   const [selectedRows, setSelectedRows] = useState<ReadonlySet<number>>(() => new Set());
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [expandedGroupIds, setExpandedGroupIds] = useState(new Set([]));
