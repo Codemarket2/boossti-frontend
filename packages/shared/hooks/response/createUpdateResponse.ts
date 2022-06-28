@@ -45,17 +45,24 @@ export function useCreateUpdateResponse({
         values: stringifyValues(payload.values, true).map((m) =>
           JSON.parse(JSON.stringify(m), omitTypename),
         ),
+        templates: stringifyTemplates(payload?.templates),
         workFlowFormResponseParentId,
-        templateId,
+        // templateId,
         templateDefaultWidgetResponseId,
       };
       let response;
       if (edit) {
+        if (templateId) {
+          payload = { ...payload, newTemplates: [{ template: templateId }] };
+        }
         response = await updateMutation({
           variables: payload,
         });
         response = response?.data?.updateResponse;
       } else {
+        if (templateId) {
+          payload = { ...payload, templates: [{ template: templateId }] };
+        }
         response = await createMutation({
           variables: payload,
         });
@@ -69,3 +76,13 @@ export function useCreateUpdateResponse({
   };
   return { handleCreateUpdateResponse, createLoading, updateLoading };
 }
+
+const stringifyTemplates = (templates) => {
+  const newTemplates = templates?.map((template) => ({
+    _id: template?._id,
+    template: template?.template,
+    user: template?.user,
+    createdAt: template?.createdAt,
+  }));
+  return newTemplates || [];
+};

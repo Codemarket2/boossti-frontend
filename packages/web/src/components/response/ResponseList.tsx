@@ -15,7 +15,6 @@ interface IProps {
   isTemplateInstance?: string;
   valueFilter?: any;
 }
-type Direction = 'ltr' | 'rtl';
 
 export default function ResponseList({
   form,
@@ -34,7 +33,7 @@ export default function ResponseList({
     templateDefaultWidgetResponseId,
     valueFilter,
   });
-  const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
+  const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert, templateId });
 
   return (
     <>
@@ -84,6 +83,7 @@ export default function ResponseList({
             limit={state.limit}
             onPageChange={(page) => setState({ ...state, page })}
             onLimitChange={(limit) => setState({ ...state, limit })}
+            templateId={templateId}
           />
         </>
       )}

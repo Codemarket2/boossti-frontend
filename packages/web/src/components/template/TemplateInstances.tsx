@@ -26,7 +26,7 @@ export default function TemplateIntances({ template }: IProps) {
           settings={{
             ...customSettings,
             widgetType: 'both',
-            formView: 'button',
+            formView: customSettings?.formView || 'button',
             onlyMyResponses: true,
             buttonLabel: customSettings?.buttonLabel || `Create ${template?.title}`,
             responsesView: 'table',

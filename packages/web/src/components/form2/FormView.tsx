@@ -68,10 +68,16 @@ const initialState = {
   submitted: false,
   messages: [],
   response: null,
-  formModal: false,
-  selectItemValue: null,
-  drawer: false,
-  temp: null,
+  formDrawer: false,
+  responseDrawer: false,
+  selectedResponse: null,
+
+  selectItemAdd: false,
+};
+
+const initialSelectState = {
+  loading: false,
+  selectedFullResponse: null,
 };
 
 export default function FormViewWrapper({
@@ -108,13 +114,12 @@ export default function FormViewWrapper({
   });
 
   const [state, setState] = useState(initialState);
+  const [selectState, setSelectState] = useState(initialSelectState);
   let authenticated = useSelector(({ auth }: any) => auth.authenticated);
   if (isAuthorized) {
     authenticated = isAuthorized;
   }
-  const [showOverlayResult, setShowOverlayResult] = useState(true);
   const [checkNewUser, setCheckNewUser] = useState(true);
-
   const verifyIfUserExist = async (payload) => {
     const { password, email, name } = payload;
     try {
@@ -218,7 +223,7 @@ export default function FormViewWrapper({
         );
       }
       await refetch();
-      setState({ ...state, submitted: true, formModal: false, messages, response });
+      setState({ ...initialState, submitted: true, messages, response });
       if (createCallback) {
         createCallback(response);
       }
@@ -253,31 +258,10 @@ export default function FormViewWrapper({
       )}
       {canSubmit && form?.settings?.widgetType !== 'responses' && (
         <>
-          {state.formModal && (
-            <Overlay
-              open={state.formModal}
-              onClose={() => setState({ ...state, formModal: false })}
-            >
-              <div className="p-2">
-                <FormView
-                  authRequired={form?.settings?.whoCanSubmit !== 'all' && !isAuthorized}
-                  fields={form?.fields}
-                  handleSubmit={handleSubmit}
-                  loading={createLoading}
-                  fieldWiseView={form?.settings?.formView === 'oneField'}
-                  formId={form?._id}
-                  onCancel={() => setState({ ...state, formModal: false })}
-                />
-              </div>
-            </Overlay>
-          )}
           {state.submitted ? (
             <Overlay
-              onClose={() => {
-                setShowOverlayResult(false);
-                setState({ ...state, submitted: false });
-              }}
-              open={showOverlayResult}
+              onClose={() => setState(initialState)}
+              open={state.submitted}
               title="Your submitted response"
             >
               <div className="py-5">
@@ -291,81 +275,78 @@ export default function FormViewWrapper({
             </Overlay>
           ) : (
             <>
+              {state.formDrawer && (
+                <Overlay open={state.formDrawer} onClose={() => setState(initialState)}>
+                  <div className="p-2">
+                    {form?.settings?.formView === 'selectItem' && !state.selectItemAdd ? (
+                      <>
+                        <SelectResponse
+                          label={form?.name}
+                          formId={form?._id}
+                          formField={form?.settings?.selectItemField}
+                          value={state.selectedResponse}
+                          onChange={(selectedResponse: any) =>
+                            setState({ ...state, selectedResponse })
+                          }
+                          onChangeFullResponse={(selectedFullResponse) =>
+                            setSelectState({ ...selectState, selectedFullResponse })
+                          }
+                          openDrawer={() => setState({ ...state, selectItemAdd: true })}
+                          allowCreate
+                        />
+                        <LoadingButton
+                          className="my-2"
+                          size="small"
+                          variant="contained"
+                          color="primary"
+                          loading={createLoading}
+                          onClick={async () => {
+                            if (templateId) {
+                              if (!selectState.selectedFullResponse) {
+                                alert('Please select the response');
+                              } else {
+                                await handleCreateUpdateResponse({
+                                  payload: { ...selectState.selectedFullResponse },
+                                  edit: true,
+                                  fields: form?.fields,
+                                });
+                                await refetch();
+                                setState(initialState);
+                                setSelectState(initialSelectState);
+                              }
+                            }
+                          }}
+                        >
+                          Submit
+                        </LoadingButton>
+                      </>
+                    ) : (
+                      <FormView
+                        authRequired={form?.settings?.whoCanSubmit !== 'all' && !isAuthorized}
+                        fields={form?.fields}
+                        handleSubmit={handleSubmit}
+                        loading={createLoading}
+                        fieldWiseView={form?.settings?.formView === 'oneField'}
+                        formId={form?._id}
+                        onCancel={() => setState(initialState)}
+                      />
+                    )}
+                  </div>
+                </Overlay>
+              )}
               {form?.settings?.formView === 'leaderboard' ? (
                 <Leaderboard formId={form?._id} settings={form?.settings} />
-              ) : form?.settings?.formView === 'button' ? (
+              ) : ['selectItem', 'button'].includes(form?.settings?.formView) ? (
                 <>
                   <div className="text-center">
                     <Button
                       variant="contained"
                       className="mb-2"
-                      onClick={() => setState({ ...state, formModal: true })}
+                      onClick={() => setState({ ...state, formDrawer: true })}
                     >
                       {form?.settings?.buttonLabel || form?.name}
                     </Button>
                   </div>
-                </>
-              ) : form?.settings?.formView === 'selectItem' ? (
-                <>
-                  {/* <SelectItemView
-                    formId={form?.settings?.selectItemForm}
-                    settings={form?.settings}
-                  /> */}
-                  <SelectResponse
-                    label={form?.name}
-                    formId={form?._id}
-                    formField={form?.settings?.selectItemField}
-                    value={state.temp}
-                    onChange={(temp: any) => {
-                      setState({ ...state, temp });
-                    }}
-                    openDrawer={() => setState({ ...state, formModal: true })}
-                  />
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={async () => {
-                      // const responseId = state?.selectItemValue?._id;
-                      // const response = await handleCreateUpdateResponseParent({ _id: responseId });
-                      // if (response) {
-                      //   console.log(response);
-                      // }
-                    }}
-                  >
-                    Submit
-                  </Button>
-
-                  {/* <SelectResponse
-                    label={
-                      form?.fields?.find((fld) => fld._id === form?.settings?.selectItemField)
-                        ?.label
-                    }
-                    formId={form?._id}
-                    formField={form?.settings?.selectItemField}
-                    value={state?.selectItemValue}
-                    onChange={(newValue) => setState({ ...state, selectItemValue: newValue })}
-                    error={
-                      validateValue(true, state, form?.settings, 'form').error ||
-                      !form?.settings?.selectItemField
-                    }
-                    helperText={
-                      validateValue(true, state, form?.settings, 'form').errorMessage ||
-                      (!form?.settings?.selectItemField ? 'Form field not selected' : '')
-                    }
-                  />
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={async () => {
-                      // const responseId = state?.selectItemValue?._id;
-                      // const response = await handleCreateUpdateResponseParent({ _id: responseId });
-                      // if (response) {
-                      //   console.log(response);
-                      // }
-                    }}
-                  >
-                    Submit
-                  </Button> */}
                 </>
               ) : (
                 <FormView
@@ -386,16 +367,19 @@ export default function FormViewWrapper({
           {form?.settings?.responsesView === 'button' ? (
             <>
               <div className="text-center">
-                <Button variant="outlined" onClick={() => setState({ ...state, drawer: true })}>
+                <Button
+                  variant="outlined"
+                  onClick={() => setState({ ...state, responseDrawer: true })}
+                >
                   {`${data?.getResponses?.count} Responses`}
                 </Button>
               </div>
-              {state.drawer && (
+              {state.responseDrawer && (
                 <Overlay
                   minWidth="85vw"
                   title="Responses"
-                  open={state.drawer}
-                  onClose={() => setState({ ...state, drawer: false })}
+                  open={state.responseDrawer}
+                  onClose={() => setState(initialState)}
                 >
                   <ResponseList
                     form={form}

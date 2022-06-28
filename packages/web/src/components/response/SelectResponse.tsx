@@ -19,6 +19,7 @@ interface IProps {
   openDrawer?: any;
   allowCreate?: boolean;
   onlyMyResponses?: boolean;
+  onChangeFullResponse?: (response: any) => void;
 }
 
 const filter = createFilterOptions();
@@ -29,6 +30,7 @@ export default function SelectResponse({
   templateDefaultWidgetResponseId,
   value = null,
   onChange,
+  onChangeFullResponse,
   error = false,
   helperText,
   disabled,
@@ -70,6 +72,12 @@ export default function SelectResponse({
               setAddOption({ ...addOption, showDrawer: true });
             }
           } else {
+            if (onChangeFullResponse) {
+              const response = data?.getResponses?.data?.find((r) => r?._id === newValue?._id);
+              if (response) {
+                onChangeFullResponse(response);
+              }
+            }
             onChange(newValue);
           }
         }}

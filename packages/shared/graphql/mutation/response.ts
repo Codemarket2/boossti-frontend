@@ -3,7 +3,8 @@ import { gql } from '@apollo/client';
 export const CREATE_RESPONSE = gql`
   mutation MyMutation(
     $formId: ID!
-    $templateId: ID
+    $templates: [ResponseTemplateInput]
+    # $templateId: ID
     $templateDefaultWidgetResponseId: ID
     $workFlowFormResponseParentId: ID
     $values: [ValueInput]
@@ -11,7 +12,8 @@ export const CREATE_RESPONSE = gql`
   ) {
     createResponse(
       formId: $formId
-      templateId: $templateId
+      templates: $templates
+      # templateId: $templateId
       templateDefaultWidgetResponseId: $templateDefaultWidgetResponseId
       workFlowFormResponseParentId: $workFlowFormResponseParentId
       values: $values
@@ -20,7 +22,23 @@ export const CREATE_RESPONSE = gql`
       _id
       formId
       count
-      templateId
+      # templateId
+      templates {
+        template {
+          _id
+          title
+          slug
+        }
+        user {
+          _id
+          count
+          values {
+            field
+            value
+          }
+        }
+        createdAt
+      }
       templateDefaultWidgetResponseId
       workFlowFormResponseParentId
       values {
@@ -74,9 +92,30 @@ export const CREATE_RESPONSE = gql`
 `;
 
 export const UPDATE_RESPONSE = gql`
-  mutation MyMutation($_id: ID!, $values: [ValueInput]) {
-    updateResponse(_id: $_id, values: $values) {
+  mutation MyMutation(
+    $_id: ID!
+    $values: [ValueInput]
+    $templates: [ResponseTemplateInput]
+    $newTemplates: [ResponseTemplateInput]
+  ) {
+    updateResponse(_id: $_id, values: $values, templates: $templates, newTemplates: $newTemplates) {
       _id
+      templates {
+        template {
+          _id
+          title
+          slug
+        }
+        user {
+          _id
+          count
+          values {
+            field
+            value
+          }
+        }
+        createdAt
+      }
       values {
         _id
         field
@@ -119,8 +158,8 @@ export const UPDATE_RESPONSE = gql`
 `;
 
 export const DELETE_RESPONSE = gql`
-  mutation MyMutation($_id: ID!) {
-    deleteResponse(_id: $_id)
+  mutation MyMutation($_id: ID!, $templateId: ID) {
+    deleteResponse(_id: $_id, templateId: $templateId)
   }
 `;
 

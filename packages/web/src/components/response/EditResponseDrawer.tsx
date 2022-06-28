@@ -10,10 +10,20 @@ interface IProps {
   response: any;
   open: boolean;
   onClose: () => void;
+  templateId?: string;
 }
 
-export default function EditResponseDrawer({ form, response, open, onClose }: IProps): any {
-  const { handleCreateUpdateResponse, updateLoading } = useCreateUpdateResponse({ onAlert });
+export default function EditResponseDrawer({
+  form,
+  response,
+  open,
+  onClose,
+  templateId,
+}: IProps): any {
+  const { handleCreateUpdateResponse, updateLoading } = useCreateUpdateResponse({
+    onAlert,
+    templateId,
+  });
   const authorized = useAuthorization([response?.createdBy?._id, form?.createdBy?._id], true);
   const handleSubmit = async (values: any[]) => {
     const payload = {
