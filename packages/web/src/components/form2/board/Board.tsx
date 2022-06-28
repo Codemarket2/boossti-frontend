@@ -20,7 +20,6 @@ import Edit from '@mui/icons-material/Edit';
 import Close from '@mui/icons-material/Close';
 import BoardForm from './ColumnForm';
 import DisplayRichText from '../../common/DisplayRichText';
-import InputGroup from '../../common/InputGroup';
 
 const onDragEnd = (result, columns, setColumns) => {
   if (!result.destination) return;
@@ -95,17 +94,20 @@ export default function Board({
   };
 
   const handleDelete = () => {
-    const newColumns = { ...columns };
-    if (state.item?._id) {
-      newColumns[state.columnId] = {
-        ...state.column,
-        items: newColumns[state.columnId]?.items?.filter((item) => item?._id !== state.item?._id),
-      };
-    } else {
-      delete newColumns[state.columnId];
+    const answer = confirm('Are you sure you want to delete?');
+    if (answer) {
+      const newColumns = { ...columns };
+      if (state.item?._id) {
+        newColumns[state.columnId] = {
+          ...state.column,
+          items: newColumns[state.columnId]?.items?.filter((item) => item?._id !== state.item?._id),
+        };
+      } else {
+        delete newColumns[state.columnId];
+      }
+      setColumns(newColumns);
+      setState(initialState);
     }
-    setColumns(newColumns);
-    setState(initialState);
   };
 
   const handleSave = (value) => {
@@ -145,7 +147,7 @@ export default function Board({
   };
 
   return (
-    <div style={{ width: '100%', overflowX: 'scroll' }}>
+    <div style={{ width: '100%', overflowX: 'auto' }}>
       <div className="d-flex align-items-center position-absolute">
         {onClose && (
           <>
@@ -170,8 +172,7 @@ export default function Board({
             </Typography>
           </>
         )}
-
-        <div className="position-absolut">
+        <div>
           {editMode && (
             <Tooltip title="Add column">
               <IconButton
@@ -265,7 +266,7 @@ export default function Board({
           )}
         </>
       )}
-      <div className="d-flex mt-5">
+      <div className={`d-flex ${editMode || state.previewMode ? 'mt-4' : ''}`}>
         <DragDropContext onDragEnd={(result) => onDragEnd(result, columns, setColumns)}>
           {Object.entries(columns).map(([columnId, column]: any) => {
             return (
@@ -277,7 +278,7 @@ export default function Board({
                 }}
                 key={columnId}
               >
-                <Typography variant="h5">
+                <Typography variant="h5" style={{ width: 250 }}>
                   {column.title}
                   {editMode && (
                     <IconButton
@@ -310,7 +311,7 @@ export default function Board({
                             background: snapshot.isDraggingOver
                               ? 'lightblue'
                               : column.backgroundColor || 'lightgrey',
-                            width: 250,
+                            width: 260,
                             minHeight: 250,
                           }}
                         >
@@ -359,7 +360,9 @@ export default function Board({
                                           </IconButton>
                                         )}
                                       </Typography>
-                                      <DisplayRichText value={item.description} />
+                                      <div style={{ width: '100%', overflowX: 'auto' }}>
+                                        <DisplayRichText value={item.description} />
+                                      </div>
                                     </Card>
                                   );
                                 }}

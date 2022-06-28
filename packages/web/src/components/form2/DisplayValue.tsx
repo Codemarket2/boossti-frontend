@@ -18,9 +18,15 @@ interface IProps {
   field: Partial<IField>;
   value: any;
   imageAvatar?: boolean;
+  verticalView?: boolean;
 }
 
-export default function DisplayValue({ field, value: tempValue, imageAvatar }: IProps) {
+export default function DisplayValue({
+  field,
+  value: tempValue,
+  imageAvatar,
+  verticalView,
+}: IProps) {
   const value: any = { ...tempValue };
   if (typeof value?.options === 'string') {
     value.options = JSON.parse(value?.options);
@@ -170,7 +176,7 @@ export default function DisplayValue({ field, value: tempValue, imageAvatar }: I
         </>
       );
     case 'board':
-      return <DisplayBoard board={value?.options?.board} />;
+      return <DisplayBoard board={value?.options?.board} verticalView={verticalView} />;
     default:
       return <>{value?.value}</>;
   }

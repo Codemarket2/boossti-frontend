@@ -80,8 +80,8 @@ export function useCreateUpdateResponse({
 const stringifyTemplates = (templates) => {
   const newTemplates = templates?.map((template) => ({
     _id: template?._id,
-    template: template?.template,
-    user: template?.user,
+    template: template?.template?._id,
+    user: template?.user?._id,
     createdAt: template?.createdAt,
   }));
   return newTemplates || [];

@@ -22,6 +22,7 @@ import TextField from '@mui/material/TextField';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Search } from '@mui/icons-material';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 interface IProps {
   search: string;
@@ -58,6 +59,7 @@ export default function ResponseTable({
 }: IProps) {
   const [selectedResponse, setSelectedResponse] = useState(null);
   const userForm = useSelector(({ setting }: any) => setting.userForm);
+  const router = useRouter();
   return (
     <div>
       <TableContainer component={Paper} variant="outlined">

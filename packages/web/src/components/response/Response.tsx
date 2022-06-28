@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { useGetForm } from '@frontend/shared/hooks/form';
 import { useDeleteResponse, useGetResponse } from '@frontend/shared/hooks/response';
 import { getPage } from '@frontend/shared/hooks/template/pages';
@@ -340,16 +340,15 @@ export function ResponseChild3({
                     {response?.values
                       ?.filter((v) => v.field === field._id)
                       .map((value) => (
-                        <StyledBox
-                          key={value?._id}
-                          style={{ display: 'flex', alignContent: 'center' }}
-                        >
-                          <DisplayValue field={field} value={value} />
+                        <Fragment key={value?._id}>
+                          <StyledBox style={{ display: 'flex', alignContent: 'center' }}>
+                            <DisplayValue field={field} value={value} verticalView />
+                          </StyledBox>
                           {field?.options?.showCommentBox && (
                             <CommentLikeShare parentId={value?._id} />
                           )}
                           {field?.options?.showStarRating && <StarRating parentId={value?._id} />}
-                        </StyledBox>
+                        </Fragment>
                       ))}
                   </div>
                 );
