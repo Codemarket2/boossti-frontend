@@ -224,7 +224,36 @@ export default function AddField({
           )}
         </>
       )}
-
+      {['form', 'response'].includes(formik.values.fieldType) && (
+        <div>
+          <FormControlLabel
+            className="mt-n2"
+            disabled={formik.isSubmitting}
+            control={
+              <Checkbox
+                checked={isDefault || formik.values.options?.dependentRelationship}
+                onChange={({ target }) => onOptionChange({ dependentRelationship: target.checked })}
+                name="dependentRelationship"
+                color="primary"
+              />
+            }
+            label="Dependent relationship"
+          />
+          <FormControlLabel
+            className="mt-n2"
+            disabled={formik.isSubmitting}
+            control={
+              <Checkbox
+                checked={isDefault || formik.values.options?.twoWayRelationship}
+                onChange={({ target }) => onOptionChange({ twoWayRelationship: target.checked })}
+                name="twoWayRelationship"
+                color="primary"
+              />
+            }
+            label="Two way relationship"
+          />
+        </div>
+      )}
       {!isWidget && !isWidgetForm && !['label', 'template'].includes(formik.values.fieldType) && (
         <>
           <FormControlLabel

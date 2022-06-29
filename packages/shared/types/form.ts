@@ -9,6 +9,8 @@ export interface IFieldOptions {
   unit: string;
   default: boolean;
   selectItem: boolean;
+  dependentRelationship: boolean;
+  twoWayRelationship: boolean;
   showOptionCreatedByUser: boolean;
   showOptionCreatedOnTemplate: boolean;
   required: boolean;

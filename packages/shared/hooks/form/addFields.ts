@@ -38,6 +38,8 @@ const defaultOptions: IFieldOptions = {
   unit: '',
   default: false,
   selectItem: false,
+  dependentRelationship: false,
+  twoWayRelationship: false,
   showOptionCreatedByUser: false,
   showOptionCreatedOnTemplate: false,
   required: false,
