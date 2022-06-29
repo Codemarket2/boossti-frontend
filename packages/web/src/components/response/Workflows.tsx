@@ -9,7 +9,7 @@ import FormFieldsValue from '../form2/FormFieldsValue';
 import ResponseSections from './ResponseSection';
 import ErrorLoading from '../common/ErrorLoading';
 
-export default function ResponseLayout({
+export default function Workflow({
   _id,
   parentPageFields = [],
 }: {

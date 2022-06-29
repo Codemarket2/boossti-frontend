@@ -6,10 +6,9 @@ import { IHooksProps } from '../../types/common';
 
 interface IDeleteProps extends IHooksProps {
   _id?: string;
-  templateId?: string;
 }
 
-export function useDeleteResponse({ onAlert, templateId }: IDeleteProps) {
+export function useDeleteResponse({ onAlert }: IDeleteProps) {
   const [deleteMutation, { loading: deleteLoading }] = useMutation(DELETE_RESPONSE);
   const handleDelete = async (_id: string, deleteCallBack?: any) => {
     try {
@@ -33,7 +32,7 @@ export function useDeleteResponse({ onAlert, templateId }: IDeleteProps) {
       //   }
       // };
       await deleteMutation({
-        variables: { _id, templateId },
+        variables: { _id },
         // update: deleteInCache,
       });
       if (deleteCallBack) {

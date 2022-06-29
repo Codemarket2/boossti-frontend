@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import FormSetting from './FormSetting';
 import InputGroup from '../common/InputGroup';
 import Overlay from '../common/Overlay';
-import ResponseLayout from '../response/ResponseLayout';
+import Workflows from '../response/Workflows';
 import { ActionsWrapper } from './Actions';
 import BackdropComponent from '../common/Backdrop';
 import ShopifySettings from './shopify/ShopifySettings';
@@ -138,7 +138,7 @@ export default function CustomFormSettings({
                 />
               </InputGroup>
               {settings?.customSectionId && (
-                <ResponseLayout
+                <Workflows
                   _id={settings?.customSectionId}
                   parentPageFields={[...pageFields, ...parentPageFields]}
                 />

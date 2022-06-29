@@ -17,14 +17,13 @@ interface ISettings {
 
 interface IFormPage {
   settings?: ISettings;
-  templateId?: string;
-  templateDefaultWidgetResponseId?: string;
+  appId?: string;
+  installId?: string;
   modifyForm?: (form: any) => void;
   isTemplateInstance?: string;
   createCallback?: (response: any) => void;
   isPageOwner?: boolean;
   workFlowFormResponseParentId?: string;
-  isAuthorized?: boolean;
   systemValues?: ISystemValues;
   valueFilter?: any;
 }
@@ -36,14 +35,13 @@ interface IProps extends IFormPage {
 export const FormPage = ({
   slug,
   settings = {},
-  templateId,
-  templateDefaultWidgetResponseId,
+  appId,
+  installId,
   modifyForm,
   isTemplateInstance = '',
   createCallback,
   isPageOwner,
   workFlowFormResponseParentId,
-  isAuthorized,
   systemValues,
   valueFilter,
 }: IProps) => {
@@ -66,9 +64,9 @@ export const FormPage = ({
   return (
     <FormView
       form={form}
-      templateId={templateId}
       isTemplateInstance={isTemplateInstance}
-      templateDefaultWidgetResponseId={templateDefaultWidgetResponseId}
+      appId={appId}
+      installId={installId}
       createCallback={createCallback}
       isPageOwner={isPageOwner}
       workFlowFormResponseParentId={workFlowFormResponseParentId}
@@ -85,11 +83,10 @@ interface IFormPageByIdProps extends IFormPage {
 export const FormPageById = ({
   _id,
   settings = {},
-  templateId,
-  templateDefaultWidgetResponseId,
+  appId,
+  installId,
   modifyForm,
   isTemplateInstance = '',
-  isAuthorized,
   createCallback,
   isPageOwner,
   workFlowFormResponseParentId,
@@ -115,10 +112,9 @@ export const FormPageById = ({
   return (
     <FormView
       form={form}
-      templateId={templateId}
       isTemplateInstance={isTemplateInstance}
-      templateDefaultWidgetResponseId={templateDefaultWidgetResponseId}
-      isAuthorized={isAuthorized}
+      appId={appId}
+      installId={installId}
       createCallback={createCallback}
       isPageOwner={isPageOwner}
       workFlowFormResponseParentId={workFlowFormResponseParentId}

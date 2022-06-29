@@ -3,18 +3,16 @@ import { gql } from '@apollo/client';
 export const CREATE_RESPONSE = gql`
   mutation MyMutation(
     $formId: ID!
-    $templates: [ResponseTemplateInput]
-    # $templateId: ID
-    $templateDefaultWidgetResponseId: ID
+    $appId: ID
+    $installId: ID
     $workFlowFormResponseParentId: ID
     $values: [ValueInput]
     $options: AWSJSON
   ) {
     createResponse(
       formId: $formId
-      templates: $templates
-      # templateId: $templateId
-      templateDefaultWidgetResponseId: $templateDefaultWidgetResponseId
+      appId: $appId
+      installId: $installId
       workFlowFormResponseParentId: $workFlowFormResponseParentId
       values: $values
       options: $options
@@ -22,24 +20,8 @@ export const CREATE_RESPONSE = gql`
       _id
       formId
       count
-      # templateId
-      templates {
-        template {
-          _id
-          title
-          slug
-        }
-        user {
-          _id
-          count
-          values {
-            field
-            value
-          }
-        }
-        createdAt
-      }
-      templateDefaultWidgetResponseId
+      appId
+      installId
       workFlowFormResponseParentId
       values {
         _id
@@ -92,30 +74,11 @@ export const CREATE_RESPONSE = gql`
 `;
 
 export const UPDATE_RESPONSE = gql`
-  mutation MyMutation(
-    $_id: ID!
-    $values: [ValueInput]
-    $templates: [ResponseTemplateInput]
-    $newTemplates: [ResponseTemplateInput]
-  ) {
-    updateResponse(_id: $_id, values: $values, templates: $templates, newTemplates: $newTemplates) {
+  mutation MyMutation($_id: ID!, $values: [ValueInput]) {
+    updateResponse(_id: $_id, values: $values) {
       _id
-      templates {
-        template {
-          _id
-          title
-          slug
-        }
-        user {
-          _id
-          count
-          values {
-            field
-            value
-          }
-        }
-        createdAt
-      }
+      appId
+      installId
       values {
         _id
         field
@@ -158,8 +121,8 @@ export const UPDATE_RESPONSE = gql`
 `;
 
 export const DELETE_RESPONSE = gql`
-  mutation MyMutation($_id: ID!, $templateId: ID) {
-    deleteResponse(_id: $_id, templateId: $templateId)
+  mutation MyMutation($_id: ID!) {
+    deleteResponse(_id: $_id)
   }
 `;
 

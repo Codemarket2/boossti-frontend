@@ -2,7 +2,6 @@ import { useSelector } from 'react-redux';
 import { Fragment, useState } from 'react';
 import { useGetForm } from '@frontend/shared/hooks/form';
 import { useDeleteResponse, useGetResponse } from '@frontend/shared/hooks/response';
-import { getPage } from '@frontend/shared/hooks/template/pages';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Typography from '@mui/material/Typography';
@@ -13,7 +12,7 @@ import ListItemText from '@mui/material/ListItemText';
 import moment from 'moment';
 import { Paper, Box, Grid, List, ListItem, IconButton, Tooltip } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { getUserAttributes } from '@frontend/shared/hooks/user/getUserForm';
+import { getUserName } from '@frontend/shared/hooks/user/getUserForm';
 import EditResponseDrawer from './EditResponseDrawer';
 import Breadcrumbs from '../common/Breadcrumbs';
 import DisplayValue from '../form2/DisplayValue';
@@ -157,20 +156,6 @@ export function ResponseChild3({
 
   const userForm = useSelector(({ setting }: any) => setting.userForm);
 
-  const redirectToPage = async (_id) => {
-    setState({ ...state, showBackdrop: true });
-    const page = await getPage(_id);
-    if (
-      page?.data?.getPage?.template?.slug &&
-      page?.data?.getPage?.slug &&
-      router?.query?.itemSlug !== page?.data?.getPage?.slug
-    ) {
-      router.push(`/${page?.data?.getPage?.template?.slug}/${page?.data?.getPage?.slug}`);
-    } else {
-      setState({ ...state, showBackdrop: false });
-    }
-  };
-
   const hideLeftNavigation = !(hideAuthor || hideNavigation || hideBreadcrumbs);
 
   return (
@@ -304,27 +289,7 @@ export function ResponseChild3({
               {!hideAuthor && (
                 <>
                   <Typography variant="body1">
-                    {`by ${
-                      getUserAttributes(userForm, response?.createdBy)?._id
-                        ? `${getUserAttributes(userForm, response?.createdBy)?.firstName} ${
-                            getUserAttributes(userForm, response?.createdBy)?.lastName
-                          }`
-                        : 'Unauthorised user'
-                    } `}
-                    {response?.parentId?.title && (
-                      <span>
-                        {'from '}
-                        <Typography
-                          color="primary"
-                          display="inline"
-                          style={{ cursor: 'pointer' }}
-                          onClick={() => redirectToPage(response?.parentId?._id)}
-                        >
-                          {response?.parentId?.title}
-                        </Typography>
-                        {' page'}
-                      </span>
-                    )}
+                    {`by ${getUserName(userForm, response?.createdBy)} `}
                   </Typography>
                   <Typography variant="body2">
                     {`created at ${moment(response?.createdAt).format('l')} ${moment(
@@ -335,22 +300,30 @@ export function ResponseChild3({
               )}
               {form?.fields?.map((field, index) => {
                 return (
-                  <div key={field?._id} className="mt-2">
-                    <Typography fontWeight="bold">- {field?.label}</Typography>
-                    {response?.values
-                      ?.filter((v) => v.field === field._id)
-                      .map((value) => (
-                        <Fragment key={value?._id}>
-                          <StyledBox style={{ display: 'flex', alignContent: 'center' }}>
-                            <DisplayValue field={field} value={value} verticalView />
-                          </StyledBox>
-                          {field?.options?.showCommentBox && (
-                            <CommentLikeShare parentId={value?._id} />
-                          )}
-                          {field?.options?.showStarRating && <StarRating parentId={value?._id} />}
-                        </Fragment>
-                      ))}
-                  </div>
+                  <Fragment key={field?._id}>
+                    {form?.slug === 'apps' && field?.label?.toLowerCase() === 'install' ? (
+                      <div>Show Install form</div>
+                    ) : (
+                      <div className="mt-2">
+                        <Typography fontWeight="bold">- {field?.label}</Typography>
+                        {response?.values
+                          ?.filter((v) => v.field === field._id)
+                          .map((value) => (
+                            <Fragment key={value?._id}>
+                              <StyledBox style={{ display: 'flex', alignContent: 'center' }}>
+                                <DisplayValue field={field} value={value} verticalView />
+                              </StyledBox>
+                              {field?.options?.showCommentBox && (
+                                <CommentLikeShare parentId={value?._id} />
+                              )}
+                              {field?.options?.showStarRating && (
+                                <StarRating parentId={value?._id} />
+                              )}
+                            </Fragment>
+                          ))}
+                      </div>
+                    )}
+                  </Fragment>
                 );
               })}
             </div>

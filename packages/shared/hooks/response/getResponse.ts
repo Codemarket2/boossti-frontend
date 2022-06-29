@@ -19,8 +19,8 @@ interface IProps {
   formField?: string;
   onlyMy?: boolean;
   workFlowFormResponseParentId?: string;
-  templateId?: string;
-  templateDefaultWidgetResponseId?: string;
+  appId?: string;
+  installId?: string;
   search?: string;
   valueFilter?: any;
 }
@@ -30,8 +30,8 @@ export function useGetResponses({
   formField = null,
   onlyMy = false,
   workFlowFormResponseParentId = null,
-  templateId,
-  templateDefaultWidgetResponseId,
+  appId,
+  installId,
   search = null,
   valueFilter,
 }: IProps) {
@@ -44,16 +44,16 @@ export function useGetResponses({
 
   let filter;
   if (search || state.search) {
-    let templateFilter = {};
+    let searchFilter = {};
     const searchValue = search || state.search;
     if (valueFilter) {
-      templateFilter = {
+      searchFilter = {
         $and: [{ ...valueFilter }, { 'values.value': { $regex: searchValue, $options: 'i' } }],
       };
     } else {
-      templateFilter = { 'values.value': { $regex: searchValue, $options: 'i' } };
+      searchFilter = { 'values.value': { $regex: searchValue, $options: 'i' } };
     }
-    filter = JSON.stringify(templateFilter);
+    filter = JSON.stringify(searchFilter);
   } else if (valueFilter) {
     filter = JSON.stringify(valueFilter);
   }
@@ -61,23 +61,15 @@ export function useGetResponses({
   const { data, error, loading, subscribeToMore, refetch } = useQuery(GET_RESPONSES, {
     variables: {
       ...state,
-      // search: search || state.search,
-      // formField: formField || state.formField,
       formId,
       workFlowFormResponseParentId,
       onlyMy,
-      templateId,
-      templateDefaultWidgetResponseId,
+      appId,
+      installId,
       valueFilter: filter,
     },
     fetchPolicy: 'cache-and-network',
   });
-
-  // const [updateResponse] = useMutation(UPDATE_RESPONSE);
-
-  const handleUpdateResponse = (responseId: string, value: any) => {
-    //
-  };
 
   useEffect(() => {
     if (!subscribed) {
@@ -113,7 +105,7 @@ export function useGetResponses({
     }
   }, []);
 
-  return { data, error, loading, state, setState, refetch, handleUpdateResponse };
+  return { data, error, loading, state, setState, refetch };
 }
 
 export async function getResponses(formId: string, formField: string, search: string) {

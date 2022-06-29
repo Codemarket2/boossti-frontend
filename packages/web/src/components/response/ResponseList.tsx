@@ -10,8 +10,8 @@ interface IProps {
   form: any;
   workFlowFormResponseParentId?: string;
   showOnlyMyResponses?: boolean;
-  templateId?: string;
-  templateDefaultWidgetResponseId?: string;
+  appId?: string;
+  installId?: string;
   isTemplateInstance?: string;
   valueFilter?: any;
 }
@@ -20,20 +20,20 @@ export default function ResponseList({
   form,
   workFlowFormResponseParentId,
   showOnlyMyResponses,
-  templateId,
+  appId,
   isTemplateInstance,
-  templateDefaultWidgetResponseId,
+  installId,
   valueFilter,
 }: IProps): any {
-  const { data, error, loading, state, setState, refetch, handleUpdateResponse } = useGetResponses({
+  const { data, error, loading, state, setState, refetch } = useGetResponses({
     formId: form?._id,
     onlyMy: showOnlyMyResponses,
     workFlowFormResponseParentId,
-    templateId,
-    templateDefaultWidgetResponseId,
+    appId,
+    installId,
     valueFilter,
   });
-  const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert, templateId });
+  const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
 
   return (
     <>
@@ -43,7 +43,7 @@ export default function ResponseList({
           <Table2
             form={form}
             responses={data?.getResponses?.data}
-            onRowChange={handleUpdateResponse}
+            onRowChange={(resId, value) => {}}
           />
         </>
       ) : form?.settings?.responsesView === 'vertical' ? (
@@ -83,7 +83,6 @@ export default function ResponseList({
             limit={state.limit}
             onPageChange={(page) => setState({ ...state, page })}
             onLimitChange={(limit) => setState({ ...state, limit })}
-            templateId={templateId}
           />
         </>
       )}

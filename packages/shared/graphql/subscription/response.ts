@@ -6,22 +6,8 @@ export const RESPONSE_SUB = gql`
       _id
       formId
       count
-      templates {
-        template {
-          _id
-          title
-          slug
-        }
-        user {
-          _id
-          count
-          values {
-            field
-            value
-          }
-        }
-        createdAt
-      }
+      appId
+      installId
       workFlowFormResponseParentId
       values {
         _id

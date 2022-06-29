@@ -29,7 +29,7 @@ import Actions from './Actions';
 import { onAlert } from '../../utils/alert';
 import InlineInput from '../common/InlineInput';
 import { QRButton } from '../qrcode/QRButton';
-import ResponseLayout from '../response/ResponseLayout';
+import Workflows from '../response/Workflows';
 import BulkUploadAction from './BulkUploadAction';
 import NotFound from '../common/NotFound';
 import UnAuthorised from '../common/UnAuthorised';
@@ -242,7 +242,7 @@ export default function Form({ _id, drawerMode = false, onSlugChange, hideFields
                   />
                 </>
               )}
-              {options.currentTab === 'Workflows' && <ResponseLayout _id={_id} />}
+              {options.currentTab === 'Workflows' && <Workflows _id={_id} />}
               {options.currentTab === 'Responses' && (
                 <>
                   <Paper variant="outlined">

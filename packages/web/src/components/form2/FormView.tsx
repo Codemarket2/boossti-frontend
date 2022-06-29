@@ -35,8 +35,8 @@ import projectConfig from '../../../../shared/index';
 
 interface IProps {
   form: any;
-  templateId?: string;
-  templateDefaultWidgetResponseId?: string;
+  appId?: string;
+  installId?: string;
   workFlowFormResponseParentId?: string;
   createCallback?: (response: any) => void;
   setResponded?: () => void;
@@ -86,8 +86,8 @@ export default function FormViewWrapper({
   createCallback,
   setResponded,
   isPageOwner,
-  templateId,
-  templateDefaultWidgetResponseId,
+  appId,
+  installId,
   isTemplateInstance = '',
   isAuthorized,
   systemValues,
@@ -96,10 +96,10 @@ export default function FormViewWrapper({
   const isAdmin = useSelector(({ auth }: any) => auth?.admin);
   const { handleCreateUpdateResponse, createLoading } = useCreateUpdateResponse({
     onAlert,
-    workFlowFormResponseParentId,
-    templateId,
-    templateDefaultWidgetResponseId,
+    appId,
+    installId,
     systemValues,
+    workFlowFormResponseParentId,
   });
 
   const showOnlyMyResponses = !(isAdmin || isPageOwner) && form?.settings?.onlyMyResponses;
@@ -108,17 +108,17 @@ export default function FormViewWrapper({
     formId: form?._id,
     onlyMy: showOnlyMyResponses,
     workFlowFormResponseParentId,
-    templateId,
-    templateDefaultWidgetResponseId,
+    appId,
+    installId,
     valueFilter,
   });
 
   const [state, setState] = useState(initialState);
   const [selectState, setSelectState] = useState(initialSelectState);
-  let authenticated = useSelector(({ auth }: any) => auth.authenticated);
-  if (isAuthorized) {
-    authenticated = isAuthorized;
-  }
+  const authenticated = useSelector(({ auth }: any) => auth.authenticated);
+  // if (isAuthorized) {
+  //   authenticated = isAuthorized;
+  // }
   const [checkNewUser, setCheckNewUser] = useState(true);
   const verifyIfUserExist = async (payload) => {
     const { password, email, name } = payload;
@@ -301,7 +301,7 @@ export default function FormViewWrapper({
                           color="primary"
                           loading={createLoading}
                           onClick={async () => {
-                            if (templateId) {
+                            if (appId) {
                               if (!selectState.selectedFullResponse) {
                                 alert('Please select the response');
                               } else {
@@ -387,9 +387,9 @@ export default function FormViewWrapper({
                     form={form}
                     workFlowFormResponseParentId={workFlowFormResponseParentId}
                     showOnlyMyResponses={showOnlyMyResponses}
-                    templateId={templateId}
+                    appId={appId}
                     isTemplateInstance={isTemplateInstance}
-                    templateDefaultWidgetResponseId={templateDefaultWidgetResponseId}
+                    installId={installId}
                     valueFilter={valueFilter}
                   />
                 </Overlay>
@@ -400,9 +400,9 @@ export default function FormViewWrapper({
               form={form}
               workFlowFormResponseParentId={workFlowFormResponseParentId}
               showOnlyMyResponses={showOnlyMyResponses}
-              templateId={templateId}
+              appId={appId}
               isTemplateInstance={isTemplateInstance}
-              templateDefaultWidgetResponseId={templateDefaultWidgetResponseId}
+              installId={installId}
               valueFilter={valueFilter}
             />
           )}

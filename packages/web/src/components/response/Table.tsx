@@ -38,7 +38,6 @@ interface IProps {
   limit: number;
   onPageChange: (page: number) => void;
   onLimitChange: (newLimit: number) => void;
-  templateId: string;
 }
 
 export default function ResponseTable({
@@ -55,7 +54,6 @@ export default function ResponseTable({
   limit,
   onPageChange,
   onLimitChange,
-  templateId,
 }: IProps) {
   const [selectedResponse, setSelectedResponse] = useState(null);
   const userForm = useSelector(({ setting }: any) => setting.userForm);
@@ -129,7 +127,6 @@ export default function ResponseTable({
                                 form={form}
                                 response={selectedResponse}
                                 onClose={() => setSelectedResponse(null)}
-                                templateId={templateId}
                               />
                             </>
                           )}

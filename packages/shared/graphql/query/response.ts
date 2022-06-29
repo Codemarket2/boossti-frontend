@@ -6,22 +6,8 @@ export const GET_RESPONSE = gql`
       _id
       formId
       count
-      templates {
-        template {
-          _id
-          title
-          slug
-        }
-        user {
-          _id
-          count
-          values {
-            field
-            value
-          }
-        }
-        createdAt
-      }
+      appId
+      installId
       workFlowFormResponseParentId
       values {
         _id
@@ -79,22 +65,8 @@ export const GET_RESPONSE_BY_COUNT = gql`
       _id
       formId
       count
-      templates {
-        template {
-          _id
-          title
-          slug
-        }
-        user {
-          _id
-          count
-          values {
-            field
-            value
-          }
-        }
-        createdAt
-      }
+      appId
+      installId
       workFlowFormResponseParentId
       values {
         _id
@@ -149,8 +121,8 @@ export const GET_RESPONSE_BY_COUNT = gql`
 export const GET_RESPONSES = gql`
   query getResponses(
     $formId: ID!
-    $templateId: ID
-    $templateDefaultWidgetResponseId: ID
+    $appId: ID
+    $installId: ID
     $workFlowFormResponseParentId: ID
     $page: Int
     $limit: Int
@@ -161,8 +133,8 @@ export const GET_RESPONSES = gql`
   ) {
     getResponses(
       formId: $formId
-      templateId: $templateId
-      templateDefaultWidgetResponseId: $templateDefaultWidgetResponseId
+      appId: $appId
+      installId: $installId
       workFlowFormResponseParentId: $workFlowFormResponseParentId
       page: $page
       limit: $limit
@@ -176,22 +148,8 @@ export const GET_RESPONSES = gql`
         _id
         formId
         count
-        templates {
-          template {
-            _id
-            title
-            slug
-          }
-          user {
-            _id
-            count
-            values {
-              field
-              value
-            }
-          }
-          createdAt
-        }
+        appId
+        installId
         workFlowFormResponseParentId
         values {
           _id
@@ -255,22 +213,8 @@ export const GET_MY_RESPONSES = gql`
           name
         }
         count
-        templates {
-          template {
-            _id
-            title
-            slug
-          }
-          user {
-            _id
-            count
-            values {
-              field
-              value
-            }
-          }
-          createdAt
-        }
+        appId
+        installId
         workFlowFormResponseParentId
         values {
           _id
