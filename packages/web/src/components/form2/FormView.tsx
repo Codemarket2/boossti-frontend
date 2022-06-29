@@ -329,6 +329,7 @@ export default function FormViewWrapper({
                         fieldWiseView={form?.settings?.formView === 'oneField'}
                         formId={form?._id}
                         onCancel={() => setState(initialState)}
+                        form={form}
                       />
                     )}
                   </div>
@@ -356,6 +357,7 @@ export default function FormViewWrapper({
                   loading={createLoading}
                   fieldWiseView={form?.settings?.formView === 'oneField'}
                   formId={form?._id}
+                  form={form}
                 />
               )}
             </>
@@ -421,6 +423,7 @@ interface IProps2 {
   formId?: any;
   edit?: boolean;
   responseId?: string;
+  form?: any;
 }
 
 const initialSubmitState = {
@@ -461,6 +464,7 @@ export function FormView({
   formId,
   edit,
   responseId,
+  form,
 }: IProps2): any {
   const [values, setValues] = useState(initialValues);
   const [editValue, setEditValue] = useState({ fieldId: null, index: null });
@@ -480,7 +484,16 @@ export function FormView({
   }, [values]);
 
   const onChange = (sValue, valueIndex) => {
-    const newValue = { ...defaultValue, ...sValue };
+    let newValue = { ...defaultValue, ...sValue };
+    if (form?.slug === 'template') {
+      const tempField = fields?.find(
+        (f) => f?.label?.toLowerCase() === 'widgets' && f?._id === sValue?.field,
+      );
+      if (tempField) {
+        const options = newValue?.options || {};
+        newValue = { ...newValue, options: { ...options, defaultWidget: true } };
+      }
+    }
     let newValues = [];
     let changed = false;
     let tempValueIndex = -1;
@@ -492,11 +505,13 @@ export function FormView({
           return { ...oldValue, ...newValue };
         }
       }
+
       return oldValue;
     });
     if (!changed) {
       newValues = [...values, newValue];
     }
+
     setValues(newValues);
   };
 
@@ -640,7 +655,7 @@ export function FormView({
                         className="my-2"
                         size="small"
                         color="primary"
-                        variant="contained"
+                        variant="outlined"
                         onClick={() => {
                           if (field?.fieldType === 'richTextarea') {
                             setHideField(true);
@@ -653,7 +668,7 @@ export function FormView({
                       </Button>
                     )}
                   </>
-                  {filterValues(values, field).map((value, valueIndex) => (
+                  {filterValues(values, field).map((value: any, valueIndex) => (
                     <div key={valueIndex}>
                       {valueIndex !== filterValues(values, field)?.length - 1 && (
                         <>
@@ -706,13 +721,15 @@ export function FormView({
                               >
                                 <EditIcon />
                               </IconButton>
-                              <IconButton
-                                edge="end"
-                                onClick={() => onRemoveOneValue(field._id, valueIndex)}
-                                size="large"
-                              >
-                                <DeleteIcon />
-                              </IconButton>
+                              {!value?.options?.defaultWidget && (
+                                <IconButton
+                                  edge="end"
+                                  onClick={() => onRemoveOneValue(field._id, valueIndex)}
+                                  size="large"
+                                >
+                                  <DeleteIcon />
+                                </IconButton>
+                              )}
                             </div>
                           )}
                         </>
