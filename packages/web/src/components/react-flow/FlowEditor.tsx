@@ -6,64 +6,15 @@ import ReactFlow, {
   useEdgesState,
   Controls,
 } from 'react-flow-renderer';
+import { generateObjectId } from '@frontend/shared/utils/objectId';
 import Sidebar from './Sidebar';
 import CustomNode from './CustomNode';
+import { defaultNodes, defaultEdges } from './defaultNodes';
 
-const initialNodes: any = [
-  {
-    id: '1',
-    type: 'input',
-    data: {
-      label: (
-        <>
-          Welcome to <strong>React Flow!</strong>
-        </>
-      ),
-    },
-    position: { x: 250, y: 0 },
-  },
-  {
-    id: '2',
-    data: {
-      label: (
-        <>
-          This is a <strong>default node</strong>
-        </>
-      ),
-    },
-    position: { x: 100, y: 100 },
-    type: 'textUpdater',
-  },
-  {
-    id: '3',
-    data: {
-      label: (
-        <>
-          This one has a <strong>custom style</strong>
-        </>
-      ),
-    },
-    position: { x: 400, y: 100 },
-    style: {
-      background: '#D6D5E6',
-      color: '#333',
-      border: '1px solid #222138',
-      width: 180,
-    },
-  },
-];
-
-let id = 0;
-// eslint-disable-next-line no-plusplus
-const getId = () => `dndnode_${id++}`;
-
-const DnDFlow = () => {
+const FlowEditor = () => {
   const reactFlowWrapper = useRef(null);
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([
-    { id: 'e1-2', source: '1', target: '2', label: 'this is an edge label' },
-    { id: 'e1-3', source: '1', target: '3' },
-  ]);
+  const [nodes, setNodes, onNodesChange] = useNodesState(defaultNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(defaultEdges);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
   const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), []);
@@ -79,8 +30,7 @@ const DnDFlow = () => {
       event.preventDefault();
 
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-      const type = event.dataTransfer.getData('application/reactflow');
-
+      const { type, label } = JSON.parse(event.dataTransfer.getData('application/reactflow'));
       // check if the dropped element is valid
       if (typeof type === 'undefined' || !type) {
         return;
@@ -91,10 +41,10 @@ const DnDFlow = () => {
         y: event.clientY - reactFlowBounds.top,
       });
       const newNode = {
-        id: getId(),
+        id: generateObjectId(),
         type,
         position,
-        data: { label: `${type} node` },
+        data: { label },
       };
 
       setNodes((nds) => nds.concat(newNode));
@@ -130,4 +80,4 @@ const DnDFlow = () => {
   );
 };
 
-export default DnDFlow;
+export default FlowEditor;

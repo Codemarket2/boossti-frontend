@@ -35,6 +35,8 @@ import Response from '../response/Response';
 import UnitQuantityInput from './UnitQuantityInput';
 import Board from './board/Board';
 import { defaultBoard } from './board/defaultBoard';
+import Diagram from '../syncfusion-diagram/Diagram';
+import { defaultDiagram } from '../syncfusion-diagram/defaultDiagram';
 
 interface IProps {
   disabled?: boolean;
@@ -568,6 +570,16 @@ export default function Field({
             editMode
             board={value?.options?.board || defaultBoard}
             onBoardChange={(board) => onChange({ options: { board } })}
+          />
+        </>
+      );
+    }
+    case 'diagram': {
+      return (
+        <>
+          <Diagram
+            value={value?.options?.diagram || defaultDiagram}
+            onChange={(diagram) => onChange({ options: { diagram } })}
           />
         </>
       );

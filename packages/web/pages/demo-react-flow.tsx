@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import ReactFlow from '../src/components/react-flow/ReactFlow';
+import FlowEditor from '../src/components/react-flow/FlowEditor';
 
 export default function ReactFlowPage() {
   const [loading, setLoading] = useState(true);
@@ -8,5 +8,5 @@ export default function ReactFlowPage() {
     setLoading(false);
   }, []);
 
-  return <div style={{ height: '100vh' }}>{!loading && <ReactFlow />}</div>;
+  return <div style={{ height: '100vh' }}>{!loading && <FlowEditor />}</div>;
 }

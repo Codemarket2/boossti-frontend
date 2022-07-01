@@ -12,7 +12,7 @@ type FieldType = {
 
 export const templateWidgetTypes: FieldType[] = [
   { label: 'Form', value: 'form' },
-  { label: 'Template', value: 'template' },
+  // { label: 'Template', value: 'template' },
 ];
 
 export const fieldTypes: FieldType[] = [
@@ -40,6 +40,7 @@ export const fieldTypes: FieldType[] = [
   { label: 'Barcode Scanner', value: 'barcodeScanner' },
   { label: 'Lighthouse Report', value: 'lighthouseReport' },
   { label: 'Board', value: 'board' },
+  { label: 'Diagram', value: 'diagram' },
 ];
 
 export const selectOptionsTypes = [

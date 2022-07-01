@@ -231,27 +231,31 @@ export default function AddField({
             disabled={formik.isSubmitting}
             control={
               <Checkbox
-                checked={isDefault || formik.values.options?.dependentRelationship}
-                onChange={({ target }) => onOptionChange({ dependentRelationship: target.checked })}
-                name="dependentRelationship"
-                color="primary"
-              />
-            }
-            label="Dependent relationship"
-          />
-          <FormControlLabel
-            className="mt-n2"
-            disabled={formik.isSubmitting}
-            control={
-              <Checkbox
                 checked={isDefault || formik.values.options?.twoWayRelationship}
                 onChange={({ target }) => onOptionChange({ twoWayRelationship: target.checked })}
                 name="twoWayRelationship"
                 color="primary"
               />
             }
-            label="Two way relationship"
+            label="Two way relationship(parent will have child Id & child will have parent Id)"
           />
+          <div>
+            <FormControlLabel
+              className="mt-n2"
+              disabled={formik.isSubmitting}
+              control={
+                <Checkbox
+                  checked={isDefault || formik.values.options?.dependentRelationship}
+                  onChange={({ target }) =>
+                    onOptionChange({ dependentRelationship: target.checked })
+                  }
+                  name="dependentRelationship"
+                  color="primary"
+                />
+              }
+              label="Dependent relationship(if parent is deleted child is also deleted)"
+            />
+          </div>
         </div>
       )}
       {!isWidget && !isWidgetForm && !['label', 'template'].includes(formik.values.fieldType) && (

@@ -94,6 +94,12 @@ export const validateValue = (validate: boolean, value: any, field: Field): IRet
       }
       break;
     }
+    case 'diagram': {
+      if (!value?.options?.diagram) {
+        result = { error: true, errorMessage: 'Required' };
+      }
+      break;
+    }
     // case 'select': {
     //   const optionsTemplate = options?.optionsTemplate || value?.options?.optionsTemplate;
     //   if (

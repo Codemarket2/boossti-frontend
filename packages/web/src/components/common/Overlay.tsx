@@ -12,6 +12,7 @@ interface IProps {
   children: ReactNode;
   secondButton?: ReactNode;
   minWidth?: string;
+  maxWidth?: string;
 }
 
 export default function Overlay({
@@ -21,10 +22,11 @@ export default function Overlay({
   children,
   secondButton = null,
   minWidth = '60vw',
+  maxWidth,
 }: IProps) {
   return (
     <Drawer anchor="right" open={open}>
-      <div style={{ minWidth, maxWidth: '85vw' }}>
+      <div style={{ minWidth, maxWidth: maxWidth || '85vw' }}>
         <AppBar color="transparent" position="static" elevation={1}>
           <Toolbar>
             {title && (

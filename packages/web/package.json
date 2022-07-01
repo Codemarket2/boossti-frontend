@@ -32,6 +32,8 @@
     "@shopify/app-bridge": "^3.0.1",
     "@shopify/app-bridge-react": "^3.0.1",
     "@shopify/app-bridge-utils": "^3.0.1",
+    "@syncfusion/ej2-base": "^20.2.36",
+    "@syncfusion/ej2-react-diagrams": "^20.2.36",
     "@testing-library/jest-dom": "^5.16.3",
     "@testing-library/react": "^13.0.0",
     "autosuggest-highlight": "^3.2.1",

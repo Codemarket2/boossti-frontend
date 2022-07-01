@@ -13,6 +13,7 @@ import ImageList from '../post/ImageList';
 import DisplayFiles from '../fileLibrary/DisplayFiles';
 import { LighthouseReport } from './LighthouseReportRendrer';
 import DisplayBoard from './board/DisplayBoard';
+import DisplayDiagram from '../syncfusion-diagram/DisplayDiagram';
 
 interface IProps {
   field: Partial<IField>;
@@ -177,6 +178,8 @@ export default function DisplayValue({
       );
     case 'board':
       return <DisplayBoard board={value?.options?.board} verticalView={verticalView} />;
+    case 'diagram':
+      return <DisplayDiagram diagram={value?.options?.diagram} />;
     default:
       return <>{value?.value}</>;
   }
