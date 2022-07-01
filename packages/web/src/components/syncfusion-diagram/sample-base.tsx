@@ -5,10 +5,13 @@ import { enableRipple } from '@syncfusion/ej2-base';
 
 enableRipple(true);
 
-interface IProps {
+export interface IProps {
   value: any;
   onSave: (newValue) => void;
   editMode?: boolean;
+  forms?: any[];
+  search?: string;
+  onSearchChange?: (search: string) => void;
 }
 
 export class SampleBase extends React.PureComponent<IProps, any> {

@@ -6,10 +6,15 @@ import {
   SymbolPaletteComponent,
   Node,
   DiagramConstraints,
+  NodeModel,
+  NodeConstraints,
 } from '@syncfusion/ej2-react-diagrams';
 import Button from '@mui/material/Button';
 import Close from '@mui/icons-material/Close';
-import { SampleBase } from './sample-base';
+import { generateObjectId } from '@frontend/shared/utils/objectId';
+import TextField from '@mui/material/TextField';
+import Search from '@mui/icons-material/Search';
+import { IProps, SampleBase } from './sample-base';
 import { flowShapes, connectorSymbols } from './defaultNodes';
 
 import '@syncfusion/ej2-diagrams/styles/material.css';
@@ -19,12 +24,57 @@ import '@syncfusion/ej2-splitbuttons/styles/material.css';
 import '@syncfusion/ej2-navigations/styles/material.css';
 
 let diagramInstance: DiagramComponent;
+let paletteInstance: SymbolPaletteComponent;
+
+const convertFormsToShapes = (forms: any[] = []) =>
+  forms?.map(
+    (form): NodeModel => ({
+      id: `${form?._id}`,
+      shape: {
+        type: 'Text',
+        content: form?.name,
+      },
+      // eslint-disable-next-line no-bitwise
+      constraints: NodeConstraints.Default | NodeConstraints.ReadOnly,
+      style: {
+        fontSize: 9,
+      },
+    }),
+  );
 
 export class DiagramEditor extends SampleBase {
+  constructor(props) {
+    super(props);
+    this.state = {
+      paletteId: 'forms',
+      customShapes: convertFormsToShapes(props.forms),
+    };
+  }
+
   rendereComplete() {
     addEvents();
     diagramInstance.fitToPage();
     diagramInstance.loadDiagram(JSON.stringify(this.props.value));
+  }
+
+  updateFormsPalette = () => {
+    paletteInstance.removePalette(this.state.paletteId);
+    const paletteId = `forms-${generateObjectId()}`;
+    paletteInstance.addPalettes([
+      {
+        id: paletteId,
+        symbols: convertFormsToShapes(this.props.forms),
+        title: 'Forms',
+        expanded: true,
+      },
+    ]);
+    this.setState({ paletteId });
+  };
+
+  componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<any>, snapshot?: any): void {
+    if (this.props.forms !== prevProps?.forms) {
+      this.updateFormsPalette();
+    }
   }
 
   render() {
@@ -41,38 +91,60 @@ export class DiagramEditor extends SampleBase {
             </div>
             {this.props.editMode && (
               <div id="palette-space" className="sb-mobile-palette">
-                <Button
-                  variant="contained"
-                  startIcon={<Close />}
-                  onClick={() => {
-                    const jsonData = JSON.parse(diagramInstance.saveDiagram());
-                    diagramInstance.destroy();
-                    this.props.onSave(jsonData);
-                  }}
-                >
-                  Close
-                </Button>
+                <div className="p-1">
+                  <Button
+                    variant="contained"
+                    startIcon={<Close />}
+                    onClick={() => {
+                      const jsonData = JSON.parse(diagramInstance.saveDiagram());
+                      diagramInstance.destroy();
+                      this.props.onSave(jsonData);
+                    }}
+                  >
+                    Close
+                  </Button>
+                </div>
+                {this.props.onSearchChange && (
+                  <div className="p-1">
+                    <TextField
+                      fullWidth
+                      InputProps={{
+                        endAdornment: <Search />,
+                      }}
+                      size="small"
+                      label="Search form"
+                      value={this.props.search}
+                      onChange={({ target: { value } }) => this.props.onSearchChange(value)}
+                    />
+                  </div>
+                )}
                 <SymbolPaletteComponent
+                  ref={(palette) => {
+                    paletteInstance = palette;
+                  }}
                   id="symbolpalette"
-                  expandMode="Multiple"
+                  expandMode="Single"
                   palettes={[
                     {
                       id: 'flow',
-                      // expanded: true,
                       symbols: flowShapes,
                       title: 'Flow Shapes',
                     },
                     {
                       id: 'connectors',
-                      // expanded: true,
                       symbols: connectorSymbols,
                       title: 'Connectors',
+                    },
+                    {
+                      id: 'forms',
+                      symbols: this.state.customShapes,
+                      title: 'Forms',
                     },
                   ]}
                   width="100%"
                   height="100%"
                   symbolHeight={60}
-                  symbolWidth={60}
+                  symbolWidth={65}
                   getNodeDefaults={(symbol) => {
                     if (
                       symbol.id === 'Terminator' ||
@@ -98,7 +170,7 @@ export class DiagramEditor extends SampleBase {
                     }
                     symbol.style.strokeColor = '#757575';
                   }}
-                  symbolMargin={{ left: 15, right: 15, top: 15, bottom: 15 }}
+                  symbolMargin={{ left: 2, right: 2, top: 2, bottom: 2 }}
                   getSymbolInfo={(symbol) => {
                     return { fit: true };
                   }}
@@ -122,8 +194,8 @@ export class DiagramEditor extends SampleBase {
                     obj.width = 100;
                     obj.height *= ratio;
                   }
-                  obj.style = { fill: '#357BD2', strokeColor: 'white' };
-                  obj.annotations = [{ style: { color: 'white', fill: 'transparent' } }];
+                  obj.style = { fill: '#FDFE7D', strokeColor: 'white' };
+                  obj.annotations = [{ style: { color: 'black', fill: 'transparent' } }];
                   // Set ports
                   obj.ports = getPorts(node);
                   return obj;
@@ -149,7 +221,7 @@ export class DiagramEditor extends SampleBase {
                     obj.height *= ratio;
                     obj.offsetX += (obj.width - oWidth) / 2;
                     obj.offsetY += (obj.height - oHeight) / 2;
-                    obj.style = { fill: '#357BD2', strokeColor: 'white' };
+                    obj.style = { fill: '#FDFE7D', strokeColor: 'white', fontSize: 12 };
                   }
                 }}
               />
