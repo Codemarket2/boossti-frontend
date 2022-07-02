@@ -10,7 +10,7 @@ import ErrorLoading from '../common/ErrorLoading';
 interface IProps {
   formId: string;
   value: any;
-  onChange: (form, label) => void;
+  onChange: (fieldId, label, formName) => void;
   error?: boolean;
   helperText?: string;
   disabled?: boolean;
@@ -40,9 +40,8 @@ export default function SelectFormFields({
         onChange={(e) =>
           onChange(
             e.target.value,
-            data?.getForm?.fields
-              ?.filter((f) => ['text', 'email'].includes(f.fieldType))
-              .find((f) => f?._id === e.target.value)?.label,
+            data?.getForm?.fields.find((f) => f?._id === e.target.value)?.label,
+            data?.getForm?.name,
           )
         }
         label="Select form field"
