@@ -12,7 +12,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ArrowBackIosRounded, ArrowForwardIosRounded } from '@mui/icons-material';
-import { useGetResponses } from '@frontend/shared/hooks/response/getResponse';
+import { parseResponse, useGetResponses } from '@frontend/shared/hooks/response/getResponse';
 import { useCreateUpdateResponse } from '@frontend/shared/hooks/response';
 import { validateForm, validateValue } from '@frontend/shared/utils/validate';
 import axios from 'axios';
@@ -466,7 +466,7 @@ export function FormView({
   responseId,
   form,
 }: IProps2): any {
-  const [values, setValues] = useState(initialValues);
+  const [values, setValues] = useState(parseResponse({ values: initialValues })?.values || []);
   const [editValue, setEditValue] = useState({ fieldId: null, index: null });
   const [submitState, setSubmitState] = useState(initialSubmitState);
   const authenticated = useSelector(({ auth }: any) => auth.authenticated);

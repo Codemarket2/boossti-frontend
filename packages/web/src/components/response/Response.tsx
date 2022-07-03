@@ -2,7 +2,6 @@ import { useSelector } from 'react-redux';
 import { Fragment, useState } from 'react';
 import { useGetForm } from '@frontend/shared/hooks/form';
 import { useDeleteResponse, useGetResponse } from '@frontend/shared/hooks/response';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Typography from '@mui/material/Typography';
 import { useUpdateSection } from '@frontend/shared/hooks/section';
@@ -13,6 +12,7 @@ import moment from 'moment';
 import { Paper, Box, Grid, List, ListItem, IconButton, Tooltip } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { getUserName } from '@frontend/shared/hooks/user/getUserForm';
+import { parseResponse } from '@frontend/shared/hooks/response/getResponse';
 import EditResponseDrawer from './EditResponseDrawer';
 import Breadcrumbs from '../common/Breadcrumbs';
 import DisplayValue from '../form2/DisplayValue';
@@ -133,7 +133,7 @@ interface IProps3 {
 
 export function ResponseChild3({
   form,
-  response,
+  response: tempResponse,
   hideBreadcrumbs,
   hideNavigation,
   hideAuthor,
@@ -144,15 +144,17 @@ export function ResponseChild3({
   const [state, setState] = useState({ showMenu: null, edit: false, showBackdrop: false });
 
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
+  const response = parseResponse(tempResponse);
   const authorized =
     useAuthorization([response?.createdBy?._id, form?.createdBy?._id], true) || isAuthorized;
   const authorized2 = useAuthorization([form?.createdBy?._id], true);
   const { section, onSectionChange, handleUpdateSection } = useUpdateSection({
     onAlert,
-    _id: JSON.parse(response?.options)?.customSectionId || form._id,
+    _id:
+      (typeof response?.options === 'string' ? JSON.parse(response?.options) : response?.options)
+        ?.customSectionId || form._id,
   });
   const { editMode } = useSelector(({ setting }: any) => setting);
-  const router = useRouter();
 
   const userForm = useSelector(({ setting }: any) => setting.userForm);
 

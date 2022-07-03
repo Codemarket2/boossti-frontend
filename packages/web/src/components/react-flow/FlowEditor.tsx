@@ -1,23 +1,51 @@
-import React, { useState, useRef, useCallback, useMemo } from 'react';
+import React, { useState, useRef, useCallback, createContext } from 'react';
 import ReactFlow, {
   ReactFlowProvider,
   addEdge,
   useNodesState,
   useEdgesState,
   Controls,
+  Background,
 } from 'react-flow-renderer';
 import { generateObjectId } from '@frontend/shared/utils/objectId';
 import Sidebar from './Sidebar';
 import CustomNode from './CustomNode';
-import { defaultNodes, defaultEdges } from './defaultNodes';
+import Overlay from '../common/Overlay';
+import { defaultEdges, defaultNodes } from './defaultNodes';
 
-const FlowEditor = () => {
+const nodeTypes = {
+  customNode: CustomNode,
+};
+
+export interface IFlow {
+  nodes: any[];
+  edges: any[];
+}
+
+interface FlowEditorProps {
+  open: boolean;
+  onClose: () => void;
+  flow: IFlow;
+  editMode?: boolean;
+  onFlowChange: (flow: IFlow) => void;
+}
+
+export default function FlowEditor({
+  open,
+  onClose,
+  flow,
+  editMode = false,
+  onFlowChange,
+}: FlowEditorProps) {
   const reactFlowWrapper = useRef(null);
-  const [nodes, setNodes, onNodesChange] = useNodesState(defaultNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(defaultEdges);
+  const [nodes, setNodes, onNodesChange] = useNodesState(flow?.nodes || defaultNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(flow?.edges || defaultEdges);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
   const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), []);
+  const onNodeChange = useCallback((id, newData) => {
+    setNodes((nds) => nds.map((node) => (node?.id === id ? { ...node, data: newData } : node)));
+  }, []);
 
   const onDragOver = useCallback((event) => {
     event.preventDefault();
@@ -30,9 +58,9 @@ const FlowEditor = () => {
       event.preventDefault();
 
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-      const { type, label } = JSON.parse(event.dataTransfer.getData('application/reactflow'));
+      const newNodeData = JSON.parse(event.dataTransfer.getData('application/reactflow'));
       // check if the dropped element is valid
-      if (typeof type === 'undefined' || !type) {
+      if (typeof newNodeData === 'undefined' || !newNodeData) {
         return;
       }
 
@@ -42,9 +70,9 @@ const FlowEditor = () => {
       });
       const newNode = {
         id: generateObjectId(),
-        type,
+        type: 'customNode',
         position,
-        data: { label },
+        data: newNodeData,
       };
 
       setNodes((nds) => nds.concat(newNode));
@@ -52,32 +80,52 @@ const FlowEditor = () => {
     [reactFlowInstance],
   );
 
-  // const nodeTypes = useMemo(() => ({ textUpdater: CustomNode }), []);
-
   return (
-    <div className="dndflow">
-      <ReactFlowProvider>
-        <div className="reactflow-wrapper" ref={reactFlowWrapper}>
-          <ReactFlow
-            // nodeTypes={nodeTypes}
-            nodes={nodes}
-            edges={edges}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
-            onConnect={onConnect}
-            onInit={setReactFlowInstance}
-            onDrop={onDrop}
-            onDragOver={onDragOver}
-            fitView
-          >
-            <Controls />
-            {/* <Background color="#aaa" gap={16} /> */}
-          </ReactFlow>
+    <FlowContext.Provider value={{ onNodeChange }}>
+      <Overlay
+        title="Flow Diagram"
+        open={open}
+        onClose={() => {
+          onClose();
+          onFlowChange({ nodes, edges });
+        }}
+        maxWidth="90vw"
+        minWidth="90vw"
+      >
+        <div style={{ height: 'calc(100vh - 50px)', minHeight: 300 }}>
+          <div className="dndflow">
+            <ReactFlowProvider>
+              <div className="reactflow-wrapper" ref={reactFlowWrapper}>
+                <ReactFlow
+                  nodeTypes={nodeTypes}
+                  nodes={nodes}
+                  edges={edges}
+                  onNodesChange={onNodesChange}
+                  onEdgesChange={onEdgesChange}
+                  onConnect={onConnect}
+                  onInit={setReactFlowInstance}
+                  onDrop={onDrop}
+                  onDragOver={onDragOver}
+                  fitView
+                  nodesDraggable={editMode}
+                  nodesConnectable={editMode}
+                  elementsSelectable={editMode}
+                >
+                  <Controls showInteractive={editMode} />
+                  <Background color="#aaa" gap={16} />
+                </ReactFlow>
+              </div>
+              {editMode && <Sidebar />}
+            </ReactFlowProvider>
+          </div>
         </div>
-        <Sidebar />
-      </ReactFlowProvider>
-    </div>
+      </Overlay>
+    </FlowContext.Provider>
   );
-};
+}
 
-export default FlowEditor;
+export const FlowContext = createContext({
+  onNodeChange: (id, newData) => {
+    //
+  },
+});

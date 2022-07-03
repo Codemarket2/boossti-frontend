@@ -4,6 +4,7 @@ import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
 import { ReactNode } from 'react';
+import Close from '@mui/icons-material/Close';
 
 interface IProps {
   open: boolean;
@@ -22,20 +23,27 @@ export default function Overlay({
   children,
   secondButton = null,
   minWidth = '60vw',
-  maxWidth,
+  maxWidth = '85vw',
 }: IProps) {
   return (
     <Drawer anchor="right" open={open}>
-      <div style={{ minWidth, maxWidth: maxWidth || '85vw' }}>
+      <div style={{ minWidth, maxWidth }}>
         <AppBar color="transparent" position="static" elevation={1}>
-          <Toolbar>
+          <Toolbar variant="dense">
             {title && (
               <Typography variant="h6" className="flex-grow-1">
                 {title}
               </Typography>
             )}
             {secondButton}
-            <Button className="ml-2" onClick={onClose} color="primary" variant="outlined">
+            <Button
+              className="ml-2"
+              startIcon={<Close />}
+              onClick={onClose}
+              color="primary"
+              variant="contained"
+              size="small"
+            >
               Close
             </Button>
           </Toolbar>

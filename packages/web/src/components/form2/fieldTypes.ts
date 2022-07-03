@@ -41,9 +41,5 @@ export const fieldTypes: FieldType[] = [
   { label: 'Lighthouse Report', value: 'lighthouseReport' },
   { label: 'Board', value: 'board' },
   { label: 'Diagram', value: 'diagram' },
-];
-
-export const selectOptionsTypes = [
-  { label: 'Existing Template', value: 'template' },
-  ...fieldTypes?.filter((t) => t.value !== 'select'),
+  { label: 'Flow Diagram', value: 'flowDiagram' },
 ];

@@ -1,12 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import FlowEditor from '../src/components/react-flow/FlowEditor';
+import React, { useState } from 'react';
+import ReactFlow from '../src/components/react-flow/ReactFlow';
 
 export default function ReactFlowPage() {
-  const [loading, setLoading] = useState(true);
+  const [flow, onFlowChange] = useState(null);
 
-  useEffect(() => {
-    setLoading(false);
-  }, []);
-
-  return <div style={{ height: '100vh' }}>{!loading && <FlowEditor />}</div>;
+  return <ReactFlow editMode flow={flow} onFlowChange={onFlowChange} />;
 }

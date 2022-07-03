@@ -14,6 +14,7 @@ import DisplayFiles from '../fileLibrary/DisplayFiles';
 import { LighthouseReport } from './LighthouseReportRendrer';
 import DisplayBoard from './board/DisplayBoard';
 import DisplayDiagram from '../syncfusion-diagram/DisplayDiagram';
+import ReactFlow from '../react-flow/ReactFlow';
 
 interface IProps {
   field: Partial<IField>;
@@ -180,6 +181,8 @@ export default function DisplayValue({
       return <DisplayBoard board={value?.options?.board} verticalView={verticalView} />;
     case 'diagram':
       return <DisplayDiagram diagram={value?.options?.diagram} />;
+    case 'flowDiagram':
+      return <ReactFlow flow={value?.options?.flowDiagram} />;
     default:
       return <>{value?.value}</>;
   }

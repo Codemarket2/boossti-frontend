@@ -1,48 +1,49 @@
+import { MarkerType } from 'react-flow-renderer';
+
 export const defaultNodes: any = [
   {
     id: '1',
-    type: 'input',
+    type: 'customNode',
     data: {
-      label: (
-        <>
-          Welcome to <strong>React Flow!</strong>
-        </>
-      ),
+      label: 'Welcome to React Flow!',
     },
-    position: { x: 250, y: 0 },
+    position: { x: 0, y: 0 },
   },
   {
     id: '2',
+    type: 'customNode',
     data: {
-      label: (
-        <>
-          This is a <strong>default node</strong>
-        </>
-      ),
+      label: 'This is a default node',
     },
-    position: { x: 100, y: 100 },
-    // type: 'textUpdater',
+    position: { x: -150, y: 150 },
   },
-  // {
-  //   id: '3',
-  //   data: {
-  //     label: (
-  //       <>
-  //         This one has a <strong>custom style</strong>
-  //       </>
-  //     ),
-  //   },
-  //   position: { x: 400, y: 100 },
-  //   style: {
-  //     background: '#D6D5E6',
-  //     color: '#333',
-  //     border: '1px solid #222138',
-  //     width: 180,
-  //   },
-  // },
+  {
+    id: '3',
+    type: 'customNode',
+    data: { label: 'Sample Text' },
+    position: { x: 150, y: 150 },
+  },
 ];
 
 export const defaultEdges = [
-  { id: 'e1-2', source: '1', target: '2', label: 'this is an edge label' },
-  { id: 'e1-3', source: '1', target: '3' },
+  {
+    id: 'e1-2',
+    source: '1',
+    target: '2',
+    label: 'edge label',
+    type: 'smoothstep',
+    markerEnd: {
+      type: MarkerType.ArrowClosed,
+    },
+  },
+  {
+    id: 'e1-3',
+    source: '1',
+    target: '3',
+    type: 'smoothstep',
+    animated: true,
+    markerEnd: {
+      type: MarkerType.ArrowClosed,
+    },
+  },
 ];

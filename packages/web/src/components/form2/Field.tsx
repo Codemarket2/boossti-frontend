@@ -37,6 +37,7 @@ import Board from './board/Board';
 import { defaultBoard } from './board/defaultBoard';
 import Diagram from '../syncfusion-diagram/Diagram';
 import { defaultDiagram } from '../syncfusion-diagram/defaultDiagram';
+import ReactFlow from '../react-flow/ReactFlow';
 
 interface IProps {
   disabled?: boolean;
@@ -534,6 +535,9 @@ export default function Field({
               </Button>
             </>
           )}
+          {validation.error && (
+            <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
+          )}
         </>
       );
     }
@@ -560,6 +564,9 @@ export default function Field({
             options={options}
             onChange={(newValue) => onChange({ ...newValue })}
           />
+          {validation.error && (
+            <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
+          )}
         </>
       );
     }
@@ -571,6 +578,9 @@ export default function Field({
             board={value?.options?.board || defaultBoard}
             onBoardChange={(board) => onChange({ options: { board } })}
           />
+          {validation.error && (
+            <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
+          )}
         </>
       );
     }
@@ -581,10 +591,26 @@ export default function Field({
             value={value?.options?.diagram || defaultDiagram}
             onChange={(diagram) => onChange({ options: { diagram } })}
           />
+          {validation.error && (
+            <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
+          )}
         </>
       );
     }
-
+    case 'flowDiagram': {
+      return (
+        <>
+          <ReactFlow
+            editMode
+            flow={value?.options?.flowDiagram}
+            onFlowChange={(flowDiagram) => onChange({ options: { flowDiagram } })}
+          />
+          {validation.error && (
+            <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
+          )}
+        </>
+      );
+    }
     default: {
       const textValidation = validateValue(validate, value, {
         options,

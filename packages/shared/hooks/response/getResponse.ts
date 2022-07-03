@@ -129,6 +129,7 @@ export function useGetResponseByCount(formId: string, count: number): any {
     variables: { formId, count },
     fetchPolicy: 'cache-and-network',
   });
+
   return { data, error, loading };
 }
 
@@ -155,3 +156,20 @@ export async function getResponse(_id) {
   }
   return response;
 }
+
+export const parseResponse = (payload) => {
+  const response = { ...payload };
+  if (response?.options && typeof response?.options === 'string') {
+    response.options = JSON.parse(response?.options);
+  }
+  if (response?.values?.length > 0) {
+    response.values = response?.values?.map((value) => {
+      const newValue = { ...value };
+      if (newValue?.options && typeof newValue?.options === 'string') {
+        newValue.options = JSON.parse(newValue.options);
+      }
+      return newValue;
+    });
+  }
+  return response;
+};
