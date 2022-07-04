@@ -54,6 +54,7 @@ const defaultOptions: IFieldOptions = {
   systemCalculatedAndSaved: false,
   systemValue: null,
   systemCalculatedAndView: false,
+  formula: null,
   showAsCheckbox: false,
   selectAllowCreate: false,
   selectOptions: [''],

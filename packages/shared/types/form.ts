@@ -25,6 +25,7 @@ export interface IFieldOptions {
   systemCalculatedAndSaved: boolean;
   systemValue: any;
   systemCalculatedAndView: boolean;
+  formula: null;
   showAsCheckbox: boolean;
   selectAllowCreate: boolean;
   selectOptions: string[];

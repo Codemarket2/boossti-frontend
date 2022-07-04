@@ -265,7 +265,6 @@ const FormFieldRules = ({ onCancel, onOptionChange, fields, activeField, data }:
           </div>
         );
       })}
-
       <InputGroup className="mt-4">
         <LoadingButton type="submit" size="small">
           Save

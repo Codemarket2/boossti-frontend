@@ -27,6 +27,7 @@ import RichTextarea from '../common/RichTextarea2';
 import SelectForm from './SelectForm';
 import SelectTemplate from '../template/SelectTemplate';
 import SelectFormFields from './SelectFormFields';
+import FieldFormula from './FieldFormula';
 
 interface IProps {
   onCancel?: () => void;
@@ -530,7 +531,7 @@ export default function AddField({
             }
             label="System calculated & saved"
           />
-          {formik.values.options?.systemCalculatedAndSaved && (
+          {/* {formik.values.options?.systemCalculatedAndSaved && (
             <>
               <InputGroup>
                 <FormControl fullWidth size="small">
@@ -558,7 +559,7 @@ export default function AddField({
                 </FormControl>
               </InputGroup>
             </>
-          )}
+          )} */}
           <div>
             <FormControlLabel
               className="mt-n2"
@@ -576,6 +577,19 @@ export default function AddField({
               label="System calculated & view"
             />
           </div>
+          {[
+            formik.values.options?.systemCalculatedAndSaved,
+            formik.values.options?.systemCalculatedAndView,
+          ].includes(true) && (
+            <FieldFormula
+              formula={formik.values.options?.formula}
+              onFormulaChange={(newFormula) => {
+                const formula = formik.values.options?.formula || {};
+                onOptionChange({ formula: { ...formula, ...newFormula } });
+              }}
+              fields={tParentFields}
+            />
+          )}
         </>
       )}
       <div className="mb-2">
