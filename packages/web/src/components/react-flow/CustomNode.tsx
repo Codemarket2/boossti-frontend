@@ -9,6 +9,7 @@ import DisplayRichText from '../common/DisplayRichText';
 import { DisplayForm } from '../form2/DisplayForm';
 import EditNode from './EditNode';
 import { FlowContext } from './FlowEditor';
+import DisplayFormField from './DisplayFormField';
 
 const initialState = { edit: false };
 
@@ -40,11 +41,25 @@ export default memo(({ data, isConnectable, selected, id }: NodeProps) => {
           <Typography textAlign="center">
             <DisplayRichText value={data?.label} />
           </Typography>
-          {data?.formId && data?.formView === 'fullForm' && (
-            <div>
-              <Divider />
-              <DisplayForm _id={data?.formId} settings={{ widgetType: 'form' }} />
-            </div>
+          {data?.formId && ['fullForm', 'formField'].includes(data?.formView) && (
+            <>
+              <Divider className="my-1" />
+              {data?.formView === 'fullForm' ? (
+                <>
+                  <DisplayForm _id={data?.formId} settings={{ widgetType: 'form' }} />
+                </>
+              ) : (
+                data?.formView === 'formField' && (
+                  <>
+                    {data?.fieldId ? (
+                      <DisplayFormField formId={data?.formId} fieldId={data?.fieldId} />
+                    ) : (
+                      <Typography color="error">Please select form field</Typography>
+                    )}
+                  </>
+                )
+              )}
+            </>
           )}
         </div>
         {state.edit && (

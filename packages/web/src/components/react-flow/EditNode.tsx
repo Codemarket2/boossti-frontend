@@ -10,6 +10,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import React, { useState } from 'react';
 import InputGroup from '../common/InputGroup';
 import RichTextarea2 from '../common/RichTextarea2';
+import SelectFormFields from '../form2/SelectFormFields';
 
 interface IProps {
   open: boolean;
@@ -27,19 +28,31 @@ export default function EditNode({ open, data, onChange, onClose }: IProps) {
         <div style={{ minWidth: 200 }}>
           <InputGroup>
             {state?.formId ? (
-              <FormControl size="small" fullWidth variant="outlined">
-                <InputLabel id="demo-simple-select-standard-label">Form view</InputLabel>
-                <Select
-                  labelId="demo-simple-select-standard-label"
-                  id="demo-simple-select-standard"
-                  value={state.formView || 'formName'}
-                  onChange={({ target }) => setState({ ...state, formView: target.value })}
-                  label="Form view"
-                >
-                  <MenuItem value="formName">Display form name</MenuItem>
-                  <MenuItem value="fullForm">Display full form</MenuItem>
-                </Select>
-              </FormControl>
+              <>
+                <FormControl size="small" fullWidth variant="outlined" required>
+                  <InputLabel id="demo-simple-select-standard-label">Form view</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-standard-label"
+                    id="demo-simple-select-standard"
+                    value={state.formView || 'formName'}
+                    onChange={({ target }) => setState({ ...state, formView: target.value })}
+                    label="Form view"
+                  >
+                    <MenuItem value="formName">Display form name</MenuItem>
+                    <MenuItem value="fullForm">Display full form</MenuItem>
+                    <MenuItem value="formField">Display form field</MenuItem>
+                  </Select>
+                </FormControl>
+                {state.formView === 'formField' && (
+                  <InputGroup>
+                    <SelectFormFields
+                      formId={state?.formId}
+                      value={state.fieldId}
+                      onChange={(fieldId) => setState({ ...state, fieldId })}
+                    />
+                  </InputGroup>
+                )}
+              </>
             ) : (
               <>
                 <RichTextarea2
