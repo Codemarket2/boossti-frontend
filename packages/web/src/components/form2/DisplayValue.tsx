@@ -124,11 +124,12 @@ export default function DisplayValue({
       return <>{value?.valueDate && moment(value?.valueDate).format('lll')}</>;
     case 'number':
     case 'phoneNumber':
-      return <>{value?.valueNumber}</>;
-    case 'unitQuantity':
       return (
         <>
-          {value?.valueNumber} {value?.options?.unit}
+          {value?.valueNumber}{' '}
+          {field.fieldType === 'number' &&
+            field.options?.physicalQuantity &&
+            (field.options?.unit || value?.options?.unit)}
         </>
       );
     case 'boolean':

@@ -424,6 +424,18 @@ export default function Field({
       );
     }
     case 'number': {
+      if (options?.physicalQuantity) {
+        return (
+          <UnitQuantityInput
+            value={value}
+            label={label}
+            options={options}
+            onChange={(newValue) => onChange({ ...newValue })}
+            error={validation.error}
+            helperText={validation.errorMessage}
+          />
+        );
+      }
       return (
         <TextField
           fullWidth
@@ -555,21 +567,6 @@ export default function Field({
         </>
       );
     }
-    case 'unitQuantity': {
-      return (
-        <>
-          <UnitQuantityInput
-            value={value}
-            label={label}
-            options={options}
-            onChange={(newValue) => onChange({ ...newValue })}
-          />
-          {validation.error && (
-            <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
-          )}
-        </>
-      );
-    }
     case 'board': {
       return (
         <>
@@ -611,6 +608,7 @@ export default function Field({
         </>
       );
     }
+
     default: {
       const textValidation = validateValue(validate, value, {
         options,

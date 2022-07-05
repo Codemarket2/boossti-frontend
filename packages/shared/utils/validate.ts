@@ -24,13 +24,7 @@ export const validateValue = (validate: boolean, value: any, field: Field): IRet
 
   switch (fieldType) {
     case 'number': {
-      if (!value?.valueNumber) {
-        result = { error: true, errorMessage: 'Required' };
-      }
-      break;
-    }
-    case 'unitQuantity': {
-      if (!value?.valueNumber || !value?.options?.unit) {
+      if (!value?.valueNumber || (field.options?.physicalQuantity && !value?.options?.unit)) {
         result = { error: true, errorMessage: 'Required' };
       }
       break;

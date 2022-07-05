@@ -166,17 +166,12 @@ export default function AddField({
           onChange={(newValue) => onOptionChange({ staticText: newValue })}
         />
       )}
-      {formik?.values?.fieldType === 'unitQuantity' && (
+      {formik?.values?.fieldType === 'number' && (
         <>
           <InputGroup>
-            <FormControl
-              variant="outlined"
-              fullWidth
-              size="small"
-              error={Boolean(!formik.values.options?.physicalQuantity)}
-            >
+            <FormControl variant="outlined" fullWidth size="small">
               <InputLabel id="physical-quantity-select-outlined-label">
-                Physical Quantity*
+                Physical Quantity
               </InputLabel>
               <Select
                 labelId="physical-quantity-select-outlined-label"
@@ -188,15 +183,15 @@ export default function AddField({
                 }
                 label="Physical Quantity*"
               >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
                 {Object.keys(quantities)?.map((physicalQuantity, i) => (
                   <MenuItem value={physicalQuantity} key={i}>
                     {physicalQuantity}
                   </MenuItem>
                 ))}
               </Select>
-              {!formik.values.options?.physicalQuantity && (
-                <FormHelperText className="text-danger">Required</FormHelperText>
-              )}
             </FormControl>
           </InputGroup>
           {formik.values.options?.physicalQuantity && (

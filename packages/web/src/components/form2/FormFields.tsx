@@ -426,7 +426,7 @@ const getFieldSecondaryText = (field) => {
     secondaryText += ` ${field?.form?.name}`;
   } else if (field?.fieldType === 'template' && field?.template?.title) {
     secondaryText += ` ${field?.template?.title}`;
-  } else if (field?.fieldType === 'unitQuantity' && field?.options?.physicalQuantity) {
+  } else if (field?.fieldType === 'number' && field?.options?.physicalQuantity) {
     secondaryText += ` ${field?.options?.physicalQuantity}`;
     if (field?.options?.unit) {
       secondaryText += ` ${field?.options?.unit}`;

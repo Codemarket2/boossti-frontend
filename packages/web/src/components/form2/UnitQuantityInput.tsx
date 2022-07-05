@@ -1,6 +1,7 @@
 import { IFieldOptions } from '@frontend/shared/types/form';
 import { quantities } from '@frontend/shared/utils/quantities';
-import { Typography } from '@mui/material';
+import FormHelperText from '@mui/material/FormHelperText';
+import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
 import InputAdornment from '@mui/material/InputAdornment';
 import InputLabel from '@mui/material/InputLabel';
@@ -14,6 +15,8 @@ interface IProps {
   label: string;
   options: Partial<IFieldOptions>;
   onChange: (newValue: any) => void;
+  error: boolean;
+  helperText: string;
 }
 
 const getDefaultUnit = ({ value, options }: { value: any; options: any }) => {
@@ -27,7 +30,14 @@ const getDefaultUnit = ({ value, options }: { value: any; options: any }) => {
   return unit;
 };
 
-export default function UnitQuantityInput({ value, label, options, onChange }: IProps) {
+export default function UnitQuantityInput({
+  value,
+  label,
+  options,
+  onChange,
+  error,
+  helperText,
+}: IProps) {
   const onChangeQuantity = ({ target }) => {
     onChange({
       valueNumber: target.value,
@@ -78,6 +88,7 @@ export default function UnitQuantityInput({ value, label, options, onChange }: I
           </FormControl>
         </div>
       )}
+      {error && <FormHelperText className="text-danger">{helperText}</FormHelperText>}
     </>
   );
 }

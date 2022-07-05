@@ -20,7 +20,6 @@ export const fieldTypes: FieldType[] = [
   { label: 'Form Response', value: 'response' },
   { label: 'Text', value: 'text' },
   { label: 'Number', value: 'number' },
-  { label: 'Unit/Quantity', value: 'unitQuantity' },
   { label: 'Password', value: 'password' },
   { label: 'Textarea', value: 'textarea' },
   { label: 'Rich Textarea', value: 'richTextarea' },
