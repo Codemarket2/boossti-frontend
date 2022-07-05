@@ -14,10 +14,10 @@ import DisplayFormField from './DisplayFormField';
 const initialState = { edit: false };
 
 export default memo(({ data, isConnectable, selected, id }: NodeProps) => {
-  const flowContext = useContext(FlowContext);
+  const { onNodeChange, editMode } = useContext(FlowContext);
   const [state, setState] = useState(initialState);
   return (
-    <>
+    <div className="nowheel">
       <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
       <Card
         variant="outlined"
@@ -28,7 +28,7 @@ export default memo(({ data, isConnectable, selected, id }: NodeProps) => {
           color: data?.color,
         }}
       >
-        {selected && (
+        {editMode && selected && (
           <IconButton
             size="small"
             onClick={() => setState({ ...state, edit: true })}
@@ -37,7 +37,7 @@ export default memo(({ data, isConnectable, selected, id }: NodeProps) => {
             <Edit fontSize="small" />
           </IconButton>
         )}
-        <div className="p-2" style={{ maxWidth: '300px' }}>
+        <div className="p-2" style={{ maxWidth: '300px', overflowX: 'auto' }}>
           <Typography textAlign="center">
             <DisplayRichText value={data?.label} />
           </Typography>
@@ -68,13 +68,13 @@ export default memo(({ data, isConnectable, selected, id }: NodeProps) => {
             onClose={() => setState(initialState)}
             data={data}
             onChange={(newData) => {
-              if (flowContext?.onNodeChange) flowContext?.onNodeChange(id, newData);
+              if (onNodeChange) onNodeChange(id, newData);
               setState(initialState);
             }}
           />
         )}
       </Card>
       <Handle type="source" position={Position.Bottom} isConnectable={isConnectable} />
-    </>
+    </div>
   );
 });

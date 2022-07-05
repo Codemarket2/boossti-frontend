@@ -58,11 +58,14 @@ export default function FlowEditor({
       event.preventDefault();
 
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-      const newNodeData = JSON.parse(event.dataTransfer.getData('application/reactflow'));
+
+      let newNodeData = event.dataTransfer.getData('application/reactflow');
       // check if the dropped element is valid
-      if (typeof newNodeData === 'undefined' || !newNodeData) {
+      if (!newNodeData) {
         return;
       }
+
+      newNodeData = JSON.parse(newNodeData);
 
       const position = reactFlowInstance.project({
         x: event.clientX - reactFlowBounds.left,
@@ -81,7 +84,7 @@ export default function FlowEditor({
   );
 
   return (
-    <FlowContext.Provider value={{ onNodeChange }}>
+    <FlowContext.Provider value={{ onNodeChange, editMode }}>
       <Overlay
         title="Flow Diagram"
         open={open}
@@ -109,7 +112,7 @@ export default function FlowEditor({
                   fitView
                   nodesDraggable={editMode}
                   nodesConnectable={editMode}
-                  elementsSelectable={editMode}
+                  // elementsSelectable={editMode}
                 >
                   <Controls showInteractive={editMode} />
                   <Background color="#aaa" gap={16} />
@@ -128,4 +131,5 @@ export const FlowContext = createContext({
   onNodeChange: (id, newData) => {
     //
   },
+  editMode: false,
 });
