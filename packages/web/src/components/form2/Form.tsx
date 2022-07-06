@@ -35,7 +35,7 @@ import NotFound from '../common/NotFound';
 import UnAuthorised from '../common/UnAuthorised';
 import Permissions from './Permissions';
 import AuditLog from '../auditLog/AuditLog';
-import Constraints from './Constraints/Constraints';
+import Conditions from './Constraints/Conditions';
 import ShopifySettings from './shopify/ShopifySettings';
 import BoardsTab from './board/BoardsTab';
 
@@ -54,7 +54,7 @@ const tabs = [
   'Responses',
   'Boards',
   'Activity',
-  'Constraints',
+  'Conditions',
   'Shopify',
 ];
 
@@ -196,7 +196,8 @@ export default function Form({ _id, drawerMode = false, onSlugChange, hideFields
                   parentFields={state.fields?.map((f) => ({
                     ...f,
                     formId: state._id,
-                    label: `${state?.name} - ${f?.label}`,
+                    label: f?.label,
+                    formName: state?.name,
                   }))}
                 />
               </Grid>
@@ -264,14 +265,19 @@ export default function Form({ _id, drawerMode = false, onSlugChange, hideFields
               )}
               {options.currentTab === 'Permissions' && <Permissions formId={_id} form={state} />}
               {options.currentTab === 'Activity' && <AuditLog documentId={_id} formId={_id} />}
-              {options.currentTab === 'Constraints' && (
-                <Constraints
+              {options.currentTab === 'Conditions' && (
+                <Conditions
                   form={state}
-                  onConstraintChange={(constraints) => {
+                  onConditionsChange={(conditions) => {
                     handleOnChange({
-                      settings: { ...state.settings, constraints },
+                      settings: { ...state.settings, conditions },
                     });
                   }}
+                  onFieldsChange={(newFields) =>
+                    handleOnChange({
+                      fields: newFields,
+                    })
+                  }
                 />
               )}
               {options.currentTab === 'Shopify' && (

@@ -27,7 +27,7 @@ import RichTextarea from '../common/RichTextarea2';
 import SelectForm from './SelectForm';
 import SelectTemplate from '../template/SelectTemplate';
 import SelectFormFields from './SelectFormFields';
-import FieldFormula from './FieldFormula';
+import Formula from './formula/Formula';
 
 interface IProps {
   onCancel?: () => void;
@@ -576,13 +576,15 @@ export default function AddField({
             formik.values.options?.systemCalculatedAndSaved,
             formik.values.options?.systemCalculatedAndView,
           ].includes(true) && (
-            <FieldFormula
+            <Formula
               formula={formik.values.options?.formula}
               onFormulaChange={(newFormula) => {
                 const formula = formik.values.options?.formula || {};
                 onOptionChange({ formula: { ...formula, ...newFormula } });
               }}
-              fields={tParentFields}
+              fields={tParentFields?.filter(
+                (f) => f?.fieldType === 'number' && field?._id !== f?._id,
+              )}
             />
           )}
         </>
