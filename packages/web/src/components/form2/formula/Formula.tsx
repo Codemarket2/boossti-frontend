@@ -1,13 +1,14 @@
 import Edit from '@mui/icons-material/Edit';
 import { IconButton, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { IField, IFormula } from '@frontend/shared/types/form';
 import FormulaEditor from './FormulaEditor';
 import DisplayFormula from './DisplayFormula';
 
 interface FormulaProps {
-  fields: any[];
-  formula: any;
-  onFormulaChange: (formula: any) => void;
+  fields: IField[];
+  formula: IFormula;
+  onFormulaChange: (formula: IFormula) => void;
 }
 
 export default function Formula({ fields, formula, onFormulaChange }: FormulaProps) {

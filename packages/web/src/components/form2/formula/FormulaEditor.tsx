@@ -1,3 +1,4 @@
+import { IField, IFormula, IFormulaVariable } from '@frontend/shared/types/form';
 import Add from '@mui/icons-material/Add';
 import Delete from '@mui/icons-material/Delete';
 import { Button, FormHelperText, IconButton, TextField, Typography } from '@mui/material';
@@ -12,11 +13,18 @@ import InputGroup from '../../common/InputGroup';
 import DisplayFormula from './DisplayFormula';
 
 interface FieldFormulaProps {
-  fields: any[];
-  formula: any;
-  onSave: (formula: any) => void;
+  fields: IField[];
+  formula: IFormula;
+  onSave: (formula: IFormula) => void;
   onClose: () => void;
 }
+
+const defaultVariable: IFormulaVariable = {
+  value: '',
+  operation: null,
+  constantValue: null,
+  variables: [],
+};
 
 export default function FormulaEditor({
   fields,
@@ -25,7 +33,7 @@ export default function FormulaEditor({
   onClose,
 }: FieldFormulaProps) {
   const [formula, setFormula] = useState(tempFormula);
-  const onFormulaChange = (newFormula) => {
+  const onFormulaChange = (newFormula: Partial<IFormula>) => {
     setFormula({ ...formula, ...newFormula });
   };
   return (
@@ -39,7 +47,7 @@ export default function FormulaEditor({
             value={formula?.condition}
             label="Condition"
             onChange={({ target: { value } }) =>
-              onFormulaChange({ condition: value, variables: [{}] })
+              onFormulaChange({ condition: value, variables: [defaultVariable] })
             }
             error={!formula?.condition}
           >
@@ -84,9 +92,9 @@ export default function FormulaEditor({
 }
 
 interface VariablesProps {
-  variables: any[];
-  onVariablesChange: (variables: any[]) => void;
-  fields: any[];
+  variables: IFormulaVariable[];
+  onVariablesChange: (variables: IFormulaVariable[]) => void;
+  fields: IField[];
   level?: number;
 }
 
@@ -111,7 +119,7 @@ const Variables = ({ variables, onVariablesChange, fields, level }: VariablesPro
           {variableIndex > 0 && (
             <InputGroup>
               <div className="d-flex align-items-center">
-                <FormControl fullWidth size="small">
+                <FormControl fullWidth size="small" error={!variable?.operation}>
                   <InputLabel id="operation-label">Operation</InputLabel>
                   <Select
                     labelId="operation-label"
@@ -121,12 +129,14 @@ const Variables = ({ variables, onVariablesChange, fields, level }: VariablesPro
                       onVariableChange(variableIndex, { operation: value })
                     }
                   >
-                    {/* <MenuItem value="">None</MenuItem> */}
                     <MenuItem value="add">+ Add</MenuItem>
                     <MenuItem value="subtract">- Subtract</MenuItem>
                     <MenuItem value="multiply">x Multiply</MenuItem>
                     <MenuItem value="divide">% Divide</MenuItem>
                   </Select>
+                  {!variable?.operation && (
+                    <FormHelperText className="text-danger">Required</FormHelperText>
+                  )}
                 </FormControl>
                 <div>
                   <IconButton
@@ -200,7 +210,7 @@ const Variables = ({ variables, onVariablesChange, fields, level }: VariablesPro
                 className="ml-n1"
                 size="small"
                 startIcon={<Add />}
-                onClick={() => onVariablesChange([...variables, {}])}
+                onClick={() => onVariablesChange([...variables, defaultVariable])}
               >
                 Add operation
               </Button>

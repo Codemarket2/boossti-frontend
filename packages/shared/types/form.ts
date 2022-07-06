@@ -25,10 +25,12 @@ export interface IFieldOptions {
   systemCalculatedAndSaved: boolean;
   systemValue: any;
   systemCalculatedAndView: boolean;
-  formula: null;
+  formula: IFormula;
   showAsCheckbox: boolean;
   selectAllowCreate: boolean;
   selectOptions: string[];
+  grid?: any;
+  style?: any;
 }
 
 export interface IField {
@@ -38,4 +40,16 @@ export interface IField {
   template: any;
   form: any;
   options: IFieldOptions;
+}
+
+export interface IFormula {
+  condition: string;
+  variables: IFormulaVariable[];
+}
+
+export interface IFormulaVariable {
+  operation: 'add' | 'subtract' | 'divide' | 'multiply';
+  value: 'brackets' | 'constantValue' | string;
+  constantValue: number;
+  variables: IFormulaVariable[];
 }

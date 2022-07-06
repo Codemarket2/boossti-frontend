@@ -15,6 +15,7 @@ import { LighthouseReport } from './LighthouseReportRendrer';
 import DisplayBoard from './board/DisplayBoard';
 import DisplayDiagram from '../syncfusion-diagram/DisplayDiagram';
 import ReactFlow from '../react-flow/ReactFlow';
+import DisplayFormulaValue from './formula/DisplayFormulaValue';
 
 interface IProps {
   field: Partial<IField>;
@@ -30,6 +31,7 @@ export default function DisplayValue({
   verticalView,
 }: IProps) {
   const value: any = { ...tempValue };
+
   if (typeof value?.options === 'string') {
     value.options = JSON.parse(value?.options);
   }
@@ -49,6 +51,9 @@ export default function DisplayValue({
       </>
     );
   }
+  // if (field?.options?.systemCalculatedAndView) {
+  //   return <DisplayFormulaValue formula={field?.options?.formula} />;
+  // }
   switch (field.fieldType) {
     case 'text':
     case 'textarea':

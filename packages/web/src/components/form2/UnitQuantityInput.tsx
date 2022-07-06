@@ -17,6 +17,7 @@ interface IProps {
   onChange: (newValue: any) => void;
   error: boolean;
   helperText: string;
+  disabled: boolean;
 }
 
 const getDefaultUnit = ({ value, options }: { value: any; options: any }) => {
@@ -37,6 +38,7 @@ export default function UnitQuantityInput({
   onChange,
   error,
   helperText,
+  disabled,
 }: IProps) {
   const onChangeQuantity = ({ target }) => {
     onChange({
@@ -59,6 +61,7 @@ export default function UnitQuantityInput({
             endAdornment: <InputAdornment position="end">{options?.unit}</InputAdornment>,
           }}
           onChange={onChangeQuantity}
+          disabled={disabled}
         />
       ) : (
         <div className="d-flex">
@@ -68,6 +71,7 @@ export default function UnitQuantityInput({
             placeholder={label}
             value={value?.valueNumber}
             onChange={onChangeQuantity}
+            disabled={disabled}
           />
           <FormControl size="small" disabled={Boolean(options?.unit)}>
             <InputLabel id="unit-select-label">Unit</InputLabel>

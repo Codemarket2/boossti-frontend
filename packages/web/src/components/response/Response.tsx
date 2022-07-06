@@ -27,6 +27,7 @@ import { onAlert } from '../../utils/alert';
 import CRUDMenu from '../common/CRUDMenu';
 import BackdropComponent from '../common/Backdrop';
 import EditMode from '../common/EditMode';
+import DisplayFormulaValue from '../form2/formula/DisplayFormulaValue';
 
 const StyledBox = styled(Box)(({ theme }) => ({
   flexDirection: 'column',
@@ -300,31 +301,37 @@ export function ResponseChild3({
                   </Typography>
                 </>
               )}
-              {form?.fields?.map((field, index) => {
+              {form?.fields?.map((field) => {
                 return (
                   <Fragment key={field?._id}>
-                    {form?.slug === 'apps' && field?.label?.toLowerCase() === 'install' ? (
-                      <div>Show Install form</div>
-                    ) : (
-                      <div className="mt-2">
-                        <Typography fontWeight="bold">- {field?.label}</Typography>
-                        {response?.values
-                          ?.filter((v) => v.field === field._id)
-                          .map((value) => (
-                            <Fragment key={value?._id}>
-                              <StyledBox style={{ display: 'flex', alignContent: 'center' }}>
-                                <DisplayValue field={field} value={value} verticalView />
-                              </StyledBox>
-                              {field?.options?.showCommentBox && (
-                                <CommentLikeShare parentId={value?._id} />
-                              )}
-                              {field?.options?.showStarRating && (
-                                <StarRating parentId={value?._id} />
-                              )}
-                            </Fragment>
-                          ))}
-                      </div>
-                    )}
+                    <div className="mt-2">
+                      <Typography fontWeight="bold">- {field?.label}</Typography>
+                      {field?.options?.systemCalculatedAndView ? (
+                        <DisplayFormulaValue
+                          formula={field?.options?.formula}
+                          field={field}
+                          values={response?.values}
+                        />
+                      ) : (
+                        <>
+                          {response?.values
+                            ?.filter((v) => v.field === field._id)
+                            .map((value) => (
+                              <Fragment key={value?._id}>
+                                <StyledBox style={{ display: 'flex', alignContent: 'center' }}>
+                                  <DisplayValue field={field} value={value} verticalView />
+                                </StyledBox>
+                                {field?.options?.showCommentBox && (
+                                  <CommentLikeShare parentId={value?._id} />
+                                )}
+                                {field?.options?.showStarRating && (
+                                  <StarRating parentId={value?._id} />
+                                )}
+                              </Fragment>
+                            ))}
+                        </>
+                      )}
+                    </div>
                   </Fragment>
                 );
               })}

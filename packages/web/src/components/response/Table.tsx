@@ -23,6 +23,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { Search } from '@mui/icons-material';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { IField } from '@frontend/shared/types/form';
+import DisplayFormulaValue from '../form2/formula/DisplayFormulaValue';
 
 interface IProps {
   search: string;
@@ -160,15 +162,27 @@ export default function ResponseTable({
                       </a>
                     </Link>
                   </TableCell>
-                  {form?.fields?.map((field, i) => (
+                  {form?.fields?.map((field: IField, i) => (
                     <TableCell key={i}>
-                      {response?.values
-                        ?.filter((v) => v.field === field._id)
-                        ?.map((value) => (
-                          <div key={value?._id}>
-                            <DisplayValue field={field} value={value} />
-                          </div>
-                        ))}
+                      {field?.options?.systemCalculatedAndView ? (
+                        <>
+                          <DisplayFormulaValue
+                            formula={field?.options?.formula}
+                            field={field}
+                            values={response?.values}
+                          />
+                        </>
+                      ) : (
+                        <>
+                          {response?.values
+                            ?.filter((v) => v.field === field._id)
+                            ?.map((value) => (
+                              <div key={value?._id}>
+                                <DisplayValue field={field} value={value} />
+                              </div>
+                            ))}
+                        </>
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>

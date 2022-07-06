@@ -18,6 +18,7 @@ import { validateForm, validateValue } from '@frontend/shared/utils/validate';
 import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
 import { ISystemValues } from '@frontend/shared/hooks/response/calculateSystemValues';
+import { IField } from '@frontend/shared/types/form';
 import ResponseList from '../response/ResponseList';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
@@ -32,6 +33,8 @@ import Leaderboard from '../response/Leaderboard';
 import SelectResponse from '../response/SelectResponse';
 import { replaceVariables } from './variables';
 import projectConfig from '../../../../shared/index';
+import { evaluateFormula } from './formula/DisplayFormulaValue';
+import DisplayFormula, { getFormula } from './formula/DisplayFormula';
 
 interface IProps {
   form: any;
@@ -587,6 +590,7 @@ export function FormView({
     responseId,
     setUniqueLoading,
     setUnique,
+    validate: submitState.validate,
   };
 
   return (
@@ -600,8 +604,8 @@ export function FormView({
       )}
       <Grid container spacing={0}>
         {(fieldWiseView && fields?.length > 1 ? [fields[page]] : fields)
-          ?.filter((field) => !field?.options?.systemCalculatedAndSaved)
-          ?.map((field) => (
+          ?.filter((field: IField) => !field?.options?.systemCalculatedAndSaved)
+          ?.map((field: any) => (
             <Grid
               item
               xs={field?.options?.grid?.xs || 12}
@@ -623,6 +627,11 @@ export function FormView({
                       </span>
                     )}
                   </Typography>
+                  {field?.options?.systemCalculatedAndView && (
+                    <div className="mb-2">
+                      <DisplayFormula formula={field?.options?.formula} fields={fields} />
+                    </div>
+                  )}
                   <>
                     <div className="w-100">
                       {hideField ? (
@@ -634,18 +643,26 @@ export function FormView({
                           disabled={
                             edit && field.options.notEditable
                               ? submitState.loading || field.options.notEditable
-                              : submitState.loading
+                              : submitState.loading || field.options.systemCalculatedAndView
                           }
                           validate={submitState.validate}
                           label={field?.options?.required ? `${field?.label}*` : field?.label}
-                          onChangeValue={(changedValue) =>
-                            onChange(
-                              { ...changedValue, field: field._id },
-                              filterValues(values, field)?.length - 1,
-                            )
-                          }
+                          onChangeValue={(changedValue) => {
+                            if (!field?.options?.systemCalculatedAndView) {
+                              onChange(
+                                { ...changedValue, field: field._id },
+                                filterValues(values, field)?.length - 1,
+                              );
+                            }
+                          }}
                           value={
-                            filterValues(values, field)[filterValues(values, field)?.length - 1]
+                            field.options.systemCalculatedAndView
+                              ? {
+                                  valueNumber: evaluateFormula(
+                                    getFormula(field?.options?.formula?.variables, [], values),
+                                  ),
+                                }
+                              : filterValues(values, field)[filterValues(values, field)?.length - 1]
                           }
                         />
                       )}
@@ -682,7 +699,6 @@ export function FormView({
                                     {...field}
                                     {...fieldProps}
                                     disabled={submitState.loading}
-                                    validate={submitState.validate}
                                     label={
                                       field?.options?.required ? `${field?.label}*` : field?.label
                                     }

@@ -15,12 +15,9 @@ import { validateValue } from '@frontend/shared/utils/validate';
 import { IFieldOptions } from '@frontend/shared/types/form';
 import RichTextarea from '../common/RichTextarea2';
 import DisplayRichText from '../common/DisplayRichText';
-// import SelectPage from '../template/SelectPage';
 import SelectResponse from '../response/SelectResponse';
 import Select from './Select';
 import SelectForm from './SelectForm';
-// import SelectTemplate from '../template/SelectTemplate';
-// import { SelectOptionType } from './EditField';
 import ImagePicker2 from '../common/ImagePicker2';
 import ColorInput from '../customMUI/ColorInput/ColorInput';
 import AddressSearch from '../common/AddressSearch';
@@ -277,7 +274,6 @@ export default function Field({
         </>
       );
     }
-
     case 'file': {
       return (
         <div>
@@ -295,116 +291,6 @@ export default function Field({
         </div>
       );
     }
-
-    // case 'select': {
-    //   const optionsTemplate = options?.optionsTemplate || value?.options?.optionsTemplate;
-    //   return (
-    //     <>
-    //       {!options?.optionsTemplate && (
-    //         <div className="my-2">
-    //           <SelectOptionType
-    //             value={value?.options?.optionsTemplate}
-    //             onChange={(newOptionsTemplate) =>
-    //               onChange({
-    //                 field: _id,
-    //                 options: {
-    //                   ...value?.options,
-    //                   optionsTemplate: newOptionsTemplate,
-    //                 },
-    //               })
-    //             }
-    //             error={validation.error}
-    //             helperText={validation.errorMessage}
-    //           />
-    //         </div>
-    //       )}
-    //       {optionsTemplate === 'template' ? (
-    //         <>
-    //           <SelectTemplate
-    //             label={null}
-    //             placeholder={`${label} template`}
-    //             value={value?.template || null}
-    //             onChange={(newValue) => onChange({ field: _id, template: newValue })}
-    //             error={validation.error}
-    //             helperText={validation.errorMessage}
-    //           />
-    //           {template?._id && (
-    //             <div className="mt-2">
-    //               <SelectPage
-    //                 templateId={template?._id}
-    //                 typeSlug={template?.slug}
-    //                 label={null}
-    //                 placeholder={`${label} page`}
-    //                 error={validation.error}
-    //                 helperText={validation.errorMessage}
-    //                 value={value ? value.page : null}
-    //                 onChange={(newValue) => onChange({ field: _id, page: newValue })}
-    //                 allowCreate={options?.selectAllowCreate}
-    //               />
-    //             </div>
-    //           )}
-    //         </>
-    //       ) : optionsTemplate === 'response' ? (
-    //         <>
-    //           {!form && (
-    //             <SelectForm
-    //               placeholder={`${label} form`}
-    //               label={null}
-    //               value={value?.form}
-    //               onChange={(newValue) => onChange({ field: _id, form: newValue })}
-    //               error={validation.error}
-    //               helperText={validation.errorMessage}
-    //             />
-    //           )}
-    //           {form?._id && (
-    //             <SelectResponse
-    //               label={`${label} response`}
-    //               formId={form?._id}
-    //               formField={options?.formField}
-    //               value={value?.response}
-    //               onChange={(newValue) => onChange({ field: _id, response: newValue })}
-    //               error={validation.error}
-    //               helperText={validation.errorMessage}
-    //             />
-    //           )}
-    //         </>
-    //       ) : options?.showAsCheckbox ? (
-    //         <div>
-    //           {options?.selectOptions?.map((option, i) => (
-    //             <FormControlLabel
-    //               disabled={disabled}
-    //               key={i}
-    //               control={
-    //                 <Checkbox
-    //                   name={option}
-    //                   checked={value?.values?.includes(option)}
-    //                   onChange={onChangeCheckbox}
-    //                 />
-    //               }
-    //               label={option}
-    //             />
-    //           ))}
-    //           {validation.error && (
-    //             <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
-    //           )}
-    //         </div>
-    //       ) : (
-    //         optionsTemplate && (
-    //           <Select
-    //             label={label}
-    //             options={options?.selectOptions}
-    //             value={value ? value?.value : ''}
-    //             onChange={(newValue) => onChange({ field: _id, value: newValue })}
-    //             selectAllowCreate={options?.selectAllowCreate}
-    //             error={validation.error}
-    //             helperText={validation.errorMessage}
-    //           />
-    //         )
-    //       )}
-    //     </>
-    //   );
-    // }
-
     case 'phoneNumber': {
       return (
         <>
@@ -431,6 +317,7 @@ export default function Field({
             label={label}
             options={options}
             onChange={(newValue) => onChange({ ...newValue })}
+            disabled={disabled}
             error={validation.error}
             helperText={validation.errorMessage}
           />
@@ -461,7 +348,6 @@ export default function Field({
         />
       );
     }
-
     case 'barcodeScanner': {
       return (
         <BarcodeInput
@@ -471,7 +357,6 @@ export default function Field({
         />
       );
     }
-
     case 'address': {
       return <AddressSearch _id={_id} onChange={onChange} values={value} />;
     }
@@ -513,7 +398,6 @@ export default function Field({
         />
       );
     }
-
     case 'response': {
       return (
         <>
@@ -608,7 +492,6 @@ export default function Field({
         </>
       );
     }
-
     default: {
       const textValidation = validateValue(validate, value, {
         options,
