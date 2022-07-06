@@ -7,9 +7,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
 import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
-import Edit from '@mui/icons-material/Edit';
 import React, { useState } from 'react';
 import ConditionForm from './ConditionForm';
 import CRUDMenu from '../../common/CRUDMenu';
@@ -28,9 +26,10 @@ const initialState = {
   constraintIndex: null,
   showMenu: null,
   selectedField: null,
+  selectedTab: 0,
 };
 
-export default function Conditions({ form, onConditionsChange, onFieldsChange }: IProps) {
+export default function ConditionsTab({ form, onConditionsChange, onFieldsChange }: IProps) {
   const [state, setState] = useState(initialState);
   const conditions = form?.settings?.conditions || [];
 
@@ -53,9 +52,9 @@ export default function Conditions({ form, onConditionsChange, onFieldsChange }:
   };
 
   return (
-    <>
+    <div className="p-2">
       {state.selectedField ? (
-        <Paper variant="outlined" className="p-2">
+        <div>
           <Typography variant="h5">Rules</Typography>
           <FormulaEditor
             fields={form?.fields?.filter(
@@ -78,7 +77,7 @@ export default function Conditions({ form, onConditionsChange, onFieldsChange }:
               setState(initialState);
             }}
           />
-        </Paper>
+        </div>
       ) : state?.showForm ? (
         <ConditionForm
           constraint={state.constraint}
@@ -87,8 +86,8 @@ export default function Conditions({ form, onConditionsChange, onFieldsChange }:
           onCancel={() => setState(initialState)}
         />
       ) : (
-        <Paper variant="outlined">
-          <Typography variant="h5" className="d-flex align-items-center p-2">
+        <>
+          <Typography variant="h5" className="d-flex align-items-center">
             Conditions
             <Tooltip title="Add Condition">
               <IconButton color="primary" onClick={() => setState({ ...state, showForm: true })}>
@@ -96,7 +95,7 @@ export default function Conditions({ form, onConditionsChange, onFieldsChange }:
               </IconButton>
             </Tooltip>
           </Typography>
-          <List>
+          <List disablePadding>
             {conditions?.map((condition, index) => (
               <ListItem key={index} disablePadding>
                 <ListItemButton>
@@ -127,7 +126,7 @@ export default function Conditions({ form, onConditionsChange, onFieldsChange }:
               onDelete={onDelete}
             />
           </List>
-          <List>
+          <List disablePadding>
             {form?.fields
               ?.filter(
                 (field) =>
@@ -161,8 +160,8 @@ export default function Conditions({ form, onConditionsChange, onFieldsChange }:
                 </ListItem>
               ))}
           </List>
-        </Paper>
+        </>
       )}
-    </>
+    </div>
   );
 }

@@ -84,17 +84,17 @@ export default function FlowEditor({
   );
 
   return (
-    <FlowContext.Provider value={{ onNodeChange, editMode }}>
-      <Overlay
-        title="Flow Diagram"
-        open={open}
-        onClose={() => {
-          onClose();
-          onFlowChange({ nodes, edges });
-        }}
-        maxWidth="90vw"
-        minWidth="90vw"
-      >
+    <Overlay
+      title="Flow Diagram"
+      open={open}
+      onClose={() => {
+        onClose();
+        onFlowChange({ nodes, edges });
+      }}
+      maxWidth="90vw"
+      minWidth="90vw"
+    >
+      <FlowContext.Provider value={{ onNodeChange, editMode }}>
         <div style={{ height: 'calc(100vh - 50px)', minHeight: 300 }}>
           <div className="dndflow">
             <ReactFlowProvider>
@@ -122,8 +122,8 @@ export default function FlowEditor({
             </ReactFlowProvider>
           </div>
         </div>
-      </Overlay>
-    </FlowContext.Provider>
+      </FlowContext.Provider>
+    </Overlay>
   );
 }
 

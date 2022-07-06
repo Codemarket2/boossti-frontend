@@ -29,7 +29,7 @@ export default function ConstraintForm({ constraint, fields = [], onSave, onCanc
   const { formik } = useAddConstraint({ onAlert, onSave, constraint });
 
   return (
-    <Paper variant="outlined" className="p-2">
+    <>
       <Typography>Add Constraint</Typography>
       <form onSubmit={formik.handleSubmit}>
         <InputGroup>
@@ -130,7 +130,7 @@ export default function ConstraintForm({ constraint, fields = [], onSave, onCanc
           </Button>
         </InputGroup>
       </form>
-    </Paper>
+    </>
   );
 }
 

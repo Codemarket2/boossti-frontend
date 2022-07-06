@@ -51,6 +51,6 @@ export const getFormula = (variables: IFormulaVariable[], fields: IField[], valu
 const operationSymbols = {
   add: '+',
   subtract: '-',
-  divide: '%',
+  divide: '/',
   multiply: '*',
 };
