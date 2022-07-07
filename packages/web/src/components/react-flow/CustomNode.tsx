@@ -38,14 +38,16 @@ export default memo(({ data, isConnectable, selected, id }: NodeProps) => {
           </IconButton>
         )}
         <div className="p-2" style={{ maxWidth: '300px', overflowX: 'auto' }}>
-          <Typography textAlign="center">
-            <DisplayRichText value={data?.label} />
-          </Typography>
-          {data?.formId && ['fullForm', 'formField'].includes(data?.formView) && (
+          {data?.formView !== 'formField' && (
+            <Typography textAlign="center">
+              <DisplayRichText value={data?.label} />
+            </Typography>
+          )}
+          {data?.formId && (
             <>
-              <Divider className="my-1" />
               {data?.formView === 'fullForm' ? (
                 <>
+                  <Divider className="my-1" />
                   <DisplayForm _id={data?.formId} settings={{ widgetType: 'form' }} />
                 </>
               ) : (

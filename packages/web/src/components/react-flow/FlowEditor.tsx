@@ -23,11 +23,12 @@ export interface IFlow {
 }
 
 interface FlowEditorProps {
-  open: boolean;
-  onClose: () => void;
+  open?: boolean;
+  onClose?: () => void;
   flow: IFlow;
   editMode?: boolean;
-  onFlowChange: (flow: IFlow) => void;
+  onFlowChange?: (flow: IFlow) => void;
+  overlay?: boolean;
 }
 
 export default function FlowEditor({
@@ -36,6 +37,7 @@ export default function FlowEditor({
   flow,
   editMode = false,
   onFlowChange,
+  overlay,
 }: FlowEditorProps) {
   const reactFlowWrapper = useRef(null);
   const [nodes, setNodes, onNodesChange] = useNodesState(flow?.nodes || defaultNodes);
@@ -83,47 +85,57 @@ export default function FlowEditor({
     [reactFlowInstance],
   );
 
-  return (
-    <Overlay
-      title="Flow Diagram"
-      open={open}
-      onClose={() => {
-        onClose();
-        onFlowChange({ nodes, edges });
-      }}
-      maxWidth="90vw"
-      minWidth="90vw"
-    >
-      <FlowContext.Provider value={{ onNodeChange, editMode }}>
-        <div style={{ height: 'calc(100vh - 50px)', minHeight: 300 }}>
-          <div className="dndflow">
-            <ReactFlowProvider>
-              <div className="reactflow-wrapper" ref={reactFlowWrapper}>
-                <ReactFlow
-                  nodeTypes={nodeTypes}
-                  nodes={nodes}
-                  edges={edges}
-                  onNodesChange={onNodesChange}
-                  onEdgesChange={onEdgesChange}
-                  onConnect={onConnect}
-                  onInit={setReactFlowInstance}
-                  onDrop={onDrop}
-                  onDragOver={onDragOver}
-                  fitView
-                  nodesDraggable={editMode}
-                  nodesConnectable={editMode}
-                  // elementsSelectable={editMode}
-                >
-                  <Controls showInteractive={editMode} />
-                  <Background color="#aaa" gap={16} />
-                </ReactFlow>
-              </div>
-              {editMode && <Sidebar />}
-            </ReactFlowProvider>
-          </div>
+  const Editor = (
+    <FlowContext.Provider value={{ onNodeChange, editMode }}>
+      <div style={{ height: 'calc(100vh - 50px)', minHeight: 300 }}>
+        <div className="dndflow">
+          <ReactFlowProvider>
+            <div className="reactflow-wrapper" ref={reactFlowWrapper}>
+              <ReactFlow
+                nodeTypes={nodeTypes}
+                nodes={nodes}
+                edges={edges}
+                onNodesChange={onNodesChange}
+                onEdgesChange={onEdgesChange}
+                onConnect={onConnect}
+                onInit={setReactFlowInstance}
+                onDrop={onDrop}
+                onDragOver={onDragOver}
+                fitView
+                nodesDraggable={editMode}
+                nodesConnectable={editMode}
+                // elementsSelectable={editMode}
+              >
+                <Controls showInteractive={editMode} />
+                <Background color="#aaa" gap={16} />
+              </ReactFlow>
+            </div>
+            {editMode && <Sidebar />}
+          </ReactFlowProvider>
         </div>
-      </FlowContext.Provider>
-    </Overlay>
+      </div>
+    </FlowContext.Provider>
+  );
+
+  return (
+    <>
+      {overlay ? (
+        <Overlay
+          title="Flow Diagram"
+          open={open}
+          onClose={() => {
+            onClose();
+            onFlowChange({ nodes, edges });
+          }}
+          maxWidth="90vw"
+          minWidth="90vw"
+        >
+          {Editor}
+        </Overlay>
+      ) : (
+        Editor
+      )}
+    </>
   );
 }
 
@@ -133,3 +145,5 @@ export const FlowContext = createContext({
   },
   editMode: false,
 });
+
+// export const FlowEditorDrawer = () => {};

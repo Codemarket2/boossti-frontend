@@ -37,7 +37,7 @@ export default function Conditions({ form, onConditionsChange, onFieldsChange }:
           onFieldsChange={onFieldsChange}
         />
       )}
-      {state.selectedTab === 1 && <FlowDiagramTab />}
+      {state.selectedTab === 1 && <FlowDiagramTab form={form} />}
     </Paper>
   );
 }

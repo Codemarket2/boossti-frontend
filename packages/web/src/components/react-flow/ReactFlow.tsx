@@ -23,6 +23,7 @@ export default function ReactFlow({ flow, onFlowChange, editMode }: ReactFlowPro
       </Button>
       {editor && (
         <FlowEditor
+          overlay
           editMode={editMode}
           open={editor}
           onClose={() => setEditor(false)}
