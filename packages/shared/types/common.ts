@@ -4,7 +4,7 @@ export interface IHooksProps {
 
 export interface ISchema {
   _id: string;
-  createdBy: string;
+  createdBy: string | any;
   updatedBy?: string;
   createdAt: Date;
   updatedAt: Date;

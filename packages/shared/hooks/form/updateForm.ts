@@ -1,40 +1,37 @@
 import { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { UPDATE_FORM } from '../../graphql/mutation/form';
-import { GET_FORM } from '../../graphql/query/form';
+import { GET_FORM_BY_SLUG } from '../../graphql/query/form';
 import { IHooksProps } from '../../types/common';
-import { useGetForm } from './index';
 import { omitTypename } from '../../utils/omitTypename';
 import { client as apolloClient } from '../../graphql/index';
+import { IForm } from '../../types/form';
 
 interface IProps extends IHooksProps {
-  _id: string;
+  form: IForm;
 }
 
-const updateCache = (_id, newFormData) => {
+const updateCache = (slug, newFormData) => {
   const oldData = apolloClient.readQuery({
-    query: GET_FORM,
-    variables: { _id },
+    query: GET_FORM_BY_SLUG,
+    variables: { slug },
   });
-  if (oldData?.getForm) {
+  if (oldData?.getFormBySlug) {
     const newData = {
       ...oldData,
-      getForm: { ...oldData?.getForm, ...newFormData },
+      getFormBySlug: { ...oldData?.getFormBySlug, ...newFormData },
     };
     apolloClient.writeQuery({
-      query: GET_FORM,
-      variables: { _id },
+      query: GET_FORM_BY_SLUG,
+      variables: { slug },
       data: newData,
     });
   }
 };
 
-export function useUpdateForm({ onAlert, _id }: IProps): any {
-  const { data, error } = useGetForm(_id);
+export function useUpdateForm({ onAlert, form }: IProps): any {
   const [saveToServer, setSaveToServer] = useState(false);
   const [updateFormMutation, { loading: updateLoading }] = useMutation(UPDATE_FORM);
-
-  const form = data?.getForm;
 
   useEffect(() => {
     let timeOutId;
@@ -45,8 +42,8 @@ export function useUpdateForm({ onAlert, _id }: IProps): any {
     return () => clearTimeout(timeOutId);
   }, [form]);
 
-  const handleOnChange = (newState) => {
-    updateCache(_id, stringifyForm({ ...form, ...newState }));
+  const handleOnChange = (newForm) => {
+    updateCache(form?.slug, stringifyForm({ ...form, ...newForm }));
     setSaveToServer(true);
   };
 
@@ -62,6 +59,7 @@ export function useUpdateForm({ onAlert, _id }: IProps): any {
       onAlert('Error while auto saving', err.message);
     }
   };
+
   const handleUpdateName = async (name) => {
     try {
       const payload = stringifyForm(form, true);
@@ -71,11 +69,11 @@ export function useUpdateForm({ onAlert, _id }: IProps): any {
       return res?.data?.updateForm?.slug;
     } catch (err) {
       // console.log(err);
-      onAlert('Error while auto saving', err.message);
+      onAlert('Error while saving form name', err.message);
     }
   };
 
-  return { state: form, handleOnChange, error, updateLoading, handleUpdateForm, handleUpdateName };
+  return { handleOnChange, updateLoading, handleUpdateForm, handleUpdateName };
 }
 
 export const stringifyForm = (form: any, removetemplate = false) => {

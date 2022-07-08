@@ -1,7 +1,11 @@
-export interface IForm {
+import { ISchema } from './common';
+
+export interface IForm extends ISchema {
   _id: string;
+  name: string;
+  slug: string;
   fields: IField[];
-  setings: any;
+  settings: any;
 }
 
 export interface IFieldOptions {

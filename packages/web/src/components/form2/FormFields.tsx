@@ -384,16 +384,9 @@ export default function FormFields({
           onClose={() => setValues(initialValues)}
           open={values.editStyle}
           styles={fields?.filter((f) => f._id === values?.field?._id)?.pop()?.options?.style || {}}
-          handleResetStyle={() => handleEditStyle(values?.field._id, {})}
-          onStyleChange={(value) =>
-            handleEditStyle(
-              values?.field._id,
-              values?.field?.options?.style
-                ? { ...values?.field?.options?.style, ...value }
-                : value,
-            )
-          }
-          removeStyle={(styleKey) => handleRemoveStyle(values?.field, styleKey)}
+          // handleResetStyle={() => handleEditStyle(values?.field._id, {})}
+          onStylesChange={(value) => handleEditStyle(values?.field._id, value)}
+          // removeStyle={(styleKey) => handleRemoveStyle(values?.field, styleKey)}
         />
       )}
       {values.editForm && (

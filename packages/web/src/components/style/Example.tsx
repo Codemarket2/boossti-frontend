@@ -19,9 +19,7 @@ export default function StylePage() {
         onClose={() => setDrawer(false)}
         open={drawer}
         styles={styles}
-        onStyleChange={(value) => setStyles({ ...styles, ...value })}
-        handleResetStyle={() => setStyles({})}
-        removeStyle={removeStyle}
+        onStylesChange={(value) => setStyles(value)}
       />
     </div>
   );

@@ -15,27 +15,29 @@ interface IProps {
   onClose: () => void;
   open: boolean;
   styles: any;
-  onStyleChange: (value: any) => void;
-  removeStyle: (styleKey: any) => void;
-  handleResetStyle: () => void;
+  onStylesChange: (value: any) => void;
 }
 
-// const appendPx = (value) => `${value}px`;
-const removePx = (value) => {
-  if (value) {
-    return parseInt(value.replace('px', ''));
-  }
-  return '';
-};
-
-export default function StyleDrawer({
-  open,
-  onClose,
-  styles,
-  onStyleChange,
-  removeStyle,
-  handleResetStyle,
-}: IProps) {
+export default function StyleDrawer({ open, onClose, styles = {}, onStylesChange }: IProps) {
+  const onStyleChange = (newStyle) => {
+    onStylesChange({ ...styles, ...newStyle });
+  };
+  const removeStyle = (property) => {
+    const newStyles = { ...styles };
+    delete newStyles?.[property];
+    onStylesChange(newStyles);
+  };
+  const handleResetStyle = () => {
+    onStylesChange({});
+  };
+  const handleChange = (e, isNumber?: boolean) => {
+    const name = e?.target?.name;
+    let value = e?.target?.value;
+    if (isNumber) {
+      value = value ? Number(value) : null;
+    }
+    onStyleChange({ [name]: value });
+  };
   return (
     <Drawer
       ModalProps={{ BackdropProps: { invisible: true } }}
@@ -57,20 +59,13 @@ export default function StyleDrawer({
           </IconButton>
         </div>
         <InputGroup>
-          <TextField
-            size="small"
-            type="text"
-            label="Text Color"
-            variant="outlined"
-            fullWidth
-            onChange={(e) => {
-              if (e.target.value) {
-                onStyleChange({ color: e.target.value });
-              } else {
-                removeStyle('color');
-              }
-            }}
-            value={styles.color}
+          <InputLabel>Text Color</InputLabel>
+          <input
+            type="color"
+            defaultValue="#000000"
+            name="color"
+            value={styles?.color}
+            onChange={handleChange}
           />
         </InputGroup>
         <InputGroup>
@@ -80,25 +75,24 @@ export default function StyleDrawer({
             label="Font Size"
             variant="outlined"
             fullWidth
+            name="fontSize"
             onChange={(e) => {
-              if (parseInt(e.target.value) > 0) {
-                onStyleChange({ fontSize: `${e.target.value}px` });
-              } else {
-                removeStyle('fontSize');
-              }
+              handleChange(e, true);
             }}
-            value={removePx(styles.fontSize)}
+            value={styles.fontSize}
           />
         </InputGroup>
         <InputGroup>
+          {styles.textAlign}
           <FormControl size="small" variant="outlined" fullWidth>
             <InputLabel id="demo-simple-select-outlined-label">Text Align</InputLabel>
             <Select
               labelId="demo-simple-select-outlined-label"
               id="demo-simple-select-outlined"
               value={styles.textAlign || defaultStyles.textAlign}
+              name="textAlign"
               onChange={(e) => {
-                onStyleChange({ textAlign: e.target.value });
+                handleChange(e);
               }}
               label="Text Align"
             >
@@ -133,20 +127,41 @@ export default function StyleDrawer({
           </FormControl>
         </InputGroup>
         <InputGroup>
+          <InputLabel>Background Color</InputLabel>
+          <input
+            type="color"
+            defaultValue="#ffffff"
+            value={styles?.backgroundColor}
+            name="backgroundColor"
+            onChange={handleChange}
+          />
+        </InputGroup>
+        <InputGroup>
           <TextField
             size="small"
-            type="text"
-            label="Background Color"
+            type="number"
+            label="Margin"
             variant="outlined"
             fullWidth
+            name="margin"
             onChange={(e) => {
-              if (e.target.value) {
-                onStyleChange({ backgroundColor: e.target.value });
-              } else {
-                removeStyle('backgroundColor');
-              }
+              handleChange(e, true);
             }}
-            value={styles.backgroundColor}
+            value={styles.margin}
+          />
+        </InputGroup>
+        <InputGroup>
+          <TextField
+            size="small"
+            type="number"
+            label="Padding"
+            variant="outlined"
+            fullWidth
+            name="padding"
+            onChange={(e) => {
+              handleChange(e, true);
+            }}
+            value={styles.padding}
           />
         </InputGroup>
       </div>

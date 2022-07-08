@@ -18,6 +18,7 @@ import { useUpdateForm, useDeleteForm } from '@frontend/shared/hooks/form';
 import { useAuthorization } from '@frontend/shared/hooks/auth';
 import Link from 'next/link';
 import Container from '@mui/material/Container';
+import { IForm } from '@frontend/shared/types/form';
 import ErrorLoading from '../common/ErrorLoading';
 import Breadcrumbs from '../common/Breadcrumbs';
 import Backdrop from '../common/Backdrop';
@@ -38,9 +39,10 @@ import AuditLog from '../auditLog/AuditLog';
 import Conditions from './conditions/Conditions';
 import ShopifySettings from './shopify/ShopifySettings';
 import BoardsTab from './board/BoardsTab';
+import DesignTab from './design/DesignTab';
 
 interface IProps {
-  _id: string;
+  form: IForm;
   drawerMode?: boolean;
   onSlugChange?: (newSlug: string) => void;
   hideFields?: boolean;
@@ -52,16 +54,17 @@ const tabs = [
   'Actions',
   'Workflows',
   'Responses',
+  'Design',
   'Boards',
   'Activity',
   'Conditions',
   'Shopify',
 ];
 
-export default function Form({ _id, drawerMode = false, onSlugChange, hideFields }: IProps): any {
-  const { error, state, handleOnChange, updateLoading, handleUpdateName } = useUpdateForm({
+export default function Form({ form, drawerMode = false, onSlugChange, hideFields }: IProps): any {
+  const { handleOnChange, updateLoading, handleUpdateName } = useUpdateForm({
     onAlert,
-    _id,
+    form,
   });
   const { handleDelete } = useDeleteForm({
     onAlert,
@@ -74,7 +77,7 @@ export default function Form({ _id, drawerMode = false, onSlugChange, hideFields
   });
 
   const router = useRouter();
-  const authorized = useAuthorization([state?.createdBy?._id], true);
+  const authorized = useAuthorization([form?.createdBy?._id], true);
 
   useEffect(() => {
     if (router?.query?.tab) {
@@ -92,14 +95,14 @@ export default function Form({ _id, drawerMode = false, onSlugChange, hideFields
   const handlePublish = () => {
     setOptions({
       ...options,
-      snackBar: state?.settings?.published
+      snackBar: form?.settings?.published
         ? 'Successfully unpublished the form'
         : 'Successfully published the form',
     });
     handleOnChange({
       settings: {
-        ...state.settings,
-        published: Boolean(!state?.settings?.published),
+        ...form.settings,
+        published: Boolean(!form?.settings?.published),
       },
     });
   };
@@ -112,12 +115,12 @@ export default function Form({ _id, drawerMode = false, onSlugChange, hideFields
         ...options,
         backdrop: true,
       });
-      handleDelete(_id, () => router.push('/forms'));
+      handleDelete(form?._id, () => router.push('/forms'));
     }
   };
 
-  if (error || !state) {
-    return <ErrorLoading error={error} />;
+  if (!form) {
+    return <ErrorLoading />;
   }
 
   if (authorized) {
@@ -139,7 +142,7 @@ export default function Form({ _id, drawerMode = false, onSlugChange, hideFields
             <Typography variant="h5" className="py-2">
               <InlineInput
                 placeholder="Form Name"
-                value={state?.name}
+                value={form?.name}
                 onChange={(e) => handleOnChange({ name: e.target.value })}
               />
             </Typography>
@@ -149,7 +152,7 @@ export default function Form({ _id, drawerMode = false, onSlugChange, hideFields
                 <Link href="/forms">Forms</Link>
                 <InlineInput
                   placeholder="Form Name"
-                  value={state?.name}
+                  value={form?.name}
                   onChange={async (e) => {
                     setOptions({ ...options, backdrop: true });
                     const newSlug = await handleUpdateName(e.target.value);
@@ -173,7 +176,7 @@ export default function Form({ _id, drawerMode = false, onSlugChange, hideFields
                   control={
                     <Switch
                       color="primary"
-                      checked={state?.settings?.published}
+                      checked={form?.settings?.published}
                       onChange={handlePublish}
                     />
                   }
@@ -191,13 +194,13 @@ export default function Form({ _id, drawerMode = false, onSlugChange, hideFields
             {!hideFields && (
               <Grid item xs={12} sm={4}>
                 <FormFields
-                  fields={state.fields}
+                  fields={form.fields}
                   setFields={(newFields) => handleOnChange({ fields: newFields })}
-                  parentFields={state.fields?.map((f) => ({
+                  parentFields={form.fields?.map((f) => ({
                     ...f,
-                    formId: state._id,
+                    formId: form._id,
                     label: f?.label,
-                    formName: state?.name,
+                    formName: form?.name,
                   }))}
                 />
               </Grid>
@@ -217,7 +220,7 @@ export default function Form({ _id, drawerMode = false, onSlugChange, hideFields
                   {tabs.map((label) => (
                     <Tab key={label} label={label} value={label} />
                   ))}
-                  {state?.name?.toUpperCase().includes('ROLE') && (
+                  {form?.name?.toUpperCase().includes('ROLE') && (
                     <Tab label="Permissions" value="permissions" />
                   )}
                 </Tabs>
@@ -225,52 +228,67 @@ export default function Form({ _id, drawerMode = false, onSlugChange, hideFields
               {options.currentTab === 'Preview' && (
                 <Paper variant="outlined" className="px-2">
                   <FormView
-                    form={{ ...state, settings: { ...state.settings, widgetType: 'form' } }}
+                    form={{ ...form, settings: { ...form.settings, widgetType: 'form' } }}
                   />
                 </Paper>
               )}
               {options.currentTab === 'Settings' && (
                 <>
                   <FormSetting
-                    formId={_id}
-                    settings={state.settings}
-                    state={state}
+                    formId={form?._id}
+                    settings={form.settings}
+                    state={form}
                     onChange={(settings) =>
                       handleOnChange({
-                        settings: { ...state.settings, ...settings },
+                        settings: { ...form.settings, ...settings },
                       })
                     }
                   />
                 </>
               )}
-              {options.currentTab === 'Workflows' && <Workflows _id={_id} />}
+              {options.currentTab === 'Workflows' && <Workflows _id={form?._id} />}
               {options.currentTab === 'Responses' && (
                 <>
                   <Paper variant="outlined">
-                    <BulkUploadAction form={state} />
+                    <BulkUploadAction form={form} />
                   </Paper>
-                  <ResponseList form={state} />
+                  <ResponseList form={form} />
                 </>
               )}
-              {options.currentTab === 'Actions' && (
-                <Actions
-                  fields={state?.fields}
-                  settings={state?.settings}
-                  onChange={(actions) =>
+              {options.currentTab === 'Design' && (
+                <DesignTab
+                  form={form}
+                  onChange={(newForm) =>
                     handleOnChange({
-                      settings: { ...state.settings, actions },
+                      ...form,
+                      ...newForm,
                     })
                   }
                 />
               )}
-              {options.currentTab === 'Permissions' && <Permissions formId={_id} form={state} />}
-              {options.currentTab === 'Activity' && <AuditLog documentId={_id} formId={_id} />}
+              {options.currentTab === 'Actions' && (
+                <Actions
+                  fields={form?.fields}
+                  settings={form?.settings}
+                  onChange={(actions) =>
+                    handleOnChange({
+                      settings: { ...form.settings, actions },
+                    })
+                  }
+                />
+              )}
+              {options.currentTab === 'Permissions' && (
+                <Permissions formId={form?._id} form={form} />
+              )}
+              {options.currentTab === 'Activity' && (
+                <AuditLog documentId={form?._id} formId={form?._id} />
+              )}
               {options.currentTab === 'Conditions' && (
                 <Conditions
-                  form={state}
+                  form={form}
                   onConditionsChange={(conditions) => {
                     handleOnChange({
-                      settings: { ...state.settings, conditions },
+                      settings: { ...form.settings, conditions },
                     });
                   }}
                   onFieldsChange={(newFields) =>
@@ -282,18 +300,18 @@ export default function Form({ _id, drawerMode = false, onSlugChange, hideFields
               )}
               {options.currentTab === 'Shopify' && (
                 <ShopifySettings
-                  shopify={state?.settings?.shopify}
+                  shopify={form?.settings?.shopify}
                   onShopifyChange={(shopify) =>
-                    handleOnChange({ settings: { ...state.settings, shopify } })
+                    handleOnChange({ settings: { ...form.settings, shopify } })
                   }
                 />
               )}
               {options.currentTab === 'Boards' && (
                 <BoardsTab
-                  formId={state?._id}
-                  boards={state?.settings?.boards}
+                  formId={form?._id}
+                  boards={form?.settings?.boards}
                   onBoardsChange={(boards) =>
-                    handleOnChange({ settings: { ...state.settings, boards } })
+                    handleOnChange({ settings: { ...form.settings, boards } })
                   }
                 />
               )}
@@ -305,17 +323,17 @@ export default function Form({ _id, drawerMode = false, onSlugChange, hideFields
   }
 
   if (
-    state?.settings?.published &&
-    (state?.settings?.whoCanViewResponses === 'all' || state?.settings?.whoCanSubmit === 'all')
+    form?.settings?.published &&
+    (form?.settings?.whoCanViewResponses === 'all' || form?.settings?.whoCanSubmit === 'all')
   ) {
     return (
       <Container>
-        <FormView form={state} />
+        <FormView form={form} />
       </Container>
     );
   }
 
-  if (state?.settings?.published) {
+  if (form?.settings?.published) {
     return <UnAuthorised />;
   }
 

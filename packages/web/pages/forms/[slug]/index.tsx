@@ -16,7 +16,7 @@ export default function Page(): any {
   };
 
   return (
-    <UserLayout container={false}>
+    <UserLayout container={false} authRequired>
       {slug ? <FormPage slug={slug.toString()} onSlugChange={onSlugChange} /> : <ErrorLoading />}
     </UserLayout>
   );
@@ -29,9 +29,9 @@ export const FormPage = ({ slug, onSlugChange }: { slug: string; onSlugChange?: 
     return <ErrorLoading error={error} />;
   }
 
-  if (!data?.getFormBySlug) {
+  if (!data?.getFormBySlug?._id) {
     return <NotFound />;
   }
 
-  return <Form _id={data?.getFormBySlug?._id} onSlugChange={onSlugChange} />;
+  return <Form form={data?.getFormBySlug} onSlugChange={onSlugChange} />;
 };

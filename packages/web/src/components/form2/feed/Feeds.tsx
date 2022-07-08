@@ -26,7 +26,7 @@ export default function Feeds() {
       <Grid item xs={12} sm={9}>
         {state.form?._id ? (
           <>
-            <Form _id={state.form?._id} hideFields />
+            <Form form={state.form} hideFields />
           </>
         ) : (
           <Typography textAlign="center" variant="h4" className="mt-5">
