@@ -28,6 +28,7 @@ import SelectForm from './SelectForm';
 import SelectTemplate from '../template/SelectTemplate';
 import SelectFormFields from './SelectFormFields';
 import Formula from './formula/Formula';
+import FieldCondition from './field-condition/FieldCondition';
 
 interface IProps {
   onCancel?: () => void;
@@ -219,6 +220,13 @@ export default function AddField({
             </InputGroup>
           )}
         </>
+      )}
+      {['response'].includes(formik.values.fieldType) && (
+        <FieldCondition
+          formFields={tParentFields}
+          field={formik.values}
+          onConditionsChange={(newConditions) => onOptionChange({ conditions: newConditions })}
+        />
       )}
       {['form', 'response'].includes(formik.values.fieldType) && (
         <div>
@@ -575,18 +583,19 @@ export default function AddField({
           {[
             formik.values.options?.systemCalculatedAndSaved,
             formik.values.options?.systemCalculatedAndView,
-          ].includes(true) && (
-            <Formula
-              formula={formik.values.options?.formula}
-              onFormulaChange={(newFormula) => {
-                const formula = formik.values.options?.formula || {};
-                onOptionChange({ formula: { ...formula, ...newFormula } });
-              }}
-              fields={tParentFields?.filter(
-                (f) => f?.fieldType === 'number' && field?._id !== f?._id,
-              )}
-            />
-          )}
+          ].includes(true) &&
+            formik.values.fieldType === 'number' && (
+              <Formula
+                formula={formik.values.options?.formula}
+                onFormulaChange={(newFormula) => {
+                  const formula = formik.values.options?.formula || {};
+                  onOptionChange({ formula: { ...formula, ...newFormula } });
+                }}
+                fields={tParentFields?.filter(
+                  (f) => f?.fieldType === 'number' && field?._id !== f?._id,
+                )}
+              />
+            )}
         </>
       )}
       <div className="mb-2">

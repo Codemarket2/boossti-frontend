@@ -35,6 +35,7 @@ export interface IFieldOptions {
   selectOptions: string[];
   grid?: any;
   style?: any;
+  conditions: ICondition[];
 }
 
 export interface IField {
@@ -49,6 +50,14 @@ export interface IField {
 export interface IFormula {
   condition: string;
   variables: IFormulaVariable[];
+}
+
+export interface ICondition {
+  operator: 'AND' | 'OR';
+  fieldId: string;
+  conditionType: '==' | '!=';
+  value: string;
+  constantValue: string;
 }
 
 export interface IFormulaVariable {

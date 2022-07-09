@@ -58,6 +58,7 @@ const defaultOptions: IFieldOptions = {
   showAsCheckbox: false,
   selectAllowCreate: false,
   selectOptions: [''],
+  conditions: [],
 };
 
 interface IValues extends IField {
