@@ -19,6 +19,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import { useAddFields } from '@frontend/shared/hooks/form';
 import { quantities } from '@frontend/shared/utils/quantities';
+import { IField } from '@frontend/shared/types/form';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
 import { onAlert } from '../../utils/alert';
@@ -33,7 +34,7 @@ import FieldCondition from './field-condition/FieldCondition';
 interface IProps {
   onCancel?: () => void;
   onSave: (field: any, action: string) => void;
-  field: any;
+  field: IField;
   isWidget?: boolean;
   isDefault?: boolean;
   parentFields?: any[];
@@ -228,14 +229,14 @@ export default function AddField({
           onConditionsChange={(newConditions) => onOptionChange({ conditions: newConditions })}
         />
       )}
-      {['form', 'response'].includes(formik.values.fieldType) && (
+      {['response'].includes(formik.values.fieldType) && (
         <div>
           <FormControlLabel
             className="mt-n2"
             disabled={formik.isSubmitting}
             control={
               <Checkbox
-                checked={isDefault || formik.values.options?.twoWayRelationship}
+                checked={formik.values.options?.twoWayRelationship}
                 onChange={({ target }) => onOptionChange({ twoWayRelationship: target.checked })}
                 name="twoWayRelationship"
                 color="primary"
@@ -243,13 +244,49 @@ export default function AddField({
             }
             label="Two way relationship(parent will have child Id & child will have parent Id)"
           />
+          {formik.values.options?.twoWayRelationship && (
+            <div>
+              <InputGroup>
+                <TextField
+                  fullWidth
+                  size="small"
+                  label="Relation label"
+                  name="relationLabel"
+                  value={formik.values.options.relationLabel}
+                  onChange={formik.handleChange}
+                  error={!formik.values.options.relationLabel}
+                  helperText={!formik.values.options?.relationLabel && 'Required'}
+                />
+              </InputGroup>
+              <InputGroup>
+                <FormControl fullWidth size="small" error={!formik.values.options.relationFieldId}>
+                  <InputLabel>Relation Field</InputLabel>
+                  <Select
+                    value={formik.values.options?.relationFieldId}
+                    label="Relation Field"
+                    onChange={formik.handleChange}
+                  >
+                    {tParentFields
+                      ?.filter((f) => f?._id !== field?._id)
+                      ?.map((f) => (
+                        <MenuItem key={f?._id} value={f?._id}>
+                          {f?.label}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                  {!formik.values.options.relationFieldId && (
+                    <FormHelperText>Required</FormHelperText>
+                  )}
+                </FormControl>
+              </InputGroup>
+            </div>
+          )}
           <div>
             <FormControlLabel
-              className="mt-n2"
               disabled={formik.isSubmitting}
               control={
                 <Checkbox
-                  checked={isDefault || formik.values.options?.dependentRelationship}
+                  checked={formik.values.options?.dependentRelationship}
                   onChange={({ target }) =>
                     onOptionChange({ dependentRelationship: target.checked })
                   }

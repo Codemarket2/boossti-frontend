@@ -27,7 +27,16 @@ export default function EditResponseDrawer({ form, response, open, onClose }: IP
   };
 
   return (
-    <Overlay open={open} onClose={onClose} title="Edit Response">
+    <Overlay
+      open={open}
+      onClose={() => {
+        const anwser = confirm('Are you sure you want to close?');
+        if (anwser) {
+          onClose();
+        }
+      }}
+      title="Edit Response"
+    >
       <div className="p-2">
         {authorized ? (
           <FormView

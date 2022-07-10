@@ -15,6 +15,8 @@ export interface IFieldOptions {
   selectItem: boolean;
   dependentRelationship: boolean;
   twoWayRelationship: boolean;
+  relationLabel: string;
+  relationFieldId: string;
   showOptionCreatedByUser: boolean;
   showOptionCreatedOnTemplate: boolean;
   required: boolean;

@@ -40,6 +40,8 @@ const defaultOptions: IFieldOptions = {
   selectItem: false,
   dependentRelationship: false,
   twoWayRelationship: false,
+  relationLabel: '',
+  relationFieldId: '',
   showOptionCreatedByUser: false,
   showOptionCreatedOnTemplate: false,
   required: false,
