@@ -9,7 +9,13 @@ import EditIcon from '@mui/icons-material/Edit';
 import { useAuthorization } from '@frontend/shared/hooks/auth';
 import ListItemText from '@mui/material/ListItemText';
 import moment from 'moment';
-import { Paper, Box, Grid, List, ListItem, IconButton, Tooltip } from '@mui/material';
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
 import { getUserName } from '@frontend/shared/hooks/user/getUserForm';
 import { parseResponse } from '@frontend/shared/hooks/response/getResponse';
@@ -301,6 +307,10 @@ export function ResponseChild3({
                   </Typography>
                 </>
               )}
+              <div className="mt-2">
+                <Typography fontWeight="bold">- ID</Typography>
+                {response?.count}
+              </div>
               {form?.fields?.map((field) => {
                 return (
                   <Fragment key={field?._id}>

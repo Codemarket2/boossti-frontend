@@ -19,6 +19,7 @@ import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
 import { ISystemValues } from '@frontend/shared/hooks/response/calculateSystemValues';
 import { IField } from '@frontend/shared/types/form';
+import { TextField } from '@mui/material';
 import ResponseList from '../response/ResponseList';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
@@ -427,6 +428,7 @@ interface IProps2 {
   edit?: boolean;
   responseId?: string;
   form?: any;
+  responseCount?: number;
 }
 
 const initialSubmitState = {
@@ -468,6 +470,7 @@ export function FormView({
   edit,
   responseId,
   form,
+  responseCount,
 }: IProps2): any {
   const [values, setValues] = useState(parseResponse({ values: initialValues })?.values || []);
   const [editValue, setEditValue] = useState({ fieldId: null, index: null });
@@ -603,6 +606,19 @@ export function FormView({
         </Overlay>
       )}
       <Grid container spacing={0}>
+        <Grid item xs={100}>
+          <InputGroup>
+            <Typography>ID</Typography>
+            <TextField
+              fullWidth
+              size="small"
+              placeholder="ID"
+              disabled
+              helperText="System generated"
+              value={responseCount}
+            />
+          </InputGroup>
+        </Grid>
         {(fieldWiseView && fields?.length > 1 ? [fields[page]] : fields)
           ?.filter((field: IField) => !field?.options?.systemCalculatedAndSaved)
           ?.map((field: any) => (
