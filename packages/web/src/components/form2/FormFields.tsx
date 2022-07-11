@@ -237,7 +237,7 @@ export default function FormFields({
           )}
           <List dense>
             <ListItem button>
-              <ListItemText primary="ID" secondary="System generated" />
+              <ListItemText primary="ID" secondary={!previewMode && 'System generated'} />
             </ListItem>
             <DragDropContext onDragEnd={onDragEnd}>
               <Droppable droppableId="list">

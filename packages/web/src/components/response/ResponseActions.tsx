@@ -46,6 +46,7 @@ export default function ResponseActions({
           {selectedResponse?._id === response?._id && (
             <>
               <EditResponseDrawer
+                overlay
                 open
                 form={form}
                 response={selectedResponse}

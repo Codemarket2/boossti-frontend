@@ -2,7 +2,7 @@ import TablePagination from '@mui/material/TablePagination';
 import { useGetResponses, useDeleteResponse } from '@frontend/shared/hooks/response';
 import Backdrop from '../common/Backdrop';
 import { onAlert } from '../../utils/alert';
-import { ResponseChild3 } from './Response';
+import { DisplayResponse } from './DisplayResponse';
 import Table2 from './Table2';
 import Table from './Table';
 
@@ -49,7 +49,7 @@ export default function ResponseList({
       ) : form?.settings?.responsesView === 'vertical' ? (
         <>
           {data?.getResponses?.data?.map((response) => (
-            <ResponseChild3
+            <DisplayResponse
               key={response?._id}
               hideBreadcrumbs
               form={form}

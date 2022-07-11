@@ -2,7 +2,7 @@ import { useGetFormBySlug } from '@frontend/shared/hooks/form';
 import { useGetResponseByCount } from '@frontend/shared/hooks/response';
 import NotFound from '../components/common/NotFound';
 import ErrorLoading from '../components/common/ErrorLoading';
-import { ResponseChild3 } from '../components/response/Response';
+import { DisplayResponse } from '../components/response/DisplayResponse';
 
 interface IProps {
   slug: string;
@@ -44,7 +44,7 @@ export function ResponseChild({ form, count, hideBreadcrumbs }: IProps2) {
   }
 
   return (
-    <ResponseChild3
+    <DisplayResponse
       response={data?.getResponseByCount}
       form={form}
       hideBreadcrumbs={hideBreadcrumbs}

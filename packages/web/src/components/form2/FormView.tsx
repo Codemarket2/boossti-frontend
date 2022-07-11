@@ -28,7 +28,7 @@ import { onAlert } from '../../utils/alert';
 import DisplayRichText from '../common/DisplayRichText';
 import Overlay from '../common/Overlay';
 import AuthScreen from '../../screens/AuthScreen';
-import { ResponseChild3 } from '../response/Response';
+import { DisplayResponse } from '../response/DisplayResponse';
 import DisplayValue from './DisplayValue';
 import Leaderboard from '../response/Leaderboard';
 import SelectResponse from '../response/SelectResponse';
@@ -273,7 +273,12 @@ export default function FormViewWrapper({
                   <DisplayRichText value={message} />
                 ))}
                 {state.response && (
-                  <ResponseChild3 form={form} response={state.response} hideAuthor hideNavigation />
+                  <DisplayResponse
+                    form={form}
+                    response={state.response}
+                    hideAuthor
+                    hideNavigation
+                  />
                 )}
               </div>
             </Overlay>
@@ -429,6 +434,7 @@ interface IProps2 {
   responseId?: string;
   form?: any;
   responseCount?: number;
+  inlineEdit?: boolean;
 }
 
 const initialSubmitState = {
@@ -459,6 +465,7 @@ export const filterValues = (values, field) => {
 };
 
 export function FormView({
+  inlineEdit = false,
   fields,
   handleSubmit,
   loading,
@@ -606,20 +613,23 @@ export function FormView({
         </Overlay>
       )}
       <Grid container spacing={0}>
-        <Grid item xs={100}>
-          <InputGroup>
-            <Typography>ID</Typography>
-            <TextField
-              fullWidth
-              size="small"
-              placeholder="ID"
-              disabled
-              helperText="System generated"
-              value={responseCount}
-            />
-          </InputGroup>
-        </Grid>
+        {!inlineEdit && (
+          <Grid item xs={100}>
+            <InputGroup>
+              <Typography>ID</Typography>
+              <TextField
+                fullWidth
+                size="small"
+                placeholder="ID"
+                disabled
+                helperText="System generated"
+                value={responseCount}
+              />
+            </InputGroup>
+          </Grid>
+        )}
         {(fieldWiseView && fields?.length > 1 ? [fields[page]] : fields)
+          ?.filter((field: IField) => field?.options?.required)
           ?.filter((field: IField) => !field?.options?.systemCalculatedAndSaved)
           ?.map((field: any) => (
             <Grid

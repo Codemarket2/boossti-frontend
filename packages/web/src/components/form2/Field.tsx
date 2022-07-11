@@ -403,6 +403,7 @@ export default function Field({
         <>
           {value?.response?._id ? (
             <Response
+              hideAuthor
               responseId={value?.response?._id}
               hideBreadcrumbs
               deleteCallBack={() => onChange({ field: _id, response: null })}
