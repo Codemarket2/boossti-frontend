@@ -41,4 +41,5 @@ export const fieldTypes: FieldType[] = [
   { label: 'Board', value: 'board' },
   { label: 'Diagram', value: 'diagram' },
   { label: 'Flow Diagram', value: 'flowDiagram' },
+  { label: 'Condition', value: 'condition' },
 ];

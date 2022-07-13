@@ -1,51 +1,81 @@
-import { useGetForm } from '@frontend/shared/hooks/form';
-import { IField } from '@frontend/shared/types/form';
-import Skeleton from '@mui/material/Skeleton';
-import React from 'react';
-import ErrorLoading from '../../common/ErrorLoading';
+/* eslint-disable no-await-in-loop */
+/* eslint-disable no-restricted-syntax */
+import { getForm } from '@frontend/shared/hooks/form';
+import { ICondition, IField, IForm } from '@frontend/shared/types/form';
+import React, { useEffect, useState } from 'react';
+import slugify from 'slugify';
 
 interface DisplayFieldConditionProps {
-  field: IField;
-  formFields: IField[];
+  conditions: ICondition[];
+  formFields?: IField[];
 }
 
-export default function DisplayCondition({ field, formFields }: DisplayFieldConditionProps) {
-  const { data, error } = useGetForm(field?.form?._id);
-  if (!data || error) {
-    return (
-      <ErrorLoading error={error}>
-        <Skeleton height={50} />;
-      </ErrorLoading>
-    );
-  }
-  return (
-    <div>{getFieldCondition(field?.options?.conditions, formFields, data?.getForm?.fields)}</div>
-  );
-}
+export default function DisplayFieldCondition({
+  conditions = [],
+  formFields = [],
+}: DisplayFieldConditionProps) {
+  const [forms, setForms] = useState({});
 
-export const getFieldCondition = (conditions, valueFormFields, formFields) => {
-  let condition = '';
-  conditions?.forEach((con) => {
-    if (con?.operator) {
-      condition += ` ${con?.operator}`;
+  const getForms = async () => {
+    try {
+      const formIds = [];
+      conditions?.forEach((con) => {
+        if (con?.formId && !formIds?.includes(formIds)) {
+          formIds.push(con?.formId);
+        }
+      });
+      const tempForm = {};
+      for (const formId of formIds) {
+        if (!tempForm[formId]?._id) {
+          const form = await getForm(formId);
+          if (form?._id) {
+            tempForm[form?._id] = form;
+          }
+        }
+      }
+      setForms(tempForm);
+    } catch (error) {
+      // eslint-disable-next-line no-alert
+      alert(`Error in form query, ${error?.message}`);
     }
-    if (con?.fieldId) {
-      const fieldLabel = formFields?.find((formField) => formField?._id === con?.fieldId)?.label;
+  };
+  useEffect(() => {
+    getForms();
+  }, []);
+
+  return <div>{getFieldCondition(conditions, formFields, forms)}</div>;
+}
+
+export const getFieldCondition = (conditions, valueFormFields, forms: { [key: string]: IForm }) => {
+  let conditionString = '';
+  conditions?.forEach((condition) => {
+    if (condition?.operator) {
+      conditionString += ` ${condition?.operator}`;
+    }
+    if (condition?.fieldId) {
+      const form = forms[condition?.formId];
+      const formName = slugify(form?.name || '', '_');
+      const formFields = form?.fields || [];
+      let fieldLabel = formFields?.find((formField) => formField?._id === condition?.fieldId)
+        ?.label;
       if (fieldLabel) {
-        condition += ` ${fieldLabel}`;
+        fieldLabel = slugify(fieldLabel || '', '_');
+        conditionString += ` $${formName}.${fieldLabel}`;
       }
     }
-    if (con?.conditionType) {
-      condition += ` ${con?.conditionType}`;
+    if (condition?.conditionType) {
+      conditionString += ` ${condition?.conditionType}`;
     }
-    if (con?.value === 'constantValue') {
-      condition += ` ${con?.constantValue}`;
-    } else if (con?.value) {
-      const fieldLabel = valueFormFields?.find((f) => f?._id === con?.value)?.label;
+    if (condition?.value?.includes('user.')) {
+      conditionString += ` $${condition?.value}`;
+    } else if (condition?.value === 'constantValue') {
+      conditionString += ` "${condition?.constantValue}"`;
+    } else if (condition?.value) {
+      const fieldLabel = valueFormFields?.find((f) => f?._id === condition?.value)?.label;
       if (fieldLabel) {
-        condition += ` ${fieldLabel}`;
+        conditionString += ` $${slugify(fieldLabel, '_')}`;
       }
     }
   });
-  return condition;
+  return conditionString;
 };

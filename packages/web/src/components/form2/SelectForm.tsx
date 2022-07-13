@@ -8,6 +8,7 @@ import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { useCreateForm, useGetForms } from '@frontend/shared/hooks/form';
 import { useState } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
+import { IForm } from '@frontend/shared/types/form';
 import ErrorLoading from '../common/ErrorLoading';
 import LoadingButton from '../common/LoadingButton';
 import BackdropComponent from '../common/Backdrop';
@@ -71,7 +72,7 @@ export function SelectFormDrawer({ open, onClose, onSelect, loading }: IProps2) 
 
 interface IProps {
   value: any;
-  onChange: (form) => void;
+  onChange: (form: IForm) => void;
   error?: boolean;
   helperText?: any;
   disabled?: boolean;

@@ -1,19 +1,16 @@
 import { useAddConstraint } from '@frontend/shared/hooks/form';
 import { Delete } from '@mui/icons-material';
 import AddCircle from '@mui/icons-material/AddCircle';
-import {
-  Button,
-  FormControl,
-  FormHelperText,
-  IconButton,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Tooltip,
-  Typography,
-} from '@mui/material';
-import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
+import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
+import IconButton from '@mui/material/IconButton';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 import React from 'react';
 import { onAlert } from '../../../utils/alert';
 import InputGroup from '../../common/InputGroup';

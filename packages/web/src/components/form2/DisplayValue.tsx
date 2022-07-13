@@ -15,7 +15,8 @@ import { LighthouseReport } from './LighthouseReportRendrer';
 import DisplayBoard from './board/DisplayBoard';
 import DisplayDiagram from '../syncfusion-diagram/DisplayDiagram';
 import ReactFlow from '../react-flow/ReactFlow';
-import DisplayFormulaValue from './formula/DisplayFormulaValue';
+// import DisplayFormulaValue from './formula/DisplayFormulaValue';
+import DisplayFieldCondition from './field-condition/DisplayFieldCondition';
 
 interface IProps {
   field: Partial<IField>;
@@ -73,52 +74,6 @@ export default function DisplayValue({
       ) : (
         <Typography>NA</Typography>
       );
-    // case 'select': {
-    //   let optionsTemplate = field.options?.optionsTemplate || value?.options?.optionsTemplate;
-    //   let valueFormField = value?.options?.formField;
-    //   if (typeof value?.options === 'string') {
-    //     optionsTemplate =
-    //       field.options?.optionsTemplate || JSON.parse(value?.options)?.optionsTemplate;
-    //     valueFormField = JSON.parse(value?.options)?.formField;
-    //   }
-    //   if (optionsTemplate === 'template') {
-    //     if ((field?.template?._id || value.template?._id) && value.page) {
-    //       return <PageDrawer title={value.page?.title} slug={value.page?.slug} />;
-    //     }
-    //     if (value?.template?.slug && value?.template?.title) {
-    //       return <Link href={`/${value?.template?.slug}`}>{value?.template?.title}</Link>;
-    //     }
-    //     return null;
-    //   }
-    //   if (optionsTemplate === 'response') {
-    //     if (
-    //       ((field?.form?._id && field?.options?.formField) ||
-    //         (value?.form?._id && valueFormField)) &&
-    //       value?.response
-    //     ) {
-    //       return (
-    //         <ShowResponseLabel
-    //           formField={field?.form?._id ? field.options?.formField : valueFormField}
-    //           response={value?.response}
-    //         />
-    //       );
-    //     }
-    //     return <>{value?.form?.name}</>;
-    //   }
-    //   if (field?.options?.showAsCheckbox) {
-    //     return (
-    //       <>
-    //         {value?.values?.map((v, i) => (
-    //           <Fragment key={i}>
-    //             {v}
-    //             <br />
-    //           </Fragment>
-    //         ))}
-    //       </>
-    //     );
-    //   }
-    //   return <DisplayValue field={{ fieldType: optionsTemplate }} value={value} />;
-    // }
     case 'link':
       return <a href={value?.value}>{value?.value}</a>;
     case 'richTextarea':
@@ -189,6 +144,8 @@ export default function DisplayValue({
       return <DisplayDiagram diagram={value?.options?.diagram} />;
     case 'flowDiagram':
       return <ReactFlow flow={value?.options?.flowDiagram} />;
+    case 'condition':
+      return <DisplayFieldCondition conditions={value?.options?.conditions} />;
     default:
       return <>{value?.value}</>;
   }

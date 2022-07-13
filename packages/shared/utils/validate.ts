@@ -100,33 +100,12 @@ export const validateValue = (validate: boolean, value: any, field: Field): IRet
       }
       break;
     }
-    // case 'select': {
-    //   const optionsTemplate = options?.optionsTemplate || value?.options?.optionsTemplate;
-    //   if (
-    //     optionsTemplate === 'template' &&
-    //
-    //     ((!field?.template && !value?.template) || (field?.template && !value?.page))
-    //   ) {
-    //     result = { error: true, errorMessage: 'Required' };
-    //   } else if (
-    //     optionsTemplate === 'response' &&
-    //
-    //     ((!field?.form && !value?.form) || (field?.form && !value?.response))
-    //   ) {
-    //     result = { error: true, errorMessage: 'Required' };
-    //   } else if (
-    //     !['template', 'response'].includes(optionsTemplate) &&
-    //
-    //     !value?.value
-    //   ) {
-    //     if (options?.showAsCheckbox && value?.values?.length > 0) {
-    //       result = { error: false, errorMessage: '' };
-    //     } else {
-    //       result = { error: true, errorMessage: 'Required' };
-    //     }
-    //   }
-    //   break;
-    // }
+    case 'condition': {
+      if (!(value?.options?.conditions?.length > 0)) {
+        result = { error: true, errorMessage: 'Required' };
+      }
+      break;
+    }
     default: {
       if (!value?.value) {
         result = { error: true, errorMessage: 'Required' };

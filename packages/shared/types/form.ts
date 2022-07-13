@@ -56,6 +56,7 @@ export interface IFormula {
 
 export interface ICondition {
   operator: 'AND' | 'OR';
+  formId: string;
   fieldId: string;
   conditionType: '==' | '!=';
   value: string;

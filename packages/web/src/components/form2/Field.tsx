@@ -26,8 +26,6 @@ import CreateResponseDrawer from '../response/CreateResponseDrawer';
 import FileUpload from '../fileLibrary/FileUpload';
 import DisplayFiles from '../fileLibrary/DisplayFiles';
 import { onAlert } from '../../utils/alert';
-
-import 'react-phone-input-2/lib/style.css';
 import Response from '../response/Response';
 import UnitQuantityInput from './UnitQuantityInput';
 import Board from './board/Board';
@@ -35,6 +33,9 @@ import { defaultBoard } from './board/defaultBoard';
 import Diagram from '../syncfusion-diagram/Diagram';
 import { defaultDiagram } from '../syncfusion-diagram/defaultDiagram';
 import ReactFlow from '../react-flow/ReactFlow';
+import FieldConditionForm from './field-condition/FieldConditionForm';
+
+import 'react-phone-input-2/lib/style.css';
 
 interface IProps {
   disabled?: boolean;
@@ -490,6 +491,16 @@ export default function Field({
           {validation.error && (
             <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
           )}
+        </>
+      );
+    }
+    case 'condition': {
+      return (
+        <>
+          <FieldConditionForm
+            conditions={value?.options?.conditions}
+            onConditionsChange={(conditions) => onChange({ options: { conditions } })}
+          />
         </>
       );
     }

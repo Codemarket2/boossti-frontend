@@ -83,6 +83,7 @@ export function useGetForm(_id: string) {
   const [form, setForm] = useState(null);
   const { data, error, loading } = useQuery(GET_FORM, {
     variables: { _id },
+    // nextFetchPolicy: 'cache-and-network',
   });
 
   const { data: subscriptionData } = useSubscription(UPDATED_FORM, {

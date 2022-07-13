@@ -42,7 +42,10 @@ export default function FieldCondition({
                   <Edit fontSize="small" />
                 </IconButton>
               </Typography>
-              <DisplayFieldCondition field={field} formFields={formFields} />
+              <DisplayFieldCondition
+                conditions={field?.options?.conditions}
+                formFields={formFields}
+              />
             </>
           )}
         </>
@@ -51,6 +54,7 @@ export default function FieldCondition({
         <FieldConditionForm
           formFields={formFields}
           field={field}
+          conditions={field?.options?.conditions}
           onConditionsChange={onConditionsChange}
           onCancel={() => setState(initialState)}
         />
