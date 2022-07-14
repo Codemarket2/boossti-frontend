@@ -1,7 +1,11 @@
-import { useQuery } from '@apollo/client';
+import { useQuery, useSubscription } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { GET_RESPONSE_BY_COUNT, GET_RESPONSES, GET_RESPONSE } from '../../graphql/query/response';
-import { RESPONSE_SUB } from '../../graphql/subscription/response';
+import {
+  DELETED_RESPONSE,
+  RESPONSE_SUB,
+  UPDATE_RESPONSE_SUB,
+} from '../../graphql/subscription/response';
 import { client as apolloClient, guestClient } from '../../graphql';
 // import { UPDATE_RESPONSE } from '../../graphql/mutation/response';
 
@@ -121,14 +125,31 @@ export function useGetResponse(_id: string): any {
     variables: { _id },
     fetchPolicy: 'cache-and-network',
   });
+
+  useSubscription(UPDATE_RESPONSE_SUB, {
+    variables: { _id: data?.getResponse?._id },
+  });
+
   return { data, error, loading };
 }
 
 export function useGetResponseByCount(formId: string, count: number): any {
-  const { data, error, loading } = useQuery(GET_RESPONSE_BY_COUNT, {
+  const { data, error, loading, refetch } = useQuery(GET_RESPONSE_BY_COUNT, {
     variables: { formId, count },
     fetchPolicy: 'cache-and-network',
   });
+
+  useSubscription(UPDATE_RESPONSE_SUB, {
+    variables: { _id: data?.getResponseByCount?._id },
+  });
+  const { data: deleteSubData } = useSubscription(DELETED_RESPONSE);
+
+  useEffect(() => {
+    // alert('del');
+    if (deleteSubData?.deletedResponse === data?.getResponseByCount?._id) {
+      refetch();
+    }
+  }, [deleteSubData]);
 
   return { data, error, loading };
 }

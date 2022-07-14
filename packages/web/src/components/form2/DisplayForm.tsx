@@ -80,7 +80,7 @@ interface IFormPageByIdProps extends IFormPage {
   _id: string;
 }
 
-export const FormPageById = ({
+const FormPageById = ({
   _id,
   settings = {},
   appId,

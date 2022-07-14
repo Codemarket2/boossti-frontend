@@ -1,5 +1,6 @@
 import { useGetFormBySlug } from '@frontend/shared/hooks/form';
 import { useGetResponseByCount } from '@frontend/shared/hooks/response';
+import { useRouter } from 'next/router';
 import NotFound from '../components/common/NotFound';
 import ErrorLoading from '../components/common/ErrorLoading';
 import { DisplayResponse } from '../components/response/DisplayResponse';
@@ -34,6 +35,7 @@ interface IProps2 {
 
 export function ResponseChild({ form, count, hideBreadcrumbs }: IProps2) {
   const { data, error } = useGetResponseByCount(form?._id, count);
+  const router = useRouter();
 
   if (error || !data) {
     return <ErrorLoading error={error} />;
@@ -48,6 +50,7 @@ export function ResponseChild({ form, count, hideBreadcrumbs }: IProps2) {
       response={data?.getResponseByCount}
       form={form}
       hideBreadcrumbs={hideBreadcrumbs}
+      deleteCallBack={() => router.push(`/forms/${form?.slug}`)}
     />
   );
 }

@@ -136,14 +136,15 @@ const ConditionComponent = ({
   const [formName, setFormName] = useState(null);
   const { data, error } = useGetForm(condition?.formId || field?.form?._id);
 
+  const form = data?.getForm;
   useEffect(() => {
-    if (data?.getForm?._id) {
-      setForm(data?.getForm);
+    if (form?._id) {
+      setForm(form);
       if (!condition?.formId) {
-        onChange({ formId: data?.getForm?._id });
+        onChange({ formId: form?._id });
       }
     }
-  }, [data?.getForm]);
+  }, [form]);
 
   return (
     <div>
@@ -196,6 +197,14 @@ const ConditionComponent = ({
           />
         </InputGroup>
       )}
+      {form?.fields?.find((f) => f?._id === condition?.fieldId)?.fieldType === 'response' &&
+        form?.fields?.find((f) => f?._id === condition?.fieldId)?.form?._id && (
+          <>
+            <SelectSubField
+              formId={form?.fields?.find((f) => f?._id === condition?.fieldId)?.form?._id}
+            />
+          </>
+        )}
       <InputGroup>
         <FormControl size="small" fullWidth error={!condition?.conditionType}>
           <InputLabel>Condition Type</InputLabel>
@@ -244,10 +253,29 @@ const ConditionComponent = ({
             value={condition?.constantValue}
             onChange={({ target }) => onChange({ constantValue: target.value })}
             error={!condition?.constantValue}
-            helperText="Required"
+            helperText={!condition?.constantValue && 'Required'}
           />
         </InputGroup>
       )}
     </div>
+  );
+};
+
+interface SelectSubFieldProps {
+  formId: string;
+}
+
+const SelectSubField = ({ formId }: SelectSubFieldProps) => {
+  const [value, onChange] = useState({ fieldId: '' });
+  return (
+    <InputGroup>
+      <SelectFormFields
+        formId={formId}
+        value={value?.fieldId}
+        onChange={(fieldId) => onChange({ fieldId })}
+        error={!value?.fieldId}
+        helperText="Required"
+      />
+    </InputGroup>
   );
 };

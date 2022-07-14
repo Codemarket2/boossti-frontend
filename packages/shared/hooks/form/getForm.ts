@@ -86,16 +86,9 @@ export function useGetForm(_id: string) {
     // nextFetchPolicy: 'cache-and-network',
   });
 
-  const { data: subscriptionData } = useSubscription(UPDATED_FORM, {
+  useSubscription(UPDATED_FORM, {
     variables: { _id },
   });
-
-  useEffect(() => {
-    if (subscriptionData?.updatedForm) {
-      const parsedForm = parseForm(subscriptionData?.updatedForm);
-      setForm({ ...form, ...parsedForm });
-    }
-  }, [subscriptionData]);
 
   useEffect(() => {
     if (data && data.getForm) {
@@ -110,6 +103,10 @@ export function useGetFormBySlug(slug: string): any {
   const [getFormBySlug2, setGetFormBySlug] = useState(null);
   const { data, error, loading } = useQuery(GET_FORM_BY_SLUG, {
     variables: { slug },
+  });
+
+  useSubscription(UPDATED_FORM, {
+    variables: { _id: getFormBySlug2?._id },
   });
 
   useEffect(() => {

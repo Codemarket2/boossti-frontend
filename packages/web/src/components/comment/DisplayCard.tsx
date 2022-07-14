@@ -187,7 +187,7 @@ export default function DisplayCard({
                 fieldTitle={fieldTitle}
                 showOverlayOnce
               >
-                {currentUserId === commentedUser!.createdBy!._id && (
+                {currentUserId === commentedUser?.createdBy?._id && (
                   <>
                     <IconButton onClick={() => setEdit(true)} size="large">
                       <EditIcon />

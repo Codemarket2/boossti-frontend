@@ -5,17 +5,20 @@ import Divider from '@mui/material/Divider';
 import Card from '@mui/material/Card';
 import React, { memo, useContext, useState } from 'react';
 import { Handle, NodeProps, Position } from 'react-flow-renderer';
+import { Tooltip } from '@mui/material';
 import DisplayRichText from '../common/DisplayRichText';
 import { DisplayForm } from '../form2/DisplayForm';
 import EditNode from './EditNode';
 import { FlowContext } from './FlowEditor';
 import DisplayFormField from './DisplayFormField';
+import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
 
-const initialState = { edit: false };
+const initialState = { edit: false, showComment: false };
 
 export default memo(({ data, isConnectable, selected, id }: NodeProps) => {
   const { onNodeChange, editMode } = useContext(FlowContext);
   const [state, setState] = useState(initialState);
+
   return (
     <div className="nowheel">
       <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
@@ -26,17 +29,25 @@ export default memo(({ data, isConnectable, selected, id }: NodeProps) => {
           borderWidth: selected ? 1.5 : 1,
           backgroundColor: data?.backgroundColor,
           color: data?.color,
+          minWidth: 120,
         }}
       >
         {editMode && selected && (
-          <IconButton
-            size="small"
-            onClick={() => setState({ ...state, edit: true })}
-            style={{ position: 'absolute', right: -25 }}
-          >
-            <Edit fontSize="small" />
-          </IconButton>
+          <Tooltip title="Edit">
+            <IconButton
+              size="small"
+              onClick={() => setState({ ...state, edit: true })}
+              style={{ position: 'absolute', right: -25 }}
+            >
+              <Edit fontSize="small" />
+            </IconButton>
+          </Tooltip>
         )}
+        <>
+          <div style={{ position: 'absolute', bottom: -40 }}>
+            <CommentLikeShare parentId={id} itemSlug={null} />
+          </div>
+        </>
         <div className="p-2" style={{ maxWidth: '300px', overflowX: 'auto' }}>
           {data?.formView !== 'formField' && (
             <Typography textAlign="center">

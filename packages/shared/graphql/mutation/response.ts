@@ -77,8 +77,11 @@ export const UPDATE_RESPONSE = gql`
   mutation MyMutation($_id: ID!, $values: [ValueInput]) {
     updateResponse(_id: $_id, values: $values) {
       _id
+      formId
+      count
       appId
       installId
+      workFlowFormResponseParentId
       values {
         _id
         field
@@ -107,7 +110,6 @@ export const UPDATE_RESPONSE = gql`
         }
         response {
           _id
-          count
           values {
             field
             value
@@ -116,6 +118,16 @@ export const UPDATE_RESPONSE = gql`
         }
         options
       }
+      createdBy {
+        _id
+        count
+        values {
+          field
+          value
+        }
+      }
+      createdAt
+      options
     }
   }
 `;
