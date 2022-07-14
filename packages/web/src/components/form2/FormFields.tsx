@@ -23,7 +23,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import CRUDMenu from '../common/CRUDMenu';
-import AddField from './AddField';
+import AddField from './field/AddField';
 // import EditField from './EditField';
 import EditFieldGrid from './EditFieldGrid';
 import EditFormDrawer from './EditFormDrawer';
@@ -158,13 +158,6 @@ export default function FormFields({
   //   }
   // };
 
-  const handleRemoveStyle = (field: any, styleKey: string) => {
-    if (field?.options?.style) {
-      const { [styleKey]: removedStyle, ...restStyles } = field?.options?.style;
-      handleEditStyle(field._id, restStyles);
-    }
-  };
-
   const handleEditStyle = (fieldId: string, style: any) => {
     setFields(
       fields.map((field) =>
@@ -172,21 +165,6 @@ export default function FormFields({
       ),
     );
   };
-
-  // : values.showForm && values.field ? (
-  //   <EditField
-  //     fields={fields}
-  //     field={fields.filter((f) => f._id === values.field._id)[0]}
-  //     onFieldChange={(updatedField) => {
-  //       setFields(
-  //         fields?.map((field) => (field._id === updatedField._id ? updatedField : field)),
-  //       );
-  //     }}
-  //     onClose={() => setValues(initialValues)}
-  //     isWidget={isWidget}
-  //     parentFields={parentFields}
-  //   />
-  // )
 
   return (
     <Paper variant="outlined">
@@ -389,9 +367,7 @@ export default function FormFields({
           onClose={() => setValues(initialValues)}
           open={values.editStyle}
           styles={fields?.filter((f) => f._id === values?.field?._id)?.pop()?.options?.style || {}}
-          // handleResetStyle={() => handleEditStyle(values?.field._id, {})}
           onStylesChange={(value) => handleEditStyle(values?.field._id, value)}
-          // removeStyle={(styleKey) => handleRemoveStyle(values?.field, styleKey)}
         />
       )}
       {values.editForm && (

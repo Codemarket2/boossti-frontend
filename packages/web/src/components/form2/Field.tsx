@@ -13,6 +13,7 @@ import { useCheckUnique } from '@frontend/shared/hooks/response';
 import PhoneInput from 'react-phone-input-2';
 import { validateValue } from '@frontend/shared/utils/validate';
 import { IFieldOptions } from '@frontend/shared/types/form';
+import { IValue } from '@frontend/shared/types/response';
 import RichTextarea from '../common/RichTextarea2';
 import DisplayRichText from '../common/DisplayRichText';
 import SelectResponse from '../response/SelectResponse';
@@ -45,13 +46,13 @@ interface IProps {
   fieldType: string;
   template: any;
   options: Partial<IFieldOptions>;
-  value: any;
-  onChangeValue: (arg: any) => void;
-  mediaState: any;
-  setMediaState: any;
+  value: Partial<IValue>;
+  onChangeValue: (arg: IValue) => void;
+  mediaState?: any;
+  setMediaState?: any;
   form: any;
   formId?: any;
-  setUnique: any;
+  setUnique?: any;
   responseId?: string;
   setUniqueLoading?: (args: boolean) => void;
 }
@@ -139,7 +140,7 @@ export default function Field({
           <Select
             label={label}
             options={options?.selectOptions}
-            value={value?.value || value?.valueNumber || ''}
+            value={value?.value || value?.valueNumber?.toString() || ''}
             onChange={(newValue) => {
               let valueObject: any = {};
               if (fieldType === 'number') {

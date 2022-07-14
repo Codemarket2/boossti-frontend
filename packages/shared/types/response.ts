@@ -1,4 +1,5 @@
 import { IMedia, ISchema } from './common';
+import { IForm } from './form';
 
 export interface IResponse extends ISchema {
   formId: any;
@@ -18,8 +19,8 @@ export interface IValue {
   values: string[];
   template: string;
   page: string;
-  response: string;
-  form: string;
+  response: string | IResponse | any;
+  form: string | IForm;
   options: any;
   media: IMedia[];
 }

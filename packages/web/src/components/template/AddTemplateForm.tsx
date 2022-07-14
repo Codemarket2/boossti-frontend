@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { onAlert } from '../../utils/alert';
 import Backdrop from '../common/Backdrop';
 import InputGroup from '../common/InputGroup';
-import AddField from '../form2/AddField';
+import AddField from '../form2/field/AddField';
 
 interface IProps {
   createCallback: (slug: string) => void;

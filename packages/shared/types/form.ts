@@ -1,4 +1,5 @@
 import { ISchema } from './common';
+import { IValue } from './response';
 
 export interface IForm extends ISchema {
   _id: string;
@@ -38,6 +39,7 @@ export interface IFieldOptions {
   grid?: any;
   style?: any;
   conditions: ICondition[];
+  defaultValue: Partial<IValue>;
 }
 
 export interface IField {

@@ -6639,7 +6639,7 @@ aws-amplify@4.1.1:
     "@aws-amplify/ui" "2.0.3"
     "@aws-amplify/xr" "3.0.3"
 
-aws-appsync-auth-link@^3.0.5, aws-appsync-auth-link@^3.0.7:
+aws-appsync-auth-link@^3.0.7:
   version "3.0.7"
   resolved "https://registry.yarnpkg.com/aws-appsync-auth-link/-/aws-appsync-auth-link-3.0.7.tgz#2b676b9198101055b91a15b367f9ef2805f2d766"
   integrity sha512-Jsa53opryGFIOHGok74ICfboxhDN64o11Z+aXoCrAnE0TwzJMMK1F20ha6sYzUuozY9pGYeE+EQ3OVn6waYMog==
@@ -6649,10 +6649,10 @@ aws-appsync-auth-link@^3.0.5, aws-appsync-auth-link@^3.0.7:
     "@aws-sdk/util-hex-encoding" "^3.29.0"
     debug "2.6.9"
 
-aws-appsync-subscription-link@^3.0.7:
-  version "3.0.10"
-  resolved "https://registry.yarnpkg.com/aws-appsync-subscription-link/-/aws-appsync-subscription-link-3.0.10.tgz#e0e477f5e9f624064d499be4228c2e42fad37be3"
-  integrity sha512-BVmMMw1/vESWvweY9OXVYmDYmDBmHsQ45AkDN5sBHzbjglRx2GYVi3hi1OQe9T9i84p2AVm3kp+dsRhfNFsdLA==
+aws-appsync-subscription-link@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/aws-appsync-subscription-link/-/aws-appsync-subscription-link-3.1.0.tgz#6bdd7a4296aa82a20106b8b5c1e5567d0dc37a1b"
+  integrity sha512-5gox5uY9Fwjuxc0DZ2n7jiOXAo7Ri7VEd1U+WOc7WlX6zSzuGh0xLPIEQ2dcYL4vGRHttkCp9IJMrv6HGYA/4g==
   dependencies:
     aws-appsync-auth-link "^3.0.7"
     debug "2.6.9"

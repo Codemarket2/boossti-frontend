@@ -145,8 +145,10 @@ export function useGetResponseByCount(formId: string, count: number): any {
   const { data: deleteSubData } = useSubscription(DELETED_RESPONSE);
 
   useEffect(() => {
-    // alert('del');
-    if (deleteSubData?.deletedResponse === data?.getResponseByCount?._id) {
+    if (
+      data?.getResponseByCount?._id &&
+      deleteSubData?.deletedResponse === data?.getResponseByCount?._id
+    ) {
       refetch();
     }
   }, [deleteSubData]);

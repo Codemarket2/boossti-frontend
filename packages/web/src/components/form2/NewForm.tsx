@@ -9,7 +9,7 @@ import { onAlert } from '../../utils/alert';
 import BackdropComponent from '../common/Backdrop';
 import Breadcrumbs from '../common/Breadcrumbs';
 import InputGroup from '../common/InputGroup';
-import AddField from './AddField';
+import AddField from './field/AddField';
 
 export default function NewForm() {
   const [state, setState] = useState({ name: '', field: null, validate: false });
