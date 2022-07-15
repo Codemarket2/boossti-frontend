@@ -12,7 +12,7 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { useCheckUnique } from '@frontend/shared/hooks/response';
 import PhoneInput from 'react-phone-input-2';
 import { validateValue } from '@frontend/shared/utils/validate';
-import { IFieldOptions } from '@frontend/shared/types/form';
+import { IField } from '@frontend/shared/types/form';
 import { IValue } from '@frontend/shared/types/response';
 import RichTextarea from '../common/RichTextarea2';
 import DisplayRichText from '../common/DisplayRichText';
@@ -38,19 +38,14 @@ import FieldConditionForm from './field-condition/FieldConditionForm';
 
 import 'react-phone-input-2/lib/style.css';
 
-interface IProps {
+interface FieldProps {
+  field: IField;
   disabled?: boolean;
-  validate: boolean;
-  _id: string;
-  label: string;
-  fieldType: string;
-  template: any;
-  options: Partial<IFieldOptions>;
+  validate?: boolean;
   value: Partial<IValue>;
   onChangeValue: (arg: IValue) => void;
   mediaState?: any;
   setMediaState?: any;
-  form: any;
   formId?: any;
   setUnique?: any;
   responseId?: string;
@@ -58,27 +53,29 @@ interface IProps {
 }
 
 export default function Field({
+  field,
   disabled = false,
   validate,
-  _id,
-  label,
-  fieldType,
-  template,
-  options,
   value,
   onChangeValue,
-  form,
   formId,
   setUnique,
   responseId,
   setUniqueLoading,
-}: IProps): any {
-  useCheckUnique({ formId, value, options, setUnique, onAlert, responseId, setUniqueLoading });
+}: FieldProps): any {
+  useCheckUnique({
+    formId,
+    value,
+    options: field?.options,
+    setUnique,
+    onAlert,
+    responseId,
+    setUniqueLoading,
+  });
 
   const onChange = (payload) => {
-    // debugger;
-    onChangeValue({ ...value, field: _id, ...payload });
-    if (options?.unique) {
+    onChangeValue({ ...value, field: field?._id, ...payload });
+    if (field?.options?.unique) {
       setUnique(false);
       setUniqueLoading(true);
     }
@@ -99,26 +96,26 @@ export default function Field({
     onChange({ values: newValues });
   };
 
-  const validation = validateValue(validate, value, { options, fieldType, template, form });
+  const validation = validateValue(validate, value, field);
 
-  if (options.selectItem && fieldType !== 'form') {
+  if (field?.options?.selectItem && ['response', 'text', 'number'].includes(field?.fieldType)) {
     return (
       <>
-        {fieldType === 'response' ? (
+        {field?.fieldType === 'response' ? (
           <SelectResponse
-            label={`${label} response`}
-            formId={form?._id}
-            formField={options?.formField}
+            label={`${field?.label} response`}
+            formId={field?.form?._id}
+            formField={field?.options?.formField}
             value={value?.response}
-            onChange={(newValue) => onChange({ field: _id, response: newValue })}
+            onChange={(newValue) => onChange({ field: field?._id, response: newValue })}
             error={validation.error}
             helperText={validation.errorMessage}
-            allowCreate={options?.selectAllowCreate}
-            onlyMyResponses={options?.showOptionCreatedByUser}
+            allowCreate={field?.options?.selectAllowCreate}
+            onlyMyResponses={field?.options?.showOptionCreatedByUser}
           />
-        ) : options?.showAsCheckbox ? (
+        ) : field?.options?.showAsCheckbox ? (
           <>
-            {options?.selectOptions?.map((option, i) => (
+            {field?.options?.selectOptions?.map((option, i) => (
               <FormControlLabel
                 disabled={disabled}
                 key={i}
@@ -138,19 +135,19 @@ export default function Field({
           </>
         ) : (
           <Select
-            label={label}
-            options={options?.selectOptions}
+            label={field?.label}
+            options={field?.options?.selectOptions}
             value={value?.value || value?.valueNumber?.toString() || ''}
             onChange={(newValue) => {
               let valueObject: any = {};
-              if (fieldType === 'number') {
+              if (field?.fieldType === 'number') {
                 valueObject = { valueNumber: newValue };
               } else {
                 valueObject = { value: newValue };
               }
               onChange(valueObject);
             }}
-            selectAllowCreate={options?.selectAllowCreate}
+            selectAllowCreate={field?.options?.selectAllowCreate}
             error={validation.error}
             helperText={validation.errorMessage}
           />
@@ -159,9 +156,9 @@ export default function Field({
     );
   }
 
-  switch (fieldType) {
+  switch (field?.fieldType) {
     case 'label': {
-      return <DisplayRichText value={options?.staticText} />;
+      return <DisplayRichText value={field?.options?.staticText} />;
     }
     case 'date': {
       return (
@@ -177,7 +174,7 @@ export default function Field({
             // placeholder={moment().format('L')}
             inputFormat="MM/DD/YYYY"
             value={value && value?.valueDate ? moment(value.valueDate) : null}
-            onChange={(newValue) => onChange({ field: _id, valueDate: moment(newValue) })}
+            onChange={(newValue) => onChange({ field: field?._id, valueDate: moment(newValue) })}
             // animateYearScrolling
             renderInput={(props) => (
               <TextField
@@ -208,7 +205,7 @@ export default function Field({
             // placeholder={moment().format('L')}
             inputFormat="lll"
             value={value && value?.valueDate ? moment(value.valueDate) : null}
-            onChange={(newValue) => onChange({ field: _id, valueDate: moment(newValue) })}
+            onChange={(newValue) => onChange({ field: field?._id, valueDate: moment(newValue) })}
             // animateYearScrolling
             renderInput={(props) => (
               <TextField
@@ -246,12 +243,14 @@ export default function Field({
             control={
               <Checkbox
                 checked={value ? value.valueBoolean : false}
-                onChange={({ target }) => onChange({ field: _id, valueBoolean: target.checked })}
+                onChange={({ target }) =>
+                  onChange({ field: field?._id, valueBoolean: target.checked })
+                }
                 name="valueBoolean"
                 color="primary"
               />
             }
-            label={label}
+            label={field?.label}
           />
           {validation.error && (
             <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
@@ -267,7 +266,7 @@ export default function Field({
             fileType="image/*"
             // mutiple={options?.multipleValues}
             state={value}
-            setState={(newValue) => onChange({ field: _id, ...newValue })}
+            setState={(newValue) => onChange({ field: field?._id, ...newValue })}
             formId={formId}
           />
           {validation.error && (
@@ -282,10 +281,12 @@ export default function Field({
           {value?.value ? (
             <DisplayFiles
               urls={[value?.value]}
-              onDelete={(url) => onChange({ field: _id, value: '' })}
+              onDelete={(url) => onChange({ field: field?._id, value: '' })}
             />
           ) : (
-            <FileUpload onUpload={(fileUrls) => onChange({ field: _id, value: fileUrls[0] })} />
+            <FileUpload
+              onUpload={(fileUrls) => onChange({ field: field?._id, value: fileUrls[0] })}
+            />
           )}
           {validation.error && (
             <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
@@ -302,7 +303,7 @@ export default function Field({
             preferredCountries={['us']}
             enableSearch
             value={value?.valueNumber?.toString() || ''}
-            onChange={(phone) => onChange({ field: _id, valueNumber: phone })}
+            onChange={(phone) => onChange({ field: field?._id, valueNumber: phone })}
             inputStyle={validation.error ? { borderColor: 'red' } : {}}
           />
           {validation.error && (
@@ -312,12 +313,12 @@ export default function Field({
       );
     }
     case 'number': {
-      if (options?.physicalQuantity) {
+      if (field?.options?.physicalQuantity) {
         return (
           <UnitQuantityInput
             value={value}
-            label={label}
-            options={options}
+            label={field?.label}
+            options={field?.options}
             onChange={(newValue) => onChange({ ...newValue })}
             disabled={disabled}
             error={validation.error}
@@ -328,14 +329,14 @@ export default function Field({
       return (
         <TextField
           fullWidth
-          placeholder={label}
+          placeholder={field?.label}
           variant="outlined"
           name="valueNumber"
           size="small"
           type="number"
           disabled={disabled}
           value={value ? value.valueNumber : ''}
-          onChange={({ target }) => onChange({ field: _id, valueNumber: target.value })}
+          onChange={({ target }) => onChange({ field: field?._id, valueNumber: target.value })}
           error={validation.error}
           helperText={validation.errorMessage}
         />
@@ -346,7 +347,7 @@ export default function Field({
         <ColorInput
           label=""
           color={value ? value.value : ''}
-          onColorChange={(e: any) => onChange({ field: _id, value: e })}
+          onColorChange={(e: any) => onChange({ field: field?._id, value: e })}
         />
       );
     }
@@ -355,12 +356,12 @@ export default function Field({
         <BarcodeInput
           label=""
           barcode={value ? value.value : ''}
-          onBarcodeChange={(e: any) => onChange({ field: _id, value: e })}
+          onBarcodeChange={(e: any) => onChange({ field: field?._id, value: e })}
         />
       );
     }
     case 'address': {
-      return <AddressSearch _id={_id} onChange={onChange} values={value} />;
+      return <AddressSearch _id={field?._id} onChange={onChange} values={value} />;
     }
     case 'lighthouseReport': {
       return (
@@ -368,33 +369,33 @@ export default function Field({
           multiline
           rows={6}
           fullWidth
-          placeholder={label}
+          placeholder={field?.label}
           variant="outlined"
           name="value"
           size="small"
-          type={['email', 'password'].includes(fieldType) ? fieldType : 'text'}
+          type={['email', 'password'].includes(field?.fieldType) ? field?.fieldType : 'text'}
           disabled
           value={value ? value.value : ''}
-          onChange={({ target }) => onChange({ field: _id, value: target.value })}
+          onChange={({ target }) => onChange({ field: field?._id, value: target.value })}
         />
       );
     }
     case 'link': {
       const textValidation = validateValue(validate, value, {
-        options,
-        fieldType: ['link'].includes(fieldType) ? 'url' : 'text',
+        ...field,
+        fieldType: ['link'].includes(field?.fieldType) ? 'url' : 'text',
       });
       return (
         <TextField
           fullWidth
-          placeholder={label}
+          placeholder={field?.label}
           variant="outlined"
           name="value"
           size="small"
           type="url"
           disabled={disabled}
           value={value ? value.value : ''}
-          onChange={({ target }) => onChange({ field: _id, value: target.value })}
+          onChange={({ target }) => onChange({ field: field?._id, value: target.value })}
           error={textValidation.error}
           helperText={textValidation.errorMessage}
         />
@@ -408,18 +409,18 @@ export default function Field({
               hideAuthor
               responseId={value?.response?._id}
               hideBreadcrumbs
-              deleteCallBack={() => onChange({ field: _id, response: null })}
+              deleteCallBack={() => onChange({ field: field?._id, response: null })}
             />
           ) : (
             <>
-              {form?._id && addOption?.showDrawer && (
+              {field?.form?._id && addOption?.showDrawer && (
                 <CreateResponseDrawer
                   open={addOption?.showDrawer}
                   onClose={() => setAddOption({ ...addOption, showDrawer: false })}
-                  title={label}
-                  formId={form?._id}
+                  title={field?.label}
+                  formId={field?.form?._id}
                   createCallback={(newResponse) => {
-                    onChange({ field: _id, response: newResponse });
+                    onChange({ field: field?._id, response: newResponse });
                     setAddOption({ ...addOption, showDrawer: false });
                   }}
                 />
@@ -444,10 +445,10 @@ export default function Field({
       return (
         <>
           <SelectForm
-            placeholder={`${label} form`}
+            placeholder={`${field?.label} form`}
             label={null}
             value={value?.form}
-            onChange={(newValue) => onChange({ field: _id, form: newValue })}
+            onChange={(newValue) => onChange({ field: field?._id, form: newValue })}
             error={validation.error}
             helperText={validation.errorMessage}
           />
@@ -507,22 +508,22 @@ export default function Field({
     }
     default: {
       const textValidation = validateValue(validate, value, {
-        options,
-        fieldType: ['email'].includes(fieldType) ? fieldType : 'text',
+        ...field,
+        fieldType: ['email'].includes(field?.fieldType) ? field?.fieldType : 'text',
       });
       return (
         <TextField
-          multiline={fieldType === 'textarea'}
-          rows={fieldType === 'textarea' && 6}
+          multiline={field?.fieldType === 'textarea'}
+          rows={field?.fieldType === 'textarea' && 6}
           fullWidth
-          placeholder={label}
+          placeholder={field?.label}
           variant="outlined"
           name="value"
           size="small"
-          type={['email', 'password'].includes(fieldType) ? fieldType : 'text'}
+          type={['email', 'password'].includes(field?.fieldType) ? field?.fieldType : 'text'}
           disabled={disabled}
           value={value ? value.value : ''}
-          onChange={({ target }) => onChange({ field: _id, value: target.value })}
+          onChange={({ target }) => onChange({ field: field?._id, value: target.value })}
           error={textValidation.error}
           helperText={textValidation.errorMessage}
         />

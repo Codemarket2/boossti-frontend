@@ -61,7 +61,7 @@ const defaultOptions: IFieldOptions = {
   selectAllowCreate: false,
   selectOptions: [''],
   conditions: [],
-  defaultValue: {},
+  defaultValue: null,
 };
 
 interface IValues extends IField {

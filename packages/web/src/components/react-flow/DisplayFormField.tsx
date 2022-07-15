@@ -26,7 +26,7 @@ export default function DisplayFormField({ formId, fieldId }: IProps) {
           {field?.label}
           {field?.options?.required && '*'}
         </Typography>
-        <Field {...field} value={value} onChangeValue={setValue} />
+        <Field field={field} value={value} onChangeValue={setValue} />
       </div>
     );
   }

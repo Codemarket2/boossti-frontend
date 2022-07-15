@@ -290,8 +290,10 @@ export default function AddField({
       {!isWidget && !isWidgetForm && !['label', 'template'].includes(formik.values.fieldType) && (
         <>
           <DefaultValue
-            field={field}
-            onDefaultValueChange={(defaultValue) => onOptionChange({ defaultValue })}
+            field={formik.values}
+            onDefaultValueChange={(defaultValue) => {
+              onOptionChange({ defaultValue });
+            }}
           />
           {['response', 'text', 'number'].includes(formik.values.fieldType) && (
             <>

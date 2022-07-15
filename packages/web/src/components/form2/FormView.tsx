@@ -37,7 +37,7 @@ import projectConfig from '../../../../shared/index';
 import { evaluateFormula } from './formula/DisplayFormulaValue';
 import DisplayFormula, { getFormula } from './formula/DisplayFormula';
 
-interface IProps {
+interface FormViewWrapperProps {
   form: any;
   appId?: string;
   installId?: string;
@@ -96,7 +96,7 @@ export default function FormViewWrapper({
   isAuthorized,
   systemValues,
   valueFilter,
-}: IProps): any {
+}: FormViewWrapperProps): any {
   const isAdmin = useSelector(({ auth }: any) => auth?.admin);
   const { handleCreateUpdateResponse, createLoading } = useCreateUpdateResponse({
     onAlert,
@@ -120,9 +120,7 @@ export default function FormViewWrapper({
   const [state, setState] = useState(initialState);
   const [selectState, setSelectState] = useState(initialSelectState);
   const authenticated = useSelector(({ auth }: any) => auth.authenticated);
-  // if (isAuthorized) {
-  //   authenticated = isAuthorized;
-  // }
+
   const [checkNewUser, setCheckNewUser] = useState(true);
   const verifyIfUserExist = async (payload) => {
     const { password, email, name } = payload;
@@ -421,7 +419,7 @@ export default function FormViewWrapper({
   );
 }
 
-interface IProps2 {
+interface FormViewProps {
   fields: any;
   handleSubmit: (payload: any) => any;
   loading?: boolean;
@@ -442,28 +440,6 @@ const initialSubmitState = {
   loading: false,
 };
 
-export const filterValues = (values, field) => {
-  let newValues = [{ ...defaultValue, field: field._id }];
-  if (values.some((f) => f.field === field._id)) {
-    if (field?.options?.multipleValues) {
-      newValues = values.filter((f) => f.field === field._id);
-    } else {
-      newValues = [values.filter((f) => f.field === field._id)[0]];
-    }
-  }
-  return newValues?.map((v) => {
-    let newOptions = { option: false };
-    if (v?.options) {
-      if (typeof v?.options === 'object') {
-        newOptions = { ...v?.options };
-      } else if (typeof v?.options === 'string') {
-        newOptions = JSON.parse(v?.options);
-      }
-    }
-    return { ...v, options: newOptions };
-  });
-};
-
 export function FormView({
   inlineEdit = false,
   fields,
@@ -478,7 +454,7 @@ export function FormView({
   responseId,
   form,
   responseCount,
-}: IProps2): any {
+}: FormViewProps): any {
   const [values, setValues] = useState(parseResponse({ values: initialValues })?.values || []);
   const [editValue, setEditValue] = useState({ fieldId: null, index: null });
   const [submitState, setSubmitState] = useState(initialSubmitState);
@@ -495,6 +471,21 @@ export function FormView({
       setHideField(false);
     }
   }, [values]);
+
+  useEffect(() => {
+    const defaultValues = [];
+    fields?.forEach((field) => {
+      if (field?.options?.required && field?.options?.defaultValue) {
+        if (!values?.some((v) => v?.field === field?._id)) {
+          const tempValue = field?.options?.defaultValue || {};
+          defaultValues.push({ field: field?._id, ...tempValue });
+        }
+      }
+    });
+    if (defaultValues?.length > 0) {
+      setValues([...values, ...defaultValues]);
+    }
+  }, []);
 
   const onChange = (sValue, valueIndex) => {
     let newValue = { ...defaultValue, ...sValue };
@@ -664,15 +655,17 @@ export function FormView({
                         <Skeleton height={200} />
                       ) : (
                         <Field
-                          {...field}
                           {...fieldProps}
+                          field={{
+                            ...field,
+                            label: `${field?.label} ${field?.options?.required ? '*' : ''}`,
+                          }}
                           disabled={
                             edit && field.options.notEditable
                               ? submitState.loading || field.options.notEditable
                               : submitState.loading || field.options.systemCalculatedAndView
                           }
                           validate={submitState.validate}
-                          label={field?.options?.required ? `${field?.label}*` : field?.label}
                           onChangeValue={(changedValue) => {
                             if (!field?.options?.systemCalculatedAndView) {
                               onChange(
@@ -722,12 +715,14 @@ export function FormView({
                                   <Skeleton height={200} />
                                 ) : (
                                   <Field
-                                    {...field}
+                                    field={{
+                                      ...field,
+                                      label: field?.options?.required
+                                        ? `${field?.label}*`
+                                        : field?.label,
+                                    }}
                                     {...fieldProps}
                                     disabled={submitState.loading}
-                                    label={
-                                      field?.options?.required ? `${field?.label}*` : field?.label
-                                    }
                                     onChangeValue={(changedValue) =>
                                       onChange({ ...changedValue, field: field._id }, valueIndex)
                                     }
@@ -859,3 +854,26 @@ export function FormView({
     </div>
   );
 }
+
+export const filterValues = (values, field) => {
+  const defaultFieldValue = field?.options?.defaultValue || {};
+  let newValues = [{ ...defaultValue, ...defaultFieldValue, field: field._id }];
+
+  if (values.some((f) => f.field === field._id)) {
+    if (field?.options?.multipleValues) {
+      newValues = values.filter((f) => f.field === field._id);
+    } else {
+      newValues = [values.find((f) => f.field === field._id)];
+    }
+  }
+  return newValues?.map((value) => {
+    let newOptions = { option: false };
+    if (value?.options) {
+      const options = value?.options || newOptions;
+      if (typeof options === 'string') {
+        newOptions = JSON.parse(options);
+      }
+    }
+    return { ...value, options: newOptions };
+  });
+};
