@@ -225,13 +225,13 @@ export default function FormViewWrapper({
         );
       }
       await refetch();
-      setState({ ...initialState, submitted: true, messages, response });
       if (createCallback) {
         createCallback(response);
       }
       if (setResponded) {
         setResponded();
       }
+      setState({ ...initialState, submitted: true, messages, response });
     }
     return response;
   };
@@ -856,8 +856,8 @@ export function FormView({
 }
 
 export const filterValues = (values, field) => {
-  const defaultFieldValue = field?.options?.defaultValue || {};
-  let newValues = [{ ...defaultValue, ...defaultFieldValue, field: field._id }];
+  // const defaultFieldValue = field?.options?.defaultValue || {};
+  let newValues = [{ ...defaultValue, field: field._id }];
 
   if (values.some((f) => f.field === field._id)) {
     if (field?.options?.multipleValues) {
@@ -869,9 +869,9 @@ export const filterValues = (values, field) => {
   return newValues?.map((value) => {
     let newOptions = { option: false };
     if (value?.options) {
-      const options = value?.options || newOptions;
-      if (typeof options === 'string') {
-        newOptions = JSON.parse(options);
+      newOptions = value?.options || newOptions;
+      if (typeof newOptions === 'string') {
+        newOptions = JSON.parse(newOptions);
       }
     }
     return { ...value, options: newOptions };

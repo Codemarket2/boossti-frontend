@@ -6,15 +6,20 @@ import ReactFlow, {
   useEdgesState,
   Controls,
   Background,
+  MarkerType,
 } from 'react-flow-renderer';
 import { generateObjectId } from '@frontend/shared/utils/objectId';
+import { useGetFormBySlug } from '@frontend/shared/hooks/form';
 import Sidebar from './Sidebar';
 import CustomNode from './CustomNode';
+import CustomNode2 from './CustomNode2';
 import Overlay from '../common/Overlay';
 import { defaultEdges, defaultNodes } from './defaultNodes';
+import { flowDiagramConfig } from './flowDiagramConfig';
 
 const nodeTypes = {
   customNode: CustomNode,
+  customNode2: CustomNode2,
 };
 
 export interface IFlow {
@@ -44,7 +49,22 @@ export default function FlowEditor({
   const [edges, setEdges, onEdgesChange] = useEdgesState(flow?.edges || defaultEdges);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
-  const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), []);
+  const onConnect = useCallback(
+    (params) =>
+      setEdges((eds) =>
+        addEdge(
+          {
+            ...params,
+            markerEnd: {
+              type: MarkerType.ArrowClosed,
+            },
+            animated: true,
+          },
+          eds,
+        ),
+      ),
+    [],
+  );
   const onNodeChange = useCallback((id, newData) => {
     setNodes((nds) => nds.map((node) => (node?.id === id ? { ...node, data: newData } : node)));
   }, []);
@@ -61,13 +81,17 @@ export default function FlowEditor({
 
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
 
-      let newNodeData = event.dataTransfer.getData('application/reactflow');
+      let dropData = event.dataTransfer.getData('application/reactflow');
+
       // check if the dropped element is valid
-      if (!newNodeData) {
+      if (!dropData) {
         return;
       }
+      dropData = JSON.parse(dropData);
 
-      newNodeData = JSON.parse(newNodeData);
+      if (!dropData?.data || !dropData?.nodeType) {
+        return;
+      }
 
       const position = reactFlowInstance.project({
         x: event.clientX - reactFlowBounds.left,
@@ -75,11 +99,10 @@ export default function FlowEditor({
       });
       const newNode = {
         id: generateObjectId(),
-        type: 'customNode',
+        type: dropData?.nodeType,
         position,
-        data: newNodeData,
+        data: dropData?.data,
       };
-
       setNodes((nds) => nds.concat(newNode));
     },
     [reactFlowInstance],
@@ -145,5 +168,3 @@ export const FlowContext = createContext({
   },
   editMode: false,
 });
-
-// export const FlowEditorDrawer = () => {};

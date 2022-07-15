@@ -1,4 +1,5 @@
 import Edit from '@mui/icons-material/Edit';
+import Settings from '@mui/icons-material/Settings';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
@@ -11,9 +12,11 @@ import { DisplayForm } from '../form2/DisplayForm';
 import EditNode from './EditNode';
 import { FlowContext } from './FlowEditor';
 import DisplayFormField from './DisplayFormField';
-import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
+import DisplayResponseById from '../response/DisplayResponseById';
+import DisplayDefaultResponse from './DisplayDefaultResponse';
+import Overlay from '../common/Overlay';
 
-const initialState = { edit: false, showComment: false };
+const initialState = { editNodeSetting: false, editResponse: false };
 
 export default memo(({ data, isConnectable, selected, id }: NodeProps) => {
   const { onNodeChange, editMode } = useContext(FlowContext);
@@ -33,23 +36,29 @@ export default memo(({ data, isConnectable, selected, id }: NodeProps) => {
         }}
       >
         {editMode && selected && (
-          <Tooltip title="Edit">
+          <Tooltip title="Node Settings">
             <IconButton
               size="small"
-              onClick={() => setState({ ...state, edit: true })}
+              onClick={() => setState({ ...initialState, editNodeSetting: true })}
               style={{ position: 'absolute', right: -25 }}
+            >
+              <Settings fontSize="small" />
+            </IconButton>
+          </Tooltip>
+        )}
+        {editMode && selected && data?.formView === 'formResponse' && !data?.responseId && (
+          <Tooltip title="Edit Response">
+            <IconButton
+              size="small"
+              onClick={() => setState({ ...initialState, editResponse: true })}
+              style={{ position: 'absolute', right: -25, top: -20 }}
             >
               <Edit fontSize="small" />
             </IconButton>
           </Tooltip>
         )}
-        {/* <>
-          <div style={{ position: 'absolute', bottom: -40 }}>
-            <CommentLikeShare parentId={id} itemSlug={null} />
-          </div>
-        </> */}
         <div className="p-2" style={{ maxWidth: '300px', overflowX: 'auto' }}>
-          {data?.formView !== 'formField' && (
+          {(!data?.formView || data?.formView === 'formName') && (
             <Typography textAlign="center">
               <DisplayRichText value={data?.label} />
             </Typography>
@@ -61,13 +70,26 @@ export default memo(({ data, isConnectable, selected, id }: NodeProps) => {
                   <Divider className="my-1" />
                   <DisplayForm _id={data?.formId} settings={{ widgetType: 'form' }} />
                 </>
+              ) : data?.formView === 'formField' ? (
+                <>
+                  {data?.fieldId ? (
+                    <DisplayFormField formId={data?.formId} fieldId={data?.fieldId} />
+                  ) : (
+                    <Typography color="error">Please select form field</Typography>
+                  )}
+                </>
               ) : (
-                data?.formView === 'formField' && (
+                data?.formView === 'formResponse' && (
                   <>
-                    {data?.fieldId ? (
-                      <DisplayFormField formId={data?.formId} fieldId={data?.fieldId} />
+                    {data?.responseId ? (
+                      <DisplayResponseById
+                        responseId={data?.responseId}
+                        hideBreadcrumbs
+                        hideAuthor
+                        hideDelete
+                      />
                     ) : (
-                      <Typography color="error">Please select form field</Typography>
+                      <DisplayDefaultResponse formId={data?.formId} />
                     )}
                   </>
                 )
@@ -75,9 +97,9 @@ export default memo(({ data, isConnectable, selected, id }: NodeProps) => {
             </>
           )}
         </div>
-        {state.edit && (
+        {state.editNodeSetting && (
           <EditNode
-            open={state.edit}
+            open={state.editNodeSetting}
             onClose={() => setState(initialState)}
             data={data}
             onChange={(newData) => {
@@ -85,6 +107,23 @@ export default memo(({ data, isConnectable, selected, id }: NodeProps) => {
               setState(initialState);
             }}
           />
+        )}
+        {state.editResponse && (
+          <Overlay open={state.editResponse} onClose={() => setState(initialState)}>
+            <div className="p-2">
+              <DisplayForm
+                _id={data?.formId}
+                settings={{ formView: 'fullForm', widgetType: 'form' }}
+                createCallback={(response) => {
+                  if (response?._id) {
+                    const newData = { ...data, responseId: response?._id };
+                    onNodeChange(id, newData);
+                  }
+                  setState(initialState);
+                }}
+              />
+            </div>
+          </Overlay>
         )}
       </Card>
       <Handle type="source" position={Position.Bottom} isConnectable={isConnectable} />

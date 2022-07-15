@@ -27,7 +27,7 @@ import CreateResponseDrawer from '../response/CreateResponseDrawer';
 import FileUpload from '../fileLibrary/FileUpload';
 import DisplayFiles from '../fileLibrary/DisplayFiles';
 import { onAlert } from '../../utils/alert';
-import Response from '../response/Response';
+import DisplayResponseById from '../response/DisplayResponseById';
 import UnitQuantityInput from './UnitQuantityInput';
 import Board from './board/Board';
 import { defaultBoard } from './board/defaultBoard';
@@ -405,7 +405,7 @@ export default function Field({
       return (
         <>
           {value?.response?._id ? (
-            <Response
+            <DisplayResponseById
               hideAuthor
               responseId={value?.response?._id}
               hideBreadcrumbs

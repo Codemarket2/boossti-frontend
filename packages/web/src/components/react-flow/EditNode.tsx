@@ -41,6 +41,7 @@ export default function EditNode({ open, data, onChange, onClose }: IProps) {
                     <MenuItem value="formName">Display form name</MenuItem>
                     <MenuItem value="fullForm">Display full form</MenuItem>
                     <MenuItem value="formField">Display form field</MenuItem>
+                    <MenuItem value="formResponse">Display form response</MenuItem>
                   </Select>
                 </FormControl>
                 {state.formView === 'formField' && (

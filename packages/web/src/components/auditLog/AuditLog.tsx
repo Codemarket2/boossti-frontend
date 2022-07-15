@@ -18,7 +18,7 @@ import TimelineConnector from '@mui/lab/TimelineConnector';
 import { useSelector } from 'react-redux';
 import TimelineDot from '@mui/lab/TimelineDot';
 import ErrorLoading from '../common/ErrorLoading';
-import Response from '../response/Response';
+import DisplayResponseById from '../response/DisplayResponseById';
 
 // const ReactJson = dynamic(() => import('react-json-view'), { ssr: false });
 
@@ -78,7 +78,7 @@ const Item = ({ auditLog, userForm }: IProps2) => {
         {showChanges && (
           <Collapse in={showChanges}>
             {isCreateResponse ? (
-              <Response responseId={JSON.parse(auditLog?.diff)?._id} hideBreadcrumbs />
+              <DisplayResponseById responseId={JSON.parse(auditLog?.diff)?._id} hideBreadcrumbs />
             ) : (
               <>
                 {/* <DisplayDiff value={JSON.parse(auditLog?.diff)} initial level={1} /> */}
