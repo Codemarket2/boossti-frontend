@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { useUpdateComment } from '@frontend/shared/hooks/comment/createComment';
+import { useAuthorization } from '@frontend/shared/hooks/auth';
+import Typography from '@mui/material/Typography';
 import CommentInput from './CommentInput';
-import DisplayCard from './DisplayCard';
+import CommentCard from './CommentCard';
 
 interface IDisplayComment {
-  postId: string;
+  parentIds: string[];
   threadId: string;
-  handleDelete: any;
-  commentedUser: any;
+  handleDelete: (commentId: string, threadId: string) => void;
+  comment: any;
   index: number;
   itemSlug?: string;
   shareIndex?: any;
@@ -16,52 +17,55 @@ interface IDisplayComment {
 }
 
 export default function DisplayComment({
-  postId,
+  parentIds,
   handleDelete,
-  commentedUser,
+  comment,
   index,
   threadId,
   itemSlug,
   shareIndex,
   fieldTitle,
 }: IDisplayComment) {
-  const { attributes } = useSelector(({ auth }: any) => auth);
-  const currentUserId = attributes['custom:_id'];
+  const authorized = useAuthorization([comment?.createdBy?._id]);
 
   const [edit, setEdit] = useState(false);
 
   const { handleUpdate, setUpdateInputVal, updateInputVal } = useUpdateComment(
-    commentedUser._id,
+    comment._id,
     setEdit,
   );
+
   useEffect(() => {
     if (updateInputVal === '') {
-      setUpdateInputVal(commentedUser?.body);
+      setUpdateInputVal(comment?.body);
     }
   }, []);
 
   const handleOnChangeUpdate = (e) => {
-    // let updateVal = e.target.value;
     setUpdateInputVal(e);
   };
 
   return (
     <>
-      {edit && currentUserId === commentedUser!.createdBy!._id ? (
-        <CommentInput
-          inputVal={updateInputVal}
-          handleChange={handleOnChangeUpdate}
-          onClick={handleUpdate}
-        />
+      {edit && authorized ? (
+        <>
+          <Typography>Edit Comment</Typography>
+          <CommentInput
+            label="Update Comment"
+            inputVal={updateInputVal}
+            handleChange={handleOnChangeUpdate}
+            onClick={handleUpdate}
+            onCancel={() => setEdit(false)}
+          />
+        </>
       ) : (
-        <DisplayCard
-          commentedUser={commentedUser}
+        <CommentCard
+          comment={comment}
           handleDelete={handleDelete}
           index={index}
           threadId={threadId}
-          postId={postId}
+          parentIds={parentIds}
           setEdit={setEdit}
-          showIcon
           itemSlug={itemSlug}
           shareIndex={shareIndex}
           fieldTitle={fieldTitle}

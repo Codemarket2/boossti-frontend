@@ -11,7 +11,7 @@ import { DisplayForm } from '../form2/DisplayForm';
 import EditNode from './EditNode';
 import { FlowContext } from './FlowEditor';
 import DisplayFormField from './DisplayFormField';
-import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
+import CommentLikeShare from '../comment/CommentLikeShare';
 
 const initialState = { edit: false, showComment: false };
 

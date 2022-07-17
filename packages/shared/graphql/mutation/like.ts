@@ -1,22 +1,26 @@
 import { gql } from '@apollo/client';
 
 export const CREATE_LIKE = gql`
-  mutation MyMutation($parentId: ID!) {
-    createLike(parentId: $parentId) {
+  mutation MyMutation($threadId: ID!) {
+    createLike(threadId: $threadId) {
       _id
-      createdAt
       like
-      parentId
+      threadId
       createdBy {
-        name
-        picture
+        _id
+        count
+        values {
+          field
+          value
+        }
       }
+      createdAt
     }
   }
 `;
 
 export const DELETE_LIKE = gql`
-  mutation MyMutation($parentId: ID!) {
-    deleteLike(parentId: $parentId)
+  mutation MyMutation($threadId: ID!) {
+    deleteLike(threadId: $threadId)
   }
 `;

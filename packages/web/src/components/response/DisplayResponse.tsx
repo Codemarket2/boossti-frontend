@@ -22,7 +22,7 @@ import Divider from '@mui/material/Divider';
 import EditResponseDrawer from './EditResponseDrawer';
 import Breadcrumbs from '../common/Breadcrumbs';
 import DisplayValue from '../form2/DisplayValue';
-import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
+import CommentLikeShare from '../comment/CommentLikeShare';
 import StarRating from '../starRating/starRating';
 import { QRButton } from '../qrcode/QRButton';
 import ResponseSections from './ResponseSection';
@@ -224,7 +224,7 @@ export function DisplayResponse({
                                     <DisplayValue field={field} value={value} verticalView />
                                   </StyledBox>
                                   {field?.options?.showCommentBox && (
-                                    <CommentLikeShare parentId={value?._id} />
+                                    <CommentLikeShare threadId={value?._id} />
                                   )}
                                   {field?.options?.showStarRating && (
                                     <StarRating parentId={value?._id} />

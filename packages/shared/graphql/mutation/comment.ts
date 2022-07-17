@@ -1,13 +1,21 @@
 import { gql } from '@apollo/client';
 
 export const CREATE_COMMENT = gql`
-  mutation MyMutation($threadId: ID!, $parentId: ID!, $body: String!) {
-    createComment(body: $body, parentId: $parentId, threadId: $threadId) {
+  mutation MyMutation($threadId: ID!, $parentIds: [ID], $body: String!) {
+    createComment(body: $body, parentIds: $parentIds, threadId: $threadId) {
       _id
       body
+      threadId
+      parentIds
+      createdBy {
+        _id
+        count
+        values {
+          field
+          value
+        }
+      }
       createdAt
-      parentId
-      updatedAt
     }
   }
 `;
@@ -17,13 +25,17 @@ export const UPDATE_COMMENT = gql`
     updateComment(_id: $_id, body: $body) {
       _id
       body
-      createdAt
-      updatedAt
       threadId
+      parentIds
       createdBy {
-        name
-        picture
+        _id
+        count
+        values {
+          field
+          value
+        }
       }
+      createdAt
     }
   }
 `;

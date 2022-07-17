@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import ShareIcon from '@mui/icons-material/Share';
-import { Tooltip } from '@mui/material/';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
 
 interface IShare {
   itemSlug?: string;
@@ -58,14 +59,16 @@ export default function Share({ itemSlug, index, commentId, fieldTitle }: IShare
 
   return (
     <>
-      <Tooltip
-        open={open}
-        onClose={handleClose}
-        onOpen={handleOpen}
-        title={isCopied ? 'copied' : 'copy share link'}
-      >
-        <ShareIcon onClick={handleCopyShareLink} />
-      </Tooltip>
+      <IconButton>
+        <Tooltip
+          open={open}
+          onClose={handleClose}
+          onOpen={handleOpen}
+          title={isCopied ? 'copied' : 'copy share link'}
+        >
+          <ShareIcon onClick={handleCopyShareLink} />
+        </Tooltip>
+      </IconButton>
     </>
   );
 }

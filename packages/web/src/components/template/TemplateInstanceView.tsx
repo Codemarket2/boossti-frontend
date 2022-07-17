@@ -1,6 +1,6 @@
 import { useAuthorization } from '@frontend/shared/hooks/auth';
 import { useDeleteResponse, useGetResponseByCount } from '@frontend/shared/hooks/response';
-import { Share } from '@mui/icons-material';
+import Share from '@mui/icons-material/Share';
 import { Grid, Paper } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';

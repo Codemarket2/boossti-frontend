@@ -11,7 +11,7 @@ import moment from 'moment';
 
 import ImageList from './ImageList';
 import MentionParser from '../common/MentionParser';
-import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
+import CommentLikeShare from '../comment/CommentLikeShare';
 
 interface IProps {
   post: any;
@@ -66,7 +66,7 @@ export default function PostCard({ post, onClickMore = () => null, authenticated
           <ImageList media={post.media} authenticated={authenticated} />
         </CardContent>
         <CardActions disableSpacing>
-          <CommentLikeShare parentId={post._id} />
+          <CommentLikeShare threadId={post._id} />
         </CardActions>
       </Card>
     </>

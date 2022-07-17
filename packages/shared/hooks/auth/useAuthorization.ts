@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-export const useAuthorization = (_id: string[], allowAdmin: boolean) => {
+export const useAuthorization = (_id: string[], allowAdmin = false) => {
   const { attributes, admin = false } = useSelector(({ auth }: any) => auth);
 
   if (allowAdmin && admin) {

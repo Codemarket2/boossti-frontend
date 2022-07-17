@@ -1,5 +1,5 @@
 import { useGetForms } from '@frontend/shared/hooks/form';
-import { Search } from '@mui/icons-material';
+import Search from '@mui/icons-material/Search';
 import TextField from '@mui/material/TextField';
 import React from 'react';
 import ErrorLoading from '../common/ErrorLoading';
