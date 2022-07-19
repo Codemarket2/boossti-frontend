@@ -8,10 +8,11 @@ import {
 import { useLikeSubscription } from '../like/getLike';
 import { ADDED_COMMENT } from '../../graphql/subscription/comment';
 
-export const useGetComments = (threadId: string) => {
-  const { data, error, loading, subscribeToMore } = useQuery(GET_COMMENTS_BY_PARENT_ID, {
+export const useGetComments = (threadId: string, commentIds: string[]) => {
+  const { data, error, loading, subscribeToMore, refetch } = useQuery(GET_COMMENTS_BY_PARENT_ID, {
     variables: {
       threadId,
+      commentIds,
     },
     fetchPolicy: 'cache-and-network',
   });
@@ -55,6 +56,7 @@ export const useGetComments = (threadId: string) => {
     data,
     error,
     loading,
+    refetch,
   };
 };
 

@@ -1,5 +1,6 @@
 import Skeleton from '@mui/material/Skeleton';
 import { useCreateComment, useDeleteComment } from '@frontend/shared/hooks/comment/createComment';
+import { useRouter } from 'next/router';
 import { useGetComments } from '@frontend/shared/hooks/comment/getComment';
 import CommentInput from './CommentInput';
 import DisplayComment from './DisplayComment';
@@ -25,12 +26,24 @@ export default function CommentsList({
   shareIndex,
   fieldTitle,
 }: IComment) {
-  const { data, error } = useGetComments(threadId);
+  const router = useRouter();
+  let commentIds = [];
+  if (router?.query?.childThreadId) {
+    commentIds = Array.isArray(router?.query?.childThreadId)
+      ? router?.query?.childThreadId
+      : [router?.query?.childThreadId];
+  }
+  if (router?.query?.commentId) {
+    commentIds = [...commentIds, router?.query?.commentId];
+  }
+
+  const { data, error, refetch } = useGetComments(threadId, commentIds);
   const { handleSave, inputVal, setInputVal, loading: submitLoading } = useCreateComment({
     parentIds,
     threadId,
+    refetch,
   });
-  const { handleDelete, loading: deleteLoading } = useDeleteComment();
+  const { handleDelete, loading: deleteLoading } = useDeleteComment(refetch);
 
   const handleChange = (e) => {
     setInputVal(e);

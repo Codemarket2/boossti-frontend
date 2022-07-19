@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import moment from 'moment';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -34,6 +35,7 @@ export default function CommentCard({
   shareIndex,
   fieldTitle,
 }: IDisplayComment) {
+  const router = useRouter();
   const [commentsListShown, setCommentsListShown] = useState(false);
   const userForm = useSelector(({ setting }: any) => setting.userForm);
 
@@ -45,7 +47,10 @@ export default function CommentCard({
 
   return (
     <div className="py-2">
-      <div className="d-flex">
+      <div
+        className="d-flex"
+        style={router?.query?.commentId === comment?._id ? { background: 'yellow' } : {}}
+      >
         <div>
           <Avatar sx={{ width: 35, height: 35 }}>
             <PersonIcon fontSize="large" />

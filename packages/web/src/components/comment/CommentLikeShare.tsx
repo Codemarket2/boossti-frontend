@@ -42,20 +42,41 @@ export default function CommentLikeShare({
   isReply,
   onCommentsListToggle,
 }: CommentLikeShareProps) {
+  const router = useRouter();
   const { data, error } = useGetActionCounts(threadId);
 
   const [copy, setCopy] = useState(false);
   const copyLink = () => {
     setCopy(true);
     setTimeout(() => setCopy(false), 2000);
-    const link = `${window.location.href}`;
-    // if (isReply) {
-    //   link += `&commentId=${threadId}`;
-    // }
+    let link = `${window.location.origin}${window.location.pathname}`;
+    if (isReply) {
+      const query: any = { ...router.query, commentId: threadId };
+      delete query.slug;
+      delete query.count;
+      let queryString = '';
+      Object.keys(query).forEach((key) => {
+        const queryValue = query[key];
+        if (Array.isArray(queryValue)) {
+          queryValue.forEach((q) => {
+            if (queryValue) {
+              queryString += '&';
+            }
+            queryString += `${key}=${q}`;
+          });
+        } else {
+          if (queryValue) {
+            queryString += '&';
+          }
+          queryString += `${key}=${queryValue}`;
+        }
+      });
+      if (queryString) link += `?${queryString}`;
+    }
     navigator.clipboard.writeText(link);
+    // router.push(router);
   };
   const [showComment, setShowComment] = useState(false);
-  const router = useRouter();
 
   const handleToggleCommentsList = () => {
     if (isReply) {
@@ -79,6 +100,7 @@ export default function CommentLikeShare({
       if (showComment) {
         delete router.query.threadId;
         delete router.query.childThreadId;
+        delete router.query.commentId;
       } else {
         router.query.threadId = threadId;
       }
@@ -94,15 +116,15 @@ export default function CommentLikeShare({
         oldChildThreadIds = Array.isArray(router.query.childThreadId)
           ? router.query.childThreadId
           : [router.query.childThreadId];
+        isChildThreadIdPresent = oldChildThreadIds?.some((ct) => ct === threadId);
       }
-      isChildThreadIdPresent = oldChildThreadIds?.some((ct) => ct === threadId);
 
       if (isChildThreadIdPresent && !showComment) {
         setShowComment(true);
         if (onCommentsListToggle) {
           onCommentsListToggle(true);
         }
-      } else if (isChildThreadIdPresent && showComment) {
+      } else if (!isChildThreadIdPresent && showComment) {
         setShowComment(false);
         if (onCommentsListToggle) {
           onCommentsListToggle(false);
@@ -168,7 +190,6 @@ export default function CommentLikeShare({
               <ShareIcon />
             </IconButton>
           </Tooltip>
-          {/* {JSON.stringify(window.location)} */}
           {children}
         </div>
       </div>

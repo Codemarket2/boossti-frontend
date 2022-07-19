@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const GET_COMMENTS_BY_PARENT_ID = gql`
-  query MyQuery($threadId: ID!) {
-    getCommentsByThreadId(threadId: $threadId) {
+  query MyQuery($threadId: ID!, $commentIds: [ID]) {
+    getCommentsByThreadId(threadId: $threadId, commentIds: $commentIds) {
       data {
         _id
         body

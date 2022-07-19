@@ -7,9 +7,10 @@ import { GET_COMMENTS_BY_PARENT_ID } from '../../graphql/query/comment';
 interface UseCreateCommentProps {
   threadId: string;
   parentIds?: string[];
+  refetch: any;
 }
 
-export function useCreateComment({ parentIds, threadId }: UseCreateCommentProps) {
+export function useCreateComment({ parentIds, threadId, refetch }: UseCreateCommentProps) {
   const [createCommentMutation, { loading }] = useMutation(CREATE_COMMENT);
   const [inputVal, setInputVal] = useState('');
 
@@ -48,6 +49,7 @@ export function useCreateComment({ parentIds, threadId }: UseCreateCommentProps)
         },
       });
       setInputVal('');
+      refetch();
     }
   };
 
@@ -85,10 +87,10 @@ export function useUpdateComment(id: string, setEdit: any) {
   };
 }
 
-export function useDeleteComment() {
+export function useDeleteComment(refetch) {
   const [deleteCommentMutation, { data, loading, error }] = useMutation(DELETE_COMMENT);
-  const handleDelete = (commentId: string, threadId: string) => {
-    deleteCommentMutation({
+  const handleDelete = async (commentId: string, threadId: string) => {
+    await deleteCommentMutation({
       variables: {
         _id: commentId,
       },
@@ -120,6 +122,7 @@ export function useDeleteComment() {
         }
       },
     });
+    refetch();
   };
 
   return {
