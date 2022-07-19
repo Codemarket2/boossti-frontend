@@ -14,6 +14,7 @@ import PhoneInput from 'react-phone-input-2';
 import { validateValue } from '@frontend/shared/utils/validate';
 import { IField } from '@frontend/shared/types/form';
 import { IValue } from '@frontend/shared/types/response';
+import { generateObjectId } from '@frontend/shared/utils/objectId';
 import RichTextarea from '../common/RichTextarea2';
 import DisplayRichText from '../common/DisplayRichText';
 import SelectResponse from '../response/SelectResponse';
@@ -51,6 +52,8 @@ interface FieldProps {
   responseId?: string;
   setUniqueLoading?: (args: boolean) => void;
 }
+
+const objectId = generateObjectId();
 
 export default function Field({
   field,
@@ -486,6 +489,7 @@ export default function Field({
       return (
         <>
           <ReactFlow
+            _id={value?._id || objectId}
             editMode
             flow={value?.options?.flowDiagram}
             onFlowChange={(flowDiagram) => onChange({ options: { flowDiagram } })}
