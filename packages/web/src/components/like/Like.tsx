@@ -1,15 +1,27 @@
+import { useState } from 'react';
 import { IconButton, Tooltip } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useLikeUnlike } from './utils/useLikeUnlikeHook';
+import LikeModal from './LikeModal';
 
-interface ILike {
+interface LikeProps {
   threadId: string;
   likedByUser: boolean;
   commentLike?: boolean;
+  likeCount: number;
 }
 
-export default function Like({ threadId, likedByUser, commentLike = false }: ILike) {
+export default function Like({ threadId, likedByUser, commentLike = false, likeCount }: LikeProps) {
   const { handleLikeDislike } = useLikeUnlike(threadId, likedByUser);
+  const [showLikeModel, setShowLikeModel] = useState(false);
+
+  const handleOpenLikeModal = () => {
+    setShowLikeModel(true);
+  };
+
+  const handleCloseLikeModal = () => {
+    setShowLikeModel(false);
+  };
 
   return (
     <>
@@ -22,6 +34,22 @@ export default function Like({ threadId, likedByUser, commentLike = false }: ILi
           </IconButton>
         )}
       </Tooltip>
+      {likeCount > 0 && (
+        <>
+          <span onClick={handleOpenLikeModal} style={{ cursor: 'pointer' }} className="mr-2">
+            {likeCount}
+          </span>
+          {showLikeModel && (
+            <LikeModal
+              threadId={threadId}
+              handleOpenLikeModal={handleOpenLikeModal}
+              handleCloseLikeModal={handleCloseLikeModal}
+              totalLike={likeCount}
+              open={showLikeModel}
+            />
+          )}
+        </>
+      )}
     </>
   );
 }

@@ -1,14 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import IconButton from '@mui/material/IconButton';
 import CommentIcon from '@mui/icons-material/ModeComment';
+import ShareIcon from '@mui/icons-material/Share';
 import Divider from '@mui/material/Divider';
 import { useGetActionCounts } from '@frontend/shared/hooks/comment/getComment';
 import Tooltip from '@mui/material/Tooltip';
+import { useRouter } from 'next/router';
 import ErrorLoading from '../common/ErrorLoading';
-import LikeModal from '../like/LikeModal';
 import Like from '../like/Like';
 import CommentsList from './CommentsList';
-import Share from '../share/Share';
 import Overlay from '../common/Overlay';
 
 interface CommentLikeShareProps {
@@ -18,7 +18,6 @@ interface CommentLikeShareProps {
   children?: React.ReactNode;
   index?: any;
   itemSlug?: string;
-  commentId?: string;
   fieldTitle?: string;
   showHideComments?: boolean;
   isReply?: boolean;
@@ -38,7 +37,6 @@ export default function CommentLikeShare({
   children,
   index,
   itemSlug,
-  commentId,
   fieldTitle,
   showHideComments,
   isReply,
@@ -46,22 +44,84 @@ export default function CommentLikeShare({
 }: CommentLikeShareProps) {
   const { data, error } = useGetActionCounts(threadId);
 
-  const [open, setOpen] = useState(false);
+  const [copy, setCopy] = useState(false);
+  const copyLink = () => {
+    setCopy(true);
+    setTimeout(() => setCopy(false), 2000);
+    const link = `${window.location.href}`;
+    // if (isReply) {
+    //   link += `&commentId=${threadId}`;
+    // }
+    navigator.clipboard.writeText(link);
+  };
   const [showComment, setShowComment] = useState(false);
-  const handleOpenLikeModal = () => {
-    setOpen(true);
-  };
-
-  const handleCloseLikeModal = () => {
-    setOpen(false);
-  };
+  const router = useRouter();
 
   const handleToggleCommentsList = () => {
-    setShowComment(!showComment);
-    if (onCommentsListToggle) {
-      onCommentsListToggle(!showComment);
+    if (isReply) {
+      let oldChildThreads = [];
+      if (router.query.childThreadId) {
+        oldChildThreads = Array.isArray(router.query.childThreadId)
+          ? router.query.childThreadId
+          : [router.query.childThreadId];
+      }
+      if (showComment) {
+        oldChildThreads = oldChildThreads.filter((ct) => ct !== threadId);
+        if (oldChildThreads?.length > 0) {
+          router.query.childThreadId = oldChildThreads;
+        } else {
+          delete router.query.childThreadId;
+        }
+      } else {
+        router.query.childThreadId = [...oldChildThreads, threadId];
+      }
+    } else if (!isReply) {
+      if (showComment) {
+        delete router.query.threadId;
+        delete router.query.childThreadId;
+      } else {
+        router.query.threadId = threadId;
+      }
     }
+    router.push(router);
   };
+
+  useEffect(() => {
+    if (isReply) {
+      let isChildThreadIdPresent = false;
+      let oldChildThreadIds = [];
+      if (router.query.childThreadId) {
+        oldChildThreadIds = Array.isArray(router.query.childThreadId)
+          ? router.query.childThreadId
+          : [router.query.childThreadId];
+      }
+      isChildThreadIdPresent = oldChildThreadIds?.some((ct) => ct === threadId);
+
+      if (isChildThreadIdPresent && !showComment) {
+        setShowComment(true);
+        if (onCommentsListToggle) {
+          onCommentsListToggle(true);
+        }
+      } else if (isChildThreadIdPresent && showComment) {
+        setShowComment(false);
+        if (onCommentsListToggle) {
+          onCommentsListToggle(false);
+        }
+      }
+    } else if (!isReply) {
+      if (router.query.threadId === threadId && !showComment) {
+        setShowComment(true);
+        if (onCommentsListToggle) {
+          onCommentsListToggle(true);
+        }
+      } else if (router.query.threadId !== threadId && showComment) {
+        setShowComment(false);
+        if (onCommentsListToggle) {
+          onCommentsListToggle(false);
+        }
+      }
+    }
+  }, [router.query]);
 
   const CommentsListComponent = (
     <div style={isReply && spacingStyles}>
@@ -87,24 +147,12 @@ export default function CommentLikeShare({
           }
         }
       >
-        <Like threadId={threadId} likedByUser={data?.getActionCounts?.likedByUser || false} />
+        <Like
+          threadId={threadId}
+          likedByUser={data?.getActionCounts?.likedByUser || false}
+          likeCount={data?.getActionCounts?.likeCount}
+        />
         <div>
-          {data?.getActionCounts?.likeCount && data.getActionCounts.likeCount > 0 ? (
-            <>
-              <span onClick={handleOpenLikeModal} style={{ cursor: 'pointer' }} className="mr-2">
-                {data.getActionCounts.likeCount}
-              </span>
-              {open && (
-                <LikeModal
-                  threadId={threadId}
-                  handleOpenLikeModal={handleOpenLikeModal}
-                  handleCloseLikeModal={handleCloseLikeModal}
-                  totalLike={data.getActionCounts.likeCount}
-                  open={open}
-                />
-              )}
-            </>
-          ) : null}
           <Tooltip title={`${showComment ? 'Hide' : 'Show'} Comment`}>
             <IconButton onClick={handleToggleCommentsList}>
               <CommentIcon />
@@ -115,7 +163,12 @@ export default function CommentLikeShare({
               <span className="mr-2">{data.getActionCounts.commentCount}</span>
             </Tooltip>
           )}
-          <Share index={index} itemSlug={itemSlug} commentId={commentId} fieldTitle={fieldTitle} />
+          <Tooltip title={copy ? 'link copied' : 'share link'} onClick={copyLink}>
+            <IconButton>
+              <ShareIcon />
+            </IconButton>
+          </Tooltip>
+          {/* {JSON.stringify(window.location)} */}
           {children}
         </div>
       </div>
@@ -127,7 +180,7 @@ export default function CommentLikeShare({
           </>
         )
       ) : (
-        <Overlay open={showComment} onClose={() => setShowComment(false)} title="Comments">
+        <Overlay open={showComment} onClose={() => handleToggleCommentsList()} title="Comments">
           <div className="p-2">{CommentsListComponent}</div>
         </Overlay>
       )}

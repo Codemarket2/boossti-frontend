@@ -81,7 +81,6 @@ export default function CommentCard({
           threadId={comment._id}
           parentIds={parentIds}
           showDivider={false}
-          commentId={comment._id}
           itemSlug={itemSlug}
           index={shareIndex}
           fieldTitle={fieldTitle}
