@@ -35,7 +35,7 @@ import DefaultValue from './DefaultValue';
 interface IProps {
   onCancel?: () => void;
   onSave: (field: any, action: string) => void;
-  field: IField;
+  field: IField | null;
   isWidget?: boolean;
   isDefault?: boolean;
   parentFields?: any[];
@@ -73,6 +73,7 @@ export default function AddField({
     <form className="px-2" onSubmit={formik.handleSubmit}>
       <InputGroup>
         <TextField
+          data-testid="field-label"
           autoFocus
           fullWidth
           label="Label*"
