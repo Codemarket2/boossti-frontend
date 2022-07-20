@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 import Card from '@mui/material/Card';
 import React, { memo, useContext, useState } from 'react';
-import { Handle, NodeProps, Position } from 'react-flow-renderer';
+import { Handle, NodeProps } from 'react-flow-renderer';
 import { Tooltip } from '@mui/material';
 import DisplayRichText from '../common/DisplayRichText';
 import { DisplayForm } from '../form2/DisplayForm';
@@ -24,7 +24,6 @@ export default memo(({ data, isConnectable, selected, id }: NodeProps) => {
 
   return (
     <div className="nowheel">
-      <Handle type="target" position={Position.Top} isConnectable={isConnectable} />
       <Card
         variant="outlined"
         style={{
@@ -126,7 +125,25 @@ export default memo(({ data, isConnectable, selected, id }: NodeProps) => {
           </Overlay>
         )}
       </Card>
-      <Handle type="source" position={Position.Bottom} isConnectable={isConnectable} />
+      {data?.ports?.map((port) => {
+        let handleStyles = {};
+        if (port?.alignment || port?.alignment === 0) {
+          if (['top', 'bottom'].includes(port.position)) {
+            handleStyles = { left: `${port?.alignment}%` };
+          } else if (['left', 'right'].includes(port.position)) {
+            handleStyles = { top: `${port?.alignment}%` };
+          }
+        }
+        return (
+          <Handle
+            style={{ ...handleStyles, backgroundColor: port?.color }}
+            key={port?._id}
+            type={port?.type}
+            id={port?._id}
+            position={port.position}
+          />
+        );
+      })}
     </div>
   );
 });

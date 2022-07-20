@@ -43,11 +43,6 @@ export default memo(({ data, isConnectable, selected, id }: NodeProps) => {
             </IconButton>
           </Tooltip>
         )}
-        {/* <>
-          <div style={{ position: 'absolute', bottom: -40 }}>
-            <CommentLikeShare parentId={id} itemSlug={null} />
-          </div>
-        </> */}
         <div className="p-2" style={{ maxWidth: '300px', overflowX: 'auto' }}>
           {data?.formView !== 'formField' && (
             <Typography textAlign="center">

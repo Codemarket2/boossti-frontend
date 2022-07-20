@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "cross-env NODE_OPTIONS=--max-old-space-size=8192 next dev",
     "dev:unix": "NODE_OPTIONS=--max-old-space-size=8192 next dev",
     "debug": "NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
@@ -101,6 +101,7 @@
     "@types/react": "17.0.43",
     "@types/react-dom": "17.0.14",
     "babel-loader": "^8.2.4",
+    "cross-env": "^7.0.3",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "storybook-addon-apollo-client": "^4.0.11",
