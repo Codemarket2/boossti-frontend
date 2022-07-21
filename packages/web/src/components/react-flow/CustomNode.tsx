@@ -11,7 +11,7 @@ import { DisplayForm } from '../form2/DisplayForm';
 import EditNode from './EditNode';
 import { FlowContext } from './FlowEditor';
 import DisplayFormField from './DisplayFormField';
-import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
+import CommentLikeShare from '../comment/CommentLikeShare';
 
 const initialState = { edit: false, showComment: false };
 
@@ -43,11 +43,6 @@ export default memo(({ data, isConnectable, selected, id }: NodeProps) => {
             </IconButton>
           </Tooltip>
         )}
-        {/* <>
-          <div style={{ position: 'absolute', bottom: -40 }}>
-            <CommentLikeShare parentId={id} itemSlug={null} />
-          </div>
-        </> */}
         <div className="p-2" style={{ maxWidth: '300px', overflowX: 'auto' }}>
           {data?.formView !== 'formField' && (
             <Typography textAlign="center">

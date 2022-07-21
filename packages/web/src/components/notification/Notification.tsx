@@ -21,7 +21,7 @@ import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import ListItemText from '@mui/material/ListItemText';
-import { ExpandMore } from '@mui/icons-material';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 import { styled } from '@mui/material/styles';
 import CommentModel from './CommentModel';
 

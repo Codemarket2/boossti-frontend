@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container } from '@mui/material';
 import { useGetComment } from '@frontend/shared/hooks/comment/getComment';
-import Comment from '../components/comment/Comment';
+import CommentsList from '../components/comment/CommentsList';
 import PostCardSkeleton from '../components/post/PostCardSkeleton';
 import ErrorLoading from '../components/common/ErrorLoading';
 
@@ -14,7 +14,7 @@ export default function CommentScreen({ _id }: { _id: string }) {
           <PostCardSkeleton />
         </ErrorLoading>
       ) : (
-        <Comment postId={data.getComment.parentId} threadId={data.getComment.parentId} />
+        <CommentsList parentIds={data.getComment.parentId} threadId={data.getComment.parentId} />
       )}
     </Container>
   );

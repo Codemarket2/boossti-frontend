@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import { useGetMyResponses } from '@frontend/shared/hooks/response';
 import Link from 'next/link';
 import { Accordion, AccordionDetails, AccordionSummary, Button } from '@mui/material';
-import { ExpandMore } from '@mui/icons-material';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 import ErrorLoading from '../common/ErrorLoading';
 import { DisplayResponseWithFormId } from '../response/DisplayResponseById';
 

@@ -11,7 +11,7 @@ import CRUDMenu from '../common/CRUDMenu';
 import { FormView } from './FormView';
 import DisplayValue from './DisplayValue';
 import BackdropComponent from '../common/Backdrop';
-import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
+import CommentLikeShare from '../comment/CommentLikeShare';
 import StarRating from '../starRating/starRating';
 import Overlay from '../common/Overlay';
 
@@ -198,7 +198,7 @@ export default function FormFieldsValue({
                     ))}
                 </>
               )}
-              {field?.options?.showCommentBox && <CommentLikeShare parentId={field._id} />}
+              {field?.options?.showCommentBox && <CommentLikeShare threadId={field._id} />}
               <StarRating parentId={field._id} />
             </div>
             {showOverlay.show && showOverlay.id === field._id && (
@@ -275,7 +275,7 @@ export default function FormFieldsValue({
                         ))}
                     </>
                   )}
-                  {field?.options?.showCommentBox && <CommentLikeShare parentId={field._id} />}
+                  {field?.options?.showCommentBox && <CommentLikeShare threadId={field._id} />}
                   <StarRating parentId={field._id} />
                 </div>
               </Overlay>

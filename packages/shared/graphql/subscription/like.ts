@@ -6,7 +6,7 @@ export const ADDED_LIKE = gql`
       _id
       createdAt
       like
-      parentId
+      threadId
       createdBy {
         name
         picture

@@ -1,5 +1,5 @@
 import { useAddConstraint } from '@frontend/shared/hooks/form';
-import { Delete } from '@mui/icons-material';
+import Delete from '@mui/icons-material/Delete';
 import AddCircle from '@mui/icons-material/AddCircle';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';

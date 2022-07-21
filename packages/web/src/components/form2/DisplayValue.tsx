@@ -143,7 +143,7 @@ export default function DisplayValue({
     case 'diagram':
       return <DisplayDiagram diagram={value?.options?.diagram} />;
     case 'flowDiagram':
-      return <ReactFlow flow={value?.options?.flowDiagram} />;
+      return <ReactFlow _id={value?._id} flow={value?.options?.flowDiagram} />;
     case 'condition':
       return <DisplayFieldCondition conditions={value?.options?.conditions} />;
     default:
