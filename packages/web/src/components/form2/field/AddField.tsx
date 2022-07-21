@@ -94,8 +94,11 @@ export default function AddField({
           size="small"
           error={Boolean(formik.touched.fieldType && formik.errors.fieldType)}
         >
-          <InputLabel id="fieldType-simple-select-outlined-label">Field Type*</InputLabel>
+          <InputLabel data-testid="field-type-label" id="fieldType-simple-select-outlined-label">
+            Field Type*
+          </InputLabel>
           <Select
+            data-testid="field-type-select"
             labelId="fieldType-simple-select-outlined-label"
             id="fieldType-simple-select-outlined"
             name="fieldType"
