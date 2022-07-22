@@ -214,6 +214,7 @@ export default function AddField({
           )}
         </>
       )}
+
       {['response'].includes(formik.values.fieldType) && (
         <FieldCondition
           formFields={tParentFields}
@@ -471,6 +472,7 @@ export default function AddField({
                 />
               }
               label="Required"
+              data-testid="required-field-attribute"
             />
           </div>
           <FormControlLabel
@@ -485,6 +487,7 @@ export default function AddField({
               />
             }
             label="Multiple values"
+            data-testid="multiple-value-attribute"
           />
           <br />
           <FormControlLabel
@@ -499,6 +502,7 @@ export default function AddField({
               />
             }
             label="Unique"
+            data-testid="unique-attribute"
           />
           {formik.values?.options?.unique && (
             <div className="pl-3 mt-n3">
@@ -532,6 +536,7 @@ export default function AddField({
                 />
               }
               label="Show comment box"
+              data-testid="show-comment-box-attribute"
             />
           </div>
           <FormControlLabel
@@ -546,6 +551,7 @@ export default function AddField({
               />
             }
             label="Show star rating"
+            data-testid="show-star-rating-attribute"
           />
           <br />
           <FormControlLabel
@@ -560,6 +566,7 @@ export default function AddField({
               />
             }
             label="Response not editable"
+            data-testid="response-not-editable-attribute"
           />
           <br />
           <FormControlLabel
@@ -576,6 +583,7 @@ export default function AddField({
               />
             }
             label="System calculated & saved"
+            data-testid="sys-calc&saved-attribute"
           />
           {/* {formik.values.options?.systemCalculatedAndSaved && (
             <>
@@ -621,6 +629,7 @@ export default function AddField({
                 />
               }
               label="System calculated & view"
+              data-testid="sys-cal&view-attribute"
             />
           </div>
           {[
@@ -642,7 +651,7 @@ export default function AddField({
         </>
       )}
       <div className="mb-2">
-        <LoadingButton type="submit" loading={formLoading} size="small">
+        <LoadingButton type="submit" loading={formLoading} size="small" data-testid="save-btn">
           Save
         </LoadingButton>
         {onCancel && (

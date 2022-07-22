@@ -2,8 +2,107 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { IField } from '@frontend/shared/types/form';
 import userEvent from '@testing-library/user-event';
-import { act, logDOM, render, within, screen } from '../../../../../jest/test-utils';
+import { act, logDOM, render, within, screen, getByRole } from '../../../../../jest/test-utils';
 import AddField from '../AddField';
+
+const OPTIONS = [
+  {
+    text: 'Form',
+    value: 'form',
+  },
+  {
+    text: 'Form Response',
+    value: 'response',
+  },
+  {
+    text: 'Text',
+    value: 'text',
+  },
+  {
+    text: 'Number',
+    value: 'number',
+  },
+  {
+    text: 'Password',
+    value: 'password',
+  },
+  {
+    text: 'Textarea',
+    value: 'textarea',
+  },
+  {
+    text: 'Rich Textarea',
+    value: 'richTextarea',
+  },
+  {
+    text: 'Boolean',
+    value: 'boolean',
+  },
+  {
+    text: 'Email',
+    value: 'email',
+  },
+  {
+    text: 'Phone Number',
+    value: 'phoneNumber',
+  },
+  {
+    text: 'Date',
+    value: 'date',
+  },
+  {
+    text: 'Date & Time',
+    value: 'dateTime',
+  },
+  {
+    text: 'Image',
+    value: 'image',
+  },
+  {
+    text: 'File',
+    value: 'file',
+  },
+  {
+    text: 'Address',
+    value: 'address',
+  },
+  {
+    text: 'Static Text',
+    value: 'label',
+  },
+  {
+    text: 'Link',
+    value: 'link',
+  },
+  {
+    text: 'Color Picker',
+    value: 'colorPicker',
+  },
+  {
+    text: 'Barcode Scanner',
+    value: 'barcodeScanner',
+  },
+  {
+    text: 'Lighthouse Report',
+    value: 'lighthouseReport',
+  },
+  {
+    text: 'Board',
+    value: 'board',
+  },
+  {
+    text: 'Diagram',
+    value: 'diagram',
+  },
+  {
+    text: 'Flow Diagram',
+    value: 'flowDiagram',
+  },
+  {
+    text: 'Condition',
+    value: 'condition',
+  },
+] as const;
 
 type TExtendedFieldTypes =
   | 'form'
@@ -98,6 +197,10 @@ describe('Selecting Form Field Type (label : Field Type*)', () => {
     return options;
   };
 
+  const getSelectedValue = (SelectComponent: HTMLElement) => {
+    return getInputElement(SelectComponent).value;
+  };
+
   // ---------FUNCTIONS END-------------------
 
   // ---------TEST CASES START-------------
@@ -160,113 +263,13 @@ describe('Selecting Form Field Type (label : Field Type*)', () => {
     expect(options).toHaveLength(TOTAL_OPTIONS);
   });
 
+  test('is required', () => {
+    throw new Error(' TODO');
+  });
+
   describe('Field Type Options', () => {
-    type IEXPECTED_OPTIONS = Array<{
-      text: string;
-      value: TExtendedFieldTypes;
-    }>;
-
-    const EXPECTED_OPTIONS: IEXPECTED_OPTIONS = [
-      {
-        text: 'Form',
-        value: 'form',
-      },
-      {
-        text: 'Form Response',
-        value: 'response',
-      },
-      {
-        text: 'Text',
-        value: 'text',
-      },
-      {
-        text: 'Number',
-        value: 'number',
-      },
-      {
-        text: 'Password',
-        value: 'password',
-      },
-      {
-        text: 'Textarea',
-        value: 'textarea',
-      },
-      {
-        text: 'Rich Textarea',
-        value: 'richTextarea',
-      },
-      {
-        text: 'Boolean',
-        value: 'boolean',
-      },
-      {
-        text: 'Email',
-        value: 'email',
-      },
-      {
-        text: 'Phone Number',
-        value: 'phoneNumber',
-      },
-      {
-        text: 'Date',
-        value: 'date',
-      },
-      {
-        text: 'Date & Time',
-        value: 'dateTime',
-      },
-      {
-        text: 'Image',
-        value: 'image',
-      },
-      {
-        text: 'File',
-        value: 'file',
-      },
-      {
-        text: 'Address',
-        value: 'address',
-      },
-      {
-        text: 'Static Text',
-        value: 'label',
-      },
-      {
-        text: 'Link',
-        value: 'link',
-      },
-      {
-        text: 'Color Picker',
-        value: 'colorPicker',
-      },
-      {
-        text: 'Barcode Scanner',
-        value: 'barcodeScanner',
-      },
-      {
-        text: 'Lighthouse Report',
-        value: 'lighthouseReport',
-      },
-      {
-        text: 'Board',
-        value: 'board',
-      },
-      {
-        text: 'Diagram',
-        value: 'diagram',
-      },
-      {
-        text: 'Flow Diagram',
-        value: 'flowDiagram',
-      },
-      {
-        text: 'Condition',
-        value: 'condition',
-      },
-    ];
-
-    test.each(EXPECTED_OPTIONS)(
-      `Option of $text should be present with value of $value`,
+    test.each(OPTIONS)(
+      `Option of '$text' should be present with value of '$value' and it should be selectable`,
       async (optionData) => {
         const { getByTestId } = render(<AddField {...getAppFieldMockProps()} />);
 
@@ -280,9 +283,86 @@ describe('Selecting Form Field Type (label : Field Type*)', () => {
         }
 
         expect(optionElement).toHaveTextContent(optionData.text);
-        expect(optionElement).toHaveAttribute('data-value', optionData.value);
+        // checking indirectly, dont use
+        // expect(optionElement).toHaveAttribute('data-value', optionData.value);
+
+        const user = userEvent.setup();
+        await user.click(optionElement);
+
+        const selectedvalue = getSelectedValue(SelectComponent);
+        expect(selectedvalue).toBe(optionData.value);
       },
     );
+  });
+
+  describe('Field Attributes', () => {
+    type fieldTypes = typeof OPTIONS[number]['text'];
+    const selectFieldTypeOption = async (fieldType: fieldTypes, SelectComponent: HTMLElement) => {
+      await makeListBoxVisible(SelectComponent);
+      const options = await getOptionElements(SelectComponent);
+      const optionElement = options.find((ele) => ele.textContent === fieldType);
+
+      const user = userEvent.setup();
+      await user.click(optionElement);
+    };
+
+    describe('common attributes', () => {
+      const COMMON_ATTRIBUTES = [
+        {
+          text: 'Required',
+          testid: 'required-field-attribute',
+          // name is the <Checkbox name='$name'/> attribute
+          name: 'required',
+        },
+        {
+          text: 'Multiple values',
+          testid: 'multiple-value-attribute',
+          name: 'multipleValues',
+        },
+        {
+          text: 'Unique',
+          testid: 'unique-attribute',
+          name: 'unique',
+        },
+        {
+          text: 'Show comment box',
+          testid: 'show-comment-box-attribute',
+          name: 'showCommentBox',
+        },
+        {
+          text: 'Show star rating',
+          testid: 'show-star-rating-attribute',
+          name: 'showStarRating',
+        },
+        {
+          text: 'Response not editable',
+          testid: 'response-not-editable-attribute',
+          name: 'notEditable',
+        },
+        {
+          text: 'System calculated & saved',
+          testid: 'sys-calc&saved-attribute',
+          name: 'systemCalculatedAndSaved',
+        },
+        {
+          text: 'System calculated & view',
+          testid: 'sys-cal&view-attribute',
+          name: 'systemCalculatedAndView',
+        },
+      ] as const;
+
+      test.each(COMMON_ATTRIBUTES)(`basic checks for '$text' Attribute`, (attr) => {
+        const { getByTestId } = render(<AddField {...getAppFieldMockProps()} />);
+
+        const reqAttrEle = getByTestId(attr.testid);
+        // im assuming eveything is a checkbox
+        const innerCheckBox = reqAttrEle.querySelector('input[type="checkbox"]');
+
+        expect(reqAttrEle).toBeVisible();
+        expect(innerCheckBox).toBeEnabled();
+        expect(innerCheckBox).toHaveAttribute('name', attr.name);
+      });
+    });
   });
 
   // ---------TEST CASES END-------------
@@ -352,6 +432,23 @@ describe("Field's Label Name (label : Label*)", () => {
     expect(innerInput).toHaveValue(DEFAULT_VALUE);
   });
 
+  // not working, saveBtn is the form submit button, which is not working
+  test('is required', async () => {
+    const { getByTestId } = render(<AddField {...getAppFieldMockProps()} />);
+
+    const saveBtn = getByTestId('save-btn');
+    const innerInput = getInputElement(getByTestId('field-label'));
+    const user = userEvent.setup();
+
+    // default value is cleared
+    await user.clear(innerInput);
+
+    // try to save the form with
+    await user.click(saveBtn);
+
+    expect(innerInput).toHaveAccessibleDescription(/required/i);
+  });
+
   test('(important) should be able to enter a label name', async () => {
     const { getByTestId } = render(<AddField {...getAppFieldMockProps()} />);
 
@@ -393,5 +490,6 @@ describe("Field's Label Name (label : Label*)", () => {
       await user.clear(innerInput);
     }
   });
+
   // ---------TEST CASES END-------------
 });
