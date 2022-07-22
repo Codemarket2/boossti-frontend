@@ -18,7 +18,7 @@ import { useCreateUpdateResponse } from '@frontend/shared/hooks/response';
 import { validateForm, validateValue } from '@frontend/shared/utils/validate';
 import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
-import { ISystemValues } from '@frontend/shared/hooks/response/calculateSystemValues';
+// import { ISystemValues } from '@frontend/shared/hooks/response/calculateSystemValues';
 import { IField } from '@frontend/shared/types/form';
 import { TextField } from '@mui/material';
 import ResponseList from '../response/ResponseList';
@@ -48,8 +48,9 @@ interface FormViewWrapperProps {
   isPageOwner?: boolean;
   isTemplateInstance?: string;
   isAuthorized?: boolean;
-  systemValues?: ISystemValues;
+  // systemValues?: ISystemValues;
   valueFilter?: any;
+  overrideValues?: any[];
 }
 
 export const defaultValue = {
@@ -95,15 +96,16 @@ export default function FormViewWrapper({
   installId,
   isTemplateInstance = '',
   isAuthorized,
-  systemValues,
+  // systemValues,
   valueFilter,
+  overrideValues,
 }: FormViewWrapperProps): any {
   const isAdmin = useSelector(({ auth }: any) => auth?.admin);
   const { handleCreateUpdateResponse, createLoading } = useCreateUpdateResponse({
     onAlert,
     appId,
     installId,
-    systemValues,
+    // systemValues,
     workFlowFormResponseParentId,
   });
 
@@ -330,6 +332,7 @@ export default function FormViewWrapper({
                       </>
                     ) : (
                       <FormView
+                        overrideValues={overrideValues}
                         authRequired={form?.settings?.whoCanSubmit !== 'all' && !isAuthorized}
                         fields={form?.fields}
                         handleSubmit={handleSubmit}
@@ -359,6 +362,7 @@ export default function FormViewWrapper({
                 </>
               ) : (
                 <FormView
+                  overrideValues={overrideValues}
                   authRequired={form?.settings?.whoCanSubmit !== 'all'}
                   fields={form?.fields}
                   handleSubmit={handleSubmit}
@@ -434,6 +438,7 @@ interface FormViewProps {
   form?: any;
   responseCount?: number;
   inlineEdit?: boolean;
+  overrideValues?: any[];
 }
 
 const initialSubmitState = {
@@ -443,7 +448,7 @@ const initialSubmitState = {
 
 export function FormView({
   inlineEdit = false,
-  fields,
+  fields: tempFields,
   handleSubmit,
   loading,
   onCancel,
@@ -455,6 +460,7 @@ export function FormView({
   responseId,
   form,
   responseCount,
+  overrideValues,
 }: FormViewProps): any {
   const [values, setValues] = useState(parseResponse({ values: initialValues })?.values || []);
   const [editValue, setEditValue] = useState({ fieldId: null, index: null });
@@ -466,6 +472,13 @@ export function FormView({
   const [hideField, setHideField] = useState(false);
   const [unique, setUnique] = useState(false);
   const [uniqueLoading, setUniqueLoading] = useState(false);
+
+  const fields = tempFields?.filter(
+    (field: IField) =>
+      field?.options?.required &&
+      !field?.options?.systemCalculatedAndSaved &&
+      !overrideValues?.some((v) => v?.field === field?._id),
+  );
 
   useEffect(() => {
     if (hideField) {
@@ -525,41 +538,43 @@ export function FormView({
     const validate = validateForm(fields, values);
     if (validate) {
       setSubmitState({ ...submitState, validate, loading: false });
-    } else if (authRequired && !authenticated) {
+      return;
+    }
+    if (authRequired && !authenticated) {
       setSubmitState({ ...submitState, loading: false });
       return setShowAuthModal(true);
-    } else {
-      const payload = [];
-      for (let i = 0; i < values.length; i += 1) {
-        const value = { ...values[i] };
-        const field = fields?.filter((f) => f._id === value.field)[0];
-        if (field) {
-          if (field.fieldType === 'image' && value?.tempMedia?.length > 0) {
-            let newMedia = [];
-            if (value.tempMediaFiles.length > 0) {
-              // eslint-disable-next-line no-await-in-loop
-              newMedia = await fileUpload(value.tempMediaFiles, '/form-response');
-            }
-            if (newMedia?.length > 0) {
-              newMedia = newMedia.map((n, i2) => ({
-                url: n,
-                // caption: value?.tempMedia[i].caption,
-                caption: value?.tempMedia[i2].caption,
-              }));
-              value.media = newMedia;
-            }
+    }
+    // const payload = [];
+    const payload = overrideValues?.length > 0 ? [...overrideValues] : [];
+    for (let i = 0; i < values.length; i += 1) {
+      const value = { ...values[i] };
+      const field = fields?.filter((f) => f._id === value.field)[0];
+      if (field) {
+        if (field.fieldType === 'image' && value?.tempMedia?.length > 0) {
+          let newMedia = [];
+          if (value.tempMediaFiles.length > 0) {
+            // eslint-disable-next-line no-await-in-loop
+            newMedia = await fileUpload(value.tempMediaFiles, '/form-response');
+          }
+          if (newMedia?.length > 0) {
+            newMedia = newMedia.map((n, i2) => ({
+              url: n,
+              // caption: value?.tempMedia[i].caption,
+              caption: value?.tempMedia[i2].caption,
+            }));
+            value.media = newMedia;
           }
         }
-        const { tempMedia, tempMediaFiles, ...finalValue } = value;
-        payload.push(finalValue);
       }
-      const response = await handleSubmit(payload);
-      if (response) {
-        setSubmitState(initialSubmitState);
-        setValues([]);
-      } else {
-        setSubmitState({ ...submitState, loading: false });
-      }
+      const { tempMedia, tempMediaFiles, ...finalValue } = value;
+      payload.push(finalValue);
+    }
+    const response = await handleSubmit(payload);
+    if (response) {
+      setSubmitState(initialSubmitState);
+      setValues([]);
+    } else {
+      setSubmitState({ ...submitState, loading: false });
     }
   };
 
@@ -620,164 +635,161 @@ export function FormView({
             </InputGroup>
           </Grid>
         )}
-        {(fieldWiseView && fields?.length > 1 ? [fields[page]] : fields)
-          ?.filter((field: IField) => field?.options?.required)
-          ?.filter((field: IField) => !field?.options?.systemCalculatedAndSaved)
-          ?.map((field: any) => (
-            <Grid
-              item
-              xs={field?.options?.grid?.xs || 12}
-              sm={field?.options?.grid?.sm}
-              md={field?.options?.grid?.md}
-              lg={field?.options?.grid?.lg}
-              xl={field?.options?.grid?.xl}
-              key={field._id}
-            >
-              <div style={field?.options?.style || {}}>
-                <InputGroup key={field._id}>
-                  <Typography className={field?.options?.required ? 'text-danger' : ''}>
-                    {field?.label}
-                    {field?.options?.required && '*'}
-                    {unique && field?.options?.unique && ' This field must be unique'}
-                    {uniqueLoading && field?.options?.unique && (
-                      <span className="ml-2">
-                        <CircularProgress size={10} />
-                      </span>
-                    )}
-                  </Typography>
-                  {field?.options?.systemCalculatedAndView && (
-                    <div className="mb-2">
-                      <DisplayFormula formula={field?.options?.formula} fields={fields} />
-                    </div>
+        {(fieldWiseView && fields?.length > 1 ? [fields[page]] : fields)?.map((field: any) => (
+          <Grid
+            item
+            xs={field?.options?.grid?.xs || 12}
+            sm={field?.options?.grid?.sm}
+            md={field?.options?.grid?.md}
+            lg={field?.options?.grid?.lg}
+            xl={field?.options?.grid?.xl}
+            key={field._id}
+          >
+            <div style={field?.options?.style || {}}>
+              <InputGroup key={field._id}>
+                <Typography className={field?.options?.required ? 'text-danger' : ''}>
+                  {field?.label}
+                  {field?.options?.required && '*'}
+                  {unique && field?.options?.unique && ' This field must be unique'}
+                  {uniqueLoading && field?.options?.unique && (
+                    <span className="ml-2">
+                      <CircularProgress size={10} />
+                    </span>
                   )}
-                  <>
-                    <div className="w-100">
-                      {hideField ? (
-                        <Skeleton height={200} />
-                      ) : (
-                        <Field
-                          {...fieldProps}
-                          field={{
-                            ...field,
-                            label: `${field?.label} ${field?.options?.required ? '*' : ''}`,
-                          }}
-                          disabled={
-                            edit && field.options.notEditable
-                              ? submitState.loading || field.options.notEditable
-                              : submitState.loading || field.options.systemCalculatedAndView
-                          }
-                          validate={submitState.validate}
-                          onChangeValue={(changedValue) => {
-                            if (!field?.options?.systemCalculatedAndView) {
-                              onChange(
-                                { ...changedValue, field: field._id },
-                                filterValues(values, field)?.length - 1,
-                              );
-                            }
-                          }}
-                          value={
-                            field.options.systemCalculatedAndView
-                              ? {
-                                  valueNumber: evaluateFormula(
-                                    getFormula(field?.options?.formula?.variables, [], values),
-                                  ),
-                                }
-                              : filterValues(values, field)[filterValues(values, field)?.length - 1]
-                          }
-                        />
-                      )}
-                    </div>
-                    {field?.options?.multipleValues && (
-                      <Button
-                        className="my-2"
-                        size="small"
-                        color="primary"
-                        variant="outlined"
-                        onClick={() => {
-                          if (field?.fieldType === 'richTextarea') {
-                            setHideField(true);
-                          }
-                          onAddOneMoreValue(field);
+                </Typography>
+                {field?.options?.systemCalculatedAndView && (
+                  <div className="mb-2">
+                    <DisplayFormula formula={field?.options?.formula} fields={fields} />
+                  </div>
+                )}
+                <>
+                  <div className="w-100">
+                    {hideField ? (
+                      <Skeleton height={200} />
+                    ) : (
+                      <Field
+                        {...fieldProps}
+                        field={{
+                          ...field,
+                          label: `${field?.label} ${field?.options?.required ? '*' : ''}`,
                         }}
-                        startIcon={<AddIcon />}
-                      >
-                        Add
-                      </Button>
+                        disabled={
+                          edit && field.options.notEditable
+                            ? submitState.loading || field.options.notEditable
+                            : submitState.loading || field.options.systemCalculatedAndView
+                        }
+                        validate={submitState.validate}
+                        onChangeValue={(changedValue) => {
+                          if (!field?.options?.systemCalculatedAndView) {
+                            onChange(
+                              { ...changedValue, field: field._id },
+                              filterValues(values, field)?.length - 1,
+                            );
+                          }
+                        }}
+                        value={
+                          field.options.systemCalculatedAndView
+                            ? {
+                                valueNumber: evaluateFormula(
+                                  getFormula(field?.options?.formula?.variables, [], values),
+                                ),
+                              }
+                            : filterValues(values, field)[filterValues(values, field)?.length - 1]
+                        }
+                      />
                     )}
-                  </>
-                  {filterValues(values, field).map((value: any, valueIndex) => (
-                    <div key={valueIndex}>
-                      {valueIndex !== filterValues(values, field)?.length - 1 && (
-                        <>
-                          {editValue.fieldId === field._id && editValue.index === valueIndex ? (
-                            <>
-                              <div className="w-100">
-                                {hideField ? (
-                                  <Skeleton height={200} />
-                                ) : (
-                                  <Field
-                                    field={{
-                                      ...field,
-                                      label: field?.options?.required
-                                        ? `${field?.label}*`
-                                        : field?.label,
-                                    }}
-                                    {...fieldProps}
-                                    disabled={submitState.loading}
-                                    onChangeValue={(changedValue) =>
-                                      onChange({ ...changedValue, field: field._id }, valueIndex)
-                                    }
-                                    value={value}
-                                  />
-                                )}
-                              </div>
-                              <Button
-                                className="my-2"
-                                size="small"
-                                color="primary"
-                                variant="contained"
-                                onClick={() => setEditValue({ fieldId: null, index: null })}
-                              >
-                                Save
-                              </Button>
-                            </>
-                          ) : (
-                            <div className="mb-2 d-flex align-items-start">
-                              <div className="w-100">
-                                <DisplayValue value={value} field={field} />
-                                {validateValue(submitState.validate, value, field).error && (
-                                  <FormHelperText className="text-danger">
-                                    {validateValue(submitState.validate, value, field).errorMessage}
-                                  </FormHelperText>
-                                )}
-                              </div>
-                              <IconButton
-                                onClick={() =>
-                                  setEditValue({ fieldId: field._id, index: valueIndex })
-                                }
-                                size="large"
-                              >
-                                <EditIcon />
-                              </IconButton>
-                              {!value?.options?.defaultWidget && (
-                                <IconButton
-                                  edge="end"
-                                  onClick={() => onRemoveOneValue(field._id, valueIndex)}
-                                  size="large"
-                                >
-                                  <DeleteIcon />
-                                </IconButton>
+                  </div>
+                  {field?.options?.multipleValues && (
+                    <Button
+                      className="my-2"
+                      size="small"
+                      color="primary"
+                      variant="outlined"
+                      onClick={() => {
+                        if (field?.fieldType === 'richTextarea') {
+                          setHideField(true);
+                        }
+                        onAddOneMoreValue(field);
+                      }}
+                      startIcon={<AddIcon />}
+                    >
+                      Add
+                    </Button>
+                  )}
+                </>
+                {filterValues(values, field).map((value: any, valueIndex) => (
+                  <div key={valueIndex}>
+                    {valueIndex !== filterValues(values, field)?.length - 1 && (
+                      <>
+                        {editValue.fieldId === field._id && editValue.index === valueIndex ? (
+                          <>
+                            <div className="w-100">
+                              {hideField ? (
+                                <Skeleton height={200} />
+                              ) : (
+                                <Field
+                                  field={{
+                                    ...field,
+                                    label: field?.options?.required
+                                      ? `${field?.label}*`
+                                      : field?.label,
+                                  }}
+                                  {...fieldProps}
+                                  disabled={submitState.loading}
+                                  onChangeValue={(changedValue) =>
+                                    onChange({ ...changedValue, field: field._id }, valueIndex)
+                                  }
+                                  value={value}
+                                />
                               )}
                             </div>
-                          )}
-                        </>
-                      )}
-                    </div>
-                  ))}
-                </InputGroup>
-              </div>
-            </Grid>
-          ))}
+                            <Button
+                              className="my-2"
+                              size="small"
+                              color="primary"
+                              variant="contained"
+                              onClick={() => setEditValue({ fieldId: null, index: null })}
+                            >
+                              Save
+                            </Button>
+                          </>
+                        ) : (
+                          <div className="mb-2 d-flex align-items-start">
+                            <div className="w-100">
+                              <DisplayValue value={value} field={field} />
+                              {validateValue(submitState.validate, value, field).error && (
+                                <FormHelperText className="text-danger">
+                                  {validateValue(submitState.validate, value, field).errorMessage}
+                                </FormHelperText>
+                              )}
+                            </div>
+                            <IconButton
+                              onClick={() =>
+                                setEditValue({ fieldId: field._id, index: valueIndex })
+                              }
+                              size="large"
+                            >
+                              <EditIcon />
+                            </IconButton>
+                            {!value?.options?.defaultWidget && (
+                              <IconButton
+                                edge="end"
+                                onClick={() => onRemoveOneValue(field._id, valueIndex)}
+                                size="large"
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            )}
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
+                ))}
+              </InputGroup>
+            </div>
+          </Grid>
+        ))}
         {fieldWiseView && fields?.length > 1 && (
           <div className="w-100 d-flex justify-content-between">
             {page !== 0 && (

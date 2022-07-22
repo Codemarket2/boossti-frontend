@@ -4,11 +4,11 @@ import { CREATE_RESPONSE, UPDATE_RESPONSE } from '../../graphql/mutation/respons
 import { IHooksProps } from '../../types/common';
 import { omitTypename } from '../../utils/omitTypename';
 import { stringifyValues } from '../section/updateSection';
-import { calculateSystemValues, ISystemValues } from './calculateSystemValues';
+import { calculateSystemValues } from './calculateSystemValues';
 
 interface IProps extends IHooksProps {
   workFlowFormResponseParentId?: string;
-  systemValues?: ISystemValues;
+  // systemValues?: ISystemValues;
   appId?: string;
   installId?: string;
 }
@@ -18,8 +18,8 @@ export function useCreateUpdateResponse({
   appId,
   installId,
   workFlowFormResponseParentId,
-  systemValues,
-}: IProps) {
+}: // systemValues,
+IProps) {
   const [createMutation, { loading: createLoading }] = useMutation(CREATE_RESPONSE);
   const [updateMutation, { loading: updateLoading }] = useMutation(UPDATE_RESPONSE);
   const globalState = useSelector((state) => state);
@@ -38,7 +38,7 @@ export function useCreateUpdateResponse({
         values: payload?.values,
         fields,
         globalState,
-        systemValues,
+        // systemValues,
       });
       payload = {
         ...payload,
@@ -69,3 +69,19 @@ export function useCreateUpdateResponse({
   };
   return { handleCreateUpdateResponse, createLoading, updateLoading };
 }
+
+export const defaultValueObject = {
+  // _id: '',
+  field: '',
+  value: '',
+  valueNumber: null,
+  valueBoolean: null,
+  valueDate: null,
+  media: [],
+  values: [],
+  template: null,
+  page: null,
+  form: null,
+  response: null,
+  options: { option: false },
+};

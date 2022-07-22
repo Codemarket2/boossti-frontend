@@ -12,7 +12,7 @@ export default function BoardsTab({ formId, boards = [], onBoardsChange }: IProp
     <Paper variant="outlined" className="p-1">
       <DisplayForm
         slug="form-boards"
-        systemValues={{ Form: formId }}
+        // systemValues={{ Form: formId }}
         settings={{ formView: 'button', buttonLabel: 'Add Board' }}
         valueFilter={{ 'values.form': formId }}
       />

@@ -6,6 +6,7 @@ import { useGetSection } from './getSection';
 import { client as apolloClient } from '../../graphql';
 import { omitTypename } from '../../utils/omitTypename';
 import { IHooksProps } from '../../types/common';
+import { defaultValueObject } from '../response/createUpdateResponse';
 
 const updateCache = (_id, newSectionData) => {
   const oldData = apolloClient.readQuery({
@@ -113,6 +114,7 @@ export const stringifyPayload = (oldPayload: any, removeId = false) => {
 export const stringifyValues = (values, removeId = false) => {
   return values.map((m) => {
     let value = JSON.parse(JSON.stringify(m), omitTypename);
+
     if (removeId) {
       if (value?.template?._id) {
         value = { ...value, template: value?.template?._id || null };

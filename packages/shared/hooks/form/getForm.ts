@@ -2,7 +2,12 @@ import { useQuery, useSubscription } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { FORM_SUB, UPDATED_FORM } from '../../graphql/subscription/form';
 import { client as apolloClient, guestClient } from '../../graphql';
-import { GET_FORMS, GET_FORM, GET_FORM_BY_SLUG } from '../../graphql/query/form';
+import {
+  GET_FORMS,
+  GET_FORM,
+  GET_FORM_BY_SLUG,
+  GET_FORM_RELATIONS,
+} from '../../graphql/query/form';
 
 interface IProps {
   page?: number;
@@ -97,6 +102,26 @@ export function useGetForm(_id: string) {
   }, [data]);
 
   return { data: form ? { getForm: form } : null, error, loading };
+}
+
+export function useGetFormRelations(_id: string) {
+  const [forms, setForms] = useState(null);
+  const { data, error, loading } = useQuery(GET_FORM_RELATIONS, {
+    variables: { _id },
+    nextFetchPolicy: 'cache-and-network',
+  });
+
+  // useSubscription(UPDATED_FORM, {
+  //   variables: { _id },
+  // });
+
+  useEffect(() => {
+    if (data && data.getFormRelations) {
+      setForms(data.getFormRelations?.map((form) => parseForm(form)));
+    }
+  }, [data]);
+
+  return { data: forms ? { getFormRelations: forms } : null, error, loading };
 }
 
 export function useGetFormBySlug(slug: string) {

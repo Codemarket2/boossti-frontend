@@ -18,6 +18,7 @@ import { useUpdateForm, useDeleteForm } from '@frontend/shared/hooks/form';
 import { useAuthorization } from '@frontend/shared/hooks/auth';
 import Link from 'next/link';
 import Container from '@mui/material/Container';
+import AddCircle from '@mui/icons-material/AddCircle';
 import { IForm } from '@frontend/shared/types/form';
 import ErrorLoading from '../common/ErrorLoading';
 import Breadcrumbs from '../common/Breadcrumbs';
@@ -40,6 +41,7 @@ import Conditions from './conditions/Conditions';
 import ShopifySettings from './shopify/ShopifySettings';
 import BoardsTab from './board/BoardsTab';
 import DesignTab from './design/DesignTab';
+import RelationFields from './RelationFields';
 
 interface IProps {
   form: IForm;
@@ -203,10 +205,11 @@ export default function Form({ form, drawerMode = false, onSlugChange, hideField
                     formName: form?.name,
                   }))}
                 />
+                <RelationFields formId={form?._id} />
               </Grid>
             )}
             <Grid item xs={12} sm={hideFields ? 12 : 8}>
-              <Paper variant="outlined">
+              <Paper variant="outlined" className="d-flex align-item-center">
                 <Tabs
                   variant="scrollable"
                   value={options.currentTab}
@@ -224,6 +227,11 @@ export default function Form({ form, drawerMode = false, onSlugChange, hideField
                     <Tab label="Permissions" value="permissions" />
                   )}
                 </Tabs>
+                <Tooltip title="Add Tab">
+                  <IconButton edge="start" color="primary">
+                    <AddCircle />
+                  </IconButton>
+                </Tooltip>
               </Paper>
               {options.currentTab === 'Preview' && (
                 <Paper variant="outlined" className="px-2">

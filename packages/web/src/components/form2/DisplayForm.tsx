@@ -1,6 +1,7 @@
 /* eslint-disable react/destructuring-assignment */
 import { useGetForm, useGetFormBySlug } from '@frontend/shared/hooks/form';
-import { ISystemValues } from '@frontend/shared/hooks/response/calculateSystemValues';
+import { defaultValueObject } from '@frontend/shared/hooks/response/createUpdateResponse';
+// import { ISystemValues } from '@frontend/shared/hooks/response/calculateSystemValues';
 import ErrorLoading from '../common/ErrorLoading';
 import NotFound from '../common/NotFound';
 import FormView from './FormView';
@@ -24,8 +25,9 @@ interface IFormPage {
   createCallback?: (response: any) => void;
   isPageOwner?: boolean;
   workFlowFormResponseParentId?: string;
-  systemValues?: ISystemValues;
+  // systemValues?: ISystemValues;
   valueFilter?: any;
+  overrideValues?: any;
 }
 
 interface IProps extends IFormPage {
@@ -42,8 +44,9 @@ export const FormPage = ({
   createCallback,
   isPageOwner,
   workFlowFormResponseParentId,
-  systemValues,
+  // systemValues,
   valueFilter,
+  overrideValues,
 }: IProps) => {
   const { data, error } = useGetFormBySlug(slug);
 
@@ -70,8 +73,9 @@ export const FormPage = ({
       createCallback={createCallback}
       isPageOwner={isPageOwner}
       workFlowFormResponseParentId={workFlowFormResponseParentId}
-      systemValues={systemValues}
+      // systemValues={systemValues}
       valueFilter={valueFilter}
+      overrideValues={overrideValues}
     />
   );
 };
@@ -90,8 +94,9 @@ const FormPageById = ({
   createCallback,
   isPageOwner,
   workFlowFormResponseParentId,
-  systemValues,
+  // systemValues,
   valueFilter,
+  overrideValues,
 }: IFormPageByIdProps) => {
   const { data, error } = useGetForm(_id);
 
@@ -118,8 +123,9 @@ const FormPageById = ({
       createCallback={createCallback}
       isPageOwner={isPageOwner}
       workFlowFormResponseParentId={workFlowFormResponseParentId}
-      systemValues={systemValues}
+      // systemValues={systemValues}
       valueFilter={valueFilter}
+      overrideValues={overrideValues}
     />
   );
 };
@@ -130,8 +136,12 @@ interface IDisplayFormProps extends IFormPage {
 }
 
 export const DisplayForm = (props: IDisplayFormProps) => {
+  const overrideValues = props?.overrideValues?.map((value) => ({
+    ...defaultValueObject,
+    ...value,
+  }));
   if (props._id) {
-    return <FormPageById {...props} _id={props._id} />;
+    return <FormPageById {...props} overrideValues={overrideValues} _id={props._id} />;
   }
-  return <FormPage {...props} slug={props.slug} />;
+  return <FormPage {...props} overrideValues={overrideValues} slug={props.slug} />;
 };
