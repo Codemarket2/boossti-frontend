@@ -2,7 +2,7 @@ import { Typography } from '@mui/material';
 import React, { useState } from 'react';
 import Overlay from '../common/Overlay';
 import { getLabel } from './SelectResponse';
-import Response from './Response';
+import DisplayResponseById from './DisplayResponseById';
 
 interface IProps {
   open: boolean;
@@ -14,7 +14,7 @@ export default function ResponseDrawer({ open, onClose, responseId }: IProps) {
   return (
     <Overlay open={open} onClose={onClose} title="Response">
       <div className="p-2">
-        <Response responseId={responseId} hideBreadcrumbs />
+        <DisplayResponseById responseId={responseId} hideBreadcrumbs />
       </div>
     </Overlay>
   );

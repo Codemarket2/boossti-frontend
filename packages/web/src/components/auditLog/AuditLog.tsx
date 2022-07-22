@@ -11,14 +11,14 @@ import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 import TimelineItem from '@mui/lab/TimelineItem';
 import IconButton from '@mui/material/IconButton';
 import ArrowRight from '@mui/icons-material/ArrowRight';
-import { ArrowDropDown } from '@mui/icons-material';
+import ArrowDropDown from '@mui/icons-material/ArrowDropDown';
 import TimelineSeparator from '@mui/lab/TimelineSeparator';
-import { getUserAttributes } from '@frontend/shared/hooks/user/getUserForm';
+import { getUserName } from '@frontend/shared/hooks/user/getUserForm';
 import TimelineConnector from '@mui/lab/TimelineConnector';
 import { useSelector } from 'react-redux';
 import TimelineDot from '@mui/lab/TimelineDot';
 import ErrorLoading from '../common/ErrorLoading';
-import Response from '../response/Response';
+import DisplayResponseById from '../response/DisplayResponseById';
 
 // const ReactJson = dynamic(() => import('react-json-view'), { ssr: false });
 
@@ -78,7 +78,7 @@ const Item = ({ auditLog, userForm }: IProps2) => {
         {showChanges && (
           <Collapse in={showChanges}>
             {isCreateResponse ? (
-              <Response responseId={JSON.parse(auditLog?.diff)?._id} hideBreadcrumbs />
+              <DisplayResponseById responseId={JSON.parse(auditLog?.diff)?._id} hideBreadcrumbs />
             ) : (
               <>
                 {/* <DisplayDiff value={JSON.parse(auditLog?.diff)} initial level={1} /> */}
@@ -95,12 +95,7 @@ const Item = ({ auditLog, userForm }: IProps2) => {
           </Collapse>
         )}
         <Typography className="mt-1">
-          by
-          <span className="font-weight-bold">
-            {` ${getUserAttributes(userForm, auditLog?.createdBy)?.firstName} ${
-              getUserAttributes(userForm, auditLog?.createdBy)?.lastName
-            }`}
-          </span>
+          by <span className="font-weight-bold">{getUserName(userForm, auditLog?.createdBy)}</span>
           <Typography component="span">{` ${moment(auditLog.createdAt).format('lll')}`}</Typography>
         </Typography>
       </TimelineOppositeContent>

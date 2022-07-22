@@ -1,5 +1,5 @@
 import { Button, FormLabel, IconButton, TextField, Typography } from '@mui/material';
-import { Brightness1 } from '@mui/icons-material';
+import Brightness1 from '@mui/icons-material/Brightness1';
 import { SketchPicker } from 'react-color';
 import Paper from '@mui/material/Paper';
 import React, { FormEvent, useEffect, useState } from 'react';

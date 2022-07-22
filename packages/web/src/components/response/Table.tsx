@@ -20,7 +20,7 @@ import EditResponseDrawer from './EditResponseDrawer';
 import { useSelector } from 'react-redux';
 import TextField from '@mui/material/TextField';
 import CircularProgress from '@mui/material/CircularProgress';
-import { Search } from '@mui/icons-material';
+import Search from '@mui/icons-material/Search';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { IField } from '@frontend/shared/types/form';

@@ -43,8 +43,8 @@ export const defaultEdges = [
   //   target: '3',
   //   type: 'smoothstep',
   //   animated: true,
-  //   markerEnd: {
-  //     type: MarkerType.ArrowClosed,
-  //   },
+  // markerEnd: {
+  //   type: MarkerType.ArrowClosed,
+  // },
   // },
 ];

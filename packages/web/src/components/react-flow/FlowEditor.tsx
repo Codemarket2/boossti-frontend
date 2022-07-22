@@ -6,15 +6,23 @@ import ReactFlow, {
   useEdgesState,
   Controls,
   Background,
+  MarkerType,
 } from 'react-flow-renderer';
 import { generateObjectId } from '@frontend/shared/utils/objectId';
 import Sidebar from './Sidebar';
 import CustomNode from './CustomNode';
+import CustomNode2 from './CustomNode2';
+import CustomEdge from './CustomEdge';
 import Overlay from '../common/Overlay';
 import { defaultEdges, defaultNodes } from './defaultNodes';
 
 const nodeTypes = {
   customNode: CustomNode,
+  customNode2: CustomNode2,
+};
+
+const edgeTypes = {
+  customEdge: CustomEdge,
 };
 
 export interface IFlow {
@@ -44,9 +52,33 @@ export default function FlowEditor({
   const [edges, setEdges, onEdgesChange] = useEdgesState(flow?.edges || defaultEdges);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
-  const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), []);
+  const onConnect = useCallback(
+    (params) =>
+      setEdges((eds) =>
+        addEdge(
+          {
+            ...params,
+            markerEnd: {
+              type: MarkerType.ArrowClosed,
+              color: '#808080',
+            },
+            animated: true,
+            type: 'customEdge',
+            style: {
+              stroke: '#808080',
+            },
+          },
+          eds,
+        ),
+      ),
+    [],
+  );
   const onNodeChange = useCallback((id, newData) => {
     setNodes((nds) => nds.map((node) => (node?.id === id ? { ...node, data: newData } : node)));
+  }, []);
+
+  const onEdgeChange = useCallback((id, newEdge) => {
+    setEdges((edgs) => edgs.map((node) => (node?.id === id ? { ...node, ...newEdge } : node)));
   }, []);
 
   const onDragOver = useCallback((event) => {
@@ -61,13 +93,17 @@ export default function FlowEditor({
 
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
 
-      let newNodeData = event.dataTransfer.getData('application/reactflow');
+      let dropData = event.dataTransfer.getData('application/reactflow');
+
       // check if the dropped element is valid
-      if (!newNodeData) {
+      if (!dropData) {
         return;
       }
+      dropData = JSON.parse(dropData);
 
-      newNodeData = JSON.parse(newNodeData);
+      if (!dropData?.data || !dropData?.nodeType) {
+        return;
+      }
 
       const position = reactFlowInstance.project({
         x: event.clientX - reactFlowBounds.left,
@@ -75,24 +111,32 @@ export default function FlowEditor({
       });
       const newNode = {
         id: generateObjectId(),
-        type: 'customNode',
+        type: dropData?.nodeType,
         position,
-        data: newNodeData,
+        data: {
+          ...dropData?.data,
+          ports: [
+            { _id: generateObjectId(), position: 'top', type: 'target' },
+            { _id: generateObjectId(), position: 'bottom', type: 'source' },
+            { _id: generateObjectId(), position: 'left', type: 'target' },
+            { _id: generateObjectId(), position: 'right', type: 'source' },
+          ],
+        },
       };
-
       setNodes((nds) => nds.concat(newNode));
     },
     [reactFlowInstance],
   );
 
   const Editor = (
-    <FlowContext.Provider value={{ onNodeChange, editMode }}>
+    <FlowContext.Provider value={{ onNodeChange, editMode, onEdgeChange }}>
       <div style={{ height: 'calc(100vh - 50px)', minHeight: 300 }}>
         <div className="dndflow">
           <ReactFlowProvider>
             <div className="reactflow-wrapper" ref={reactFlowWrapper}>
               <ReactFlow
                 nodeTypes={nodeTypes}
+                edgeTypes={edgeTypes}
                 nodes={nodes}
                 edges={edges}
                 onNodesChange={onNodesChange}
@@ -144,6 +188,7 @@ export const FlowContext = createContext({
     //
   },
   editMode: false,
+  onEdgeChange: (id, newEdge) => {
+    //
+  },
 });
-
-// export const FlowEditorDrawer = () => {};

@@ -1,26 +1,29 @@
 import { useGetForm } from '@frontend/shared/hooks/form';
 import { useGetResponse } from '@frontend/shared/hooks/response';
+import { IResponse } from '@frontend/shared/types/response';
 import NotFound from '../common/NotFound';
 import ErrorLoading from '../common/ErrorLoading';
 import { DisplayResponse } from './DisplayResponse';
 
-interface IProps {
+interface DisplayResponseByIdProps {
   responseId: string;
   hideBreadcrumbs?: boolean;
   hideNavigation?: boolean;
   hideAuthor?: boolean;
   hideWorkflow?: boolean;
   deleteCallBack?: () => void;
+  hideDelete?: boolean;
 }
 
-export default function Response({
+export default function DisplayResponseById({
   responseId,
   hideBreadcrumbs,
   hideNavigation,
   hideAuthor,
   hideWorkflow,
+  hideDelete,
   deleteCallBack,
-}: IProps) {
+}: DisplayResponseByIdProps) {
   const { data, error } = useGetResponse(responseId);
 
   if (error || !data?.getResponse) {
@@ -32,7 +35,7 @@ export default function Response({
   // }
 
   return (
-    <ResponseChild2
+    <DisplayResponseWithFormId
       response={data?.getResponse}
       formId={data?.getResponse?.formId}
       hideBreadcrumbs={hideBreadcrumbs}
@@ -40,22 +43,24 @@ export default function Response({
       hideAuthor={hideAuthor}
       hideWorkflow={hideWorkflow}
       deleteCallBack={deleteCallBack}
+      hideDelete={hideDelete}
     />
   );
 }
 
-interface IProps2 {
-  formId: any;
-  response: any;
+interface DisplayResponseWithFormIdProps {
+  formId: string;
+  response: IResponse;
   hideBreadcrumbs?: boolean;
   hideNavigation?: boolean;
   hideAuthor?: boolean;
   hideWorkflow?: boolean;
   isAuthorized?: boolean;
   deleteCallBack?: () => void;
+  hideDelete?: boolean;
 }
 
-export function ResponseChild2({
+export function DisplayResponseWithFormId({
   formId,
   response,
   hideBreadcrumbs,
@@ -64,7 +69,8 @@ export function ResponseChild2({
   hideWorkflow,
   isAuthorized,
   deleteCallBack,
-}: IProps2) {
+  hideDelete,
+}: DisplayResponseWithFormIdProps) {
   const { data, error, loading } = useGetForm(formId);
 
   if (error || !data || loading) {
@@ -85,6 +91,7 @@ export function ResponseChild2({
       hideWorkflow={hideWorkflow}
       isAuthorized={isAuthorized}
       deleteCallBack={deleteCallBack}
+      hideDelete={hideDelete}
     />
   );
 }

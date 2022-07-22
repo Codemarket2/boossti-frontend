@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import Modal from '@mui/material/Modal';
 import Backdrop from '@mui/material/Backdrop';
 import Fade from '@mui/material/Fade';
-import Comment from '../comment/Comment';
+import CommentsList from '../comment/CommentsList';
 
 const StyledModal = styled(Modal)(({ theme }) => ({
   display: 'flex',
@@ -47,7 +47,7 @@ export default function CommentModel({ notification }: { notification: any }) {
       >
         <Fade in={open}>
           <StyledPaper>
-            <Comment postId={notification.threadId} threadId={notification.threadId} />
+            <CommentsList parentIds={notification.threadId} threadId={notification.threadId} />
           </StyledPaper>
         </Fade>
       </StyledModal>

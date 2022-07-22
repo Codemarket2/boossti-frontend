@@ -3,9 +3,9 @@ import Typography from '@mui/material/Typography';
 import { useGetMyResponses } from '@frontend/shared/hooks/response';
 import Link from 'next/link';
 import { Accordion, AccordionDetails, AccordionSummary, Button } from '@mui/material';
-import { ExpandMore } from '@mui/icons-material';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 import ErrorLoading from '../common/ErrorLoading';
-import { ResponseChild2 } from '../response/Response';
+import { DisplayResponseWithFormId } from '../response/DisplayResponseById';
 
 export default function ActivityList() {
   const { data, error, loading } = useGetMyResponses();
@@ -44,7 +44,7 @@ function ActivityAccordion({ data }: any) {
       </AccordionSummary>
       <AccordionDetails>
         <div className="w-100">
-          <ResponseChild2 formId={data?.formId?._id} response={data} hideBreadcrumbs />
+          <DisplayResponseWithFormId formId={data?.formId?._id} response={data} hideBreadcrumbs />
           <Link href={`response/${data._id}`}>
             <Button variant="outlined">Edit</Button>
           </Link>

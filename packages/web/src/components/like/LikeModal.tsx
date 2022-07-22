@@ -16,7 +16,7 @@ interface ILikeModal {
   handleOpenLikeModal: any;
   handleCloseLikeModal: any;
   totalLike: number;
-  parentId: string;
+  threadId: string;
 }
 
 const BootstrapDialogTitle = (props: any) => {
@@ -47,9 +47,9 @@ export default function LikeModal({
   handleOpenLikeModal,
   handleCloseLikeModal,
   totalLike,
-  parentId,
+  threadId,
 }: ILikeModal) {
-  const { data, error } = useGetLikes(parentId);
+  const { data, error } = useGetLikes(threadId);
   return (
     <Dialog
       fullWidth
@@ -65,7 +65,7 @@ export default function LikeModal({
         <ErrorLoading error={error} />
       ) : (
         <DialogContent dividers>
-          {data.getLikesByParentId.data.map((user) => (
+          {data?.getLikesByThreadId?.data?.map((user) => (
             <List key={user._id}>
               <ListItem>
                 <ListItemAvatar>

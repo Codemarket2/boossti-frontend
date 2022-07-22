@@ -9,7 +9,6 @@ import InputLabel from '@mui/material/InputLabel';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-// import LoadingButton from '@mui/lab/LoadingButton';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -1028,8 +1027,11 @@ export default function ActionForm({
                         </Tooltip>
                       </div>
                       <Field
-                        {...fields?.filter((f) => f?._id === variable.field)[0]}
-                        label="Value"
+                        field={{
+                          ...fields?.filter((f) => f?._id === variable.field)[0],
+                          label: 'value',
+                        }}
+                        // label="Value"
                         validate
                         value={variable.value}
                         onChangeValue={(newValue) =>

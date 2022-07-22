@@ -1,6 +1,6 @@
 import { useAuthorization } from '@frontend/shared/hooks/auth';
 import { useDeleteResponse, useGetResponseByCount } from '@frontend/shared/hooks/response';
-import { Share } from '@mui/icons-material';
+import Share from '@mui/icons-material/Share';
 import { Grid, Paper } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
@@ -14,7 +14,7 @@ import DeleteButton from '../common/DeleteButton';
 import ErrorLoading from '../common/ErrorLoading';
 import { DisplayForm } from '../form2/DisplayForm';
 import { QRButton } from '../qrcode/QRButton';
-import { ResponseChild2 } from '../response/Response';
+import { DisplayResponseWithFormId } from '../response/DisplayResponseById';
 import TemplateWidgets from './TemplateWidgets';
 import { onAlert } from '../../utils/alert';
 import BackdropComponent from '../common/Backdrop';
@@ -147,7 +147,7 @@ function TemplateInstanceView({ template, response, hideBreadcrumbs }: IProps2) 
         <Grid item sm={10}>
           <Paper variant="outlined" className="p-2">
             {!selectedWidget || selectedWidget?._id === defaultWidget?._id ? (
-              <ResponseChild2
+              <DisplayResponseWithFormId
                 formId={defaultWidgetFormId}
                 response={response}
                 hideBreadcrumbs

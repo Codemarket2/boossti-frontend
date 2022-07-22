@@ -22,7 +22,7 @@ import Divider from '@mui/material/Divider';
 import EditResponseDrawer from './EditResponseDrawer';
 import Breadcrumbs from '../common/Breadcrumbs';
 import DisplayValue from '../form2/DisplayValue';
-import CommentLikeShare from '../common/commentLikeShare/CommentLikeShare';
+import CommentLikeShare from '../comment/CommentLikeShare';
 import StarRating from '../starRating/starRating';
 import { QRButton } from '../qrcode/QRButton';
 import ResponseSections from './ResponseSection';
@@ -31,7 +31,7 @@ import { onAlert } from '../../utils/alert';
 import BackdropComponent from '../common/Backdrop';
 import EditMode from '../common/EditMode';
 import DisplayFormulaValue from '../form2/formula/DisplayFormulaValue';
-import Response from './Response';
+import DisplayResponseById from './DisplayResponseById';
 import DeleteButton from '../common/DeleteButton';
 
 interface DisplayResponseProps {
@@ -43,6 +43,7 @@ interface DisplayResponseProps {
   hideWorkflow?: boolean;
   deleteCallBack?: () => void;
   isAuthorized?: boolean;
+  hideDelete?: boolean;
 }
 
 const initialState = { showMenu: null, edit: false, showBackdrop: false, fieldId: null };
@@ -56,6 +57,7 @@ export function DisplayResponse({
   hideWorkflow,
   deleteCallBack,
   isAuthorized,
+  hideDelete,
 }: DisplayResponseProps) {
   const [state, setState] = useState(initialState);
 
@@ -78,7 +80,7 @@ export function DisplayResponse({
 
   const DeleteComponent = (
     <>
-      {authorized && (
+      {!hideDelete && authorized && (
         <DeleteButton
           tooltip="Delete Response"
           onClick={() => {
@@ -147,7 +149,7 @@ export function DisplayResponse({
         )}
         <Grid item xs={!hideLeftNavigation ? 12 : 9}>
           {response?.workFlowFormResponseParentId && section?.options?.showRelation && (
-            <Response
+            <DisplayResponseById
               responseId={response?.workFlowFormResponseParentId}
               hideBreadcrumbs
               hideWorkflow
@@ -222,7 +224,7 @@ export function DisplayResponse({
                                     <DisplayValue field={field} value={value} verticalView />
                                   </StyledBox>
                                   {field?.options?.showCommentBox && (
-                                    <CommentLikeShare parentId={value?._id} />
+                                    <CommentLikeShare threadId={value?._id} />
                                   )}
                                   {field?.options?.showStarRating && (
                                     <StarRating parentId={value?._id} />

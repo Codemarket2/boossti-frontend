@@ -99,7 +99,7 @@ export function useGetForm(_id: string) {
   return { data: form ? { getForm: form } : null, error, loading };
 }
 
-export function useGetFormBySlug(slug: string): any {
+export function useGetFormBySlug(slug: string) {
   const [getFormBySlug2, setGetFormBySlug] = useState(null);
   const { data, error, loading } = useQuery(GET_FORM_BY_SLUG, {
     variables: { slug },

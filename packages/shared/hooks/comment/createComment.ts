@@ -4,7 +4,13 @@ import produce from 'immer';
 import { CREATE_COMMENT, DELETE_COMMENT, UPDATE_COMMENT } from '../../graphql/mutation/comment';
 import { GET_COMMENTS_BY_PARENT_ID } from '../../graphql/query/comment';
 
-export function useCreateComment(postId: string, threadId: string) {
+interface UseCreateCommentProps {
+  threadId: string;
+  parentIds?: string[];
+  refetch: any;
+}
+
+export function useCreateComment({ parentIds, threadId, refetch }: UseCreateCommentProps) {
   const [createCommentMutation, { loading }] = useMutation(CREATE_COMMENT);
   const [inputVal, setInputVal] = useState('');
 
@@ -16,7 +22,7 @@ export function useCreateComment(postId: string, threadId: string) {
       await createCommentMutation({
         variables: {
           body: inputVal,
-          parentId: postId,
+          parentIds,
           threadId,
         },
         update: (store, { data }) => {
@@ -24,17 +30,17 @@ export function useCreateComment(postId: string, threadId: string) {
             const getComment = store.readQuery({
               query: GET_COMMENTS_BY_PARENT_ID,
               variables: {
-                parentId: postId,
+                parentIds,
               },
             });
 
             store.writeQuery({
               query: GET_COMMENTS_BY_PARENT_ID,
               data: produce(getComment, (draft: any) => {
-                draft?.getCommentsByParentID?.data?.push(data?.createComment);
+                draft?.getCommentsByThreadId?.data?.push(data?.createComment);
               }),
               variables: {
-                parentId: postId,
+                parentIds,
               },
             });
           } catch (error) {
@@ -43,6 +49,7 @@ export function useCreateComment(postId: string, threadId: string) {
         },
       });
       setInputVal('');
+      refetch();
     }
   };
 
@@ -80,34 +87,42 @@ export function useUpdateComment(id: string, setEdit: any) {
   };
 }
 
-export function useDeleteComment() {
+export function useDeleteComment(refetch) {
   const [deleteCommentMutation, { data, loading, error }] = useMutation(DELETE_COMMENT);
-  const handleDelete = (id: string, postId: string, index: number) => {
-    deleteCommentMutation({
+  const handleDelete = async (commentId: string, threadId: string) => {
+    await deleteCommentMutation({
       variables: {
-        _id: id,
+        _id: commentId,
       },
       update: (store) => {
-        const existingComment = store.readQuery({
+        const existingComment: any = store.readQuery({
           query: GET_COMMENTS_BY_PARENT_ID,
           variables: {
-            parentId: postId,
+            threadId,
           },
         });
+        if (existingComment?.getCommentsByThreadId) {
+          const newData = {
+            ...existingComment,
+            getCommentsByThreadId: {
+              ...existingComment?.getCommentsByThreadId,
+              data: existingComment?.getCommentsByThreadId?.data?.filter(
+                (comment) => comment?._id !== commentId,
+              ),
+            },
+          };
 
-        const newData = produce(existingComment, (draft: any) => {
-          draft!.getCommentsByParentID!.data!.splice(index, 1);
-        });
-
-        store.writeQuery({
-          query: GET_COMMENTS_BY_PARENT_ID,
-          data: newData,
-          variables: {
-            parentId: postId,
-          },
-        });
+          store.writeQuery({
+            query: GET_COMMENTS_BY_PARENT_ID,
+            data: newData,
+            variables: {
+              threadId,
+            },
+          });
+        }
       },
     });
+    refetch();
   };
 
   return {

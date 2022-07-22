@@ -1,16 +1,11 @@
+import { IField } from '../types/form';
+
 interface IReturn {
   error: boolean;
   errorMessage: string;
 }
 
-interface Field {
-  fieldType: any;
-  options: any;
-  template?: any;
-  form?: any;
-}
-
-export const validateValue = (validate: boolean, value: any, field: Field): IReturn => {
+export const validateValue = (validate: boolean, value: any, field: Partial<IField>): IReturn => {
   let result = { error: false, errorMessage: '' };
   const { options, fieldType } = field;
 

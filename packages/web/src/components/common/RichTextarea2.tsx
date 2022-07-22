@@ -158,7 +158,7 @@ function uploadPlugin(editor) {
     return new MyUploadAdapter(loader);
   };
   editor.editing.view.change((writer) => {
-    writer.setStyle('min-height', '200px', editor.editing.view.document.getRoot());
+    writer.setStyle('min-height', '150px', editor.editing.view.document.getRoot());
     writer.setStyle('max-height', '90vh', editor.editing.view.document.getRoot());
   });
 }
@@ -199,7 +199,7 @@ export default function RichTextarea2({ value = '', onChange, testId }: IProps) 
               }}
             />
           ) : (
-            <Skeleton height={200} />
+            <Skeleton height={150} />
           )}
         </>
       ) : (
