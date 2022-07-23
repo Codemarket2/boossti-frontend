@@ -1,5 +1,7 @@
 /* eslint-disable react/jsx-wrap-multilines */
 import { useEffect } from 'react';
+
+// MUI IMPORTS
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
@@ -17,9 +19,13 @@ import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
+
+// SHARED IMPORTS
 import { useAddFields } from '@frontend/shared/hooks/form';
 import { quantities } from '@frontend/shared/utils/quantities';
 import { IField } from '@frontend/shared/types/form';
+
+// EXTERNAL IMPORTS
 import InputGroup from '../../common/InputGroup';
 import LoadingButton from '../../common/LoadingButton';
 import { onAlert } from '../../../utils/alert';
@@ -41,14 +47,14 @@ interface IProps {
   parentFields?: any[];
 }
 
-export default function AddField({
+const AddField = ({
   onCancel,
   onSave,
   field = null,
   isWidget = false,
   isDefault,
   parentFields: tParentFields = [],
-}: IProps): any {
+}: IProps): JSX.Element => {
   const { formik, formLoading, setFormValues, onOptionChange } = useAddFields({
     onAlert,
     onSave,
@@ -71,7 +77,7 @@ export default function AddField({
 
   return (
     <form className="px-2" onSubmit={formik.handleSubmit}>
-      <InputGroup>
+      <InputGroup data-testid="field-label-input-grp">
         <TextField
           data-testid="field-label"
           autoFocus
@@ -651,7 +657,7 @@ export default function AddField({
         </>
       )}
       <div className="mb-2">
-        <LoadingButton type="submit" loading={formLoading} size="small" data-testid="save-btn">
+        <LoadingButton type="submit" loading={formLoading} size="small" data-testid="form-save-btn">
           Save
         </LoadingButton>
         {onCancel && (
@@ -669,4 +675,6 @@ export default function AddField({
       <Divider />
     </form>
   );
-}
+};
+
+export default AddField;

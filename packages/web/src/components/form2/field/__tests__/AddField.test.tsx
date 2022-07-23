@@ -2,7 +2,15 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { IField } from '@frontend/shared/types/form';
 import userEvent from '@testing-library/user-event';
-import { act, logDOM, render, within, screen, getByRole } from '../../../../../jest/test-utils';
+import {
+  act,
+  logDOM,
+  render,
+  within,
+  screen,
+  getByRole,
+  prettyDOM,
+} from '../../../../../jest/test-utils';
 import AddField from '../AddField';
 
 const OPTIONS = [
@@ -104,6 +112,9 @@ const OPTIONS = [
   },
 ] as const;
 
+type fieldTypes = typeof OPTIONS[number]['text'];
+type fieldTypeValues = typeof OPTIONS[number]['value'];
+
 type TExtendedFieldTypes =
   | 'form'
   | 'response'
@@ -136,6 +147,7 @@ interface IExtendedField extends IField {
 
 type AppFieldProps = Parameters<typeof AddField>[0] & {
   field: IExtendedField;
+  onSave: jest.Mock
 };
 
 const getAppFieldMockProps = (extra?: Partial<AppFieldProps>): AppFieldProps => {
@@ -145,6 +157,24 @@ const getAppFieldMockProps = (extra?: Partial<AppFieldProps>): AppFieldProps => 
     onCancel: jest.fn(),
     ...extra,
   };
+};
+
+const getLabelNameInpGrp = () => {
+  return screen.getByTestId('field-label-input-grp');
+};
+
+const getLabelNameComponent = () => {
+  return screen.getByTestId('field-label');
+};
+
+const getLabelNameInpElement = (labelComponent: HTMLElement = null) => {
+  let _labelComp = labelComponent;
+  if (!labelComponent) _labelComp = getLabelNameComponent();
+  return _labelComp.querySelector('input[name=label]') as HTMLInputElement;
+};
+
+const getFormSaveBtn = () => {
+  return screen.getByTestId('form-save-btn');
 };
 
 describe('Selecting Form Field Type (label : Field Type*)', () => {
@@ -198,7 +228,7 @@ describe('Selecting Form Field Type (label : Field Type*)', () => {
   };
 
   const getSelectedValue = (SelectComponent: HTMLElement) => {
-    return getInputElement(SelectComponent).value;
+    return getInputElement(SelectComponent).value as fieldTypeValues | null;
   };
 
   // ---------FUNCTIONS END-------------------
@@ -254,6 +284,14 @@ describe('Selecting Form Field Type (label : Field Type*)', () => {
     expect(ClickableBtn).not.toHaveAttribute('aria-labelledby', null);
   });
 
+  test('should not have any default value selected', () => {
+    const { getByTestId } = render(<AddField {...getAppFieldMockProps()} />);
+
+    const SelectComponent = getByTestId('field-type-select');
+    const selectedField = getSelectedValue(SelectComponent);
+    expect(selectedField).toBeFalsy();
+  });
+
   test('should have 24 types of fields', async () => {
     const { getByTestId } = render(<AddField {...getAppFieldMockProps()} />);
 
@@ -263,7 +301,7 @@ describe('Selecting Form Field Type (label : Field Type*)', () => {
     expect(options).toHaveLength(TOTAL_OPTIONS);
   });
 
-  test('is required', () => {
+  test.skip('is required', () => {
     throw new Error(' TODO');
   });
 
@@ -296,7 +334,6 @@ describe('Selecting Form Field Type (label : Field Type*)', () => {
   });
 
   describe('Field Attributes', () => {
-    type fieldTypes = typeof OPTIONS[number]['text'];
     const selectFieldTypeOption = async (fieldType: fieldTypes, SelectComponent: HTMLElement) => {
       await makeListBoxVisible(SelectComponent);
       const options = await getOptionElements(SelectComponent);
@@ -369,40 +406,34 @@ describe('Selecting Form Field Type (label : Field Type*)', () => {
 });
 
 describe("Field's Label Name (label : Label*)", () => {
-  // ---------FUNCTIONS START-------------
-
-  // HELPER FUNCTION TO AVOID BOILERPLATE
-  const getInputElement = (TextField: HTMLElement) =>
-    TextField.querySelector('input[name=label]') as HTMLInputElement;
-
-  // ---------FUNCTIONS END-------------
-
   // ---------TEST CASES START-------------
   test('to be in the DOM', () => {
-    const { getByTestId } = render(<AddField {...getAppFieldMockProps()} />);
-    expect(getByTestId('field-label')).toBeInTheDocument();
+    render(<AddField {...getAppFieldMockProps()} />);
+    const labelComponent = getLabelNameComponent();
+    expect(labelComponent).toBeInTheDocument();
   });
 
-  test('to be Visible to the user', () => {
-    const { getByTestId } = render(<AddField {...getAppFieldMockProps()} />);
-    expect(getByTestId('field-label')).toBeVisible();
+  test('to be visible', () => {
+    render(<AddField {...getAppFieldMockProps()} />);
+    const labelComponent = getLabelNameComponent();
+    expect(labelComponent).toBeVisible();
   });
 
   test('to be Enabled', () => {
-    const { getByTestId } = render(<AddField {...getAppFieldMockProps()} />);
-    const innerInput = getInputElement(getByTestId('field-label'));
+    render(<AddField {...getAppFieldMockProps()} />);
+    const innerInput = getLabelNameInpElement();
     expect(innerInput).toBeEnabled();
   });
 
   test(`should have Input Components's Label Name as Label*`, () => {
-    const { getByTestId } = render(<AddField {...getAppFieldMockProps()} />);
-    const labelComponent = getByTestId('field-label').querySelector('label');
+    render(<AddField {...getAppFieldMockProps()} />);
+    const labelComponent = getLabelNameComponent().querySelector('label');
     expect(labelComponent).toHaveTextContent('Label*');
   });
 
   test('should have appropriate attributes', () => {
-    const { getByTestId } = render(<AddField {...getAppFieldMockProps()} />);
-    const innerInput = getInputElement(getByTestId('field-label'));
+    render(<AddField {...getAppFieldMockProps()} />);
+    const innerInput = getLabelNameInpElement();
     expect(innerInput).toHaveAttribute('type', 'text');
     expect(innerInput).toHaveAttribute('name', 'label');
   });
@@ -414,7 +445,7 @@ describe("Field's Label Name (label : Label*)", () => {
         <input type="text" data-testid="diff-inp" />
       </>,
     );
-    const innerInput = getInputElement(getByTestId('field-label'));
+    const innerInput = getLabelNameInpElement();
     expect(innerInput).toHaveFocus();
 
     const user = userEvent.setup();
@@ -426,18 +457,18 @@ describe("Field's Label Name (label : Label*)", () => {
   });
 
   test(`should have a default value = ''`, () => {
-    const { getByTestId } = render(<AddField {...getAppFieldMockProps()} />);
-    const innerInput = getInputElement(getByTestId('field-label'));
+    render(<AddField {...getAppFieldMockProps()} />);
+    const innerInput = getLabelNameInpElement();
     const DEFAULT_VALUE = '';
     expect(innerInput).toHaveValue(DEFAULT_VALUE);
   });
 
   // not working, saveBtn is the form submit button, which is not working
-  test('is required', async () => {
-    const { getByTestId } = render(<AddField {...getAppFieldMockProps()} />);
+  test.skip('is required', async () => {
+    render(<AddField {...getAppFieldMockProps()} />);
 
-    const saveBtn = getByTestId('save-btn');
-    const innerInput = getInputElement(getByTestId('field-label'));
+    const saveBtn = getFormSaveBtn();
+    const innerInput = getLabelNameInpElement();
     const user = userEvent.setup();
 
     // default value is cleared
@@ -450,12 +481,13 @@ describe("Field's Label Name (label : Label*)", () => {
   });
 
   test('(important) should be able to enter a label name', async () => {
-    const { getByTestId } = render(<AddField {...getAppFieldMockProps()} />);
+    render(<AddField {...getAppFieldMockProps()} />);
 
-    const labelElement = getByTestId('field-label');
-    const innerInput = getInputElement(labelElement);
+    const labelComponent = getLabelNameComponent();
+    const innerInput = getLabelNameInpElement(labelComponent);
     const user = userEvent.setup();
-    await user.click(labelElement);
+
+    await user.click(labelComponent);
 
     // CLEAR DEFAULT INPUT
     // await act(() => user.clear(innerInput)); // gives issues
@@ -492,4 +524,45 @@ describe("Field's Label Name (label : Label*)", () => {
   });
 
   // ---------TEST CASES END-------------
+});
+
+describe('Form Save Button', () => {
+  test('is enabled', () => {
+    const { getByTestId } = render(<AddField {...getAppFieldMockProps()} />);
+
+    const FormSaveBtn = getFormSaveBtn();
+
+    // console.debug('enabled', prettyDOM(FormSaveBtn));
+
+    expect(FormSaveBtn).toBeEnabled();
+  });
+
+  test('to be visible', () => {
+    const { getByTestId } = render(<AddField {...getAppFieldMockProps()} />);
+    const FormSaveBtn = getFormSaveBtn();
+    expect(FormSaveBtn).toBeVisible();
+  });
+
+  describe('form should not be submitted', () => {
+    test.only('if label name is empty', async () => {
+      const mockProps = getAppFieldMockProps();
+
+      render(<AddField {...mockProps} />);
+
+      const labelLabelNameComp = getLabelNameComponent();
+      const labelNameInputEle = getLabelNameInpElement();
+      const FormSaveBtn = getFormSaveBtn();
+
+      const user = userEvent.setup();
+
+      // default input should be removed
+      await user.clear(labelNameInputEle);
+
+      console.debug('before click', prettyDOM(getLabelNameInpGrp()));
+      await user.click(FormSaveBtn);
+
+      console.debug('after click', prettyDOM(getLabelNameInpGrp()));
+      console.debug('ac', mockProps.onSave.)
+    });
+  });
 });
