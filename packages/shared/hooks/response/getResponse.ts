@@ -7,7 +7,7 @@ import {
   UPDATE_RESPONSE_SUB,
 } from '../../graphql/subscription/response';
 import { client as apolloClient, guestClient } from '../../graphql';
-// import { UPDATE_RESPONSE } from '../../graphql/mutation/response';
+import { IResponse } from '../../types';
 
 export const defaultQueryVariables = {
   formId: null,
@@ -62,7 +62,23 @@ export function useGetResponses({
     filter = JSON.stringify(valueFilter);
   }
 
-  const { data, error, loading, subscribeToMore, refetch } = useQuery(GET_RESPONSES, {
+  const { data, error, loading, subscribeToMore, refetch } = useQuery<
+    {
+      getResponses: { data: IResponse[]; count: number };
+    },
+    {
+      formId: string;
+      appId: string;
+      installId: string;
+      workFlowFormResponseParentId: string;
+      page: number;
+      limit: number;
+      search: string;
+      formField: string;
+      onlyMy: boolean;
+      valueFilter: any;
+    }
+  >(GET_RESPONSES, {
     variables: {
       ...state,
       formId,
@@ -78,7 +94,7 @@ export function useGetResponses({
   useEffect(() => {
     if (!subscribed) {
       setSubscribed(true);
-      subscribeToMore({
+      subscribeToMore<{ responseSub: IResponse }, { formId: string }>({
         document: RESPONSE_SUB,
         variables: {
           formId,
@@ -113,7 +129,7 @@ export function useGetResponses({
 }
 
 export async function getResponses(formId: string, formField: string, search: string) {
-  const { data } = await guestClient.query({
+  const { data } = await guestClient.query<{ getResponses: { data: IResponse[]; count: number } }>({
     query: GET_RESPONSES,
     variables: { formId, formField, search },
   });
@@ -121,10 +137,13 @@ export async function getResponses(formId: string, formField: string, search: st
 }
 
 export function useGetResponse(_id: string): any {
-  const { data, error, loading } = useQuery(GET_RESPONSE, {
-    variables: { _id },
-    fetchPolicy: 'cache-and-network',
-  });
+  const { data, error, loading } = useQuery<{ getResponse: IResponse }, { _id: string }>(
+    GET_RESPONSE,
+    {
+      variables: { _id },
+      fetchPolicy: 'cache-and-network',
+    },
+  );
 
   useSubscription(UPDATE_RESPONSE_SUB, {
     variables: { _id: data?.getResponse?._id },
@@ -134,7 +153,10 @@ export function useGetResponse(_id: string): any {
 }
 
 export function useGetResponseByCount(formId: string, count: number): any {
-  const { data, error, loading, refetch } = useQuery(GET_RESPONSE_BY_COUNT, {
+  const { data, error, loading, refetch } = useQuery<
+    { getResponseByCount: IResponse },
+    { formId: string; count: number }
+  >(GET_RESPONSE_BY_COUNT, {
     variables: { formId, count },
     fetchPolicy: 'cache-and-network',
   });
@@ -170,7 +192,7 @@ export async function getResponseByParentId(formId, parentId) {
 
 export async function getResponse(_id) {
   let response = null;
-  const res = await apolloClient.query({
+  const res = await apolloClient.query<{ getResponse: IResponse }>({
     query: GET_RESPONSE,
     variables: { _id },
   });

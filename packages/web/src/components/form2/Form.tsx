@@ -20,6 +20,7 @@ import Link from 'next/link';
 import Container from '@mui/material/Container';
 import AddCircle from '@mui/icons-material/AddCircle';
 import { IForm } from '@frontend/shared/types/form';
+import slugify from 'slugify';
 import ErrorLoading from '../common/ErrorLoading';
 import Breadcrumbs from '../common/Breadcrumbs';
 import Backdrop from '../common/Backdrop';
@@ -42,6 +43,8 @@ import ShopifySettings from './shopify/ShopifySettings';
 import BoardsTab from './board/BoardsTab';
 import DesignTab from './design/DesignTab';
 import RelationFields from './RelationFields';
+import TabsList from './tabs/TabsList';
+import TabView from './tabs/TabView';
 
 interface IProps {
   form: IForm;
@@ -57,14 +60,21 @@ const tabs = [
   'Workflows',
   'Responses',
   'Design',
-  'Boards',
+  // 'Boards',
   'Activity',
   'Conditions',
   'Shopify',
 ];
 
+const initialState = {
+  currentTab: 'Preview',
+  snackBar: '',
+  backdrop: false,
+  formTabs: false,
+};
+
 export default function Form({ form, drawerMode = false, onSlugChange, hideFields }: IProps): any {
-  const { handleOnChange, updateLoading, handleUpdateName } = useUpdateForm({
+  const { handleOnChange, updateLoading, handleUpdateForm } = useUpdateForm({
     onAlert,
     form,
   });
@@ -72,11 +82,7 @@ export default function Form({ form, drawerMode = false, onSlugChange, hideField
     onAlert,
   });
 
-  const [options, setOptions] = useState({
-    currentTab: 'Preview',
-    snackBar: '',
-    backdrop: false,
-  });
+  const [options, setOptions] = useState(initialState);
 
   const router = useRouter();
   const authorized = useAuthorization([form?.createdBy?._id], true);
@@ -157,10 +163,10 @@ export default function Form({ form, drawerMode = false, onSlugChange, hideField
                   value={form?.name}
                   onChange={async (e) => {
                     setOptions({ ...options, backdrop: true });
-                    const newSlug = await handleUpdateName(e.target.value);
+                    const updatedForm = await handleUpdateForm({ name: e.target.value });
                     setOptions({ ...options, backdrop: false });
-                    if (newSlug && onSlugChange) {
-                      onSlugChange(newSlug);
+                    if (updatedForm?.slug && onSlugChange) {
+                      onSlugChange(updatedForm?.slug);
                     }
                   }}
                 />
@@ -208,7 +214,7 @@ export default function Form({ form, drawerMode = false, onSlugChange, hideField
                 <RelationFields formId={form?._id} />
               </Grid>
             )}
-            <Grid item xs={12} sm={hideFields ? 12 : 8}>
+            <Grid item xs={12} sm={hideFields ? 12 : options.formTabs ? 5 : 8}>
               <Paper variant="outlined" className="d-flex align-item-center">
                 <Tabs
                   variant="scrollable"
@@ -226,12 +232,25 @@ export default function Form({ form, drawerMode = false, onSlugChange, hideField
                   {form?.name?.toUpperCase().includes('ROLE') && (
                     <Tab label="Permissions" value="permissions" />
                   )}
+                  {form?.settings?.tabs?.map((tab) => (
+                    <Tab
+                      key={tab?._id}
+                      label={tab?.label || 'NA'}
+                      value={slugify(tab?.label, { lower: true })}
+                    />
+                  ))}
                 </Tabs>
-                <Tooltip title="Add Tab">
-                  <IconButton edge="start" color="primary">
-                    <AddCircle />
-                  </IconButton>
-                </Tooltip>
+                {!options?.formTabs && (
+                  <Tooltip title="Add Tab">
+                    <IconButton
+                      edge="start"
+                      color="primary"
+                      onClick={() => setOptions({ ...options, formTabs: !options?.formTabs })}
+                    >
+                      <AddCircle />
+                    </IconButton>
+                  </Tooltip>
+                )}
               </Paper>
               {options.currentTab === 'Preview' && (
                 <Paper variant="outlined" className="px-2">
@@ -314,7 +333,7 @@ export default function Form({ form, drawerMode = false, onSlugChange, hideField
                   }
                 />
               )}
-              {options.currentTab === 'Boards' && (
+              {/* {options.currentTab === 'Boards' && (
                 <BoardsTab
                   formId={form?._id}
                   boards={form?.settings?.boards}
@@ -322,8 +341,32 @@ export default function Form({ form, drawerMode = false, onSlugChange, hideField
                     handleOnChange({ settings: { ...form.settings, boards } })
                   }
                 />
+              )} */}
+              {form?.settings?.tabs?.some(
+                (tab) => slugify(tab?.label, { lower: true }) === options.currentTab,
+              ) && (
+                <TabView
+                  formId={form?._id}
+                  tab={form?.settings?.tabs?.find(
+                    (tab) => slugify(tab?.label, { lower: true }) === options.currentTab,
+                  )}
+                />
               )}
             </Grid>
+            {options.formTabs && (
+              <Grid item xs={12} sm={3}>
+                <TabsList
+                  formId={form?._id}
+                  tabs={form?.settings?.tabs}
+                  onClose={() => setOptions({ ...options, formTabs: false })}
+                  onTabsChange={(newTabs) =>
+                    handleOnChange({
+                      settings: { ...form.settings, tabs: newTabs },
+                    })
+                  }
+                />
+              </Grid>
+            )}
           </Grid>
         </div>
       </>

@@ -2,19 +2,9 @@ interface IPayload {
   fields: any[];
   values: any[];
   globalState: any;
-  // systemValues?: ISystemValues;
 }
 
-// export interface ISystemValues {
-//   [key: string]: string | number | boolean;
-// }
-
-export const calculateSystemValues = ({
-  fields = [],
-  values = [],
-  globalState = {},
-}: // systemValues,
-IPayload) => {
+export const calculateSystemValues = ({ fields = [], values = [], globalState = {} }: IPayload) => {
   let newValues = [...values];
 
   const systemFields = fields?.filter(
@@ -28,15 +18,7 @@ IPayload) => {
       } else if (field?.options?.systemValue?._id === 'userEmail') {
         value = { value: globalState?.auth?.attributes?.email || '' };
       }
-    }
-    // else if (
-    //   field?.options?.systemValue?.props &&
-    //   field?.options?.systemValue?._id === 'props' &&
-    //   systemValues?.[field?.label]
-    // ) {
-    //   value = getValueObject(field, systemValues[field?.label]);
-    // }
-    else {
+    } else {
       value = values?.find((v) => v?.field === field?.options?.systemValue?._id);
     }
     if (value) {

@@ -33,7 +33,7 @@ const validationSchema = yup.object().shape({
   // }),
 });
 
-const defaultOptions: IFieldOptions = {
+export const defaultOptions: IFieldOptions = {
   physicalQuantity: '',
   unit: '',
   default: false,

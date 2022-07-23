@@ -6,11 +6,12 @@ import Paper from '@mui/material/Paper';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useEffect, useState } from 'react';
+import { IMedia } from '@frontend/shared/types';
 // import MentionParser from "./MentionParser";
 // import MentionInput from "./MentionInput";
 
 interface IProps {
-  media: [];
+  media: IMedia[];
   tempMedia?: any;
   selected: any;
   setSelected: any;

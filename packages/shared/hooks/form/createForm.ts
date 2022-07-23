@@ -1,10 +1,13 @@
 import { useMutation } from '@apollo/client';
 import { CREATE_FORM } from '../../graphql/mutation/form';
+import { IForm } from '../../types';
 import { IHooksProps } from '../../types/common';
 import { stringifyForm } from './updateForm';
 
 export function useCreateForm({ onAlert }: IHooksProps) {
-  const [createMutation, { loading: createLoading }] = useMutation(CREATE_FORM);
+  const [createMutation, { loading: createLoading }] = useMutation<{ createForm: IForm }, IForm>(
+    CREATE_FORM,
+  );
 
   const handleCreateForm = async (
     payload: { name: string; fields: any[] },

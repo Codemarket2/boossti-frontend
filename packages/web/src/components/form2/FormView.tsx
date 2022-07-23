@@ -16,10 +16,10 @@ import ArrowForwardIosRounded from '@mui/icons-material/ArrowForwardIosRounded';
 import { parseResponse, useGetResponses } from '@frontend/shared/hooks/response/getResponse';
 import { useCreateUpdateResponse } from '@frontend/shared/hooks/response';
 import { validateForm, validateValue } from '@frontend/shared/utils/validate';
+import { IValue } from '@frontend/shared/types';
 import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
-// import { ISystemValues } from '@frontend/shared/hooks/response/calculateSystemValues';
-import { IField } from '@frontend/shared/types/form';
+import { IField, IForm } from '@frontend/shared/types/form';
 import { TextField } from '@mui/material';
 import ResponseList from '../response/ResponseList';
 import InputGroup from '../common/InputGroup';
@@ -39,7 +39,7 @@ import { evaluateFormula } from './formula/DisplayFormulaValue';
 import DisplayFormula, { getFormula } from './formula/DisplayFormula';
 
 interface FormViewWrapperProps {
-  form: any;
+  form: IForm;
   appId?: string;
   installId?: string;
   workFlowFormResponseParentId?: string;
@@ -48,9 +48,8 @@ interface FormViewWrapperProps {
   isPageOwner?: boolean;
   isTemplateInstance?: string;
   isAuthorized?: boolean;
-  // systemValues?: ISystemValues;
   valueFilter?: any;
-  overrideValues?: any[];
+  overrideValues?: IValue[];
 }
 
 export const defaultValue = {
@@ -96,7 +95,6 @@ export default function FormViewWrapper({
   installId,
   isTemplateInstance = '',
   isAuthorized,
-  // systemValues,
   valueFilter,
   overrideValues,
 }: FormViewWrapperProps): any {
@@ -105,7 +103,6 @@ export default function FormViewWrapper({
     onAlert,
     appId,
     installId,
-    // systemValues,
     workFlowFormResponseParentId,
   });
 
@@ -354,6 +351,8 @@ export default function FormViewWrapper({
                     <Button
                       variant="contained"
                       className="mb-2"
+                      size="small"
+                      startIcon={<AddIcon />}
                       onClick={() => setState({ ...state, formDrawer: true })}
                     >
                       {form?.settings?.buttonLabel || form?.name}
@@ -382,6 +381,7 @@ export default function FormViewWrapper({
             <>
               <div className="text-center">
                 <Button
+                  size="small"
                   variant="outlined"
                   onClick={() => setState({ ...state, responseDrawer: true })}
                 >
@@ -425,7 +425,7 @@ export default function FormViewWrapper({
 }
 
 interface FormViewProps {
-  fields: any;
+  fields: IField[];
   handleSubmit: (payload: any) => any;
   loading?: boolean;
   onCancel?: () => void;
@@ -438,7 +438,7 @@ interface FormViewProps {
   form?: any;
   responseCount?: number;
   inlineEdit?: boolean;
-  overrideValues?: any[];
+  overrideValues?: IValue[];
 }
 
 const initialSubmitState = {

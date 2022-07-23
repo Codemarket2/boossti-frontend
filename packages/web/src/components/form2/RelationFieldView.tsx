@@ -23,7 +23,6 @@ export default function RelationFieldView({ formId, responseId }: RelationFieldV
           (relationField) =>
             relationField?.form?._id === formId && relationField?.options?.twoWayRelationship,
         );
-
         return (
           <div key={relationForm?._id}>
             {field && (

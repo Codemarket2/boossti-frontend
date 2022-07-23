@@ -1,5 +1,11 @@
 import { useGetFormRelations } from '@frontend/shared/hooks/form/getForm';
-import { List, ListItem, ListItemText, Paper, Skeleton, Typography } from '@mui/material';
+import Divider from '@mui/material/Divider';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import Paper from '@mui/material/Paper';
+import Skeleton from '@mui/material/Skeleton';
+import Typography from '@mui/material/Typography';
 import React from 'react';
 import ErrorLoading from '../common/ErrorLoading';
 
@@ -19,8 +25,15 @@ export default function RelationFields({ formId, previewMode }: RelationFieldsPr
   }
   if (data?.getFormRelations?.length > 0) {
     return (
-      <Paper variant="outlined">
-        {!previewMode && <Typography className="pt-2 pl-2">Relation Fields</Typography>}
+      <Paper variant="outlined" className="mt-2">
+        {!previewMode && (
+          <>
+            <Typography variant="h5" className="p-2">
+              Relation Fields
+            </Typography>
+            <Divider />
+          </>
+        )}
         <List dense disablePadding>
           {data?.getFormRelations?.map((relationForm) => {
             const field = relationForm?.fields?.find(

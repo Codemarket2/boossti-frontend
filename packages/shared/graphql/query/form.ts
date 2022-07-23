@@ -69,6 +69,40 @@ export const GET_FORM_RELATIONS = gql`
     }
   }
 `;
+export const GET_FORM_TAB_RELATIONS = gql`
+  query getFormTabRelations($_id: ID!) {
+    getFormTabRelations(_id: $_id) {
+      _id
+      name
+      slug
+      fields {
+        _id
+        label
+        fieldType
+        options
+        template {
+          _id
+          title
+          slug
+        }
+        form {
+          _id
+          name
+        }
+      }
+      settings
+      published
+      createdBy {
+        _id
+        values {
+          field
+          value
+        }
+      }
+      createdAt
+    }
+  }
+`;
 
 export const GET_FORM_BY_SLUG = gql`
   query GetFormBySlug($slug: String!) {

@@ -1,7 +1,7 @@
 /* eslint-disable react/destructuring-assignment */
 import { useGetForm, useGetFormBySlug } from '@frontend/shared/hooks/form';
 import { defaultValueObject } from '@frontend/shared/hooks/response/createUpdateResponse';
-// import { ISystemValues } from '@frontend/shared/hooks/response/calculateSystemValues';
+import { IForm } from '@frontend/shared/types';
 import ErrorLoading from '../common/ErrorLoading';
 import NotFound from '../common/NotFound';
 import FormView from './FormView';
@@ -20,12 +20,11 @@ interface IFormPage {
   settings?: ISettings;
   appId?: string;
   installId?: string;
-  modifyForm?: (form: any) => void;
+  modifyForm?: (form: IForm) => IForm;
   isTemplateInstance?: string;
   createCallback?: (response: any) => void;
   isPageOwner?: boolean;
   workFlowFormResponseParentId?: string;
-  // systemValues?: ISystemValues;
   valueFilter?: any;
   overrideValues?: any;
 }
@@ -44,7 +43,6 @@ export const FormPage = ({
   createCallback,
   isPageOwner,
   workFlowFormResponseParentId,
-  // systemValues,
   valueFilter,
   overrideValues,
 }: IProps) => {
@@ -73,7 +71,6 @@ export const FormPage = ({
       createCallback={createCallback}
       isPageOwner={isPageOwner}
       workFlowFormResponseParentId={workFlowFormResponseParentId}
-      // systemValues={systemValues}
       valueFilter={valueFilter}
       overrideValues={overrideValues}
     />
@@ -94,7 +91,6 @@ const FormPageById = ({
   createCallback,
   isPageOwner,
   workFlowFormResponseParentId,
-  // systemValues,
   valueFilter,
   overrideValues,
 }: IFormPageByIdProps) => {
@@ -123,7 +119,6 @@ const FormPageById = ({
       createCallback={createCallback}
       isPageOwner={isPageOwner}
       workFlowFormResponseParentId={workFlowFormResponseParentId}
-      // systemValues={systemValues}
       valueFilter={valueFilter}
       overrideValues={overrideValues}
     />
