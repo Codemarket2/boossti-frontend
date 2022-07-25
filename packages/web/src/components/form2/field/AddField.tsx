@@ -111,6 +111,8 @@ const AddField = ({
             value={formik.values.fieldType}
             onChange={formik.handleChange}
             label="Field Type*"
+            inputProps={{ 'aria-describedby': 'fieldType-helperText' }}
+            MenuProps={{ id: 'fieldType-menu' }}
           >
             {getFormFieldTypes(isWidget)?.map((option, index) => (
               <MenuItem value={option.value} key={index}>
@@ -119,7 +121,9 @@ const AddField = ({
             ))}
           </Select>
           {formik.touched.fieldType && formik.errors.fieldType && (
-            <FormHelperText className="text-danger">{formik.errors.fieldType}</FormHelperText>
+            <FormHelperText id="fieldType-helperText" className="text-danger">
+              {formik.errors.fieldType}
+            </FormHelperText>
           )}
         </FormControl>
       </InputGroup>
