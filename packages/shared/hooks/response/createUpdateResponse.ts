@@ -1,14 +1,14 @@
 import { useMutation } from '@apollo/client';
 import { useSelector } from 'react-redux';
 import { CREATE_RESPONSE, UPDATE_RESPONSE } from '../../graphql/mutation/response';
+import { IResponse } from '../../types';
 import { IHooksProps } from '../../types/common';
 import { omitTypename } from '../../utils/omitTypename';
 import { stringifyValues } from '../section/updateSection';
-import { calculateSystemValues, ISystemValues } from './calculateSystemValues';
+import { calculateSystemValues } from './calculateSystemValues';
 
 interface IProps extends IHooksProps {
   workFlowFormResponseParentId?: string;
-  systemValues?: ISystemValues;
   appId?: string;
   installId?: string;
 }
@@ -18,10 +18,15 @@ export function useCreateUpdateResponse({
   appId,
   installId,
   workFlowFormResponseParentId,
-  systemValues,
 }: IProps) {
-  const [createMutation, { loading: createLoading }] = useMutation(CREATE_RESPONSE);
-  const [updateMutation, { loading: updateLoading }] = useMutation(UPDATE_RESPONSE);
+  const [createMutation, { loading: createLoading }] = useMutation<
+    { createResponse: IResponse },
+    IResponse
+  >(CREATE_RESPONSE);
+  const [updateMutation, { loading: updateLoading }] = useMutation<
+    { updateResponse: IResponse },
+    IResponse
+  >(UPDATE_RESPONSE);
   const globalState = useSelector((state) => state);
   const handleCreateUpdateResponse = async ({
     payload: tPayload,
@@ -38,7 +43,6 @@ export function useCreateUpdateResponse({
         values: payload?.values,
         fields,
         globalState,
-        systemValues,
       });
       payload = {
         ...payload,
@@ -69,3 +73,19 @@ export function useCreateUpdateResponse({
   };
   return { handleCreateUpdateResponse, createLoading, updateLoading };
 }
+
+export const defaultValueObject = {
+  // _id: '',
+  field: '',
+  value: '',
+  valueNumber: null,
+  valueBoolean: null,
+  valueDate: null,
+  media: [],
+  values: [],
+  template: null,
+  page: null,
+  form: null,
+  response: null,
+  options: { option: false },
+};

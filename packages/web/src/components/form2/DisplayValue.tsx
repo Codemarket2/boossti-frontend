@@ -66,11 +66,13 @@ export default function DisplayValue({
       return <ShowResponseLabel formField={field.options?.formField} response={value?.response} />;
     case 'form':
       return value?.form?.name ? (
-        <Link href={`/forms/${slugify(value?.form?.name, { lower: true })}`}>
-          <a>
-            <Typography color="primary">{value?.form?.name}</Typography>
-          </a>
-        </Link>
+        <a
+          target="_blank"
+          rel="noreferrer"
+          href={`/forms/${slugify(value?.form?.name, { lower: true })}`}
+        >
+          <Typography color="primary">{value?.form?.name}</Typography>
+        </a>
       ) : (
         <Typography>NA</Typography>
       );

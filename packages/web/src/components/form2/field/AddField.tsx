@@ -19,13 +19,12 @@ import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
+import InfoOutlined from '@mui/icons-material/InfoOutlined';
 
 // SHARED IMPORTS
 import { useAddFields } from '@frontend/shared/hooks/form';
 import { quantities } from '@frontend/shared/utils/quantities';
 import { IField } from '@frontend/shared/types/form';
-
-// EXTERNAL IMPORTS
 import InputGroup from '../../common/InputGroup';
 import LoadingButton from '../../common/LoadingButton';
 import { onAlert } from '../../../utils/alert';
@@ -234,19 +233,23 @@ const AddField = ({
       )}
       {['response'].includes(formik.values.fieldType) && (
         <div>
-          <FormControlLabel
-            className="mt-n2"
-            disabled={formik.isSubmitting}
-            control={
-              <Checkbox
-                checked={formik.values.options?.twoWayRelationship}
-                onChange={({ target }) => onOptionChange({ twoWayRelationship: target.checked })}
-                name="twoWayRelationship"
-                color="primary"
-              />
-            }
-            label="Two way relationship(parent will have child Id & child will have parent Id)"
-          />
+          <div className="mt-n2">
+            <FormControlLabel
+              disabled={formik.isSubmitting}
+              control={
+                <Checkbox
+                  checked={formik.values.options?.twoWayRelationship}
+                  onChange={({ target }) => onOptionChange({ twoWayRelationship: target.checked })}
+                  name="twoWayRelationship"
+                  color="primary"
+                />
+              }
+              label="Two way relationship"
+            />
+            <Tooltip title="Parent will have child Id & child will have parent Id">
+              <InfoOutlined className="mt-n2 ml-n2" fontSize="small" />
+            </Tooltip>
+          </div>
           {formik.values.options?.twoWayRelationship && (
             <div>
               <InputGroup>
@@ -256,7 +259,7 @@ const AddField = ({
                   label="Relation label"
                   name="relationLabel"
                   value={formik.values.options.relationLabel}
-                  onChange={formik.handleChange}
+                  onChange={({ target }) => onOptionChange({ relationLabel: target.value })}
                   error={!formik.values.options.relationLabel}
                   helperText={!formik.values.options?.relationLabel && 'Required'}
                 />
@@ -267,7 +270,8 @@ const AddField = ({
                   <Select
                     value={formik.values.options?.relationFieldId}
                     label="Relation Field"
-                    onChange={formik.handleChange}
+                    name="relationFieldId"
+                    onChange={({ target }) => onOptionChange({ relationFieldId: target.value })}
                   >
                     {tParentFields
                       ?.filter((f) => f?._id !== field?._id)
@@ -297,8 +301,11 @@ const AddField = ({
                   color="primary"
                 />
               }
-              label="Dependent relationship(if parent is deleted child is also deleted)"
+              label="Dependent relationship"
             />
+            <Tooltip title="If parent is deleted child is also deleted">
+              <InfoOutlined className="mt-n2 ml-n2" fontSize="small" />
+            </Tooltip>
           </div>
         </div>
       )}

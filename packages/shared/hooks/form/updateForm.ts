@@ -29,15 +29,18 @@ const updateCache = (slug, newFormData) => {
   }
 };
 
-export function useUpdateForm({ onAlert, form }: IProps): any {
+export function useUpdateForm({ onAlert, form }: IProps) {
   const [saveToServer, setSaveToServer] = useState(false);
-  const [updateFormMutation, { loading: updateLoading }] = useMutation(UPDATE_FORM);
+  const [updateFormMutation, { loading: updateLoading }] = useMutation<
+    { updateForm: IForm },
+    IForm
+  >(UPDATE_FORM);
 
   useEffect(() => {
     let timeOutId;
     if (saveToServer && form) {
       setSaveToServer(false);
-      timeOutId = setTimeout(() => handleUpdateForm(), 1500);
+      timeOutId = setTimeout(() => handleUpdateForm(form), 1500);
     }
     return () => clearTimeout(timeOutId);
   }, [form]);
@@ -47,33 +50,20 @@ export function useUpdateForm({ onAlert, form }: IProps): any {
     setSaveToServer(true);
   };
 
-  const handleUpdateForm = async () => {
+  const handleUpdateForm = async (newForm: Partial<IForm> = {}) => {
     try {
-      const payload = stringifyForm(form, true);
+      const payload = stringifyForm({ ...form, ...newForm }, true);
       const res = await updateFormMutation({
         variables: payload,
       });
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.log(err);
-      onAlert('Error while auto saving', err.message);
-    }
-  };
-
-  const handleUpdateName = async (name) => {
-    try {
-      const payload = stringifyForm(form, true);
-      const res = await updateFormMutation({
-        variables: { ...payload, name },
-      });
-      return res?.data?.updateForm?.slug;
+      return res?.data?.updateForm;
     } catch (err) {
       // console.log(err);
       onAlert('Error while saving form name', err.message);
     }
   };
 
-  return { handleOnChange, updateLoading, handleUpdateForm, handleUpdateName };
+  return { handleOnChange, updateLoading, handleUpdateForm };
 }
 
 export const stringifyForm = (form: any, removetemplate = false) => {

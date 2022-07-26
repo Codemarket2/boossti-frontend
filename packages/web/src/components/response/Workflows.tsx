@@ -65,7 +65,7 @@ export default function Workflow({
             section={section}
             onSectionChange={onSectionChange}
             authorized
-            title="Response sections"
+            title="Workflows"
             parentPageFields={parentPageFields}
           />
         </Grid>

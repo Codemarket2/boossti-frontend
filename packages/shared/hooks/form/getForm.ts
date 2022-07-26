@@ -2,15 +2,19 @@ import { useQuery, useSubscription } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { FORM_SUB, UPDATED_FORM } from '../../graphql/subscription/form';
 import { client as apolloClient, guestClient } from '../../graphql';
-import { GET_FORMS, GET_FORM, GET_FORM_BY_SLUG } from '../../graphql/query/form';
+import {
+  GET_FORMS,
+  GET_FORM,
+  GET_FORM_BY_SLUG,
+  GET_FORM_RELATIONS,
+  GET_FORM_TAB_RELATIONS,
+} from '../../graphql/query/form';
+import { IForm } from '../../types';
 
 interface IProps {
   page?: number;
   limit?: number;
-  // search?: string;
 }
-
-// const defaultQueryVariables = { page: 1, limit: 20, search: '' };
 
 export function useGetForms({ page = 1, limit = 20 }: IProps) {
   const [state, setState] = useState({
@@ -21,7 +25,10 @@ export function useGetForms({ page = 1, limit = 20 }: IProps) {
   });
   const [subscribed, setSubscribed] = useState(false);
 
-  const { data, error, loading, subscribeToMore } = useQuery(GET_FORMS, {
+  const { data, error, loading, subscribeToMore } = useQuery<
+    { getForms: { data: IForm[]; count: number } },
+    { page: number; limit: number; search: string }
+  >(GET_FORMS, {
     variables: { ...state },
     fetchPolicy: 'cache-and-network',
   });
@@ -30,7 +37,7 @@ export function useGetForms({ page = 1, limit = 20 }: IProps) {
     let unsubscribe = () => null;
     if (!subscribed) {
       setSubscribed(true);
-      unsubscribe = subscribeToMore({
+      unsubscribe = subscribeToMore<{ formSub: IForm }>({
         document: FORM_SUB,
         updateQuery: (prev, { subscriptionData }) => {
           if (!subscriptionData.data) return prev;
@@ -80,11 +87,14 @@ export const parseForm = (form) => {
 };
 
 export function useGetForm(_id: string) {
-  const [form, setForm] = useState(null);
-  const { data, error, loading } = useQuery(GET_FORM, {
-    variables: { _id },
-    // nextFetchPolicy: 'cache-and-network',
-  });
+  const [form, setForm] = useState<IForm>(null);
+  const { data, error, loading, refetch } = useQuery<{ getForm: IForm }, { _id: string }>(
+    GET_FORM,
+    {
+      variables: { _id },
+      // nextFetchPolicy: 'cache-and-network',
+    },
+  );
 
   useSubscription(UPDATED_FORM, {
     variables: { _id },
@@ -96,14 +106,55 @@ export function useGetForm(_id: string) {
     }
   }, [data]);
 
-  return { data: form ? { getForm: form } : null, error, loading };
+  return { data: form ? { getForm: form } : null, error, loading, refetch };
+}
+
+export function useGetFormRelations(_id: string) {
+  const [forms, setForms] = useState<IForm[]>(null);
+  const { data, error, loading } = useQuery<{ getFormRelations: IForm[] }, { _id: string }>(
+    GET_FORM_RELATIONS,
+    {
+      variables: { _id },
+      nextFetchPolicy: 'cache-and-network',
+    },
+  );
+
+  useEffect(() => {
+    if (data && data.getFormRelations) {
+      setForms(data.getFormRelations?.map((form) => parseForm(form)));
+    }
+  }, [data]);
+
+  return { data: forms ? { getFormRelations: forms } : null, error, loading };
+}
+
+export function useGetFormTabRelations(_id: string) {
+  const [forms, setForms] = useState<IForm[]>(null);
+  const { data, error, loading } = useQuery<{ getFormTabRelations: IForm[] }, { _id: string }>(
+    GET_FORM_TAB_RELATIONS,
+    {
+      variables: { _id },
+      nextFetchPolicy: 'cache-and-network',
+    },
+  );
+
+  useEffect(() => {
+    if (data && data.getFormTabRelations) {
+      setForms(data.getFormTabRelations?.map((form) => parseForm(form)));
+    }
+  }, [data]);
+
+  return { data: forms ? { getFormTabRelations: forms } : null, error, loading };
 }
 
 export function useGetFormBySlug(slug: string) {
   const [getFormBySlug2, setGetFormBySlug] = useState(null);
-  const { data, error, loading } = useQuery(GET_FORM_BY_SLUG, {
-    variables: { slug },
-  });
+  const { data, error, loading } = useQuery<{ getFormBySlug: IForm }, { slug: string }>(
+    GET_FORM_BY_SLUG,
+    {
+      variables: { slug },
+    },
+  );
 
   useSubscription(UPDATED_FORM, {
     variables: { _id: getFormBySlug2?._id },
@@ -118,7 +169,7 @@ export function useGetFormBySlug(slug: string) {
   return { data: getFormBySlug2 ? { getFormBySlug: getFormBySlug2 } : null, error, loading };
 }
 
-export async function getForm(_id) {
+export async function getForm(_id: string) {
   let form = null;
   try {
     const response = await apolloClient.query({
