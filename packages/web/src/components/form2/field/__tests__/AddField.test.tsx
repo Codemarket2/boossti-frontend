@@ -2,113 +2,158 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { IField } from '@frontend/shared/types/form';
 import userEvent from '@testing-library/user-event';
+import _ from 'lodash';
 import { render, within, screen, waitFor } from '../../../../../jest/test-utils';
 import AddField from '../AddField';
 
 const FIELD_TYPES = [
   {
-    text: 'Form',
+    label: 'Form',
     value: 'form',
   },
   {
-    text: 'Form Response',
+    label: 'Form Response',
     value: 'response',
   },
   {
-    text: 'Text',
+    label: 'Text',
     value: 'text',
   },
   {
-    text: 'Number',
+    label: 'Number',
     value: 'number',
   },
   {
-    text: 'Password',
+    label: 'Password',
     value: 'password',
   },
   {
-    text: 'Textarea',
+    label: 'Textarea',
     value: 'textarea',
   },
   {
-    text: 'Rich Textarea',
+    label: 'Rich Textarea',
     value: 'richTextarea',
   },
   {
-    text: 'Boolean',
+    label: 'Boolean',
     value: 'boolean',
   },
   {
-    text: 'Email',
+    label: 'Email',
     value: 'email',
   },
   {
-    text: 'Phone Number',
+    label: 'Phone Number',
     value: 'phoneNumber',
   },
   {
-    text: 'Date',
+    label: 'Date',
     value: 'date',
   },
   {
-    text: 'Date & Time',
+    label: 'Date & Time',
     value: 'dateTime',
   },
   {
-    text: 'Image',
+    label: 'Image',
     value: 'image',
   },
   {
-    text: 'File',
+    label: 'File',
     value: 'file',
   },
   {
-    text: 'Address',
+    label: 'Address',
     value: 'address',
   },
   {
-    text: 'Static Text',
+    label: 'Static Text',
     value: 'label',
   },
   {
-    text: 'Link',
+    label: 'Link',
     value: 'link',
   },
   {
-    text: 'Color Picker',
+    label: 'Color Picker',
     value: 'colorPicker',
   },
   {
-    text: 'Barcode Scanner',
+    label: 'Barcode Scanner',
     value: 'barcodeScanner',
   },
   {
-    text: 'Lighthouse Report',
+    label: 'Lighthouse Report',
     value: 'lighthouseReport',
   },
   {
-    text: 'Board',
+    label: 'Board',
     value: 'board',
   },
   {
-    text: 'Diagram',
+    label: 'Diagram',
     value: 'diagram',
   },
   {
-    text: 'Flow Diagram',
+    label: 'Flow Diagram',
     value: 'flowDiagram',
   },
   {
-    text: 'Condition',
+    label: 'Condition',
     value: 'condition',
   },
 ] as const;
 
-type TFieldTypes = typeof FIELD_TYPES[number]['text'];
+const COMMON_FIELD_ATTRIBUTES = [
+  {
+    label: 'Required',
+    testid: 'required-field-attribute',
+    // name is the <Checkbox name='$name'/> attribute
+    name: 'required',
+  },
+  {
+    label: 'Multiple values',
+    testid: 'multiple-value-attribute',
+    name: 'multipleValues',
+  },
+  {
+    label: 'Unique',
+    testid: 'unique-attribute',
+    name: 'unique',
+  },
+  {
+    label: 'Show comment box',
+    testid: 'show-comment-box-attribute',
+    name: 'showCommentBox',
+  },
+  {
+    label: 'Show star rating',
+    testid: 'show-star-rating-attribute',
+    name: 'showStarRating',
+  },
+  {
+    label: 'Response not editable',
+    testid: 'response-not-editable-attribute',
+    name: 'notEditable',
+  },
+  {
+    label: 'System calculated & saved',
+    testid: 'sys-calc&saved-attribute',
+    name: 'systemCalculatedAndSaved',
+  },
+  {
+    label: 'System calculated & view',
+    testid: 'sys-cal&view-attribute',
+    name: 'systemCalculatedAndView',
+  },
+] as const;
+
+type TFieldTypeLabels = typeof FIELD_TYPES[number]['label'];
 type TFieldTypeValues = typeof FIELD_TYPES[number]['value'];
 
-const getFieldTypeValue = (fieldType: TFieldTypes) => {
-  const _FieldType = FIELD_TYPES.find((field) => field.text === fieldType);
+const getFieldTypeValue = (fieldType: TFieldTypeLabels) => {
+  const _FieldType = FIELD_TYPES.find((field) => field.label === fieldType);
   if (!_FieldType) throw new Error(`Field Type : ${fieldType} not found (404)`);
   return _FieldType.value;
 };
@@ -162,7 +207,10 @@ const getFieldTypeInpEle = (SelectComponent: HTMLElement = null) => {
 /**
  * @returns selected FieldType Option
  */
-const selectFieldType = async (fieldType: TFieldTypes, SelectComponent: HTMLElement = null) => {
+const selectFieldType = async (
+  fieldType: TFieldTypeLabels,
+  SelectComponent: HTMLElement = null,
+) => {
   let _SC = SelectComponent;
 
   if (!_SC) _SC = getFieldTypeComponent();
@@ -299,6 +347,11 @@ describe('Selecting Form Field Type (label : Field Type*)', () => {
     const user = userEvent.setup();
 
     // default input should be removed
+    // eslint-disable-next-line no-console
+    console.warn(
+      'AddField.test.tsx',
+      'doesnt clear the selected field type, so if default field Type is provided then this test will 100% fail',
+    );
     await user.clear(FieldTypeInpEle);
 
     await user.click(FormSaveBtn);
@@ -312,7 +365,7 @@ describe('Selecting Form Field Type (label : Field Type*)', () => {
 
   describe('Field Type Options', () => {
     test.each(FIELD_TYPES)(
-      `Option of '$text' should be present with value of '$value' and it should be selectable`,
+      `Option of '$label' should be present with value of '$value' and it should be selectable`,
       async (field) => {
         render(<AddField {...getAppFieldMockProps()} />);
 
@@ -325,7 +378,7 @@ describe('Selecting Form Field Type (label : Field Type*)', () => {
         }
         const Menu = within(document.getElementById('fieldType-menu')).getByRole('listbox');
 
-        const optionElement = within(Menu).getByText(field.text);
+        const optionElement = within(Menu).getByText(field.label);
         expect(optionElement).toHaveAttribute('data-value', field.value);
 
         // checking indirectly, dont use
@@ -341,60 +394,17 @@ describe('Selecting Form Field Type (label : Field Type*)', () => {
 
   describe('Field Attributes', () => {
     describe('common attributes', () => {
-      const COMMON_ATTRIBUTES = [
-        {
-          text: 'Required',
-          testid: 'required-field-attribute',
-          // name is the <Checkbox name='$name'/> attribute
-          name: 'required',
-        },
-        {
-          text: 'Multiple values',
-          testid: 'multiple-value-attribute',
-          name: 'multipleValues',
-        },
-        {
-          text: 'Unique',
-          testid: 'unique-attribute',
-          name: 'unique',
-        },
-        {
-          text: 'Show comment box',
-          testid: 'show-comment-box-attribute',
-          name: 'showCommentBox',
-        },
-        {
-          text: 'Show star rating',
-          testid: 'show-star-rating-attribute',
-          name: 'showStarRating',
-        },
-        {
-          text: 'Response not editable',
-          testid: 'response-not-editable-attribute',
-          name: 'notEditable',
-        },
-        {
-          text: 'System calculated & saved',
-          testid: 'sys-calc&saved-attribute',
-          name: 'systemCalculatedAndSaved',
-        },
-        {
-          text: 'System calculated & view',
-          testid: 'sys-cal&view-attribute',
-          name: 'systemCalculatedAndView',
-        },
-      ] as const;
-
-      test.each(COMMON_ATTRIBUTES)(`basic checks for '$text' Attribute`, (attr) => {
+      test.each(COMMON_FIELD_ATTRIBUTES)(`basic checks for '$label' Attribute`, (attr) => {
         const { getByTestId } = render(<AddField {...getAppFieldMockProps()} />);
 
         const reqAttrEle = getByTestId(attr.testid);
         // im assuming eveything is a checkbox
-        const innerCheckBox = reqAttrEle.querySelector('input[type="checkbox"]');
+        const innerCheckBox = reqAttrEle.querySelector('input');
 
         expect(reqAttrEle).toBeVisible();
         expect(innerCheckBox).toBeEnabled();
         expect(innerCheckBox).toHaveAttribute('name', attr.name);
+        expect(within(reqAttrEle).getByText(attr.label));
       });
     });
   });
@@ -524,82 +534,46 @@ describe("Field's Label Name (label : Label*)", () => {
 });
 
 describe('Form Save Button', () => {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+
+  interface RequiredFields {
+    FIELD_LABEL: string;
+    FIELD_TYPE: {
+      label: TFieldTypeLabels;
+      value: TFieldTypeValues;
+    };
+    OnSubmitFormData: IFormValues;
+  }
+
   /**
    * Enters minimum required fields to submit the form. \
    * required fields are :-
    *  - `Field Label`
    *  - `Field Type`
    */
-  const enterRequiredFields = async () => {
+  const enterRequiredFields = async (extra: Partial<RequiredFields> = {}) => {
     const FieldLabelInpEle = getFieldLabelInpElement();
 
     const user = userEvent.setup();
-    const FIELD_LABEL = 'MockLabel';
-    const FIELD_TYPE_LABEL: TFieldTypes = 'Boolean';
+    const FIELD_LABEL = extra?.FIELD_LABEL || 'MockLabel';
+    const FIELD_TYPE_LABEL = extra?.FIELD_TYPE?.label || 'Boolean';
 
     await user.type(FieldLabelInpEle, FIELD_LABEL);
 
     await selectFieldType(FIELD_TYPE_LABEL);
 
-    return {
+    const RETURN_DATA: RequiredFields = {
       FIELD_LABEL,
       FIELD_TYPE: {
         label: FIELD_TYPE_LABEL,
         value: getFieldTypeValue(FIELD_TYPE_LABEL),
       },
-    } as const;
-  };
-
-  test('is enabled', () => {
-    render(<AddField {...getAppFieldMockProps()} />);
-
-    const FormSaveBtn = getFormSaveBtn();
-
-    // console.debug('enabled', prettyDOM(FormSaveBtn));
-
-    expect(FormSaveBtn).toBeEnabled();
-  });
-
-  test('to be visible', () => {
-    render(<AddField {...getAppFieldMockProps()} />);
-    const FormSaveBtn = getFormSaveBtn();
-    expect(FormSaveBtn).toBeVisible();
-  });
-
-  describe('form should be submitted', () => {
-    test('with minimum required fields', async () => {
-      const mockProps = getAppFieldMockProps();
-      render(<AddField isWidget={false} {...mockProps} />);
-
-      await enterRequiredFields();
-      const FormSaveBtn = getFormSaveBtn();
-      const user = userEvent.setup();
-
-      await user.click(FormSaveBtn);
-      expect(mockProps.onSave).toHaveBeenCalledTimes(1);
-    });
-
-    test.skip('with appropriate onSave() callback arguments', async () => {
-      const mockProps = getAppFieldMockProps({
-        isWidget: false,
-      });
-      render(<AddField {...mockProps} />);
-
-      const mockInput = await enterRequiredFields();
-
-      const FormSaveBtn = getFormSaveBtn();
-      const user = userEvent.setup();
-
-      await user.click(FormSaveBtn);
-
-      const onSaveMock = mockProps.onSave.mock;
-
-      const ExpectedFieldConfig: IFormValues = {
+      OnSubmitFormData: {
         _id: expect.any(String),
-        fieldType: mockInput.FIELD_TYPE.value,
+        fieldType: getFieldTypeValue(FIELD_TYPE_LABEL),
         form: null,
-        isWidget: Boolean(mockProps.isWidget),
-        label: mockInput.FIELD_LABEL,
+        isWidget: false,
+        label: FIELD_LABEL,
         template: null,
         options: {
           physicalQuantity: '',
@@ -631,12 +605,111 @@ describe('Form Save Button', () => {
           conditions: [],
           defaultValue: null,
         },
-      };
-      const ExpectedActionType = 'create';
+      },
+    };
 
-      const ExpectedOnSaveArguments = [ExpectedFieldConfig, ExpectedActionType];
+    return _.merge(RETURN_DATA, extra) as RequiredFields;
+  };
 
-      expect(onSaveMock.calls).toEqual(ExpectedOnSaveArguments);
+  function getSubmitConfig(
+    mockProps: ReturnType<typeof getAppFieldMockProps>,
+    mockInput: Awaited<ReturnType<typeof enterRequiredFields>>,
+  ): IFormValues {
+    const updatedData: Partial<typeof mockInput['OnSubmitFormData']> = {
+      _id: expect.any(String),
+      fieldType: mockInput.FIELD_TYPE.value,
+      isWidget: Boolean(mockProps.isWidget),
+      label: mockInput.FIELD_LABEL,
+    };
+
+    return _.merge(mockInput.OnSubmitFormData, updatedData);
+  }
+
+  test('is enabled', () => {
+    render(<AddField {...getAppFieldMockProps()} />);
+
+    const FormSaveBtn = getFormSaveBtn();
+
+    // console.debug('enabled', prettyDOM(FormSaveBtn));
+
+    expect(FormSaveBtn).toBeEnabled();
+  });
+
+  test('to be visible', () => {
+    render(<AddField {...getAppFieldMockProps()} />);
+    const FormSaveBtn = getFormSaveBtn();
+    expect(FormSaveBtn).toBeVisible();
+  });
+
+  describe('form should be submitted', () => {
+    test('with minimum required fields', async () => {
+      const mockProps = getAppFieldMockProps();
+      render(<AddField isWidget={false} {...mockProps} />);
+
+      await enterRequiredFields();
+      const FormSaveBtn = getFormSaveBtn();
+      const user = userEvent.setup();
+
+      await user.click(FormSaveBtn);
+      expect(mockProps.onSave).toHaveBeenCalledTimes(1);
+    });
+
+    describe('with form data', () => {
+      describe.skip('field type', () => {
+        test.each(FIELD_TYPES)(`having '$label' selected as Type of Field`, async (field) => {
+          const mockProps = getAppFieldMockProps({
+            isWidget: false,
+          });
+
+          render(<AddField {...mockProps} />);
+
+          const mockInput = await enterRequiredFields({
+            FIELD_TYPE: field,
+          });
+
+          const FormSaveBtn = getFormSaveBtn();
+          const user = userEvent.setup();
+          await user.click(FormSaveBtn);
+
+          const onSaveMock = mockProps.onSave.mock;
+          const ExpectedFieldConfig: IFormValues = getSubmitConfig(mockProps, mockInput);
+          const ExpectedActionType = 'create';
+          const ExpectedOnSaveArguments = [ExpectedFieldConfig, ExpectedActionType];
+
+          expect(onSaveMock.calls[0]).toEqual(ExpectedOnSaveArguments);
+        });
+      });
+
+      describe('Field Options / Attributes', () => {
+        test.each(COMMON_FIELD_ATTRIBUTES)(
+          `having '$label' Attribute of a field selected`,
+          async (attr) => {
+            const mockProps = getAppFieldMockProps({
+              isWidget: false,
+            });
+
+            const { getByTestId } = render(<AddField {...mockProps} />);
+
+            const user = userEvent.setup();
+            const mockInput = await enterRequiredFields();
+            const AttrCheckBox = getByTestId(attr.testid).querySelector('input');
+            const FormSaveBtn = getFormSaveBtn();
+
+            await user.click(AttrCheckBox);
+            await user.click(FormSaveBtn);
+
+            const onSaveMock = mockProps.onSave.mock;
+
+            mockInput.OnSubmitFormData.options[attr.name] = true;
+            const ExpectedOnSubmitData = mockInput.OnSubmitFormData;
+            const ExpectedActionType = 'create';
+            const ExpectedOnSaveArguments = [ExpectedOnSubmitData, ExpectedActionType];
+
+            expect(onSaveMock.calls[0]).toEqual(ExpectedOnSaveArguments);
+          },
+          10000,
+        );
+      });
     });
   });
   // test('form should be submitted', async () => {
@@ -657,12 +730,16 @@ describe('Form Save Button', () => {
       const mockProps = getAppFieldMockProps();
       render(<AddField {...mockProps} />);
 
-      const FieldLabalInpEle = getFieldLabelInpElement();
+      await enterRequiredFields();
+
+      const FieldLabelInpEle = getFieldLabelInpElement();
       const FormSaveBtn = getFormSaveBtn();
       const user = userEvent.setup();
 
-      await user.clear(FieldLabalInpEle);
+      await user.clear(FieldLabelInpEle);
       await user.click(FormSaveBtn);
+      await waitFor(() => expect(FieldLabelInpEle).toHaveAccessibleDescription());
+
       expect(mockProps.onSave).toHaveBeenCalledTimes(0);
     });
 
@@ -670,11 +747,23 @@ describe('Form Save Button', () => {
       const mockProps = getAppFieldMockProps();
       render(<AddField {...mockProps} />);
 
-      const LabelNameInpEle = getFieldLabelInpElement();
+      const FormSaveBtn = getFormSaveBtn();
+      const FieldTypeComp = getFieldTypeComponent();
+      const FieldTypeBtn = within(FieldTypeComp).getByRole('button');
       const user = userEvent.setup();
 
-      await user.clear(LabelNameInpEle);
-      await new Promise((r) => setTimeout(r, 1000));
+      // eslint-disable-next-line no-console
+      console.warn(
+        'AddField.test.tsx',
+        'doesnt clear the selected field type, so if default field Type is provided then this test will 100% fail',
+      );
+      // const FieldTypeInpEle = getFieldTypeInpEle();
+      // await enterRequiredFields();
+      // await user.clear(FieldTypeInpEle);
+
+      await user.click(FormSaveBtn);
+      await waitFor(() => expect(FieldTypeBtn).toHaveAccessibleDescription());
+
       expect(mockProps.onSave).toHaveBeenCalledTimes(0);
     });
   });
