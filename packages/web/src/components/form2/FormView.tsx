@@ -35,8 +35,8 @@ import Leaderboard from '../response/Leaderboard';
 import SelectResponse from '../response/SelectResponse';
 import { replaceVariables } from './variables';
 import projectConfig from '../../../../shared/index';
-import { evaluateFormula } from './formula/DisplayFormulaValue';
-import DisplayFormula, { getFormula } from './formula/DisplayFormula';
+import { evaluateFormula } from './field/formula/DisplayFormulaValue';
+import DisplayFormula, { getFormula } from './field/formula/DisplayFormula';
 
 interface FormViewWrapperProps {
   form: IForm;
@@ -635,161 +635,163 @@ export function FormView({
             </InputGroup>
           </Grid>
         )}
-        {(fieldWiseView && fields?.length > 1 ? [fields[page]] : fields)?.map((field: any) => (
-          <Grid
-            item
-            xs={field?.options?.grid?.xs || 12}
-            sm={field?.options?.grid?.sm}
-            md={field?.options?.grid?.md}
-            lg={field?.options?.grid?.lg}
-            xl={field?.options?.grid?.xl}
-            key={field._id}
-          >
-            <div style={field?.options?.style || {}}>
-              <InputGroup key={field._id}>
-                <Typography className={field?.options?.required ? 'text-danger' : ''}>
-                  {field?.label}
-                  {field?.options?.required && '*'}
-                  {unique && field?.options?.unique && ' This field must be unique'}
-                  {uniqueLoading && field?.options?.unique && (
-                    <span className="ml-2">
-                      <CircularProgress size={10} />
-                    </span>
-                  )}
-                </Typography>
-                {field?.options?.systemCalculatedAndView && (
-                  <div className="mb-2">
-                    <DisplayFormula formula={field?.options?.formula} fields={fields} />
-                  </div>
-                )}
-                <>
-                  <div className="w-100">
-                    {hideField ? (
-                      <Skeleton height={200} />
-                    ) : (
-                      <Field
-                        {...fieldProps}
-                        field={{
-                          ...field,
-                          label: `${field?.label} ${field?.options?.required ? '*' : ''}`,
-                        }}
-                        disabled={
-                          edit && field.options.notEditable
-                            ? submitState.loading || field.options.notEditable
-                            : submitState.loading || field.options.systemCalculatedAndView
-                        }
-                        validate={submitState.validate}
-                        onChangeValue={(changedValue) => {
-                          if (!field?.options?.systemCalculatedAndView) {
-                            onChange(
-                              { ...changedValue, field: field._id },
-                              filterValues(values, field)?.length - 1,
-                            );
-                          }
-                        }}
-                        value={
-                          field.options.systemCalculatedAndView
-                            ? {
-                                valueNumber: evaluateFormula(
-                                  getFormula(field?.options?.formula?.variables, [], values),
-                                ),
-                              }
-                            : filterValues(values, field)[filterValues(values, field)?.length - 1]
-                        }
-                      />
+        {(fieldWiseView && fields?.length > 1 ? [fields[page]] : fields)
+          ?.filter((field) => !field?.options?.hidden)
+          ?.map((field: any) => (
+            <Grid
+              item
+              xs={field?.options?.grid?.xs || 12}
+              sm={field?.options?.grid?.sm}
+              md={field?.options?.grid?.md}
+              lg={field?.options?.grid?.lg}
+              xl={field?.options?.grid?.xl}
+              key={field._id}
+            >
+              <div style={field?.options?.style || {}}>
+                <InputGroup key={field._id}>
+                  <Typography className={field?.options?.required ? 'text-danger' : ''}>
+                    {field?.label}
+                    {field?.options?.required && '*'}
+                    {unique && field?.options?.unique && ' This field must be unique'}
+                    {uniqueLoading && field?.options?.unique && (
+                      <span className="ml-2">
+                        <CircularProgress size={10} />
+                      </span>
                     )}
-                  </div>
-                  {field?.options?.multipleValues && (
-                    <Button
-                      className="my-2"
-                      size="small"
-                      color="primary"
-                      variant="outlined"
-                      onClick={() => {
-                        if (field?.fieldType === 'richTextarea') {
-                          setHideField(true);
-                        }
-                        onAddOneMoreValue(field);
-                      }}
-                      startIcon={<AddIcon />}
-                    >
-                      Add
-                    </Button>
+                  </Typography>
+                  {field?.options?.systemCalculatedAndView && (
+                    <div className="mb-2">
+                      <DisplayFormula formula={field?.options?.formula} fields={fields} />
+                    </div>
                   )}
-                </>
-                {filterValues(values, field).map((value: any, valueIndex) => (
-                  <div key={valueIndex}>
-                    {valueIndex !== filterValues(values, field)?.length - 1 && (
-                      <>
-                        {editValue.fieldId === field._id && editValue.index === valueIndex ? (
-                          <>
-                            <div className="w-100">
-                              {hideField ? (
-                                <Skeleton height={200} />
-                              ) : (
-                                <Field
-                                  field={{
-                                    ...field,
-                                    label: field?.options?.required
-                                      ? `${field?.label}*`
-                                      : field?.label,
-                                  }}
-                                  {...fieldProps}
-                                  disabled={submitState.loading}
-                                  onChangeValue={(changedValue) =>
-                                    onChange({ ...changedValue, field: field._id }, valueIndex)
-                                  }
-                                  value={value}
-                                />
-                              )}
-                            </div>
-                            <Button
-                              className="my-2"
-                              size="small"
-                              color="primary"
-                              variant="contained"
-                              onClick={() => setEditValue({ fieldId: null, index: null })}
-                            >
-                              Save
-                            </Button>
-                          </>
-                        ) : (
-                          <div className="mb-2 d-flex align-items-start">
-                            <div className="w-100">
-                              <DisplayValue value={value} field={field} />
-                              {validateValue(submitState.validate, value, field).error && (
-                                <FormHelperText className="text-danger">
-                                  {validateValue(submitState.validate, value, field).errorMessage}
-                                </FormHelperText>
-                              )}
-                            </div>
-                            <IconButton
-                              onClick={() =>
-                                setEditValue({ fieldId: field._id, index: valueIndex })
-                              }
-                              size="large"
-                            >
-                              <EditIcon />
-                            </IconButton>
-                            {!value?.options?.defaultWidget && (
+                  <>
+                    <div className="w-100">
+                      {hideField ? (
+                        <Skeleton height={200} />
+                      ) : (
+                        <Field
+                          {...fieldProps}
+                          field={{
+                            ...field,
+                            label: `${field?.label} ${field?.options?.required ? '*' : ''}`,
+                          }}
+                          disabled={
+                            edit && field.options.notEditable
+                              ? submitState.loading || field.options.notEditable
+                              : submitState.loading || field.options.systemCalculatedAndView
+                          }
+                          validate={submitState.validate}
+                          onChangeValue={(changedValue) => {
+                            if (!field?.options?.systemCalculatedAndView) {
+                              onChange(
+                                { ...changedValue, field: field._id },
+                                filterValues(values, field)?.length - 1,
+                              );
+                            }
+                          }}
+                          value={
+                            field.options.systemCalculatedAndView
+                              ? {
+                                  valueNumber: evaluateFormula(
+                                    getFormula(field?.options?.formula?.variables, [], values),
+                                  ),
+                                }
+                              : filterValues(values, field)[filterValues(values, field)?.length - 1]
+                          }
+                        />
+                      )}
+                    </div>
+                    {field?.options?.multipleValues && (
+                      <Button
+                        className="my-2"
+                        size="small"
+                        color="primary"
+                        variant="outlined"
+                        onClick={() => {
+                          if (field?.fieldType === 'richTextarea') {
+                            setHideField(true);
+                          }
+                          onAddOneMoreValue(field);
+                        }}
+                        startIcon={<AddIcon />}
+                      >
+                        Add
+                      </Button>
+                    )}
+                  </>
+                  {filterValues(values, field).map((value: any, valueIndex) => (
+                    <div key={valueIndex}>
+                      {valueIndex !== filterValues(values, field)?.length - 1 && (
+                        <>
+                          {editValue.fieldId === field._id && editValue.index === valueIndex ? (
+                            <>
+                              <div className="w-100">
+                                {hideField ? (
+                                  <Skeleton height={200} />
+                                ) : (
+                                  <Field
+                                    field={{
+                                      ...field,
+                                      label: field?.options?.required
+                                        ? `${field?.label}*`
+                                        : field?.label,
+                                    }}
+                                    {...fieldProps}
+                                    disabled={submitState.loading}
+                                    onChangeValue={(changedValue) =>
+                                      onChange({ ...changedValue, field: field._id }, valueIndex)
+                                    }
+                                    value={value}
+                                  />
+                                )}
+                              </div>
+                              <Button
+                                className="my-2"
+                                size="small"
+                                color="primary"
+                                variant="contained"
+                                onClick={() => setEditValue({ fieldId: null, index: null })}
+                              >
+                                Save
+                              </Button>
+                            </>
+                          ) : (
+                            <div className="mb-2 d-flex align-items-start">
+                              <div className="w-100">
+                                <DisplayValue value={value} field={field} />
+                                {validateValue(submitState.validate, value, field).error && (
+                                  <FormHelperText className="text-danger">
+                                    {validateValue(submitState.validate, value, field).errorMessage}
+                                  </FormHelperText>
+                                )}
+                              </div>
                               <IconButton
-                                edge="end"
-                                onClick={() => onRemoveOneValue(field._id, valueIndex)}
+                                onClick={() =>
+                                  setEditValue({ fieldId: field._id, index: valueIndex })
+                                }
                                 size="large"
                               >
-                                <DeleteIcon />
+                                <EditIcon />
                               </IconButton>
-                            )}
-                          </div>
-                        )}
-                      </>
-                    )}
-                  </div>
-                ))}
-              </InputGroup>
-            </div>
-          </Grid>
-        ))}
+                              {!value?.options?.defaultWidget && (
+                                <IconButton
+                                  edge="end"
+                                  onClick={() => onRemoveOneValue(field._id, valueIndex)}
+                                  size="large"
+                                >
+                                  <DeleteIcon />
+                                </IconButton>
+                              )}
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  ))}
+                </InputGroup>
+              </div>
+            </Grid>
+          ))}
         {fieldWiseView && fields?.length > 1 && (
           <div className="w-100 d-flex justify-content-between">
             {page !== 0 && (

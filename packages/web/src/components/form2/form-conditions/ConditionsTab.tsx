@@ -11,8 +11,8 @@ import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import React, { useState } from 'react';
 import ConditionForm from './ConditionForm';
 import CRUDMenu from '../../common/CRUDMenu';
-import DisplayFormula from '../formula/DisplayFormula';
-import FormulaEditor from '../formula/FormulaEditor';
+import DisplayFormula from '../field/formula/DisplayFormula';
+import FormulaEditor from '../field/formula/FormulaEditor';
 
 interface IProps {
   form: any;
