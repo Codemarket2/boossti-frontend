@@ -32,7 +32,7 @@ export default function DisplayValue({
   verticalView,
 }: IProps) {
   const value: any = { ...tempValue };
-
+  console.log(field, value);
   if (typeof value?.options === 'string') {
     value.options = JSON.parse(value?.options);
   }
@@ -55,13 +55,14 @@ export default function DisplayValue({
   // if (field?.options?.systemCalculatedAndView) {
   //   return <DisplayFormulaValue formula={field?.options?.formula} />;
   // }
+
   switch (field.fieldType) {
     case 'text':
     case 'textarea':
     case 'url':
     case 'email':
     case 'password':
-      return <>{value?.value}</>;
+      return <span data-testid="text-output">{value?.value}</span>;
     case 'response':
       return <ShowResponseLabel formField={field.options?.formField} response={value?.response} />;
     case 'form':
@@ -81,18 +82,22 @@ export default function DisplayValue({
     case 'richTextarea':
       return <DisplayRichText value={value?.value} />;
     case 'date':
-      return <>{value?.valueDate && moment(value?.valueDate).format('L')}</>;
+      return (
+        <span data-testid="date-output">
+          {value?.valueDate && moment(value?.valueDate).format('L')}
+        </span>
+      );
     case 'dateTime':
       return <>{value?.valueDate && moment(value?.valueDate).format('lll')}</>;
     case 'number':
     case 'phoneNumber':
       return (
-        <>
+        <span data-testid="number-output">
           {value?.valueNumber}{' '}
           {field.fieldType === 'number' &&
             field.options?.physicalQuantity &&
             (field.options?.unit || value?.options?.unit)}
-        </>
+        </span>
       );
     case 'boolean':
       return <>{value?.valueBoolean ? 'Yes' : 'No'}</>;
