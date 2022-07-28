@@ -25,14 +25,16 @@ import InfoOutlined from '@mui/icons-material/InfoOutlined';
 import { useAddFields } from '@frontend/shared/hooks/form';
 import { quantities } from '@frontend/shared/utils/quantities';
 import { IField } from '@frontend/shared/types/form';
+
+// OTHERS
 import InputGroup from '../../common/InputGroup';
 import LoadingButton from '../../common/LoadingButton';
 import { onAlert } from '../../../utils/alert';
 import { getFormFieldTypes } from '../fieldTypes';
 import RichTextarea from '../../common/RichTextarea2';
 import SelectForm from '../SelectForm';
-import SelectTemplate from '../../template/SelectTemplate';
 import SelectFormFields from '../SelectFormFields';
+import SelectTemplate from '../../template/SelectTemplate';
 import Formula from '../formula/Formula';
 import FieldCondition from '../field-condition/FieldCondition';
 import DefaultValue from './DefaultValue';
@@ -46,14 +48,14 @@ interface IProps {
   parentFields?: any[];
 }
 
-const AddField = ({
+export default function AddField({
   onCancel,
   onSave,
   field = null,
   isWidget = false,
   isDefault,
   parentFields: tParentFields = [],
-}: IProps): JSX.Element => {
+}: IProps) {
   const { formik, formLoading, setFormValues, onOptionChange } = useAddFields({
     onAlert,
     onSave,
@@ -140,6 +142,7 @@ const AddField = ({
             error={formik.touched.form && Boolean(formik.errors.form)}
             helperText={formik.touched.form && formik.errors.form}
           />
+
           {formik.values.form && formik.values.fieldType === 'response' && (
             <div className="mt-3">
               <SelectFormFields
@@ -245,6 +248,7 @@ const AddField = ({
                 />
               }
               label="Two way relationship"
+              data-testid="two-way-relationship-field-option"
             />
             <Tooltip title="Parent will have child Id & child will have parent Id">
               <InfoOutlined className="mt-n2 ml-n2" fontSize="small" />
@@ -302,6 +306,7 @@ const AddField = ({
                 />
               }
               label="Dependent relationship"
+              data-testid="dependent-relationship-field-option"
             />
             <Tooltip title="If parent is deleted child is also deleted">
               <InfoOutlined className="mt-n2 ml-n2" fontSize="small" />
@@ -334,6 +339,7 @@ const AddField = ({
                 label={`Select Item ${
                   formik.values.fieldType === 'response' ? '(Independent relation)' : ''
                 }`}
+                data-testid="select-item-field-option"
               />
               {formik.values.fieldType !== 'form' && formik.values.options?.selectItem && (
                 <>
@@ -351,6 +357,7 @@ const AddField = ({
                       />
                     }
                     label="Can create new option"
+                    data-testid="select-allow-create-field-option"
                   />
 
                   {formik.values.fieldType === 'response' ? (
@@ -371,6 +378,7 @@ const AddField = ({
                           />
                         }
                         label="Created by user"
+                        data-testid="show-option-created-by-user-field-option"
                       />
                       <FormControlLabel
                         className="mt-n2"
@@ -386,6 +394,7 @@ const AddField = ({
                           />
                         }
                         label="Created on template"
+                        data-testid="show-option-created-on-template-field-option"
                       />
                     </div>
                   ) : (
@@ -404,6 +413,7 @@ const AddField = ({
                           />
                         }
                         label="Show as checkbox"
+                        data-testid="show-as-checkbox-field-option"
                       />
                       <div className="mb-3">
                         <FormLabel>
@@ -489,7 +499,7 @@ const AddField = ({
                 />
               }
               label="Required"
-              data-testid="required-field-attribute"
+              data-testid="required-field-field-option"
             />
           </div>
           <FormControlLabel
@@ -504,7 +514,7 @@ const AddField = ({
               />
             }
             label="Multiple values"
-            data-testid="multiple-value-attribute"
+            data-testid="multiple-value-field-option"
           />
           <br />
           <FormControlLabel
@@ -519,7 +529,7 @@ const AddField = ({
               />
             }
             label="Unique"
-            data-testid="unique-attribute"
+            data-testid="unique-field-option"
           />
           {formik.values?.options?.unique && (
             <div className="pl-3 mt-n3">
@@ -537,6 +547,7 @@ const AddField = ({
                   />
                 }
                 label="Case insensitive unique"
+                data-testid="case-insensitive-unique-field-option"
               />
             </div>
           )}
@@ -553,7 +564,7 @@ const AddField = ({
                 />
               }
               label="Show comment box"
-              data-testid="show-comment-box-attribute"
+              data-testid="show-comment-box-field-option"
             />
           </div>
           <FormControlLabel
@@ -568,7 +579,7 @@ const AddField = ({
               />
             }
             label="Show star rating"
-            data-testid="show-star-rating-attribute"
+            data-testid="show-star-rating-field-option"
           />
           <br />
           <FormControlLabel
@@ -583,7 +594,7 @@ const AddField = ({
               />
             }
             label="Response not editable"
-            data-testid="response-not-editable-attribute"
+            data-testid="response-not-editable-field-option"
           />
           <br />
           <FormControlLabel
@@ -600,7 +611,7 @@ const AddField = ({
               />
             }
             label="System calculated & saved"
-            data-testid="sys-calc&saved-attribute"
+            data-testid="sys-calcAndsaved-field-option"
           />
           {/* {formik.values.options?.systemCalculatedAndSaved && (
             <>
@@ -646,7 +657,7 @@ const AddField = ({
                 />
               }
               label="System calculated & view"
-              data-testid="sys-cal&view-attribute"
+              data-testid="sys-calAndview-field-option"
             />
           </div>
           {[
@@ -686,6 +697,4 @@ const AddField = ({
       <Divider />
     </form>
   );
-};
-
-export default AddField;
+}

@@ -1,9 +1,26 @@
+/* eslint-disable import/first */
+/* eslint-disable dot-notation */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable react/jsx-props-no-spreading */
+
+// NOT WORKING, TODO: FIX
+// jest.mock('../../SelectForm', () => ({
+//   __esModule: true,
+//   default: jest.fn(SelectFormMock),
+// }));
+
+// jest.mock('../../SelectFormFields', () => ({
+//   __esModule: true,
+//   default: jest.fn(SelectFormFieldsMock),
+// }));
+
 import { IField } from '@frontend/shared/types/form';
 import userEvent from '@testing-library/user-event';
 import _ from 'lodash';
-import { render, within, screen, waitFor } from '../../../../../jest/test-utils';
+import { defaultOptions } from '@frontend/shared/hooks/form/addFields';
+import SelectFormMock, { SelectFormMockData } from '../__mocks__/SelectForm';
+import SelectFormFieldsMock, { SelectFormFieldsMockData } from '../__mocks__/SelectFormFields';
+import { render, within, screen, waitFor, prettyDOM, logDOM } from '../../../../../jest/test-utils';
 import AddField from '../AddField';
 
 const FIELD_TYPES = [
@@ -105,49 +122,90 @@ const FIELD_TYPES = [
   },
 ] as const;
 
+const TODO = [
+  {
+    label: 'Two way relationship',
+    name: 'twoWayRelationship',
+    testid: 'two-way-relationship-field-option',
+  },
+  {
+    label: 'Dependent relationship',
+    name: 'dependentRelationship',
+    testid: 'dependent-relationship-field-option',
+  },
+  {
+    // fieldType === response then label = 'Select Item (Independent relation)'
+    label: 'Select Item',
+    name: 'selectItem',
+    testid: 'select-item-field-option',
+  },
+  {
+    label: 'Can create new option',
+    name: 'selectAllowCreate',
+    testid: 'select-allow-create-field-option',
+  },
+  {
+    label: 'Created by user',
+    name: 'showOptionCreatedByUser',
+    testid: 'show-option-created-by-user-field-option',
+  },
+  {
+    label: 'Created on template',
+    name: 'showOptionCreatedOnTemplate',
+    testid: 'show-option-created-on-template-field-option',
+  },
+  {
+    label: 'Show as checkbox',
+    name: 'showAsCheckbox',
+    testid: 'show-as-checkbox-field-option',
+  },
+] as const;
+
 const COMMON_FIELD_ATTRIBUTES = [
   {
     label: 'Required',
-    testid: 'required-field-attribute',
+    testid: 'required-field-field-option',
     // name is the <Checkbox name='$name'/> attribute
     name: 'required',
   },
   {
     label: 'Multiple values',
-    testid: 'multiple-value-attribute',
+    testid: 'multiple-value-field-option',
     name: 'multipleValues',
   },
   {
     label: 'Unique',
-    testid: 'unique-attribute',
+    testid: 'unique-field-option',
     name: 'unique',
   },
   {
     label: 'Show comment box',
-    testid: 'show-comment-box-attribute',
+    testid: 'show-comment-box-field-option',
     name: 'showCommentBox',
   },
   {
     label: 'Show star rating',
-    testid: 'show-star-rating-attribute',
+    testid: 'show-star-rating-field-option',
     name: 'showStarRating',
   },
   {
     label: 'Response not editable',
-    testid: 'response-not-editable-attribute',
+    testid: 'response-not-editable-field-option',
     name: 'notEditable',
   },
   {
     label: 'System calculated & saved',
-    testid: 'sys-calc&saved-attribute',
+    testid: 'sys-calcAndsaved-field-option',
     name: 'systemCalculatedAndSaved',
   },
   {
     label: 'System calculated & view',
-    testid: 'sys-cal&view-attribute',
+    testid: 'sys-calAndview-field-option',
     name: 'systemCalculatedAndView',
   },
 ] as const;
+
+const TOTAL_FIELD_OPTIONS = [...COMMON_FIELD_ATTRIBUTES, ...TODO];
 
 type TFieldTypeLabels = typeof FIELD_TYPES[number]['label'];
 type TFieldTypeValues = typeof FIELD_TYPES[number]['value'];
@@ -392,24 +450,165 @@ describe('Selecting Form Field Type (label : Field Type*)', () => {
     );
   });
 
-  describe('Field Attributes', () => {
-    describe('common attributes', () => {
-      test.each(COMMON_FIELD_ATTRIBUTES)(`basic checks for '$label' Attribute`, (attr) => {
-        const { getByTestId } = render(<AddField {...getAppFieldMockProps()} />);
+  // ---------TEST CASES END-------------
+});
 
-        const reqAttrEle = getByTestId(attr.testid);
-        // im assuming eveything is a checkbox
-        const innerCheckBox = reqAttrEle.querySelector('input');
+describe('Field Options / Attributes', () => {
+  const TEST_FIELD_OPTION = {
+    Required: () => {
+      const OptionEle = screen.getByTestId('required-field-field-option');
+      const nameAttr = 'required';
+      const label = 'Required';
+      const innerCheckBox = OptionEle.querySelector('input');
 
-        expect(reqAttrEle).toBeVisible();
-        expect(innerCheckBox).toBeEnabled();
-        expect(innerCheckBox).toHaveAttribute('name', attr.name);
-        expect(within(reqAttrEle).getByText(attr.label));
-      });
+      expect(OptionEle).toBeVisible();
+      expect(innerCheckBox).toBeEnabled();
+      expect(innerCheckBox).toHaveAttribute('name', nameAttr);
+      expect(within(OptionEle).queryByText(label)).not.toBeFalsy();
+      expect(innerCheckBox).not.toBeChecked();
+    },
+
+    'Multiple values': () => {
+      const OptionEle = screen.getByTestId('multiple-value-field-option');
+      const nameAttr = 'multipleValues';
+      const label = 'Multiple values';
+      const innerCheckBox = OptionEle.querySelector('input');
+
+      expect(OptionEle).toBeVisible();
+      expect(innerCheckBox).toBeEnabled();
+      expect(innerCheckBox).toHaveAttribute('name', nameAttr);
+      expect(within(OptionEle).queryByText(label)).not.toBeFalsy();
+      expect(innerCheckBox).not.toBeChecked();
+    },
+
+    Unique: () => {
+      const OptionEle = screen.getByTestId('unique-field-option');
+      const nameAttr = 'unique';
+      const label = 'Unique';
+      const innerCheckBox = OptionEle.querySelector('input');
+
+      expect(OptionEle).toBeVisible();
+      expect(innerCheckBox).toBeEnabled();
+      expect(innerCheckBox).toHaveAttribute('name', nameAttr);
+      expect(within(OptionEle).queryByText(label)).not.toBeFalsy();
+      expect(innerCheckBox).not.toBeChecked();
+    },
+
+    'Show comment box': () => {
+      const OptionEle = screen.getByTestId('show-comment-box-field-option');
+      const nameAttr = 'showCommentBox';
+      const label = 'Show comment box';
+      const innerCheckBox = OptionEle.querySelector('input');
+
+      expect(OptionEle).toBeVisible();
+      expect(innerCheckBox).toBeEnabled();
+      expect(innerCheckBox).toHaveAttribute('name', nameAttr);
+      expect(within(OptionEle).queryByText(label)).not.toBeFalsy();
+      expect(innerCheckBox).not.toBeChecked();
+    },
+
+    'Show star rating': () => {
+      const OptionEle = screen.getByTestId('show-star-rating-field-option');
+      const nameAttr = 'showStarRating';
+      const label = 'Show star rating';
+      const innerCheckBox = OptionEle.querySelector('input');
+
+      expect(OptionEle).toBeVisible();
+      expect(innerCheckBox).toBeEnabled();
+      expect(innerCheckBox).toHaveAttribute('name', nameAttr);
+      expect(within(OptionEle).queryByText(label)).not.toBeFalsy();
+      expect(innerCheckBox).not.toBeChecked();
+    },
+
+    'Response not editable': () => {
+      const OptionEle = screen.getByTestId('response-not-editable-field-option');
+      const nameAttr = 'notEditable';
+      const label = 'Response not editable';
+      const innerCheckBox = OptionEle.querySelector('input');
+
+      expect(OptionEle).toBeVisible();
+      expect(innerCheckBox).toBeEnabled();
+      expect(innerCheckBox).toHaveAttribute('name', nameAttr);
+      expect(within(OptionEle).queryByText(label)).not.toBeFalsy();
+      expect(innerCheckBox).not.toBeChecked();
+    },
+
+    'System calculated & saved': () => {
+      const OptionEle = screen.getByTestId('sys-calcAndsaved-field-option');
+      const nameAttr = 'systemCalculatedAndSaved';
+      const label = 'System calculated & saved';
+      const innerCheckBox = OptionEle.querySelector('input');
+
+      expect(OptionEle).toBeVisible();
+      expect(innerCheckBox).toBeEnabled();
+      expect(innerCheckBox).toHaveAttribute('name', nameAttr);
+      expect(within(OptionEle).queryByText(label)).not.toBeFalsy();
+      expect(innerCheckBox).not.toBeChecked();
+    },
+
+    'System calculated & view': () => {
+      const OptionEle = screen.getByTestId('sys-calAndview-field-option');
+      const nameAttr = 'systemCalculatedAndView';
+      const label = 'System calculated & view';
+      const innerCheckBox = OptionEle.querySelector('input');
+
+      expect(OptionEle).toBeVisible();
+      expect(innerCheckBox).toBeEnabled();
+      expect(innerCheckBox).toHaveAttribute('name', nameAttr);
+      expect(within(OptionEle).queryByText(label)).not.toBeFalsy();
+      expect(innerCheckBox).not.toBeChecked();
+    },
+  } as const;
+
+  describe('when Field Type is not selected (default options to show)', () => {
+    test.each([
+      'Required',
+      'Multiple values',
+      'Unique',
+      'Show comment box',
+      'Show star rating',
+      'Response not editable',
+      'System calculated & saved',
+      'System calculated & view',
+    ])(`checking '%s' Field Option`, async (fieldOption) => {
+      render(<AddField {...getAppFieldMockProps()} />);
+      TEST_FIELD_OPTION[fieldOption]();
     });
   });
 
-  // ---------TEST CASES END-------------
+  describe(`for Field Type = 'Form'`, () => {
+    test.each([
+      'Required',
+      'Multiple values',
+      'Unique',
+      'Show comment box',
+      'Show star rating',
+      'Response not editable',
+      'System calculated & saved',
+      'System calculated & view',
+    ])(`checking '%s' Field Option`, async (fieldOption) => {
+      render(<AddField {...getAppFieldMockProps()} />);
+      await selectFieldType('Form');
+      TEST_FIELD_OPTION[fieldOption]();
+    });
+  });
+
+  describe(`for Field Type = 'Form Response'`, () => {
+    test.each([
+      'Required',
+      'Multiple values',
+      'Unique',
+      'Show comment box',
+      'Show star rating',
+      'Response not editable',
+      'System calculated & saved',
+      'System calculated & view',
+    ])(`checking '%s' Field Option`, async (fieldOption) => {
+      render(<AddField {...getAppFieldMockProps()} />);
+      await selectFieldType('Form Response');
+      TEST_FIELD_OPTION[fieldOption]();
+    });
+  });
 });
 
 describe("Field's Label Name (label : Label*)", () => {
@@ -562,6 +761,14 @@ describe('Form Save Button', () => {
 
     await selectFieldType(FIELD_TYPE_LABEL);
 
+    // TODO
+    // const UPDATED = {
+    //   form: SelectFormMockData,
+    //   options: {
+    //     formField: SelectFormFieldsMockData.fieldID,
+    //   },
+    // };
+
     const RETURN_DATA: RequiredFields = {
       FIELD_LABEL,
       FIELD_TYPE: {
@@ -571,40 +778,13 @@ describe('Form Save Button', () => {
       OnSubmitFormData: {
         _id: expect.any(String),
         fieldType: getFieldTypeValue(FIELD_TYPE_LABEL),
+        // TODO
+        // form: SelectFormMockData,
         form: null,
         isWidget: false,
         label: FIELD_LABEL,
         template: null,
-        options: {
-          physicalQuantity: '',
-          unit: '',
-          default: false,
-          selectItem: false,
-          dependentRelationship: false,
-          twoWayRelationship: false,
-          relationLabel: '',
-          relationFieldId: '',
-          showOptionCreatedByUser: false,
-          showOptionCreatedOnTemplate: false,
-          required: false,
-          multipleValues: false,
-          unique: false,
-          caseInsensitiveUnique: false,
-          staticText: '',
-          formField: '',
-          showCommentBox: false,
-          showStarRating: false,
-          notEditable: false,
-          systemCalculatedAndSaved: false,
-          systemValue: null,
-          systemCalculatedAndView: false,
-          formula: null,
-          showAsCheckbox: false,
-          selectAllowCreate: false,
-          selectOptions: [''],
-          conditions: [],
-          defaultValue: null,
-        },
+        options: _.merge(defaultOptions, {}),
       },
     };
 
@@ -655,8 +835,9 @@ describe('Form Save Button', () => {
     });
 
     describe('with form data', () => {
+      // TODO: work in progress
       describe.skip('field type', () => {
-        test.each(FIELD_TYPES)(`having '$label' selected as Type of Field`, async (field) => {
+        test.only.each(FIELD_TYPES)(`having '$label' selected as Type of Field`, async (field) => {
           const mockProps = getAppFieldMockProps({
             isWidget: false,
           });
@@ -676,6 +857,13 @@ describe('Form Save Button', () => {
           const ExpectedActionType = 'create';
           const ExpectedOnSaveArguments = [ExpectedFieldConfig, ExpectedActionType];
 
+          // WHY mocking a react component isn't working?
+          // const ele1 = screen.queryByTestId('select-form-mock');
+          // const ele = screen.queryByTestId('select-form-fields-mock');
+          // logDOM(document);
+          // debugger;
+          // console.log(onSaveMock.calls[0], Boolean(ele1), Boolean(ele));
+          // debugger;
           expect(onSaveMock.calls[0]).toEqual(ExpectedOnSaveArguments);
         });
       });
