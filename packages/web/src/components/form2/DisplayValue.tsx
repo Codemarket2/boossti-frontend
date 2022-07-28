@@ -88,7 +88,11 @@ export default function DisplayValue({
         </span>
       );
     case 'dateTime':
-      return <>{value?.valueDate && moment(value?.valueDate).format('lll')}</>;
+      return (
+        <span data-testid="datetime-output">
+          {value?.valueDate && moment(value?.valueDate).format('lll')}
+        </span>
+      );
     case 'number':
     case 'phoneNumber':
       return (
@@ -100,7 +104,7 @@ export default function DisplayValue({
         </span>
       );
     case 'boolean':
-      return <>{value?.valueBoolean ? 'Yes' : 'No'}</>;
+      return <span data-testid="boolean-output">{value?.valueBoolean ? 'Yes' : 'No'}</span>;
     case 'image':
       if (imageAvatar) {
         return (
