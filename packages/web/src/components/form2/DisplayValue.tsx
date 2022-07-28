@@ -16,7 +16,7 @@ import DisplayBoard from './board/DisplayBoard';
 import DisplayDiagram from '../syncfusion-diagram/DisplayDiagram';
 import ReactFlow from '../react-flow/ReactFlow';
 // import DisplayFormulaValue from './formula/DisplayFormulaValue';
-import DisplayFieldCondition from './field-condition/DisplayFieldCondition';
+import DisplayFieldCondition from './field/field-condition/DisplayFieldCondition';
 
 interface IProps {
   field: Partial<IField>;

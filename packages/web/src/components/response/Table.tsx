@@ -24,7 +24,7 @@ import Search from '@mui/icons-material/Search';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { IField } from '@frontend/shared/types/form';
-import DisplayFormulaValue from '../form2/formula/DisplayFormulaValue';
+import DisplayFormulaValue from '../form2/field/formula/DisplayFormulaValue';
 
 interface IProps {
   search: string;

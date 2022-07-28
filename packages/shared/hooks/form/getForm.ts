@@ -50,7 +50,7 @@ export function useGetForms({ page = 1, limit = 20 }: IProps) {
             }
             return t;
           });
-          if (isNew) {
+          if (isNew && prev?.getForms?.data?.length > 0) {
             newData = [...prev?.getForms?.data, newForm];
           }
           return {

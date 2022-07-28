@@ -38,9 +38,8 @@ import NotFound from '../common/NotFound';
 import UnAuthorised from '../common/UnAuthorised';
 import Permissions from './Permissions';
 import AuditLog from '../auditLog/AuditLog';
-import Conditions from './conditions/Conditions';
+import FormConditions from './form-conditions/FormConditions';
 import ShopifySettings from './shopify/ShopifySettings';
-import BoardsTab from './board/BoardsTab';
 import DesignTab from './design/DesignTab';
 import RelationFields from './RelationFields';
 import TabsList from './tabs/TabsList';
@@ -311,7 +310,7 @@ export default function Form({ form, drawerMode = false, onSlugChange, hideField
                 <AuditLog documentId={form?._id} formId={form?._id} />
               )}
               {options.currentTab === 'Conditions' && (
-                <Conditions
+                <FormConditions
                   form={form}
                   onConditionsChange={(conditions) => {
                     handleOnChange({

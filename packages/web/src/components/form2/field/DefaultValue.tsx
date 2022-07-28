@@ -19,7 +19,14 @@ export default function DefaultValue({ field, onDefaultValueChange }: DefaultVal
         <>
           <FormLabel>
             Default Value
-            <IconButton onClick={() => onDefaultValueChange(null)} size="small" color="error">
+            <IconButton
+              onClick={() => {
+                setShowField(false);
+                onDefaultValueChange(null);
+              }}
+              size="small"
+              color="error"
+            >
               <Delete fontSize="small" />
             </IconButton>
           </FormLabel>
