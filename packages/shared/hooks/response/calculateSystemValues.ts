@@ -2,19 +2,9 @@ interface IPayload {
   fields: any[];
   values: any[];
   globalState: any;
-  systemValues?: ISystemValues;
 }
 
-export interface ISystemValues {
-  [key: string]: string | number | boolean;
-}
-
-export const calculateSystemValues = ({
-  fields = [],
-  values = [],
-  globalState = {},
-  systemValues,
-}: IPayload) => {
+export const calculateSystemValues = ({ fields = [], values = [], globalState = {} }: IPayload) => {
   let newValues = [...values];
 
   const systemFields = fields?.filter(
@@ -28,12 +18,6 @@ export const calculateSystemValues = ({
       } else if (field?.options?.systemValue?._id === 'userEmail') {
         value = { value: globalState?.auth?.attributes?.email || '' };
       }
-    } else if (
-      field?.options?.systemValue?.props &&
-      field?.options?.systemValue?._id === 'props' &&
-      systemValues?.[field?.label]
-    ) {
-      value = getValueObject(field, systemValues[field?.label]);
     } else {
       value = values?.find((v) => v?.field === field?.options?.systemValue?._id);
     }
@@ -54,32 +38,32 @@ export const calculateSystemValues = ({
   return newValues;
 };
 
-const getValueObject = (field, tempValue) => {
-  const value: any = {
-    field: field?._id,
-    value: '',
-  };
-  switch (field?.fieldType) {
-    case 'number':
-    case 'phoneNumber':
-      value.valueNumber = tempValue;
-      break;
-    case 'date':
-    case 'dateTime':
-      value.valueDate = tempValue;
-      break;
-    case 'boolean':
-      value.valueBoolean = tempValue;
-      break;
-    case 'form':
-      value.form = tempValue;
-      break;
-    case 'response':
-      value.response = tempValue;
-      break;
-    default:
-      value.value = tempValue;
-      break;
-  }
-  return value;
-};
+// const getValueObject = (field, tempValue) => {
+//   const value: any = {
+//     field: field?._id,
+//     value: '',
+//   };
+//   switch (field?.fieldType) {
+//     case 'number':
+//     case 'phoneNumber':
+//       value.valueNumber = tempValue;
+//       break;
+//     case 'date':
+//     case 'dateTime':
+//       value.valueDate = tempValue;
+//       break;
+//     case 'boolean':
+//       value.valueBoolean = tempValue;
+//       break;
+//     case 'form':
+//       value.form = tempValue;
+//       break;
+//     case 'response':
+//       value.response = tempValue;
+//       break;
+//     default:
+//       value.value = tempValue;
+//       break;
+//   }
+//   return value;
+// };

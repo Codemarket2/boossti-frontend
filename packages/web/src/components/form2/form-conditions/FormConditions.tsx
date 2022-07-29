@@ -16,7 +16,7 @@ const initialState = {
   selectedTab: 1,
 };
 
-export default function Conditions({ form, onConditionsChange, onFieldsChange }: IProps) {
+export default function FormConditions({ form, onConditionsChange, onFieldsChange }: IProps) {
   const [state, setState] = useState(initialState);
 
   return (

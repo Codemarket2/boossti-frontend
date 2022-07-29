@@ -2,7 +2,6 @@ import { ISchema } from './common';
 import { IValue } from './response';
 
 export interface IForm extends ISchema {
-  _id: string;
   name: string;
   slug: string;
   fields: IField[];
@@ -40,14 +39,17 @@ export interface IFieldOptions {
   style?: any;
   conditions: ICondition[];
   defaultValue: Partial<IValue>;
+  tabField?: boolean;
+  hidden?: boolean;
+  hiddenCondition?: IHiddenCondition[];
 }
 
 export interface IField {
   _id: string;
   label: string;
   fieldType: string;
-  template: any;
-  form: any;
+  template?: any;
+  form?: any;
   options: IFieldOptions;
 }
 
@@ -70,4 +72,11 @@ export interface IFormulaVariable {
   value: 'brackets' | 'constantValue' | string;
   constantValue: number;
   variables: IFormulaVariable[];
+}
+
+export interface IHiddenCondition {
+  field: string;
+  conditionType: string;
+  value: string;
+  constantValue: string;
 }

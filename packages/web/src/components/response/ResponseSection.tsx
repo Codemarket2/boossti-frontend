@@ -17,16 +17,14 @@ export default function ResponseSections({
 }: IProps) {
   return (
     <>
-      {section?.fields?.length > 0 && (
-        <FormFields
-          fields={section?.fields}
-          setFields={(fields: any) => onSectionChange({ fields })}
-          title={title}
-          previewMode={!authorized}
-          isWidget
-          parentPageFields={parentPageFields}
-        />
-      )}
+      <FormFields
+        fields={section?.fields}
+        setFields={(fields: any) => onSectionChange({ fields })}
+        title={title}
+        previewMode={!authorized}
+        isWidget
+        parentPageFields={parentPageFields}
+      />
     </>
   );
 }

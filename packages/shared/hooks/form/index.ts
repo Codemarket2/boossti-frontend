@@ -1,4 +1,4 @@
-export { useGetForm, useGetForms, useGetFormBySlug, getForm, getFormBySlug } from './getForm';
+export * from './getForm';
 export { useCreateForm, useCreateVirtualForm } from './createForm';
 export { useUpdateForm } from './updateForm';
 export { useDeleteForm } from './deleteForm';

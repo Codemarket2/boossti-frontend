@@ -16,10 +16,10 @@ import ArrowForwardIosRounded from '@mui/icons-material/ArrowForwardIosRounded';
 import { parseResponse, useGetResponses } from '@frontend/shared/hooks/response/getResponse';
 import { useCreateUpdateResponse } from '@frontend/shared/hooks/response';
 import { validateForm, validateValue } from '@frontend/shared/utils/validate';
+import { IValue } from '@frontend/shared/types';
 import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
-import { ISystemValues } from '@frontend/shared/hooks/response/calculateSystemValues';
-import { IField } from '@frontend/shared/types/form';
+import { IField, IForm } from '@frontend/shared/types/form';
 import { TextField } from '@mui/material';
 import ResponseList from '../response/ResponseList';
 import InputGroup from '../common/InputGroup';
@@ -35,11 +35,11 @@ import Leaderboard from '../response/Leaderboard';
 import SelectResponse from '../response/SelectResponse';
 import { replaceVariables } from './variables';
 import projectConfig from '../../../../shared/index';
-import { evaluateFormula } from './formula/DisplayFormulaValue';
-import DisplayFormula, { getFormula } from './formula/DisplayFormula';
+import { evaluateFormula } from './field/formula/DisplayFormulaValue';
+import DisplayFormula, { getFormula } from './field/formula/DisplayFormula';
 
 interface FormViewWrapperProps {
-  form: any;
+  form: IForm;
   appId?: string;
   installId?: string;
   workFlowFormResponseParentId?: string;
@@ -48,8 +48,8 @@ interface FormViewWrapperProps {
   isPageOwner?: boolean;
   isTemplateInstance?: string;
   isAuthorized?: boolean;
-  systemValues?: ISystemValues;
   valueFilter?: any;
+  overrideValues?: IValue[];
 }
 
 export const defaultValue = {
@@ -95,15 +95,14 @@ export default function FormViewWrapper({
   installId,
   isTemplateInstance = '',
   isAuthorized,
-  systemValues,
   valueFilter,
+  overrideValues,
 }: FormViewWrapperProps): any {
   const isAdmin = useSelector(({ auth }: any) => auth?.admin);
   const { handleCreateUpdateResponse, createLoading } = useCreateUpdateResponse({
     onAlert,
     appId,
     installId,
-    systemValues,
     workFlowFormResponseParentId,
   });
 
@@ -330,6 +329,7 @@ export default function FormViewWrapper({
                       </>
                     ) : (
                       <FormView
+                        overrideValues={overrideValues}
                         authRequired={form?.settings?.whoCanSubmit !== 'all' && !isAuthorized}
                         fields={form?.fields}
                         handleSubmit={handleSubmit}
@@ -351,6 +351,8 @@ export default function FormViewWrapper({
                     <Button
                       variant="contained"
                       className="mb-2"
+                      size="small"
+                      startIcon={<AddIcon />}
                       onClick={() => setState({ ...state, formDrawer: true })}
                     >
                       {form?.settings?.buttonLabel || form?.name}
@@ -359,6 +361,7 @@ export default function FormViewWrapper({
                 </>
               ) : (
                 <FormView
+                  overrideValues={overrideValues}
                   authRequired={form?.settings?.whoCanSubmit !== 'all'}
                   fields={form?.fields}
                   handleSubmit={handleSubmit}
@@ -378,6 +381,7 @@ export default function FormViewWrapper({
             <>
               <div className="text-center">
                 <Button
+                  size="small"
                   variant="outlined"
                   onClick={() => setState({ ...state, responseDrawer: true })}
                 >
@@ -421,7 +425,7 @@ export default function FormViewWrapper({
 }
 
 interface FormViewProps {
-  fields: any;
+  fields: IField[];
   handleSubmit: (payload: any) => any;
   loading?: boolean;
   onCancel?: () => void;
@@ -434,6 +438,7 @@ interface FormViewProps {
   form?: any;
   responseCount?: number;
   inlineEdit?: boolean;
+  overrideValues?: IValue[];
 }
 
 const initialSubmitState = {
@@ -443,7 +448,7 @@ const initialSubmitState = {
 
 export function FormView({
   inlineEdit = false,
-  fields,
+  fields: tempFields,
   handleSubmit,
   loading,
   onCancel,
@@ -455,6 +460,7 @@ export function FormView({
   responseId,
   form,
   responseCount,
+  overrideValues,
 }: FormViewProps): any {
   const [values, setValues] = useState(parseResponse({ values: initialValues })?.values || []);
   const [editValue, setEditValue] = useState({ fieldId: null, index: null });
@@ -466,6 +472,13 @@ export function FormView({
   const [hideField, setHideField] = useState(false);
   const [unique, setUnique] = useState(false);
   const [uniqueLoading, setUniqueLoading] = useState(false);
+
+  const fields = tempFields?.filter(
+    (field: IField) =>
+      field?.options?.required &&
+      !field?.options?.systemCalculatedAndSaved &&
+      !overrideValues?.some((v) => v?.field === field?._id),
+  );
 
   useEffect(() => {
     if (hideField) {
@@ -525,41 +538,43 @@ export function FormView({
     const validate = validateForm(fields, values);
     if (validate) {
       setSubmitState({ ...submitState, validate, loading: false });
-    } else if (authRequired && !authenticated) {
+      return;
+    }
+    if (authRequired && !authenticated) {
       setSubmitState({ ...submitState, loading: false });
       return setShowAuthModal(true);
-    } else {
-      const payload = [];
-      for (let i = 0; i < values.length; i += 1) {
-        const value = { ...values[i] };
-        const field = fields?.filter((f) => f._id === value.field)[0];
-        if (field) {
-          if (field.fieldType === 'image' && value?.tempMedia?.length > 0) {
-            let newMedia = [];
-            if (value.tempMediaFiles.length > 0) {
-              // eslint-disable-next-line no-await-in-loop
-              newMedia = await fileUpload(value.tempMediaFiles, '/form-response');
-            }
-            if (newMedia?.length > 0) {
-              newMedia = newMedia.map((n, i2) => ({
-                url: n,
-                // caption: value?.tempMedia[i].caption,
-                caption: value?.tempMedia[i2].caption,
-              }));
-              value.media = newMedia;
-            }
+    }
+    // const payload = [];
+    const payload = overrideValues?.length > 0 ? [...overrideValues] : [];
+    for (let i = 0; i < values.length; i += 1) {
+      const value = { ...values[i] };
+      const field = fields?.filter((f) => f._id === value.field)[0];
+      if (field) {
+        if (field.fieldType === 'image' && value?.tempMedia?.length > 0) {
+          let newMedia = [];
+          if (value.tempMediaFiles.length > 0) {
+            // eslint-disable-next-line no-await-in-loop
+            newMedia = await fileUpload(value.tempMediaFiles, '/form-response');
+          }
+          if (newMedia?.length > 0) {
+            newMedia = newMedia.map((n, i2) => ({
+              url: n,
+              // caption: value?.tempMedia[i].caption,
+              caption: value?.tempMedia[i2].caption,
+            }));
+            value.media = newMedia;
           }
         }
-        const { tempMedia, tempMediaFiles, ...finalValue } = value;
-        payload.push(finalValue);
       }
-      const response = await handleSubmit(payload);
-      if (response) {
-        setSubmitState(initialSubmitState);
-        setValues([]);
-      } else {
-        setSubmitState({ ...submitState, loading: false });
-      }
+      const { tempMedia, tempMediaFiles, ...finalValue } = value;
+      payload.push(finalValue);
+    }
+    const response = await handleSubmit(payload);
+    if (response) {
+      setSubmitState(initialSubmitState);
+      setValues([]);
+    } else {
+      setSubmitState({ ...submitState, loading: false });
     }
   };
 
@@ -621,8 +636,7 @@ export function FormView({
           </Grid>
         )}
         {(fieldWiseView && fields?.length > 1 ? [fields[page]] : fields)
-          ?.filter((field: IField) => field?.options?.required)
-          ?.filter((field: IField) => !field?.options?.systemCalculatedAndSaved)
+          ?.filter((field) => !field?.options?.hidden)
           ?.map((field: any) => (
             <Grid
               item

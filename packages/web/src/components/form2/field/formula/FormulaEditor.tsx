@@ -9,7 +9,7 @@ import ListSubheader from '@mui/material/ListSubheader';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import React, { useState } from 'react';
-import InputGroup from '../../common/InputGroup';
+import InputGroup from '../../../common/InputGroup';
 import DisplayFormula from './DisplayFormula';
 
 interface FieldFormulaProps {
