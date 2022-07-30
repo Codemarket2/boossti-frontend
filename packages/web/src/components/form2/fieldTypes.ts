@@ -1,21 +1,146 @@
-export const getFormFieldTypes = (isWidget: boolean): FieldType[] => {
+type FormFieldType = {
+  label: 'Form';
+  value: 'form';
+};
+
+type FormResponseType = {
+  label: 'Form Response';
+  value: 'response';
+};
+
+type TextType = {
+  label: 'Text';
+  value: 'text';
+};
+
+type NumberType = {
+  label: 'Number';
+  value: 'number';
+};
+
+type PasswordType = {
+  label: 'Password';
+  value: 'password';
+};
+
+type TextareaType = {
+  label: 'Textarea';
+  value: 'textarea';
+};
+
+type RichTextareaType = {
+  label: 'Rich Textarea';
+  value: 'richTextarea';
+};
+
+type BooleanType = {
+  label: 'Boolean';
+  value: 'boolean';
+};
+type EmailType = {
+  label: 'Email';
+  value: 'email';
+};
+type PhoneNumberType = {
+  label: 'Phone Number';
+  value: 'phoneNumber';
+};
+type DateType = {
+  label: 'Date';
+  value: 'date';
+};
+type DateandTimeType = {
+  label: 'Date & Time';
+  value: 'dateTime';
+};
+type ImageType = {
+  label: 'Image';
+  value: 'image';
+};
+type FileType = {
+  label: 'File';
+  value: 'file';
+};
+type AddressType = {
+  label: 'Address';
+  value: 'address';
+};
+type StaticTextType = {
+  label: 'Static Text';
+  value: 'label';
+};
+type LinkType = {
+  label: 'Link';
+  value: 'link';
+};
+type ColorPickerType = {
+  label: 'Color Picker';
+  value: 'colorPicker';
+};
+type BarcodeScannerType = {
+  label: 'Barcode Scanner';
+  value: 'barcodeScanner';
+};
+type LightHouseReportType = {
+  label: 'Lighthouse Report';
+  value: 'lighthouseReport';
+};
+type BoardType = {
+  label: 'Board';
+  value: 'board';
+};
+type DiagramType = {
+  label: 'Diagram';
+  value: 'diagram';
+};
+type FlowDiagramType = {
+  label: 'Flow Diagram';
+  value: 'flowDiagram';
+};
+type ConditionType = {
+  label: 'Condition';
+  value: 'condition';
+};
+
+type TFieldType =
+  | FormFieldType
+  | FormResponseType
+  | TextType
+  | NumberType
+  | PasswordType
+  | TextareaType
+  | RichTextareaType
+  | BooleanType
+  | EmailType
+  | PhoneNumberType
+  | DateType
+  | DateandTimeType
+  | ImageType
+  | FileType
+  | AddressType
+  | StaticTextType
+  | LinkType
+  | ColorPickerType
+  | BarcodeScannerType
+  | LightHouseReportType
+  | BoardType
+  | DiagramType
+  | FlowDiagramType
+  | ConditionType;
+
+export const getFormFieldTypes = (isWidget: boolean): TFieldType[] => {
   if (isWidget) {
     return templateWidgetTypes;
   }
   return fieldTypes;
 };
 
-type FieldType = {
-  label: string;
-  value: string;
-};
-
-export const templateWidgetTypes: FieldType[] = [
+export const templateWidgetTypes: TFieldType[] = [
   { label: 'Form', value: 'form' },
   // { label: 'Template', value: 'template' },
 ];
 
-export const fieldTypes: FieldType[] = [
+export const fieldTypes: TFieldType[] = [
   { label: 'Form', value: 'form' },
   { label: 'Form Response', value: 'response' },
   { label: 'Text', value: 'text' },

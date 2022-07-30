@@ -80,6 +80,8 @@ interface IProps {
   label?: string;
 }
 
+export type { IProps as ISelectFormComponentProps };
+
 export default function SelectForm({
   value,
   onChange,
