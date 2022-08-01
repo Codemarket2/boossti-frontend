@@ -32,7 +32,7 @@ export default function DisplayValue({
   verticalView,
 }: IProps) {
   const value: any = { ...tempValue };
-  console.log(field, value);
+
   if (typeof value?.options === 'string') {
     value.options = JSON.parse(value?.options);
   }
@@ -110,7 +110,7 @@ export default function DisplayValue({
         return (
           <>
             {value?.media?.map((image, i) => (
-              <Avatar key={i} alt={`image-${i + 1}`} src={image?.url} />
+              <Avatar data-testid="image-output" key={i} alt={`image-${i + 1}`} src={image?.url} />
             ))}
           </>
         );
@@ -127,7 +127,7 @@ export default function DisplayValue({
       const address = value?.value?.split('+');
       const addressKey = ['Address', 'Landmark', 'City', 'State', 'Country'];
       return (
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+        <Box data-testid="address-output" sx={{ display: 'flex', flexDirection: 'column' }}>
           {address.map((res, index) => (
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <b>{res !== '' && `${addressKey[index]}: `} </b>

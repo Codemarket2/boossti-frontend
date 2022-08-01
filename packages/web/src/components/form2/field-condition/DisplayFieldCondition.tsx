@@ -43,7 +43,11 @@ export default function DisplayFieldCondition({
     getForms();
   }, []);
 
-  return <div>{getFieldCondition(conditions, formFields, forms)}</div>;
+  return (
+    <div data-testid="displayFieldCondition-output">
+      {getFieldCondition(conditions, formFields, forms)}
+    </div>
+  );
 }
 
 export const getFieldCondition = (conditions, valueFormFields, forms: { [key: string]: IForm }) => {
