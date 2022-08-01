@@ -13,10 +13,10 @@ import Select from '@mui/material/Select';
 import ListSubheader from '@mui/material/ListSubheader';
 import { FormHelperText } from '@mui/material';
 import { useEffect, useState } from 'react';
-import InputGroup from '../../common/InputGroup';
-import SelectFormFields from '../SelectFormFields';
+import InputGroup from '../../../common/InputGroup';
+import SelectFormFields from '../../SelectFormFields';
 import { getFieldCondition } from './DisplayFieldCondition';
-import SelectForm from '../SelectForm';
+import SelectForm from '../../SelectForm';
 
 interface ConditionFormProps {
   conditions: ICondition[];

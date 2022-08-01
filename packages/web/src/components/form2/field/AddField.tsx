@@ -29,9 +29,10 @@ import RichTextarea from '../../common/RichTextarea2';
 import SelectForm from '../SelectForm';
 import SelectTemplate from '../../template/SelectTemplate';
 import SelectFormFields from '../SelectFormFields';
-import Formula from '../formula/Formula';
-import FieldCondition from '../field-condition/FieldCondition';
+import Formula from './formula/Formula';
+import FieldCondition from './field-condition/FieldCondition';
 import DefaultValue from './DefaultValue';
+import HiddenCondition from './HiddenCondition';
 
 interface IProps {
   onCancel?: () => void;
@@ -48,7 +49,7 @@ export default function AddField({
   field = null,
   isWidget = false,
   isDefault,
-  parentFields: tParentFields = [],
+  parentFields = [],
 }: IProps): any {
   const { formik, formLoading, setFormValues, onOptionChange } = useAddFields({
     onAlert,
@@ -213,7 +214,7 @@ export default function AddField({
       )}
       {['response'].includes(formik.values.fieldType) && (
         <FieldCondition
-          formFields={tParentFields}
+          formFields={parentFields}
           field={formik.values}
           onConditionsChange={(newConditions) => onOptionChange({ conditions: newConditions })}
         />
@@ -260,7 +261,7 @@ export default function AddField({
                     name="relationFieldId"
                     onChange={({ target }) => onOptionChange({ relationFieldId: target.value })}
                   >
-                    {tParentFields
+                    {parentFields
                       ?.filter((f) => f?._id !== field?._id)
                       ?.map((f) => (
                         <MenuItem key={f?._id} value={f?._id}>
@@ -478,6 +479,52 @@ export default function AddField({
               label="Required"
             />
           </div>
+          <div>
+            <FormControlLabel
+              className="mt-n2"
+              disabled={formik.values.options?.default || formik.isSubmitting}
+              control={
+                <Checkbox
+                  checked={formik.values.options?.hidden}
+                  onChange={({ target }) => onOptionChange({ hidden: target.checked })}
+                  name="hidden"
+                  color="primary"
+                />
+              }
+              label="Hidden"
+            />
+            {formik.values.options?.hidden && (
+              <div className="pl-2">
+                <FormControlLabel
+                  className="mt-n2"
+                  control={
+                    <Checkbox
+                      checked={formik.values.options?.hiddenCondition?.length > 0}
+                      onChange={({ target }) =>
+                        onOptionChange({
+                          hiddenCondition: target.checked
+                            ? [{ field: '', conditionType: null, value: '', constantValue: '' }]
+                            : null,
+                        })
+                      }
+                      name="showIf"
+                      color="primary"
+                    />
+                  }
+                  label="Show If condition"
+                />
+                <HiddenCondition
+                  fields={parentFields?.filter((f) => f?._id !== field?._id)}
+                  hiddenCondition={formik.values.options?.hiddenCondition}
+                  onHiddenConditionChange={(hiddenCondition) =>
+                    onOptionChange({
+                      hiddenCondition,
+                    })
+                  }
+                />
+              </div>
+            )}
+          </div>
           <FormControlLabel
             className="mt-n2"
             disabled={formik.isSubmitting}
@@ -639,7 +686,7 @@ export default function AddField({
                   const formula = formik.values.options?.formula || {};
                   onOptionChange({ formula: { ...formula, ...newFormula } });
                 }}
-                fields={tParentFields?.filter(
+                fields={parentFields?.filter(
                   (f) => f?.fieldType === 'number' && field?._id !== f?._id,
                 )}
               />

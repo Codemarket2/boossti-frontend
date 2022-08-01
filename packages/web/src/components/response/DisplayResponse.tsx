@@ -30,7 +30,7 @@ import FormFieldsValue from '../form2/FormFieldsValue';
 import { onAlert } from '../../utils/alert';
 import BackdropComponent from '../common/Backdrop';
 import EditMode from '../common/EditMode';
-import DisplayFormulaValue from '../form2/formula/DisplayFormulaValue';
+import DisplayFormulaValue from '../form2/field/formula/DisplayFormulaValue';
 import DisplayResponseById from './DisplayResponseById';
 import DeleteButton from '../common/DeleteButton';
 import RelationFields from '../form2/RelationFields';

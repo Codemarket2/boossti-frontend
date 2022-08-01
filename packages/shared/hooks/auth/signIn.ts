@@ -59,7 +59,10 @@ export function useSignIn({ onAlert = () => null, successCallback }: ISignInArgs
     const { password, email } = oldPayload;
     try {
       dispatch(showLoading());
-      const user = await Auth.signIn(email, password);
+      let user = await Auth.signIn(email, password);
+      if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
+        user = await Auth.completeNewPassword(user, password);
+      }
       const payload = {
         attributes: user.attributes,
         admin: user.signInUserSession.accessToken.payload['cognito:groups']

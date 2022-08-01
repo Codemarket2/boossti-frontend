@@ -40,6 +40,8 @@ export interface IFieldOptions {
   conditions: ICondition[];
   defaultValue: Partial<IValue>;
   tabField?: boolean;
+  hidden?: boolean;
+  hiddenCondition?: IHiddenCondition[];
 }
 
 export interface IField {
@@ -70,4 +72,11 @@ export interface IFormulaVariable {
   value: 'brackets' | 'constantValue' | string;
   constantValue: number;
   variables: IFormulaVariable[];
+}
+
+export interface IHiddenCondition {
+  field: string;
+  conditionType: string;
+  value: string;
+  constantValue: string;
 }

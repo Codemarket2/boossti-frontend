@@ -35,7 +35,7 @@ import { defaultBoard } from './board/defaultBoard';
 import Diagram from '../syncfusion-diagram/Diagram';
 import { defaultDiagram } from '../syncfusion-diagram/defaultDiagram';
 import ReactFlow from '../react-flow/ReactFlow';
-import FieldConditionForm from './field-condition/FieldConditionForm';
+import FieldConditionForm from './field/field-condition/FieldConditionForm';
 
 import 'react-phone-input-2/lib/style.css';
 
