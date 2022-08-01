@@ -129,7 +129,7 @@ export default function DisplayValue({
       return (
         <Box data-testid="address-output" sx={{ display: 'flex', flexDirection: 'column' }}>
           {address.map((res, index) => (
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
               <b>{res !== '' && `${addressKey[index]}: `} </b>
               <Typography sx={{ marginLeft: '5px' }} key={index}>
                 {res !== '' && `${res},`}

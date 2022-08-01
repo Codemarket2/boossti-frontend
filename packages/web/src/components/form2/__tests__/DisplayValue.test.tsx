@@ -2,19 +2,21 @@ import { useState } from 'react';
 import userEvent from '@testing-library/user-event';
 import moment from 'moment';
 import crypto from 'crypto';
+import { IValue } from '@frontend/shared/types/response';
+import { IField } from '@frontend/shared/types';
 import { fireEvent, render, screen, act, waitFor } from '../../../../jest/test-utils';
 import DisplayValue from '../DisplayValue';
 import { defaultOptions } from '../../../../../shared/hooks/form/addFields';
 import DisplayBoard from '../board/DisplayBoard';
 import DisplayDiagram from '../../syncfusion-diagram/DisplayDiagram';
-import Diagram from './diagramProp';
+import Diagram from '../diagramProp';
 import ReactFlow from '../../react-flow/ReactFlow';
-import flowDiagramProps from './flowDiagramProps';
+import flowDiagramProps from '../flowDiagramProps';
 import 'next/router';
 import DisplayFieldCondition from '../field/field-condition/DisplayFieldCondition';
 
 const flowDiagram = flowDiagramProps();
-const diagram = Diagram();
+const diagramProps = Diagram();
 
 Object.defineProperty(global.self, 'crypto', {
   value: {
@@ -22,9 +24,15 @@ Object.defineProperty(global.self, 'crypto', {
   },
 });
 
-const getInitialProps = () => {
+const getInitialProps = (): {
+  field: IField;
+  value: IValue;
+  imageAvatar: boolean;
+  verticalView: boolean;
+} => {
   return {
     field: {
+      _id: '62b0cf932b8e64fb467cfffc',
       fieldType: 'email',
       form: null,
       label: 'email',
@@ -35,8 +43,8 @@ const getInitialProps = () => {
     value: {
       _id: '62e57e0ad6436ef4a1b0e15a',
       value: 'arjavsethi07@gmail.com',
-      valueDate: '',
-      valueNumber: '124',
+      valueDate: null,
+      valueNumber: 124,
       valueBoolean: true,
       media: [],
       options: {
@@ -63,7 +71,7 @@ const getInitialProps = () => {
             },
           },
         },
-        diagram: { ...diagram },
+        diagram: { ...diagramProps },
         flowDiagram: { ...flowDiagram },
         conditions: [
           {
@@ -76,11 +84,15 @@ const getInitialProps = () => {
           },
         ],
       },
+      template: '',
+      values: [],
+      page: '',
+      response: '',
+      field: '',
+      form: '',
     },
     imageAvatar: true,
     verticalView: false,
-    _id: '62b0cf932b8e64fb467cfffc',
-    template: null,
   };
 };
 
@@ -96,39 +108,49 @@ jest.mock('next/router', () => ({
   },
 }));
 
-const DisplayFieldConditionTest = (props) => {
-  return <DisplayFieldCondition conditions={props.value.options.condition} />;
+const DisplayFieldConditionTest = ({ value }: { value: IValue }) => {
+  return <DisplayFieldCondition conditions={value.options.conditions} />;
 };
-const DisplayValueTest = (props): any => {
+const DisplayValueTest = ({
+  field,
+  value,
+  imageAvatar,
+  verticalView,
+}: {
+  value: IValue;
+  field: IField;
+  imageAvatar: boolean;
+  verticalView: boolean;
+}) => {
   return (
     <>
       <DisplayValue
-        field={props.field}
-        value={props.value}
-        imageAvatar={props.imageAvatar}
-        verticalView={props.verticalView}
+        field={field}
+        value={value}
+        imageAvatar={imageAvatar}
+        verticalView={verticalView}
       />
     </>
   );
 };
-const DisplayBoardTest = (props): any => {
+const DisplayBoardTest = ({ value, verticalView }: { value: IValue; verticalView: boolean }) => {
   return (
     <>
-      <DisplayBoard board={props.value.options.board} verticalView={props.verticalView} />
+      <DisplayBoard board={value.options.board} verticalView={verticalView} />
     </>
   );
 };
-const DisplayDiagramTest = (props): any => {
+const DisplayDiagramTest = ({ value }: { value: IValue }) => {
   return (
     <>
-      <DisplayDiagram diagram={props.value.options.diagram} />
+      <DisplayDiagram diagram={value.options.diagram} />
     </>
   );
 };
-const ReactFlowTest = (props): any => {
+const ReactFlowTest = ({ value }: { value: IValue }) => {
   return (
     <>
-      <ReactFlow _id={props.value._id} flow={props.value.options.flowDiagram} />
+      <ReactFlow _id={value._id} flow={value.options.flowDiagram} />
     </>
   );
 };
@@ -190,27 +212,28 @@ describe('checks the working of switch case', () => {
   it('checks number rendering', () => {
     const props = getInitialProps();
     props.field.fieldType = 'number';
-    props.value.valueNumber = '12345';
+    props.value.valueNumber = 12345;
     render(<DisplayValueTest {...props} />);
     const number = screen.getByTestId('number-output');
     expect(number).toBeInTheDocument();
     const { valueNumber } = props.value;
-    expect(number).toHaveTextContent(valueNumber);
+
+    expect(number).toHaveTextContent(valueNumber.toString());
   });
   it('checks phone number rendering', () => {
     const props = getInitialProps();
     props.field.fieldType = 'number';
-    props.value.valueNumber = '12345';
+    props.value.valueNumber = 12345;
     render(<DisplayValueTest {...props} />);
     const number = screen.getByTestId('number-output');
     expect(number).toBeInTheDocument();
     const { valueNumber } = props.value;
-    expect(number).toHaveTextContent(valueNumber);
+    expect(number).toHaveTextContent(valueNumber.toString());
   });
   it('checks date rendering', () => {
     const props = getInitialProps();
     props.field.fieldType = 'date';
-    props.value.valueDate = 'June29,2022';
+    props.value.valueDate = new Date();
     render(<DisplayValueTest {...props} />);
     const date = screen.getByTestId('date-output');
     expect(date).toBeInTheDocument();
@@ -221,7 +244,7 @@ describe('checks the working of switch case', () => {
   it('checks datetime rendering', () => {
     const props = getInitialProps();
     props.field.fieldType = 'dateTime';
-    props.value.valueDate = 'June29,2022';
+    props.value.valueDate = new Date();
     render(<DisplayValueTest {...props} />);
     const date = screen.getByTestId('datetime-output');
     expect(date).toBeInTheDocument();
