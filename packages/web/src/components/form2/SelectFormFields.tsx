@@ -16,6 +16,8 @@ interface IProps {
   disabled?: boolean;
 }
 
+export type { IProps as ISelectFormFieldsComponentProps };
+
 export default function SelectFormFields({
   formId,
   value,

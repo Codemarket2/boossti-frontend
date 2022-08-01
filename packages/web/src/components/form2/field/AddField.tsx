@@ -1,5 +1,7 @@
 /* eslint-disable react/jsx-wrap-multilines */
 import { useEffect } from 'react';
+
+// MUI IMPORTS
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
@@ -17,18 +19,22 @@ import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
+import InfoOutlined from '@mui/icons-material/InfoOutlined';
+
+// SHARED IMPORTS
 import { useAddFields } from '@frontend/shared/hooks/form';
 import { quantities } from '@frontend/shared/utils/quantities';
 import { IField } from '@frontend/shared/types/form';
-import InfoOutlined from '@mui/icons-material/InfoOutlined';
+
+// OTHERS
 import InputGroup from '../../common/InputGroup';
 import LoadingButton from '../../common/LoadingButton';
 import { onAlert } from '../../../utils/alert';
 import { getFormFieldTypes } from '../fieldTypes';
 import RichTextarea from '../../common/RichTextarea2';
 import SelectForm from '../SelectForm';
-import SelectTemplate from '../../template/SelectTemplate';
 import SelectFormFields from '../SelectFormFields';
+import SelectTemplate from '../../template/SelectTemplate';
 import Formula from './formula/Formula';
 import FieldCondition from './field-condition/FieldCondition';
 import DefaultValue from './DefaultValue';
@@ -37,7 +43,7 @@ import HiddenCondition from './HiddenCondition';
 interface IProps {
   onCancel?: () => void;
   onSave: (field: any, action: string) => void;
-  field: IField;
+  field: IField | null;
   isWidget?: boolean;
   isDefault?: boolean;
   parentFields?: any[];
@@ -50,7 +56,7 @@ export default function AddField({
   isWidget = false,
   isDefault,
   parentFields = [],
-}: IProps): any {
+}: IProps) {
   const { formik, formLoading, setFormValues, onOptionChange } = useAddFields({
     onAlert,
     onSave,
@@ -73,8 +79,9 @@ export default function AddField({
 
   return (
     <form className="px-2" onSubmit={formik.handleSubmit}>
-      <InputGroup>
+      <InputGroup data-testid="field-label-input-grp">
         <TextField
+          data-testid="field-label"
           autoFocus
           fullWidth
           label="Label*"
@@ -95,14 +102,19 @@ export default function AddField({
           size="small"
           error={Boolean(formik.touched.fieldType && formik.errors.fieldType)}
         >
-          <InputLabel id="fieldType-simple-select-outlined-label">Field Type*</InputLabel>
+          <InputLabel data-testid="field-type-label" id="fieldType-simple-select-outlined-label">
+            Field Type*
+          </InputLabel>
           <Select
+            data-testid="field-type-select"
             labelId="fieldType-simple-select-outlined-label"
             id="fieldType-simple-select-outlined"
             name="fieldType"
             value={formik.values.fieldType}
             onChange={formik.handleChange}
             label="Field Type*"
+            inputProps={{ 'aria-describedby': 'fieldType-helperText' }}
+            MenuProps={{ id: 'fieldType-menu' }}
           >
             {getFormFieldTypes(isWidget)?.map((option, index) => (
               <MenuItem value={option.value} key={index}>
@@ -111,7 +123,9 @@ export default function AddField({
             ))}
           </Select>
           {formik.touched.fieldType && formik.errors.fieldType && (
-            <FormHelperText className="text-danger">{formik.errors.fieldType}</FormHelperText>
+            <FormHelperText id="fieldType-helperText" className="text-danger">
+              {formik.errors.fieldType}
+            </FormHelperText>
           )}
         </FormControl>
       </InputGroup>
@@ -129,6 +143,7 @@ export default function AddField({
             error={formik.touched.form && Boolean(formik.errors.form)}
             helperText={formik.touched.form && formik.errors.form}
           />
+
           {formik.values.form && formik.values.fieldType === 'response' && (
             <div className="mt-3">
               <SelectFormFields
@@ -212,6 +227,7 @@ export default function AddField({
           )}
         </>
       )}
+
       {['response'].includes(formik.values.fieldType) && (
         <FieldCondition
           formFields={parentFields}
@@ -233,6 +249,7 @@ export default function AddField({
                 />
               }
               label="Two way relationship"
+              data-testid="two-way-relationship-field-option"
             />
             <Tooltip title="Parent will have child Id & child will have parent Id">
               <InfoOutlined className="mt-n2 ml-n2" fontSize="small" />
@@ -290,6 +307,7 @@ export default function AddField({
                 />
               }
               label="Dependent relationship"
+              data-testid="dependent-relationship-field-option"
             />
             <Tooltip title="If parent is deleted child is also deleted">
               <InfoOutlined className="mt-n2 ml-n2" fontSize="small" />
@@ -322,6 +340,7 @@ export default function AddField({
                 label={`Select Item ${
                   formik.values.fieldType === 'response' ? '(Independent relation)' : ''
                 }`}
+                data-testid="select-item-field-option"
               />
               {formik.values.fieldType !== 'form' && formik.values.options?.selectItem && (
                 <>
@@ -339,6 +358,7 @@ export default function AddField({
                       />
                     }
                     label="Can create new option"
+                    data-testid="select-allow-create-field-option"
                   />
 
                   {formik.values.fieldType === 'response' ? (
@@ -359,6 +379,7 @@ export default function AddField({
                           />
                         }
                         label="Created by user"
+                        data-testid="show-option-created-by-user-field-option"
                       />
                       <FormControlLabel
                         className="mt-n2"
@@ -374,6 +395,7 @@ export default function AddField({
                           />
                         }
                         label="Created on template"
+                        data-testid="show-option-created-on-template-field-option"
                       />
                     </div>
                   ) : (
@@ -392,6 +414,7 @@ export default function AddField({
                           />
                         }
                         label="Show as checkbox"
+                        data-testid="show-as-checkbox-field-option"
                       />
                       <div className="mb-3">
                         <FormLabel>
@@ -477,6 +500,7 @@ export default function AddField({
                 />
               }
               label="Required"
+              data-testid="required-field-field-option"
             />
           </div>
           <div>
@@ -537,6 +561,7 @@ export default function AddField({
               />
             }
             label="Multiple values"
+            data-testid="multiple-value-field-option"
           />
           <br />
           <FormControlLabel
@@ -551,6 +576,7 @@ export default function AddField({
               />
             }
             label="Unique"
+            data-testid="unique-field-option"
           />
           {formik.values?.options?.unique && (
             <div className="pl-3 mt-n3">
@@ -568,6 +594,7 @@ export default function AddField({
                   />
                 }
                 label="Case insensitive unique"
+                data-testid="case-insensitive-unique-field-option"
               />
             </div>
           )}
@@ -584,6 +611,7 @@ export default function AddField({
                 />
               }
               label="Show comment box"
+              data-testid="show-comment-box-field-option"
             />
           </div>
           <FormControlLabel
@@ -598,6 +626,7 @@ export default function AddField({
               />
             }
             label="Show star rating"
+            data-testid="show-star-rating-field-option"
           />
           <br />
           <FormControlLabel
@@ -612,6 +641,7 @@ export default function AddField({
               />
             }
             label="Response not editable"
+            data-testid="response-not-editable-field-option"
           />
           <br />
           <FormControlLabel
@@ -628,6 +658,7 @@ export default function AddField({
               />
             }
             label="System calculated & saved"
+            data-testid="sys-calcAndsaved-field-option"
           />
           {/* {formik.values.options?.systemCalculatedAndSaved && (
             <>
@@ -673,6 +704,7 @@ export default function AddField({
                 />
               }
               label="System calculated & view"
+              data-testid="sys-calAndview-field-option"
             />
           </div>
           {[
@@ -694,7 +726,7 @@ export default function AddField({
         </>
       )}
       <div className="mb-2">
-        <LoadingButton type="submit" loading={formLoading} size="small">
+        <LoadingButton type="submit" loading={formLoading} size="small" data-testid="form-save-btn">
           Save
         </LoadingButton>
         {onCancel && (
