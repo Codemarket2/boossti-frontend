@@ -11,7 +11,7 @@ import Diagram from './diagramProp';
 import ReactFlow from '../../react-flow/ReactFlow';
 import flowDiagramProps from './flowDiagramProps';
 import 'next/router';
-import DisplayFieldCondition from '../field-condition/DisplayFieldCondition';
+import DisplayFieldCondition from '../field/field-condition/DisplayFieldCondition';
 
 const flowDiagram = flowDiagramProps();
 const diagram = Diagram();
@@ -194,7 +194,7 @@ describe('checks the working of switch case', () => {
     render(<DisplayValueTest {...props} />);
     const number = screen.getByTestId('number-output');
     expect(number).toBeInTheDocument();
-    const {valueNumber} = props.value;
+    const { valueNumber } = props.value;
     expect(number).toHaveTextContent(valueNumber);
   });
   it('checks phone number rendering', () => {
@@ -204,7 +204,7 @@ describe('checks the working of switch case', () => {
     render(<DisplayValueTest {...props} />);
     const number = screen.getByTestId('number-output');
     expect(number).toBeInTheDocument();
-    const {valueNumber} = props.value;
+    const { valueNumber } = props.value;
     expect(number).toHaveTextContent(valueNumber);
   });
   it('checks date rendering', () => {
@@ -285,14 +285,14 @@ describe('checks the working of switch case', () => {
     const Overlay = screen.getByTestId('overlay');
     expect(Overlay).toBeInTheDocument();
   });
-    it('checks display diplay Field condition rendering', () => {
-      const props = getInitialProps();
-      props.field.fieldType = 'displayFieldCondition';
+  it('checks display diplay Field condition rendering', () => {
+    const props = getInitialProps();
+    props.field.fieldType = 'displayFieldCondition';
 
-      render(<DisplayFieldConditionTest {...props} />);
-      const displayFieldCondition = screen.getByTestId('displayFieldCondition-output');
-      expect(displayFieldCondition).toBeInTheDocument();
-    });
+    render(<DisplayFieldConditionTest {...props} />);
+    const displayFieldCondition = screen.getByTestId('displayFieldCondition-output');
+    expect(displayFieldCondition).toBeInTheDocument();
+  });
   it('checks react flow rendering', () => {
     const props = getInitialProps();
     props.field.fieldType = 'reactFlow';
@@ -306,5 +306,4 @@ describe('checks the working of switch case', () => {
     expect(button).toHaveTextContent('View Flow Diagram');
     fireEvent.click(button);
   });
-
 });
