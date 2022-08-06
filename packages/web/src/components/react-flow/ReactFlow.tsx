@@ -18,9 +18,13 @@ export default function ReactFlow({ _id, flow, onFlowChange, editMode }: ReactFl
   const toggleEditor = () => {
     if (editor) {
       delete router?.query?.flowEditor;
+      delete router?.query?.editMode;
+    } else if (editMode) {
+      router.query.editMode = _id;
     } else {
       router.query.flowEditor = _id;
     }
+
     router.push(router);
   };
 
@@ -32,6 +36,13 @@ export default function ReactFlow({ _id, flow, onFlowChange, editMode }: ReactFl
     }
   }, [router?.query?.flowEditor]);
 
+  useEffect(() => {
+    if (router?.query?.editMode && router?.query?.editMode === _id && !editor && editMode) {
+      setEditor(true);
+    } else if (router?.query?.editMode !== _id && editor) {
+      setEditor(false);
+    }
+  }, [router?.query?.editMode]);
   return (
     <div data-testid="reactFlow-output">
       <Button
@@ -39,7 +50,9 @@ export default function ReactFlow({ _id, flow, onFlowChange, editMode }: ReactFl
         size="small"
         startIcon={editMode && <Edit />}
         variant="contained"
-        onClick={() => toggleEditor()}
+        onClick={() => {
+          toggleEditor();
+        }}
       >
         {editMode ? 'Edit' : 'View'} Flow Diagram
       </Button>
