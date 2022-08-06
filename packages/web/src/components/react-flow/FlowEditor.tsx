@@ -43,10 +43,11 @@ export default function FlowEditor({
   open,
   onClose,
   flow,
-  editMode = false,
+  editMode = false, 
   onFlowChange,
   overlay,
 }: FlowEditorProps) {
+ 
   const reactFlowWrapper = useRef(null);
   const [nodes, setNodes, onNodesChange] = useNodesState(flow?.nodes || defaultNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(flow?.edges || defaultEdges);
