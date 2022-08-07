@@ -21,6 +21,7 @@ const SelectFormFieldsMock = (props: ISelectFormFieldsComponentProps): JSX.Eleme
   const { fieldID, formName, labelName, fieldName } = SelectFormFieldsMockData;
 
   useEffect(() => {
+    debugger;
     onChange(fieldID, labelName, formName);
   }, []);
 

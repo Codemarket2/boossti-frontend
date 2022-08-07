@@ -10,10 +10,15 @@ import { client } from '../../graphql';
 interface ISignInArgs {
   onAlert: (a: string, b: string) => void;
   successCallback?: () => void;
+  onError?: (err: { message: string }) => void;
 }
 
 interface ISignInState {
   email: string;
+  /**
+   * if True, then the user verification is required
+   * if False, then the user is already verified
+   */
   verify: boolean;
   auth: boolean;
   showForgetPasswordForm: boolean;
@@ -59,7 +64,14 @@ export function useSignIn({ onAlert = () => null, successCallback }: ISignInArgs
     const { password, email } = oldPayload;
     try {
       dispatch(showLoading());
+      debugger;
       const user = await Auth.signIn(email, password);
+
+      if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
+        throw new Error(`TODO: user.challengeName === 'NEW_PASSWORD_REQUIRED'`);
+      }
+
+      debugger;
       const payload = {
         attributes: user.attributes,
         admin: user.signInUserSession.accessToken.payload['cognito:groups']

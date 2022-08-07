@@ -4,6 +4,7 @@ import { Auth } from 'aws-amplify';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { showLoading, hideLoading } from '../../redux/actions/loading';
+import { AppDispatch } from '../../redux';
 
 export { useSignIn } from './signIn';
 export { useSignUp } from './signUp';
@@ -64,7 +65,7 @@ export function useForgetPassword({
   onAlert = () => null,
   handleShowSignInForm = () => null,
 }: IForgetPasswordArgs) {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const [state, setState] = useState<IForgetPasswordState>({
     email: '',
     verify: false,
@@ -74,6 +75,7 @@ export function useForgetPassword({
     initialValues: forgetPassword1Value,
     validationSchema: forgetPassword1ValidationSchema,
     onSubmit: async (values: IForgetPassword1FormValues) => {
+      debugger;
       await onSubmit(values);
     },
   });
@@ -82,13 +84,17 @@ export function useForgetPassword({
     initialValues: forgetPassword2Value,
     validationSchema: forgetPassword2ValidationSchema,
     onSubmit: async (values: IForgetPassword2FormValues) => {
+      debugger;
       await onSubmit(values);
     },
   });
 
   const forgetPassword = async (payload: any) => {
     const { email } = payload;
-    await Auth.forgotPassword(email);
+    const res = await Auth.forgotPassword(email).catch((err) => {
+      debugger;
+    });
+    debugger;
     setState({
       ...state,
       email,
@@ -101,7 +107,8 @@ export function useForgetPassword({
     const { email } = state;
     const { code, password, confirmPassword } = payload;
     if (password === confirmPassword) {
-      await Auth.forgotPasswordSubmit(email, code, password);
+      const res = await Auth.forgotPasswordSubmit(email, code, password);
+      debugger;
       setState({
         ...state,
         email: '',
@@ -117,14 +124,18 @@ export function useForgetPassword({
     try {
       dispatch(showLoading());
       if (state.verify) {
+        debugger;
         await resetPassword(payload);
       } else {
+        debugger;
         await forgetPassword(payload);
       }
+
       dispatch(hideLoading());
     } catch (error) {
       dispatch(hideLoading());
       onAlert('Error', error.message);
+      debugger;
     }
   };
 
