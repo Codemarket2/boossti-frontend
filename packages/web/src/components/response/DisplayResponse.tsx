@@ -98,13 +98,15 @@ export function DisplayResponse({
     <>
       <BackdropComponent open={deleteLoading || state.showBackdrop} />
       {!hideBreadcrumbs && (
-        <div className="d-flex justify-content-between align-items-center">
+        <div className="d-flex justify-content-between align-items-center" data-testid="breadcrumb">
           {!hideNavigation && (
-            <Breadcrumbs>
-              <Link href="/forms">Forms</Link>
-              <Link href={`/forms/${form.slug}`}>{form?.name}</Link>
-              <Typography>{response.count}</Typography>
-            </Breadcrumbs>
+            <div data-testid="navigation">
+              <Breadcrumbs>
+                <Link href="/forms">Forms</Link>
+                <Link href={`/forms/${form.slug}`}>{form?.name}</Link>
+                <Typography>{response.count}</Typography>
+              </Breadcrumbs>
+            </div>
           )}
           <div className="d-flex align-items-center">
             {!hideNavigation && (
@@ -119,7 +121,7 @@ export function DisplayResponse({
       )}
       <Grid container spacing={1}>
         {hideLeftNavigation && (
-          <Grid item xs={3}>
+          <Grid data-testid="hideLeftNavigation" item xs={3}>
             <div
               className={`d-flex ${
                 section?.options?.belowResponse ? 'flex-column-reverse' : 'flex-column'
@@ -134,11 +136,13 @@ export function DisplayResponse({
                   <ListItem button>
                     <ListItemText primary="ID" />
                   </ListItem>
-                  {form?.fields?.map((field) => (
-                    <ListItem button key={field._id}>
-                      <ListItemText primary={field?.label} />
-                    </ListItem>
-                  ))}
+                  <div data-testid="fieldName">
+                    {form?.fields?.map((field) => (
+                      <ListItem button key={field._id}>
+                        <ListItemText primary={field?.label} />
+                      </ListItem>
+                    ))}
+                  </div>
                 </List>
               </Paper>
               <RelationFields formId={form?._id} previewMode />
@@ -169,10 +173,10 @@ export function DisplayResponse({
               <div className="d-flex align-items-center">
                 {!hideAuthor && (
                   <div>
-                    <Typography variant="body1">
+                    <Typography variant="body1" data-testid="userName">
                       {`by ${getUserName(userForm, response?.createdBy)} `}
                     </Typography>
-                    <Typography variant="body2">
+                    <Typography data-testid="createdAt" variant="body2">
                       {`created at ${moment(response?.createdAt).format('l')} ${moment(
                         response?.createdAt,
                       ).format('LT')}`}
