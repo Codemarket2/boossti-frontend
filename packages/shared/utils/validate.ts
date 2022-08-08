@@ -4,7 +4,11 @@ interface IReturn {
   error: boolean;
   errorMessage: string;
 }
-
+/**
+ * is used to check if a field's value is valid or not
+ * - if `returnValue.error === False` then the field's value is `valid`
+ * - if `returnValue.error === True` then the field's value is `invalid`
+ */
 export const validateValue = (validate: boolean, value: any, field: Partial<IField>): IReturn => {
   let result = { error: false, errorMessage: '' };
   const { options, fieldType } = field;
@@ -116,25 +120,26 @@ function validateEmail(elementValue) {
   return emailPattern.test(elementValue);
 }
 
-export const validateForm = (fields, values): boolean => {
-  let validate = false;
-  fields?.every((field) => {
-    if (
-      field?.options?.required &&
-      values.filter((value) => value.field === field._id).length === 0
-    ) {
-      validate = true;
-    } else {
-      values
-        .filter((value) => value.field === field._id)
-        ?.map((tempValue) => {
-          if (validateValue(true, tempValue, field).error) {
-            validate = true;
-          }
-          return tempValue;
-        });
-    }
-    return !validate;
+/**
+ * used to check if `all` the required fields of a form are valid
+ * - if the `returnValue === False` means `all` the required fields are `valid`
+ * - if the `returnValue === True` means atleast `1` required field is `invalid`
+ * */
+export const validateResponse = (fields, values): boolean => {
+  const isValid = fields?.every((field) => {
+    // IF THE FIELD IS OPTIONAL, THEN SKIP VALIDATION OF IT's VALUE
+    if (!field?.options?.required) return true;
+
+    // FIELD IS REQUIRED, SO DO SOME VALIDATION
+    const atleastOneValidValue = values.some((fieldValue) => {
+      // CHECKS IF THE FIELD VALUE BELONGS TO THE field, IF IT DOESN'T THEN SKIP
+      if (fieldValue.field !== field._id) return false;
+
+      return !validateValue(true, fieldValue, field).error;
+    });
+
+    return atleastOneValidValue;
   });
-  return validate;
+
+  return !isValid;
 };
