@@ -196,4 +196,26 @@ describe('checks working of DisplayResponse', () => {
     ).format('LT')}`;
     expect(createdAt).toHaveTextContent(createAtText);
   });
+  it('checks rendering of id', () => {
+    const props = getInitialProps();
+    render(<DisplyResponseTest {...props} />);
+    const id = screen.getByTestId('ID');
+    expect(id).toBeDefined();
+    expect(id).toHaveTextContent(String(props.response?.count));
+  });
+  it('checks rendering of field (main response display)', () => {
+    const props = getInitialProps();
+    render(<DisplyResponseTest {...props} />);
+    const label = screen.getByTestId('label');
+    expect(label).toBeDefined();
+    expect(label).toHaveTextContent(props.form?.fields[0]?.label);
+    const fieldsDisplay = screen.getByTestId('fields-display');
+    expect(fieldsDisplay).toBeDefined();
+  });
+  it("checks rendering of field's value", () => {
+    const props = getInitialProps();
+    render(<DisplyResponseTest {...props} />);
+    const value = screen.getByTestId('value');
+    expect(value).toBeDefined();
+  });
 });

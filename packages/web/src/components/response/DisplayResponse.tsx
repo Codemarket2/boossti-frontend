@@ -185,7 +185,7 @@ export function DisplayResponse({
                 )}
                 {hideBreadcrumbs && DeleteComponent}
               </div>
-              <div className="mt-3">
+              <div className="mt-3" data-testid="ID">
                 <Typography fontWeight="bold">ID</Typography>
                 {response?.count}
               </div>
@@ -203,8 +203,12 @@ export function DisplayResponse({
                       </>
                     ) : (
                       <div>
-                        <Typography fontWeight="bold" className="d-flex align-items-center">
-                          {field?.label}
+                        <Typography
+                          fontWeight="bold"
+                          className="d-flex align-items-center"
+                          data-testid="fields-display"
+                        >
+                          <div data-testid="label">{field?.label}</div>
                           <Tooltip title="Edit Response">
                             <IconButton
                               edge="end"
@@ -215,31 +219,33 @@ export function DisplayResponse({
                             </IconButton>
                           </Tooltip>
                         </Typography>
-                        {field?.options?.systemCalculatedAndView ? (
-                          <DisplayFormulaValue
-                            formula={field?.options?.formula}
-                            field={field}
-                            values={response?.values}
-                          />
-                        ) : (
-                          <>
-                            {response?.values
-                              ?.filter((v) => v.field === field._id)
-                              .map((value) => (
-                                <Fragment key={value?._id}>
-                                  <StyledBox style={{ display: 'flex', alignContent: 'center' }}>
-                                    <DisplayValue field={field} value={value} verticalView />
-                                  </StyledBox>
-                                  {field?.options?.showCommentBox && (
-                                    <CommentLikeShare threadId={value?._id} />
-                                  )}
-                                  {field?.options?.showStarRating && (
-                                    <StarRating parentId={value?._id} />
-                                  )}
-                                </Fragment>
-                              ))}
-                          </>
-                        )}
+                        <div data-testid="value">
+                          {field?.options?.systemCalculatedAndView ? (
+                            <DisplayFormulaValue
+                              formula={field?.options?.formula}
+                              field={field}
+                              values={response?.values}
+                            />
+                          ) : (
+                            <>
+                              {response?.values
+                                ?.filter((v) => v.field === field._id)
+                                .map((value) => (
+                                  <Fragment key={value?._id}>
+                                    <StyledBox style={{ display: 'flex', alignContent: 'center' }}>
+                                      <DisplayValue field={field} value={value} verticalView />
+                                    </StyledBox>
+                                    {field?.options?.showCommentBox && (
+                                      <CommentLikeShare threadId={value?._id} />
+                                    )}
+                                    {field?.options?.showStarRating && (
+                                      <StarRating parentId={value?._id} />
+                                    )}
+                                  </Fragment>
+                                ))}
+                            </>
+                          )}
+                        </div>
                       </div>
                     )}
                   </div>
