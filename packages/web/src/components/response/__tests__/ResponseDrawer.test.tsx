@@ -4,9 +4,7 @@ import ResponseDrawer, { ShowResponseLabel } from '../ResponseDrawer';
 const getInitialProps = () => {
   return {
     open: false,
-    onClose: () => {
-      return 0;
-    },
+    onClose: () => {},
     responseId: '62f28fc897f7ea743d9049c0',
   };
 };
