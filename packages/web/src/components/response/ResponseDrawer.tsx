@@ -11,7 +11,6 @@ interface IProps {
 }
 
 export default function ResponseDrawer({ open, onClose, responseId }: IProps) {
-  console.log('ResponseDrawer', open, onClose, responseId);
   return (
     <div data-testid="overlay">
       <Overlay open={open} onClose={onClose} title="Response">

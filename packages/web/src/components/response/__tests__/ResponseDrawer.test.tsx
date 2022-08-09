@@ -1,11 +1,12 @@
 import { fireEvent, render, screen, act, waitFor } from '../../../../jest/test-utils';
-import ResponseDrawer from '../ResponseDrawer';
-import { ShowResponseLabel } from '../ResponseDrawer';
+import ResponseDrawer, { ShowResponseLabel } from '../ResponseDrawer';
 
 const getInitialProps = () => {
   return {
     open: false,
-    onClose: () => {},
+    onClose: () => {
+      return 0;
+    },
     responseId: '62f28fc897f7ea743d9049c0',
   };
 };
