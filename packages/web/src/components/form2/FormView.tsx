@@ -1,10 +1,12 @@
-import { Auth } from 'aws-amplify';
-import { fileUpload } from '@frontend/shared/utils/fileUpload';
 import { useEffect, useState } from 'react';
+import { Auth } from 'aws-amplify';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+
+// MUI
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
-import { useSelector } from 'react-redux';
 import IconButton from '@mui/material/IconButton';
 import FormHelperText from '@mui/material/FormHelperText';
 import Skeleton from '@mui/material/Skeleton';
@@ -13,14 +15,18 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIosRounded from '@mui/icons-material/ArrowBackIosRounded';
 import ArrowForwardIosRounded from '@mui/icons-material/ArrowForwardIosRounded';
+import CircularProgress from '@mui/material/CircularProgress';
+import { TextField } from '@mui/material';
+
+// SHARED
 import { parseResponse, useGetResponses } from '@frontend/shared/hooks/response/getResponse';
 import { useCreateUpdateResponse } from '@frontend/shared/hooks/response';
-import { validateForm, validateValue } from '@frontend/shared/utils/validate';
+import { validateResponse, validateValue } from '@frontend/shared/utils/validate';
 import { IValue } from '@frontend/shared/types';
-import axios from 'axios';
-import CircularProgress from '@mui/material/CircularProgress';
 import { IField, IForm } from '@frontend/shared/types/form';
-import { TextField } from '@mui/material';
+import { fileUpload } from '@frontend/shared/utils/fileUpload';
+
+// OTHERS
 import ResponseList from '../response/ResponseList';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
@@ -473,6 +479,7 @@ export function FormView({
   const [unique, setUnique] = useState(false);
   const [uniqueLoading, setUniqueLoading] = useState(false);
 
+  // ONLY SHOW & VALIDATE REQUIRED FIELDS
   const fields = tempFields?.filter(
     (field: IField) =>
       field?.options?.required &&
@@ -535,7 +542,7 @@ export function FormView({
 
   const onSubmit = async () => {
     setSubmitState({ ...submitState, loading: true });
-    const validate = validateForm(fields, values);
+    const validate = validateResponse(fields, values);
     if (validate) {
       setSubmitState({ ...submitState, validate, loading: false });
       return;
@@ -582,6 +589,7 @@ export function FormView({
     let newValues = [];
     const newValue = { ...defaultValue, field: field._id, value: '' };
     const fieldValues = values.filter((f) => f.field === field._id);
+
     if (
       fieldValues.length > 0 &&
       !validateValue(true, fieldValues[fieldValues.length - 1], {
@@ -842,7 +850,7 @@ export function FormView({
           <Grid item xs={12}>
             <InputGroup style={{ display: 'flex' }}>
               <LoadingButton
-                disabled={validateForm(fields, values) || unique || uniqueLoading}
+                disabled={validateResponse(fields, values) || unique || uniqueLoading}
                 loading={submitState.loading || loading}
                 onClick={onSubmit}
                 variant="contained"
