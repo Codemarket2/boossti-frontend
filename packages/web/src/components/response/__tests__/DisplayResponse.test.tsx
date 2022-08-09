@@ -1,10 +1,9 @@
-import { getElementById } from 'domutils';
-import { DisplayResponse } from '../DisplayResponse';
-import { fireEvent, render, screen, act, waitFor } from '../../../../jest/test-utils';
 import { IForm, IResponse } from '@frontend/shared/types';
 import { getUserName } from '@frontend/shared/hooks/user/getUserForm';
 
 import moment from 'moment';
+import { fireEvent, render, screen, act, waitFor } from '../../../../jest/test-utils';
+import { DisplayResponse } from '../DisplayResponse';
 
 const getInitialProps = () => {
   return {
@@ -189,7 +188,7 @@ describe('checks working of DisplayResponse', () => {
     const createdAt = screen.getByTestId('createdAt');
     expect(createdAt).toBeDefined();
     expect(userName).toBeDefined();
-    const userNameText = `by`; //to do
+    const userNameText = `by`; // to do
     expect(userName).toHaveTextContent(userNameText);
     const createAtText = `created at ${moment(props.response?.createdAt).format('l')} ${moment(
       props.response?.createdAt,
