@@ -1,5 +1,4 @@
 import { IForm, IResponse } from '@frontend/shared/types';
-import { getUserName } from '@frontend/shared/hooks/user/getUserForm';
 
 import moment from 'moment';
 import { fireEvent, render, screen, act, waitFor } from '../../../../jest/test-utils';
