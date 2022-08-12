@@ -3,17 +3,6 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable react/jsx-props-no-spreading */
 
-// NOT WORKING, TODO: FIX
-// jest.mock('../../SelectForm', () => ({
-//   __esModule: true,
-//   default: jest.fn(SelectFormMock),
-// }));
-
-// jest.mock('../../SelectFormFields', () => ({
-//   __esModule: true,
-//   default: jest.fn(SelectFormFieldsMock),
-// }));
-
 import { IField } from '@frontend/shared/types/form';
 import userEvent from '@testing-library/user-event';
 import _ from 'lodash';
@@ -21,6 +10,18 @@ import { defaultOptions } from '@frontend/shared/hooks/form/addFields';
 import SelectFormMock, { SelectFormMockData } from '../__mocks__/SelectForm';
 import SelectFormFieldsMock, { SelectFormFieldsMockData } from '../__mocks__/SelectFormFields';
 import { render, within, screen, waitFor, prettyDOM, logDOM } from '../../../../../jest/test-utils';
+
+// NOT WORKING, TODO: FIX
+jest.mock('../../SelectForm', () => ({
+  __esModule: true,
+  default: jest.fn(SelectFormMock),
+}));
+
+jest.mock('../../SelectFormFields', () => ({
+  __esModule: true,
+  default: jest.fn(SelectFormFieldsMock),
+}));
+
 import AddField from '../AddField';
 
 const FIELD_TYPES = [
@@ -836,8 +837,13 @@ describe('Form Save Button', () => {
 
     describe('with form data', () => {
       // TODO: work in progress
-      describe.skip('field type', () => {
-        test.only.each(FIELD_TYPES)(`having '$label' selected as Type of Field`, async (field) => {
+      describe('field type', () => {
+        test.only.each([
+          {
+            label: 'Form Response',
+            value: 'response',
+          } as const,
+        ])(`having '$label' selected as Type of Field`, async (field) => {
           const mockProps = getAppFieldMockProps({
             isWidget: false,
           });
@@ -858,8 +864,10 @@ describe('Form Save Button', () => {
           const ExpectedOnSaveArguments = [ExpectedFieldConfig, ExpectedActionType];
 
           // WHY mocking a react component isn't working?
-          // const ele1 = screen.queryByTestId('select-form-mock');
-          // const ele = screen.queryByTestId('select-form-fields-mock');
+          const ele1 = screen.queryByTestId('select-form-mock');
+          const ele = screen.queryByTestId('select-form-fields-mock');
+
+          debugger;
           // logDOM(document);
           // debugger;
           // console.log(onSaveMock.calls[0], Boolean(ele1), Boolean(ele));

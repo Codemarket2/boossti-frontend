@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Auth } from 'aws-amplify';
 import * as yup from 'yup';
@@ -32,6 +33,20 @@ export function useVerifyEmail({
 }: IVerifyEmailArgs) {
   const dispatch = useDispatch();
 
+  const [isEmailSent, setIsEmailSent] = useState(false);
+
+  useEffect(() => {
+    sendVerificationCode();
+    setIsEmailSent((_) => true);
+  }, []);
+
+  /** Sends a verification code to the email */
+  const sendVerificationCode = async () => {
+    const res = await Auth.resendSignUp(email);
+
+    console.log(res);
+  };
+
   const formik = useFormik({
     initialValues: verifyEmailFormValues,
     validationSchema: verifyEmailValidationSchema,
@@ -53,5 +68,5 @@ export function useVerifyEmail({
     }
   };
 
-  return { formik };
+  return { formik, sendVerificationCode, isEmailSent } as const;
 }

@@ -57,6 +57,28 @@ const validationSchema = yup.object({
     then: yup.string().required('This is a required field'),
     otherwise: yup.string(),
   }),
+
+  signupEmailSubject: yup.string().when('actionType', {
+    is: (actionType) => actionType === 'createCognitoUser',
+    then: yup.string().required('Email Subject is required'),
+    otherwise: yup.string(),
+  }),
+  signupEmailBody: yup.string().when('actionType', {
+    is: (actionType) => actionType === 'createCognitoUser',
+    then: yup.string().required('Email Body is required'),
+    otherwise: yup.string(),
+  }),
+  inviteEmailSubject: yup.string().when('actionType', {
+    is: (actionType) => actionType === 'createCognitoUser',
+    then: yup.string().required('Email Subject is required'),
+    otherwise: yup.string(),
+  }),
+  inviteEmailBody: yup.string().when('actionType', {
+    is: (actionType) => actionType === 'createCognitoUser',
+    then: yup.string().required('Email Body is required'),
+    otherwise: yup.string(),
+  }),
+
   userPoolId: yup.string().when('actionType', {
     is: (value) =>
       ['createCognitoGroup', 'updateCognitoGroup', 'deleteCognitoGroup'].includes(value),
@@ -99,10 +121,30 @@ type TVariables = {
   formId?: any;
 };
 
-interface IFormValues {
+type TActionType =
+  | 'showMessage'
+  | 'sendEmail'
+  | 'sendSms'
+  | 'generateNewUser'
+  | 'updateFieldValue'
+  | 'sendInAppNotification'
+  | 'sendPushNotification'
+  | 'onPaletteChange'
+  | 'createCognitoGroup'
+  | 'updateCognitoGroup'
+  | 'deleteCognitoGroup'
+  | 'createCognitoUser'
+  | 'updateCognitoUser'
+  | 'deleteCognitoUser'
+  | 'createSeoReport'
+  | 'createSubDomainRoute53'
+  | 'updateSubDomainRoute53'
+  | 'deleteSubDomainRoute53';
+
+type TFormValues = {
   active: boolean;
   triggerType: string;
-  actionType: string;
+  actionType: TActionType;
   name: string;
   cognitoGroupName: string;
   cognitoGroupDesc: string;
@@ -116,6 +158,11 @@ interface IFormValues {
   colorValues: any[];
   subject: string;
   body: string;
+  templateSenderEmail: string;
+  signupEmailSubject: string;
+  signupEmailBody: string;
+  inviteEmailSubject: string;
+  inviteEmailBody: string;
   userPoolId: string;
   firstName: string;
   lastName: string;
@@ -126,9 +173,9 @@ interface IFormValues {
   reportScreenshoot: string;
   domain: string;
   distributionId: string;
-}
+};
 
-const defaultFormValues = {
+const defaultFormValues: TFormValues = {
   active: true,
   triggerType: 'onCreate',
   actionType: 'sendEmail',
@@ -146,6 +193,11 @@ const defaultFormValues = {
   fields: [{ field: '', formId: null, value: null }],
   subject: '',
   body: '',
+  templateSenderEmail: '',
+  signupEmailSubject: '',
+  signupEmailBody: '',
+  inviteEmailSubject: '',
+  inviteEmailBody: '',
   userPoolId: '',
   firstName: '',
   lastName: '',
@@ -165,10 +217,10 @@ interface IProps extends IHooksProps {
 export function useFormActions({ onAlert, onSave }: IProps) {
   const [edit, setEdit] = useState(false);
 
-  const formik = useFormik({
+  const formik = useFormik<TFormValues>({
     initialValues: defaultFormValues,
     validationSchema,
-    onSubmit: async (payload: IFormValues) => {
+    onSubmit: async (payload) => {
       try {
         if (edit) {
           onSave(payload, 'update');
@@ -182,9 +234,9 @@ export function useFormActions({ onAlert, onSave }: IProps) {
     },
   });
 
-  const setFormValues = (payload) => {
+  const setFormValues = (payload: TFormValues) => {
     setEdit(true);
-    const newValues: any = { ...defaultFormValues };
+    const newValues = { ...defaultFormValues };
     Object.keys(defaultFormValues).forEach((key) => {
       if (payload[key] !== undefined) {
         newValues[key] = payload[key];
@@ -193,5 +245,5 @@ export function useFormActions({ onAlert, onSave }: IProps) {
     formik.setValues(newValues);
   };
 
-  return { formik, setFormValues, edit };
+  return { formik, setFormValues, edit } as const;
 }

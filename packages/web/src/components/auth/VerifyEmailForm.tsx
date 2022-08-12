@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { useVerifyEmail } from '@frontend/shared/hooks/auth';
@@ -16,17 +16,25 @@ interface IProps {
 
 export default function VerifyEmailForm({
   onSuccess,
-  email,
+  email = '',
   label,
   onLabelClick,
   disabled = false,
 }: IProps) {
-  const { formik } = useVerifyEmail({ onAlert, email, onSuccess });
+  const { formik, sendVerificationCode, isEmailSent } = useVerifyEmail({
+    onAlert,
+    email,
+    onSuccess,
+  });
+
   return (
     <form onSubmit={formik.handleSubmit} data-testid="verify-email-form">
       <InputGroup>
         <Typography>Verify your email!</Typography>
-        <Typography variant="caption">Verification code has been sent to {email}</Typography>
+        {!isEmailSent && <Typography variant="caption">Sending Verification code</Typography>}
+        {isEmailSent && (
+          <Typography variant="caption">Verification code has been sent to {email}</Typography>
+        )}
       </InputGroup>
       <InputGroup>
         <TextField
@@ -51,6 +59,15 @@ export default function VerifyEmailForm({
           loading={disabled || formik.isSubmitting}
         >
           Verify
+        </LoadingButton>
+      </InputGroup>
+      <InputGroup>
+        <LoadingButton
+          onClick={() => sendVerificationCode()}
+          fullWidth
+          loading={disabled || formik.isSubmitting}
+        >
+          Resend
         </LoadingButton>
       </InputGroup>
       <InputGroup>

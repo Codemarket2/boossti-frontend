@@ -1,5 +1,11 @@
+// REACT
+import { useEffect, useState } from 'react';
+
+// REDUX
+import { useSelector } from 'react-redux';
+
+// MUI
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
-import { useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import Paper from '@mui/material/Paper';
@@ -16,14 +22,159 @@ import FormHelperText from '@mui/material/FormHelperText';
 import Switch from '@mui/material/Switch';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
+
+// SHARED
 import { useFormActions } from '@frontend/shared/hooks/form';
-import { useSelector } from 'react-redux';
+
+// OTHERS
 import LoadingButton from '../common/LoadingButton';
 import InputGroup from '../common/InputGroup';
 import { onAlert } from '../../utils/alert';
 import RichTextarea from '../common/RichTextarea2';
 import Field from './Field';
 import { defaultValue } from './FormView';
+
+interface ICommonInputProps {
+  formik: ReturnType<typeof useFormActions>['formik'];
+}
+
+const SenderEmailInput = ({ formik }: ICommonInputProps) => {
+  return (
+    <>
+      <InputGroup>
+        <TextField
+          inputProps={{ 'data-testid': 'sender-email-input' }}
+          fullWidth
+          label="Sender Email*"
+          variant="outlined"
+          name="senderEmail"
+          size="small"
+          // type="email"
+          disabled={formik.isSubmitting}
+          value={formik.values.senderEmail}
+          onChange={formik.handleChange}
+          error={formik.touched.senderEmail && Boolean(formik.errors.senderEmail)}
+          helperText={formik.touched.senderEmail && formik.errors.senderEmail}
+        />
+      </InputGroup>
+    </>
+  );
+};
+
+const EmailTemplateTabs = ({ formik }: ICommonInputProps) => {
+  const [selectedTab, setSelectedTab] = useState<'signup' | 'invite'>('signup');
+
+  useEffect(() => {
+    if (formik.errors.signupEmailSubject || formik.errors.signupEmailBody) setSelectedTab('signup');
+    else if (formik.errors.inviteEmailSubject || formik.errors.inviteEmailBody)
+      setSelectedTab('invite');
+  }, [formik.isSubmitting]);
+
+  return (
+    <>
+      <Box sx={{ width: '100%' }}>
+        <Typography variant="h6">Template*</Typography>
+        {/* SIGNUP's SENDER's EMAIL FIELD */}
+        <InputGroup>
+          <TextField
+            fullWidth
+            label="Sender Email*"
+            variant="outlined"
+            name="templateSenderEmail"
+            size="small"
+            // type="email"
+            disabled={formik.isSubmitting}
+            value={formik.values.templateSenderEmail}
+            onChange={formik.handleChange}
+            error={formik.touched.templateSenderEmail && Boolean(formik.errors.templateSenderEmail)}
+            helperText={formik.touched.templateSenderEmail && formik.errors.templateSenderEmail}
+          />
+        </InputGroup>
+        <TabContext value={selectedTab}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <TabList onChange={(_, tab) => setSelectedTab(tab)} aria-label="email template">
+              <Tab label="Signup" value="signup" />
+              <Tab label="Invite" value="invite" />
+            </TabList>
+          </Box>
+          <TabPanel value="signup">
+            <Box>
+              <InputGroup>
+                <TextField
+                  // inputProps={{ 'data-testid': 'subject-input' }}
+                  fullWidth
+                  label="Email Subject*"
+                  variant="outlined"
+                  name="signupEmailSubject"
+                  size="small"
+                  disabled={formik.isSubmitting}
+                  value={formik.values.signupEmailSubject}
+                  onChange={formik.handleChange}
+                  error={
+                    formik.touched.signupEmailSubject && Boolean(formik.errors.signupEmailSubject)
+                  }
+                  helperText={formik.touched.signupEmailSubject && formik.errors.signupEmailSubject}
+                />
+              </InputGroup>
+              <InputGroup>
+                <InputLabel>Email Body*</InputLabel>
+                <RichTextarea
+                  // testId="body-input"
+                  value={formik.values.signupEmailBody}
+                  onChange={(newValue) => formik.setFieldValue('signupEmailBody', newValue)}
+                />
+                {formik.touched.signupEmailBody && formik.errors.signupEmailBody && (
+                  <FormHelperText className="text-danger">
+                    {formik.errors.signupEmailBody}
+                  </FormHelperText>
+                )}
+              </InputGroup>
+            </Box>
+          </TabPanel>
+          <TabPanel value="invite">
+            <Box>
+              <InputGroup>
+                <TextField
+                  // inputProps={{ 'data-testid': 'subject-input' }}
+                  fullWidth
+                  label="Email Subject*"
+                  variant="outlined"
+                  name="inviteEmailSubject"
+                  size="small"
+                  disabled={formik.isSubmitting}
+                  value={formik.values.inviteEmailSubject}
+                  onChange={formik.handleChange}
+                  error={
+                    formik.touched.inviteEmailSubject && Boolean(formik.errors.inviteEmailSubject)
+                  }
+                  helperText={formik.touched.inviteEmailSubject && formik.errors.inviteEmailSubject}
+                />
+              </InputGroup>
+              <InputGroup>
+                <InputLabel>Email Body*</InputLabel>
+                <RichTextarea
+                  // testId="body-input"
+                  value={formik.values.inviteEmailBody}
+                  onChange={(newValue) => formik.setFieldValue('inviteEmailBody', newValue)}
+                />
+                {formik.touched.inviteEmailBody && formik.errors.inviteEmailBody && (
+                  <FormHelperText className="text-danger">
+                    {formik.errors.inviteEmailBody}
+                  </FormHelperText>
+                )}
+              </InputGroup>
+            </Box>
+          </TabPanel>
+        </TabContext>
+      </Box>
+    </>
+  );
+};
 
 const filter = createFilterOptions();
 
@@ -535,22 +686,7 @@ export default function ActionForm({
               </>
             )}
             {['sendEmail', 'generateNewUser']?.includes(formik.values.actionType) && (
-              <InputGroup>
-                <TextField
-                  inputProps={{ 'data-testid': 'sender-email-input' }}
-                  fullWidth
-                  label="Sender Email*"
-                  variant="outlined"
-                  name="senderEmail"
-                  size="small"
-                  // type="email"
-                  disabled={formik.isSubmitting}
-                  value={formik.values.senderEmail}
-                  onChange={formik.handleChange}
-                  error={formik.touched.senderEmail && Boolean(formik.errors.senderEmail)}
-                  helperText={formik.touched.senderEmail && formik.errors.senderEmail}
-                />
-              </InputGroup>
+              <SenderEmailInput formik={formik} />
             )}
             {['sendEmail', 'sendInAppNotification', 'sendPushNotification']?.includes(
               formik.values.actionType,
@@ -734,6 +870,7 @@ export default function ActionForm({
               'generateNewUser',
               'sendInAppNotification',
               'sendPushNotification',
+              'createCognitoUser',
             ]?.includes(formik.values.actionType) && (
               <InputGroup>
                 <Typography variant="h6" className="d-flex align-items-center pl-2">
@@ -829,6 +966,12 @@ export default function ActionForm({
                   </div>
                 ))}
               </InputGroup>
+            )}
+
+            {['createCognitoUser']?.includes(formik.values.actionType) && (
+              <div>
+                <EmailTemplateTabs formik={formik} />
+              </div>
             )}
             {formik.values.actionType === 'onPaletteChange' && (
               <InputGroup>

@@ -8,6 +8,7 @@ import { onAlert } from '../../utils/alert';
 import InputGroup from '../common/InputGroup';
 
 interface IProps {
+  /** callback fired after submitting Forget Passowrd Form */
   handleShowSignInForm: () => void;
 }
 

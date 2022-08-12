@@ -589,7 +589,6 @@ export function FormView({
     let newValues = [];
     const newValue = { ...defaultValue, field: field._id, value: '' };
     const fieldValues = values.filter((f) => f.field === field._id);
-
     if (
       fieldValues.length > 0 &&
       !validateValue(true, fieldValues[fieldValues.length - 1], {

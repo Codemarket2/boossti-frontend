@@ -24,6 +24,7 @@ export default function SignInForm({ successCallback }: IProps) {
       />
     );
   }
+
   if (state.verify) {
     return (
       <VerifyEmailForm
@@ -34,6 +35,7 @@ export default function SignInForm({ successCallback }: IProps) {
       />
     );
   }
+
   return (
     <form onSubmit={formik.handleSubmit} data-testid="signin-form">
       <InputGroup>
