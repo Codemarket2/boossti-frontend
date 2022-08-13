@@ -444,27 +444,32 @@ export default function Field({
         <>
           <div data-testid="response">
             {value?.response?._id ? (
-              <DisplayResponseById
-                hideAuthor
-                responseId={value?.response?._id}
-                hideBreadcrumbs
-                deleteCallBack={() => onChange({ field: field?._id, response: null })}
-              />
+              <div data-testid="responseId">
+                <DisplayResponseById
+                  hideAuthor
+                  responseId={value?.response?._id}
+                  hideBreadcrumbs
+                  deleteCallBack={() => onChange({ field: field?._id, response: null })}
+                />
+              </div>
             ) : (
               <>
-                {field?.form?._id && addOption?.showDrawer && (
-                  <CreateResponseDrawer
-                    open={addOption?.showDrawer}
-                    onClose={() => setAddOption({ ...addOption, showDrawer: false })}
-                    title={field?.label}
-                    formId={field?.form?._id}
-                    createCallback={(newResponse) => {
-                      onChange({ field: field?._id, response: newResponse });
-                      setAddOption({ ...addOption, showDrawer: false });
-                    }}
-                  />
-                )}
+                <div data-testid="responseModal">
+                  {field?.form?._id && addOption?.showDrawer && (
+                    <CreateResponseDrawer
+                      open={addOption?.showDrawer}
+                      onClose={() => setAddOption({ ...addOption, showDrawer: false })}
+                      title={field?.label}
+                      formId={field?.form?._id}
+                      createCallback={(newResponse) => {
+                        onChange({ field: field?._id, response: newResponse });
+                        setAddOption({ ...addOption, showDrawer: false });
+                      }}
+                    />
+                  )}
+                </div>
                 <Button
+                  data-testid="response-button"
                   variant="contained"
                   size="small"
                   className="mt-2"

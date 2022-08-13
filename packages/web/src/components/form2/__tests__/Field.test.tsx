@@ -71,7 +71,7 @@ const getInitialProps = () => {
       template: '',
       values: [],
       page: '',
-      response: '',
+      response: { _id: null },
       field: '',
       form: '',
     },
@@ -223,6 +223,21 @@ describe('Test cases for Field component', () => {
     render(<FieldTest {...props} />);
     const response = screen.getByTestId('response');
     expect(response).toBeInTheDocument();
+    const button = screen.getByTestId('response-button');
+    expect(button).toBeInTheDocument();
+    fireEvent.click(button);
+    expect(button).toHaveTextContent('Add');
+    expect(button).toBeEnabled();
+    const responseModal = screen.getByTestId('responseModal');
+    expect(responseModal).toBeInTheDocument();
+  });
+  it('checks rendering of responsebyID', () => {
+    const props = getInitialProps();
+    props.value.response._id = '62e57e0ad6436ef4a1b0e15a';
+    props.field.fieldType = 'response';
+    render(<FieldTest {...props} />);
+    const responseId = screen.getByTestId('responseId');
+    expect(responseId).toBeInTheDocument();
   });
   it('checks rendering of form', () => {
     const props = getInitialProps();
