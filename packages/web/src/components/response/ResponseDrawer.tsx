@@ -12,11 +12,13 @@ interface IProps {
 
 export default function ResponseDrawer({ open, onClose, responseId }: IProps) {
   return (
-    <Overlay open={open} onClose={onClose} title="Response">
-      <div className="p-2">
-        <DisplayResponseById responseId={responseId} hideBreadcrumbs />
-      </div>
-    </Overlay>
+    <div data-testid="overlay">
+      <Overlay open={open} onClose={onClose} title="Response">
+        <div className="p-2">
+          <DisplayResponseById responseId={responseId} hideBreadcrumbs />
+        </div>
+      </Overlay>
+    </div>
   );
 }
 
@@ -31,12 +33,15 @@ export const ShowResponseLabel = ({ formField, response }: IProps2) => {
     <div>
       {showOverlay && (
         <ResponseDrawer
+          data-testid="overlay"
           open={showOverlay}
           onClose={() => setShowOverlay(false)}
           responseId={response?._id}
         />
       )}
+
       <Typography
+        data-testid="button"
         color="primary"
         onClick={() => setShowOverlay(true)}
         style={{ cursor: 'pointer' }}

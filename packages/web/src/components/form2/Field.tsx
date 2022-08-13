@@ -36,10 +36,9 @@ import Diagram from '../syncfusion-diagram/Diagram';
 import { defaultDiagram } from '../syncfusion-diagram/defaultDiagram';
 import ReactFlow from '../react-flow/ReactFlow';
 import FieldConditionForm from './field/field-condition/FieldConditionForm';
-
 import 'react-phone-input-2/lib/style.css';
 
-interface FieldProps {
+export interface FieldProps {
   field: IField;
   disabled?: boolean;
   validate?: boolean;
@@ -165,69 +164,83 @@ export default function Field({
     }
     case 'date': {
       return (
-        <LocalizationProvider
-          dateAdapter={AdapterMoment}
-          //  libInstance={moment} utils={MomentUtils}
-        >
-          <DatePicker
-            disabled={disabled}
-            // fullWidth
-            // size="small"
-            // inputVariant="outlined"
-            // placeholder={moment().format('L')}
-            inputFormat="MM/DD/YYYY"
-            value={value && value?.valueDate ? moment(value.valueDate) : null}
-            onChange={(newValue) => onChange({ field: field?._id, valueDate: moment(newValue) })}
-            // animateYearScrolling
-            renderInput={(props) => (
-              <TextField
-                {...props}
-                fullWidth
-                size="small"
-                variant="outlined"
-                placeholder={moment().format('L')}
-                error={validation.error}
-                helperText={validation.errorMessage}
+        <div data-testid="date">
+          <LocalizationProvider
+            dateAdapter={AdapterMoment}
+
+            //  libInstance={moment} utils={MomentUtils}
+          >
+            <div data-testid="date-picker">
+              <DatePicker
+                disabled={disabled}
+                // fullWidth
+                // size="small"
+                // inputVariant="outlined"
+                // placeholder={moment().format('L')}
+                inputFormat="MM/DD/YYYY"
+                value={value && value?.valueDate ? moment(value.valueDate) : null}
+                onChange={(newValue) =>
+                  onChange({ field: field?._id, valueDate: moment(newValue) })
+                }
+                // animateYearScrolling
+                renderInput={(props) => (
+                  <TextField
+                    {...props}
+                    fullWidth
+                    size="small"
+                    variant="outlined"
+                    placeholder={moment().format('L')}
+                    error={validation.error}
+                    helperText={validation.errorMessage}
+                  />
+                )}
               />
-            )}
-          />
-        </LocalizationProvider>
+            </div>
+          </LocalizationProvider>
+        </div>
       );
     }
     case 'dateTime': {
       return (
-        <LocalizationProvider
-          dateAdapter={AdapterMoment}
-          //  libInstance={moment} utils={MomentUtils}
-        >
-          <DateTimePicker
-            disabled={disabled}
-            // fullWidth
-            // size="small"
-            // inputVariant="outlined"
-            // placeholder={moment().format('L')}
-            inputFormat="lll"
-            value={value && value?.valueDate ? moment(value.valueDate) : null}
-            onChange={(newValue) => onChange({ field: field?._id, valueDate: moment(newValue) })}
-            // animateYearScrolling
-            renderInput={(props) => (
-              <TextField
-                {...props}
-                fullWidth
-                size="small"
-                variant="outlined"
-                placeholder={moment().format('L')}
-                error={validation.error}
-                helperText={validation.errorMessage}
+        <div data-testid="date">
+          <LocalizationProvider
+            dateAdapter={AdapterMoment}
+
+            //  libInstance={moment} utils={MomentUtils}
+          >
+            <div data-testid="date-picker">
+              <DateTimePicker
+                disabled={disabled}
+                // fullWidth
+                // size="small"
+                // inputVariant="outlined"
+                // placeholder={moment().format('L')}
+                inputFormat="lll"
+                value={value && value?.valueDate ? moment(value.valueDate) : null}
+                onChange={(newValue) =>
+                  onChange({ field: field?._id, valueDate: moment(newValue) })
+                }
+                // animateYearScrolling
+                renderInput={(props) => (
+                  <TextField
+                    {...props}
+                    fullWidth
+                    size="small"
+                    variant="outlined"
+                    placeholder={moment().format('L')}
+                    error={validation.error}
+                    helperText={validation.errorMessage}
+                  />
+                )}
               />
-            )}
-          />
-        </LocalizationProvider>
+            </div>
+          </LocalizationProvider>
+        </div>
       );
     }
     case 'richTextarea': {
       return (
-        <>
+        <div data-testid="richTextarea">
           <RichTextarea
             value={value?.value || ''}
             onChange={(newValue) => onChange({ value: newValue })}
@@ -235,52 +248,57 @@ export default function Field({
           {validation.error && (
             <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
           )}
-        </>
+        </div>
       );
     }
     case 'boolean': {
       return (
         <>
-          <FormControlLabel
-            disabled={disabled}
-            control={
-              <Checkbox
-                checked={value ? value.valueBoolean : false}
-                onChange={({ target }) =>
-                  onChange({ field: field?._id, valueBoolean: target.checked })
-                }
-                name="valueBoolean"
-                color="primary"
-              />
-            }
-            label={field?.label}
-          />
-          {validation.error && (
-            <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
-          )}
+          <div data-testid="boolean">
+            <FormControlLabel
+              disabled={disabled}
+              control={
+                <Checkbox
+                  data-testid="boolean-checkbox"
+                  checked={value ? value.valueBoolean : false}
+                  onChange={({ target }) =>
+                    onChange({ field: field?._id, valueBoolean: target.checked })
+                  }
+                  name="valueBoolean"
+                  color="primary"
+                />
+              }
+              label={field?.label}
+            />
+            {validation.error && (
+              <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
+            )}
+          </div>
         </>
       );
     }
     case 'image': {
       return (
         <>
-          <ImagePicker2
-            label="Select Image"
-            fileType="image/*"
-            // mutiple={options?.multipleValues}
-            state={value}
-            setState={(newValue) => onChange({ field: field?._id, ...newValue })}
-            formId={formId}
-          />
-          {validation.error && (
-            <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
-          )}
+          <div data-testid="image">
+            <ImagePicker2
+              label="Select Image"
+              fileType="image/*"
+              // mutiple={options?.multipleValues}
+              state={value}
+              setState={(newValue) => onChange({ field: field?._id, ...newValue })}
+              formId={formId}
+            />
+            {validation.error && (
+              <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
+            )}
+          </div>
         </>
       );
     }
     case 'file': {
       return (
-        <div>
+        <div data-testid="file">
           {value?.value ? (
             <DisplayFiles
               urls={[value?.value]}
@@ -300,15 +318,17 @@ export default function Field({
     case 'phoneNumber': {
       return (
         <>
-          <PhoneInput
-            countryCodeEditable={false}
-            country="us"
-            preferredCountries={['us']}
-            enableSearch
-            value={value?.valueNumber?.toString() || ''}
-            onChange={(phone) => onChange({ field: field?._id, valueNumber: phone })}
-            inputStyle={validation.error ? { borderColor: 'red' } : {}}
-          />
+          <div data-testid="phone-input">
+            <PhoneInput
+              countryCodeEditable={false}
+              country="us"
+              preferredCountries={['us']}
+              enableSearch
+              value={value?.valueNumber?.toString() || ''}
+              onChange={(phone) => onChange({ field: field?._id, valueNumber: phone })}
+              inputStyle={validation.error ? { borderColor: 'red' } : {}}
+            />
+          </div>
           {validation.error && (
             <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
           )}
@@ -330,57 +350,70 @@ export default function Field({
         );
       }
       return (
-        <TextField
-          fullWidth
-          placeholder={field?.label}
-          variant="outlined"
-          name="valueNumber"
-          size="small"
-          type="number"
-          disabled={disabled}
-          value={value ? value.valueNumber : ''}
-          onChange={({ target }) => onChange({ field: field?._id, valueNumber: target.value })}
-          error={validation.error}
-          helperText={validation.errorMessage}
-        />
+        <div data-testid="number">
+          <TextField
+            fullWidth
+            placeholder={field?.label}
+            variant="outlined"
+            name="valueNumber"
+            size="small"
+            type="number"
+            disabled={disabled}
+            value={value ? value.valueNumber : ''}
+            onChange={({ target }) => onChange({ field: field?._id, valueNumber: target.value })}
+            error={validation.error}
+            helperText={validation.errorMessage}
+          />
+        </div>
       );
     }
     case 'colorPicker': {
       return (
-        <ColorInput
-          label=""
-          color={value ? value.value : ''}
-          onColorChange={(e: any) => onChange({ field: field?._id, value: e })}
-        />
+        <div data-testid="color-picker">
+          <ColorInput
+            label=""
+            color={value ? value.value : ''}
+            onColorChange={(e: any) => onChange({ field: field?._id, value: e })}
+          />
+        </div>
       );
     }
     case 'barcodeScanner': {
       return (
-        <BarcodeInput
-          label=""
-          barcode={value ? value.value : ''}
-          onBarcodeChange={(e: any) => onChange({ field: field?._id, value: e })}
-        />
+        <div data-testid="barcode-scanner">
+          <BarcodeInput
+            label=""
+            barcode={value ? value.value : ''}
+            onBarcodeChange={(e: any) => onChange({ field: field?._id, value: e })}
+          />
+        </div>
       );
     }
     case 'address': {
-      return <AddressSearch _id={field?._id} onChange={onChange} values={value} />;
+      return (
+        <div data-testid="addressSearch">
+          {' '}
+          <AddressSearch _id={field?._id} onChange={onChange} values={value} />
+        </div>
+      );
     }
     case 'lighthouseReport': {
       return (
-        <TextField
-          multiline
-          rows={6}
-          fullWidth
-          placeholder={field?.label}
-          variant="outlined"
-          name="value"
-          size="small"
-          type={['email', 'password'].includes(field?.fieldType) ? field?.fieldType : 'text'}
-          disabled
-          value={value ? value.value : ''}
-          onChange={({ target }) => onChange({ field: field?._id, value: target.value })}
-        />
+        <div data-testid="lighthouse-report">
+          <TextField
+            multiline
+            rows={6}
+            fullWidth
+            placeholder={field?.label}
+            variant="outlined"
+            name="value"
+            size="small"
+            type={['email', 'password'].includes(field?.fieldType) ? field?.fieldType : 'text'}
+            disabled
+            value={value ? value.value : ''}
+            onChange={({ target }) => onChange({ field: field?._id, value: target.value })}
+          />
+        </div>
       );
     }
     case 'link': {
@@ -389,55 +422,64 @@ export default function Field({
         fieldType: ['link'].includes(field?.fieldType) ? 'url' : 'text',
       });
       return (
-        <TextField
-          fullWidth
-          placeholder={field?.label}
-          variant="outlined"
-          name="value"
-          size="small"
-          type="url"
-          disabled={disabled}
-          value={value ? value.value : ''}
-          onChange={({ target }) => onChange({ field: field?._id, value: target.value })}
-          error={textValidation.error}
-          helperText={textValidation.errorMessage}
-        />
+        <div data-testid="link">
+          <TextField
+            fullWidth
+            placeholder={field?.label}
+            variant="outlined"
+            name="value"
+            size="small"
+            type="url"
+            disabled={disabled}
+            value={value ? value.value : ''}
+            onChange={({ target }) => onChange({ field: field?._id, value: target.value })}
+            error={textValidation.error}
+            helperText={textValidation.errorMessage}
+          />
+        </div>
       );
     }
     case 'response': {
       return (
         <>
-          {value?.response?._id ? (
-            <DisplayResponseById
-              hideAuthor
-              responseId={value?.response?._id}
-              hideBreadcrumbs
-              deleteCallBack={() => onChange({ field: field?._id, response: null })}
-            />
-          ) : (
-            <>
-              {field?.form?._id && addOption?.showDrawer && (
-                <CreateResponseDrawer
-                  open={addOption?.showDrawer}
-                  onClose={() => setAddOption({ ...addOption, showDrawer: false })}
-                  title={field?.label}
-                  formId={field?.form?._id}
-                  createCallback={(newResponse) => {
-                    onChange({ field: field?._id, response: newResponse });
-                    setAddOption({ ...addOption, showDrawer: false });
-                  }}
+          <div data-testid="response">
+            {value?.response?._id ? (
+              <div data-testid="responseId">
+                <DisplayResponseById
+                  hideAuthor
+                  responseId={value?.response?._id}
+                  hideBreadcrumbs
+                  deleteCallBack={() => onChange({ field: field?._id, response: null })}
                 />
-              )}
-              <Button
-                variant="contained"
-                size="small"
-                className="mt-2"
-                onClick={() => setAddOption({ ...addOption, showDrawer: true })}
-              >
-                Add
-              </Button>
-            </>
-          )}
+              </div>
+            ) : (
+              <>
+                <div data-testid="responseModal">
+                  {field?.form?._id && addOption?.showDrawer && (
+                    <CreateResponseDrawer
+                      open={addOption?.showDrawer}
+                      onClose={() => setAddOption({ ...addOption, showDrawer: false })}
+                      title={field?.label}
+                      formId={field?.form?._id}
+                      createCallback={(newResponse) => {
+                        onChange({ field: field?._id, response: newResponse });
+                        setAddOption({ ...addOption, showDrawer: false });
+                      }}
+                    />
+                  )}
+                </div>
+                <Button
+                  data-testid="response-button"
+                  variant="contained"
+                  size="small"
+                  className="mt-2"
+                  onClick={() => setAddOption({ ...addOption, showDrawer: true })}
+                >
+                  Add
+                </Button>
+              </>
+            )}
+          </div>
           {validation.error && (
             <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
           )}
@@ -447,66 +489,76 @@ export default function Field({
     case 'form': {
       return (
         <>
-          <SelectForm
-            placeholder={`${field?.label} form`}
-            label={null}
-            value={value?.form}
-            onChange={(newValue) => onChange({ field: field?._id, form: newValue })}
-            error={validation.error}
-            helperText={validation.errorMessage}
-          />
+          <div data-testid="form">
+            <SelectForm
+              placeholder={`${field?.label} form`}
+              label={null}
+              value={value?.form}
+              onChange={(newValue) => onChange({ field: field?._id, form: newValue })}
+              error={validation.error}
+              helperText={validation.errorMessage}
+            />
+          </div>
         </>
       );
     }
     case 'board': {
       return (
         <>
-          <Board
-            editMode
-            board={value?.options?.board || defaultBoard}
-            onBoardChange={(board) => onChange({ options: { board } })}
-          />
-          {validation.error && (
-            <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
-          )}
+          <div data-testid="board">
+            <Board
+              editMode
+              board={value?.options?.board || defaultBoard}
+              onBoardChange={(board) => onChange({ options: { board } })}
+            />
+            {validation.error && (
+              <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
+            )}
+          </div>
         </>
       );
     }
     case 'diagram': {
       return (
         <>
-          <Diagram
-            value={value?.options?.diagram || defaultDiagram}
-            onChange={(diagram) => onChange({ options: { diagram } })}
-          />
-          {validation.error && (
-            <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
-          )}
+          <div data-testid="diagram">
+            <Diagram
+              value={value?.options?.diagram || defaultDiagram}
+              onChange={(diagram) => onChange({ options: { diagram } })}
+            />
+            {validation.error && (
+              <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
+            )}
+          </div>
         </>
       );
     }
     case 'flowDiagram': {
       return (
         <>
-          <ReactFlow
-            _id={value?._id || objectId}
-            editMode
-            flow={value?.options?.flowDiagram}
-            onFlowChange={(flowDiagram) => onChange({ options: { flowDiagram } })}
-          />
-          {validation.error && (
-            <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
-          )}
+          <div data-testid="flow-diagram">
+            <ReactFlow
+              _id={value?._id || objectId}
+              editMode
+              flow={value?.options?.flowDiagram}
+              onFlowChange={(flowDiagram) => onChange({ options: { flowDiagram } })}
+            />
+            {validation.error && (
+              <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
+            )}
+          </div>
         </>
       );
     }
     case 'condition': {
       return (
         <>
-          <FieldConditionForm
-            conditions={value?.options?.conditions}
-            onConditionsChange={(conditions) => onChange({ options: { conditions } })}
-          />
+          <div data-testid="condition">
+            <FieldConditionForm
+              conditions={value?.options?.conditions}
+              onConditionsChange={(conditions) => onChange({ options: { conditions } })}
+            />
+          </div>
         </>
       );
     }
