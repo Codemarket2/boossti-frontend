@@ -125,7 +125,7 @@ const FormPageById = ({
   );
 };
 
-interface IDisplayFormProps extends IFormPage {
+export interface IDisplayFormProps extends IFormPage {
   slug?: string;
   _id?: string;
 }
@@ -136,7 +136,15 @@ export const DisplayForm = (props: IDisplayFormProps) => {
     ...value,
   }));
   if (props._id) {
-    return <FormPageById {...props} overrideValues={overrideValues} _id={props._id} />;
+    return (
+      <div data-testid="FormPageById">
+        <FormPageById {...props} overrideValues={overrideValues} _id={props._id} />;
+      </div>
+    );
   }
-  return <FormPage {...props} overrideValues={overrideValues} slug={props.slug} />;
+  return (
+    <div data-testid="FormPage">
+      <FormPage {...props} overrideValues={overrideValues} slug={props.slug} />
+    </div>
+  );
 };
