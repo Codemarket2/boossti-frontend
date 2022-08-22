@@ -1,31 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { useVerifyEmail } from '@frontend/shared/hooks/auth';
+import { useVerifyEmail } from '@frontend/shared/hooks/auth/verifyEmail';
 import LoadingButton from '../common/LoadingButton';
 import { onAlert } from '../../utils/alert';
 import InputGroup from '../common/InputGroup';
 
 interface IProps {
-  onSuccess: () => void;
+  onSuccess?: () => void;
   email: string;
   label?: string;
-  onLabelClick: () => void;
+  onCancel: () => void;
   disabled?: boolean;
+  user: any;
 }
 
 export default function VerifyEmailForm({
   onSuccess,
-  email = '',
-  label,
-  onLabelClick,
+  email,
+  label = 'Verification Code',
+  onCancel,
   disabled = false,
+  user,
 }: IProps) {
   const { formik, sendVerificationCode, isEmailSent } = useVerifyEmail({
     onAlert,
     email,
     onSuccess,
+    user,
   });
+
+  // useEffect(() => {
+  //   sendVerificationCode();
+  // }, []);
 
   return (
     <form onSubmit={formik.handleSubmit} data-testid="verify-email-form">
@@ -39,7 +46,7 @@ export default function VerifyEmailForm({
       <InputGroup>
         <TextField
           fullWidth
-          label="Verification Code"
+          label={label}
           variant="outlined"
           type="text"
           name="code"
@@ -77,7 +84,7 @@ export default function VerifyEmailForm({
           variant="outlined"
           type="button"
           disabled={disabled || formik.isSubmitting}
-          onClick={onLabelClick}
+          onClick={onCancel}
         >
           Cancel
         </LoadingButton>

@@ -1,143 +1,152 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Auth } from 'aws-amplify';
 import * as yup from 'yup';
-import { useFormik } from 'formik';
+import { FormikHelpers, useFormik } from 'formik';
 import { showLoading, hideLoading } from '../../redux/actions/loading';
 import { AppDispatch } from '../../redux';
 
 export { useSignIn } from './signIn';
 export { useSignUp } from './signUp';
 
-interface IForgetPasswordState {
-  email: string;
-  verify: boolean;
-}
-
-interface IForgetPasswordArgs {
+export interface IuseForgotPwdHoodArgs {
   onAlert: (a: string, b: string) => void;
-  handleShowSignInForm: () => void;
+
+  /** if specified this callback is fired after successfully changing the password */
+  onSuccess?: (newPassword: string) => void;
+
+  email?: string;
 }
 
-const forgetPassword1ValidationSchema = yup.object({
+interface IuseForgetPwdHookState {
+  email: string;
+  isOTPSent: boolean;
+}
+
+/** Validation Schema for formik */
+const emailValidationSchema = yup.object({
   email: yup.string().email('Enter a valid email').required('Email is required'),
 });
 
-interface IForgetPassword1FormValues {
+interface IEmailFormValues {
+  /** `required` for sending OTP to the email */
   email: string;
 }
 
-const forgetPassword1Value: IForgetPassword1FormValues = {
-  email: '',
-};
+const MIN_PWD_LENGTH = 8;
+const MIN_CODE_LENGTH = 6;
 
-const forgetPassword2ValidationSchema = yup.object({
+/** Validation Schema for formik */
+const setNewPwdSchema = yup.object({
   code: yup
     .string()
-    .length(6, 'Password reset code should be of 6 characters length')
+    .length(
+      MIN_CODE_LENGTH,
+      `Password reset code should be of ${MIN_CODE_LENGTH} characters length`,
+    )
     .required('Password reset code is required'),
-  password: yup
+  newPassword: yup
     .string()
-    .min(6, 'Password should be of minimum 6 characters length')
+    .min(MIN_PWD_LENGTH, `Password should be of minimum ${MIN_PWD_LENGTH} characters length`)
     .required('Password is required'),
-  confirmPassword: yup
+  confirmNewPassword: yup
     .string()
-    .min(6, 'Password should be of minimum 6 characters length')
+    .min(MIN_PWD_LENGTH, `Password should be of minimum ${MIN_PWD_LENGTH} characters length`)
     .required('Password is required')
-    .test('passwords-match', 'Passwords must match', function (value) {
-      return this.parent.password === value;
+    .test('passwords-match', 'Passwords must match', function matchPwd(value) {
+      return this.parent.newPassword === value;
     }),
 });
 
-interface IForgetPassword2FormValues {
+interface ISetNewPwdFormValues {
+  /** `required` for verifying the password reset OTP */
   code: string;
-  password: string;
-  confirmPassword: string;
+  /** `required` new password of the user */
+  newPassword: string;
+  /** `required` for making sure user doesn't mess up entering his new password */
+  confirmNewPassword: string;
 }
-
-const forgetPassword2Value: IForgetPassword2FormValues = {
-  code: '',
-  password: '',
-  confirmPassword: '',
-};
 
 export function useForgetPassword({
   onAlert = () => null,
-  handleShowSignInForm = () => null,
-}: IForgetPasswordArgs) {
+  onSuccess,
+  email = '',
+}: IuseForgotPwdHoodArgs) {
   const dispatch: AppDispatch = useDispatch();
-  const [state, setState] = useState<IForgetPasswordState>({
-    email: '',
-    verify: false,
+
+  const [hookState, setHookState] = useState<IuseForgetPwdHookState>({
+    email,
+    isOTPSent: false,
   });
 
-  const formik1 = useFormik({
-    initialValues: forgetPassword1Value,
-    validationSchema: forgetPassword1ValidationSchema,
-    onSubmit: async (values: IForgetPassword1FormValues) => {
-      debugger;
-      await onSubmit(values);
-    },
-  });
-
-  const formik2 = useFormik({
-    initialValues: forgetPassword2Value,
-    validationSchema: forgetPassword2ValidationSchema,
-    onSubmit: async (values: IForgetPassword2FormValues) => {
-      debugger;
-      await onSubmit(values);
-    },
-  });
-
-  const forgetPassword = async (payload: any) => {
-    const { email } = payload;
-    const res = await Auth.forgotPassword(email).catch((err) => {
-      debugger;
-    });
-    debugger;
-    setState({
-      ...state,
+  /** used for sending password reset OTP to email */
+  const otpFormik = useFormik<IEmailFormValues>({
+    initialValues: {
       email,
-      verify: true,
-    });
-    formik1.handleReset('');
-  };
+    },
+    validationSchema: emailValidationSchema,
+    onSubmit: async (values, actions) => {
+      await forgetPassword(values, actions);
+    },
+  });
 
-  const resetPassword = async (payload: any) => {
-    const { email } = state;
-    const { code, password, confirmPassword } = payload;
-    if (password === confirmPassword) {
-      const res = await Auth.forgotPasswordSubmit(email, code, password);
-      debugger;
-      setState({
-        ...state,
-        email: '',
-      });
-      formik2.handleReset('');
-      handleShowSignInForm();
-    } else {
-      throw new Error("Password and Confirm Password doesn't Match!");
-    }
-  };
+  /** used for entering the new password */
+  const setNewPwdFormik = useFormik<ISetNewPwdFormValues>({
+    initialValues: {
+      code: '',
+      newPassword: '',
+      confirmNewPassword: '',
+    },
+    validationSchema: setNewPwdSchema,
+    onSubmit: async (values, actions) => {
+      await forgotPasswordSubmit(values, actions);
+    },
+  });
 
-  const onSubmit = async (payload: IForgetPassword1FormValues | IForgetPassword2FormValues) => {
+  useEffect(() => {
+    if (otpFormik.isSubmitting || setNewPwdFormik.isSubmitting) dispatch(showLoading());
+    else dispatch(hideLoading());
+    return () => {
+      dispatch(hideLoading());
+    };
+  }, [otpFormik.isSubmitting, setNewPwdFormik.isSubmitting]);
+
+  const forgetPassword = async (
+    payload: IEmailFormValues,
+    actions: FormikHelpers<IEmailFormValues>,
+  ) => {
     try {
-      dispatch(showLoading());
-      if (state.verify) {
-        debugger;
-        await resetPassword(payload);
-      } else {
-        debugger;
-        await forgetPassword(payload);
-      }
+      const { email: uEmail } = payload;
+      const res = await Auth.forgotPassword(uEmail);
 
-      dispatch(hideLoading());
+      setHookState((prev) => ({
+        ...prev,
+        email: uEmail,
+        isOTPSent: true,
+      }));
     } catch (error) {
-      dispatch(hideLoading());
-      onAlert('Error', error.message);
-      debugger;
+      if (error?.code === 'NotAuthorizedException') {
+        // When user's account status is FORCE_PASSWORD_CHANGE, just try to signin once as workarounds are already added
+        onAlert('Error', `${error.message}, Please Try to Signin`);
+      } else {
+        onAlert('Error', error.message);
+      }
     }
   };
 
-  return { state, formik1, formik2 };
+  const forgotPasswordSubmit = async (
+    payload: ISetNewPwdFormValues,
+    actions: FormikHelpers<ISetNewPwdFormValues>,
+  ) => {
+    try {
+      const { code, newPassword } = payload;
+
+      const res = await Auth.forgotPasswordSubmit(hookState.email, code, newPassword);
+      if (onSuccess) onSuccess(newPassword);
+    } catch (error) {
+      onAlert('Error', error.message);
+    }
+  };
+
+  return { state: hookState, otpFormik, setNewPwdFormik };
 }

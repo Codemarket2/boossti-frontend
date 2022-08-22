@@ -1,48 +1,66 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { useForgetPassword } from '@frontend/shared/hooks/auth';
+import {
+  useForgetPassword,
+  IuseForgotPwdHoodArgs,
+} from '@frontend/shared/hooks/auth/forgetPassword';
 import PasswordInput from '../common/PasswordInput';
 import LoadingButton from '../common/LoadingButton';
 import { onAlert } from '../../utils/alert';
 import InputGroup from '../common/InputGroup';
 
 interface IProps {
-  /** callback fired after submitting Forget Passowrd Form */
-  handleShowSignInForm: () => void;
-}
+  onSuccess?: IuseForgotPwdHoodArgs['onSuccess'];
 
-export default function ForgetPasswordForm({ handleShowSignInForm }: IProps) {
-  const { state, formik1, formik2 } = useForgetPassword({
+  /**
+   * this callback is fired if user want's to cancel the Forget Password operation
+   * if not specified then `cancel button` get's hidden
+   * */
+  onCancel?: () => void;
+
+  email?: string;
+  label?: string;
+}
+/** This form can be used for forgetting & resetting the user's password */
+export default function ForgetPasswordForm({
+  onSuccess,
+  email = '',
+  label = '',
+  onCancel,
+}: IProps) {
+  const { state, otpFormik, setNewPwdFormik } = useForgetPassword({
     onAlert,
-    handleShowSignInForm,
+    onSuccess,
+    email,
   });
 
-  const showSignInForm = () => {
-    formik1.handleReset('');
-    formik2.handleReset('');
-    handleShowSignInForm();
-  };
+  useEffect(() => {
+    if (email) {
+      otpFormik.setFieldValue('email', email);
+    }
+  }, []);
 
-  if (state.verify) {
+  if (state.isOTPSent) {
     return (
-      <form onSubmit={formik2.handleSubmit} data-testid="forget-password-form">
+      <form onSubmit={setNewPwdFormik.handleSubmit} data-testid="forget-password-form">
         <InputGroup>
-          <Typography>Forgot Password</Typography>
+          <Typography>{label || 'Forget Password'}</Typography>
         </InputGroup>
         <InputGroup>
           <TextField
+            autoComplete="off"
             fullWidth
             label="Password Reset Code*"
             variant="outlined"
             type="text"
             name="code"
             size="small"
-            disabled={formik2.isSubmitting}
-            value={formik2.values.code}
-            onChange={formik2.handleChange}
-            error={formik2.touched.code && Boolean(formik2.errors.code)}
-            helperText={formik2.touched.code && formik2.errors.code}
+            disabled={setNewPwdFormik.isSubmitting}
+            value={setNewPwdFormik.values.code}
+            onChange={setNewPwdFormik.handleChange}
+            error={setNewPwdFormik.touched.code && Boolean(setNewPwdFormik.errors.code)}
+            helperText={setNewPwdFormik.touched.code && setNewPwdFormik.errors.code}
           />
         </InputGroup>
         <InputGroup>
@@ -50,14 +68,16 @@ export default function ForgetPasswordForm({ handleShowSignInForm }: IProps) {
             fullWidth
             label="Password*"
             variant="outlined"
-            name="password"
+            name="newPassword"
             size="small"
             labelWidth={80}
-            disabled={formik2.isSubmitting}
-            value={formik2.values.password}
-            onChange={formik2.handleChange}
-            error={formik2.touched.password && Boolean(formik2.errors.password)}
-            helperText={formik2.touched.password && formik2.errors.password}
+            disabled={setNewPwdFormik.isSubmitting}
+            value={setNewPwdFormik.values.newPassword}
+            onChange={setNewPwdFormik.handleChange}
+            error={
+              setNewPwdFormik.touched.newPassword && Boolean(setNewPwdFormik.errors.newPassword)
+            }
+            helperText={setNewPwdFormik.touched.newPassword && setNewPwdFormik.errors.newPassword}
           />
         </InputGroup>
         <InputGroup>
@@ -65,39 +85,53 @@ export default function ForgetPasswordForm({ handleShowSignInForm }: IProps) {
             fullWidth
             label="Confirm Password*"
             variant="outlined"
-            name="confirmPassword"
+            name="confirmNewPassword"
             size="small"
             labelWidth={140}
-            disabled={formik2.isSubmitting}
-            value={formik2.values.confirmPassword}
-            onChange={formik2.handleChange}
-            error={formik2.touched.confirmPassword && Boolean(formik2.errors.confirmPassword)}
-            helperText={formik2.touched.confirmPassword && formik2.errors.confirmPassword}
+            disabled={setNewPwdFormik.isSubmitting}
+            value={setNewPwdFormik.values.confirmNewPassword}
+            onChange={setNewPwdFormik.handleChange}
+            error={
+              setNewPwdFormik.touched.confirmNewPassword &&
+              Boolean(setNewPwdFormik.errors.confirmNewPassword)
+            }
+            helperText={
+              setNewPwdFormik.touched.confirmNewPassword &&
+              setNewPwdFormik.errors.confirmNewPassword
+            }
           />
-        </InputGroup>
-        <InputGroup>
-          <LoadingButton fullWidth type="submit" loading={formik2.isSubmitting} className="mt-2">
-            Change Password
-          </LoadingButton>
         </InputGroup>
         <InputGroup>
           <LoadingButton
             fullWidth
-            type="button"
-            variant="outlined"
-            onClick={showSignInForm}
-            loading={formik1.isSubmitting}
+            type="submit"
+            loading={setNewPwdFormik.isSubmitting}
+            className="mt-2"
           >
-            Cancel
+            Change Password
           </LoadingButton>
         </InputGroup>
+        {onCancel && (
+          <InputGroup>
+            <LoadingButton
+              fullWidth
+              type="button"
+              variant="outlined"
+              onClick={() => onCancel()}
+              loading={setNewPwdFormik.isSubmitting}
+            >
+              Cancel
+            </LoadingButton>
+          </InputGroup>
+        )}
       </form>
     );
   }
+
   return (
-    <form onSubmit={formik1.handleSubmit} data-testid="forget-password-form">
+    <form onSubmit={otpFormik.handleSubmit} data-testid="forget-password-form">
       <InputGroup>
-        <Typography>Forgot Password</Typography>
+        <Typography>{label || 'Forget Password'}</Typography>
       </InputGroup>
       <InputGroup>
         <TextField
@@ -106,11 +140,11 @@ export default function ForgetPasswordForm({ handleShowSignInForm }: IProps) {
           variant="outlined"
           name="email"
           size="small"
-          disabled={formik1.isSubmitting}
-          value={formik1.values.email}
-          onChange={formik1.handleChange}
-          error={formik1.touched.email && Boolean(formik1.errors.email)}
-          helperText={formik1.touched.email && formik1.errors.email}
+          disabled={otpFormik.isSubmitting}
+          value={otpFormik.values.email}
+          onChange={otpFormik.handleChange}
+          error={otpFormik.touched.email && Boolean(otpFormik.errors.email)}
+          helperText={otpFormik.touched.email && otpFormik.errors.email}
         />
       </InputGroup>
       <InputGroup>
@@ -118,23 +152,26 @@ export default function ForgetPasswordForm({ handleShowSignInForm }: IProps) {
           fullWidth
           data-testid="reset-code-button"
           type="submit"
-          loading={formik1.isSubmitting}
+          loading={otpFormik.isSubmitting}
         >
           Get Password Reset Code
         </LoadingButton>
       </InputGroup>
-      <InputGroup>
-        <LoadingButton
-          fullWidth
-          data-testid="cancel-button"
-          type="button"
-          variant="outlined"
-          onClick={showSignInForm}
-          disabled={formik1.isSubmitting}
-        >
-          Cancel
-        </LoadingButton>
-      </InputGroup>
+
+      {onCancel && (
+        <InputGroup>
+          <LoadingButton
+            fullWidth
+            data-testid="cancel-button"
+            type="button"
+            variant="outlined"
+            onClick={() => onCancel()}
+            disabled={otpFormik.isSubmitting}
+          >
+            Cancel
+          </LoadingButton>
+        </InputGroup>
+      )}
     </form>
   );
 }

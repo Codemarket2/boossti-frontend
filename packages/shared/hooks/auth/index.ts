@@ -3,11 +3,12 @@ import { useDispatch } from 'react-redux';
 import { Auth } from 'aws-amplify';
 import { client } from '../../graphql';
 import { setAuthUser, initialAuthUser, unsetAuthUser } from '../../redux/actions/auth';
-// import { useInitialUser } from '../users';
-export { useSignIn } from './signIn';
-export { useSignUp } from './signUp';
-export { useForgetPassword } from './forgetPassword';
-export { useVerifyEmail } from './verifyEmail';
+import { useAuthorization } from './useAuthorization';
+import { useSignIn } from './signIn';
+import { useSignUp } from './signUp';
+import { useForgetPassword } from './forgetPassword';
+import { useVerifyEmail } from './verifyEmail';
+import { useForcePasswordReset } from './forcePasswordReset';
 
 export function useHandleLogout() {
   const dispatch = useDispatch();
@@ -35,7 +36,11 @@ export function useCurrentAuthenticatedUser() {
               -1
             : false,
         };
-        dispatch(setAuthUser(payload));
+
+        if (user?.attributes?.email_verified) {
+          dispatch(setAuthUser(payload));
+        }
+
         return user.attributes;
       }
     } catch (error) {
@@ -49,4 +54,11 @@ export function useCurrentAuthenticatedUser() {
   return { getUser };
 }
 
-export { useAuthorization } from './useAuthorization';
+export {
+  useAuthorization,
+  useSignIn,
+  useSignUp,
+  useForgetPassword,
+  useVerifyEmail,
+  useForcePasswordReset,
+};
