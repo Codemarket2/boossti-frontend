@@ -60,11 +60,34 @@ export interface IFormula {
 
 export interface ICondition {
   operator: 'AND' | 'OR';
+  left: ConditionPart;
+  conditionType: '==' | '!=' | '>' | '<';
+  right: ConditionRightPart;
+  // formId: string;
+  // fieldId: string;
+  // subFieldId: string;
+  // value: string;
+  // constantValue: string;
+  // formValue?: any;
+}
+
+export interface ConditionPart {
   formId: string;
   fieldId: string;
-  conditionType: '==' | '!=';
+  subField: ConditionPart;
+  responseId?: string;
+}
+
+interface ConditionRightPart extends ConditionPart {
   value: string;
   constantValue: string;
+  responseId: string;
+  subField: ConditionRightPartSubField;
+}
+
+export interface ConditionRightPartSubField extends ConditionPart {
+  subField: ConditionRightPartSubField;
+  responseId: string;
 }
 
 export interface IFormulaVariable {
