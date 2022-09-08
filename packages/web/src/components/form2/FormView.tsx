@@ -566,7 +566,8 @@ export function FormView({
 
   const onSubmit = async () => {
     setSubmitState({ ...submitState, loading: true });
-    const validate = validateResponse(fields, values);
+
+    const validate = validateResponse(fields?.filter(filterHiddenFields), values);
     if (validate) {
       setSubmitState({ ...submitState, validate, loading: false });
       return;
