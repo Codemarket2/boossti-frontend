@@ -16,7 +16,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIosRounded from '@mui/icons-material/ArrowBackIosRounded';
 import ArrowForwardIosRounded from '@mui/icons-material/ArrowForwardIosRounded';
 import CircularProgress from '@mui/material/CircularProgress';
-import TextField from '@mui/material/TextField';
 
 // SHARED
 import { parseResponse, useGetResponses } from '@frontend/shared/hooks/response/getResponse';
@@ -643,6 +642,20 @@ export function FormView({
     validate: submitState.validate,
   };
 
+  const filterHiddenFields = (field) => {
+    if (field?.options?.hidden && field?.options?.hiddenConditions?.length > 0) {
+      const result = resolveCondition({
+        conditions: field?.options?.hiddenConditions,
+        leftPartResponse: { formId, values },
+        forms: conditionFormsResponses?.forms,
+        responses: conditionFormsResponses?.responses,
+        authState,
+      });
+      return result;
+    }
+    return !field?.options?.hidden;
+  };
+
   return (
     <div className="position-relative">
       {!authenticated && showAuthModal && (
@@ -653,35 +666,8 @@ export function FormView({
         </Overlay>
       )}
       <Grid container spacing={0} data-testid="fieldWiseView">
-        {/* {!inlineEdit && (
-          <Grid item xs={100}>
-            <InputGroup>
-              <Typography data-testid="ID">ID</Typography>
-              <TextField
-                fullWidth
-                size="small"
-                placeholder="ID"
-                disabled
-                helperText="System generated"
-                value={responseCount}
-              />
-            </InputGroup>
-          </Grid>
-        )} */}
         {(fieldWiseView && fields?.length > 1 ? [fields[page]] : fields)
-          ?.filter((field) => {
-            if (field?.options?.hidden && field?.options?.hiddenConditions?.length > 0) {
-              const result = resolveCondition({
-                conditions: field?.options?.hiddenConditions,
-                leftPartResponse: { formId, values },
-                forms: conditionFormsResponses?.forms,
-                responses: conditionFormsResponses?.responses,
-                authState,
-              });
-              return result;
-            }
-            return !field?.options?.hidden;
-          })
+          ?.filter(filterHiddenFields)
           ?.map((field: any) => (
             <Grid
               item
@@ -901,7 +887,11 @@ export function FormView({
             <InputGroup style={{ display: 'flex' }}>
               <div data-testid="submitButton">
                 <LoadingButton
-                  disabled={validateResponse(fields, values) || unique || uniqueLoading}
+                  disabled={
+                    validateResponse(fields?.filter(filterHiddenFields), values) ||
+                    unique ||
+                    uniqueLoading
+                  }
                   loading={submitState.loading || loading}
                   onClick={onSubmit}
                   variant="contained"
