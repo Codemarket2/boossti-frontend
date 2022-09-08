@@ -43,6 +43,11 @@ import { replaceVariables } from './variables';
 import projectConfig from '../../../../shared/index';
 import { evaluateFormula } from './field/formula/DisplayFormulaValue';
 import DisplayFormula, { getFormula } from './field/formula/DisplayFormula';
+import {
+  getConditionsFormAndResponse,
+  getFieldCondition,
+} from './field/field-condition/DisplayFieldCondition';
+import { resolveCondition } from './field/field-condition/ResolveCondition';
 
 interface FormViewWrapperProps {
   form: IForm;
@@ -104,7 +109,7 @@ export default function FormViewWrapper({
   valueFilter,
   overrideValues,
 }: FormViewWrapperProps): any {
-  const isAdmin = useSelector(({ auth }: any) => auth?.admin);
+  const { admin: isAdmin, authenticated } = useSelector(({ auth }: any) => auth);
   const { handleCreateUpdateResponse, createLoading } = useCreateUpdateResponse({
     onAlert,
     appId,
@@ -125,7 +130,7 @@ export default function FormViewWrapper({
 
   const [state, setState] = useState(initialState);
   const [selectState, setSelectState] = useState(initialSelectState);
-  const authenticated = useSelector(({ auth }: any) => auth.authenticated);
+  // const authenticated = useSelector(({ auth }: any) => auth.authenticated);
 
   const [checkNewUser, setCheckNewUser] = useState(true);
   const verifyIfUserExist = async (payload) => {
@@ -471,21 +476,27 @@ export function FormView({
   const [values, setValues] = useState(parseResponse({ values: initialValues })?.values || []);
   const [editValue, setEditValue] = useState({ fieldId: null, index: null });
   const [submitState, setSubmitState] = useState(initialSubmitState);
-  const authenticated = useSelector(({ auth }: any) => auth.authenticated);
+  const authState = useSelector(({ auth }: any) => auth);
+  const authenticated = authState?.authenticated;
   const [showAuthModal, setShowAuthModal] = useState(false);
 
   const [page, setPage] = useState(0);
   const [hideField, setHideField] = useState(false);
   const [unique, setUnique] = useState(false);
   const [uniqueLoading, setUniqueLoading] = useState(false);
+  const [conditionFormsResponses, setConditionFormsResponses] = useState({
+    forms: {},
+    responses: {},
+  });
 
   // ONLY SHOW & VALIDATE REQUIRED FIELDS
-  const fields = tempFields?.filter(
-    (field: IField) =>
+  const fields = tempFields?.filter((field: IField) => {
+    return (
       field?.options?.required &&
       !field?.options?.systemCalculatedAndSaved &&
-      !overrideValues?.some((v) => v?.field === field?._id),
-  );
+      !overrideValues?.some((v) => v?.field === field?._id)
+    );
+  });
 
   useEffect(() => {
     if (hideField) {
@@ -495,6 +506,7 @@ export function FormView({
 
   useEffect(() => {
     const defaultValues = [];
+    let hiddenConditions = [];
     fields?.forEach((field) => {
       if (field?.options?.required && field?.options?.defaultValue) {
         if (!values?.some((v) => v?.field === field?._id)) {
@@ -502,11 +514,24 @@ export function FormView({
           defaultValues.push({ field: field?._id, ...tempValue });
         }
       }
+      if (field?.options?.hidden && field?.options?.hiddenConditions?.length > 0) {
+        hiddenConditions = [...hiddenConditions, ...field?.options?.hiddenConditions];
+      }
     });
     if (defaultValues?.length > 0) {
       setValues([...values, ...defaultValues]);
     }
+    if (hiddenConditions?.length > 0) {
+      getConditionForms(hiddenConditions);
+    }
   }, []);
+
+  const getConditionForms = async (hiddenConditions) => {
+    const { responses: tempResponses, forms: tempForms } = await getConditionsFormAndResponse(
+      hiddenConditions,
+    );
+    setConditionFormsResponses({ responses: tempResponses, forms: tempForms });
+  };
 
   const onChange = (sValue, valueIndex) => {
     let newValue = { ...defaultValue, ...sValue };
@@ -628,7 +653,7 @@ export function FormView({
         </Overlay>
       )}
       <Grid container spacing={0} data-testid="fieldWiseView">
-        {!inlineEdit && (
+        {/* {!inlineEdit && (
           <Grid item xs={100}>
             <InputGroup>
               <Typography data-testid="ID">ID</Typography>
@@ -642,9 +667,21 @@ export function FormView({
               />
             </InputGroup>
           </Grid>
-        )}
+        )} */}
         {(fieldWiseView && fields?.length > 1 ? [fields[page]] : fields)
-          ?.filter((field) => !field?.options?.hidden)
+          ?.filter((field) => {
+            if (field?.options?.hidden && field?.options?.hiddenConditions?.length > 0) {
+              const result = resolveCondition({
+                conditions: field?.options?.hiddenConditions,
+                leftPartResponse: { formId, values },
+                forms: conditionFormsResponses?.forms,
+                responses: conditionFormsResponses?.responses,
+                authState,
+              });
+              return result;
+            }
+            return !field?.options?.hidden;
+          })
           ?.map((field: any) => (
             <Grid
               item

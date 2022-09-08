@@ -6,6 +6,7 @@ import { ConditionPart, ICondition, IField, IForm } from '@frontend/shared/types
 import React, { useEffect, useState } from 'react';
 import slugify from 'slugify';
 import moment from 'moment';
+import { getResponse } from '@frontend/shared/hooks/response/getResponse';
 
 interface DisplayFieldConditionProps {
   conditions: ICondition[];
@@ -17,51 +18,40 @@ export default function DisplayFieldCondition({
   formFields = [],
 }: DisplayFieldConditionProps) {
   const [forms, setForms] = useState({});
+  const [responses, setResponses] = useState({});
 
   const getForms = async () => {
-    try {
-      const formIds = [];
-      conditions?.forEach((condition) => {
-        const leftFormIds = getFormIds(condition?.left);
-        const rightFormIds = getFormIds(condition?.right);
-        [...leftFormIds, ...rightFormIds].forEach((formId) => {
-          if (formId && !formIds?.includes(formId)) {
-            formIds.push(formId);
-          }
-        });
-      });
-      const tempForm = {};
-      for (const formId of formIds) {
-        if (!tempForm[formId]?._id) {
-          const form = await getForm(formId);
-          if (form?._id) {
-            tempForm[form?._id] = form;
-          }
-        }
-      }
-      setForms(tempForm);
-    } catch (error) {
-      // eslint-disable-next-line no-alert
-      alert(`Error in form query, ${error?.message}`);
-    }
+    const { responses: tempResponses, forms: tempForms } = await getConditionsFormAndResponse(
+      conditions,
+    );
+    setForms(tempForms);
+    setResponses(tempResponses);
   };
+
   useEffect(() => {
     getForms();
   }, []);
 
   return (
     <div data-testid="displayFieldCondition-output">
-      {getFieldCondition(conditions, formFields, forms, {})}
+      {getFieldCondition({ conditions, formFields, forms, responses })}
     </div>
   );
 }
 
-export const getFieldCondition = (
-  conditions: ICondition[],
-  valueFormFields,
-  forms: { [key: string]: IForm },
-  responses: { [key: string]: IResponse },
-) => {
+interface GetFieldCondition {
+  conditions: ICondition[];
+  forms: { [key: string]: IForm };
+  responses: { [key: string]: IResponse };
+  formFields?: any;
+}
+
+export const getFieldCondition = ({
+  conditions,
+  formFields,
+  forms,
+  responses,
+}: GetFieldCondition) => {
   let conditionString = '';
   conditions?.forEach((condition) => {
     if (condition?.operator) {
@@ -72,7 +62,7 @@ export const getFieldCondition = (
     if (condition?.left?.formId) {
       const form = forms[condition?.left?.formId];
       const formName = slugifyVariable(form?.name);
-      conditionString += `$${formName}`;
+      conditionString += ` $${formName}`;
       if (condition?.left?.fieldId) {
         const subFieldLabel = getSubFieldsLabel(condition?.left, forms);
         if (subFieldLabel) {
@@ -86,7 +76,7 @@ export const getFieldCondition = (
     }
 
     // rightside
-    if (condition?.right?.value?.includes('user.')) {
+    if (condition?.right?.value?.includes('auth.')) {
       conditionString += ` $${condition?.right?.value}`;
     } else if (condition?.right?.value === 'constantValue') {
       conditionString += ` "${condition?.right?.constantValue}"`;
@@ -100,7 +90,7 @@ export const getFieldCondition = (
         }
       }
     } else if (condition?.right?.value) {
-      const fieldLabel = valueFormFields?.find((f) => f?._id === condition?.right?.value)?.label;
+      const fieldLabel = formFields?.find((f) => f?._id === condition?.right?.value)?.label;
       if (fieldLabel) {
         conditionString += ` $${slugifyVariable(fieldLabel)}`;
       }
@@ -163,6 +153,20 @@ const getFormIds = (part: ConditionPart) => {
   return formIds;
 };
 
+const getResponseIds = (part: ConditionPart) => {
+  let responseIds: string[] = [];
+  if (part?.responseId) {
+    responseIds.push(part?.responseId);
+  }
+  if (part?.subField?.responseId) {
+    const nestedFormIds = getResponseIds(part?.subField);
+    if (nestedFormIds?.length > 0) {
+      responseIds = [...responseIds, ...nestedFormIds];
+    }
+  }
+  return responseIds;
+};
+
 export const getValue = (field, value) => {
   switch (field?.fieldType) {
     case 'number':
@@ -199,4 +203,50 @@ const getLabel = (formField: string, response: any): string => {
     }
   });
   return label;
+};
+
+export const getConditionsFormAndResponse = async (conditions: ICondition[]) => {
+  try {
+    const formIds = [];
+    const responseIds = [];
+    conditions?.forEach((condition) => {
+      const leftFormIds = getFormIds(condition?.left);
+      const rightFormIds = getFormIds(condition?.right);
+      const rightResponseIds = getResponseIds(condition?.right);
+      [...leftFormIds, ...rightFormIds].forEach((formId) => {
+        if (formId && !formIds?.includes(formId)) {
+          formIds.push(formId);
+        }
+      });
+      rightResponseIds.forEach((responseId) => {
+        if (responseId && !responseIds?.includes(responseId)) {
+          responseIds.push(responseId);
+        }
+      });
+    });
+    const forms: { [key: string]: IForm } = {};
+    for (const formId of formIds) {
+      if (!forms[formId]?._id) {
+        const form = await getForm(formId);
+        if (form?._id) {
+          forms[form?._id] = form;
+        }
+      }
+    }
+    const responses: { [key: string]: IResponse } = {};
+    for (const responseId of responseIds) {
+      if (!responses[responseId]?._id) {
+        const response = await getResponse(responseId);
+        if (response?._id) {
+          responses[response?._id] = response;
+        }
+      }
+    }
+    return { forms, responses };
+  } catch (error) {
+    // eslint-disable-next-line no-alert
+    alert(
+      `Error while getting conditions form, ${error?.message} try refreshing the page or come back later.`,
+    );
+  }
 };

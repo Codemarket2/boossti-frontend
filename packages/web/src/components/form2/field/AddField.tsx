@@ -38,7 +38,8 @@ import SelectTemplate from '../../template/SelectTemplate';
 import Formula from './formula/Formula';
 import FieldCondition from './field-condition/FieldCondition';
 import DefaultValue from './DefaultValue';
-import HiddenCondition from './HiddenCondition';
+// import HiddenCondition from './HiddenCondition';
+import FieldConditionForm from './field-condition/FieldConditionForm';
 
 interface IProps {
   onCancel?: () => void;
@@ -523,12 +524,12 @@ export default function AddField({
                   className="mt-n2"
                   control={
                     <Checkbox
-                      checked={formik.values.options?.hiddenCondition?.length > 0}
+                      checked={formik.values.options?.hiddenConditions?.length > 0}
                       onChange={({ target }) =>
                         onOptionChange({
-                          hiddenCondition: target.checked
-                            ? [{ field: '', conditionType: null, value: '', constantValue: '' }]
-                            : null,
+                          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                          // @ts-ignore
+                          hiddenConditions: target.checked ? [{}] : null,
                         })
                       }
                       name="showIf"
@@ -537,15 +538,16 @@ export default function AddField({
                   }
                   label="Show If condition"
                 />
-                <HiddenCondition
-                  fields={parentFields?.filter((f) => f?._id !== field?._id)}
-                  hiddenCondition={formik.values.options?.hiddenCondition}
-                  onHiddenConditionChange={(hiddenCondition) =>
-                    onOptionChange({
-                      hiddenCondition,
-                    })
-                  }
-                />
+                {formik.values.options?.hiddenConditions?.length > 0 && (
+                  <FieldConditionForm
+                    conditions={formik.values.options?.hiddenConditions}
+                    onConditionsChange={(hiddenConditions) =>
+                      onOptionChange({
+                        hiddenConditions,
+                      })
+                    }
+                  />
+                )}
               </div>
             )}
           </div>

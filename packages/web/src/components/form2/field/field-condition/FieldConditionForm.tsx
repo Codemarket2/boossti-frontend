@@ -69,7 +69,7 @@ export default function FieldConditionForm({
   return (
     <div>
       {field?._id && <Typography>Edit Condition</Typography>}
-      {getFieldCondition(conditions, formFields, forms, responses)}
+      {getFieldCondition({ conditions, formFields, forms, responses })}
       <div className={field?._id ? 'pl-3' : ''}>
         {conditions?.map((condition, conditionIndex) => (
           <ConditionComponent
@@ -229,8 +229,18 @@ const ConditionComponent = ({
           >
             <MenuItem value="==">== (is Equal to)</MenuItem>
             <MenuItem value="!=">!= (is Not Equal to)</MenuItem>
-            <MenuItem value=">">{`>`} (Greater Than)</MenuItem>
-            <MenuItem value="<">{`<`} (Less Than)</MenuItem>
+            <MenuItem disabled value=">">
+              {`>`} (Greater Than)
+            </MenuItem>
+            <MenuItem disabled value="<">
+              {`<`} (Less Than)
+            </MenuItem>
+            <MenuItem disabled value=">=">
+              {`>=`} (Greater Than or Equal to)
+            </MenuItem>
+            <MenuItem disabled value="<=">
+              {`<=`} (Less Than or Equal to)
+            </MenuItem>
           </Select>
           {!condition?.conditionType && <FormHelperText>Required</FormHelperText>}
         </FormControl>
@@ -247,10 +257,10 @@ const ConditionComponent = ({
           >
             <MenuItem value="constantValue">Constant Value</MenuItem>
             <MenuItem value="form">Form</MenuItem>
-            <ListSubheader>Global state</ListSubheader>
-            <MenuItem value="user._id">user._id</MenuItem>
-            <MenuItem value="user.email">user.email</MenuItem>
-            <MenuItem value="user.name">user.name</MenuItem>
+            <ListSubheader>Global state (logged in User)</ListSubheader>
+            <MenuItem value="auth._id">auth._id</MenuItem>
+            <MenuItem value="auth.email">auth.email</MenuItem>
+            <MenuItem value="auth.name">auth.name</MenuItem>
             {formFields?.length > 0 && <ListSubheader>Form fields</ListSubheader>}
             {formFields
               ?.filter((formField) => formField?._id !== field?._id)

@@ -41,7 +41,8 @@ export interface IFieldOptions {
   defaultValue: Partial<IValue>;
   tabField?: boolean;
   hidden?: boolean;
-  hiddenCondition?: IHiddenCondition[];
+  // hiddenCondition?: IHiddenCondition[];
+  hiddenConditions?: ICondition[];
 }
 
 export interface IField {
