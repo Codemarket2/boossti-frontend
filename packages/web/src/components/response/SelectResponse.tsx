@@ -7,11 +7,11 @@ import ErrorLoading from '../common/ErrorLoading';
 import CreateResponseDrawer from './CreateResponseDrawer';
 
 interface IProps {
-  label: string;
   formId: string;
-  installId?: string;
   value: any;
-  onChange: (form) => void;
+  onChange: (response) => void;
+  label?: string;
+  installId?: string;
   error?: boolean;
   helperText?: string;
   disabled?: boolean;
@@ -20,12 +20,13 @@ interface IProps {
   allowCreate?: boolean;
   onlyMyResponses?: boolean;
   onChangeFullResponse?: (response: any) => void;
+  floatingLabel?: boolean;
 }
 
 const filter = createFilterOptions();
 
 export default function SelectResponse({
-  label,
+  label = 'Select Response',
   formId,
   installId,
   value = null,
@@ -38,6 +39,7 @@ export default function SelectResponse({
   openDrawer,
   allowCreate,
   onlyMyResponses,
+  floatingLabel,
 }: IProps) {
   const { data, error: queryError, loading, state, setState } = useGetResponses({
     formId,
@@ -107,7 +109,8 @@ export default function SelectResponse({
             error={error}
             helperText={helperText}
             fullWidth
-            placeholder={label || 'Select'}
+            placeholder={label}
+            label={floatingLabel && label}
             variant="outlined"
             InputProps={{
               ...params.InputProps,

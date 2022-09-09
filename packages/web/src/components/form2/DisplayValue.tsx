@@ -5,7 +5,6 @@ import Avatar from '@mui/material/Avatar';
 import { Box, Typography } from '@mui/material';
 import { IField } from '@frontend/shared/types/form';
 import slugify from 'slugify';
-import Link from 'next/link';
 import DisplayRichText from '../common/DisplayRichText';
 import { ShowResponseLabel } from '../response/ResponseDrawer';
 // import PageDrawer from '../template/PageDrawer';
