@@ -1,10 +1,10 @@
 import React from 'react';
-import Demo from '../__mocks__/Demo';
+import DemoQuery from '../__mocks__/DemoQuery';
 
 export default function demo() {
   return (
     <div>
-      <Demo />
+      <DemoQuery />
     </div>
   );
 }

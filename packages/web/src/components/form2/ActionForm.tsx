@@ -174,6 +174,7 @@ export default function ActionForm({
                   <MenuItem value="createCognitoUser">Create Cognito User</MenuItem>
                   <MenuItem value="updateCognitoUser">Update Cognito User</MenuItem>
                   <MenuItem value="deleteCognitoUser">Delete Cognito User</MenuItem>
+                  <MenuItem value="linkedinInviteAutomation">LinkedIn Invite Automation </MenuItem>
                   {fields?.some(
                     (field) => field?.fieldType === 'link' && field?.options?.required,
                   ) ? (
@@ -1126,6 +1127,140 @@ export default function ActionForm({
               </InputGroup>
             </Card>
           )}
+          {['linkedinInviteAutomation'].includes(formik.values.actionType) && (
+            <>
+              <div className="d-flex align-items-center">
+                <FormControl
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  error={Boolean(formik.touched.cognitoGroupName && formik.errors.cognitoGroupName)}
+                >
+                  <InputLabel id="linkedinEmail">LinkedIn Email</InputLabel>
+                  <Select
+                    labelId="linkedinEmail"
+                    id="linkedinEmail"
+                    name="linkedinEmail"
+                    value={formik.values.linkedinEmail}
+                    onChange={formik.handleChange}
+                    label="LinkedIn Email"
+                  >
+                    {fields
+                      ?.filter((f) => f.fieldType === 'email' && f?.options?.required)
+                      ?.map((field) => (
+                        <MenuItem value={field._id} key={field._id}>
+                          {field.label}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+              </div>
+              <div className="d-flex align-items-center mt-3">
+                <FormControl
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  error={Boolean(formik.touched.cognitoGroupDesc && formik.errors.cognitoGroupDesc)}
+                >
+                  <InputLabel id="linkedinPassword">LinkedIn Password</InputLabel>
+                  <Select
+                    labelId="linkedinPassword"
+                    id="linkedinPassword"
+                    name="linkedinPassword"
+                    value={formik.values.linkedinPassword}
+                    onChange={formik.handleChange}
+                    label=">LinkedIn Password"
+                  >
+                    {fields
+                      ?.filter((f) => f.fieldType === 'password' && f?.options?.required)
+                      ?.map((field) => (
+                        <MenuItem value={field._id} key={field._id}>
+                          {field.label}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+              </div>
+              <div className="d-flex align-items-center mt-3">
+                <FormControl
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  error={Boolean(formik.touched.cognitoGroupDesc && formik.errors.cognitoGroupDesc)}
+                >
+                  <InputLabel id="keyword">Keyword</InputLabel>
+                  <Select
+                    labelId="keyword"
+                    id="keyword"
+                    name="keyword"
+                    value={formik.values.keyword}
+                    onChange={formik.handleChange}
+                    label=">Keyword"
+                  >
+                    {fields
+                      ?.filter((f) => f.fieldType === 'text' && f?.options?.required)
+                      ?.map((field) => (
+                        <MenuItem value={field._id} key={field._id}>
+                          {field.label}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+              </div>
+              <div className="d-flex align-items-center mt-3">
+                <FormControl
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  error={Boolean(formik.touched.cognitoGroupDesc && formik.errors.cognitoGroupDesc)}
+                >
+                  <InputLabel id="tag">Tag</InputLabel>
+                  <Select
+                    labelId="tag"
+                    id="tag"
+                    name="tag"
+                    value={formik.values.tag}
+                    onChange={formik.handleChange}
+                    label="Tag"
+                  >
+                    {fields
+                      ?.filter((f) => f.fieldType === 'text' && f?.options?.required)
+                      ?.map((field) => (
+                        <MenuItem value={field._id} key={field._id}>
+                          {field.label}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+              </div>
+              <div className="d-flex align-items-center mt-3">
+                <FormControl
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  error={Boolean(formik.touched.cognitoGroupDesc && formik.errors.cognitoGroupDesc)}
+                >
+                  <InputLabel id="noOfInvites">No. Of Invites</InputLabel>
+                  <Select
+                    labelId="noOfInvites"
+                    id="noOfInvites"
+                    name="noOfInvites"
+                    value={formik.values.noOfInvites}
+                    onChange={formik.handleChange}
+                    label="noOfInvites"
+                  >
+                    {fields
+                      ?.filter((f) => f.fieldType === 'number' && f?.options?.required)
+                      ?.map((field) => (
+                        <MenuItem value={field._id} key={field._id}>
+                          {field.label}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+              </div>
+            </>
+          )}
           <InputGroup>
             <LoadingButton
               data-testid="save-button"
@@ -1171,4 +1306,5 @@ const actionTypes = [
   'createSubDomainRoute53',
   'updateSubDomainRoute53',
   'deleteSubDomainRoute53',
+  'linkedinInviteAutomation',
 ];

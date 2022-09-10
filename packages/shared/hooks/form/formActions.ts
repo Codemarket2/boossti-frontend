@@ -126,6 +126,11 @@ interface IFormValues {
   reportScreenshoot: string;
   domain: string;
   distributionId: string;
+  linkedinEmail: string;
+  linkedinPassword: string;
+  noOfInvites: number;
+  keyword: string;
+  tag: string;
 }
 
 const defaultFormValues = {
@@ -156,6 +161,11 @@ const defaultFormValues = {
   reportScreenshoot: '',
   domain: '',
   distributionId: '',
+  linkedinEmail: '',
+  linkedinPassword: '',
+  noOfInvites: 0,
+  keyword: '',
+  tag: '',
 };
 
 interface IProps extends IHooksProps {

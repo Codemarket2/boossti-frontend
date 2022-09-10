@@ -6,7 +6,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import ErrorLoading from '../common/ErrorLoading';
 import CreateResponseDrawer from './CreateResponseDrawer';
 
-interface IProps {
+
+export interface IProps {
   formId: string;
   value: any;
   onChange: (response) => void;
@@ -46,6 +47,7 @@ export default function SelectResponse({
     formField,
     onlyMy: onlyMyResponses,
   });
+
   const [addOption, setAddOption] = useState({ showDrawer: false });
 
   useEffect(() => {
@@ -60,36 +62,38 @@ export default function SelectResponse({
 
   return (
     <>
-      <Autocomplete
-        disabled={disabled}
-        size="small"
-        loading={loading}
-        value={value}
-        onChange={(event: any, newValue) => {
-          if (newValue?.openDrawer) {
-            if (openDrawer) {
-              openDrawer();
-            } else {
-              onChange(null);
-              setAddOption({ ...addOption, showDrawer: true });
-            }
-          } else {
-            if (onChangeFullResponse) {
-              const response = data?.getResponses?.data?.find((r) => r?._id === newValue?._id);
-              if (response) {
-                onChangeFullResponse(response);
+      <div data-testid="selectResponse">
+        <Autocomplete
+          data-testid="Autocomplete"
+          disabled={disabled}
+          size="small"
+          loading={loading}
+          value={value}
+          onChange={(event: any, newValue) => {
+            if (newValue?.openDrawer) {
+              if (openDrawer) {
+                openDrawer();
+              } else {
+                onChange(null);
+                setAddOption({ ...addOption, showDrawer: true });
               }
+            } else {
+              if (onChangeFullResponse) {
+                const response = data?.getResponses?.data?.find((r) => r?._id === newValue?._id);
+                if (response) {
+                  onChangeFullResponse(response);
+                }
+              }
+              onChange(newValue);
             }
-            onChange(newValue);
-          }
-        }}
-        options={getLabels(formField, data?.getResponses?.data) || []}
-        getOptionLabel={(option) => option?.label}
-        inputValue={state.search}
-        onInputChange={(event, newInputValue) => {
-          setState({ ...state, search: newInputValue });
-        }}
-        filterOptions={(options, params) => {
+          }}
+          options={getLabels(formField, data?.getResponses?.data) || []}
+          getOptionLabel={(option) => option?.label}
+          inputValue={state.search}
+          onInputChange={(event, newInputValue) => {
+            setState({ ...state, search: newInputValue });
+          }}
+          filterOptions={(options, params) => {
           let filtered = filter(options, params);
           filtered = filtered.map((option: any) => {
             return { ...option, label: option?.label?.split('{{}}')?.[0] };
@@ -102,41 +106,46 @@ export default function SelectResponse({
             });
           }
           return filtered;
-        }}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            error={error}
-            helperText={helperText}
-            fullWidth
-            placeholder={label}
-            label={floatingLabel && label}
-            variant="outlined"
-            InputProps={{
-              ...params.InputProps,
-              endAdornment: (
-                <>
-                  {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                  {params.InputProps.endAdornment}
-                </>
-              ),
-            }}
-          />
-        )}
-      />
-      {addOption?.showDrawer && (
-        <CreateResponseDrawer
-          open={addOption?.showDrawer}
-          onClose={() => setAddOption({ ...addOption, showDrawer: false })}
-          title={label}
-          formId={formId}
-          installId={installId}
-          createCallback={(newResponse) => {
-            onChange(getLabels(formField, [newResponse])?.pop());
-            setAddOption({ ...addOption, showDrawer: false });
           }}
+          renderInput={(params) => (
+            <div data-testid="TextField">
+              <TextField
+                {...params}
+                error={error}
+                helperText={helperText}
+                fullWidth
+                placeholder={label || 'Select'}
+                variant="outlined"
+                InputProps={{
+                  ...params.InputProps,
+                  endAdornment: (
+                    <>
+                      {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                      {params.InputProps.endAdornment}
+                    </>
+                  ),
+                }}
+              />
+            </div>
+          )}
         />
-      )}
+
+        {addOption?.showDrawer && (
+          <div data-testid="CreateResponseDrawer">
+            <CreateResponseDrawer
+              open={addOption?.showDrawer}
+              onClose={() => setAddOption({ ...addOption, showDrawer: false })}
+              title={label}
+              formId={formId}
+              installId={installId}
+              createCallback={(newResponse) => {
+                onChange(getLabels(formField, [newResponse])?.pop());
+                setAddOption({ ...addOption, showDrawer: false });
+              }}
+            />
+          </div>
+        )}
+      </div>
     </>
   );
 }
