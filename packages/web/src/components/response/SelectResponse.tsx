@@ -8,7 +8,6 @@ import CreateResponseDrawer from './CreateResponseDrawer';
 
 
 export interface IProps {
-  label: string;
   formId: string;
   value: any;
   onChange: (response) => void;
