@@ -6,12 +6,14 @@ import CircularProgress from '@mui/material/CircularProgress';
 import ErrorLoading from '../common/ErrorLoading';
 import CreateResponseDrawer from './CreateResponseDrawer';
 
+
 export interface IProps {
   label: string;
   formId: string;
-  installId?: string;
   value: any;
-  onChange: (form) => void;
+  onChange: (response) => void;
+  label?: string;
+  installId?: string;
   error?: boolean;
   helperText?: string;
   disabled?: boolean;
@@ -20,12 +22,13 @@ export interface IProps {
   allowCreate?: boolean;
   onlyMyResponses?: boolean;
   onChangeFullResponse?: (response: any) => void;
+  floatingLabel?: boolean;
 }
 
 const filter = createFilterOptions();
 
 export default function SelectResponse({
-  label,
+  label = 'Select Response',
   formId,
   installId,
   value = null,
@@ -38,6 +41,7 @@ export default function SelectResponse({
   openDrawer,
   allowCreate,
   onlyMyResponses,
+  floatingLabel,
 }: IProps) {
   const { data, error: queryError, loading, state, setState } = useGetResponses({
     formId,
@@ -91,18 +95,18 @@ export default function SelectResponse({
             setState({ ...state, search: newInputValue });
           }}
           filterOptions={(options, params) => {
-            let filtered = filter(options, params);
-            filtered = filtered.map((option: any) => {
-              return { ...option, label: option?.label?.split('{{}}')?.[0] };
+          let filtered = filter(options, params);
+          filtered = filtered.map((option: any) => {
+            return { ...option, label: option?.label?.split('{{}}')?.[0] };
+          });
+          if (params.inputValue !== '' && !loading && allowCreate) {
+            filtered.push({
+              inputValue: params.inputValue,
+              label: `Add "${params.inputValue}"`,
+              openDrawer: true,
             });
-            if (params.inputValue !== '' && !loading && allowCreate) {
-              filtered.push({
-                inputValue: params.inputValue,
-                label: `Add "${params.inputValue}"`,
-                openDrawer: true,
-              });
-            }
-            return filtered;
+          }
+          return filtered;
           }}
           renderInput={(params) => (
             <div data-testid="TextField">

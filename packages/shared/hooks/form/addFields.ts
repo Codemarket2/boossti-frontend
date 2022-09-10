@@ -63,7 +63,7 @@ export const defaultOptions: IFieldOptions = {
   conditions: [],
   defaultValue: null,
   hidden: false,
-  hiddenCondition: null,
+  hiddenConditions: null,
 };
 
 interface IValues extends IField {
