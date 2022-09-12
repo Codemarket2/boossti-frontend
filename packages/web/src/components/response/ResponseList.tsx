@@ -33,6 +33,7 @@ export default function ResponseList({
     installId,
     valueFilter,
   });
+
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
 
   return (

@@ -52,7 +52,9 @@ export default function FileUpload({ onUpload, acceptedFileType }: IProps) {
           open={state.showLibrary}
           onClose={() => setState({ ...state, showLibrary: false })}
           files={[]}
-          onUpload={() => null}
+          onUpload={(urls: string[]) => {
+            onUpload(urls);
+          }}
           onDelete={() => null}
           onUploadNewFile={onUploadNewFile}
           acceptedFileType={acceptedFileType}
