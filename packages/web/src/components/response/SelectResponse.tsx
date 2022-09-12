@@ -6,7 +6,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 import ErrorLoading from '../common/ErrorLoading';
 import CreateResponseDrawer from './CreateResponseDrawer';
 
-
 export interface IProps {
   formId: string;
   value: any;
@@ -94,18 +93,18 @@ export default function SelectResponse({
             setState({ ...state, search: newInputValue });
           }}
           filterOptions={(options, params) => {
-          let filtered = filter(options, params);
-          filtered = filtered.map((option: any) => {
-            return { ...option, label: option?.label?.split('{{}}')?.[0] };
-          });
-          if (params.inputValue !== '' && !loading && allowCreate) {
-            filtered.push({
-              inputValue: params.inputValue,
-              label: `Add "${params.inputValue}"`,
-              openDrawer: true,
+            let filtered = filter(options, params);
+            filtered = filtered.map((option: any) => {
+              return { ...option, label: option?.label?.split('{{}}')?.[0] };
             });
-          }
-          return filtered;
+            if (params.inputValue !== '' && !loading && allowCreate) {
+              filtered.push({
+                inputValue: params.inputValue,
+                label: `Add "${params.inputValue}"`,
+                openDrawer: true,
+              });
+            }
+            return filtered;
           }}
           renderInput={(params) => (
             <div data-testid="TextField">
