@@ -15,7 +15,6 @@ import { IconButton, useTheme } from '@mui/material';
 import CheckBox from '@mui/icons-material/CheckBox';
 import Delete from '@mui/icons-material/Delete';
 import { useDropzone } from 'react-dropzone';
-import { useGetResponses, useDeleteResponse } from '@frontend/shared/hooks/response';
 
 interface FileLibraryProps {
   open: boolean;
@@ -143,26 +142,6 @@ export default function FileLibrary({
     }),
     [isFocused, isDragAccept, isDragReject],
   );
-  // Code below is for the file library
-  // All user can whatch each other files
-  const { data, loading } = useGetResponses({
-    formId: '631cfdd2bb5421884a6bbe2e', // form id of file-library form
-    onlyMy: false,
-    workFlowFormResponseParentId: null,
-    appId: null,
-    installId: null,
-    valueFilter: null,
-  });
-
-  let fileLibraryData = [];
-  if (data && loading === false) {
-    fileLibraryData = data?.getResponses?.data?.map((item) => {
-      return {
-        id: item._id,
-        url: item?.values[0]?.value,
-      };
-    });
-  }
 
   return (
     <Dialog fullWidth onClose={onClose} open={open}>
@@ -215,7 +194,7 @@ export default function FileLibrary({
           </>
         ) : (
           <div className="d-flex">
-            {fileLibraryData.map((file) => {
+            {files.map((file) => {
               const isFileSelected = selectedFiles.some((f) => f?.id === file?.id);
               return (
                 <div

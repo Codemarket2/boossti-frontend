@@ -8,6 +8,8 @@ import 'grapesjs/dist/css/grapes.min.css';
 import { Button } from '@mui/material';
 import { addTagToLink } from './addTagToLink';
 
+import FileLibrary from '../fileLibrary/FileLibrary';
+
 export default function GrapesjsEditor() {
   const [state, setState] = useState({ showLibrary: false, props: null });
 
@@ -16,14 +18,15 @@ export default function GrapesjsEditor() {
       container: '#gjs',
       height: '100vh',
       plugins: ['gjs-preset-newsletter'],
-      // assetManager: {
-      //   custom: {
-      //     open(props) {
-      //       setState({ ...state, showLibrary: true, props });
-      //     },
-      //     close(props) {},
-      //   },
-      // },
+      assetManager: {
+        // custom: {
+        //   open(props) {
+        //     setState({ ...state, showLibrary: true, props });
+        //   },
+        //   close(props) {},
+        // },
+      },
+
       storageManager: false,
     });
 
@@ -39,19 +42,44 @@ export default function GrapesjsEditor() {
         alert('Saving to database');
       },
     });
+    // editor.Commands.add('open-assets', {
+    //   run(editor, sender, opts) {
+    //     const assettarget = opts.target;
+    //     // code to open your own modal goes here.
+    //     <FileLibrary
+    //       open={true}
+    //       onClose={() => null}
+    //       files={[]}
+    //       title="File Library"
+    //       onUpload={() => null}
+    //       onUploadNewFile={() => null}
+    //       onDelete={() => null}
+    //       acceptedFileType={() => null}
+    //     />;
+    //   },
+    // });
+    // const assetManager = editor.AssetManager;
+    // if (assetManager.isOpen()) {
+    //   setIsOpen(true);
+    // }
   }, []);
 
   return (
     <div>
       {state.showLibrary && (
-        <Button
-          onClick={() => {
+        <FileLibrary
+          open={state.showLibrary}
+          onClose={() => {
             state.props.close();
             setState({ ...state, showLibrary: false });
           }}
-        >
-          Close
-        </Button>
+          files={[]}
+          title="File Library"
+          onUpload={() => state.props.FileUploader()}
+          onUploadNewFile={() => state.props.FileUploader()}
+          onDelete={() => null}
+          acceptedFileType={() => null}
+        />
       )}
       <div id="gjs" />
     </div>
