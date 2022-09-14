@@ -6,9 +6,12 @@ import 'grapesjs-preset-newsletter';
 
 import 'grapesjs/dist/css/grapes.min.css';
 import { Button } from '@mui/material';
+import { openStdin } from 'process';
+import { on } from 'events';
 import { addTagToLink } from './addTagToLink';
 
 import FileLibrary from '../fileLibrary/FileLibrary';
+import FileLibraryWrapper from '../fileLibrary/FileLibraryWrapper';
 
 export default function GrapesjsEditor() {
   const [state, setState] = useState({ showLibrary: false, props: null });
@@ -42,41 +45,37 @@ export default function GrapesjsEditor() {
         alert('Saving to database');
       },
     });
-    // editor.Commands.add('open-assets', {
-    //   run(editor, sender, opts) {
-    //     const assettarget = opts.target;
-    //     // code to open your own modal goes here.
-    //     <FileLibrary
-    //       open={true}
-    //       onClose={() => null}
-    //       files={[]}
-    //       title="File Library"
-    //       onUpload={() => null}
-    //       onUploadNewFile={() => null}
-    //       onDelete={() => null}
-    //       acceptedFileType={() => null}
-    //     />;
-    //   },
-    // });
-    // const assetManager = editor.AssetManager;
-    // if (assetManager.isOpen()) {
-    //   setIsOpen(true);
-    // }
-  }, []);
 
+    editor.Commands.add('open-assets', {
+      run(editor2, sender, opts) {
+        const assettarget = opts.target;
+        // code to open your own modal goes here.
+        setState({ ...state, showLibrary: true, props: opts });
+      },
+    });
+  }, []);
+  const onUpload = (urls) => {
+    state.props.target.set('src', urls[0]);
+    setState({ ...state, showLibrary: false, props: null });
+  };
   return (
     <div>
       {state.showLibrary && (
-        <FileLibrary
+        <FileLibraryWrapper
           open={state.showLibrary}
           onClose={() => {
-            state.props.close();
+            // state.props.close();
             setState({ ...state, showLibrary: false });
           }}
-          files={[]}
-          title="File Library"
-          onUpload={() => state.props.FileUploader()}
-          onUploadNewFile={() => state.props.FileUploader()}
+          // onUpload={() => {
+          //   setTimeout(() => {
+          //     state.assettarget.set(
+          //       'src',
+          //       'https://media-exp1.licdn.com/dms/image/C5603AQFzwKRNsakUlQ/profile-displayphoto-shrink_100_100/0/1590643886102?e=1668643200&v=beta&t=oA7joIs0P-phuvglNWJIOOtvkuDpDSy_gY_oo5eIGdc',
+          //     );
+          //   }, 1);
+          // }}
+          onUpload={onUpload}
           onDelete={() => null}
           acceptedFileType={() => null}
         />
