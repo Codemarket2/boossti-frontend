@@ -6,7 +6,12 @@ import 'grapesjs-preset-newsletter';
 
 import 'grapesjs/dist/css/grapes.min.css';
 import { Button } from '@mui/material';
+import { openStdin } from 'process';
+import { on } from 'events';
 import { addTagToLink } from './addTagToLink';
+
+import FileLibrary from '../fileLibrary/FileLibrary';
+import FileLibraryWrapper from '../fileLibrary/FileLibraryWrapper';
 
 export default function GrapesjsEditor() {
   const [state, setState] = useState({ showLibrary: false, props: null });
@@ -16,14 +21,15 @@ export default function GrapesjsEditor() {
       container: '#gjs',
       height: '100vh',
       plugins: ['gjs-preset-newsletter'],
-      // assetManager: {
-      //   custom: {
-      //     open(props) {
-      //       setState({ ...state, showLibrary: true, props });
-      //     },
-      //     close(props) {},
-      //   },
-      // },
+      assetManager: {
+        // custom: {
+        //   open(props) {
+        //     setState({ ...state, showLibrary: true, props });
+        //   },
+        //   close(props) {},
+        // },
+      },
+
       storageManager: false,
     });
 
@@ -39,19 +45,40 @@ export default function GrapesjsEditor() {
         alert('Saving to database');
       },
     });
-  }, []);
 
+    editor.Commands.add('open-assets', {
+      run(editor2, sender, opts) {
+        const assettarget = opts.target;
+        // code to open your own modal goes here.
+        setState({ ...state, showLibrary: true, props: opts });
+      },
+    });
+  }, []);
+  const onUpload = (urls) => {
+    state.props.target.set('src', urls[0]);
+    setState({ ...state, showLibrary: false, props: null });
+  };
   return (
     <div>
       {state.showLibrary && (
-        <Button
-          onClick={() => {
-            state.props.close();
+        <FileLibraryWrapper
+          open={state.showLibrary}
+          onClose={() => {
+            // state.props.close();
             setState({ ...state, showLibrary: false });
           }}
-        >
-          Close
-        </Button>
+          // onUpload={() => {
+          //   setTimeout(() => {
+          //     state.assettarget.set(
+          //       'src',
+          //       'https://media-exp1.licdn.com/dms/image/C5603AQFzwKRNsakUlQ/profile-displayphoto-shrink_100_100/0/1590643886102?e=1668643200&v=beta&t=oA7joIs0P-phuvglNWJIOOtvkuDpDSy_gY_oo5eIGdc',
+          //     );
+          //   }, 1);
+          // }}
+          onUpload={onUpload}
+          onDelete={() => null}
+          acceptedFileType={() => null}
+        />
       )}
       <div id="gjs" />
     </div>
