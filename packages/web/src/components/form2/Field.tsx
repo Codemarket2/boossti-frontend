@@ -37,6 +37,8 @@ import { defaultDiagram } from '../syncfusion-diagram/defaultDiagram';
 import ReactFlow from '../react-flow/ReactFlow';
 import FieldConditionForm from './field/field-condition/FieldConditionForm';
 import 'react-phone-input-2/lib/style.css';
+import Grapesjs from '../../../pages/grapesjs';
+import Webpage from '../grapesjs/grapesOverlay';
 
 export interface FieldProps {
   field: IField;
@@ -249,6 +251,17 @@ export default function Field({
             <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
           )}
         </div>
+      );
+    }
+    case 'webpage': {
+      return (
+        <>
+          <Webpage
+            editMode
+            value={value?.value || ''}
+            onChange={(html) => onChange({ value: html })}
+          />
+        </>
       );
     }
     case 'boolean': {

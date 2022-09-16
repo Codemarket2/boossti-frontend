@@ -14,6 +14,7 @@ interface IProps {
   secondButton?: ReactNode;
   minWidth?: string;
   maxWidth?: string;
+  hideAppBar?: boolean;
 }
 
 export default function Overlay({
@@ -24,30 +25,34 @@ export default function Overlay({
   secondButton = null,
   minWidth = '60vw',
   maxWidth = '85vw',
+  hideAppBar = false,
 }: IProps) {
   return (
     <Drawer anchor="right" open={open}>
       <div style={{ minWidth, maxWidth }}>
-        <AppBar color="transparent" position="static" elevation={1}>
-          <Toolbar variant="dense">
-            {title && (
-              <Typography variant="h6" className="flex-grow-1">
-                {title}
-              </Typography>
-            )}
-            {secondButton}
-            <Button
-              className="ml-2"
-              startIcon={<Close />}
-              onClick={onClose}
-              color="primary"
-              variant="contained"
-              size="small"
-            >
-              Close
-            </Button>
-          </Toolbar>
-        </AppBar>
+        {!hideAppBar && (
+          <AppBar color="transparent" position="static" elevation={1}>
+            <Toolbar variant="dense">
+              {title && (
+                <Typography variant="h6" className="flex-grow-1">
+                  {title}
+                </Typography>
+              )}
+              {secondButton}
+              <Button
+                className="ml-2"
+                startIcon={<Close />}
+                onClick={onClose}
+                color="primary"
+                variant="contained"
+                size="small"
+              >
+                Close
+              </Button>
+            </Toolbar>
+          </AppBar>
+        )}
+
         {children}
       </div>
     </Drawer>

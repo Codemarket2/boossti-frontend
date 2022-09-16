@@ -8,12 +8,19 @@ import 'grapesjs/dist/css/grapes.min.css';
 import { Button } from '@mui/material';
 import { openStdin } from 'process';
 import { on } from 'events';
+import Save from '@mui/icons-material/Save';
 import { addTagToLink } from './addTagToLink';
 
 import FileLibrary from '../fileLibrary/FileLibrary';
 import FileLibraryWrapper from '../fileLibrary/FileLibraryWrapper';
 
-export default function GrapesjsEditor() {
+export default function GrapesjsEditor({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (html: string) => void;
+}) {
   const [state, setState] = useState({ showLibrary: false, props: null });
 
   useEffect(() => {
@@ -42,6 +49,7 @@ export default function GrapesjsEditor() {
         html = addTagToLink(html);
         // eslint-disable-next-line no-console
         console.log(html);
+        onChange(html);
         alert('Saving to database');
       },
     });
@@ -54,6 +62,7 @@ export default function GrapesjsEditor() {
       },
     });
   }, []);
+
   const onUpload = (urls) => {
     state.props.target.set('src', urls[0]);
     setState({ ...state, showLibrary: false, props: null });
@@ -64,17 +73,8 @@ export default function GrapesjsEditor() {
         <FileLibraryWrapper
           open={state.showLibrary}
           onClose={() => {
-            // state.props.close();
             setState({ ...state, showLibrary: false });
           }}
-          // onUpload={() => {
-          //   setTimeout(() => {
-          //     state.assettarget.set(
-          //       'src',
-          //       'https://media-exp1.licdn.com/dms/image/C5603AQFzwKRNsakUlQ/profile-displayphoto-shrink_100_100/0/1590643886102?e=1668643200&v=beta&t=oA7joIs0P-phuvglNWJIOOtvkuDpDSy_gY_oo5eIGdc',
-          //     );
-          //   }, 1);
-          // }}
           onUpload={onUpload}
           onDelete={() => null}
           acceptedFileType={() => null}
