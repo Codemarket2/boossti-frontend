@@ -16,6 +16,7 @@ import DisplayDiagram from '../syncfusion-diagram/DisplayDiagram';
 import ReactFlow from '../react-flow/ReactFlow';
 // import DisplayFormulaValue from './formula/DisplayFormulaValue';
 import DisplayFieldCondition from './field/field-condition/DisplayFieldCondition';
+import GrapesOverlay from '../grapesjs/grapesOverlay';
 
 interface IProps {
   field: Partial<IField>;
@@ -156,6 +157,12 @@ export default function DisplayValue({
       return <ReactFlow _id={value?._id} flow={value?.options?.flowDiagram} />;
     case 'condition':
       return <DisplayFieldCondition conditions={value?.options?.conditions} />;
+    case 'webpage':
+      return (
+        <div>
+          <GrapesOverlay value={value?.value} />
+        </div>
+      );
     default:
       return <>{value?.value}</>;
   }
