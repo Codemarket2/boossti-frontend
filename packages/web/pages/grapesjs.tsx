@@ -5,10 +5,10 @@ import GrapesjsEditor from '../src/components/grapesjs/GrapesjsEditor';
 //   ssr: false,
 // });
 
-export default function grapesjs() {
+export default function grapesjs({ value, onChange }) {
   return (
     <div>
-      <GrapesjsEditor />
+      <GrapesjsEditor value={value} onChange={onChange} />
     </div>
   );
 }

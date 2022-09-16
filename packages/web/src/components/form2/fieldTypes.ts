@@ -101,7 +101,10 @@ type ConditionType = {
   label: 'Condition';
   value: 'condition';
 };
-
+type Webpage = {
+  label: 'Webpage';
+  value: 'webpage';
+};
 type TFieldType =
   | FormFieldType
   | FormResponseType
@@ -126,7 +129,8 @@ type TFieldType =
   | BoardType
   | DiagramType
   | FlowDiagramType
-  | ConditionType;
+  | ConditionType
+  | Webpage;
 
 export const getFormFieldTypes = (isWidget: boolean): TFieldType[] => {
   if (isWidget) {
@@ -167,4 +171,5 @@ export const fieldTypes: TFieldType[] = [
   { label: 'Diagram', value: 'diagram' },
   { label: 'Flow Diagram', value: 'flowDiagram' },
   { label: 'Condition', value: 'condition' },
+  { label: 'Webpage', value: 'webpage' },
 ];
