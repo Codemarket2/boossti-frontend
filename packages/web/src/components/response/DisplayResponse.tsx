@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
-import { Fragment, useState } from 'react';
-import { useDeleteResponse } from '@frontend/shared/hooks/response';
+import { Fragment, useEffect, useState } from 'react';
+import { useDeleteResponse, useResolveCondition } from '@frontend/shared/hooks/response';
 import Link from 'next/link';
 import Typography from '@mui/material/Typography';
 import { useUpdateSection } from '@frontend/shared/hooks/section';
@@ -78,6 +78,12 @@ export function DisplayResponse({
 
   const userForm = useSelector(({ setting }: any) => setting.userForm);
 
+  const { handleResolveCondition } = useResolveCondition(response?._id);
+
+  useEffect(() => {
+    // debugger;
+  }, [response.values]);
+
   const hideLeftNavigation = !(hideAuthor || hideNavigation || hideBreadcrumbs);
 
   const DeleteComponent = (
@@ -93,6 +99,13 @@ export function DisplayResponse({
       )}
     </>
   );
+
+  const filterFields = (field) => {
+    if (field?.options?.hidden && field?.options?.hiddenConditions?.length > 0) {
+      return false;
+    }
+    return true;
+  };
 
   return (
     <>
@@ -189,7 +202,7 @@ export function DisplayResponse({
                 <Typography fontWeight="bold">ID</Typography>
                 {response?.count}
               </div>
-              {form?.fields?.map((field) => {
+              {form?.fields?.filter(filterFields)?.map((field) => {
                 return (
                   <div key={field?._id} className="mt-3">
                     {field?._id === state.fieldId ? (

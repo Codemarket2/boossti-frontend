@@ -645,6 +645,7 @@ export function FormView({
 
   const filterHiddenFields = (field) => {
     if (field?.options?.hidden && field?.options?.hiddenConditions?.length > 0) {
+      // debugger;
       const result = resolveCondition({
         conditions: field?.options?.hiddenConditions,
         leftPartResponse: { formId, values },
