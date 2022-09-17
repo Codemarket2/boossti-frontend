@@ -2,11 +2,15 @@ import Button from '@mui/material/Button';
 import Edit from '@mui/icons-material/Edit';
 import { useState } from 'react';
 import parse from 'html-react-parser';
+import dynamic from 'next/dynamic';
 import Grapesjs from '../../../pages/grapesjs';
 import Overlay from '../common/Overlay';
-import GrapesjsEditor from './GrapesjsEditor';
+// import GrapesjsEditor from './GrapesjsEditor';
 import EditMode from '../common/EditMode';
 
+const GrapesjsEditor = dynamic(() => import('./GrapesjsEditor'), {
+  ssr: false,
+});
 interface Iprops {
   value?: string;
   onChange?: (value: string) => void;
