@@ -44,7 +44,7 @@ export default function Webpage({ editMode, value, onChange }: Iprops) {
             onClose={() => {
               setopen(false);
             }}
-            title="Edit Html Page"
+            title={editMode ? 'Editing Html Page' : 'Viewing Html Page'}
             maxWidth="100vw"
             minWidth="100vw"
             hideAppBar={editMode}
