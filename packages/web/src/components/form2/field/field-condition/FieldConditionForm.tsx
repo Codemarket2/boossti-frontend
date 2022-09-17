@@ -298,7 +298,13 @@ const ConditionComponent = ({
                   : null
               }
               onChange={(from) => {
-                onChange({ right: { ...condition?.right, formId: from?._id } });
+                const payload = { ...condition?.right, formId: from?._id };
+                if (condition?.right?.formId !== from?._id) {
+                  payload.fieldId = null;
+                  payload.responseId = null;
+                  payload.subField = null;
+                }
+                onChange({ right: payload });
                 setFormNames({ ...formNames, right: from?.name });
               }}
               error={!condition?.right?.formId}
@@ -402,7 +408,7 @@ const SelectSubField = ({
           formField={subField?.fieldId}
           value={subField?.responseId && (tempResponse || response)}
           onChange={(newResponse) => {
-            onChange({ responseId: newResponse?._id });
+            handleChange({ responseId: newResponse?._id });
             setTempResponse(newResponse);
           }}
         />

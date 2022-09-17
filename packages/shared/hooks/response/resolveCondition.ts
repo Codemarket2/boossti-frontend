@@ -5,10 +5,12 @@ export const useResolveCondition = (responseId: string) => {
   const [resolveConditionMutation] = useMutation(RESOLVE_CONDITION);
   const handleResolveCondition = async (conditions) => {
     try {
-      const { data } = await resolveConditionMutation({ variables: { responseId, conditions } });
-      // debugger;
+      const { data } = await resolveConditionMutation({
+        variables: { responseId, conditions: JSON.stringify(conditions) },
+      });
+      return data?.resolveCondition === true;
     } catch (error) {
-      alert(`Error, ${error?.message}`);
+      alert(`Error while resolving condition, ${error?.message}`);
     }
   };
   return { handleResolveCondition };

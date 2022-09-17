@@ -62,6 +62,7 @@ export function DisplayResponse({
   hideDelete,
 }: DisplayResponseProps) {
   const [state, setState] = useState(initialState);
+  const [fieldsConditionResult, setFieldsConditionResult] = useState({});
 
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
   const response = parseResponse(tempResponse);
@@ -80,9 +81,20 @@ export function DisplayResponse({
 
   const { handleResolveCondition } = useResolveCondition(response?._id);
 
+  const resolveCondition = async (fieldId, conditions) => {
+    const conditionResult = await handleResolveCondition(conditions);
+    setFieldsConditionResult((oldState) => ({ ...oldState, [fieldId]: conditionResult }));
+  };
+
   useEffect(() => {
-    // debugger;
-  }, [response.values]);
+    if (!state?.fieldId) {
+      form?.fields?.forEach((field) => {
+        if (field?.options?.hidden && field?.options?.hiddenConditions?.length > 0) {
+          resolveCondition(field?._id, field?.options?.hiddenConditions);
+        }
+      });
+    }
+  }, [state?.fieldId]);
 
   const hideLeftNavigation = !(hideAuthor || hideNavigation || hideBreadcrumbs);
 
@@ -102,6 +114,9 @@ export function DisplayResponse({
 
   const filterFields = (field) => {
     if (field?.options?.hidden && field?.options?.hiddenConditions?.length > 0) {
+      if (fieldsConditionResult?.[field?._id]) {
+        return true;
+      }
       return false;
     }
     return true;

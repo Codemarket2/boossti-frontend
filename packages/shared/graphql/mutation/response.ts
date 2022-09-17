@@ -145,7 +145,7 @@ export const CREATE_BULK_RESPONSE = gql`
 `;
 
 export const RESOLVE_CONDITION = gql`
-  mutation ResolveCondition($responseId: ID!, $conditions: AWSJSON) {
+  mutation ResolveCondition($responseId: ID!, $conditions: AWSJSON!) {
     resolveCondition(responseId: $responseId, conditions: $conditions)
   }
 `;
