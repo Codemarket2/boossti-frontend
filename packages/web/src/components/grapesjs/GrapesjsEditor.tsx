@@ -9,10 +9,15 @@ import { Button } from '@mui/material';
 import { openStdin } from 'process';
 import { on } from 'events';
 import Save from '@mui/icons-material/Save';
-import { addTagToLink } from './addTagToLink';
 
-import FileLibrary from '../fileLibrary/FileLibrary';
+// import webpagePlugin from 'grapesjs-preset-webpage';
+import blockPlugin from 'grapesjs-blocks-basic';
+import customCodePlugin from 'grapesjs-custom-code';
+import navbarPlugin from 'grapesjs-navbar';
+import scriptEditor from 'grapesjs-script-editor';
 import FileLibraryWrapper from '../fileLibrary/FileLibraryWrapper';
+import FileLibrary from '../fileLibrary/FileLibrary';
+import { addTagToLink } from './addTagToLink';
 
 export default function GrapesjsEditor({
   value,
@@ -27,18 +32,13 @@ export default function GrapesjsEditor({
     const editor = grapesjs.init({
       container: '#gjs',
       height: '100vh',
-      plugins: ['gjs-preset-newsletter'],
-      assetManager: {
-        // custom: {
-        //   open(props) {
-        //     setState({ ...state, showLibrary: true, props });
-        //   },
-        //   close(props) {},
-        // },
-      },
+      plugins: ['gjs-preset-newsletter', blockPlugin, customCodePlugin, navbarPlugin, scriptEditor],
 
       storageManager: false,
     });
+    if (value) {
+      editor.setComponents(value);
+    }
 
     editor.Panels.addButton('options', {
       id: 'options',

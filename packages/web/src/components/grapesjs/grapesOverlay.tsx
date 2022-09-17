@@ -1,18 +1,22 @@
 import Button from '@mui/material/Button';
 import Edit from '@mui/icons-material/Edit';
 import { useState } from 'react';
+import parse from 'html-react-parser';
+import dynamic from 'next/dynamic';
 import Grapesjs from '../../../pages/grapesjs';
 import Overlay from '../common/Overlay';
-import GrapesjsEditor from './GrapesjsEditor';
+// import GrapesjsEditor from './GrapesjsEditor';
+import EditMode from '../common/EditMode';
 
+const GrapesjsEditor = dynamic(() => import('./GrapesjsEditor'), {
+  ssr: false,
+});
 interface Iprops {
   value?: string;
-  onChange?: (value: Ichange) => void;
+  onChange?: (value: string) => void;
   editMode?: boolean;
 }
-interface Ichange {
-  value: string;
-}
+
 export default function Webpage({ editMode, value, onChange }: Iprops) {
   const [open, setopen] = useState(false);
   const toggleEditor = () => {
@@ -36,25 +40,32 @@ export default function Webpage({ editMode, value, onChange }: Iprops) {
       >
         {editMode ? 'Edit' : 'View'} Html Page
       </Button>
+
       {open && (
-        <Overlay
-          open={open}
-          onClose={() => {
-            setopen(false);
-          }}
-          title="Edit Html Page"
-          maxWidth="100vw"
-          minWidth="100vw"
-          hideAppBar
-        >
-          <GrapesjsEditor
-            value={value}
-            onChange={(html) => {
-              onChange({ value: html });
+        <>
+          <Overlay
+            open={open}
+            onClose={() => {
               setopen(false);
             }}
-          />
-        </Overlay>
+            title={editMode ? 'Editing Html Page' : 'Viewing Html Page'}
+            maxWidth="100vw"
+            minWidth="100vw"
+            hideAppBar={editMode}
+          >
+            {editMode ? (
+              <GrapesjsEditor
+                value={value}
+                onChange={(html) => {
+                  onChange(html);
+                  setopen(false);
+                }}
+              />
+            ) : (
+              <div>{parse(value)}</div>
+            )}
+          </Overlay>
+        </>
       )}
     </>
   );
