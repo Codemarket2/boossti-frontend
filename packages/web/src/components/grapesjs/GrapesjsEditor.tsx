@@ -39,7 +39,9 @@ export default function GrapesjsEditor({
 
       storageManager: false,
     });
-
+    if (value) {
+      editor.setComponents(value);
+    }
     editor.Panels.addButton('options', {
       id: 'options',
       attributes: { title: 'Save' },
