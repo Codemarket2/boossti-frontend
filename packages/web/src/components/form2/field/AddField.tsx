@@ -158,6 +158,25 @@ export default function AddField({
           )}
         </InputGroup>
       )}
+      {/* {formik.values.fieldType === 'form' && (
+        <>
+          <InputGroup>
+            <FormControlLabel
+              className="mt-n2 ml-2"
+              disabled={formik.isSubmitting}
+              control={
+                <Checkbox
+                  checked={formik.values.options?.addToAllForms}
+                  onChange={({ target }) => onOptionChange({ addToAllForms: target.checked })}
+                  name="addToAllForms"
+                  color="primary"
+                />
+              }
+              label="Add to all forms"
+            />
+          </InputGroup>
+        </>
+      )} */}
       {formik.values.fieldType === 'template' && (
         <InputGroup>
           <SelectTemplate
@@ -361,7 +380,6 @@ export default function AddField({
                     label="Can create new option"
                     data-testid="select-allow-create-field-option"
                   />
-
                   {formik.values.fieldType === 'response' ? (
                     <div className="ml-3">
                       <FormLabel>Show Options</FormLabel>
