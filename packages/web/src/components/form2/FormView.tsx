@@ -16,7 +16,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIosRounded from '@mui/icons-material/ArrowBackIosRounded';
 import ArrowForwardIosRounded from '@mui/icons-material/ArrowForwardIosRounded';
 import CircularProgress from '@mui/material/CircularProgress';
-import { TextField } from '@mui/material';
+import TextField from '@mui/material/TextField';
 
 // SHARED
 import { parseResponse, useGetResponses } from '@frontend/shared/hooks/response/getResponse';
@@ -709,21 +709,21 @@ export function FormView({
                       )}
                     </div>
                     {field?.options?.multipleValues && (
-                      <Button
+                      <IconButton
                         className="my-2"
-                        size="small"
+                        size="medium"
                         color="primary"
-                        variant="outlined"
+                        aria-label="add value"
                         onClick={() => {
                           if (field?.fieldType === 'richTextarea') {
                             setHideField(true);
                           }
                           onAddOneMoreValue(field);
                         }}
-                        startIcon={<AddIcon />}
+                        sx={{ border: 1, borderRadius: '50%' }}
                       >
-                        Add
-                      </Button>
+                        <AddIcon fontSize="inherit" />
+                      </IconButton>
                     )}
                   </>
                   {filterValues(values, field).map((value: any, valueIndex) => (
