@@ -53,7 +53,6 @@ const ForcePwdResetForm = ({
             label="New Password*"
             variant="outlined"
             name="newPassword"
-            
             size="small"
             labelWidth={80}
             disabled={formik.isSubmitting}
@@ -69,7 +68,6 @@ const ForcePwdResetForm = ({
             label="Confirm New Password*"
             variant="outlined"
             name="confirmNewPassword"
-            
             size="small"
             labelWidth={140}
             disabled={formik.isSubmitting}

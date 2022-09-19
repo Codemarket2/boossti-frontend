@@ -717,21 +717,23 @@ export function FormView({
                         </div>
                       </div>
                       {field?.options?.multipleValues && (
-                        <IconButton
-                          className="my-2"
-                          size="medium"
-                          color="primary"
-                          aria-label="add value"
-                          onClick={() => {
-                            if (field?.fieldType === 'richTextarea') {
-                              setHideField(true);
-                            }
-                            onAddOneMoreValue(field);
-                          }}
-                          sx={{ border: 1, borderRadius: '50%' }}
-                        >
-                          <AddIcon fontSize="inherit" />
-                        </IconButton>
+                        <div data-testid="addOneMoreValue">
+                          <IconButton
+                            className="my-2"
+                            size="medium"
+                            color="primary"
+                            aria-label="add value"
+                            onClick={() => {
+                              if (field?.fieldType === 'richTextarea') {
+                                setHideField(true);
+                              }
+                              onAddOneMoreValue(field);
+                            }}
+                            sx={{ border: 1, borderRadius: '50%' }}
+                          >
+                            <AddIcon fontSize="inherit" />
+                          </IconButton>
+                        </div>
                       )}
                     </>
                     {filterValues(values, field).map((value: any, valueIndex) => (
