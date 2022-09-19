@@ -15,13 +15,19 @@ export default function DisplayBoard({
     return <Board board={board} />;
   }
   return (
-    <div>
-      <Button size="small" onClick={() => setShowOverlay(true)}>
+    <div data-testid="displayBoard-output">
+      <Button
+        data-testid="displayBoard-output-button"
+        size="small"
+        onClick={() => setShowOverlay(true)}
+      >
         Show Board
       </Button>
       {showOverlay && (
         <Overlay open={showOverlay} onClose={() => setShowOverlay(false)}>
-          <Board board={board} />
+          <div data-testid="board">
+            <Board board={board} />
+          </div>
         </Overlay>
       )}
     </div>

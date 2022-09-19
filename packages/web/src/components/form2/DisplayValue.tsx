@@ -55,13 +55,14 @@ export default function DisplayValue({
   // if (field?.options?.systemCalculatedAndView) {
   //   return <DisplayFormulaValue formula={field?.options?.formula} />;
   // }
+
   switch (field.fieldType) {
     case 'text':
     case 'textarea':
     case 'url':
     case 'email':
     case 'password':
-      return <>{value?.value}</>;
+      return <span data-testid="text-output">{value?.value}</span>;
     case 'response':
       return <ShowResponseLabel formField={field.options?.formField} response={value?.response} />;
     case 'form':
@@ -81,27 +82,35 @@ export default function DisplayValue({
     case 'richTextarea':
       return <DisplayRichText value={value?.value} />;
     case 'date':
-      return <>{value?.valueDate && moment(value?.valueDate).format('L')}</>;
+      return (
+        <span data-testid="date-output">
+          {value?.valueDate && moment(value?.valueDate).format('L')}
+        </span>
+      );
     case 'dateTime':
-      return <>{value?.valueDate && moment(value?.valueDate).format('lll')}</>;
+      return (
+        <span data-testid="datetime-output">
+          {value?.valueDate && moment(value?.valueDate).format('lll')}
+        </span>
+      );
     case 'number':
     case 'phoneNumber':
       return (
-        <>
+        <span data-testid="number-output">
           {value?.valueNumber}{' '}
           {field.fieldType === 'number' &&
             field.options?.physicalQuantity &&
             (field.options?.unit || value?.options?.unit)}
-        </>
+        </span>
       );
     case 'boolean':
-      return <>{value?.valueBoolean ? 'Yes' : 'No'}</>;
+      return <span data-testid="boolean-output">{value?.valueBoolean ? 'Yes' : 'No'}</span>;
     case 'image':
       if (imageAvatar) {
         return (
           <>
             {value?.media?.map((image, i) => (
-              <Avatar key={i} alt={`image-${i + 1}`} src={image?.url} />
+              <Avatar data-testid="image-output" key={i} alt={`image-${i + 1}`} src={image?.url} />
             ))}
           </>
         );
@@ -118,9 +127,9 @@ export default function DisplayValue({
       const address = value?.value?.split('+');
       const addressKey = ['Address', 'Landmark', 'City', 'State', 'Country'];
       return (
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+        <Box data-testid="address-output" sx={{ display: 'flex', flexDirection: 'column' }}>
           {address.map((res, index) => (
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
               <b>{res !== '' && `${addressKey[index]}: `} </b>
               <Typography sx={{ marginLeft: '5px' }} key={index}>
                 {res !== '' && `${res},`}
