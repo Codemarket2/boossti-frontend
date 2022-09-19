@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { useGetFormTabRelations } from '@frontend/shared/hooks/form/getForm';
 import { IField } from '@frontend/shared/types';
 import Close from '@mui/icons-material/Close';
@@ -9,17 +10,26 @@ import Skeleton from '@mui/material/Skeleton';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import Edit from '@mui/icons-material/Edit';
 import ErrorLoading from '../../common/ErrorLoading';
 import FormFields from '../FormFields';
 
 interface FormTabsProps {
   formId: string;
   tabs: IField[];
+  formAllTabs: IField[];
   onClose: () => void;
   onTabsChange: (newTabs: IField[]) => void;
 }
 
-export default function TabsList({ tabs = [], onClose, onTabsChange, formId }: FormTabsProps) {
+export default function TabsList({
+  tabs = [],
+  onClose,
+  onTabsChange,
+  formId,
+  formAllTabs,
+}: FormTabsProps) {
   const { data, error } = useGetFormTabRelations(formId);
   return (
     <>
@@ -35,7 +45,35 @@ export default function TabsList({ tabs = [], onClose, onTabsChange, formId }: F
           </IconButton>
         </Tooltip>
       </div>
-      <FormFields title="Tabs" isWidget fields={tabs} setFields={onTabsChange} />
+      <FormFields title="Tabs" isWidget fields={tabs} setFields={onTabsChange} isTab />
+      {formAllTabs?.length > 0 && (
+        <Paper variant="outlined" className="mt-2">
+          <Typography variant="h5" className="p-2">
+            Common Tabs
+          </Typography>
+          <Divider />
+          <List dense disablePadding>
+            {formAllTabs?.map((tab) => (
+              <ListItem key={tab?._id}>
+                <a target="_blank" rel="noreferrer" href={`/forms/${tab?.form?.slug}`}>
+                  {tab?.label}
+                </a>
+                <ListItemSecondaryAction>
+                  {/* @ts-ignore */}
+                  <a target="_blank" rel="noreferrer" href={`/forms/${tab?.parentForm?.slug}`}>
+                    {/* @ts-ignore */}
+                    <Tooltip title={`To edit this tab goto ${tab?.parentForm?.name} form`}>
+                      <IconButton size="small">
+                        <Edit fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  </a>
+                </ListItemSecondaryAction>
+              </ListItem>
+            ))}
+          </List>
+        </Paper>
+      )}
       {!data || error ? (
         <ErrorLoading error={error}>
           <Skeleton height={50} />

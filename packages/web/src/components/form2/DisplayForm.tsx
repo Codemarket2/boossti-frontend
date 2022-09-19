@@ -138,7 +138,7 @@ export const DisplayForm = (props: IDisplayFormProps) => {
   if (props._id) {
     return (
       <div data-testid="FormPageById">
-        <FormPageById {...props} overrideValues={overrideValues} _id={props._id} />;
+        <FormPageById {...props} overrideValues={overrideValues} _id={props._id} />
       </div>
     );
   }
