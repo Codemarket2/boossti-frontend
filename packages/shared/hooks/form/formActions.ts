@@ -68,17 +68,6 @@ const validationSchema = yup.object({
     then: yup.string().required('Email Body is required'),
     otherwise: yup.string(),
   }),
-  inviteEmailSubject: yup.string().when('actionType', {
-    is: (actionType) => actionType === 'createCognitoUser',
-    then: yup.string().required('Email Subject is required'),
-    otherwise: yup.string(),
-  }),
-  inviteEmailBody: yup.string().when('actionType', {
-    is: (actionType) => actionType === 'createCognitoUser',
-    then: yup.string().required('Email Body is required'),
-    otherwise: yup.string(),
-  }),
-
   userPoolId: yup.string().when('actionType', {
     is: (value) =>
       ['createCognitoGroup', 'updateCognitoGroup', 'deleteCognitoGroup'].includes(value),
@@ -156,13 +145,12 @@ type TFormValues = {
   receiverEmails: string[];
   variables: TVariables[];
   colorValues: any[];
+  fields: any;
   subject: string;
   body: string;
   templateSenderEmail: string;
   signupEmailSubject: string;
   signupEmailBody: string;
-  inviteEmailSubject: string;
-  inviteEmailBody: string;
   userPoolId: string;
   firstName: string;
   lastName: string;
@@ -196,8 +184,6 @@ const defaultFormValues: TFormValues = {
   templateSenderEmail: '',
   signupEmailSubject: '',
   signupEmailBody: '',
-  inviteEmailSubject: '',
-  inviteEmailBody: '',
   userPoolId: '',
   firstName: '',
   lastName: '',

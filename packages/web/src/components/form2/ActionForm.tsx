@@ -66,19 +66,11 @@ const SenderEmailInput = ({ formik }: ICommonInputProps) => {
   );
 };
 
-const EmailTemplateTabs = ({ formik }: ICommonInputProps) => {
-  const [selectedTab, setSelectedTab] = useState<'signup' | 'invite'>('signup');
-
-  useEffect(() => {
-    if (formik.errors.signupEmailSubject || formik.errors.signupEmailBody) setSelectedTab('signup');
-    else if (formik.errors.inviteEmailSubject || formik.errors.inviteEmailBody)
-      setSelectedTab('invite');
-  }, [formik.isSubmitting]);
-
+const SignUpEmailTemplate = ({ formik }: ICommonInputProps) => {
   return (
     <>
       <Box sx={{ width: '100%' }}>
-        <Typography variant="h6">Template*</Typography>
+        <Typography variant="h6">Signup Template*</Typography>
         {/* SIGNUP's SENDER's EMAIL FIELD */}
         <InputGroup>
           <TextField
@@ -95,82 +87,36 @@ const EmailTemplateTabs = ({ formik }: ICommonInputProps) => {
             helperText={formik.touched.templateSenderEmail && formik.errors.templateSenderEmail}
           />
         </InputGroup>
-        <TabContext value={selectedTab}>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <TabList onChange={(_, tab) => setSelectedTab(tab)} aria-label="email template">
-              <Tab label="Signup" value="signup" />
-              <Tab label="Invite" value="invite" />
-            </TabList>
-          </Box>
-          <TabPanel value="signup">
-            <Box>
-              <InputGroup>
-                <TextField
-                  // inputProps={{ 'data-testid': 'subject-input' }}
-                  fullWidth
-                  label="Email Subject*"
-                  variant="outlined"
-                  name="signupEmailSubject"
-                  size="small"
-                  disabled={formik.isSubmitting}
-                  value={formik.values.signupEmailSubject}
-                  onChange={formik.handleChange}
-                  error={
-                    formik.touched.signupEmailSubject && Boolean(formik.errors.signupEmailSubject)
-                  }
-                  helperText={formik.touched.signupEmailSubject && formik.errors.signupEmailSubject}
-                />
-              </InputGroup>
-              <InputGroup>
-                <InputLabel>Email Body*</InputLabel>
-                <RichTextarea
-                  // testId="body-input"
-                  value={formik.values.signupEmailBody}
-                  onChange={(newValue) => formik.setFieldValue('signupEmailBody', newValue)}
-                />
-                {formik.touched.signupEmailBody && formik.errors.signupEmailBody && (
-                  <FormHelperText className="text-danger">
-                    {formik.errors.signupEmailBody}
-                  </FormHelperText>
-                )}
-              </InputGroup>
-            </Box>
-          </TabPanel>
-          <TabPanel value="invite">
-            <Box>
-              <InputGroup>
-                <TextField
-                  // inputProps={{ 'data-testid': 'subject-input' }}
-                  fullWidth
-                  label="Email Subject*"
-                  variant="outlined"
-                  name="inviteEmailSubject"
-                  size="small"
-                  disabled={formik.isSubmitting}
-                  value={formik.values.inviteEmailSubject}
-                  onChange={formik.handleChange}
-                  error={
-                    formik.touched.inviteEmailSubject && Boolean(formik.errors.inviteEmailSubject)
-                  }
-                  helperText={formik.touched.inviteEmailSubject && formik.errors.inviteEmailSubject}
-                />
-              </InputGroup>
-              <InputGroup>
-                <InputLabel>Email Body*</InputLabel>
-                <RichTextarea
-                  // testId="body-input"
-                  value={formik.values.inviteEmailBody}
-                  onChange={(newValue) => formik.setFieldValue('inviteEmailBody', newValue)}
-                />
-                {formik.touched.inviteEmailBody && formik.errors.inviteEmailBody && (
-                  <FormHelperText className="text-danger">
-                    {formik.errors.inviteEmailBody}
-                  </FormHelperText>
-                )}
-              </InputGroup>
-            </Box>
-          </TabPanel>
-        </TabContext>
+        <Box>
+          <InputGroup>
+            <TextField
+              // inputProps={{ 'data-testid': 'subject-input' }}
+              fullWidth
+              label="Email Subject*"
+              variant="outlined"
+              name="signupEmailSubject"
+              size="small"
+              disabled={formik.isSubmitting}
+              value={formik.values.signupEmailSubject}
+              onChange={formik.handleChange}
+              error={formik.touched.signupEmailSubject && Boolean(formik.errors.signupEmailSubject)}
+              helperText={formik.touched.signupEmailSubject && formik.errors.signupEmailSubject}
+            />
+          </InputGroup>
+          <InputGroup>
+            <InputLabel>Email Body*</InputLabel>
+            <RichTextarea
+              // testId="body-input"
+              value={formik.values.signupEmailBody}
+              onChange={(newValue) => formik.setFieldValue('signupEmailBody', newValue)}
+            />
+            {formik.touched.signupEmailBody && formik.errors.signupEmailBody && (
+              <FormHelperText className="text-danger">
+                {formik.errors.signupEmailBody}
+              </FormHelperText>
+            )}
+          </InputGroup>
+        </Box>
       </Box>
     </>
   );
@@ -737,8 +683,8 @@ export default function ActionForm({
                       formik.setFieldValue('receiverEmails', newValue);
                     }}
                     filterOptions={(options, params) => {
-                      const filtered = filter(options, params);
-                      const { inputValue } = params;
+                      const filtered = filter(options, params) as string[][];
+                      const { inputValue } = params as any;
                       const isExisting = options.some((option) => inputValue === option);
                       if (inputValue !== '' && !isExisting) {
                         filtered.push(inputValue);
@@ -970,7 +916,7 @@ export default function ActionForm({
 
             {['createCognitoUser']?.includes(formik.values.actionType) && (
               <div>
-                <EmailTemplateTabs formik={formik} />
+                <SignUpEmailTemplate formik={formik} />
               </div>
             )}
             {formik.values.actionType === 'onPaletteChange' && (
