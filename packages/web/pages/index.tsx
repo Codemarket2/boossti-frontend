@@ -4,13 +4,14 @@ import { Auth } from 'aws-amplify';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth/lib/types';
 import { useRouter } from 'next/router';
+import { RootState } from '@frontend/shared/redux';
 import InitialLoading from '../src/components/common/InitialLoading';
 // import UserLayout from '../src/components/common/UserLayout';
 import HomeScreen from '../src/screens/HomeScreen-new';
 
 export default function Page() {
   const router = useRouter();
-  const initial = useSelector(({ auth }: any) => auth.initial);
+  const initial = useSelector(({ auth }: RootState) => auth.initial);
   const { error_description: errorDescription } = router.query;
 
   useEffect(() => {

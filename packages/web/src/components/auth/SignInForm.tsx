@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { useSignIn } from '@frontend/shared/hooks/auth';
+import { useSignIn } from '@frontend/shared/hooks/auth/signIn';
 import VerifyEmailForm from './VerifyEmailForm';
 import LoadingButton from '../common/LoadingButton';
 import PasswordInput from '../common/PasswordInput';
@@ -9,31 +9,66 @@ import ForgetPasswordForm from './ForgetPasswordForm';
 import { onAlert } from '../../utils/alert';
 import SocialSignIn from './SocialSignIn';
 import InputGroup from '../common/InputGroup';
+import ForcePasswordResetForm from './ForcePasswordResetForm';
 
 interface IProps {
   successCallback?: () => void;
 }
 
 export default function SignInForm({ successCallback }: IProps) {
-  const { state, setState, formik } = useSignIn({ onAlert, successCallback });
+  const { state, formik, verifyEmailForm, forgetPwdForm, forcePwdResetForm } = useSignIn({
+    onAlert,
+    successCallback,
+  });
 
-  if (state.showForgetPasswordForm) {
+  if (state.showForcePasswordResetForm.enabled) {
+    const { oldPassword, username } = state.showForcePasswordResetForm;
+
+    const onSuccess = (newPassword: string) => {
+      forcePwdResetForm.hide();
+      // uncomment for auto signin after resetting the password
+      // formik.setFieldValue('password', newPassword).then(() => formik.submitForm());
+    };
+
     return (
-      <ForgetPasswordForm
-        handleShowSignInForm={() => setState({ ...state, showForgetPasswordForm: false })}
+      <ForcePasswordResetForm
+        onSuccess={onSuccess}
+        onCancel={forcePwdResetForm.hide}
+        username={username}
+        oldPassword={oldPassword}
       />
     );
   }
-  if (state.verify) {
+
+  if (state.showForgetPasswordForm.enabled) {
+    const onSuccess = (newPassword: string) => {
+      forgetPwdForm.hide();
+
+      // uncomment for auto signin after resetting the password
+      // formik.setFieldValue('password', newPassword).then(() => {
+      //   // adding delay intentionally, as it takes a few seconds to update the password in the AWS Cognito
+      //   setTimeout(formik.submitForm, 200);
+      // });
+    };
+
+    return (
+      <ForgetPasswordForm email={state.email} onSuccess={onSuccess} onCancel={forgetPwdForm.hide} />
+    );
+  }
+
+  if (state.showVerifyEmailForm) {
     return (
       <VerifyEmailForm
-        onSuccess={formik.handleSubmit}
+        onSuccess={() => {
+          formik.submitForm();
+        }}
         email={state.email}
-        label="Sign In Again?"
-        onLabelClick={() => setState({ ...state, verify: false })}
+        user={state.user}
+        onCancel={verifyEmailForm.hide}
       />
     );
   }
+
   return (
     <form onSubmit={formik.handleSubmit} data-testid="signin-form">
       <InputGroup>
@@ -81,7 +116,7 @@ export default function SignInForm({ successCallback }: IProps) {
           align="center"
           data-testid="forget-password-text"
           role="button"
-          onClick={() => setState({ ...state, showForgetPasswordForm: true })}
+          onClick={() => forgetPwdForm.show()}
         >
           Forgot Password?
         </Typography>

@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Auth } from 'aws-amplify';
 import * as yup from 'yup';
@@ -22,15 +23,14 @@ const verifyEmailValidationSchema = yup.object({
 interface IVerifyEmailArgs {
   onAlert: (a: string, b: string) => void;
   email: string;
-  onSuccess: () => void;
+  onSuccess?: () => void;
+  user: any;
 }
 
-export function useVerifyEmail({
-  onAlert = () => null,
-  email,
-  onSuccess = () => null,
-}: IVerifyEmailArgs) {
+export function useVerifyEmail({ onAlert = () => null, email, onSuccess, user }: IVerifyEmailArgs) {
   const dispatch = useDispatch();
+
+  const [isEmailSent, setIsEmailSent] = useState(false);
 
   const formik = useFormik({
     initialValues: verifyEmailFormValues,
@@ -40,18 +40,53 @@ export function useVerifyEmail({
     },
   });
 
+  useEffect(() => {
+    setIsEmailSent(false);
+    sendVerificationCode()
+      .then(() => setIsEmailSent((_) => true))
+      .catch((err) => {
+        onAlert('Error', err.message);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (formik.isSubmitting) dispatch(showLoading());
+    else dispatch(hideLoading());
+
+    return () => {
+      dispatch(hideLoading());
+    };
+  }, [formik.isSubmitting]);
+
+  /** Sends a verification code to the email */
+  const sendVerificationCode = async () => {
+    if (user) await Auth.verifyCurrentUserAttribute('email');
+    else await Auth.resendSignUp(email);
+  };
+
   const onSubmit = async (payload: IVerifyEmailFormValues) => {
     try {
-      dispatch(showLoading());
       const { code } = payload;
-      await Auth.confirmSignUp(email, code);
-      dispatch(hideLoading());
+
+      if (user) {
+        const res = await Auth.verifyCurrentUserAttributeSubmit('email', code);
+
+        if (res === 'SUCCESS') {
+          if (onSuccess) {
+            onSuccess();
+          }
+        } else {
+          // THROW SOME ERROR MESSAGE
+        }
+      } else {
+        await Auth.confirmSignUp(email, code);
+      }
+
       // formik.handleReset('');
-      await onSuccess();
     } catch (error) {
       onAlert('Error', error.message);
     }
   };
 
-  return { formik };
+  return { formik, sendVerificationCode, isEmailSent } as const;
 }

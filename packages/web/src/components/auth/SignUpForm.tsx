@@ -1,20 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import TextField from '@mui/material/TextField';
-import { useSignUp, useSignIn } from '@frontend/shared/hooks/auth';
-import { useGetFormBySlug } from '@frontend/shared/hooks/form';
-import LoadingButton from '../common/LoadingButton';
-import VerifyEmailForm from './VerifyEmailForm';
-import { onAlert } from '../../utils/alert';
+import React from 'react';
 import SocialSignIn from './SocialSignIn';
-import PasswordInput from '../common/PasswordInput';
-import InputGroup from '../common/InputGroup';
-import FormView from '../form2/FormView';
 import { DisplayForm } from '../form2/DisplayForm';
 
 export default function SignUpForm() {
   // const slug = 'users';
-  const { state, setState, formik } = useSignUp({ onAlert });
-  const { onSubmit } = useSignIn({ onAlert });
   // const { data, error } = useGetFormBySlug(slug);
   // const [form, setForm] = useState<any[]>([]);
 
@@ -25,32 +14,6 @@ export default function SignUpForm() {
   //   };
   //   setForm(tempForm);
   // }, [data]);
-
-  if (state.verify) {
-    return (
-      <VerifyEmailForm
-        onSuccess={async () => {
-          try {
-            await onSubmit({ email: formik.values.email, password: formik.values.password });
-          } catch (err) {
-            formik.handleReset('');
-            setState({
-              ...state,
-              email: '',
-              verify: false,
-            });
-            onAlert(
-              'Email Verified Successfully',
-              'Please Sign In now with your email and password',
-            );
-          }
-        }}
-        email={state.email}
-        label="Sign Up Again?"
-        onLabelClick={() => setState({ ...state, verify: false })}
-      />
-    );
-  }
 
   return (
     <>
@@ -116,7 +79,7 @@ export default function SignUpForm() {
           slug="users"
           settings={{ widgetType: 'form', whoCanSubmit: 'all' }}
           modifyForm={(form) => {
-            const newForm: any = { ...form };
+            const newForm = { ...form };
             newForm.fields = newForm?.fields?.map((field) => {
               const newField = { ...field };
               if (newField?.label?.toLowerCase() === 'roles') {

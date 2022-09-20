@@ -29,6 +29,7 @@ export const initialState: IAuthState = {
 };
 
 const authUser = (state: IAuthState = initialState, action: AnyAction) => {
+  // debugger;
   switch (action.type) {
     case SET_AUTHED_USER: {
       return {
