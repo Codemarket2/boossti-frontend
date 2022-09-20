@@ -161,6 +161,11 @@ type TFormValues = {
   reportScreenshoot: string;
   domain: string;
   distributionId: string;
+  linkedinEmail: string;
+  linkedinPassword: string;
+  noOfInvites: number;
+  keyword: string;
+  tag: string;
 };
 
 const defaultFormValues: TFormValues = {
@@ -194,6 +199,11 @@ const defaultFormValues: TFormValues = {
   reportScreenshoot: '',
   domain: '',
   distributionId: '',
+  linkedinEmail: '',
+  linkedinPassword: '',
+  noOfInvites: 0,
+  keyword: '',
+  tag: '',
 };
 
 interface IProps extends IHooksProps {

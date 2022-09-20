@@ -21,6 +21,7 @@ import Container from '@mui/material/Container';
 import AddCircle from '@mui/icons-material/AddCircle';
 import { IForm } from '@frontend/shared/types/form';
 import slugify from 'slugify';
+import { useSelector } from 'react-redux';
 import ErrorLoading from '../common/ErrorLoading';
 import Breadcrumbs from '../common/Breadcrumbs';
 import Backdrop from '../common/Backdrop';
@@ -85,6 +86,7 @@ export default function Form({ form, drawerMode = false, onSlugChange, hideField
 
   const router = useRouter();
   const authorized = useAuthorization([form?.createdBy?._id], true);
+  const authenticated = useSelector((state: any) => state?.auth?.authenticated);
 
   useEffect(() => {
     if (router?.query?.tab) {
@@ -374,16 +376,21 @@ export default function Form({ form, drawerMode = false, onSlugChange, hideField
 
   if (
     form?.settings?.published &&
-    (form?.settings?.whoCanViewResponses === 'all' || form?.settings?.whoCanSubmit === 'all')
+    authenticated
+    // &&
+    // (form?.settings?.whoCanViewResponses === 'all' || form?.settings?.whoCanSubmit === 'all')
   ) {
     return (
       <Container>
-        <FormView form={form} />
+        <FormView
+          form={form}
+          // form={{ ...form, settings: { ...form?.settings, onlyMyResponses: true } }}
+        />
       </Container>
     );
   }
 
-  if (form?.settings?.published) {
+  if (!authenticated) {
     return <UnAuthorised />;
   }
 

@@ -14,6 +14,8 @@ interface IProps {
   error?: boolean;
   helperText?: string;
   disabled?: boolean;
+  label?: string;
+  showSchemaFields?: boolean;
 }
 
 export type { IProps as ISelectFormFieldsComponentProps };
@@ -25,6 +27,8 @@ export default function SelectFormFields({
   error = false,
   helperText,
   disabled,
+  label = 'Select form field',
+  showSchemaFields = false,
 }: IProps) {
   const { data, error: queryError, loading } = useGetForm(formId);
 
@@ -34,9 +38,8 @@ export default function SelectFormFields({
     <ErrorLoading error={queryError} />
   ) : (
     <FormControl fullWidth size="small" variant="outlined" disabled={disabled} error={error}>
-      <InputLabel id="select-form-field">Select form field </InputLabel>
+      <InputLabel>{label}</InputLabel>
       <Select
-        labelId="select-form-field"
         name="formField"
         value={value}
         onChange={(e) =>
@@ -46,8 +49,11 @@ export default function SelectFormFields({
             data?.getForm?.name,
           )
         }
-        label="Select form field"
+        label={label}
       >
+        <MenuItem value="_id">_id (Response ID)</MenuItem>
+        <MenuItem value="createdBy">createdByUserId</MenuItem>
+        <MenuItem value="createdAt">createdAt (Date)</MenuItem>
         {/* ?.filter((f) => ['text', 'email'].includes(f.fieldType)) */}
         {data?.getForm?.fields?.map((f) => (
           <MenuItem key={f?._id} value={f?._id}>
