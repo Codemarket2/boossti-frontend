@@ -102,9 +102,9 @@ const EmbedForm: NextPage<EmbedFormProps> = ({ formSlug, host }: EmbedFormProps)
         </Box>
         <TabPanel value="1">
           <List>
-            <ListItem>
+            {/* <ListItem>
               <CopyToClipboardBtn formSlug={formSlug} title="Copy Form Embed Link" host={host} />
-            </ListItem>
+            </ListItem> */}
             <ListItem>
               <CopyToClipboardBtn
                 formSlug={formSlug}
