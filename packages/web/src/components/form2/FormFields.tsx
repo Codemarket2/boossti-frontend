@@ -66,6 +66,7 @@ type IProps = {
   tabName?: string;
   showWidgetExpand?: boolean;
   selectedField?: string;
+  isTab?: boolean;
 };
 
 export default function FormFields({
@@ -79,6 +80,7 @@ export default function FormFields({
   showWidgetExpand = false,
   selectedField,
   parentFields = [],
+  isTab,
 }: IProps): any {
   const [values, setValues] = useState(initialValues);
   const router = useRouter();
@@ -211,6 +213,7 @@ export default function FormFields({
               onCancel={() => setValues(initialValues)}
               isWidget={isWidget}
               parentFields={parentFields}
+              isTab={isTab}
             />
           )}
           <List dense>
