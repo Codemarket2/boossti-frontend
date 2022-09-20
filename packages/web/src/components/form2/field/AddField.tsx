@@ -48,6 +48,7 @@ interface IProps {
   isWidget?: boolean;
   isDefault?: boolean;
   parentFields?: any[];
+  isTab?: boolean;
 }
 
 export default function AddField({
@@ -57,6 +58,7 @@ export default function AddField({
   isWidget = false,
   isDefault,
   parentFields = [],
+  isTab,
 }: IProps) {
   const { formik, formLoading, setFormValues, onOptionChange } = useAddFields({
     onAlert,
@@ -158,7 +160,7 @@ export default function AddField({
           )}
         </InputGroup>
       )}
-      {/* {formik.values.fieldType === 'form' && (
+      {isTab && formik.values.fieldType === 'form' && (
         <>
           <InputGroup>
             <FormControlLabel
@@ -172,11 +174,11 @@ export default function AddField({
                   color="primary"
                 />
               }
-              label="Add to all forms"
+              label="Add tab to all forms"
             />
           </InputGroup>
         </>
-      )} */}
+      )}
       {formik.values.fieldType === 'template' && (
         <InputGroup>
           <SelectTemplate
