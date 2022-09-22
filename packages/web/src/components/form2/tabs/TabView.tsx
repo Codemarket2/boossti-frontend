@@ -62,7 +62,7 @@ export default function TabView({ formId, tab }: TabViewProps) {
           _id={data?.getForm?._id}
           settings={{ formView: 'button', buttonLabel: `Add ${tab?.label}` }}
           overrideValues={[{ field: field?._id, form: { _id: formId } }]}
-          valueFilter={{ 'values.field': field?._id, form: formId }}
+          valueFilter={{ 'values.field': field?._id, 'values.form': formId }}
         />
       ) : (
         <ErrorLoading

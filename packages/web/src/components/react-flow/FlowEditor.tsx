@@ -149,6 +149,7 @@ export default function FlowEditor({
                 nodesDraggable={editMode}
                 nodesConnectable={editMode}
                 // elementsSelectable={editMode}
+                deleteKeyCode={['Backspace', 'Delete']}
               >
                 <Controls showInteractive={editMode} />
                 <Background color="#aaa" gap={16} />

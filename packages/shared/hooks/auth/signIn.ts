@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { Reducer, useEffect, useReducer, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Auth } from 'aws-amplify';
 import * as yup from 'yup';
-import { useFormik } from 'formik';
+import { FormikConfig, FormikHelpers, useFormik } from 'formik';
 import { setAuthUser } from '../../redux/actions/auth';
 import { showLoading, hideLoading } from '../../redux/actions/loading';
 import { client } from '../../graphql';
@@ -10,13 +10,24 @@ import { client } from '../../graphql';
 interface ISignInArgs {
   onAlert: (a: string, b: string) => void;
   successCallback?: () => void;
+  onError?: (err: { message: string }) => void;
 }
 
 interface ISignInState {
   email: string;
-  verify: boolean;
+  /** required for verification prop */
+  user: any;
   auth: boolean;
-  showForgetPasswordForm: boolean;
+  showVerifyEmailForm: boolean;
+  showForgetPasswordForm: {
+    enabled: boolean;
+    label?: string;
+  };
+  showForcePasswordResetForm: {
+    enabled: boolean;
+    username: string;
+    oldPassword: string;
+  };
 }
 
 const signInValidationSchema = yup.object({
@@ -32,70 +43,170 @@ interface ISignInFormValues {
   password: string;
 }
 
-const signInValues: ISignInFormValues = {
-  email: '',
-  password: '',
-};
-
 export function useSignIn({ onAlert = () => null, successCallback }: ISignInArgs) {
-  const [state, setState] = useState<ISignInState>({
+  const [hookState, setHookState] = useState<ISignInState>({
     email: '',
-    verify: false,
+    showVerifyEmailForm: false,
     auth: false,
-    showForgetPasswordForm: false,
+    showForgetPasswordForm: {
+      enabled: false,
+    },
+    showForcePasswordResetForm: {
+      enabled: false,
+      username: '',
+      oldPassword: '',
+    },
+    user: null,
   });
 
   const dispatch = useDispatch();
 
-  const formik = useFormik({
-    initialValues: signInValues,
-    validationSchema: signInValidationSchema,
-    onSubmit: async (values: ISignInFormValues) => {
-      await onSubmit(values);
-    },
-  });
+  /** shows the verification component for email verification */
+  const showVerificationComponent = async (userEmail, user = null) => {
+    setHookState((prev) => ({
+      ...prev,
+      email: userEmail,
+      user,
+      showVerifyEmailForm: true,
+    }));
+  };
 
-  const onSubmit = async (oldPayload: ISignInFormValues) => {
+  const onSubmit: FormikConfig<ISignInFormValues>['onSubmit'] = async (oldPayload, _) => {
     const { password, email } = oldPayload;
+
     try {
-      dispatch(showLoading());
+      // if user credentials are correct then the user gets stored in the cache
       let user = await Auth.signIn(email, password);
+
+      // make the user force reset the password
       if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
-        user = await Auth.completeNewPassword(user, password);
+        setHookState((prev) => ({
+          ...prev,
+          showForcePasswordResetForm: {
+            enabled: true,
+            username: email,
+            oldPassword: password,
+          },
+        }));
+
+        return;
       }
+
+      try {
+        // Auth.signIn() can sometimes give cached user
+        // flushes the cached user & refetches the user from aws server
+        user = await Auth.currentAuthenticatedUser({
+          bypassCache: true,
+        });
+      } catch (err) {
+        // if any challenge is occured then currentAuthenticatedUser() will throw error
+        // just ignore the error
+      }
+
+      if (
+        !user?.attributes?.email_verified ||
+        user?.challengeParam?.userAttributes?.email_verified === 'False'
+      ) {
+        await showVerificationComponent(email, user);
+        return;
+      }
+
       const payload = {
         attributes: user.attributes,
         admin: user.signInUserSession.accessToken.payload['cognito:groups']
           ? user.signInUserSession.accessToken.payload['cognito:groups'].indexOf('superadmin') > -1
           : false,
       };
-      formik.handleReset('');
+
       client.resetStore();
+
       dispatch(setAuthUser(payload));
-      dispatch(hideLoading());
       if (successCallback) {
         successCallback();
       }
       return 'true';
     } catch (error) {
-      dispatch(hideLoading());
       if (error.code === 'UserNotConfirmedException') {
-        await sendVerificationCode(email);
+        await showVerificationComponent(email);
       } else {
         onAlert('Error', error.message);
       }
+
       return 'false';
     }
   };
 
-  const sendVerificationCode = async (email) => {
-    await Auth.resendSignUp(email);
-    setState({
-      ...state,
-      email,
-      verify: true,
-    });
+  const formik = useFormik<ISignInFormValues>({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validationSchema: signInValidationSchema,
+    onSubmit,
+  });
+
+  useEffect(() => {
+    if (formik.isSubmitting) dispatch(showLoading());
+    else dispatch(hideLoading());
+
+    return () => {
+      dispatch(hideLoading());
+    };
+  }, [formik.isSubmitting]);
+
+  const forgetPwdForm = {
+    hide: () =>
+      setHookState((prev) => ({
+        ...prev,
+        showForgetPasswordForm: {
+          ...prev.showForgetPasswordForm,
+          enabled: false,
+        },
+      })),
+    show: (label = '') =>
+      setHookState((prev) => ({
+        ...prev,
+        showForgetPasswordForm: {
+          ...prev.showForgetPasswordForm,
+          enabled: true,
+          label,
+        },
+      })),
   };
 
-  return { state, setState, onSubmit, formik };
+  const verifyEmailForm = {
+    hide: () =>
+      setHookState((prev) => ({
+        ...prev,
+        showVerifyEmailForm: false,
+      })),
+
+    show: () =>
+      setHookState((prev) => ({
+        ...prev,
+        showVerifyEmailForm: true,
+      })),
+  };
+
+  const forcePwdResetForm = {
+    hide: () => {
+      setHookState((prev) => ({
+        ...prev,
+        showForcePasswordResetForm: {
+          ...prev.showForcePasswordResetForm,
+          enabled: false,
+        },
+      }));
+    },
+  };
+
+  return {
+    state: hookState,
+    setState: setHookState,
+    formik,
+    onSubmit,
+    verifyEmailForm,
+    forgetPwdForm,
+    forcePwdResetForm,
+  } as const;
 }

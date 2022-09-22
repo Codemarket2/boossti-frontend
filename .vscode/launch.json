@@ -3,7 +3,7 @@
     "configurations": [
       {
         "name": "Next.js: debug client-side",
-        "type": "pwa-chrome",
+        "type": "pwa-msedge",
         "request": "launch",
         "url": "http://localhost:3000"
       },

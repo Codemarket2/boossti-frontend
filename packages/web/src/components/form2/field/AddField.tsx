@@ -48,6 +48,7 @@ interface IProps {
   isWidget?: boolean;
   isDefault?: boolean;
   parentFields?: any[];
+  isTab?: boolean;
 }
 
 export default function AddField({
@@ -57,6 +58,7 @@ export default function AddField({
   isWidget = false,
   isDefault,
   parentFields = [],
+  isTab,
 }: IProps) {
   const { formik, formLoading, setFormValues, onOptionChange } = useAddFields({
     onAlert,
@@ -157,6 +159,25 @@ export default function AddField({
             </div>
           )}
         </InputGroup>
+      )}
+      {isTab && formik.values.fieldType === 'form' && (
+        <>
+          <InputGroup>
+            <FormControlLabel
+              className="mt-n2 ml-2"
+              disabled={formik.isSubmitting}
+              control={
+                <Checkbox
+                  checked={formik.values.options?.addToAllForms}
+                  onChange={({ target }) => onOptionChange({ addToAllForms: target.checked })}
+                  name="addToAllForms"
+                  color="primary"
+                />
+              }
+              label="Add tab to all forms"
+            />
+          </InputGroup>
+        </>
       )}
       {formik.values.fieldType === 'template' && (
         <InputGroup>
@@ -361,7 +382,6 @@ export default function AddField({
                     label="Can create new option"
                     data-testid="select-allow-create-field-option"
                   />
-
                   {formik.values.fieldType === 'response' ? (
                     <div className="ml-3">
                       <FormLabel>Show Options</FormLabel>

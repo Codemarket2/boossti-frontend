@@ -143,3 +143,9 @@ export const CREATE_BULK_RESPONSE = gql`
     createBulkResponses(formId: $formId, fileUrl: $fileUrl, map: $map, fileData: $fileData)
   }
 `;
+
+export const RESOLVE_CONDITION = gql`
+  mutation ResolveCondition($responseId: ID!, $conditions: AWSJSON!) {
+    resolveCondition(responseId: $responseId, conditions: $conditions)
+  }
+`;

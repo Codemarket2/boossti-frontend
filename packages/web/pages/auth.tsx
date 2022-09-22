@@ -1,10 +1,21 @@
 import { useRouter } from 'next/router';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
+import { RootState } from '@frontend/shared/redux';
 import AuthScreen from '../src/screens/AuthScreen';
 import InitialLoading from '../src/components/common/InitialLoading';
 import UserLayout from '../src/components/common/UserLayout';
 
-interface IProps {
+const mapStateToProps = ({ auth }: RootState) => {
+  return {
+    authenticated: auth.authenticated,
+    initial: auth.initial,
+  };
+};
+
+const connector = connect(mapStateToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+interface IProps extends PropsFromRedux {
   initial: boolean;
   authenticated: boolean;
 }
@@ -27,11 +38,4 @@ function AuthPage({ initial, authenticated }: IProps) {
   return <InitialLoading />;
 }
 
-const mapStateToProps = ({ auth }: any) => {
-  return {
-    authenticated: auth.authenticated,
-    initial: auth.initial,
-  };
-};
-
-export default connect(mapStateToProps)(AuthPage);
+export default connector(AuthPage);

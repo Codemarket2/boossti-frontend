@@ -14,13 +14,14 @@ import Snackbar from '@mui/material/Snackbar';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Tooltip from '@mui/material/Tooltip';
-import { useUpdateForm, useDeleteForm } from '@frontend/shared/hooks/form';
+import { useUpdateForm, useDeleteForm, useGetFormTabs } from '@frontend/shared/hooks/form';
 import { useAuthorization } from '@frontend/shared/hooks/auth';
 import Link from 'next/link';
 import Container from '@mui/material/Container';
 import AddCircle from '@mui/icons-material/AddCircle';
 import { IForm } from '@frontend/shared/types/form';
 import slugify from 'slugify';
+import { useSelector } from 'react-redux';
 import ErrorLoading from '../common/ErrorLoading';
 import Breadcrumbs from '../common/Breadcrumbs';
 import Backdrop from '../common/Backdrop';
@@ -59,7 +60,6 @@ const tabs = [
   'Workflows',
   'Responses',
   'Design',
-  // 'Boards',
   'Activity',
   'Conditions',
   'Shopify',
@@ -80,11 +80,13 @@ export default function Form({ form, drawerMode = false, onSlugChange, hideField
   const { handleDelete } = useDeleteForm({
     onAlert,
   });
+  const { formAllTabs } = useGetFormTabs(form?._id);
 
   const [options, setOptions] = useState(initialState);
 
   const router = useRouter();
   const authorized = useAuthorization([form?.createdBy?._id], true);
+  const authenticated = useSelector((state: any) => state?.auth?.authenticated);
 
   useEffect(() => {
     if (router?.query?.tab) {
@@ -231,6 +233,13 @@ export default function Form({ form, drawerMode = false, onSlugChange, hideField
                   {form?.name?.toUpperCase().includes('ROLE') && (
                     <Tab label="Permissions" value="permissions" />
                   )}
+                  {formAllTabs?.map((tab) => (
+                    <Tab
+                      key={tab?._id}
+                      label={tab?.label || 'NA'}
+                      value={slugify(tab?.label, { lower: true })}
+                    />
+                  ))}
                   {form?.settings?.tabs?.map((tab) => (
                     <Tab
                       key={tab?._id}
@@ -332,21 +341,12 @@ export default function Form({ form, drawerMode = false, onSlugChange, hideField
                   }
                 />
               )}
-              {/* {options.currentTab === 'Boards' && (
-                <BoardsTab
-                  formId={form?._id}
-                  boards={form?.settings?.boards}
-                  onBoardsChange={(boards) =>
-                    handleOnChange({ settings: { ...form.settings, boards } })
-                  }
-                />
-              )} */}
-              {form?.settings?.tabs?.some(
+              {[...(formAllTabs || []), ...(form?.settings?.tabs || [])]?.some(
                 (tab) => slugify(tab?.label, { lower: true }) === options.currentTab,
               ) && (
                 <TabView
                   formId={form?._id}
-                  tab={form?.settings?.tabs?.find(
+                  tab={[...(formAllTabs || []), ...(form?.settings?.tabs || [])]?.find(
                     (tab) => slugify(tab?.label, { lower: true }) === options.currentTab,
                   )}
                 />
@@ -355,6 +355,7 @@ export default function Form({ form, drawerMode = false, onSlugChange, hideField
             {options.formTabs && (
               <Grid item xs={12} sm={3}>
                 <TabsList
+                  formAllTabs={formAllTabs}
                   formId={form?._id}
                   tabs={form?.settings?.tabs}
                   onClose={() => setOptions({ ...options, formTabs: false })}
@@ -374,16 +375,21 @@ export default function Form({ form, drawerMode = false, onSlugChange, hideField
 
   if (
     form?.settings?.published &&
-    (form?.settings?.whoCanViewResponses === 'all' || form?.settings?.whoCanSubmit === 'all')
+    authenticated
+    // &&
+    // (form?.settings?.whoCanViewResponses === 'all' || form?.settings?.whoCanSubmit === 'all')
   ) {
     return (
       <Container>
-        <FormView form={form} />
+        <FormView
+          form={form}
+          // form={{ ...form, settings: { ...form?.settings, onlyMyResponses: true } }}
+        />
       </Container>
     );
   }
 
-  if (form?.settings?.published) {
+  if (!authenticated) {
     return <UnAuthorised />;
   }
 

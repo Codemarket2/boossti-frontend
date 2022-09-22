@@ -43,6 +43,7 @@ export interface IFieldOptions {
   hidden?: boolean;
   // hiddenCondition?: IHiddenCondition[];
   hiddenConditions?: ICondition[];
+  addToAllForms?: boolean;
 }
 
 export interface IField {

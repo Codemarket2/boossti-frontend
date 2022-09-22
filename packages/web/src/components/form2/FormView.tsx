@@ -614,7 +614,6 @@ export function FormView({
     let newValues = [];
     const newValue = { ...defaultValue, field: field._id, value: '' };
     const fieldValues = values.filter((f) => f.field === field._id);
-
     if (
       fieldValues.length > 0 &&
       !validateValue(true, fieldValues[fieldValues.length - 1], {
@@ -645,6 +644,8 @@ export function FormView({
 
   const filterHiddenFields = (field) => {
     if (field?.options?.hidden && field?.options?.hiddenConditions?.length > 0) {
+      if (edit) return true;
+      // debugger;
       const result = resolveCondition({
         conditions: field?.options?.hiddenConditions,
         leftPartResponse: { formId, values },
