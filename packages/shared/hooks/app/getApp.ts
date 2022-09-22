@@ -102,7 +102,7 @@ export const useGetApp = () => {
 
   useEffect(() => {
     let domain = window.location.host;
-    if (!['localhost:300', 'www.boossti.com'].includes(domain)) {
+    if (!['localhost:3000', 'www.boossti.com'].includes(domain)) {
       setIsApp(true);
       dispatch(updateSettingAction({ isApp: true }));
       if (domain?.includes('localhost')) {
