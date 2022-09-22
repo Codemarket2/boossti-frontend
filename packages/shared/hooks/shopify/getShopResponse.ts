@@ -14,6 +14,6 @@ export const getShopResponse = async ({ formId, shop }: IProps) => {
       field?.label?.toLowerCase() ===
       appProperties.favoriteFormFields.storeUrl?.toLocaleLowerCase(),
   )?._id;
-  const responses = await getResponses(formId, formField, shop);
+  const responses = await getResponses({ formId, formField });
   return responses?.data[0];
 };

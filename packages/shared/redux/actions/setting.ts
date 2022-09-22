@@ -14,6 +14,12 @@ export interface IAttributes {
   editMode?: boolean;
   theme?: any;
   userForm?: any;
+  isApp?: boolean;
+  appForm?: any;
+  appResponse?: any;
+  appError?: boolean;
+  appName?: string;
+  appMenuItems?: any[];
 }
 
 export function updateSettingAction(payload: IAttributes) {
