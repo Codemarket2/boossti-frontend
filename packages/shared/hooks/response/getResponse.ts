@@ -16,6 +16,10 @@ export const defaultQueryVariables = {
   search: '',
   formField: null,
   onlyMy: false,
+  appId: null,
+  installId: null,
+  workFlowFormResponseParentId: null,
+  valueFilter: '',
 };
 
 interface IProps {
@@ -128,11 +132,27 @@ export function useGetResponses({
   return { data, error, loading, state, setState, refetch };
 }
 
-export async function getResponses(formId: string, formField: string, search: string) {
-  const { data } = await guestClient.query<{ getResponses: { data: IResponse[]; count: number } }>({
-    query: GET_RESPONSES,
-    variables: { formId, formField, search },
-  });
+export async function getResponses({
+  formId,
+  formField = null,
+  search = null,
+  valueFilter,
+  page = 1,
+  limit = 10,
+}: {
+  formId: string;
+  formField?: string;
+  search?: string;
+  valueFilter?: string;
+  page?: number;
+  limit?: number;
+}) {
+  const { data } = await apolloClient.query<{ getResponses: { data: IResponse[]; count: number } }>(
+    {
+      query: GET_RESPONSES,
+      variables: { formId, page, limit, valueFilter },
+    },
+  );
   return data?.getResponses;
 }
 

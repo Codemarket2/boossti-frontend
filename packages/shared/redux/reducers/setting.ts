@@ -11,6 +11,12 @@ export const initialState: IAttributes = {
   editMode: false,
   theme: {},
   userForm: {},
+  isApp: false,
+  appError: false,
+  appForm: null,
+  appResponse: null,
+  appName: '',
+  appMenuItems: [],
 };
 
 const setting = (state: IAttributes = initialState, action: AnyAction) => {
