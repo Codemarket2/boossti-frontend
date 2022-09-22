@@ -18,6 +18,7 @@ import { useGetApp } from '@frontend/shared/hooks/app';
 import { createTheme, ThemeProvider as MuiThemeProvider, adaptV4Theme } from '@mui/material/styles';
 import { CacheProvider, EmotionCache } from '@emotion/react';
 import GlobalStyles from '@mui/material/GlobalStyles';
+import TagManager from 'react-gtm-module';
 import LoadingBar from '../src/components/common/LoadingBar';
 import Head from '../src/components/common/Head';
 import { useOneSignal } from '../src/components/notification/onesignal';
@@ -69,7 +70,7 @@ function App({ Component, pageProps, emotionCache = clientSideEmotionCache }: My
 
   useOneSignal();
   useLogoHook();
-  const { isApp, loading } = useGetApp();
+  const { loading } = useGetApp();
   const theme = createTheme(adaptV4Theme(settings.theme));
 
   useEffect(() => {
@@ -78,6 +79,13 @@ function App({ Component, pageProps, emotionCache = clientSideEmotionCache }: My
     // if (jssStyles && jssStyles.parentNode) {
     //   jssStyles.parentNode.removeChild(jssStyles);
     // }
+
+    const tagManagerArgs = {
+      gtmId: 'G-38LJY06F3Z',
+    };
+
+    TagManager.initialize(tagManagerArgs);
+
     Hub.listen('auth', ({ payload: { event } }) => {
       switch (event) {
         case 'signIn':
