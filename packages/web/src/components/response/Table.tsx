@@ -40,6 +40,7 @@ interface IProps {
   limit: number;
   onPageChange: (page: number) => void;
   onLimitChange: (newLimit: number) => void;
+  onClickResponse?: (response, form) => void;
 }
 
 export default function ResponseTable({
@@ -56,6 +57,7 @@ export default function ResponseTable({
   limit,
   onPageChange,
   onLimitChange,
+  onClickResponse,
 }: IProps) {
   const [selectedResponse, setSelectedResponse] = useState(null);
   const userForm = useSelector(({ setting }: any) => setting.userForm);
@@ -149,7 +151,21 @@ export default function ResponseTable({
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Link
+                    <Tooltip title="Open Response">
+                      <span
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => {
+                          if (onClickResponse) {
+                            onClickResponse(response, form);
+                          } else {
+                            router.push(`/forms/${form.slug}/response/${response.count}`);
+                          }
+                        }}
+                      >
+                        <u>{response?.count}</u>
+                      </span>
+                    </Tooltip>
+                    {/* <Link
                       href={
                         isTemplateInstance
                           ? `/${isTemplateInstance}/${response.count}`
@@ -157,11 +173,9 @@ export default function ResponseTable({
                       }
                     >
                       <a>
-                        <Tooltip title="Open Response">
-                          <u>{response?.count}</u>
-                        </Tooltip>
+                       
                       </a>
-                    </Link>
+                    </Link> */}
                   </TableCell>
                   {form?.fields?.map((field: IField, i) => (
                     <TableCell key={i}>
