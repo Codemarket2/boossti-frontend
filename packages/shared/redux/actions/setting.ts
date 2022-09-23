@@ -20,6 +20,7 @@ export interface IAttributes {
   appError?: boolean;
   appName?: string;
   appMenuItems?: any[];
+  appInstanceResponse?: any;
 }
 
 export function updateSettingAction(payload: IAttributes) {
