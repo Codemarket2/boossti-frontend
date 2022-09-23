@@ -27,6 +27,7 @@ interface IFormPage {
   workFlowFormResponseParentId?: string;
   valueFilter?: any;
   overrideValues?: any;
+  onClickResponse?: (response, form) => void;
 }
 
 interface IProps extends IFormPage {
@@ -45,6 +46,7 @@ export const FormPage = ({
   workFlowFormResponseParentId,
   valueFilter,
   overrideValues,
+  onClickResponse,
 }: IProps) => {
   const { data, error } = useGetFormBySlug(slug);
 
@@ -73,6 +75,7 @@ export const FormPage = ({
       workFlowFormResponseParentId={workFlowFormResponseParentId}
       valueFilter={valueFilter}
       overrideValues={overrideValues}
+      onClickResponse={onClickResponse}
     />
   );
 };
@@ -93,6 +96,7 @@ const FormPageById = ({
   workFlowFormResponseParentId,
   valueFilter,
   overrideValues,
+  onClickResponse,
 }: IFormPageByIdProps) => {
   const { data, error } = useGetForm(_id);
 
@@ -121,6 +125,7 @@ const FormPageById = ({
       workFlowFormResponseParentId={workFlowFormResponseParentId}
       valueFilter={valueFilter}
       overrideValues={overrideValues}
+      onClickResponse={onClickResponse}
     />
   );
 };

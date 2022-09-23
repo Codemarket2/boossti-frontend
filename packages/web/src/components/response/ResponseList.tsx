@@ -14,6 +14,7 @@ interface IProps {
   installId?: string;
   isTemplateInstance?: string;
   valueFilter?: any;
+  onClickResponse?: (response, form) => void;
 }
 
 export default function ResponseList({
@@ -24,6 +25,7 @@ export default function ResponseList({
   isTemplateInstance,
   installId,
   valueFilter,
+  onClickResponse,
 }: IProps): any {
   const { data, error, loading, state, setState, refetch } = useGetResponses({
     formId: form?._id,
@@ -84,6 +86,7 @@ export default function ResponseList({
             limit={state.limit}
             onPageChange={(page) => setState({ ...state, page })}
             onLimitChange={(limit) => setState({ ...state, limit })}
+            onClickResponse={onClickResponse}
           />
         </>
       )}

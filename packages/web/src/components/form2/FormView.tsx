@@ -60,6 +60,7 @@ interface FormViewWrapperProps {
   isAuthorized?: boolean;
   valueFilter?: any;
   overrideValues?: IValue[];
+  onClickResponse?: (response, form) => void;
 }
 
 export const defaultValue = {
@@ -107,6 +108,7 @@ export default function FormViewWrapper({
   isAuthorized,
   valueFilter,
   overrideValues,
+  onClickResponse,
 }: FormViewWrapperProps): any {
   const { admin: isAdmin, authenticated } = useSelector(({ auth }: any) => auth);
   const { handleCreateUpdateResponse, createLoading } = useCreateUpdateResponse({
@@ -413,6 +415,7 @@ export default function FormViewWrapper({
                     isTemplateInstance={isTemplateInstance}
                     installId={installId}
                     valueFilter={valueFilter}
+                    onClickResponse={onClickResponse}
                   />
                 </Overlay>
               )}
@@ -426,6 +429,7 @@ export default function FormViewWrapper({
               isTemplateInstance={isTemplateInstance}
               installId={installId}
               valueFilter={valueFilter}
+              onClickResponse={onClickResponse}
             />
           )}
         </>

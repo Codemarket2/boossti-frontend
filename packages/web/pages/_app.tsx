@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useEffect } from 'react';
 // import { ThemeProvider as StyledProvider } from 'styled-components';
@@ -14,9 +15,11 @@ import { useLogoHook } from '@frontend/shared/hooks/metaTags';
 import CssBaseline from '@mui/material/CssBaseline';
 import { useCurrentAuthenticatedUser } from '@frontend/shared/hooks/auth';
 import { useGetUserForm } from '@frontend/shared/hooks/user/getUserForm';
+import { useGetApp } from '@frontend/shared/hooks/app';
 import { createTheme, ThemeProvider as MuiThemeProvider, adaptV4Theme } from '@mui/material/styles';
 import { CacheProvider, EmotionCache } from '@emotion/react';
 import GlobalStyles from '@mui/material/GlobalStyles';
+import TagManager from 'react-gtm-module';
 import LoadingBar from '../src/components/common/LoadingBar';
 import Head from '../src/components/common/Head';
 import { useOneSignal } from '../src/components/notification/onesignal';
@@ -33,6 +36,7 @@ import '../src/assets/css/ckeditor.css';
 import '../src/assets/css/common.css';
 import '../src/components/react-flow/styles.css';
 import '../src/components/syncfusion-diagram/styles.css';
+import LoadingOverlay from '../src/components/common/LoadingOverlay';
 
 const customsSignInUrl =
   process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : 'https://www.boossti.com/';
@@ -60,14 +64,15 @@ const clientSideEmotionCache = createEmotionCache();
 
 function App({ Component, pageProps, emotionCache = clientSideEmotionCache }: MyAppProps) {
   const { getUser } = useCurrentAuthenticatedUser();
-  const { darkMode, authenticated } = useSelector(({ auth }: any) => auth);
+  const { authenticated } = useSelector(({ auth }: any) => auth);
   const settings = useSelector(({ setting }: any) => setting);
   const dispatch = useDispatch();
+  const router = useRouter();
   useInitializeSystem();
 
   useOneSignal();
   useLogoHook();
-
+  const { loading } = useGetApp(router?.query);
   const theme = createTheme(adaptV4Theme(settings.theme));
 
   useEffect(() => {
@@ -76,6 +81,13 @@ function App({ Component, pageProps, emotionCache = clientSideEmotionCache }: My
     // if (jssStyles && jssStyles.parentNode) {
     //   jssStyles.parentNode.removeChild(jssStyles);
     // }
+
+    const tagManagerArgs = {
+      gtmId: 'G-38LJY06F3Z',
+    };
+
+    TagManager.initialize(tagManagerArgs);
+
     Hub.listen('auth', ({ payload: { event } }) => {
       switch (event) {
         case 'signIn':
@@ -113,6 +125,7 @@ function App({ Component, pageProps, emotionCache = clientSideEmotionCache }: My
               },
             }}
           />
+          {loading && <LoadingOverlay />}
           <Component {...pageProps} />
         </MuiThemeProvider>
       </ApolloProvider>
