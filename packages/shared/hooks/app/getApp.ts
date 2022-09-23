@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import slugify from 'slugify';
 import { updateSettingAction } from '../../redux/actions/setting';
 import { systemForms } from '../../utils/systemForms';
 import { getFormBySlug } from '../form';
 import { getResponses } from '../response/getResponse';
 
-export const useGetApp = () => {
+export const useGetApp = (routerQuery) => {
   const [isApp, setIsApp] = useState(false);
   const [loading, setLoading] = useState(true);
+  const { authenticated } = useSelector(({ auth }: any) => auth);
   const dispatch = useDispatch();
 
   const getApp = async (domain) => {
@@ -104,14 +105,35 @@ export const useGetApp = () => {
     let domain = window.location.host;
     if (!['localhost:3000', 'www.boossti.com'].includes(domain)) {
       setIsApp(true);
-      dispatch(updateSettingAction({ isApp: true }));
+      dispatch(updateSettingAction({ isApp: true, appError: false }));
       if (domain?.includes('localhost')) {
         domain = 'lab.boossti.com';
       }
       getApp(domain);
     }
     setLoading(false);
-  }, []);
+  }, [authenticated]);
+
+  const getInstance = async () => {
+    const appUsersForm = await getFormBySlug(systemForms?.appUsers?.slug);
+    const appUsersResponses = await getResponses({
+      formId: appUsersForm?._id,
+      valueFilter: JSON.stringify({ count: routerQuery?.instanceCount }),
+      limit: 10,
+    });
+    const appInstanceResponse = appUsersResponses?.data?.[0];
+    dispatch(
+      updateSettingAction({
+        appInstanceResponse,
+      }),
+    );
+  };
+
+  useEffect(() => {
+    if (routerQuery?.instanceCount) {
+      getInstance();
+    }
+  }, [routerQuery?.instanceCount]);
 
   return { isApp, loading };
 };

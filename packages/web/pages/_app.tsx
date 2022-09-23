@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useEffect } from 'react';
 // import { ThemeProvider as StyledProvider } from 'styled-components';
@@ -66,11 +67,12 @@ function App({ Component, pageProps, emotionCache = clientSideEmotionCache }: My
   const { authenticated } = useSelector(({ auth }: any) => auth);
   const settings = useSelector(({ setting }: any) => setting);
   const dispatch = useDispatch();
+  const router = useRouter();
   useInitializeSystem();
 
   useOneSignal();
   useLogoHook();
-  const { loading } = useGetApp();
+  const { loading } = useGetApp(router?.query);
   const theme = createTheme(adaptV4Theme(settings.theme));
 
   useEffect(() => {

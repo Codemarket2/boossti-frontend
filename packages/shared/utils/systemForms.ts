@@ -14,4 +14,7 @@ export const systemForms = {
       form: 'form',
     },
   },
+  appUsers: {
+    slug: 'app-users',
+  },
 };

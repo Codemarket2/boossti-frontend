@@ -20,19 +20,31 @@ interface Props {
    */
   window?: () => Window;
   children: ReactNode;
+  isInstance?: boolean;
+  isAdmin?: boolean;
 }
 
-export default function AppLayoutWrapper({ children }: { children: ReactNode }) {
+export default function AppLayoutWrapper({
+  children,
+  isInstance,
+  isAdmin,
+}: {
+  children: ReactNode;
+  isInstance?: boolean;
+  isAdmin?: boolean;
+}) {
   return (
     <AuthRequired>
-      <AppLayout>{children}</AppLayout>
+      <AppLayout isInstance={isInstance} isAdmin={isAdmin}>
+        {children}
+      </AppLayout>
     </AuthRequired>
   );
 }
 
 function AppLayout(props: Props) {
   const setting = useSelector((state: any) => state.setting);
-  const { window, children } = props;
+  const { window, children, isInstance, isAdmin } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = () => {
@@ -92,7 +104,7 @@ function AppLayout(props: Props) {
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
           }}
         >
-          <AppMenu />
+          <AppMenu isAdmin={isAdmin} isInstance={isInstance} />
         </Drawer>
         <Drawer
           variant="permanent"
@@ -102,7 +114,7 @@ function AppLayout(props: Props) {
           }}
           open
         >
-          <AppMenu />
+          <AppMenu isAdmin={isAdmin} isInstance={isInstance} />
         </Drawer>
       </Box>
       <Box
