@@ -6,6 +6,7 @@ import ErrorLoading from '../common/ErrorLoading';
 import NotFound from '../common/NotFound';
 import FormView from './FormView';
 
+export type DisplayFormSettings = Parameters<typeof DisplayForm>[0]['settings'];
 interface ISettings {
   widgetType?: 'both' | 'form' | 'response';
   formView?: 'fullForm' | 'oneField' | 'leaderboard' | 'button' | 'selectItem';

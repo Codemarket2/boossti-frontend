@@ -1,56 +1,49 @@
 // NEXTJS
 import type { NextPage, GetServerSideProps } from 'next';
-import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+
 // MUI
 import Button from '@mui/material/Button';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
-import Container from '@mui/material/Container';
+import Stack from '@mui/material/Stack';
 
 // WEB
-import { DisplayForm } from '../../../src/components/form2/DisplayForm';
+import { DisplayForm, DisplayFormSettings } from '../../../src/components/form2/DisplayForm';
+import { EditEmbeddedSettings } from '../../../src/components/embedded/EditEmbeddedSettings';
 
 const CopytoClipboard = (text: string) => navigator.clipboard.writeText(text);
 
 interface GetEmbedLinkProps {
-  host: string;
-  formSlug: string;
   IFrameTagConfig?: {
-    width: number;
-    height: number;
+    width?: number;
+    height?: number;
   };
+  /** Embedded Form Settings */
+  FormSettings: DisplayFormSettings;
 }
 
+const getSrcURL = (formSettings: DisplayFormSettings) =>
+  `${window.location.origin}${window.location.pathname}?settings=${encodeURIComponent(
+    JSON.stringify(formSettings),
+  )}`;
+
 const getEmbedLink = (config: GetEmbedLinkProps) => {
-  const { host, formSlug, IFrameTagConfig: IFrameConfig } = config;
+  const { IFrameTagConfig: IFrameConfig, FormSettings } = config;
 
-  const link = `${host}/embed/forms/${formSlug}`;
+  const link = getSrcURL(FormSettings);
 
-  if (IFrameConfig) {
-    return `<iframe src='${link}' width='${IFrameConfig.width || 500}' height='${
-      IFrameConfig.height || 500
-    }'></iframe>`;
-  }
-
-  return link;
+  return `<iframe src='${link}' width='${IFrameConfig.width || 500}' height='${
+    IFrameConfig.height || 500
+  }'></iframe>`;
 };
 
 interface CommonProps {
   title: string;
-  formSlug: string;
-  host: string;
   IFrameTagConfig?: GetEmbedLinkProps['IFrameTagConfig'];
+  FormSettings: DisplayFormSettings;
+  type: 'url' | 'iframe';
 }
 
-const CopyToClipboardBtn = (props: CommonProps) => {
-  const { title, formSlug, host, IFrameTagConfig } = props;
-
+const CopyToClipboardBtn = ({ title, IFrameTagConfig, FormSettings, type }: CommonProps) => {
   return (
     <Button
       fullWidth
@@ -58,11 +51,12 @@ const CopyToClipboardBtn = (props: CommonProps) => {
       variant="contained"
       onClick={() =>
         CopytoClipboard(
-          getEmbedLink({
-            formSlug,
-            host,
-            IFrameTagConfig,
-          }),
+          type === 'url'
+            ? getSrcURL(FormSettings)
+            : getEmbedLink({
+                IFrameTagConfig: IFrameTagConfig || {},
+                FormSettings,
+              }),
         )
       }
     >
@@ -75,58 +69,59 @@ const CopyToClipboardBtn = (props: CommonProps) => {
 
 interface EmbedFormProps {
   formSlug: string;
-  host: string;
+  // host: string;
+  /** Embedded Form Settings */
+  queryFormSettings: DisplayFormSettings;
 }
 
-const EmbedForm: NextPage<EmbedFormProps> = ({ formSlug, host }: EmbedFormProps) => {
-  const [value, setValue] = useState('1');
+const EmbedForm: NextPage<EmbedFormProps> = ({ formSlug, queryFormSettings }: EmbedFormProps) => {
+  const [formSettings, setFormSettings] = useState<DisplayFormSettings>(queryFormSettings);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    setValue(newValue);
-  };
+  useEffect(() => {
+    if (window && window.history) {
+      const NEW_URL = `${window.location.origin}${
+        window.location.pathname
+      }?settings=${encodeURIComponent(JSON.stringify(formSettings))}`;
+      window.history.pushState({ page: NEW_URL }, '', NEW_URL);
+    }
+  }, [formSettings]);
 
   return (
-    <Container>
-      <DisplayForm
-        slug={formSlug}
-        settings={{
-          widgetType: 'form',
-        }}
-      />
-
-      <TabContext value={value}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <TabList onChange={handleChange} aria-label="tabs" centered>
-            <Tab label="Links" value="1" />
-          </TabList>
-        </Box>
-        <TabPanel value="1">
-          <List>
-            {/* <ListItem>
-              <CopyToClipboardBtn formSlug={formSlug} title="Copy Form Embed Link" host={host} />
-            </ListItem> */}
-            <ListItem>
-              <CopyToClipboardBtn
-                formSlug={formSlug}
-                title="Copy IFrame Tag Link"
-                host={host}
-                IFrameTagConfig={{
-                  height: 500,
-                  width: 500,
-                }}
-              />
-            </ListItem>
-          </List>
-        </TabPanel>
-      </TabContext>
-    </Container>
+    // <Container>
+    <Stack spacing={2}>
+      <DisplayForm slug={formSlug} settings={formSettings} />
+      <Stack spacing={1}>
+        <CopyToClipboardBtn title="Copy Embedded Form URL" FormSettings={formSettings} type="url" />
+        <CopyToClipboardBtn
+          title="Copy IFrame Tag Link"
+          FormSettings={formSettings}
+          type="iframe"
+        />
+        <EditEmbeddedSettings
+          formSlug={formSlug}
+          oldSettings={formSettings}
+          onSave={setFormSettings}
+        />
+      </Stack>
+    </Stack>
+    // </Container>
   );
 };
 
 export default EmbedForm;
 
 export const getServerSideProps: GetServerSideProps<EmbedFormProps> = async (ctx) => {
-  const { formSlug } = ctx.query;
+  const { formSlug, settings: settingsSTRING } = ctx.query;
+
+  let embeddedFormSettings = {};
+  try {
+    embeddedFormSettings = JSON.parse(settingsSTRING as string);
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.log(
+      `Failed to parse (JSON) Embedded Form Settings | Faulty JSON String = ${settingsSTRING}`,
+    );
+  }
 
   if (!formSlug || Array.isArray(formSlug))
     return {
@@ -136,7 +131,8 @@ export const getServerSideProps: GetServerSideProps<EmbedFormProps> = async (ctx
   return {
     props: {
       formSlug,
-      host: ctx.req.headers.host,
+      // host: ctx.req.headers.host,
+      queryFormSettings: embeddedFormSettings,
     },
   };
 };
