@@ -55,7 +55,7 @@ export default function FileLibraryWrapper({
     onlyMy: false,
     workFlowFormResponseParentId: null,
     appId: null,
-    installId: null,
+    instanceId: null,
     valueFilter: null,
   });
 

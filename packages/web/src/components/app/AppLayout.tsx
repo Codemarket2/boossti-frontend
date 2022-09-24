@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import AppMenu from './AppMenu';
 import ErrorLoading from '../common/ErrorLoading';
 import AuthRequired from '../common/AuthRequired';
+import NotFound from '../common/NotFound';
 
 const drawerWidth = 200;
 
@@ -52,6 +53,10 @@ function AppLayout(props: Props) {
   };
 
   const container = window !== undefined ? () => window().document.body : undefined;
+
+  if (!setting?.isApp) {
+    return <NotFound />;
+  }
 
   if (!setting?.appResponse?._id || setting?.appError) {
     return (

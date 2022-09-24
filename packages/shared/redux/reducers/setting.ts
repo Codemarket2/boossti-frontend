@@ -17,6 +17,7 @@ export const initialState: IAttributes = {
   appResponse: null,
   appName: '',
   appMenuItems: [],
+  appInstanceResponse: null,
 };
 
 const setting = (state: IAttributes = initialState, action: AnyAction) => {

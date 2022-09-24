@@ -26,7 +26,7 @@ const mocks = [
               formId: '62f687f8af282a8147d7fd8c',
               count: 2,
               appId: null,
-              installId: null,
+              instanceId: null,
               workFlowFormResponseParentId: null,
               values: [
                 {
@@ -85,7 +85,7 @@ const mocks = [
               formId: '62f687f8af282a8147d7fd8c',
               count: 1,
               appId: null,
-              installId: null,
+              instanceId: null,
               workFlowFormResponseParentId: null,
               values: [
                 {

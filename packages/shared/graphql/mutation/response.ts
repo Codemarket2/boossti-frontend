@@ -4,7 +4,7 @@ export const CREATE_RESPONSE = gql`
   mutation MyMutation(
     $formId: ID!
     $appId: ID
-    $installId: ID
+    $instanceId: ID
     $workFlowFormResponseParentId: ID
     $values: [ValueInput]
     $options: AWSJSON
@@ -12,7 +12,7 @@ export const CREATE_RESPONSE = gql`
     createResponse(
       formId: $formId
       appId: $appId
-      installId: $installId
+      instanceId: $instanceId
       workFlowFormResponseParentId: $workFlowFormResponseParentId
       values: $values
       options: $options
@@ -21,7 +21,7 @@ export const CREATE_RESPONSE = gql`
       formId
       count
       appId
-      installId
+      instanceId
       workFlowFormResponseParentId
       values {
         _id
@@ -80,7 +80,7 @@ export const UPDATE_RESPONSE = gql`
       formId
       count
       appId
-      installId
+      instanceId
       workFlowFormResponseParentId
       values {
         _id
