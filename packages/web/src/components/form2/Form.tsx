@@ -45,6 +45,7 @@ import DesignTab from './design/DesignTab';
 import RelationFields from './RelationFields';
 import TabsList from './tabs/TabsList';
 import TabView from './tabs/TabView';
+import EmbedFormTab from '../embed/EmbedFormTab';
 
 interface IProps {
   form: IForm;
@@ -56,6 +57,7 @@ interface IProps {
 const tabs = [
   'Preview',
   'Settings',
+  'Embedded Form',
   'Actions',
   'Workflows',
   'Responses',
@@ -274,6 +276,9 @@ export default function Form({ form, drawerMode = false, onSlugChange, hideField
                   />
                 </>
               )}
+              {options.currentTab === 'Embedded Form' && (
+                <EmbedFormTab form={form} oldSettings={form.settings} />
+              )}
               {options.currentTab === 'Workflows' && <Workflows _id={form?._id} />}
               {options.currentTab === 'Responses' && (
                 <>
@@ -343,6 +348,7 @@ export default function Form({ form, drawerMode = false, onSlugChange, hideField
                   }
                 />
               )} */}
+
               {form?.settings?.tabs?.some(
                 (tab) => slugify(tab?.label, { lower: true }) === options.currentTab,
               ) && (
