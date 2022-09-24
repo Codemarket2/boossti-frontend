@@ -12,7 +12,7 @@ export const variables = {
   search: '',
   formField: null,
   onlyMy: false,
-  installId: '',
+  instanceId: '',
   valueFilter: null,
 };
 const DemoQuery = () => {

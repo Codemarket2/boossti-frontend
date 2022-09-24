@@ -6,6 +6,7 @@ import AuthRequired from './AuthRequired';
 import AppBar from './AppBar';
 import BottomBar from './BottomBar';
 import Container from './Container';
+import NotFound from './NotFound';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   backgroundColor: `#F0F2F5 !important`,
@@ -25,7 +26,12 @@ const UserLayout = ({
   mustAdmin = false,
   container = true,
 }: IProps): any => {
-  const authenticated = useSelector(({ auth }: any) => auth.authenticated);
+  const { auth, setting } = useSelector((state: any) => state);
+  const { authenticated } = auth;
+  // const authenticated = useSelector(({ auth }: any) => auth.authenticated);
+  if (setting?.isApp) {
+    return <NotFound />;
+  }
   return (
     <StyledPaper elevation={0}>
       <AppBar />

@@ -71,7 +71,7 @@ export default function FileLibraryWrapper({
     onlyMy: false,
     workFlowFormResponseParentId: null,
     appId: null,
-    installId: null,
+    instanceId: null,
     valueFilter: {
       'values.field': fieldId, // || '631cfdf50eaa703a059e432c', //'631cfdf50eaa703a059e432c',
       'values.value': { $regex: 'image/', $options: 'i' },

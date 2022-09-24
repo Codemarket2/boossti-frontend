@@ -61,6 +61,8 @@ export const useGetApp = (routerQuery) => {
         }),
       );
     } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log({ error });
       dispatch(updateSettingAction({ isApp: true, appError: true }));
     }
   };
@@ -127,6 +129,8 @@ export const useGetApp = (routerQuery) => {
         appInstanceResponse,
       }),
     );
+    // const instanceCount = routerQuery?.instanceCount;
+    // debugger;
   };
 
   useEffect(() => {
