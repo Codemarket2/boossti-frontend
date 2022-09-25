@@ -6,11 +6,14 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { useInstallApp } from '@frontend/shared/hooks/app/installApp';
 import { useSelector } from 'react-redux';
 import AppMenu from './AppMenu';
 import ErrorLoading from '../common/ErrorLoading';
 import AuthRequired from '../common/AuthRequired';
 import NotFound from '../common/NotFound';
+import { onAlert } from '../../utils/alert';
 
 const drawerWidth = 200;
 
@@ -48,6 +51,8 @@ function AppLayout(props: Props) {
   const { window, children, isInstance, isAdmin } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  const { handleInstall, installLoading } = useInstallApp({ onAlert });
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -59,10 +64,22 @@ function AppLayout(props: Props) {
   }
 
   if (!setting?.appResponse?._id || setting?.appError) {
+    return <ErrorLoading error={setting?.appError && { message: setting?.appError }} />;
+  }
+
+  if (!setting?.isInstalled) {
     return (
-      <ErrorLoading
-        error={setting?.appError && { message: 'App not found, go back to www.boossti.com' }}
-      />
+      <div className="mt-5 pt-5 container d-flex flex-column justify-content-center align-items-center">
+        <Typography variant="h5">You have not installed the App!</Typography>
+        <LoadingButton
+          variant="contained"
+          className="mt-4"
+          onClick={handleInstall}
+          loading={installLoading}
+        >
+          Install Now
+        </LoadingButton>
+      </div>
     );
   }
 

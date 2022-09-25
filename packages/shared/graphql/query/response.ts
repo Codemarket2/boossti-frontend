@@ -7,7 +7,6 @@ export const GET_RESPONSE = gql`
       formId
       count
       appId
-      instanceId
       workFlowFormResponseParentId
       values {
         _id
@@ -60,13 +59,12 @@ export const GET_RESPONSE = gql`
 `;
 
 export const GET_RESPONSE_BY_COUNT = gql`
-  query getResponseByCount($formId: ID!, $count: Int!, $appId: ID, $instanceId: ID) {
-    getResponseByCount(formId: $formId, count: $count, appId: $appId, instanceId: $instanceId) {
+  query getResponseByCount($formId: ID!, $count: Int!, $appId: ID) {
+    getResponseByCount(formId: $formId, count: $count, appId: $appId) {
       _id
       formId
       count
       appId
-      instanceId
       workFlowFormResponseParentId
       values {
         _id
@@ -122,7 +120,6 @@ export const GET_RESPONSES = gql`
   query getResponses(
     $formId: ID!
     $appId: ID
-    $instanceId: ID
     $workFlowFormResponseParentId: ID
     $page: Int
     $limit: Int
@@ -134,7 +131,6 @@ export const GET_RESPONSES = gql`
     getResponses(
       formId: $formId
       appId: $appId
-      instanceId: $instanceId
       workFlowFormResponseParentId: $workFlowFormResponseParentId
       page: $page
       limit: $limit
@@ -149,7 +145,6 @@ export const GET_RESPONSES = gql`
         formId
         count
         appId
-        instanceId
         workFlowFormResponseParentId
         values {
           _id
@@ -214,7 +209,6 @@ export const GET_MY_RESPONSES = gql`
         }
         count
         appId
-        instanceId
         workFlowFormResponseParentId
         values {
           _id

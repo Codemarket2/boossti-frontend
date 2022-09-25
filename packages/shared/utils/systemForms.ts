@@ -16,5 +16,10 @@ export const systemForms = {
   },
   appUsers: {
     slug: 'app-users',
+    fields: {
+      user: 'user',
+      app: 'app',
+      status: 'status',
+    },
   },
 };

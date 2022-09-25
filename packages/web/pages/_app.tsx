@@ -67,12 +67,11 @@ function App({ Component, pageProps, emotionCache = clientSideEmotionCache }: My
   const { authenticated } = useSelector(({ auth }: any) => auth);
   const settings = useSelector(({ setting }: any) => setting);
   const dispatch = useDispatch();
-  const router = useRouter();
   useInitializeSystem();
 
   useOneSignal();
   useLogoHook();
-  const { loading } = useGetApp(router?.query);
+  const { loading } = useGetApp();
   const theme = createTheme(adaptV4Theme(settings.theme));
 
   useEffect(() => {

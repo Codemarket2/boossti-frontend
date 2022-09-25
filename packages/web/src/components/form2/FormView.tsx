@@ -51,7 +51,6 @@ import { resolveCondition } from './field/field-condition/ResolveCondition';
 interface FormViewWrapperProps {
   form: IForm;
   appId?: string;
-  instanceId?: string;
   workFlowFormResponseParentId?: string;
   createCallback?: (response: any) => void;
   setResponded?: () => void;
@@ -103,7 +102,6 @@ export default function FormViewWrapper({
   setResponded,
   isPageOwner,
   appId,
-  instanceId,
   isTemplateInstance = '',
   isAuthorized,
   valueFilter,
@@ -114,7 +112,6 @@ export default function FormViewWrapper({
   const { handleCreateUpdateResponse, createLoading } = useCreateUpdateResponse({
     onAlert,
     appId,
-    instanceId,
     workFlowFormResponseParentId,
   });
 
@@ -125,7 +122,6 @@ export default function FormViewWrapper({
     onlyMy: showOnlyMyResponses,
     workFlowFormResponseParentId,
     appId,
-    instanceId,
     valueFilter,
   });
 
@@ -413,7 +409,6 @@ export default function FormViewWrapper({
                     showOnlyMyResponses={showOnlyMyResponses}
                     appId={appId}
                     isTemplateInstance={isTemplateInstance}
-                    instanceId={instanceId}
                     valueFilter={valueFilter}
                     onClickResponse={onClickResponse}
                   />
@@ -427,7 +422,6 @@ export default function FormViewWrapper({
               showOnlyMyResponses={showOnlyMyResponses}
               appId={appId}
               isTemplateInstance={isTemplateInstance}
-              instanceId={instanceId}
               valueFilter={valueFilter}
               onClickResponse={onClickResponse}
             />
