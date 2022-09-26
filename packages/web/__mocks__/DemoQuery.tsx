@@ -12,7 +12,6 @@ export const variables = {
   search: '',
   formField: null,
   onlyMy: false,
-  instanceId: '',
   valueFilter: null,
 };
 const DemoQuery = () => {

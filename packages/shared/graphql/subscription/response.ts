@@ -7,7 +7,6 @@ export const RESPONSE_SUB = gql`
       formId
       count
       appId
-      instanceId
       workFlowFormResponseParentId
       values {
         _id
@@ -65,7 +64,6 @@ export const UPDATE_RESPONSE_SUB = gql`
       formId
       count
       appId
-      instanceId
       workFlowFormResponseParentId
       values {
         _id

@@ -12,12 +12,13 @@ export const initialState: IAttributes = {
   theme: {},
   userForm: {},
   isApp: false,
-  appError: false,
+  appError: null,
   appForm: null,
   appResponse: null,
   appName: '',
   appMenuItems: [],
   appInstanceResponse: null,
+  isInstalled: false,
 };
 
 const setting = (state: IAttributes = initialState, action: AnyAction) => {

@@ -19,7 +19,6 @@ interface ISettings {
 interface IFormPage {
   settings?: ISettings;
   appId?: string;
-  instanceId?: string;
   modifyForm?: (form: IForm) => IForm;
   isTemplateInstance?: string;
   createCallback?: (response: any) => void;
@@ -38,7 +37,6 @@ export const FormPage = ({
   slug,
   settings = {},
   appId,
-  instanceId,
   modifyForm,
   isTemplateInstance = '',
   createCallback,
@@ -69,7 +67,6 @@ export const FormPage = ({
       form={form}
       isTemplateInstance={isTemplateInstance}
       appId={appId}
-      instanceId={instanceId}
       createCallback={createCallback}
       isPageOwner={isPageOwner}
       workFlowFormResponseParentId={workFlowFormResponseParentId}
@@ -88,7 +85,6 @@ const FormPageById = ({
   _id,
   settings = {},
   appId,
-  instanceId,
   modifyForm,
   isTemplateInstance = '',
   createCallback,
@@ -119,7 +115,6 @@ const FormPageById = ({
       form={form}
       isTemplateInstance={isTemplateInstance}
       appId={appId}
-      instanceId={instanceId}
       createCallback={createCallback}
       isPageOwner={isPageOwner}
       workFlowFormResponseParentId={workFlowFormResponseParentId}

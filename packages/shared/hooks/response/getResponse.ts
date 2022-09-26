@@ -18,7 +18,6 @@ export const defaultQueryVariables = {
   formField: null,
   onlyMy: false,
   appId: null,
-  instanceId: null,
   workFlowFormResponseParentId: null,
   valueFilter: '',
 };
@@ -29,7 +28,6 @@ interface IProps {
   onlyMy?: boolean;
   workFlowFormResponseParentId?: string;
   appId?: string;
-  instanceId?: string;
   search?: string;
   valueFilter?: any;
 }
@@ -40,7 +38,6 @@ export function useGetResponses({
   onlyMy = false,
   workFlowFormResponseParentId = null,
   appId,
-  instanceId,
   search = null,
   valueFilter,
 }: IProps) {
@@ -74,7 +71,6 @@ export function useGetResponses({
     {
       formId: string;
       appId: string;
-      instanceId: string;
       workFlowFormResponseParentId: string;
       page: number;
       limit: number;
@@ -90,7 +86,6 @@ export function useGetResponses({
       workFlowFormResponseParentId,
       onlyMy,
       appId,
-      instanceId,
       valueFilter: filter,
     },
     fetchPolicy: 'cache-and-network',
@@ -177,13 +172,12 @@ export function useGetResponseByCount(formId: string, count: number): any {
   const setting = useSelector((state: any) => state?.setting);
   const { data, error, loading, refetch } = useQuery<
     { getResponseByCount: IResponse },
-    { formId: string; count: number; appId: string; instanceId: string }
+    { formId: string; count: number; appId: string }
   >(GET_RESPONSE_BY_COUNT, {
     variables: {
       formId,
       count,
       appId: setting?.appResponse?._id,
-      instanceId: setting?.appInstanceResponse?._id,
     },
     fetchPolicy: 'cache-and-network',
   });
