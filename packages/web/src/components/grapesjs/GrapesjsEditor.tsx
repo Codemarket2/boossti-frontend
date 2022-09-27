@@ -5,17 +5,19 @@ import grapesjs from 'grapesjs';
 import 'grapesjs-preset-newsletter';
 
 import 'grapesjs/dist/css/grapes.min.css';
+
 import { Button } from '@mui/material';
 import { openStdin } from 'process';
 import { on } from 'events';
 import Save from '@mui/icons-material/Save';
-import footerPlugin from './plugins/footerPlugin';
 // import webpagePlugin from 'grapesjs-preset-webpage';
 import blockPlugin from 'grapesjs-blocks-basic';
-
 import customCodePlugin from 'grapesjs-custom-code';
 import navbarPlugin from 'grapesjs-navbar';
 import scriptEditor from 'grapesjs-script-editor';
+
+import { read } from 'fs';
+import footerPlugin from './plugins/footerPlugin';
 import FileLibraryWrapper from '../fileLibrary/FileLibraryWrapper';
 import FileLibrary from '../fileLibrary/FileLibrary';
 import { addTagToLink } from './addTagToLink';
@@ -28,11 +30,36 @@ export default function GrapesjsEditor({
   onChange: (html: string) => void;
 }) {
   const [state, setState] = useState({ showLibrary: false, props: null });
+  const [width, setWidth] = useState('');
+  const [height, setHeight] = useState('');
 
   useEffect(() => {
+    const handleResize = () => {
+      const widthValue = window.matchMedia('(max-width:900px)');
+
+      if (widthValue?.matches) {
+        setWidth('70rem');
+        setHeight('120rem');
+      } else {
+        setWidth('100%');
+        setHeight('100vh');
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  //
+
+  useEffect(() => {
+    //  Block of code to try
+
     const editor = grapesjs.init({
-      container: '#gjs',
-      height: '100vh',
+      // ...
+      container: '.gjs',
+      width,
+      height,
 
       plugins: [
         'gjs-preset-newsletter',
@@ -42,12 +69,6 @@ export default function GrapesjsEditor({
         navbarPlugin,
         scriptEditor,
       ],
-      pluginsOpts: {
-        blockPlugin: {
-          stylePrefix: '', // no gjs- prefix
-          flexGrid: 1, // use flexbox instead of tables
-        },
-      },
 
       storageManager: false,
     });
@@ -77,7 +98,7 @@ export default function GrapesjsEditor({
         setState({ ...state, showLibrary: true, props: opts });
       },
     });
-  }, []);
+  }, [width]);
 
   const onUpload = (urls) => {
     state.props.target.set('src', urls[0]);
@@ -96,7 +117,7 @@ export default function GrapesjsEditor({
           acceptedFileType={() => null}
         />
       )}
-      <div id="gjs" />
+      <div className="gjs">{/* <div id="gjs" /> */}</div>
     </div>
   );
 }
