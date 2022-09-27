@@ -11,7 +11,6 @@ interface IProps {
   workFlowFormResponseParentId?: string;
   showOnlyMyResponses?: boolean;
   appId?: string;
-  installId?: string;
   isTemplateInstance?: string;
   valueFilter?: any;
   onClickResponse?: (response, form) => void;
@@ -23,7 +22,6 @@ export default function ResponseList({
   showOnlyMyResponses,
   appId,
   isTemplateInstance,
-  installId,
   valueFilter,
   onClickResponse,
 }: IProps): any {
@@ -32,7 +30,6 @@ export default function ResponseList({
     onlyMy: showOnlyMyResponses,
     workFlowFormResponseParentId,
     appId,
-    installId,
     valueFilter,
   });
 

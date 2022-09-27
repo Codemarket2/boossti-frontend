@@ -11,7 +11,6 @@ export interface IProps {
   value: any;
   onChange: (response) => void;
   label?: string;
-  installId?: string;
   error?: boolean;
   helperText?: string;
   disabled?: boolean;
@@ -28,7 +27,6 @@ const filter = createFilterOptions();
 export default function SelectResponse({
   label = 'Select Response',
   formId,
-  installId,
   value = null,
   onChange,
   onChangeFullResponse,
@@ -136,7 +134,6 @@ export default function SelectResponse({
               onClose={() => setAddOption({ ...addOption, showDrawer: false })}
               title={label}
               formId={formId}
-              installId={installId}
               createCallback={(newResponse) => {
                 onChange(getLabels(formField, [newResponse])?.pop());
                 setAddOption({ ...addOption, showDrawer: false });

@@ -4,7 +4,6 @@ import { IForm } from './form';
 export interface IResponse extends ISchema {
   formId: any;
   appId: string;
-  installId: string;
   count: number;
   values: IValue[];
 }

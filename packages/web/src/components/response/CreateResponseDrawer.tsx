@@ -7,7 +7,6 @@ interface IProps {
   formId: string;
   title?: string;
   createCallback: (response: any) => void;
-  installId?: string;
 }
 
 export default function CreateResponseDrawer({
@@ -16,7 +15,6 @@ export default function CreateResponseDrawer({
   formId,
   title = '',
   createCallback,
-  installId,
 }: IProps): any {
   return (
     <Overlay open={open} onClose={onClose} title={`Create new ${title}`}>
@@ -24,7 +22,6 @@ export default function CreateResponseDrawer({
         <DisplayForm
           _id={formId}
           createCallback={createCallback}
-          installId={installId}
           settings={{ widgetType: 'form' }}
         />
       </div>

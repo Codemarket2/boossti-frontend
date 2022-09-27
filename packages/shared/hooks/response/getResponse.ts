@@ -1,5 +1,6 @@
 import { useQuery, useSubscription } from '@apollo/client';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { GET_RESPONSE_BY_COUNT, GET_RESPONSES, GET_RESPONSE } from '../../graphql/query/response';
 import {
   DELETED_RESPONSE,
@@ -17,7 +18,6 @@ export const defaultQueryVariables = {
   formField: null,
   onlyMy: false,
   appId: null,
-  installId: null,
   workFlowFormResponseParentId: null,
   valueFilter: '',
 };
@@ -28,7 +28,6 @@ interface IProps {
   onlyMy?: boolean;
   workFlowFormResponseParentId?: string;
   appId?: string;
-  installId?: string;
   search?: string;
   valueFilter?: any;
 }
@@ -39,7 +38,6 @@ export function useGetResponses({
   onlyMy = false,
   workFlowFormResponseParentId = null,
   appId,
-  installId,
   search = null,
   valueFilter,
 }: IProps) {
@@ -73,7 +71,6 @@ export function useGetResponses({
     {
       formId: string;
       appId: string;
-      installId: string;
       workFlowFormResponseParentId: string;
       page: number;
       limit: number;
@@ -89,7 +86,6 @@ export function useGetResponses({
       workFlowFormResponseParentId,
       onlyMy,
       appId,
-      installId,
       valueFilter: filter,
     },
     fetchPolicy: 'cache-and-network',
@@ -173,11 +169,16 @@ export function useGetResponse(_id: string): any {
 }
 
 export function useGetResponseByCount(formId: string, count: number): any {
+  const setting = useSelector((state: any) => state?.setting);
   const { data, error, loading, refetch } = useQuery<
     { getResponseByCount: IResponse },
-    { formId: string; count: number }
+    { formId: string; count: number; appId: string }
   >(GET_RESPONSE_BY_COUNT, {
-    variables: { formId, count },
+    variables: {
+      formId,
+      count,
+      appId: setting?.appResponse?._id,
+    },
     fetchPolicy: 'cache-and-network',
   });
 

@@ -21,6 +21,7 @@ export interface IAttributes {
   appName?: string;
   appMenuItems?: any[];
   appInstanceResponse?: any;
+  isInstalled?: boolean;
 }
 
 export function updateSettingAction(payload: IAttributes) {
