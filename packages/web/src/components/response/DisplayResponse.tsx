@@ -139,7 +139,7 @@ export function DisplayResponse({
           <div className="d-flex align-items-center">
             {!hideNavigation && (
               <>
-                <EditMode />
+                {authorized && <EditMode />}
                 <QRButton />
               </>
             )}
@@ -237,15 +237,17 @@ export function DisplayResponse({
                           data-testid="fields-display"
                         >
                           <div data-testid="label">{field?.label}</div>
-                          <Tooltip title="Edit Response">
-                            <IconButton
-                              edge="end"
-                              onClick={(e) => setState({ ...initialState, fieldId: field?._id })}
-                              size="small"
-                            >
-                              <EditIcon fontSize="small" />
-                            </IconButton>
-                          </Tooltip>
+                          {authorized && (
+                            <Tooltip title="Edit">
+                              <IconButton
+                                edge="end"
+                                onClick={(e) => setState({ ...initialState, fieldId: field?._id })}
+                                size="small"
+                              >
+                                <EditIcon fontSize="small" />
+                              </IconButton>
+                            </Tooltip>
+                          )}
                         </Typography>
                         <div data-testid="value">
                           {field?.options?.systemCalculatedAndView ? (
