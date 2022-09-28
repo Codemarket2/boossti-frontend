@@ -70,7 +70,7 @@ export default function Field({
   useCheckUnique({
     formId,
     value,
-    options: field?.options,
+    field,
     setUnique,
     onAlert,
     responseId,
