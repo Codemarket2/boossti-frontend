@@ -7,7 +7,7 @@ export default function Page() {
   const { count, slug } = router.query;
 
   return (
-    <UserLayout authRequired container={false}>
+    <UserLayout authRequired={false} container={false}>
       {slug && <ResponseScreen slug={slug?.toString()} count={count?.toString()} />}
     </UserLayout>
   );
