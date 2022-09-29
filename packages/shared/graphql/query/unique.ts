@@ -6,12 +6,14 @@ export const GET_CHECK_UNIQUE = gql`
     $value: ValueInput
     $responseId: ID
     $caseInsensitiveUnique: Boolean
+    $fieldType: String!
   ) {
     getCheckUnique(
       formId: $formId
       value: $value
       responseId: $responseId
       caseInsensitiveUnique: $caseInsensitiveUnique
+      fieldType: $fieldType
     )
   }
 `;
