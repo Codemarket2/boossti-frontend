@@ -2,27 +2,22 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import { useGetResponses } from '@frontend/shared/hooks/response/getResponse';
-import { useGetForm } from '@frontend/shared/hooks/form/getForm';
+import { useGetFormBySlug } from '@frontend/shared/hooks/form/getForm';
 import { IAttributes as ISetting } from '@frontend/shared/redux/actions/setting';
 import parse from 'html-react-parser';
 
-const PageId = (setting: any) => {
-  if (setting?.appForm) {
-    // console.log('appform', selector.setting.appForm);
-    const data1 = setting?.appForm?.fields.filter((item) => item?.form?.name === 'Pages');
-    const pageId = data1?.[0]?.form?._id; // || '6324e600fe046781e9d33d6f'; //Form ID for form named pages "6324e600fe046781e9d33d6f"
-    // console.log(pageId);
-    return pageId;
-  }
-};
-const fieldId = (pageId: string) => {
-  const { data: form, error: formError, loading: formLoading } = useGetForm(pageId);
+const fieldId = () => {
+  const { data: form, error: formBySlugError, loading: formBySlugLoading } = useGetFormBySlug(
+    'pages',
+  );
   // console.log(form);
-  const htmlField = form?.getForm?.fields?.filter((item) => item?.label === 'HTML Content');
+  const pageId = form?.getFormBySlug?._id;
+  const htmlField = form?.getFormBySlug?.fields?.filter((item) => item?.label === 'HTML Content');
   const htmlFieldId = htmlField?.[0]?._id;
-  const slug1 = form?.getForm?.fields?.filter((item) => item?.label === 'slug');
+  const slug1 = form?.getFormBySlug?.fields?.filter((item) => item?.label === 'slug');
   const slugId = slug1?.[0]?._id;
   return {
+    pageId,
     slugId,
     htmlFieldId,
   };
@@ -56,11 +51,10 @@ const Slug = () => {
   const setting = useSelector((state: { setting: ISetting }) => state.setting);
   const isApp = setting?.isApp;
   // search for appid in slug
-  const pageId = PageId(setting);
-  const fieldID = fieldId(pageId);
-  const html = htmlCode(fieldID.slugId, fieldID.htmlFieldId, slug, pageId);
+  // const pageId = PageId(setting);
+  const fieldID = fieldId();
+  const html = htmlCode(fieldID.slugId, fieldID.htmlFieldId, slug, fieldID.pageId);
 
-  // return <div> {parse(String(html))}</div>;
   if (!isApp) {
     return <>TODO 404 Page</>;
   }
