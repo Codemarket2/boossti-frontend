@@ -47,6 +47,7 @@ import {
   getFieldCondition,
 } from './field/field-condition/DisplayFieldCondition';
 import { resolveCondition } from './field/field-condition/ResolveCondition';
+import ResponseDrawer from '../response/ResponseDrawer';
 
 interface FormViewWrapperProps {
   form: IForm;
@@ -476,6 +477,7 @@ export function FormView({
   const authState = useSelector(({ auth }: any) => auth);
   const authenticated = authState?.authenticated;
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [displayExistingResponse, setDisplayExistingResponse] = useState(false);
 
   const [page, setPage] = useState(0);
   const [hideField, setHideField] = useState(false);
@@ -686,13 +688,34 @@ export function FormView({
                   >
                     {field?.label}
                     {field?.options?.required && '*'}
-                    {unique && field?.options?.unique && ' This field must be unique'}
+                    {unique && field?.options?.unique && (
+                      <>
+                        {' '}
+                        This field must be unique{' '}
+                        <Typography
+                          color="primary"
+                          className="d-inline-block"
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => setDisplayExistingResponse(true)}
+                        >
+                          view existing response
+                        </Typography>
+                      </>
+                    )}
                     {uniqueLoading && field?.options?.unique && (
                       <span className="ml-2">
                         <CircularProgress size={10} />
                       </span>
                     )}
                   </Typography>
+                  {displayExistingResponse && unique && (
+                    <ResponseDrawer
+                      data-testid="overlay"
+                      open={displayExistingResponse}
+                      onClose={() => setDisplayExistingResponse(false)}
+                      responseId={unique?.toString()}
+                    />
+                  )}
                   {field?.options?.systemCalculatedAndView && (
                     <div className="mb-2">
                       <DisplayFormula formula={field?.options?.formula} fields={fields} />
