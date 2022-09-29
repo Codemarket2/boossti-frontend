@@ -115,7 +115,7 @@ export const useGetApp = () => {
       setIsApp(true);
       dispatch(updateSettingAction({ isApp: true, appError: null }));
       if (domain?.includes('localhost')) {
-        domain = 'lab.boossti.com';
+        domain = process.env.NEXT_PUBLIC_APP_DOMAIN;
       }
       getApp(domain);
     }
