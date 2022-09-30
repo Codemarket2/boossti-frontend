@@ -9,14 +9,14 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import React, { useState } from 'react';
-import ConditionForm from './ConditionForm';
+import ConstraintForm from './ConstraintForm';
 import CRUDMenu from '../../common/CRUDMenu';
 import DisplayFormula from '../field/formula/DisplayFormula';
 import FormulaEditor from '../field/formula/FormulaEditor';
 
 interface IProps {
   form: any;
-  onConditionsChange: (arg: any) => void;
+  onConstraintsChange: (arg: any) => void;
   onFieldsChange: (fields: any) => void;
 }
 
@@ -29,25 +29,25 @@ const initialState = {
   selectedTab: 0,
 };
 
-export default function ConditionsTab({ form, onConditionsChange, onFieldsChange }: IProps) {
+export default function ConstraintsTab({ form, onConstraintsChange, onFieldsChange }: IProps) {
   const [state, setState] = useState(initialState);
-  const conditions = form?.settings?.conditions || [];
+  const constraints = form?.settings?.constraints || [];
 
   const onSave = (newConditions, action: 'create' | 'update') => {
     if (action === 'update') {
-      onConditionsChange(
-        conditions?.map((constraint, index) =>
+      onConstraintsChange(
+        constraints?.map((constraint, index) =>
           index === state.constraintIndex ? newConditions : constraint,
         ),
       );
     } else {
-      onConditionsChange([...conditions, newConditions]);
+      onConstraintsChange([...constraints, newConditions]);
     }
     setState(initialState);
   };
 
   const onDelete = () => {
-    onConditionsChange(conditions?.filter((c, index) => index !== state.constraintIndex));
+    onConstraintsChange(constraints?.filter((c, index) => index !== state.constraintIndex));
     setState(initialState);
   };
 
@@ -79,7 +79,7 @@ export default function ConditionsTab({ form, onConditionsChange, onFieldsChange
           />
         </div>
       ) : state?.showForm ? (
-        <ConditionForm
+        <ConstraintForm
           constraint={state.constraint}
           fields={form?.fields}
           onSave={onSave}
@@ -88,7 +88,7 @@ export default function ConditionsTab({ form, onConditionsChange, onFieldsChange
       ) : (
         <>
           <Typography variant="h5" className="d-flex align-items-center">
-            Conditions
+            Constraint
             <Tooltip title="Add Condition">
               <IconButton color="primary" onClick={() => setState({ ...state, showForm: true })}>
                 <AddCircle />
@@ -96,7 +96,7 @@ export default function ConditionsTab({ form, onConditionsChange, onFieldsChange
             </Tooltip>
           </Typography>
           <List disablePadding>
-            {conditions?.map((condition, index) => (
+            {constraints?.map((condition, index) => (
               <ListItem key={index} disablePadding>
                 <ListItemButton>
                   <ListItemText primary={condition?.name} secondary={condition?.constraintType} />

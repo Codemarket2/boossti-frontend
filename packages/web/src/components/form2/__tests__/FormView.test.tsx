@@ -356,9 +356,8 @@ const FormViewTest = ({
   formId,
   edit,
   responseId,
-  // form,
-  responseCount,
-}: FormViewProps) => {
+}: // form,
+FormViewProps) => {
   return (
     <FormView
       inlineEdit={inlineEdit}
@@ -369,7 +368,6 @@ const FormViewTest = ({
       edit
       formId={formId}
       responseId={responseId}
-      responseCount={responseCount}
       onCancel={onCancel}
     />
   );
