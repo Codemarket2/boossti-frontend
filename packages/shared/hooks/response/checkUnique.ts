@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { GET_CHECK_UNIQUE } from '../../graphql/query/unique';
 import { guestClient as apolloClient } from '../../graphql';
 import { IHooksProps } from '../../types/common';
+import { getFieldFilterValue } from './constraint';
 
 interface IUseCheckUniqueProps extends IHooksProps {
   formId: string;
@@ -23,15 +24,14 @@ export const useCheckUnique = ({
 }: IUseCheckUniqueProps) => {
   const handleCheckUnique = async () => {
     try {
-      const { data } = await checkUnique({
-        value,
+      const filter = getFieldFilterValue(field?.fieldType, value);
+      const existingResponseId = await checkUnique({
         formId,
         responseId,
-        caseInsensitiveUnique: field?.options?.caseInsensitiveUnique,
-        fieldType: field?.fieldType,
+        valueFilter: { ...filter, 'values.field': field?._id },
       });
-      if (data.getCheckUnique) {
-        setUnique(data.getCheckUnique);
+      if (existingResponseId) {
+        setUnique(existingResponseId);
       }
       setUniqueLoading(false);
     } catch (error) {
@@ -61,36 +61,20 @@ export const useCheckUnique = ({
 };
 
 interface ICheckUniquePayload {
-  value: any;
   formId: string;
-  responseId: string;
-  fieldType: string;
-  caseInsensitiveUnique?: boolean;
+  responseId?: string;
+  valueFilter: any;
 }
 
-async function checkUnique({
-  value,
-  formId,
-  responseId,
-  caseInsensitiveUnique,
-  fieldType,
-}: ICheckUniquePayload) {
-  const response = await apolloClient.query({
+export async function checkUnique({ formId, responseId, valueFilter = {} }: ICheckUniquePayload) {
+  const { data } = await apolloClient.query({
     query: GET_CHECK_UNIQUE,
     variables: {
-      value: {
-        field: value?.field,
-        value: value?.value,
-        valueNumber: value?.valueNumber,
-        response: value?.response?._id,
-        form: value?.form?._id,
-      },
       formId,
       responseId,
-      caseInsensitiveUnique,
-      fieldType,
+      valueFilter: JSON.stringify(valueFilter),
     },
     fetchPolicy: 'network-only',
   });
-  return response;
+  return data.getCheckUnique;
 }
