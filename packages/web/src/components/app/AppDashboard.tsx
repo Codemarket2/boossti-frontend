@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux';
 import { IAttributes as ISetting } from '@frontend/shared/redux/actions/setting';
 import parse from 'html-react-parser';
 import { useGetFormBySlug } from '@frontend/shared/hooks/form';
+import CircularProgress from '@mui/material/CircularProgress';
 import AppLayout from './AppLayout';
 
 export default function AppDashboard() {
@@ -22,11 +23,18 @@ export default function AppDashboard() {
     (value) => value?.field === htmlContentFieldId,
   )?.value;
   // console.log(homepageResponse);
+  // console.log(htmlContentValue);
   return (
     <div>
       {/* <AppLayout>Dashboard</AppLayout>
        */}
-      {!loading ? parse(String(htmlContentValue)) : <>loading</>}
+      {!loading && htmlContentValue !== undefined ? (
+        parse(String(htmlContentValue))
+      ) : (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <CircularProgress />
+        </div>
+      )}
     </div>
   );
 }

@@ -5,8 +5,9 @@ import { useGetResponses } from '@frontend/shared/hooks/response/getResponse';
 import { useGetFormBySlug } from '@frontend/shared/hooks/form/getForm';
 import { IAttributes as ISetting } from '@frontend/shared/redux/actions/setting';
 import parse from 'html-react-parser';
+import CircularProgress from '@mui/material/CircularProgress';
 
-const fieldId = () => {
+const useFieldId = () => {
   const { data: form, error: formBySlugError, loading: formBySlugLoading } = useGetFormBySlug(
     'pages',
   );
@@ -22,7 +23,7 @@ const fieldId = () => {
     htmlFieldId,
   };
 };
-const htmlCode = (slugId: string, htmlFieldId: string, slug: string | string[], pageId) => {
+const useHtmlCode = (slugId: string, htmlFieldId: string, slug: string | string[], pageId) => {
   // if (slugId && slug && pageId) {
   const { data, error, loading } = useGetResponses({
     formId: pageId, // || '6324e600fe046781e9d33d6f',
@@ -52,14 +53,24 @@ const Slug = () => {
   const isApp = setting?.isApp;
   // search for appid in slug
   // const pageId = PageId(setting);
-  const fieldID = fieldId();
-  const html = htmlCode(fieldID.slugId, fieldID.htmlFieldId, slug, fieldID.pageId);
+  const fieldID = useFieldId();
+  const html = useHtmlCode(fieldID.slugId, fieldID.htmlFieldId, slug, fieldID.pageId);
 
   if (!isApp) {
     return <>TODO 404 Page</>;
   }
 
-  return <div> {String(html) !== 'undefined' ? parse(String(html)) : <>Loading</>}</div>;
+  return (
+    <div>
+      {String(html) !== 'undefined' ? (
+        parse(String(html))
+      ) : (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <CircularProgress />
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default Slug;
