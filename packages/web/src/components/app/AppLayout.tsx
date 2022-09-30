@@ -14,6 +14,7 @@ import ErrorLoading from '../common/ErrorLoading';
 import AuthRequired from '../common/AuthRequired';
 import NotFound from '../common/NotFound';
 import { onAlert } from '../../utils/alert';
+import AppWrapper from './AppWrapper';
 
 const drawerWidth = 200;
 
@@ -51,101 +52,77 @@ function AppLayout(props: Props) {
   const { window, children, isInstance, isAdmin } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const { handleInstall, installLoading } = useInstallApp({ onAlert });
-
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
   const container = window !== undefined ? () => window().document.body : undefined;
 
-  if (!setting?.isApp) {
-    return <NotFound />;
-  }
-
-  if (!setting?.appResponse?._id || setting?.appError) {
-    return <ErrorLoading error={setting?.appError && { message: setting?.appError }} />;
-  }
-
-  if (!setting?.isInstalled) {
-    return (
-      <div className="mt-5 pt-5 container d-flex flex-column justify-content-center align-items-center">
-        <Typography variant="h5">You have not installed the App!</Typography>
-        <LoadingButton
-          variant="contained"
-          className="mt-4"
-          onClick={handleInstall}
-          loading={installLoading}
-        >
-          Install Now
-        </LoadingButton>
-      </div>
-    );
-  }
-
   return (
-    <Box sx={{ display: 'flex' }}>
-      <AppBar
-        position="fixed"
-        sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-        }}
-      >
-        <Toolbar variant="dense">
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
+    <AppWrapper>
+      <Box sx={{ display: 'flex' }}>
+        <AppBar
+          position="fixed"
+          sx={{
+            width: { sm: `calc(100% - ${drawerWidth}px)` },
+            ml: { sm: `${drawerWidth}px` },
+          }}
+        >
+          <Toolbar variant="dense">
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { sm: 'none' } }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" noWrap component="div">
+              {setting?.appName}
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <Box
+          component="nav"
+          sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+          aria-label="mailbox folders"
+        >
+          {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+          <Drawer
+            container={container}
+            variant="temporary"
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            ModalProps={{
+              keepMounted: true, // Better open performance on mobile.
+            }}
+            sx={{
+              display: { xs: 'block', sm: 'none' },
+              '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            }}
           >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            {setting?.appName}
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
-      >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-        <Drawer
-          container={container}
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-          sx={{
-            display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-          }}
+            <AppMenu isAdmin={isAdmin} isInstance={isInstance} />
+          </Drawer>
+          <Drawer
+            variant="permanent"
+            sx={{
+              display: { xs: 'none', sm: 'block' },
+              '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            }}
+            open
+          >
+            <AppMenu isAdmin={isAdmin} isInstance={isInstance} />
+          </Drawer>
+        </Box>
+        <Box
+          component="main"
+          sx={{ flexGrow: 1, p: 1, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
         >
-          <AppMenu isAdmin={isAdmin} isInstance={isInstance} />
-        </Drawer>
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-          }}
-          open
-        >
-          <AppMenu isAdmin={isAdmin} isInstance={isInstance} />
-        </Drawer>
+          <Toolbar variant="dense" />
+          {children}
+        </Box>
       </Box>
-      <Box
-        component="main"
-        sx={{ flexGrow: 1, p: 1, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
-      >
-        <Toolbar variant="dense" />
-        {children}
-      </Box>
-    </Box>
+    </AppWrapper>
   );
 }

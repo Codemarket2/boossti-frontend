@@ -26,9 +26,11 @@ export const useGetApp = () => {
           'values.field': subdomainField?._id,
           'values.value': domain,
         }),
-        limit: 2,
+        limit: 1,
+        useGuestClient: !authenticated,
       });
       const appDetailsResponse = appDetailsResponses?.data?.[0];
+      if (!appDetailsResponse?._id) throw new Error('app details not found');
       const appForm = await getFormBySlug(systemForms.apps.slug);
       const appDetailsField = appForm?.fields?.find(
         (field) => field?.label?.toLowerCase() === systemForms?.apps?.fields?.appDetails,
@@ -41,6 +43,7 @@ export const useGetApp = () => {
           'values.response': appDetailsResponse?._id,
         }),
         limit: 1,
+        useGuestClient: !authenticated,
       });
       const appResponse = appsResponses?.data?.[0];
       if (!appResponse?._id) throw new Error('App not found');
@@ -94,6 +97,7 @@ export const useGetApp = () => {
         _id: { $in: responseIds },
       }),
       limit: responseIds?.length,
+      useGuestClient: !authenticated,
     });
     const items = [];
     menuResponses?.data?.forEach((menuResponse) => {
@@ -122,26 +126,26 @@ export const useGetApp = () => {
     setLoading(false);
   }, [authenticated]);
 
-  const checkIfAppIsInstalled = async () => {
-    const appUsersForm = await getFormBySlug(systemForms?.appUsers?.slug);
-    if (!appUsersForm?._id) throw new Error('App User form not found.');
-    const userField = appUsersForm?.fields?.find(
-      (field) => field?.label?.toLowerCase() === systemForms?.appUsers?.fields?.user,
-    );
-    const appUsersResponses = await getResponses({
-      formId: appUsersForm?._id,
-      valueFilter: JSON.stringify({
-        'values.field': userField?._id,
-        'values.response': authState?.attributes?.['custom:_id'],
-      }),
-      limit: 10,
-    });
-    const appInstanceResponse = appUsersResponses?.data?.[0];
-    if (appInstanceResponse?._id) {
-      return true;
-    }
-    return false;
-  };
+  // const checkIfAppIsInstalled = async () => {
+  //   const appUsersForm = await getFormBySlug(systemForms?.appUsers?.slug);
+  //   if (!appUsersForm?._id) throw new Error('App User form not found.');
+  //   const userField = appUsersForm?.fields?.find(
+  //     (field) => field?.label?.toLowerCase() === systemForms?.appUsers?.fields?.user,
+  //   );
+  //   const appUsersResponses = await getResponses({
+  //     formId: appUsersForm?._id,
+  //     valueFilter: JSON.stringify({
+  //       'values.field': userField?._id,
+  //       'values.response': authState?.attributes?.['custom:_id'],
+  //     }),
+  //     limit: 10,
+  //   });
+  //   const appInstanceResponse = appUsersResponses?.data?.[0];
+  //   if (appInstanceResponse?._id) {
+  //     return true;
+  //   }
+  //   return false;
+  // };
 
   // useEffect(() => {
   //   if (routerQuery?.instanceCount) {
