@@ -135,6 +135,7 @@ export async function getResponses({
   valueFilter,
   page = 1,
   limit = 10,
+  useGuestClient,
 }: {
   formId: string;
   formField?: string;
@@ -142,13 +143,16 @@ export async function getResponses({
   valueFilter?: string;
   page?: number;
   limit?: number;
+  useGuestClient?: boolean;
 }) {
-  const { data } = await apolloClient.query<{ getResponses: { data: IResponse[]; count: number } }>(
-    {
-      query: GET_RESPONSES,
-      variables: { formId, page, limit, valueFilter },
-    },
-  );
+  let client = apolloClient;
+  if (useGuestClient) {
+    client = guestClient;
+  }
+  const { data } = await client.query<{ getResponses: { data: IResponse[]; count: number } }>({
+    query: GET_RESPONSES,
+    variables: { formId, page, limit, valueFilter },
+  });
   return data?.getResponses;
 }
 

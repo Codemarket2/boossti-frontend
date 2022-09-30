@@ -21,7 +21,7 @@ export default function AppMenu({ isInstance, isAdmin }: AppMenu) {
     <div>
       <Toolbar variant="dense" />
       <Divider />
-      {isAdmin ? (
+      <List dense>
         <ListItem disablePadding>
           <Link href="/admin">
             <ListItemButton selected={router?.query?.slug === 'apps'}>
@@ -29,19 +29,16 @@ export default function AppMenu({ isInstance, isAdmin }: AppMenu) {
             </ListItemButton>
           </Link>
         </ListItem>
-      ) : (
-        <List dense>
-          {setting?.appMenuItems?.map((item, i) => (
-            <ListItem key={i} disablePadding>
-              <Link href={`${isInstance ? `/instance/${instanceCount}` : ''}/${item?.formSlug}`}>
-                <ListItemButton selected={item?.formSlug === router?.query?.slug}>
-                  <ListItemText primary={item?.label} />
-                </ListItemButton>
-              </Link>
-            </ListItem>
-          ))}
-        </List>
-      )}
+        {setting?.appMenuItems?.map((item, i) => (
+          <ListItem key={i} disablePadding>
+            <Link href={`${isInstance ? `/instance/${instanceCount}` : ''}/${item?.formSlug}`}>
+              <ListItemButton selected={item?.formSlug === router?.query?.slug}>
+                <ListItemText primary={item?.label} />
+              </ListItemButton>
+            </Link>
+          </ListItem>
+        ))}
+      </List>
     </div>
   );
 }

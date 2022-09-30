@@ -4,9 +4,8 @@ export const GET_CHECK_UNIQUE = gql`
   query MyQuery(
     $formId: ID!
     $responseId: ID
-    $valueFilter: AWSJSON! # $value: ValueInput # $caseInsensitiveUnique: Boolean
-  ) # $fieldType: String!
-  {
+    $valueFilter: AWSJSON! # $value: ValueInput # $caseInsensitiveUnique: Boolean # $fieldType: String!
+  ) {
     getCheckUnique(
       formId: $formId
       responseId: $responseId
