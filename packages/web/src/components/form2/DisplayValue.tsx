@@ -23,6 +23,7 @@ interface IProps {
   value: any;
   imageAvatar?: boolean;
   verticalView?: boolean;
+  onClickResponse?: () => void;
 }
 
 export default function DisplayValue({
@@ -30,6 +31,7 @@ export default function DisplayValue({
   value: tempValue,
   imageAvatar,
   verticalView,
+  onClickResponse,
 }: IProps) {
   const value: any = { ...tempValue };
 
@@ -56,15 +58,23 @@ export default function DisplayValue({
   //   return <DisplayFormulaValue formula={field?.options?.formula} />;
   // }
 
-  switch (field.fieldType) {
+  switch (field?.fieldType) {
     case 'text':
     case 'textarea':
     case 'url':
     case 'email':
     case 'password':
       return <span data-testid="text-output">{value?.value}</span>;
-    case 'response':
-      return <ShowResponseLabel formField={field.options?.formField} response={value?.response} />;
+    case 'response': {
+      return (
+        <ShowResponseLabel
+          formId={field?.form?._id}
+          formField={field.options?.formField}
+          response={value?.response}
+          onClickResponse={onClickResponse}
+        />
+      );
+    }
     case 'form':
       return value?.form?.name ? (
         <a
