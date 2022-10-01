@@ -26,6 +26,9 @@ import { IField, IForm } from '@frontend/shared/types/form';
 import { fileUpload } from '@frontend/shared/utils/fileUpload';
 
 // OTHERS
+import { Tooltip } from '@mui/material';
+import { InfoOutlined } from '@mui/icons-material';
+import AddCircle from '@mui/icons-material/AddCircle';
 import ResponseList from '../response/ResponseList';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
@@ -485,6 +488,7 @@ export function FormView({
       fieldId: null,
       index: null,
     },
+    showResponseDrawer: '',
   });
 
   const [unique, setUnique] = useState(false);
@@ -754,28 +758,9 @@ export function FormView({
                         )}
                       </div>
                     </div>
-                    {field?.options?.multipleValues && (
-                      <div data-testid="addOneMoreValue">
-                        <IconButton
-                          className="my-2"
-                          size="medium"
-                          color="primary"
-                          aria-label="add value"
-                          onClick={() => {
-                            if (field?.fieldType === 'richTextarea') {
-                              setState((oldState) => ({ ...oldState, hideField: true }));
-                            }
-                            onAddOneMoreValue(field);
-                          }}
-                          sx={{ border: 1, borderRadius: '50%' }}
-                        >
-                          <AddIcon fontSize="inherit" />
-                        </IconButton>
-                      </div>
-                    )}
                   </>
                   {filterValues(values, field).map((value: any, valueIndex) => (
-                    <div key={valueIndex}>
+                    <div className="mt-3" key={valueIndex}>
                       {valueIndex !== filterValues(values, field)?.length - 1 && (
                         <>
                           {state.editValue?.fieldId === field._id &&
@@ -829,28 +814,53 @@ export function FormView({
                                   </FormHelperText>
                                 )}
                               </div>
-                              <IconButton
-                                onClick={() =>
-                                  setState((oldState) => ({
-                                    ...oldState,
-                                    editValue: {
-                                      fieldId: field._id,
-                                      index: valueIndex,
-                                    },
-                                  }))
-                                }
-                                size="large"
-                              >
-                                <EditIcon />
-                              </IconButton>
-                              {!value?.options?.defaultWidget && (
+                              {state.showResponseDrawer === `${field?._id}-${value?._id}` &&
+                                value?.response?._id && (
+                                  <ResponseDrawer
+                                    open
+                                    onClose={() =>
+                                      setState((oldState) => ({
+                                        ...oldState,
+                                        showResponseDrawer: '',
+                                      }))
+                                    }
+                                    responseId={value?.response?._id}
+                                  />
+                                )}
+                              <Tooltip title="Edit Value">
                                 <IconButton
-                                  edge="end"
-                                  onClick={() => onRemoveOneValue(field._id, valueIndex)}
-                                  size="large"
+                                  onClick={() => {
+                                    if (
+                                      field?.fieldType === 'response' &&
+                                      !field?.options?.selectItem
+                                    ) {
+                                      setState((oldState) => ({
+                                        ...oldState,
+                                        showResponseDrawer: `${field?._id}-${value?._id}`,
+                                      }));
+                                    } else {
+                                      setState((oldState) => ({
+                                        ...oldState,
+                                        editValue: {
+                                          fieldId: field._id,
+                                          index: valueIndex,
+                                        },
+                                      }));
+                                    }
+                                  }}
                                 >
-                                  <DeleteIcon />
+                                  <EditIcon />
                                 </IconButton>
+                              </Tooltip>
+                              {!value?.options?.defaultWidget && (
+                                <Tooltip title="Delete Value">
+                                  <IconButton
+                                    edge="end"
+                                    onClick={() => onRemoveOneValue(field._id, valueIndex)}
+                                  >
+                                    <DeleteIcon />
+                                  </IconButton>
+                                </Tooltip>
                               )}
                             </div>
                           )}
@@ -858,6 +868,26 @@ export function FormView({
                       )}
                     </div>
                   ))}
+                  {field?.options?.multipleValues && (
+                    <div data-testid="addOneMoreValue">
+                      <Typography
+                        className="my-2"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => {
+                          if (field?.fieldType === 'richTextarea') {
+                            setState((oldState) => ({ ...oldState, hideField: true }));
+                          }
+                          onAddOneMoreValue(field);
+                        }}
+                      >
+                        <AddIcon fontSize="small" />
+                        <Tooltip title={`You can add multiple values for ${field?.label} field`}>
+                          <u>add more {field?.label}</u>
+                          {/* <InfoOutlined className="ml-1" fontSize="small" /> */}
+                        </Tooltip>
+                      </Typography>
+                    </div>
+                  )}
                 </InputGroup>
               </div>
             </Grid>
