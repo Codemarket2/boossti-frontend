@@ -183,5 +183,6 @@ export const getLabel = (formField: string, response: any): string => {
         label += i > 0 ? ` ${fieldValue}` : fieldValue;
       }
     });
+
   return label || response?.label;
 };
