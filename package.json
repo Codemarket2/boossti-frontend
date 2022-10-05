@@ -39,6 +39,7 @@
     "nohoist": []
   },
   "dependencies": {
+    "caniuse-lite": "^1.0.30001415",
     "react-native": "0.64.1"
   },
   "author": "vivekvt",

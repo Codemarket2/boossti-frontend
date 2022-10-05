@@ -5,6 +5,7 @@ import grapesjs from 'grapesjs';
 import 'grapesjs-preset-newsletter';
 
 import 'grapesjs/dist/css/grapes.min.css';
+import greapesTouch from 'grapesjs-touch';
 
 import { Button } from '@mui/material';
 import { openStdin } from 'process';
@@ -15,12 +16,14 @@ import blockPlugin from 'grapesjs-blocks-basic';
 import customCodePlugin from 'grapesjs-custom-code';
 import navbarPlugin from 'grapesjs-navbar';
 import scriptEditor from 'grapesjs-script-editor';
-
 import { read } from 'fs';
+import landingPagePlugin1 from './plugins/landingpage1Plugin';
+import landingPagePlugin2 from './plugins/landingpage2Plugin';
 import footerPlugin from './plugins/footerPlugin';
 import FileLibraryWrapper from '../fileLibrary/FileLibraryWrapper';
 import FileLibrary from '../fileLibrary/FileLibrary';
 import { addTagToLink } from './addTagToLink';
+import footer2Plugin from './plugins/footer2plugin';
 
 export default function GrapesjsEditor({
   value,
@@ -64,10 +67,15 @@ export default function GrapesjsEditor({
       plugins: [
         'gjs-preset-newsletter',
         footerPlugin,
-        blockPlugin,
+        [blockPlugin],
         customCodePlugin,
         navbarPlugin,
         scriptEditor,
+
+        greapesTouch,
+        footer2Plugin,
+        landingPagePlugin1,
+        landingPagePlugin2,
       ],
 
       storageManager: false,

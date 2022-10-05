@@ -3,6 +3,7 @@ module.exports = {
     browser: true,
     es6: true,
   },
+
   extends: [
     'plugin:react/recommended',
     'airbnb',
@@ -58,6 +59,7 @@ module.exports = {
         tsx: 'never',
       },
     ],
+    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     // 'import/no-extraneous-dependencies': ['error', { ignore: 'styled-components/' }],
     'object-curly-newline': 0,
     'react/require-default-props': 'off',

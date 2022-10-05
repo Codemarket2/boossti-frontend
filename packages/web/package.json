@@ -50,6 +50,7 @@
     "grapesjs-preset-webpage": "^0.1.11",
     "grapesjs-react": "^4.0.1-alpha",
     "grapesjs-script-editor": "^1.0.3",
+    "grapesjs-touch": "^0.1.1",
     "graphql": "15.5.0",
     "html-react-parser": "^1.2.7",
     "immer": "^9.0.5",

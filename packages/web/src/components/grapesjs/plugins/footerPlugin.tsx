@@ -22,7 +22,7 @@ export default function footerPlugin(editor: any) {
       </div>
     </div>
   </div>`,
-    category: 'Custom',
+    category: 'Footers',
     attributes: {
       title: 'Insert Footer block',
     },
