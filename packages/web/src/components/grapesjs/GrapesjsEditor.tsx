@@ -15,7 +15,7 @@ import blockPlugin from 'grapesjs-blocks-basic';
 import customCodePlugin from 'grapesjs-custom-code';
 import navbarPlugin from 'grapesjs-navbar';
 import scriptEditor from 'grapesjs-script-editor';
-
+import grapesjsTouch from 'grapesjs-touch';
 import { read } from 'fs';
 import footerPlugin from './plugins/footerPlugin';
 import FileLibraryWrapper from '../fileLibrary/FileLibraryWrapper';
@@ -68,6 +68,7 @@ export default function GrapesjsEditor({
         customCodePlugin,
         navbarPlugin,
         scriptEditor,
+        grapesjsTouch,
       ],
 
       storageManager: false,
