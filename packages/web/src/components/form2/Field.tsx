@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import moment from 'moment';
 import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
+import Edit from '@mui/icons-material/Edit';
+import Delete from '@mui/icons-material/Delete';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
@@ -15,6 +18,7 @@ import { validateValue } from '@frontend/shared/utils/validate';
 import { IField } from '@frontend/shared/types/form';
 import { IValue } from '@frontend/shared/types/response';
 import { generateObjectId } from '@frontend/shared/utils/objectId';
+import ReactFlow from '../react-flow/ReactFlow';
 import RichTextarea from '../common/RichTextarea2';
 import DisplayRichText from '../common/DisplayRichText';
 import SelectResponse from '../response/SelectResponse';
@@ -28,17 +32,16 @@ import CreateResponseDrawer from '../response/CreateResponseDrawer';
 import FileUpload from '../fileLibrary/FileUpload';
 import DisplayFiles from '../fileLibrary/DisplayFiles';
 import { onAlert } from '../../utils/alert';
-import DisplayResponseById from '../response/DisplayResponseById';
 import UnitQuantityInput from './UnitQuantityInput';
 import Board from './board/Board';
 import { defaultBoard } from './board/defaultBoard';
 import Diagram from '../syncfusion-diagram/Diagram';
 import { defaultDiagram } from '../syncfusion-diagram/defaultDiagram';
-import ReactFlow from '../react-flow/ReactFlow';
 import FieldConditionForm from './field/field-condition/FieldConditionForm';
 import 'react-phone-input-2/lib/style.css';
-import Grapesjs from '../../../pages/grapesjs';
 import Webpage from '../grapesjs/grapesOverlay';
+import DisplayValue from './DisplayValue';
+import ResponseDrawer from '../response/ResponseDrawer';
 
 export interface FieldProps {
   field: IField;
@@ -86,6 +89,7 @@ export default function Field({
   };
 
   const [addOption, setAddOption] = useState({ showDrawer: false });
+  const [state, setState] = useState({ showResponseDrawer: false });
 
   const onChangeCheckbox = ({ target }) => {
     let newValues = [];
@@ -457,13 +461,30 @@ export default function Field({
         <>
           <div data-testid="response">
             {value?.response?._id ? (
-              <div data-testid="responseId">
-                <DisplayResponseById
-                  hideAuthor
-                  responseId={value?.response?._id}
-                  hideBreadcrumbs
-                  deleteCallBack={() => onChange({ field: field?._id, response: null })}
-                />
+              <div
+                data-testid="responseId"
+                className="mb-2 d-flex align-items-center justify-content-between"
+              >
+                <DisplayValue field={field} value={value} />
+                <div>
+                  <IconButton
+                    onClick={() =>
+                      setState((oldState) => ({ ...oldState, showResponseDrawer: true }))
+                    }
+                  >
+                    <Edit />
+                  </IconButton>
+                  <IconButton edge="end" onClick={() => onChange({ response: null })}>
+                    <Delete />
+                  </IconButton>
+                  <ResponseDrawer
+                    open={state.showResponseDrawer}
+                    onClose={() =>
+                      setState((oldState) => ({ ...oldState, showResponseDrawer: false }))
+                    }
+                    responseId={value?.response?._id}
+                  />
+                </div>
               </div>
             ) : (
               <>
@@ -488,7 +509,7 @@ export default function Field({
                   className="mt-2"
                   onClick={() => setAddOption({ ...addOption, showDrawer: true })}
                 >
-                  Add
+                  Add Response
                 </Button>
               </>
             )}
