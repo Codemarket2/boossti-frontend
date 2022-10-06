@@ -39,7 +39,7 @@ import Formula from './formula/Formula';
 import FieldCondition from './field-condition/FieldCondition';
 import DefaultValue from './DefaultValue';
 // import HiddenCondition from './HiddenCondition';
-import FieldConditionForm from './field-condition/FieldConditionForm';
+import FieldConditionForm, { SelectSubField } from './field-condition/FieldConditionForm';
 
 interface IProps {
   onCancel?: () => void;
@@ -249,7 +249,6 @@ export default function AddField({
           )}
         </>
       )}
-
       {['response'].includes(formik.values.fieldType) && (
         <FieldCondition
           formFields={parentFields}
@@ -577,7 +576,13 @@ export default function AddField({
             control={
               <Checkbox
                 checked={formik.values.options?.multipleValues}
-                onChange={({ target }) => onOptionChange({ multipleValues: target.checked })}
+                onChange={({ target }) => {
+                  const newOptions: any = { multipleValues: target.checked };
+                  if (!target.checked && formik.values.options?.uniqueBetweenMultipleValues) {
+                    newOptions.uniqueBetweenMultipleValues = false;
+                  }
+                  onOptionChange(newOptions);
+                }}
                 name="multipleValues"
                 color="primary"
               />
@@ -585,6 +590,60 @@ export default function AddField({
             label="Multiple values"
             data-testid="multiple-value-field-option"
           />
+          {formik.values.options?.multipleValues && (
+            <>
+              <br />
+              <FormControlLabel
+                className="mt-n2"
+                disabled={formik.isSubmitting}
+                control={
+                  <Checkbox
+                    checked={formik.values.options?.uniqueBetweenMultipleValues}
+                    onChange={({ target }) =>
+                      onOptionChange({ uniqueBetweenMultipleValues: target.checked })
+                    }
+                    name="uniqueBetweenMultipleValues"
+                    color="primary"
+                  />
+                }
+                label="Unique Between Multiple values"
+                data-testid="multiple-value-field-option"
+              />
+              {formik.values.fieldType === 'response' &&
+                formik.values.options?.multipleValues &&
+                formik.values.options?.uniqueBetweenMultipleValues && (
+                  <div className="pl-3">
+                    {formik?.values?.options?.uniqueSubField?.formId ? (
+                      <Button
+                        size="small"
+                        color="error"
+                        startIcon={<DeleteIcon />}
+                        onClick={() => onOptionChange({ uniqueSubField: null })}
+                      >
+                        Delete sub field selection
+                      </Button>
+                    ) : (
+                      <Button
+                        size="small"
+                        onClick={() =>
+                          onOptionChange({ uniqueSubField: { formId: formik.values?.form?._id } })
+                        }
+                      >
+                        Select Sub Field
+                      </Button>
+                    )}
+                    {formik?.values?.options?.uniqueSubField?.formId && (
+                      <SelectSubField
+                        subField={formik?.values?.options?.uniqueSubField}
+                        onChange={(uniqueSubField) => onOptionChange({ uniqueSubField })}
+                        setForm={() => null}
+                        setResponses={() => null}
+                      />
+                    )}
+                  </div>
+                )}
+            </>
+          )}
           <br />
           <FormControlLabel
             className="mt-n2"

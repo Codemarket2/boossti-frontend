@@ -335,7 +335,7 @@ interface SelectSubFieldProps {
   setResponses?: (response: IResponse) => void;
 }
 
-const SelectSubField = ({
+export const SelectSubField = ({
   subField,
   setForm,
   onChange,

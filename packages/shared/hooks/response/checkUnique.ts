@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { GET_CHECK_UNIQUE } from '../../graphql/query/unique';
 import { guestClient as apolloClient } from '../../graphql';
 import { IHooksProps } from '../../types/common';
 import { getFieldFilterValue } from './constraint';
+import { IForm, IValue } from '../../types';
 
 interface IUseCheckUniqueProps extends IHooksProps {
   formId: string;
@@ -78,3 +79,110 @@ export async function checkUnique({ formId, responseId, valueFilter = {} }: IChe
   });
   return data.getCheckUnique;
 }
+
+interface IUniqueBetweenMultipleValues {
+  form: IForm;
+  values: IValue[];
+}
+
+export const uniqueBetweenMultipleValues = ({ form, values }: IUniqueBetweenMultipleValues) => {
+  const [uniqueFields, setUniqueFields] = useState([]);
+  const [uniqueBetweenMultipleValuesError, setUniqueBetweenMultipleValuesError] = useState([]);
+  const [uniqueBetweenMultipleValuesLoading, setUniqueBetweenMultipleValuesLoading] = useState(
+    false,
+  );
+
+  const uniqueCheck = async () => {
+    try {
+      setUniqueBetweenMultipleValuesLoading(true);
+      const errors = [];
+      uniqueFields?.forEach((field) => {
+        const fieldValues = values?.filter((value) => value?.field === field?._id);
+        if (fieldValues?.length > 1) {
+          let hasDuplicateValue = false;
+          const oldValues = [];
+          fieldValues?.forEach((value) => {
+            if (checkForDuplicateValue({ field, value, oldValues })) {
+              hasDuplicateValue = true;
+            }
+            oldValues.push(value);
+          });
+          if (hasDuplicateValue) {
+            errors.push(field?._id);
+          }
+        }
+      });
+      setUniqueBetweenMultipleValuesError(errors);
+      setUniqueBetweenMultipleValuesLoading(false);
+    } catch (error) {
+      setUniqueBetweenMultipleValuesLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (uniqueFields?.length > 0) {
+      uniqueCheck();
+    }
+  }, [values]);
+
+  useEffect(() => {
+    if (form?.fields?.length > 0) {
+      const newFields = form?.fields?.filter(
+        (field) => field?.options?.multipleValues && field?.options?.uniqueBetweenMultipleValues,
+      );
+      setUniqueFields(newFields);
+    }
+  }, [form?.fields]);
+
+  return { uniqueBetweenMultipleValuesError, uniqueBetweenMultipleValuesLoading };
+};
+
+const checkForDuplicateValue = ({ field, value, oldValues }) => {
+  let result = false;
+  switch (field?.fieldType) {
+    case 'text':
+    case 'email':
+    case 'password':
+    case 'richTextarea':
+    case 'textarea': {
+      if (value?.value) {
+        const existingValue = oldValues?.find((v) => v?.value === value?.value);
+        if (existingValue) {
+          result = true;
+        }
+      }
+      break;
+    }
+    case 'number':
+    case 'phoneNumber': {
+      if (value?.valueNumber) {
+        const existingValue = oldValues?.find((v) => v?.valueNumber === value?.valueNumber);
+        if (existingValue) {
+          result = true;
+        }
+      }
+      break;
+    }
+    case 'form': {
+      if (value?.form?._id) {
+        const existingValue = oldValues?.find((v) => v?.form?._id === value?.form?._id);
+        if (existingValue) {
+          result = true;
+        }
+      }
+      break;
+    }
+    case 'response': {
+      if (value?.response?._id) {
+        const existingValue = oldValues?.find((v) => v?.response?._id === value?.response?._id);
+        if (existingValue) {
+          result = true;
+        }
+      }
+      break;
+    }
+    default:
+      break;
+  }
+  return result;
+};

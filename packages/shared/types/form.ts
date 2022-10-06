@@ -21,6 +21,8 @@ export interface IFieldOptions {
   showOptionCreatedOnTemplate: boolean;
   required: boolean;
   multipleValues: boolean;
+  uniqueBetweenMultipleValues: boolean;
+  uniqueSubField: any;
   unique: boolean;
   caseInsensitiveUnique: boolean;
   staticText: string;
