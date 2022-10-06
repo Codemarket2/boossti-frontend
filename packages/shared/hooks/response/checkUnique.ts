@@ -1,9 +1,11 @@
+import { useMutation } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { GET_CHECK_UNIQUE } from '../../graphql/query/unique';
 import { guestClient as apolloClient } from '../../graphql';
 import { IHooksProps } from '../../types/common';
 import { getFieldFilterValue } from './constraint';
-import { IForm, IValue } from '../../types';
+import { IField, IValue } from '../../types';
+import { CHECK_UNIQUE_BETWEEN_MULTIPLE_VALUES } from '../../graphql/mutation/response';
 
 interface IUseCheckUniqueProps extends IHooksProps {
   formId: string;
@@ -81,22 +83,23 @@ export async function checkUnique({ formId, responseId, valueFilter = {} }: IChe
 }
 
 interface IUniqueBetweenMultipleValues {
-  form: IForm;
+  fields: IField[];
   values: IValue[];
 }
 
-export const uniqueBetweenMultipleValues = ({ form, values }: IUniqueBetweenMultipleValues) => {
-  const [uniqueFields, setUniqueFields] = useState([]);
+export const uniqueBetweenMultipleValues = ({ fields, values }: IUniqueBetweenMultipleValues) => {
+  const [checkUniqueMutation] = useMutation(CHECK_UNIQUE_BETWEEN_MULTIPLE_VALUES);
   const [uniqueBetweenMultipleValuesError, setUniqueBetweenMultipleValuesError] = useState([]);
   const [uniqueBetweenMultipleValuesLoading, setUniqueBetweenMultipleValuesLoading] = useState(
     false,
   );
 
-  const uniqueCheck = async () => {
+  const uniqueCheck = async (uniqueFields) => {
     try {
       setUniqueBetweenMultipleValuesLoading(true);
       const errors = [];
-      uniqueFields?.forEach((field) => {
+      // eslint-disable-next-line no-restricted-syntax
+      for (const field of uniqueFields) {
         const fieldValues = values?.filter((value) => value?.field === field?._id);
         if (fieldValues?.length > 1) {
           let hasDuplicateValue = false;
@@ -107,11 +110,35 @@ export const uniqueBetweenMultipleValues = ({ form, values }: IUniqueBetweenMult
             }
             oldValues.push(value);
           });
+          if (
+            !hasDuplicateValue &&
+            field?.fieldType === 'response' &&
+            field?.options?.uniqueSubField?.formId
+          ) {
+            const responseIds = [];
+            oldValues?.forEach((value) => {
+              if (value?.response?._id) {
+                responseIds.push(value?.response?._id);
+              }
+            });
+            if (responseIds?.length > 1) {
+              // eslint-disable-next-line no-await-in-loop
+              const { data } = await checkUniqueMutation({
+                variables: {
+                  responseIds,
+                  subField: JSON.stringify(field?.options?.uniqueSubField),
+                },
+              });
+              if (data?.checkUniqueBetweenMultipleValues) {
+                hasDuplicateValue = true;
+              }
+            }
+          }
           if (hasDuplicateValue) {
             errors.push(field?._id);
           }
         }
-      });
+      }
       setUniqueBetweenMultipleValuesError(errors);
       setUniqueBetweenMultipleValuesLoading(false);
     } catch (error) {
@@ -120,19 +147,22 @@ export const uniqueBetweenMultipleValues = ({ form, values }: IUniqueBetweenMult
   };
 
   useEffect(() => {
+    const uniqueFields = fields?.filter(
+      (field) => field?.options?.multipleValues && field?.options?.uniqueBetweenMultipleValues,
+    );
     if (uniqueFields?.length > 0) {
-      uniqueCheck();
+      uniqueCheck(uniqueFields);
     }
   }, [values]);
 
-  useEffect(() => {
-    if (form?.fields?.length > 0) {
-      const newFields = form?.fields?.filter(
-        (field) => field?.options?.multipleValues && field?.options?.uniqueBetweenMultipleValues,
-      );
-      setUniqueFields(newFields);
-    }
-  }, [form?.fields]);
+  // useEffect(() => {
+  //   if (fields?.length > 0) {
+  //     const newFields = fields?.filter(
+  //       (field) => field?.options?.multipleValues && field?.options?.uniqueBetweenMultipleValues,
+  //     );
+  //     setUniqueFields(newFields);
+  //   }
+  // }, [fields]);
 
   return { uniqueBetweenMultipleValuesError, uniqueBetweenMultipleValuesLoading };
 };

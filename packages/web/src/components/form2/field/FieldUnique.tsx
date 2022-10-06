@@ -10,19 +10,23 @@ interface FieldUnique {
   existingResponseId: boolean;
 }
 
+export const FieldUniqueLoading = () => {
+  return (
+    <span className="ml-2">
+      <CircularProgress size={10} />
+      <Tooltip title="Checking if this value is unique">
+        <IconButton size="small">
+          <InfoOutlined fontSize="small" />
+        </IconButton>
+      </Tooltip>
+    </span>
+  );
+};
+
 export default function FieldUnique({ uniqueLoading, existingResponseId }: FieldUnique) {
   const [showExistingResponse, setShowExistingResponse] = useState(false);
   if (uniqueLoading) {
-    return (
-      <span className="ml-2">
-        <CircularProgress size={10} />
-        <Tooltip title="Checking if this value is unique">
-          <IconButton size="small">
-            <InfoOutlined fontSize="small" />
-          </IconButton>
-        </Tooltip>
-      </span>
-    );
+    return <FieldUniqueLoading />;
   }
 
   if (existingResponseId) {
