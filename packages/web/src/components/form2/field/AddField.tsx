@@ -591,8 +591,7 @@ export default function AddField({
             data-testid="multiple-value-field-option"
           />
           {formik.values.options?.multipleValues && (
-            <>
-              <br />
+            <div className="pl-3">
               <FormControlLabel
                 className="mt-n2"
                 disabled={formik.isSubmitting}
@@ -612,7 +611,7 @@ export default function AddField({
               {formik.values.fieldType === 'response' &&
                 formik.values.options?.multipleValues &&
                 formik.values.options?.uniqueBetweenMultipleValues && (
-                  <div className="pl-3">
+                  <>
                     {formik?.values?.options?.uniqueSubField?.formId ? (
                       <Button
                         size="small"
@@ -640,9 +639,9 @@ export default function AddField({
                         setResponses={() => null}
                       />
                     )}
-                  </div>
+                  </>
                 )}
-            </>
+            </div>
           )}
           <br />
           <FormControlLabel

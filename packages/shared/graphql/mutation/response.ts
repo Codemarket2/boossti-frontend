@@ -145,3 +145,9 @@ export const RESOLVE_CONDITION = gql`
     resolveCondition(responseId: $responseId, conditions: $conditions)
   }
 `;
+
+export const CHECK_UNIQUE_BETWEEN_MULTIPLE_VALUES = gql`
+  mutation CheckUniqueBetweenMultipleValues($responseIds: [ID!], $subField: AWSJSON!) {
+    checkUniqueBetweenMultipleValues(responseIds: $responseIds, subField: $subField)
+  }
+`;

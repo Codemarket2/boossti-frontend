@@ -51,6 +51,7 @@ import { resolveCondition } from './field/field-condition/ResolveCondition';
 import ResponseDrawer from '../response/ResponseDrawer';
 import DisplayConstraintError from './form-conditions/DisplayConstraintError';
 import FieldUnique from './field/FieldUnique';
+import UniqueMultipleValue from './field/UniqueMultipleValue';
 
 interface FormViewWrapperProps {
   form: IForm;
@@ -474,13 +475,7 @@ export function FormView({
 }: FormViewProps): any {
   const [values, setValues] = useState(parseResponse({ values: initialValues })?.values || []);
   const { constraintErrors, constraintsLoading } = useConstraint({ form, values, responseId });
-  const {
-    uniqueBetweenMultipleValuesLoading,
-    uniqueBetweenMultipleValuesError,
-  } = uniqueBetweenMultipleValues({
-    form,
-    values,
-  });
+
   const [submitState, setSubmitState] = useState(initialSubmitState);
   const authState = useSelector(({ auth }: any) => auth);
   const authenticated = authState?.authenticated;
@@ -510,6 +505,14 @@ export function FormView({
       !field?.options?.systemCalculatedAndSaved &&
       !overrideValues?.some((v) => v?.field === field?._id)
     );
+  });
+
+  const {
+    uniqueBetweenMultipleValuesLoading,
+    uniqueBetweenMultipleValuesError,
+  } = uniqueBetweenMultipleValues({
+    fields,
+    values,
   });
 
   useEffect(() => {
@@ -724,13 +727,14 @@ export function FormView({
                     {field?.options?.unique && (
                       <FieldUnique existingResponseId={unique} uniqueLoading={uniqueLoading} />
                     )}
-                    {/* {uniqueBetweenMultipleValuesLoading && <>Loading...</>} */}
-                    {uniqueBetweenMultipleValuesError?.includes(field?._id) && (
-                      <span className="text-danger">
-                        {' '}
-                        can&apos;t have duplicate values each value must be unique
-                      </span>
-                    )}
+                    {field?.options?.multipleValues &&
+                      field?.options?.uniqueBetweenMultipleValues && (
+                        <UniqueMultipleValue
+                          loading={uniqueBetweenMultipleValuesLoading}
+                          error={uniqueBetweenMultipleValuesError}
+                          field={field}
+                        />
+                      )}
                   </Typography>
                   {field?.options?.systemCalculatedAndView && (
                     <div className="mb-2">
