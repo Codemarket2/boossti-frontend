@@ -46,6 +46,8 @@ export const defaultOptions: IFieldOptions = {
   showOptionCreatedOnTemplate: false,
   required: false,
   multipleValues: false,
+  uniqueBetweenMultipleValues: false,
+  uniqueSubField: null,
   unique: false,
   caseInsensitiveUnique: false,
   staticText: '',
