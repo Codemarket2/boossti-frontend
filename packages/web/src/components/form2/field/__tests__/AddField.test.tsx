@@ -33,6 +33,10 @@ const FIELD_TYPES = [
     value: 'response',
   },
   {
+    label: 'Video Editor',
+    value: 'videoEditor',
+  },
+  {
     label: 'Text',
     value: 'text',
   },
@@ -392,7 +396,7 @@ describe('Selecting Form Field Type (label : Field Type*)', () => {
     const Menu = within(document.getElementById('fieldType-menu')).getByRole('listbox');
     const options = within(Menu).getAllByRole('option');
 
-    const TOTAL_OPTIONS = 25;
+    const TOTAL_OPTIONS = 26;
     expect(options).toHaveLength(TOTAL_OPTIONS);
   });
 
