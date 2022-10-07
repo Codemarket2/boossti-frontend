@@ -8,6 +8,11 @@ type FormResponseType = {
   value: 'response';
 };
 
+type VideoEditor = {
+  label: 'Video Editor';
+  value: 'videoEditor';
+};
+
 type TextType = {
   label: 'Text';
   value: 'text';
@@ -108,6 +113,7 @@ type Webpage = {
 type TFieldType =
   | FormFieldType
   | FormResponseType
+  | VideoEditor
   | TextType
   | NumberType
   | PasswordType
@@ -147,6 +153,7 @@ export const templateWidgetTypes: TFieldType[] = [
 export const fieldTypes: TFieldType[] = [
   { label: 'Form', value: 'form' },
   { label: 'Form Response', value: 'response' },
+  { label: 'Video Editor', value: 'videoEditor' },
   { label: 'Text', value: 'text' },
   { label: 'Number', value: 'number' },
   { label: 'Password', value: 'password' },
