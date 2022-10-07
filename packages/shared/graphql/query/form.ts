@@ -162,6 +162,13 @@ export const GET_FORM_BY_SLUG = gql`
         }
       }
       settings
+      createdBy {
+        _id
+        values {
+          field
+          value
+        }
+      }
     }
   }
 `;
