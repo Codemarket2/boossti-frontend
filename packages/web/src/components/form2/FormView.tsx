@@ -528,7 +528,7 @@ export function FormView({
       if (field?.options?.required && field?.options?.defaultValue) {
         if (!values?.some((v) => v?.field === field?._id)) {
           const tempValue = field?.options?.defaultValue || {};
-          defaultValues.push({ field: field?._id, ...tempValue });
+          defaultValues.push({ value: '', field: field?._id, ...tempValue });
         }
       }
       if (field?.options?.hidden && field?.options?.hiddenConditions?.length > 0) {
