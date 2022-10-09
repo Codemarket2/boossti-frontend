@@ -120,6 +120,7 @@ export default function Field({
             helperText={validation.errorMessage}
             allowCreate={field?.options?.selectAllowCreate}
             onlyMyResponses={field?.options?.showOptionCreatedByUser}
+            noAppIdFilter={field?.form?.name?.toLowerCase() === 'users'}
           />
         ) : field?.options?.showAsCheckbox ? (
           <>

@@ -1,5 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { GET_CHECK_UNIQUE } from '../../graphql/query/unique';
 import { guestClient as apolloClient } from '../../graphql';
 import { IHooksProps } from '../../types/common';
@@ -25,6 +26,7 @@ export const useCheckUnique = ({
   responseId,
   setUniqueLoading,
 }: IUseCheckUniqueProps) => {
+  const setting = useSelector((state: any) => state?.setting);
   const handleCheckUnique = async () => {
     try {
       const filter = getFieldFilterValue(field?.fieldType, value);
@@ -32,6 +34,7 @@ export const useCheckUnique = ({
         formId,
         responseId,
         valueFilter: { ...filter, 'values.field': field?._id },
+        appId: setting?.appResponse?._id,
       });
       if (existingResponseId) {
         setUnique(existingResponseId);
@@ -67,15 +70,22 @@ interface ICheckUniquePayload {
   formId: string;
   responseId?: string;
   valueFilter: any;
+  appId: string;
 }
 
-export async function checkUnique({ formId, responseId, valueFilter = {} }: ICheckUniquePayload) {
+export async function checkUnique({
+  formId,
+  responseId,
+  valueFilter = {},
+  appId,
+}: ICheckUniquePayload) {
   const { data } = await apolloClient.query({
     query: GET_CHECK_UNIQUE,
     variables: {
       formId,
       responseId,
       valueFilter: JSON.stringify(valueFilter),
+      appId,
     },
     fetchPolicy: 'network-only',
   });
@@ -88,6 +98,7 @@ interface IUniqueBetweenMultipleValues {
 }
 
 export const uniqueBetweenMultipleValues = ({ fields, values }: IUniqueBetweenMultipleValues) => {
+  const setting = useSelector((state: any) => state?.setting);
   const [checkUniqueMutation] = useMutation(CHECK_UNIQUE_BETWEEN_MULTIPLE_VALUES);
   const [uniqueBetweenMultipleValuesError, setUniqueBetweenMultipleValuesError] = useState([]);
   const [uniqueBetweenMultipleValuesLoading, setUniqueBetweenMultipleValuesLoading] = useState(
@@ -127,6 +138,7 @@ export const uniqueBetweenMultipleValues = ({ fields, values }: IUniqueBetweenMu
                 variables: {
                   responseIds,
                   subField: JSON.stringify(field?.options?.uniqueSubField),
+                  appId: setting?.appResponse?._id,
                 },
               });
               if (data?.checkUniqueBetweenMultipleValues) {
