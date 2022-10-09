@@ -3,6 +3,6 @@ export { useCreateUpdateResponse } from './createUpdateResponse';
 export { useDeleteResponse } from './deleteResponse';
 export { useGetMyResponses } from './getMyResponses';
 export { useCreateBulkResponse } from './createBulkResponse';
-export { useCheckUnique } from './checkUnique';
+export { useCheckUnique, uniqueBetweenMultipleValues } from './checkUnique';
 export { useResolveCondition } from './resolveCondition';
 export { useConstraint } from './constraint';

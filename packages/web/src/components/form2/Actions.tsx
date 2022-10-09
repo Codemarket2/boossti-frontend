@@ -18,6 +18,7 @@ interface IProps {
   fields: any;
   settings: any;
   onChange: any;
+  formId: string;
 }
 
 const initialState = {
@@ -27,10 +28,10 @@ const initialState = {
   showMenu: null,
 };
 
-export default function Actions({ fields, settings, onChange }: IProps) {
+export default function Actions({ fields, settings, onChange, formId }: IProps) {
   const [state, setState] = useState(initialState);
 
-  const onSave = (payload, operation) => {
+  const onSave = (payload, operation: 'update' | 'create') => {
     let newActions = settings?.actions || [];
     if (operation === 'update') {
       // Update
@@ -54,6 +55,7 @@ export default function Actions({ fields, settings, onChange }: IProps) {
       {state.showForm ? (
         <>
           <ActionForm
+            formId={formId}
             emailFields={fields?.filter(
               (field) => field.fieldType === 'email' && field.options?.required,
             )}
@@ -146,10 +148,12 @@ export function ActionsWrapper({
   settings,
   onChange,
   pageFields = [],
+  formId,
 }: {
   settings?: any;
   onChange: (action: any) => void;
   pageFields: any;
+  formId: string;
 }) {
-  return <Actions fields={pageFields} settings={settings} onChange={onChange} />;
+  return <Actions formId={formId} fields={pageFields} settings={settings} onChange={onChange} />;
 }

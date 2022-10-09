@@ -31,6 +31,10 @@ export default function Page() {
     return <InitialLoading />;
   }
 
+  if (globalState.auth.authenticated) {
+    router.push('/feeds');
+  }
+
   if (isApp) {
     return (
       <AppWrapper>

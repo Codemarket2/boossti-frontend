@@ -83,7 +83,7 @@ export default function SignUpForm() {
             newForm.fields = newForm?.fields?.map((field) => {
               const newField = { ...field };
               if (newField?.label?.toLowerCase() === 'roles') {
-                newField.options.systemCalculatedAndSaved = true;
+                newField.options.hidden = true;
               }
               return newField;
             });

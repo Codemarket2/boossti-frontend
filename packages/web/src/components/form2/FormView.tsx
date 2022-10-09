@@ -15,20 +15,21 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIosRounded from '@mui/icons-material/ArrowBackIosRounded';
 import ArrowForwardIosRounded from '@mui/icons-material/ArrowForwardIosRounded';
-import CircularProgress from '@mui/material/CircularProgress';
+import Tooltip from '@mui/material/Tooltip';
 
 // SHARED
 import { parseResponse, useGetResponses } from '@frontend/shared/hooks/response/getResponse';
-import { useConstraint, useCreateUpdateResponse } from '@frontend/shared/hooks/response';
+import {
+  useConstraint,
+  useCreateUpdateResponse,
+  uniqueBetweenMultipleValues,
+} from '@frontend/shared/hooks/response';
 import { validateResponse, validateValue } from '@frontend/shared/utils/validate';
 import { IValue } from '@frontend/shared/types';
 import { IField, IForm } from '@frontend/shared/types/form';
 import { fileUpload } from '@frontend/shared/utils/fileUpload';
 
 // OTHERS
-import { Tooltip } from '@mui/material';
-import { InfoOutlined } from '@mui/icons-material';
-import AddCircle from '@mui/icons-material/AddCircle';
 import ResponseList from '../response/ResponseList';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
@@ -45,14 +46,12 @@ import { replaceVariables } from './variables';
 import projectConfig from '../../../../shared/index';
 import { evaluateFormula } from './field/formula/DisplayFormulaValue';
 import DisplayFormula, { getFormula } from './field/formula/DisplayFormula';
-import {
-  getConditionsFormAndResponse,
-  getFieldCondition,
-} from './field/field-condition/DisplayFieldCondition';
+import { getConditionsFormAndResponse } from './field/field-condition/DisplayFieldCondition';
 import { resolveCondition } from './field/field-condition/ResolveCondition';
 import ResponseDrawer from '../response/ResponseDrawer';
 import DisplayConstraintError from './form-conditions/DisplayConstraintError';
 import FieldUnique from './field/FieldUnique';
+import UniqueMultipleValue from './field/UniqueMultipleValue';
 
 interface FormViewWrapperProps {
   form: IForm;
@@ -476,6 +475,7 @@ export function FormView({
 }: FormViewProps): any {
   const [values, setValues] = useState(parseResponse({ values: initialValues })?.values || []);
   const { constraintErrors, constraintsLoading } = useConstraint({ form, values, responseId });
+
   const [submitState, setSubmitState] = useState(initialSubmitState);
   const authState = useSelector(({ auth }: any) => auth);
   const authenticated = authState?.authenticated;
@@ -507,6 +507,14 @@ export function FormView({
     );
   });
 
+  const {
+    uniqueBetweenMultipleValuesLoading,
+    uniqueBetweenMultipleValuesError,
+  } = uniqueBetweenMultipleValues({
+    fields,
+    values,
+  });
+
   useEffect(() => {
     if (state.hideField) {
       setState((oldState) => ({ ...oldState, hideField: false }));
@@ -520,7 +528,7 @@ export function FormView({
       if (field?.options?.required && field?.options?.defaultValue) {
         if (!values?.some((v) => v?.field === field?._id)) {
           const tempValue = field?.options?.defaultValue || {};
-          defaultValues.push({ field: field?._id, ...tempValue });
+          defaultValues.push({ value: '', field: field?._id, ...tempValue });
         }
       }
       if (field?.options?.hidden && field?.options?.hiddenConditions?.length > 0) {
@@ -668,6 +676,15 @@ export function FormView({
     return !field?.options?.hidden;
   };
 
+  const disableSubmitButton =
+    validateResponse(fields?.filter(filterHiddenFields), values) ||
+    unique ||
+    uniqueLoading ||
+    constraintsLoading ||
+    constraintErrors?.find((con) => con?.existingResponseId)?.existingResponseId ||
+    uniqueBetweenMultipleValuesError?.length > 0 ||
+    uniqueBetweenMultipleValuesLoading;
+
   return (
     <div className="position-relative">
       {!authenticated && state.showAuthModal && (
@@ -710,8 +727,15 @@ export function FormView({
                     {field?.options?.unique && (
                       <FieldUnique existingResponseId={unique} uniqueLoading={uniqueLoading} />
                     )}
+                    {field?.options?.multipleValues &&
+                      field?.options?.uniqueBetweenMultipleValues && (
+                        <UniqueMultipleValue
+                          loading={uniqueBetweenMultipleValuesLoading}
+                          error={uniqueBetweenMultipleValuesError}
+                          field={field}
+                        />
+                      )}
                   </Typography>
-
                   {field?.options?.systemCalculatedAndView && (
                     <div className="mb-2">
                       <DisplayFormula formula={field?.options?.formula} fields={fields} />
@@ -945,13 +969,7 @@ export function FormView({
             <InputGroup style={{ display: 'flex' }}>
               <div data-testid="submitButton">
                 <LoadingButton
-                  disabled={
-                    validateResponse(fields?.filter(filterHiddenFields), values) ||
-                    unique ||
-                    uniqueLoading ||
-                    constraintsLoading ||
-                    constraintErrors?.find((con) => con?.existingResponseId)?.existingResponseId
-                  }
+                  disabled={disableSubmitButton}
                   loading={submitState.loading || loading}
                   onClick={onSubmit}
                   variant="contained"
