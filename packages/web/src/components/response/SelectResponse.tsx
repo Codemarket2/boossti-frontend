@@ -20,6 +20,7 @@ export interface IProps {
   onlyMyResponses?: boolean;
   onChangeFullResponse?: (response: any) => void;
   floatingLabel?: boolean;
+  noAppIdFilter?: boolean;
 }
 
 const filter = createFilterOptions();
@@ -38,11 +39,13 @@ export default function SelectResponse({
   allowCreate,
   onlyMyResponses,
   floatingLabel,
+  noAppIdFilter,
 }: IProps) {
   const { data, error: queryError, loading, state, setState } = useGetResponses({
     formId,
     formField,
     onlyMy: onlyMyResponses,
+    noAppIdFilter,
   });
 
   const [addOption, setAddOption] = useState({ showDrawer: false });

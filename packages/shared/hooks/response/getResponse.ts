@@ -30,6 +30,7 @@ interface IProps {
   appId?: string;
   search?: string;
   valueFilter?: any;
+  noAppIdFilter?: boolean;
 }
 
 export function useGetResponses({
@@ -37,10 +38,12 @@ export function useGetResponses({
   formField = null,
   onlyMy = false,
   workFlowFormResponseParentId = null,
-  appId,
+  // appId,
   search = null,
   valueFilter,
+  noAppIdFilter,
 }: IProps) {
+  const setting = useSelector((state: any) => state?.setting);
   const [subscribed, setSubscribed] = useState(false);
   const [state, setState] = useState({
     ...defaultQueryVariables,
@@ -62,6 +65,11 @@ export function useGetResponses({
     filter = JSON.stringify(searchFilter);
   } else if (valueFilter) {
     filter = JSON.stringify(valueFilter);
+  }
+
+  let appId;
+  if (setting?.appResponse?._id && !noAppIdFilter) {
+    appId = setting?.appResponse?._id;
   }
 
   const { data, error, loading, subscribeToMore, refetch } = useQuery<
