@@ -303,6 +303,7 @@ export default function Form({ form, drawerMode = false, onSlugChange, hideField
               )}
               {options.currentTab === 'Actions' && (
                 <Actions
+                  formId={form?._id}
                   fields={form?.fields}
                   settings={form?.settings}
                   onChange={(actions) =>
