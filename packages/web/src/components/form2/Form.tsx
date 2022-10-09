@@ -50,10 +50,10 @@ interface IProps {
   form: IForm;
   drawerMode?: boolean;
   onSlugChange?: (newSlug: string) => void;
-  hideFields?: boolean;
 }
 
 const tabs = [
+  'Fields',
   'Preview',
   'Settings',
   'Actions',
@@ -66,13 +66,14 @@ const tabs = [
 ];
 
 const initialState = {
-  currentTab: 'Preview',
+  currentTab: 'Fields',
   snackBar: '',
   backdrop: false,
   formTabs: false,
+  showFields: true,
 };
 
-export default function Form({ form, drawerMode = false, onSlugChange, hideFields }: IProps): any {
+export default function Form({ form, drawerMode = false, onSlugChange }: IProps): any {
   const { handleOnChange, updateLoading, handleUpdateForm } = useUpdateForm({
     onAlert,
     form,
@@ -200,22 +201,13 @@ export default function Form({ form, drawerMode = false, onSlugChange, hideField
             </div>
           )}
           <Grid container spacing={1}>
-            {!hideFields && (
+            {/* {!hideFields && (
               <Grid item xs={12} sm={4}>
-                <FormFields
-                  fields={form.fields}
-                  setFields={(newFields) => handleOnChange({ fields: newFields })}
-                  parentFields={form.fields?.map((f) => ({
-                    ...f,
-                    formId: form._id,
-                    label: f?.label,
-                    formName: form?.name,
-                  }))}
-                />
-                <RelationFields formId={form?._id} />
+                Fields
               </Grid>
-            )}
-            <Grid item xs={12} sm={hideFields ? 12 : options.formTabs ? 5 : 8}>
+            )} */}
+            <Grid item xs={12} sm={options.formTabs ? 9 : 12}>
+              {/* sm={hideFields ? 12 : options.formTabs ? 5 : 8} */}
               <Paper variant="outlined" className="d-flex align-item-center">
                 <Tabs
                   variant="scrollable"
@@ -251,7 +243,6 @@ export default function Form({ form, drawerMode = false, onSlugChange, hideField
                 {!options?.formTabs && (
                   <Tooltip title="Add Tab">
                     <IconButton
-                      edge="start"
                       color="primary"
                       onClick={() => setOptions({ ...options, formTabs: !options?.formTabs })}
                     >
@@ -260,6 +251,21 @@ export default function Form({ form, drawerMode = false, onSlugChange, hideField
                   </Tooltip>
                 )}
               </Paper>
+              {options.currentTab === 'Fields' && (
+                <>
+                  <FormFields
+                    fields={form.fields}
+                    setFields={(newFields) => handleOnChange({ fields: newFields })}
+                    parentFields={form.fields?.map((f) => ({
+                      ...f,
+                      formId: form._id,
+                      label: f?.label,
+                      formName: form?.name,
+                    }))}
+                  />
+                  <RelationFields formId={form?._id} />
+                </>
+              )}
               {options.currentTab === 'Preview' && (
                 <Paper variant="outlined" className="px-2">
                   <FormView
