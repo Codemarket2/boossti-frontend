@@ -56,9 +56,9 @@ const Slug = () => {
   const fieldID = useFieldId();
   const html = useHtmlCode(fieldID.slugId, fieldID.htmlFieldId, slug, fieldID.pageId);
 
-  if (!isApp) {
-    return <>TODO 404 Page</>;
-  }
+  // if (!isApp) {
+  //   return <>TODO 404 Page</>;
+  // }
 
   return (
     <div>
