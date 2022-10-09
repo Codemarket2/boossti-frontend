@@ -2,6 +2,7 @@ import { useState } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { IHooksProps } from '../../types/common';
+import { ConditionPart } from '../../types';
 
 const validationSchema = yup.object({
   active: yup.boolean(),
@@ -20,10 +21,10 @@ const validationSchema = yup.object({
     otherwise: yup.string(),
   }),
   receiverType: yup.string().label('Receiver').required(),
-  emailFieldId: yup.string().when('receiverType', {
+  emailFieldId: yup.object().when('receiverType', {
     is: (value) => value === 'emailField',
-    then: yup.string().label('Email field').required(),
-    otherwise: yup.string(),
+    then: yup.object().label('Email field').required(),
+    otherwise: yup.object().nullable(),
   }),
   receiverEmails: yup.array().when('actionType', {
     is: (value) => value === 'sendEmail',
@@ -140,7 +141,7 @@ type TFormValues = {
   phoneFieldId: string;
   senderEmail: string;
   receiverType: string;
-  emailFieldId: string;
+  emailFieldId: ConditionPart;
   nameFieldId: string;
   receiverEmails: string[];
   variables: TVariables[];
@@ -178,7 +179,7 @@ const defaultFormValues: TFormValues = {
   phoneFieldId: '',
   senderEmail: '',
   receiverType: 'formOwner',
-  emailFieldId: '',
+  emailFieldId: null,
   nameFieldId: '',
   receiverEmails: [],
   variables: [{ name: '', field: '', formId: null }],

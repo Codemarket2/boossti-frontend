@@ -329,7 +329,7 @@ const ConditionComponent = ({
 interface SelectSubFieldProps {
   subField: ConditionPart;
   onChange: (fieldId: any) => void;
-  setForm: (form: IForm) => void;
+  setForm?: (form: IForm) => void;
   selectResponse?: boolean;
   label?: string;
   setResponses?: (response: IResponse) => void;
@@ -353,13 +353,13 @@ export const SelectSubField = ({
   };
 
   useEffect(() => {
-    if (data?.getForm) {
+    if (data?.getForm && setForm) {
       setForm(data?.getForm);
     }
   }, [data?.getForm]);
 
   useEffect(() => {
-    if (response?._id) {
+    if (response?._id && setResponses) {
       setResponses(response);
     }
   }, [response]);

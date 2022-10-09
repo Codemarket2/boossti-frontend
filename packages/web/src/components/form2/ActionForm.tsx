@@ -1,5 +1,5 @@
 // REACT
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 // REDUX
 import { useSelector } from 'react-redux';
@@ -22,10 +22,10 @@ import FormHelperText from '@mui/material/FormHelperText';
 import Switch from '@mui/material/Switch';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
-import Tab from '@mui/material/Tab';
+// import TabContext from '@mui/lab/TabContext';
+// import TabList from '@mui/lab/TabList';
+// import TabPanel from '@mui/lab/TabPanel';
+// import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 
 // SHARED
@@ -38,6 +38,8 @@ import { onAlert } from '../../utils/alert';
 import RichTextarea from '../common/RichTextarea2';
 import Field from './Field';
 import { defaultValue } from './FormView';
+import { SelectSubField } from './field/field-condition/FieldConditionForm';
+import ActionVariables from './actions/ActionVariables';
 
 interface ICommonInputProps {
   formik: ReturnType<typeof useFormActions>['formik'];
@@ -125,6 +127,7 @@ const SignUpEmailTemplate = ({ formik }: ICommonInputProps) => {
 const filter = createFilterOptions();
 
 interface IProps {
+  formId: string;
   onCancel: () => void;
   fields: any[];
   emailFields: any[];
@@ -140,6 +143,7 @@ export default function ActionForm({
   nameFields,
   onSave,
   action,
+  formId,
 }: IProps) {
   const { formik, setFormValues, edit } = useFormActions({ onAlert, onSave });
   useEffect(() => {
@@ -255,12 +259,14 @@ export default function ActionForm({
                 >
                   <MenuItem value="showMessage">Show Message</MenuItem>
                   <MenuItem value="sendEmail">Send Email</MenuItem>
-                  {fields?.some((f) => f.fieldType === 'phoneNumber' && f?.options?.required) && (
-                    <MenuItem value="sendSms">Send SMS</MenuItem>
-                  )}
-                  {fields?.some((f) => f.fieldType === 'email' && f?.options?.required) && (
-                    <MenuItem value="generateNewUser">Generate New User</MenuItem>
-                  )}
+                  <MenuItem
+                    value="sendSms"
+                    disabled={
+                      !fields?.some((f) => f.fieldType === 'phoneNumber' && f?.options?.required)
+                    }
+                  >
+                    Send SMS
+                  </MenuItem>
                   <MenuItem value="updateFieldValue">Update field value</MenuItem>
                   <MenuItem value="sendInAppNotification">Send In-App Notification</MenuItem>
                   <MenuItem value="sendPushNotification">Send Push Notification</MenuItem>
@@ -272,15 +278,16 @@ export default function ActionForm({
                   <MenuItem value="updateCognitoUser">Update Cognito User</MenuItem>
                   <MenuItem value="deleteCognitoUser">Delete Cognito User</MenuItem>
                   <MenuItem value="linkedinInviteAutomation">LinkedIn Invite Automation </MenuItem>
-                  {fields?.some(
-                    (field) => field?.fieldType === 'link' && field?.options?.required,
-                  ) ? (
-                    <MenuItem value="createSeoReport">Create Lighthouse SEO Audit Report</MenuItem>
-                  ) : (
-                    <MenuItem disabled value="createSeoReport">
-                      Create Lighthouse SEO Audit Report
-                    </MenuItem>
-                  )}
+                  <MenuItem
+                    disabled={
+                      !fields?.some(
+                        (field) => field?.fieldType === 'link' && field?.options?.required,
+                      )
+                    }
+                    value="createSeoReport"
+                  >
+                    Create Lighthouse SEO Audit Report
+                  </MenuItem>
                   <MenuItem value="createSubDomainRoute53">
                     Create sub domain on AWS route53
                   </MenuItem>
@@ -657,17 +664,11 @@ export default function ActionForm({
                     <MenuItem value="formOwner">Form owner</MenuItem>
                     <MenuItem value="responseSubmitter">Response submitter</MenuItem>
                     <MenuItem value="customEmail">Custom email</MenuItem>
-                    <MenuItem value="emailField" disabled={!(emailFields?.length > 0)}>
-                      Form email field
-                    </MenuItem>
+                    <MenuItem value="emailField">Form email field</MenuItem>
                   </Select>
-                  {formik.touched.receiverType && formik.errors.receiverType ? (
+                  {formik.touched.receiverType && formik.errors.receiverType && (
                     <FormHelperText className="text-danger">
                       {formik.errors.receiverType}
-                    </FormHelperText>
-                  ) : (
-                    <FormHelperText>
-                      Add required Email field to form then use it as receiver email
                     </FormHelperText>
                   )}
                 </FormControl>
@@ -713,35 +714,10 @@ export default function ActionForm({
             {(formik.values.receiverType === 'emailField' ||
               formik.values.actionType === 'generateNewUser') && (
               <InputGroup>
-                <FormControl
-                  variant="outlined"
-                  fullWidth
-                  size="small"
-                  error={Boolean(formik.touched.emailFieldId && formik.errors.emailFieldId)}
-                >
-                  <InputLabel id="emailFieldId-simple-select-outlined-label">
-                    Email Field
-                  </InputLabel>
-                  <Select
-                    labelId="emailFieldId-simple-select-outlined-label"
-                    id="emailFieldId-simple-select-outlined"
-                    name="emailFieldId"
-                    value={formik.values.emailFieldId}
-                    onChange={formik.handleChange}
-                    label="Email Field"
-                  >
-                    {emailFields?.map((field) => (
-                      <MenuItem value={field._id} key={field._id}>
-                        {field.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  {formik.touched.emailFieldId && formik.errors.emailFieldId && (
-                    <FormHelperText className="text-danger">
-                      {formik.errors.emailFieldId}
-                    </FormHelperText>
-                  )}
-                </FormControl>
+                <SelectSubField
+                  onChange={(subField) => formik.setFieldValue('emailFieldId', subField)}
+                  subField={{ ...formik.values.emailFieldId, formId }}
+                />
               </InputGroup>
             )}
             {formik.values.actionType === 'generateNewUser' && (
@@ -819,102 +795,15 @@ export default function ActionForm({
               'sendPushNotification',
               'createCognitoUser',
             ]?.includes(formik.values.actionType) && (
-              <InputGroup>
-                <Typography variant="h6" className="d-flex align-items-center pl-2">
-                  Variables
-                  <Tooltip title="Add New Action">
-                    <IconButton
-                      color="primary"
-                      onClick={() =>
-                        formik.setFieldValue('variables', [
-                          ...formik.values.variables,
-                          { name: '', field: '' },
-                        ])
-                      }
-                      size="large"
-                    >
-                      <AddCircleIcon />
-                    </IconButton>
-                  </Tooltip>
-                </Typography>
-                <Typography>
-                  Inbuilt Variables - formName, createdBy, createdAt, pageName
-                </Typography>
-                <InputLabel>
-                  Define Variables and use it in email subject and body. example - {`{{email}}`}
-                </InputLabel>
-                {formik.values.variables.map((variable, variableIndex) => (
-                  <div className="d-flex align-items-center" key={variableIndex}>
-                    <TextField
-                      fullWidth
-                      className="mr-2"
-                      label="Name"
-                      variant="outlined"
-                      name="name"
-                      size="small"
-                      disabled={formik.isSubmitting}
-                      value={variable.name}
-                      onChange={({ target }) =>
-                        formik.setFieldValue(
-                          'variables',
-                          formik.values.variables.map((sV, sI) =>
-                            sI === variableIndex ? { ...variable, name: target.value } : sV,
-                          ),
-                        )
-                      }
-                    />
-                    <FormControl fullWidth variant="outlined" size="small">
-                      <InputLabel id="variablefield-simple-select-outlined-label">Field</InputLabel>
-                      <Select
-                        labelId="variablefield-simple-select-outlined-label"
-                        id="variablefield-simple-select-outlined"
-                        name="value"
-                        value={variable.field}
-                        onChange={({ target }) =>
-                          formik.setFieldValue(
-                            'variables',
-                            formik.values.variables.map((sV, sI) => {
-                              if (sI === variableIndex) {
-                                let payload = { ...variable, field: target.value, formId: null };
-                                const field = fields?.filter(
-                                  (f) => f._id === target.value && f?.formId,
-                                )[0];
-                                if (field) {
-                                  payload = { ...payload, formId: field.formId };
-                                }
-                                return payload;
-                              }
-                              return sV;
-                            }),
-                          )
-                        }
-                        label="Field"
-                      >
-                        {fields?.map((field) => (
-                          <MenuItem value={field._id} key={`field-${field._id}`}>
-                            {field.label}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                    <Tooltip title="Delete Variable">
-                      <IconButton
-                        color="primary"
-                        onClick={() =>
-                          formik.setFieldValue(
-                            'variables',
-                            formik.values.variables.filter((sV, sI) => sI !== variableIndex),
-                          )
-                        }
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </Tooltip>
-                  </div>
-                ))}
-              </InputGroup>
+              <ActionVariables
+                variables={formik.values.variables}
+                onVariablesChange={(newVariables) =>
+                  formik.setFieldValue('variables', newVariables)
+                }
+                disabled={formik.isSubmitting}
+                formId={formId}
+              />
             )}
-
             {['createCognitoUser']?.includes(formik.values.actionType) && (
               <div>
                 <SignUpEmailTemplate formik={formik} />

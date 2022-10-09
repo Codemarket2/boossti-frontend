@@ -24,7 +24,7 @@ function AuthPage({ initial, authenticated }: IProps) {
   const router = useRouter();
 
   if (initial && authenticated) {
-    router.push('/');
+    router.push('/feeds');
     // router.push(process.env.NEXT_PUBLIC_REDIRECT_URL || '/');
   }
 

@@ -5,21 +5,20 @@ name: Tests
 
 on:
   push:
-    branches: [ "master" , "vivekt" ]
+    branches: ['master']
   pull_request:
-    branches: [ "master", "vivekt" ]
+    branches: ['master']
 
 jobs:
   test:
-  
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Install dependencies
-      uses: actions/setup-node@v3
-      with:
-        node-version: 16
-    - run: yarn install --frozen-lockfile
-    - run: yarn web:test
-    - run: yarn web:build
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: yarn install --frozen-lockfile
+      - run: yarn web:test
+      - run: yarn web:build
