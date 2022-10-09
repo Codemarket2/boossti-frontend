@@ -51,5 +51,5 @@ const DisplayForm = ({ formSlug }: { formSlug: string }) => {
     return <NotFound />;
   }
 
-  return <Form form={data?.getFormBySlug} hideFields />;
+  return <Form form={data?.getFormBySlug} />;
 };
