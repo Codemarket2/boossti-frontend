@@ -2,10 +2,12 @@ import { useGetFormBySlug } from '@frontend/shared/hooks/form';
 import { Grid, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import ErrorLoading from '../../common/ErrorLoading';
 import NotFound from '../../common/NotFound';
 import Form from '../Form';
 import FormList from '../FormList';
+import FormView from '../FormView';
 
 export default function Feeds() {
   const [formSlug, setFormSlug] = useState('');
@@ -43,6 +45,7 @@ export default function Feeds() {
 
 const DisplayForm = ({ formSlug }: { formSlug: string }) => {
   const { data, error } = useGetFormBySlug(formSlug);
+  const { admin } = useSelector((state: any) => state.auth);
   if (!data || error) {
     return <ErrorLoading error={error} />;
   }
@@ -50,6 +53,8 @@ const DisplayForm = ({ formSlug }: { formSlug: string }) => {
   if (!data?.getFormBySlug) {
     return <NotFound />;
   }
-
-  return <Form form={data?.getFormBySlug} />;
+  if (admin) {
+    return <Form form={data?.getFormBySlug} />;
+  }
+  return <FormView form={data?.getFormBySlug} />;
 };
