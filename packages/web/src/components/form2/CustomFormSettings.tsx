@@ -147,6 +147,7 @@ export default function CustomFormSettings({
           )}
           {tab === 'actions' && (
             <ActionsWrapper
+              formId={formId}
               pageFields={[...pageFields, ...parentPageFields]}
               settings={settings}
               onChange={(actions) => onSettingsChange({ ...settings, actions })}

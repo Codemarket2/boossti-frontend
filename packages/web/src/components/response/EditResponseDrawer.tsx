@@ -63,7 +63,6 @@ export default function EditResponseDrawer({
           edit
           formId={form?._id}
           responseId={response?._id}
-          responseCount={response?.count}
           onCancel={onClose}
         />
       ) : (

@@ -4,7 +4,6 @@ export const CREATE_RESPONSE = gql`
   mutation MyMutation(
     $formId: ID!
     $appId: ID
-    $installId: ID
     $workFlowFormResponseParentId: ID
     $values: [ValueInput]
     $options: AWSJSON
@@ -12,7 +11,6 @@ export const CREATE_RESPONSE = gql`
     createResponse(
       formId: $formId
       appId: $appId
-      installId: $installId
       workFlowFormResponseParentId: $workFlowFormResponseParentId
       values: $values
       options: $options
@@ -21,7 +19,6 @@ export const CREATE_RESPONSE = gql`
       formId
       count
       appId
-      installId
       workFlowFormResponseParentId
       values {
         _id
@@ -80,7 +77,6 @@ export const UPDATE_RESPONSE = gql`
       formId
       count
       appId
-      installId
       workFlowFormResponseParentId
       values {
         _id
@@ -147,5 +143,11 @@ export const CREATE_BULK_RESPONSE = gql`
 export const RESOLVE_CONDITION = gql`
   mutation ResolveCondition($responseId: ID!, $conditions: AWSJSON!) {
     resolveCondition(responseId: $responseId, conditions: $conditions)
+  }
+`;
+
+export const CHECK_UNIQUE_BETWEEN_MULTIPLE_VALUES = gql`
+  mutation CheckUniqueBetweenMultipleValues($responseIds: [ID!], $subField: AWSJSON!) {
+    checkUniqueBetweenMultipleValues(responseIds: $responseIds, subField: $subField)
   }
 `;

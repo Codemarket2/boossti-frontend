@@ -6,12 +6,15 @@ import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth/lib/types';
 import { useRouter } from 'next/router';
 import { RootState } from '@frontend/shared/redux';
 import InitialLoading from '../src/components/common/InitialLoading';
-// import UserLayout from '../src/components/common/UserLayout';
 import HomeScreen from '../src/screens/HomeScreen-new';
+import AppDashboard from '../src/components/app/AppDashboard';
+import AppWrapper from '../src/components/app/AppWrapper';
 
 export default function Page() {
   const router = useRouter();
-  const initial = useSelector(({ auth }: RootState) => auth.initial);
+  const globalState = useSelector((state: RootState) => state);
+  const { initial } = globalState.auth;
+  const { isApp } = globalState.setting;
   const { error_description: errorDescription } = router.query;
 
   useEffect(() => {
@@ -26,6 +29,18 @@ export default function Page() {
 
   if ((errorDescription && errorDescription.includes('_ACCOUNT_LINKED')) || !initial) {
     return <InitialLoading />;
+  }
+
+  if (globalState.auth.authenticated) {
+    router.push('/feeds');
+  }
+
+  if (isApp) {
+    return (
+      <AppWrapper>
+        <AppDashboard />
+      </AppWrapper>
+    );
   }
 
   return <HomeScreen />;

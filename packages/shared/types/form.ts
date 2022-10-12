@@ -21,6 +21,8 @@ export interface IFieldOptions {
   showOptionCreatedOnTemplate: boolean;
   required: boolean;
   multipleValues: boolean;
+  uniqueBetweenMultipleValues: boolean;
+  uniqueSubField: any;
   unique: boolean;
   caseInsensitiveUnique: boolean;
   staticText: string;
@@ -43,6 +45,7 @@ export interface IFieldOptions {
   hidden?: boolean;
   // hiddenCondition?: IHiddenCondition[];
   hiddenConditions?: ICondition[];
+  addToAllForms?: boolean;
 }
 
 export interface IField {

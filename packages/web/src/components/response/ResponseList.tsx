@@ -11,9 +11,9 @@ interface IProps {
   workFlowFormResponseParentId?: string;
   showOnlyMyResponses?: boolean;
   appId?: string;
-  installId?: string;
   isTemplateInstance?: string;
   valueFilter?: any;
+  onClickResponse?: (response, form) => void;
 }
 
 export default function ResponseList({
@@ -22,15 +22,14 @@ export default function ResponseList({
   showOnlyMyResponses,
   appId,
   isTemplateInstance,
-  installId,
   valueFilter,
+  onClickResponse,
 }: IProps): any {
   const { data, error, loading, state, setState, refetch } = useGetResponses({
     formId: form?._id,
     onlyMy: showOnlyMyResponses,
     workFlowFormResponseParentId,
     appId,
-    installId,
     valueFilter,
   });
 
@@ -84,6 +83,7 @@ export default function ResponseList({
             limit={state.limit}
             onPageChange={(page) => setState({ ...state, page })}
             onLimitChange={(limit) => setState({ ...state, limit })}
+            onClickResponse={onClickResponse}
           />
         </>
       )}

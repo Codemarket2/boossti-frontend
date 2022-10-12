@@ -14,7 +14,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Tooltip from '@mui/material/Tooltip';
-import { useUpdateForm, useDeleteForm } from '@frontend/shared/hooks/form';
+import { useUpdateForm, useDeleteForm, useGetFormTabs } from '@frontend/shared/hooks/form';
 import { useAuthorization } from '@frontend/shared/hooks/auth';
 import Link from 'next/link';
 import Container from '@mui/material/Container';
@@ -39,7 +39,7 @@ import NotFound from '../common/NotFound';
 import UnAuthorised from '../common/UnAuthorised';
 import Permissions from './Permissions';
 import AuditLog from '../auditLog/AuditLog';
-import FormConditions from './form-conditions/FormConditions';
+import FormConstraints from './form-conditions/FormConstraints';
 import ShopifySettings from './shopify/ShopifySettings';
 import DesignTab from './design/DesignTab';
 import RelationFields from './RelationFields';
@@ -51,10 +51,10 @@ interface IProps {
   form: IForm;
   drawerMode?: boolean;
   onSlugChange?: (newSlug: string) => void;
-  hideFields?: boolean;
 }
 
 const tabs = [
+  'Fields',
   'Preview',
   'Settings',
   'Embedded Form',
@@ -62,20 +62,20 @@ const tabs = [
   'Workflows',
   'Responses',
   'Design',
-  // 'Boards',
   'Activity',
   'Conditions',
   'Shopify',
 ];
 
 const initialState = {
-  currentTab: 'Preview',
+  currentTab: 'Fields',
   snackBar: '',
   backdrop: false,
   formTabs: false,
+  showFields: true,
 };
 
-export default function Form({ form, drawerMode = false, onSlugChange, hideFields }: IProps): any {
+export default function Form({ form, drawerMode = false, onSlugChange }: IProps): any {
   const { handleOnChange, updateLoading, handleUpdateForm } = useUpdateForm({
     onAlert,
     form,
@@ -83,6 +83,7 @@ export default function Form({ form, drawerMode = false, onSlugChange, hideField
   const { handleDelete } = useDeleteForm({
     onAlert,
   });
+  const { formAllTabs } = useGetFormTabs(form?._id);
 
   const [options, setOptions] = useState(initialState);
 
@@ -202,22 +203,13 @@ export default function Form({ form, drawerMode = false, onSlugChange, hideField
             </div>
           )}
           <Grid container spacing={1}>
-            {!hideFields && (
+            {/* {!hideFields && (
               <Grid item xs={12} sm={4}>
-                <FormFields
-                  fields={form.fields}
-                  setFields={(newFields) => handleOnChange({ fields: newFields })}
-                  parentFields={form.fields?.map((f) => ({
-                    ...f,
-                    formId: form._id,
-                    label: f?.label,
-                    formName: form?.name,
-                  }))}
-                />
-                <RelationFields formId={form?._id} />
+                Fields
               </Grid>
-            )}
-            <Grid item xs={12} sm={hideFields ? 12 : options.formTabs ? 5 : 8}>
+            )} */}
+            <Grid item xs={12} sm={options.formTabs ? 9 : 12}>
+              {/* sm={hideFields ? 12 : options.formTabs ? 5 : 8} */}
               <Paper variant="outlined" className="d-flex align-item-center">
                 <Tabs
                   variant="scrollable"
@@ -235,6 +227,13 @@ export default function Form({ form, drawerMode = false, onSlugChange, hideField
                   {form?.name?.toUpperCase().includes('ROLE') && (
                     <Tab label="Permissions" value="permissions" />
                   )}
+                  {formAllTabs?.map((tab) => (
+                    <Tab
+                      key={tab?._id}
+                      label={tab?.label || 'NA'}
+                      value={slugify(tab?.label, { lower: true })}
+                    />
+                  ))}
                   {form?.settings?.tabs?.map((tab) => (
                     <Tab
                       key={tab?._id}
@@ -246,7 +245,6 @@ export default function Form({ form, drawerMode = false, onSlugChange, hideField
                 {!options?.formTabs && (
                   <Tooltip title="Add Tab">
                     <IconButton
-                      edge="start"
                       color="primary"
                       onClick={() => setOptions({ ...options, formTabs: !options?.formTabs })}
                     >
@@ -255,6 +253,21 @@ export default function Form({ form, drawerMode = false, onSlugChange, hideField
                   </Tooltip>
                 )}
               </Paper>
+              {options.currentTab === 'Fields' && (
+                <>
+                  <FormFields
+                    fields={form.fields}
+                    setFields={(newFields) => handleOnChange({ fields: newFields })}
+                    parentFields={form.fields?.map((f) => ({
+                      ...f,
+                      formId: form._id,
+                      label: f?.label,
+                      formName: form?.name,
+                    }))}
+                  />
+                  <RelationFields formId={form?._id} />
+                </>
+              )}
               {options.currentTab === 'Preview' && (
                 <Paper variant="outlined" className="px-2">
                   <FormView
@@ -301,6 +314,7 @@ export default function Form({ form, drawerMode = false, onSlugChange, hideField
               )}
               {options.currentTab === 'Actions' && (
                 <Actions
+                  formId={form?._id}
                   fields={form?.fields}
                   settings={form?.settings}
                   onChange={(actions) =>
@@ -317,11 +331,11 @@ export default function Form({ form, drawerMode = false, onSlugChange, hideField
                 <AuditLog documentId={form?._id} formId={form?._id} />
               )}
               {options.currentTab === 'Conditions' && (
-                <FormConditions
+                <FormConstraints
                   form={form}
-                  onConditionsChange={(conditions) => {
+                  onConstraintsChange={(constraints) => {
                     handleOnChange({
-                      settings: { ...form.settings, conditions },
+                      settings: { ...form.settings, constraints },
                     });
                   }}
                   onFieldsChange={(newFields) =>
@@ -339,22 +353,12 @@ export default function Form({ form, drawerMode = false, onSlugChange, hideField
                   }
                 />
               )}
-              {/* {options.currentTab === 'Boards' && (
-                <BoardsTab
-                  formId={form?._id}
-                  boards={form?.settings?.boards}
-                  onBoardsChange={(boards) =>
-                    handleOnChange({ settings: { ...form.settings, boards } })
-                  }
-                />
-              )} */}
-
-              {form?.settings?.tabs?.some(
+              {[...(formAllTabs || []), ...(form?.settings?.tabs || [])]?.some(
                 (tab) => slugify(tab?.label, { lower: true }) === options.currentTab,
               ) && (
                 <TabView
                   formId={form?._id}
-                  tab={form?.settings?.tabs?.find(
+                  tab={[...(formAllTabs || []), ...(form?.settings?.tabs || [])]?.find(
                     (tab) => slugify(tab?.label, { lower: true }) === options.currentTab,
                   )}
                 />
@@ -363,6 +367,7 @@ export default function Form({ form, drawerMode = false, onSlugChange, hideField
             {options.formTabs && (
               <Grid item xs={12} sm={3}>
                 <TabsList
+                  formAllTabs={formAllTabs}
                   formId={form?._id}
                   tabs={form?.settings?.tabs}
                   onClose={() => setOptions({ ...options, formTabs: false })}

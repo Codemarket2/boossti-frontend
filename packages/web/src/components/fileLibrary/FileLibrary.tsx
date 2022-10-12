@@ -15,7 +15,10 @@ import { IconButton, useTheme } from '@mui/material';
 import CheckBox from '@mui/icons-material/CheckBox';
 import Delete from '@mui/icons-material/Delete';
 import { useDropzone } from 'react-dropzone';
-import { useGetResponses, useDeleteResponse } from '@frontend/shared/hooks/response';
+import TablePagination from '@mui/material/TablePagination';
+import TextField from '@mui/material/TextField';
+import CircularProgress from '@mui/material/CircularProgress';
+import Search from '@mui/icons-material/Search';
 
 interface FileLibraryProps {
   open: boolean;
@@ -26,6 +29,15 @@ interface FileLibraryProps {
   onUploadNewFile: (newFiles: any) => void;
   title?: string;
   acceptedFileType?: any;
+  rowsPerPage?: number;
+  count?: number;
+  page?: number;
+  onPageChange?: (e: any, page: number) => void;
+  onRowsPerPageChange?: (e: any) => void;
+  onSearchChange: (search: string) => void;
+  search: string;
+  loading: boolean;
+  rowsPerPageOptions?: number[];
 }
 
 interface File {
@@ -70,6 +82,15 @@ export default function FileLibrary({
   onUploadNewFile,
   onDelete,
   acceptedFileType,
+  rowsPerPage = 10,
+  count,
+  page,
+  onPageChange,
+  onRowsPerPageChange,
+  onSearchChange,
+  search,
+  loading,
+  rowsPerPageOptions,
 }: FileLibraryProps) {
   const ref: any = useRef();
   const [selectedTab, setSelectedTab] = useState(0);
@@ -143,26 +164,6 @@ export default function FileLibrary({
     }),
     [isFocused, isDragAccept, isDragReject],
   );
-  // Code below is for the file library
-  // All user can whatch each other files
-  const { data, loading } = useGetResponses({
-    formId: '631cfdd2bb5421884a6bbe2e', // form id of file-library form
-    onlyMy: false,
-    workFlowFormResponseParentId: null,
-    appId: null,
-    installId: null,
-    valueFilter: null,
-  });
-
-  let fileLibraryData = [];
-  if (data && loading === false) {
-    fileLibraryData = data?.getResponses?.data?.map((item) => {
-      return {
-        id: item._id,
-        url: item?.values[0]?.value,
-      };
-    });
-  }
 
   return (
     <Dialog fullWidth onClose={onClose} open={open}>
@@ -214,46 +215,74 @@ export default function FileLibrary({
             </div>
           </>
         ) : (
-          <div className="d-flex">
-            {fileLibraryData.map((file) => {
-              const isFileSelected = selectedFiles.some((f) => f?.id === file?.id);
-              return (
-                <div
-                  id={file.id}
-                  style={{
-                    marginRight: 2,
-                    padding: 1,
-                    border: `2px solid ${
-                      isFileSelected ? theme.palette.primary.main : theme.palette.background.default
-                    }`,
-                    cursor: 'pointer',
-                    width: '100px',
-                  }}
-                  onClick={() => {
-                    let newSelectedFiles = [...selectedFiles];
-                    if (isFileSelected) {
-                      newSelectedFiles = selectedFiles?.filter((m) => m?.id !== file?.id);
-                    } else {
-                      newSelectedFiles = [...selectedFiles, file];
-                    }
-                    setSelectedFiles(newSelectedFiles);
-                  }}
-                >
-                  {isFileSelected && (
-                    <div
-                      style={{
-                        position: 'absolute',
-                        zIndex: 1,
-                      }}
-                    >
-                      <CheckBox color="primary" />
-                    </div>
-                  )}
-                  <img style={{ width: '100%' }} alt={file.id} src={file?.url} />
-                </div>
-              );
-            })}
-          </div>
+          <>
+            <div className="d-flex">
+              {files.map((file) => {
+                const isFileSelected = selectedFiles.some((f) => f?.id === file?.id);
+                return (
+                  <div
+                    key={file?.id}
+                    id={file?.id}
+                    style={{
+                      marginRight: 2,
+                      padding: 1,
+                      border: `2px solid ${
+                        isFileSelected
+                          ? theme.palette.primary.main
+                          : theme.palette.background.default
+                      }`,
+                      cursor: 'pointer',
+                      width: '100px',
+                    }}
+                    onClick={() => {
+                      let newSelectedFiles = [...selectedFiles];
+                      if (isFileSelected) {
+                        newSelectedFiles = selectedFiles?.filter((m) => m?.id !== file?.id);
+                      } else {
+                        newSelectedFiles = [...selectedFiles, file];
+                      }
+                      setSelectedFiles(newSelectedFiles);
+                    }}
+                  >
+                    {isFileSelected && (
+                      <div
+                        style={{
+                          position: 'absolute',
+                          zIndex: 1,
+                        }}
+                      >
+                        <CheckBox color="primary" />
+                      </div>
+                    )}
+                    <img style={{ width: '100%' }} alt={file?.id} src={file?.url} />
+                  </div>
+                );
+              })}
+            </div>
+            <div className="d-flex">
+              <TextField
+                className="ml-2"
+                size="small"
+                variant="outlined"
+                label="Search"
+                InputProps={{
+                  endAdornment:
+                    search && loading ? <CircularProgress color="inherit" size={20} /> : <Search />,
+                }}
+                value={search}
+                onChange={({ target: { value } }) => onSearchChange(value)}
+              />
+              <TablePagination
+                component="div"
+                rowsPerPageOptions={rowsPerPageOptions}
+                count={count || 0}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={onPageChange}
+                onRowsPerPageChange={onRowsPerPageChange}
+              />
+            </div>
+          </>
         )}
       </DialogContent>
       <DialogActions>

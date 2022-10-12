@@ -39,7 +39,7 @@ import Formula from './formula/Formula';
 import FieldCondition from './field-condition/FieldCondition';
 import DefaultValue from './DefaultValue';
 // import HiddenCondition from './HiddenCondition';
-import FieldConditionForm from './field-condition/FieldConditionForm';
+import FieldConditionForm, { SelectSubField } from './field-condition/FieldConditionForm';
 
 interface IProps {
   onCancel?: () => void;
@@ -48,6 +48,7 @@ interface IProps {
   isWidget?: boolean;
   isDefault?: boolean;
   parentFields?: any[];
+  isTab?: boolean;
 }
 
 export default function AddField({
@@ -57,6 +58,7 @@ export default function AddField({
   isWidget = false,
   isDefault,
   parentFields = [],
+  isTab,
 }: IProps) {
   const { formik, formLoading, setFormValues, onOptionChange } = useAddFields({
     onAlert,
@@ -158,7 +160,7 @@ export default function AddField({
           )}
         </InputGroup>
       )}
-      {/* {formik.values.fieldType === 'form' && (
+      {isTab && formik.values.fieldType === 'form' && (
         <>
           <InputGroup>
             <FormControlLabel
@@ -172,11 +174,11 @@ export default function AddField({
                   color="primary"
                 />
               }
-              label="Add to all forms"
+              label="Add tab to all forms"
             />
           </InputGroup>
         </>
-      )} */}
+      )}
       {formik.values.fieldType === 'template' && (
         <InputGroup>
           <SelectTemplate
@@ -188,10 +190,12 @@ export default function AddField({
         </InputGroup>
       )}
       {formik?.values?.fieldType === 'label' && (
-        <RichTextarea
-          value={formik.values.options?.staticText}
-          onChange={(newValue) => onOptionChange({ staticText: newValue })}
-        />
+        <InputGroup>
+          <RichTextarea
+            value={formik.values.options?.staticText}
+            onChange={(newValue) => onOptionChange({ staticText: newValue })}
+          />
+        </InputGroup>
       )}
       {formik?.values?.fieldType === 'number' && (
         <>
@@ -247,7 +251,6 @@ export default function AddField({
           )}
         </>
       )}
-
       {['response'].includes(formik.values.fieldType) && (
         <FieldCondition
           formFields={parentFields}
@@ -335,14 +338,16 @@ export default function AddField({
           </div>
         </div>
       )}
-      {!isWidget && !isWidgetForm && !['label', 'template'].includes(formik.values.fieldType) && (
+      {!isWidget && !isWidgetForm && !['template'].includes(formik.values.fieldType) && (
         <>
-          <DefaultValue
-            field={formik.values}
-            onDefaultValueChange={(defaultValue) => {
-              onOptionChange({ defaultValue });
-            }}
-          />
+          {!['label'].includes(formik.values.fieldType) && (
+            <DefaultValue
+              field={formik.values}
+              onDefaultValueChange={(defaultValue) => {
+                onOptionChange({ defaultValue });
+              }}
+            />
+          )}
           {['response', 'text', 'number'].includes(formik.values.fieldType) && (
             <>
               <FormControlLabel
@@ -575,7 +580,13 @@ export default function AddField({
             control={
               <Checkbox
                 checked={formik.values.options?.multipleValues}
-                onChange={({ target }) => onOptionChange({ multipleValues: target.checked })}
+                onChange={({ target }) => {
+                  const newOptions: any = { multipleValues: target.checked };
+                  if (!target.checked && formik.values.options?.uniqueBetweenMultipleValues) {
+                    newOptions.uniqueBetweenMultipleValues = false;
+                  }
+                  onOptionChange(newOptions);
+                }}
                 name="multipleValues"
                 color="primary"
               />
@@ -583,6 +594,59 @@ export default function AddField({
             label="Multiple values"
             data-testid="multiple-value-field-option"
           />
+          {formik.values.options?.multipleValues && (
+            <div className="pl-3">
+              <FormControlLabel
+                className="mt-n2"
+                disabled={formik.isSubmitting}
+                control={
+                  <Checkbox
+                    checked={formik.values.options?.uniqueBetweenMultipleValues}
+                    onChange={({ target }) =>
+                      onOptionChange({ uniqueBetweenMultipleValues: target.checked })
+                    }
+                    name="uniqueBetweenMultipleValues"
+                    color="primary"
+                  />
+                }
+                label="Unique Between Multiple values"
+                data-testid="multiple-value-field-option"
+              />
+              {formik.values.fieldType === 'response' &&
+                formik.values.options?.multipleValues &&
+                formik.values.options?.uniqueBetweenMultipleValues && (
+                  <>
+                    {formik?.values?.options?.uniqueSubField?.formId ? (
+                      <Button
+                        size="small"
+                        color="error"
+                        startIcon={<DeleteIcon />}
+                        onClick={() => onOptionChange({ uniqueSubField: null })}
+                      >
+                        Delete sub field selection
+                      </Button>
+                    ) : (
+                      <Button
+                        size="small"
+                        onClick={() =>
+                          onOptionChange({ uniqueSubField: { formId: formik.values?.form?._id } })
+                        }
+                      >
+                        Select Sub Field
+                      </Button>
+                    )}
+                    {formik?.values?.options?.uniqueSubField?.formId && (
+                      <SelectSubField
+                        subField={formik?.values?.options?.uniqueSubField}
+                        onChange={(uniqueSubField) => onOptionChange({ uniqueSubField })}
+                        setForm={() => null}
+                        setResponses={() => null}
+                      />
+                    )}
+                  </>
+                )}
+            </div>
+          )}
           <br />
           <FormControlLabel
             className="mt-n2"

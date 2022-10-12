@@ -4,7 +4,6 @@ import { IForm } from './form';
 export interface IResponse extends ISchema {
   formId: any;
   appId: string;
-  installId: string;
   count: number;
   values: IValue[];
 }
@@ -20,7 +19,7 @@ export interface IValue {
   template: string;
   page: string;
   response: string | IResponse | any;
-  form: string | IForm;
+  form: IForm | string | any;
   options: any;
   media: IMedia[];
 }

@@ -1,5 +1,6 @@
 import { useQuery, useSubscription } from '@apollo/client';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { GET_RESPONSE_BY_COUNT, GET_RESPONSES, GET_RESPONSE } from '../../graphql/query/response';
 import {
   DELETED_RESPONSE,
@@ -16,6 +17,9 @@ export const defaultQueryVariables = {
   search: '',
   formField: null,
   onlyMy: false,
+  appId: null,
+  workFlowFormResponseParentId: null,
+  valueFilter: '',
 };
 
 interface IProps {
@@ -24,9 +28,11 @@ interface IProps {
   onlyMy?: boolean;
   workFlowFormResponseParentId?: string;
   appId?: string;
-  installId?: string;
   search?: string;
   valueFilter?: any;
+  noAppIdFilter?: boolean;
+  limit?: number;
+  page?: number;
 }
 
 export function useGetResponses({
@@ -34,16 +40,21 @@ export function useGetResponses({
   formField = null,
   onlyMy = false,
   workFlowFormResponseParentId = null,
-  appId,
-  installId,
+  // appId,
   search = null,
   valueFilter,
+  noAppIdFilter,
+  limit = defaultQueryVariables.limit,
+  page = defaultQueryVariables.page,
 }: IProps) {
+  const setting = useSelector((state: any) => state?.setting);
   const [subscribed, setSubscribed] = useState(false);
   const [state, setState] = useState({
     ...defaultQueryVariables,
     showSearch: false,
     formField,
+    limit,
+    page,
   });
 
   let filter;
@@ -62,6 +73,11 @@ export function useGetResponses({
     filter = JSON.stringify(valueFilter);
   }
 
+  let appId;
+  if (setting?.appResponse?._id && !noAppIdFilter) {
+    appId = setting?.appResponse?._id;
+  }
+
   const { data, error, loading, subscribeToMore, refetch } = useQuery<
     {
       getResponses: { data: IResponse[]; count: number };
@@ -69,7 +85,6 @@ export function useGetResponses({
     {
       formId: string;
       appId: string;
-      installId: string;
       workFlowFormResponseParentId: string;
       page: number;
       limit: number;
@@ -85,7 +100,6 @@ export function useGetResponses({
       workFlowFormResponseParentId,
       onlyMy,
       appId,
-      installId,
       valueFilter: filter,
     },
     fetchPolicy: 'cache-and-network',
@@ -128,10 +142,30 @@ export function useGetResponses({
   return { data, error, loading, state, setState, refetch };
 }
 
-export async function getResponses(formId: string, formField: string, search: string) {
-  const { data } = await guestClient.query<{ getResponses: { data: IResponse[]; count: number } }>({
+export async function getResponses({
+  formId,
+  formField = null,
+  search = null,
+  valueFilter,
+  page = 1,
+  limit = 10,
+  useGuestClient,
+}: {
+  formId: string;
+  formField?: string;
+  search?: string;
+  valueFilter?: string;
+  page?: number;
+  limit?: number;
+  useGuestClient?: boolean;
+}) {
+  let client = apolloClient;
+  if (useGuestClient) {
+    client = guestClient;
+  }
+  const { data } = await client.query<{ getResponses: { data: IResponse[]; count: number } }>({
     query: GET_RESPONSES,
-    variables: { formId, formField, search },
+    variables: { formId, page, limit, valueFilter },
   });
   return data?.getResponses;
 }
@@ -153,11 +187,16 @@ export function useGetResponse(_id: string): any {
 }
 
 export function useGetResponseByCount(formId: string, count: number): any {
+  const setting = useSelector((state: any) => state?.setting);
   const { data, error, loading, refetch } = useQuery<
     { getResponseByCount: IResponse },
-    { formId: string; count: number }
+    { formId: string; count: number; appId: string }
   >(GET_RESPONSE_BY_COUNT, {
-    variables: { formId, count },
+    variables: {
+      formId,
+      count,
+      appId: setting?.appResponse?._id,
+    },
     fetchPolicy: 'cache-and-network',
   });
 

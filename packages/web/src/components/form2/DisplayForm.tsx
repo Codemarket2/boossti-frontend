@@ -20,7 +20,6 @@ interface ISettings {
 interface IFormPage {
   settings?: ISettings;
   appId?: string;
-  installId?: string;
   modifyForm?: (form: IForm) => IForm;
   isTemplateInstance?: string;
   createCallback?: (response: any) => void;
@@ -28,6 +27,7 @@ interface IFormPage {
   workFlowFormResponseParentId?: string;
   valueFilter?: any;
   overrideValues?: any;
+  onClickResponse?: (response, form) => void;
 }
 
 interface IProps extends IFormPage {
@@ -38,7 +38,6 @@ export const FormPage = ({
   slug,
   settings = {},
   appId,
-  installId,
   modifyForm,
   isTemplateInstance = '',
   createCallback,
@@ -46,6 +45,7 @@ export const FormPage = ({
   workFlowFormResponseParentId,
   valueFilter,
   overrideValues,
+  onClickResponse,
 }: IProps) => {
   const { data, error } = useGetFormBySlug(slug);
 
@@ -68,12 +68,12 @@ export const FormPage = ({
       form={form}
       isTemplateInstance={isTemplateInstance}
       appId={appId}
-      installId={installId}
       createCallback={createCallback}
       isPageOwner={isPageOwner}
       workFlowFormResponseParentId={workFlowFormResponseParentId}
       valueFilter={valueFilter}
       overrideValues={overrideValues}
+      onClickResponse={onClickResponse}
     />
   );
 };
@@ -86,7 +86,6 @@ const FormPageById = ({
   _id,
   settings = {},
   appId,
-  installId,
   modifyForm,
   isTemplateInstance = '',
   createCallback,
@@ -94,6 +93,7 @@ const FormPageById = ({
   workFlowFormResponseParentId,
   valueFilter,
   overrideValues,
+  onClickResponse,
 }: IFormPageByIdProps) => {
   const { data, error } = useGetForm(_id);
 
@@ -116,12 +116,12 @@ const FormPageById = ({
       form={form}
       isTemplateInstance={isTemplateInstance}
       appId={appId}
-      installId={installId}
       createCallback={createCallback}
       isPageOwner={isPageOwner}
       workFlowFormResponseParentId={workFlowFormResponseParentId}
       valueFilter={valueFilter}
       overrideValues={overrideValues}
+      onClickResponse={onClickResponse}
     />
   );
 };

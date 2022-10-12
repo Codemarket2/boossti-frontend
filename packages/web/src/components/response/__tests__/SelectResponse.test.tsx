@@ -10,7 +10,6 @@ const getInitialProps = (): IProps => {
   return {
     label: 'text * response',
     formId: '62f687f8af282a8147d7fd8c',
-    installId: undefined,
     value: null,
     onChange: jest.fn(),
     onChangeFullResponse: jest.fn(),
@@ -31,7 +30,6 @@ const variables = {
   search: '',
   formField: null,
   onlyMy: false,
-  installId: '',
   valueFilter: null,
 };
 const mocks = [
@@ -52,7 +50,6 @@ const mocks = [
               formId: '62f687f8af282a8147d7fd8c',
               count: 2,
               appId: null,
-              installId: null,
               workFlowFormResponseParentId: null,
               values: [
                 {
@@ -111,7 +108,6 @@ const mocks = [
               formId: '62f687f8af282a8147d7fd8c',
               count: 1,
               appId: null,
-              installId: null,
               workFlowFormResponseParentId: null,
               values: [
                 {
@@ -173,7 +169,6 @@ const mocks = [
 const SelectResponseTest = ({
   label,
   formId,
-  installId,
   value = null,
   onChange,
   onChangeFullResponse,
@@ -189,7 +184,6 @@ const SelectResponseTest = ({
     <SelectResponse
       label={label}
       formId={formId}
-      installId={installId}
       value={value}
       onChange={onChange}
       onChangeFullResponse={onChangeFullResponse}
