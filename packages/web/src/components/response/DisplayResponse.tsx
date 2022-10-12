@@ -210,6 +210,9 @@ export function DisplayResponse({
                         response?.createdAt,
                       ).format('LT')}`}
                     </Typography>
+                    {response?.workFlowFormResponseParentId && (
+                      <Typography variant="body1">was submitted as workflow</Typography>
+                    )}
                   </div>
                 )}
                 {hideBreadcrumbs && DeleteComponent}

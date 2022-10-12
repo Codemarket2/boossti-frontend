@@ -173,7 +173,23 @@ export default function AppBarComponent() {
                     <ListItemText primary="Create Post" />
                   </MenuItem>
                 </Link> */}
-                <MenuItem onClick={handleLogout}>
+                <MenuItem>
+                  <ListItemIcon className="mr-n3">
+                    <AccountCircleIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText primary={attributes?.email} />
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    const anwser = confirm('Are you sure you want to logout');
+                    if (anwser) {
+                      handleClose();
+                      handleLogout();
+                    } else {
+                      handleClose();
+                    }
+                  }}
+                >
                   <ListItemIcon className="mr-n3">
                     <ExitToAppIcon fontSize="small" />
                   </ListItemIcon>

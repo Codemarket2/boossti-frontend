@@ -173,6 +173,16 @@ export default function DisplayValue({
           <GrapesOverlay value={value?.value} />
         </div>
       );
+    case 'formField':
+      return (
+        <div>
+          <DisplayFieldCondition
+            conditions={[
+              { left: value?.options?.subField, operator: null, right: null, conditionType: null },
+            ]}
+          />
+        </div>
+      );
     default:
       return <>{value?.value}</>;
   }

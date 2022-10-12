@@ -31,6 +31,8 @@ interface IProps {
   search?: string;
   valueFilter?: any;
   noAppIdFilter?: boolean;
+  limit?: number;
+  page?: number;
 }
 
 export function useGetResponses({
@@ -42,6 +44,8 @@ export function useGetResponses({
   search = null,
   valueFilter,
   noAppIdFilter,
+  limit = defaultQueryVariables.limit,
+  page = defaultQueryVariables.page,
 }: IProps) {
   const setting = useSelector((state: any) => state?.setting);
   const [subscribed, setSubscribed] = useState(false);
@@ -49,6 +53,8 @@ export function useGetResponses({
     ...defaultQueryVariables,
     showSearch: false,
     formField,
+    limit,
+    page,
   });
 
   let filter;

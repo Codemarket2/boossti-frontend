@@ -3,6 +3,11 @@ type FormFieldType = {
   value: 'form';
 };
 
+type FormFieldFieldType = {
+  label: 'Form Field';
+  value: 'formField';
+};
+
 type FormResponseType = {
   label: 'Form Response';
   value: 'response';
@@ -108,6 +113,7 @@ type Webpage = {
 
 type TFieldType =
   | FormFieldType
+  | FormFieldFieldType
   | FormResponseType
   | TextType
   | NumberType
@@ -147,6 +153,7 @@ export const templateWidgetTypes: TFieldType[] = [
 
 export const fieldTypes: TFieldType[] = [
   { label: 'Form', value: 'form' },
+  { label: 'Form Field', value: 'formField' },
   { label: 'Form Response', value: 'response' },
   { label: 'Text', value: 'text' },
   { label: 'Number', value: 'number' },

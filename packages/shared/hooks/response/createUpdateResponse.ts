@@ -45,6 +45,7 @@ export function useCreateUpdateResponse({ onAlert, workFlowFormResponseParentId 
           JSON.parse(JSON.stringify(m), omitTypename),
         ),
         appId: setting?.appResponse?._id,
+        workFlowFormResponseParentId,
       };
       let response;
       if (edit) {
