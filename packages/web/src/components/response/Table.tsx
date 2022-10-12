@@ -25,6 +25,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { IField } from '@frontend/shared/types/form';
 import DisplayFormulaValue from '../form2/field/formula/DisplayFormulaValue';
+import DisplayRichText from '../common/DisplayRichText';
 
 interface IProps {
   search: string;
@@ -152,34 +153,31 @@ export default function ResponseTable({
                   </TableCell>
                   <TableCell>
                     <Tooltip title="Open Response">
-                      <span
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => {
-                          if (onClickResponse) {
-                            onClickResponse(response, form);
-                          } else {
-                            router.push(`/forms/${form.slug}/response/${response.count}`);
-                          }
-                        }}
-                      >
-                        <u>{response?.count}</u>
-                      </span>
+                      {onClickResponse ? (
+                        <span
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => {
+                            if (onClickResponse) {
+                              onClickResponse(response, form);
+                            } else {
+                              router.push(`/forms/${form.slug}/response/${response.count}`);
+                            }
+                          }}
+                        >
+                          <u>{response?.count}</u>
+                        </span>
+                      ) : (
+                        <Link href={`/forms/${form.slug}/response/${response.count}`}>
+                          <a>{response?.count}</a>
+                        </Link>
+                      )}
                     </Tooltip>
-                    {/* <Link
-                      href={
-                        isTemplateInstance
-                          ? `/${isTemplateInstance}/${response.count}`
-                          : `/forms/${form.slug}/response/${response.count}`
-                      }
-                    >
-                      <a>
-                       
-                      </a>
-                    </Link> */}
                   </TableCell>
                   {form?.fields?.map((field: IField, i) => (
                     <TableCell key={i}>
-                      {field?.options?.systemCalculatedAndView ? (
+                      {field.fieldType === 'label' ? (
+                        <DisplayRichText value={field?.options?.staticText} />
+                      ) : field?.options?.systemCalculatedAndView ? (
                         <>
                           <DisplayFormulaValue
                             formula={field?.options?.formula}

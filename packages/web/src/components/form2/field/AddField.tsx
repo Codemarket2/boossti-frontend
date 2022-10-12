@@ -190,10 +190,12 @@ export default function AddField({
         </InputGroup>
       )}
       {formik?.values?.fieldType === 'label' && (
-        <RichTextarea
-          value={formik.values.options?.staticText}
-          onChange={(newValue) => onOptionChange({ staticText: newValue })}
-        />
+        <InputGroup>
+          <RichTextarea
+            value={formik.values.options?.staticText}
+            onChange={(newValue) => onOptionChange({ staticText: newValue })}
+          />
+        </InputGroup>
       )}
       {formik?.values?.fieldType === 'number' && (
         <>
@@ -336,14 +338,16 @@ export default function AddField({
           </div>
         </div>
       )}
-      {!isWidget && !isWidgetForm && !['label', 'template'].includes(formik.values.fieldType) && (
+      {!isWidget && !isWidgetForm && !['template'].includes(formik.values.fieldType) && (
         <>
-          <DefaultValue
-            field={formik.values}
-            onDefaultValueChange={(defaultValue) => {
-              onOptionChange({ defaultValue });
-            }}
-          />
+          {!['label'].includes(formik.values.fieldType) && (
+            <DefaultValue
+              field={formik.values}
+              onDefaultValueChange={(defaultValue) => {
+                onOptionChange({ defaultValue });
+              }}
+            />
+          )}
           {['response', 'text', 'number'].includes(formik.values.fieldType) && (
             <>
               <FormControlLabel
