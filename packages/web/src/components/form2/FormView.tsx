@@ -209,12 +209,8 @@ export default function FormViewWrapper({
     (authenticated && form?.settings?.whoCanViewResponses === 'authUser') ||
     form?.settings?.whoCanViewResponses === 'all';
 
-  if (alreadySubmitted && !form?.settings?.multipleResponses) {
-    return (
-      <>
-        <DisplayResponseById responseId={alreadySubmitted} hideBreadcrumbs />
-      </>
-    );
+  if (alreadySubmitted && form?.settings?.canSubmitOnlyOneResponse) {
+    return <DisplayResponseById responseId={alreadySubmitted} hideBreadcrumbs />;
   }
 
   return (

@@ -142,6 +142,17 @@ export default function FormSetting({ formId, settings, onChange, isWidget, stat
           <FormControlLabel
             control={
               <Checkbox
+                checked={settings?.canSubmitOnlyOneResponse}
+                onChange={({ target }) => onChange({ canSubmitOnlyOneResponse: target.checked })}
+                name="canSubmitOnlyOneResponse"
+                color="primary"
+              />
+            }
+            label="can submit only one response"
+          />
+          {/* <FormControlLabel
+            control={
+              <Checkbox
                 checked={settings?.multipleResponses ?? false}
                 onChange={({ target }) => onChange({ multipleResponses: target.checked })}
                 name="multipleValues"
@@ -149,7 +160,7 @@ export default function FormSetting({ formId, settings, onChange, isWidget, stat
               />
             }
             label="can submit multiple responses"
-          />
+          /> */}
           <br />
           <FormControlLabel
             control={
