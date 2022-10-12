@@ -35,6 +35,7 @@ import DisplayResponseById from './DisplayResponseById';
 import DeleteButton from '../common/DeleteButton';
 import RelationFields from '../form2/RelationFields';
 import RelationFieldView from '../form2/RelationFieldView';
+import DisplayRichText from '../common/DisplayRichText';
 
 interface DisplayResponseProps {
   form: any;
@@ -231,26 +232,32 @@ export function DisplayResponse({
                       </>
                     ) : (
                       <div>
-                        <Typography
-                          fontWeight="bold"
-                          className="d-flex align-items-center"
-                          data-testid="fields-display"
-                        >
-                          <div data-testid="label">{field?.label}</div>
-                          {authorized && (
-                            <Tooltip title="Edit">
-                              <IconButton
-                                edge="end"
-                                onClick={(e) => setState({ ...initialState, fieldId: field?._id })}
-                                size="small"
-                              >
-                                <EditIcon fontSize="small" />
-                              </IconButton>
-                            </Tooltip>
-                          )}
-                        </Typography>
+                        {field.fieldType !== 'label' && (
+                          <Typography
+                            fontWeight="bold"
+                            className="d-flex align-items-center"
+                            data-testid="fields-display"
+                          >
+                            <div data-testid="label">{field?.label}</div>
+                            {authorized && (
+                              <Tooltip title="Edit">
+                                <IconButton
+                                  edge="end"
+                                  onClick={(e) =>
+                                    setState({ ...initialState, fieldId: field?._id })
+                                  }
+                                  size="small"
+                                >
+                                  <EditIcon fontSize="small" />
+                                </IconButton>
+                              </Tooltip>
+                            )}
+                          </Typography>
+                        )}
                         <div data-testid="value">
-                          {field?.options?.systemCalculatedAndView ? (
+                          {field.fieldType === 'label' ? (
+                            <DisplayRichText value={field?.options?.staticText} />
+                          ) : field?.options?.systemCalculatedAndView ? (
                             <DisplayFormulaValue
                               formula={field?.options?.formula}
                               field={field}

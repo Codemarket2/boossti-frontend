@@ -13,7 +13,7 @@ export const validateValue = (validate: boolean, value: any, field: Partial<IFie
   let result = { error: false, errorMessage: '' };
   const { options, fieldType } = field;
 
-  if (!validate || !options?.required) {
+  if (!validate || !options?.required || fieldType === 'label') {
     return result;
   }
 
@@ -128,7 +128,7 @@ function validateEmail(elementValue) {
 export const validateResponse = (fields, values): boolean => {
   const isValid = fields?.every((field) => {
     // IF THE FIELD IS OPTIONAL, THEN SKIP VALIDATION OF IT's VALUE
-    if (!field?.options?.required) return true;
+    if (!field?.options?.required || field.fieldType === 'label') return true;
 
     // FIELD IS REQUIRED, SO DO SOME VALIDATION
     const atleastOneValidValue = values.some((fieldValue) => {

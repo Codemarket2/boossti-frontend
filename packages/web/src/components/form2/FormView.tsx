@@ -713,29 +713,31 @@ export function FormView({
             >
               <div style={field?.options?.style || {}}>
                 <InputGroup key={field._id}>
-                  <Typography data-testid="text-danger">
-                    <span className={field?.options?.required ? 'text-danger' : ''}>
-                      {field?.label}
-                      {field?.options?.required && '*'}
-                    </span>
-                    <DisplayConstraintError
-                      fields={fields}
-                      fieldId={field._id}
-                      constraintErrors={constraintErrors}
-                      constraintsLoading={constraintsLoading}
-                    />
-                    {field?.options?.unique && (
-                      <FieldUnique existingResponseId={unique} uniqueLoading={uniqueLoading} />
-                    )}
-                    {field?.options?.multipleValues &&
-                      field?.options?.uniqueBetweenMultipleValues && (
-                        <UniqueMultipleValue
-                          loading={uniqueBetweenMultipleValuesLoading}
-                          error={uniqueBetweenMultipleValuesError}
-                          field={field}
-                        />
+                  {!['label'].includes(field.fieldType) && (
+                    <Typography data-testid="text-danger">
+                      <span className={field?.options?.required ? 'text-danger' : ''}>
+                        {field?.label}
+                        {field?.options?.required && '*'}
+                      </span>
+                      <DisplayConstraintError
+                        fields={fields}
+                        fieldId={field._id}
+                        constraintErrors={constraintErrors}
+                        constraintsLoading={constraintsLoading}
+                      />
+                      {field?.options?.unique && (
+                        <FieldUnique existingResponseId={unique} uniqueLoading={uniqueLoading} />
                       )}
-                  </Typography>
+                      {field?.options?.multipleValues &&
+                        field?.options?.uniqueBetweenMultipleValues && (
+                          <UniqueMultipleValue
+                            loading={uniqueBetweenMultipleValuesLoading}
+                            error={uniqueBetweenMultipleValuesError}
+                            field={field}
+                          />
+                        )}
+                    </Typography>
+                  )}
                   {field?.options?.systemCalculatedAndView && (
                     <div className="mb-2">
                       <DisplayFormula formula={field?.options?.formula} fields={fields} />
