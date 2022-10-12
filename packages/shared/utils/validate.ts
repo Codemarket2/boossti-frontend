@@ -75,6 +75,12 @@ export const validateValue = (validate: boolean, value: any, field: Partial<IFie
       }
       break;
     }
+    case 'formField': {
+      if (!value?.form?._id || !value?.options?.subField) {
+        result = { error: true, errorMessage: 'Required' };
+      }
+      break;
+    }
     case 'response': {
       if (!value?.response?._id) {
         result = { error: true, errorMessage: 'Required' };

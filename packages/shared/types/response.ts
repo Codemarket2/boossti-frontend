@@ -19,7 +19,7 @@ export interface IValue {
   template: string;
   page: string;
   response: string | IResponse | any;
-  form: string | IForm;
+  form: IForm | string | any;
   options: any;
   media: IMedia[];
 }

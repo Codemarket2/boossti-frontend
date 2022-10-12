@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Auth } from 'aws-amplify';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 
@@ -23,6 +22,7 @@ import {
   useConstraint,
   useCreateUpdateResponse,
   uniqueBetweenMultipleValues,
+  useCheckIfAlreadySubmitted,
 } from '@frontend/shared/hooks/response';
 import { validateResponse, validateValue } from '@frontend/shared/utils/validate';
 import { IValue } from '@frontend/shared/types';
@@ -43,7 +43,6 @@ import DisplayValue from './DisplayValue';
 import Leaderboard from '../response/Leaderboard';
 import SelectResponse from '../response/SelectResponse';
 import { replaceVariables } from './variables';
-import projectConfig from '../../../../shared/index';
 import { evaluateFormula } from './field/formula/DisplayFormulaValue';
 import DisplayFormula, { getFormula } from './field/formula/DisplayFormula';
 import { getConditionsFormAndResponse } from './field/field-condition/DisplayFieldCondition';
@@ -52,6 +51,7 @@ import ResponseDrawer from '../response/ResponseDrawer';
 import DisplayConstraintError from './form-conditions/DisplayConstraintError';
 import FieldUnique from './field/FieldUnique';
 import UniqueMultipleValue from './field/UniqueMultipleValue';
+import DisplayResponseById from '../response/DisplayResponseById';
 
 interface FormViewWrapperProps {
   form: IForm;
@@ -119,6 +119,10 @@ export default function FormViewWrapper({
     appId,
     workFlowFormResponseParentId,
   });
+  const alreadySubmitted = useCheckIfAlreadySubmitted({
+    formId: form?._id,
+    workFlowFormResponseParentId,
+  });
 
   const showOnlyMyResponses = !(isAdmin || isPageOwner) && form?.settings?.onlyMyResponses;
 
@@ -132,71 +136,12 @@ export default function FormViewWrapper({
 
   const [state, setState] = useState(initialState);
   const [selectState, setSelectState] = useState(initialSelectState);
-  // const authenticated = useSelector(({ auth }: any) => auth.authenticated);
-
-  const [checkNewUser, setCheckNewUser] = useState(true);
-  const verifyIfUserExist = async (payload) => {
-    const { password, email, name } = payload;
-    try {
-      const response = await Auth.signUp({
-        username: email,
-        password,
-        attributes: {
-          email,
-          name,
-          picture: projectConfig.defaultProfile,
-        },
-      });
-      if (response) {
-        setCheckNewUser(true);
-      }
-    } catch (er) {
-      setCheckNewUser(false);
-    }
-  };
 
   const handleSubmit = async (values) => {
-    let nPassword = '';
-    if (
-      !authenticated &&
-      form?.settings?.actions?.length > 0 &&
-      form?.settings?.actions?.find((a) => a.actionType === 'generateNewUser')
-    ) {
-      let emailId = '';
-      let nameId = '';
-      const action = form.settings?.actions?.filter((a) => a.actionType === 'generateNewUser')[0];
-      emailId = action.emailFieldId;
-      nameId = action.nameFieldId;
-      let email = '';
-      let name = '';
-      values.forEach((element) => {
-        if (element.field === emailId) {
-          email = element.value;
-        } else if (element.field === nameId) {
-          name = element.value;
-        }
-      });
-      const payload = {
-        email,
-        name,
-        password: Math.random().toString(36).slice(2),
-      };
-      const { password } = payload;
-      nPassword = password;
-      await verifyIfUserExist(payload);
-    }
     let payload: any = { formId: form?._id, values };
     let options = {};
     if (form?.settings?.customResponseLayout && form?.settings?.customSectionId) {
       options = { ...options, customSectionId: form?.settings?.customSectionId };
-    }
-    if (form?.settings?.actions?.length > 0) {
-      options = {
-        ...options,
-        actions: form?.settings?.actions,
-        password: nPassword,
-        generateNewUserEmail: checkNewUser,
-      };
     }
 
     if (
@@ -263,6 +208,10 @@ export default function FormViewWrapper({
     (authenticated && isPageOwner && form?.settings?.whoCanViewResponses === 'onlyPageOwner') ||
     (authenticated && form?.settings?.whoCanViewResponses === 'authUser') ||
     form?.settings?.whoCanViewResponses === 'all';
+
+  if (alreadySubmitted && form?.settings?.canSubmitOnlyOneResponse) {
+    return <DisplayResponseById responseId={alreadySubmitted} hideBreadcrumbs />;
+  }
 
   return (
     <div>

@@ -37,7 +37,7 @@ import Board from './board/Board';
 import { defaultBoard } from './board/defaultBoard';
 import Diagram from '../syncfusion-diagram/Diagram';
 import { defaultDiagram } from '../syncfusion-diagram/defaultDiagram';
-import FieldConditionForm from './field/field-condition/FieldConditionForm';
+import FieldConditionForm, { SelectSubField } from './field/field-condition/FieldConditionForm';
 import 'react-phone-input-2/lib/style.css';
 import Webpage from '../grapesjs/grapesOverlay';
 import DisplayValue from './DisplayValue';
@@ -534,6 +534,32 @@ export default function Field({
               helperText={validation.errorMessage}
             />
           </div>
+        </>
+      );
+    }
+    case 'formField': {
+      return (
+        <>
+          <SelectForm
+            placeholder={`${field?.label} form`}
+            label={null}
+            value={value?.form}
+            onChange={(newValue) => {
+              const payload: any = { form: newValue };
+              if (value?.form?._id !== newValue?._id) {
+                payload.options = { ...value?.options, subField: null };
+              }
+              onChange(payload);
+            }}
+            error={validation.error}
+            helperText={validation.errorMessage}
+          />
+          {value?.form && (
+            <SelectSubField
+              subField={{ ...value?.options?.subField, formId: value?.form?._id }}
+              onChange={(subField) => onChange({ options: { ...value?.options, subField } })}
+            />
+          )}
         </>
       );
     }
