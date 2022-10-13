@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useGetResponses } from './getResponse';
 
 export function useCheckIfAlreadySubmitted({ formId, workFlowFormResponseParentId }) {
-  const { data } = useGetResponses({
+  const { data, refetch } = useGetResponses({
     formId,
     workFlowFormResponseParentId,
     onlyMy: true,
@@ -12,10 +12,14 @@ export function useCheckIfAlreadySubmitted({ formId, workFlowFormResponseParentI
   const [alreadySubmitted, setAlreadySubmitted] = useState(null);
 
   useEffect(() => {
-    if (data?.getResponses && data?.getResponses?.data?.length > 0) {
-      setAlreadySubmitted(data?.getResponses?.data?.[0]?._id);
+    if (data?.getResponses) {
+      if (data?.getResponses?.data?.length > 0) {
+        setAlreadySubmitted(data?.getResponses?.data?.[0]?._id);
+      } else {
+        setAlreadySubmitted(null);
+      }
     }
   }, [data?.getResponses]);
 
-  return alreadySubmitted;
+  return { alreadySubmitted, refetch };
 }
