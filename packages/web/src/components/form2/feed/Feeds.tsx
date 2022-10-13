@@ -1,8 +1,10 @@
 import { useGetFormBySlug } from '@frontend/shared/hooks/form';
-import { Grid, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import BreadcrumbsComponent from '../../common/Breadcrumbs';
 import ErrorLoading from '../../common/ErrorLoading';
 import NotFound from '../../common/NotFound';
 import Form from '../Form';
@@ -56,5 +58,16 @@ const DisplayForm = ({ formSlug }: { formSlug: string }) => {
   if (admin) {
     return <Form form={data?.getFormBySlug} />;
   }
-  return <FormView form={data?.getFormBySlug} />;
+  if (!data?.getFormBySlug?.settings?.published) {
+    return <NotFound />;
+  }
+  return (
+    <div className="mt-3">
+      <BreadcrumbsComponent>
+        <Typography>Forms</Typography>
+        <Typography>{data?.getFormBySlug?.name}</Typography>
+      </BreadcrumbsComponent>
+      <FormView form={data?.getFormBySlug} />
+    </div>
+  );
 };

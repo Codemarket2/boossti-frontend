@@ -6,6 +6,7 @@ export interface IResponse extends ISchema {
   appId: string;
   count: number;
   values: IValue[];
+  options?: any;
 }
 
 export interface IValue {

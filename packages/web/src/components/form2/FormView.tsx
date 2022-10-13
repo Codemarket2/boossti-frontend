@@ -119,7 +119,7 @@ export default function FormViewWrapper({
     appId,
     workFlowFormResponseParentId,
   });
-  const alreadySubmitted = useCheckIfAlreadySubmitted({
+  const { alreadySubmitted } = useCheckIfAlreadySubmitted({
     formId: form?._id,
     workFlowFormResponseParentId,
   });
@@ -210,7 +210,9 @@ export default function FormViewWrapper({
     form?.settings?.whoCanViewResponses === 'all';
 
   if (alreadySubmitted && form?.settings?.canSubmitOnlyOneResponse) {
-    return <DisplayResponseById responseId={alreadySubmitted} hideBreadcrumbs />;
+    return (
+      <DisplayResponseById responseId={alreadySubmitted} hideBreadcrumbs deleteCallBack={refetch} />
+    );
   }
 
   return (
@@ -868,7 +870,7 @@ export function FormView({
             </Grid>
           ))}
         {fieldWiseView && fields?.length > 1 && (
-          <div className="w-100 d-flex justify-content-between">
+          <div className="w-100 d-flex justify-content-between my-2">
             <div data-testid="backButton">
               {state.page !== 0 && (
                 <Button
@@ -888,23 +890,23 @@ export function FormView({
                   variant="contained"
                   color="primary"
                   size="small"
+                  disabled={
+                    uniqueBetweenMultipleValuesError?.length > 0 ||
+                    uniqueBetweenMultipleValuesLoading ||
+                    unique ||
+                    uniqueLoading
+                  }
                   endIcon={<ArrowForwardIosRounded fontSize="small" />}
                   onClick={() => {
                     setSubmitState({ ...submitState, loading: true });
                     let validate = false;
-                    if (
-                      fields[state.page]?.options?.required &&
-                      values.filter((value) => value.field === fields[state.page]._id).length === 0
-                    )
-                      validate = true;
-                    else
-                      values
-                        .filter((value) => value.field === fields[state.page]._id)
-                        ?.forEach((tempValue) => {
-                          if (validateValue(true, tempValue, { ...fields[state.page] }).error)
-                            validate = true;
-                        });
-
+                    values
+                      .filter((value) => value.field === fields[state.page]._id)
+                      ?.forEach((tempValue) => {
+                        if (validateValue(true, tempValue, { ...fields[state.page] }).error) {
+                          validate = true;
+                        }
+                      });
                     setSubmitState({ ...submitState, validate, loading: false });
                     if (!validate) setState((oldState) => ({ ...oldState, page: state.page + 1 }));
                   }}

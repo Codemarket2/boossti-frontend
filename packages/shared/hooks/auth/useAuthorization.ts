@@ -8,10 +8,11 @@ export const useAuthorization = (_id: string[], allowAdmin = false) => {
   }
   let allow = false;
   if (attributes['custom:_id']) {
-    _id?.forEach((i) => {
+    allow = _id?.some((i) => {
       if (i) {
-        allow = i === attributes['custom:_id'];
+        return i === attributes['custom:_id'];
       }
+      return false;
     });
   }
   return allow;
