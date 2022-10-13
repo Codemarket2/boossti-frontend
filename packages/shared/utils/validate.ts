@@ -134,17 +134,20 @@ function validateEmail(elementValue) {
 export const validateResponse = (fields, values): boolean => {
   const isValid = fields?.every((field) => {
     // IF THE FIELD IS OPTIONAL, THEN SKIP VALIDATION OF IT's VALUE
+    // if (field.fieldType === 'label') {
+    //   debugger;
+    // }
     if (!field?.options?.required || field.fieldType === 'label') return true;
 
     // FIELD IS REQUIRED, SO DO SOME VALIDATION
-    const atleastOneValidValue = values.some((fieldValue) => {
+    const atLeastOneValidValue = values.some((fieldValue) => {
       // CHECKS IF THE FIELD VALUE BELONGS TO THE field, IF IT DOESN'T THEN SKIP
       if (fieldValue.field !== field._id) return false;
 
       return !validateValue(true, fieldValue, field).error;
     });
 
-    return atleastOneValidValue;
+    return atLeastOneValidValue;
   });
 
   return !isValid;
