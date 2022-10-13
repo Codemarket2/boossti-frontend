@@ -26,6 +26,7 @@ import { useRouter } from 'next/router';
 import { IField } from '@frontend/shared/types/form';
 import DisplayFormulaValue from '../form2/field/formula/DisplayFormulaValue';
 import DisplayRichText from '../common/DisplayRichText';
+import WorkflowButtons from './workflow/WorkflowButtons';
 
 interface IProps {
   search: string;
@@ -198,6 +199,9 @@ export default function ResponseTable({
                       )}
                     </TableCell>
                   ))}
+                  <TableCell>
+                    <WorkflowButtons response={response} />
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
