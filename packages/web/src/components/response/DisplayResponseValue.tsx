@@ -47,10 +47,14 @@ interface DisplayResponseValue {
 }
 
 export function DisplayResponseValue({ field, responseId, onClickResponse }: DisplayResponseValue) {
-  const { data, error } = useGetResponse(responseId);
+  const { data, error, loading } = useGetResponse(responseId);
 
   if (error) {
     return <ErrorLoading error={error} />;
+  }
+
+  if (loading) {
+    return <>loading...</>;
   }
 
   return (

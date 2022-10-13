@@ -15,8 +15,6 @@ export function useCheckIfAlreadySubmitted({ formId, workFlowFormResponseParentI
     if (data?.getResponses) {
       if (data?.getResponses?.data?.length > 0) {
         setAlreadySubmitted(data?.getResponses?.data?.[0]?._id);
-      } else {
-        setAlreadySubmitted(null);
       }
     }
   }, [data?.getResponses]);
