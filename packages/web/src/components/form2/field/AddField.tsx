@@ -251,13 +251,11 @@ export default function AddField({
           )}
         </>
       )}
-      {['response'].includes(formik.values.fieldType) && (
-        <FieldCondition
-          formFields={parentFields}
-          field={formik.values}
-          onConditionsChange={(newConditions) => onOptionChange({ conditions: newConditions })}
-        />
-      )}
+      <FieldCondition
+        formFields={parentFields}
+        field={formik.values}
+        onConditionsChange={(newConditions) => onOptionChange({ conditions: newConditions })}
+      />
       {['response'].includes(formik.values.fieldType) && (
         <div>
           <div className="mt-n2">
