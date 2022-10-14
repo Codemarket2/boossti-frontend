@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { UPDATE_FORM } from '../../graphql/mutation/form';
@@ -31,10 +32,21 @@ const updateCache = (slug, newFormData) => {
 
 export function useUpdateForm({ onAlert, form }: IProps) {
   const [saveToServer, setSaveToServer] = useState(false);
+  const [settingsOverrideKey, setSettingsOverrideKey] = useState('');
   const [updateFormMutation, { loading: updateLoading }] = useMutation<
     { updateForm: IForm },
     IForm
   >(UPDATE_FORM);
+  const settingGlobalState = useSelector((state: any) => state?.setting);
+  const settings = form?.settings?.override?.[settingsOverrideKey] || form?.settings;
+
+  useEffect(() => {
+    let newSettingOverrideKey = '';
+    if (settingGlobalState?.appResponse?._id) {
+      newSettingOverrideKey += `app_${settingGlobalState?.appResponse?._id}`;
+    }
+    setSettingsOverrideKey(newSettingOverrideKey);
+  }, [settingGlobalState?.appResponse?._id]);
 
   useEffect(() => {
     let timeOutId;
@@ -50,6 +62,22 @@ export function useUpdateForm({ onAlert, form }: IProps) {
     setSaveToServer(true);
   };
 
+  const handleOnSettingsChange = (newSettings) => {
+    let tempSettings = { ...form?.settings };
+    if (settingsOverrideKey) {
+      tempSettings = {
+        ...tempSettings,
+        override: {
+          ...tempSettings?.override,
+          [settingsOverrideKey]: { ...settings, ...newSettings },
+        },
+      };
+    } else {
+      tempSettings = { ...settings, ...newSettings };
+    }
+    handleOnChange({ ...form, settings: tempSettings });
+  };
+
   const handleUpdateForm = async (newForm: Partial<IForm> = {}) => {
     try {
       const payload = stringifyForm({ ...form, ...newForm }, true);
@@ -58,12 +86,11 @@ export function useUpdateForm({ onAlert, form }: IProps) {
       });
       return res?.data?.updateForm;
     } catch (err) {
-      // console.log(err);
       onAlert('Error while saving form name', err.message);
     }
   };
 
-  return { handleOnChange, updateLoading, handleUpdateForm };
+  return { settings, handleOnSettingsChange, handleOnChange, updateLoading, handleUpdateForm };
 }
 
 export const stringifyForm = (form: any, removetemplate = false) => {
