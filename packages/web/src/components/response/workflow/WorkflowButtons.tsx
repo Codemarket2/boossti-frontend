@@ -20,6 +20,7 @@ export default function WorkflowButtons({ response }: IWorkflowButton) {
       {section?.fields?.map((workflow) => (
         <div>
           <DisplayForm
+            workFlowFormResponseParentId={response?._id}
             _id={workflow?.form?._id}
             settings={{ formView: 'button', widgetType: 'form' }}
           />
