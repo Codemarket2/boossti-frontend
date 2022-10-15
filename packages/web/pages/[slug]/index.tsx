@@ -1,53 +1,76 @@
-import Link from 'next/link';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
-import Typography from '@mui/material/Typography';
-import { Home } from '@mui/icons-material';
-import { useRouter } from 'next/router';
 import React from 'react';
+import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
-import AppLayout from '../../src/components/app/AppLayout';
-import { DisplayForm } from '../../src/components/form2/DisplayForm';
-import ResponseScreen from '../../src/screens/ResponseScreen';
-import NotFound from '../../src/components/common/NotFound';
+import { useGetResponses } from '@frontend/shared/hooks/response/getResponse';
+import { useGetFormBySlug } from '@frontend/shared/hooks/form/getForm';
+import { IAttributes as ISetting } from '@frontend/shared/redux/actions/setting';
+import parse from 'html-react-parser';
+import CircularProgress from '@mui/material/CircularProgress';
 
-export default function index() {
+const useFieldId = () => {
+  const { data: form, error: formBySlugError, loading: formBySlugLoading } = useGetFormBySlug(
+    'pages',
+  );
+  // console.log(form);
+  const pageId = form?.getFormBySlug?._id;
+  const htmlField = form?.getFormBySlug?.fields?.filter((item) => item?.label === 'HTML Content');
+  const htmlFieldId = htmlField?.[0]?._id;
+  const slug1 = form?.getFormBySlug?.fields?.filter((item) => item?.label === 'slug');
+  const slugId = slug1?.[0]?._id;
+  return {
+    pageId,
+    slugId,
+    htmlFieldId,
+  };
+};
+const useHtmlCode = (slugId: string, htmlFieldId: string, slug: string | string[], pageId) => {
+  // if (slugId && slug && pageId) {
+  const { data, error, loading } = useGetResponses({
+    formId: pageId, // || '6324e600fe046781e9d33d6f',
+    valueFilter: {
+      'values.field': slugId,
+      'values.value': slug,
+    },
+  });
+
+  // console.log(slugId);
+  // console.log(data);
+  // console.log(`error${error}`);
+  let html;
+  if (data) {
+    const code = data?.getResponses?.data[0]?.values?.filter((item) => item?.field === htmlFieldId);
+    // console.log(htmlCode);
+    html = code?.[0]?.value;
+    // console.log(String(html));
+    return String(html);
+  }
+  // }
+};
+const Slug = () => {
   const router = useRouter();
-  const { slug, responseCount } = router.query;
-  const setting = useSelector((state: any) => state?.setting);
-  const appForm = setting?.appMenuItems?.find((item) => item?.formSlug === slug);
+  const { slug } = router.query;
+  const setting = useSelector((state: { setting: ISetting }) => state.setting);
+  const isApp = setting?.isApp;
+  // search for appid in slug
+  // const pageId = PageId(setting);
+  const fieldID = useFieldId();
+  const html = useHtmlCode(fieldID.slugId, fieldID.htmlFieldId, slug, fieldID.pageId);
+
+  // if (!isApp) {
+  //   return <>TODO 404 Page</>;
+  // }
 
   return (
-    <AppLayout>
-      {!appForm?.formSlug ? (
-        <NotFound />
+    <div>
+      {String(html) !== 'undefined' ? (
+        parse(String(html))
       ) : (
-        <>
-          <Breadcrumbs className="pt-2" aria-label="breadcrumb" separator=">">
-            <Home />
-            {appForm?.label && (
-              <Typography color="text.primary">
-                <Link href={`/${slug}`}>{appForm?.label}</Link>
-              </Typography>
-            )}
-            {responseCount && <Typography color="text.primary">{responseCount}</Typography>}
-          </Breadcrumbs>
-          {responseCount ? (
-            <ResponseScreen
-              hideBreadcrumbs
-              slug={slug?.toString()}
-              count={responseCount?.toString()}
-            />
-          ) : (
-            <DisplayForm
-              slug={slug?.toString()}
-              settings={{ formView: 'button' }}
-              onClickResponse={(response, form) => {
-                router.push(`${slug}?responseCount=${response?.count}`);
-              }}
-            />
-          )}
-        </>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <CircularProgress />
+        </div>
       )}
-    </AppLayout>
+    </div>
   );
-}
+};
+
+export default Slug;

@@ -8,36 +8,38 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 
-interface AppMenu {
-  isInstance?: boolean;
-  isAdmin?: boolean;
-}
-
-export default function AppMenu({ isInstance, isAdmin }: AppMenu) {
+export default function AppMenu() {
   const setting = useSelector((state: any) => state.setting);
   const router = useRouter();
-  const { instanceCount } = router.query;
   return (
     <div>
       <Toolbar variant="dense" />
       <Divider />
       <List dense>
         <ListItem disablePadding>
-          <Link href="/admin">
-            <ListItemButton selected={router?.query?.slug === 'apps'}>
+          <Link href="/dashboard">
+            <ListItemButton selected={!router?.query?.slug}>
               <ListItemText primary="App Settings" />
             </ListItemButton>
           </Link>
         </ListItem>
-        {setting?.appMenuItems?.map((item, i) => (
-          <ListItem key={i} disablePadding>
-            <Link href={`${isInstance ? `/instance/${instanceCount}` : ''}/${item?.formSlug}`}>
-              <ListItemButton selected={item?.formSlug === router?.query?.slug}>
-                <ListItemText primary={item?.label} />
-              </ListItemButton>
-            </Link>
+        {setting?.appMenuItems?.length > 0 ? (
+          setting?.appMenuItems?.map((item, i) => (
+            <ListItem key={i} disablePadding>
+              <Link href={`/dashboard/${item?.formSlug}`}>
+                <ListItemButton selected={item?.formSlug === router?.query?.slug}>
+                  <ListItemText primary={item?.label} />
+                </ListItemButton>
+              </Link>
+            </ListItem>
+          ))
+        ) : (
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemText primary="Loading Menu..." />
+            </ListItemButton>
           </ListItem>
-        ))}
+        )}
       </List>
     </div>
   );

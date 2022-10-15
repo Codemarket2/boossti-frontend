@@ -53,8 +53,11 @@ export const useGetApp = () => {
       const appName = appDetailsResponse?.values?.find(
         (value) => value?.field === appNameField?._id,
       )?.value;
-      const appMenuItems = await getMenu({ appForm, appResponse });
-      // const isInstalled = await checkIfAppIsInstalled();
+      // debugger;
+      let appMenuItems = [];
+      if (authenticated) {
+        appMenuItems = await getMenu({ appForm, appResponse });
+      }
       dispatch(
         updateSettingAction({
           isApp: true,
@@ -105,7 +108,10 @@ export const useGetApp = () => {
       const form = menuResponse?.values?.find((value) => value?.field === menuFormField?._id);
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      items.push({ label: label?.value, formSlug: slugify(form?.form?.name, { lower: true }) });
+      items.push({
+        label: label?.value,
+        formSlug: slugify(form?.form?.name || '', { lower: true }),
+      });
     });
     return items;
   };

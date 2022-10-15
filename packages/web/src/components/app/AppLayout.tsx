@@ -6,14 +6,9 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import LoadingButton from '@mui/lab/LoadingButton';
-import { useInstallApp } from '@frontend/shared/hooks/app/installApp';
 import { useSelector } from 'react-redux';
 import AppMenu from './AppMenu';
-import ErrorLoading from '../common/ErrorLoading';
 import AuthRequired from '../common/AuthRequired';
-import NotFound from '../common/NotFound';
-import { onAlert } from '../../utils/alert';
 import AppWrapper from './AppWrapper';
 
 const drawerWidth = 200;
@@ -25,31 +20,21 @@ interface Props {
    */
   window?: () => Window;
   children: ReactNode;
-  isInstance?: boolean;
-  isAdmin?: boolean;
+  // isInstance?: boolean;
+  // isAdmin?: boolean;
 }
 
-export default function AppLayoutWrapper({
-  children,
-  isInstance,
-  isAdmin,
-}: {
-  children: ReactNode;
-  isInstance?: boolean;
-  isAdmin?: boolean;
-}) {
+export default function AppLayoutWrapper({ children }: { children: ReactNode }) {
   return (
     <AuthRequired>
-      <AppLayout isInstance={isInstance} isAdmin={isAdmin}>
-        {children}
-      </AppLayout>
+      <AppLayout>{children}</AppLayout>
     </AuthRequired>
   );
 }
 
 function AppLayout(props: Props) {
   const setting = useSelector((state: any) => state.setting);
-  const { window, children, isInstance, isAdmin } = props;
+  const { window, children } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = () => {
@@ -88,7 +73,6 @@ function AppLayout(props: Props) {
           sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
           aria-label="mailbox folders"
         >
-          {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
           <Drawer
             container={container}
             variant="temporary"
@@ -102,7 +86,7 @@ function AppLayout(props: Props) {
               '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
             }}
           >
-            <AppMenu isAdmin={isAdmin} isInstance={isInstance} />
+            <AppMenu />
           </Drawer>
           <Drawer
             variant="permanent"
@@ -112,7 +96,7 @@ function AppLayout(props: Props) {
             }}
             open
           >
-            <AppMenu isAdmin={isAdmin} isInstance={isInstance} />
+            <AppMenu />
           </Drawer>
         </Box>
         <Box

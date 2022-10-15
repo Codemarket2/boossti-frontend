@@ -186,7 +186,7 @@ export function useGetResponse(_id: string): any {
   return { data, error, loading };
 }
 
-export function useGetResponseByCount(formId: string, count: number): any {
+export function useGetResponseByCount(formId: string, count: number) {
   const setting = useSelector((state: any) => state?.setting);
   const { data, error, loading, refetch } = useQuery<
     { getResponseByCount: IResponse },

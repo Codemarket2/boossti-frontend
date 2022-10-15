@@ -135,6 +135,7 @@ export const DisplayForm = (props: IDisplayFormProps) => {
     ...defaultValueObject,
     ...value,
   }));
+
   if (props._id) {
     return (
       <div data-testid="FormPageById">
