@@ -23,15 +23,23 @@ export default function AppMenu() {
             </ListItemButton>
           </Link>
         </ListItem>
-        {setting?.appMenuItems?.map((item, i) => (
-          <ListItem key={i} disablePadding>
-            <Link href={`/dashboard/${item?.formSlug}`}>
-              <ListItemButton selected={item?.formSlug === router?.query?.slug}>
-                <ListItemText primary={item?.label} />
-              </ListItemButton>
-            </Link>
+        {setting?.appMenuItems?.length > 0 ? (
+          setting?.appMenuItems?.map((item, i) => (
+            <ListItem key={i} disablePadding>
+              <Link href={`/dashboard/${item?.formSlug}`}>
+                <ListItemButton selected={item?.formSlug === router?.query?.slug}>
+                  <ListItemText primary={item?.label} />
+                </ListItemButton>
+              </Link>
+            </ListItem>
+          ))
+        ) : (
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemText primary="Loading Menu..." />
+            </ListItemButton>
           </ListItem>
-        ))}
+        )}
       </List>
     </div>
   );

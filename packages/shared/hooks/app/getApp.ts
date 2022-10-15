@@ -53,8 +53,11 @@ export const useGetApp = () => {
       const appName = appDetailsResponse?.values?.find(
         (value) => value?.field === appNameField?._id,
       )?.value;
-      const appMenuItems = await getMenu({ appForm, appResponse });
-      // const isInstalled = await checkIfAppIsInstalled();
+      // debugger;
+      let appMenuItems = [];
+      if (authenticated) {
+        appMenuItems = await getMenu({ appForm, appResponse });
+      }
       dispatch(
         updateSettingAction({
           isApp: true,

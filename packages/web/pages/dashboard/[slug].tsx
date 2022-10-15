@@ -11,6 +11,7 @@ import { DisplayForm } from '../../src/components/form2/DisplayForm';
 import ResponseScreen from '../../src/screens/ResponseScreen';
 import NotFound from '../../src/components/common/NotFound';
 import { DisplayFormDashboardBySlug } from '../../src/components/form2/FormDashboard';
+import ErrorLoading from '../../src/components/common/ErrorLoading';
 
 export default function index() {
   const router = useRouter();
@@ -22,7 +23,11 @@ export default function index() {
   return (
     <AppLayout>
       {!appForm?.formSlug ? (
-        <NotFound />
+        setting?.menuItems?.length > 0 ? (
+          <NotFound />
+        ) : (
+          <ErrorLoading />
+        )
       ) : (
         <>
           <Breadcrumbs className="pt-2" aria-label="breadcrumb" separator=">">
@@ -37,7 +42,14 @@ export default function index() {
           {id ? (
             <ResponseScreen hideBreadcrumbs slug={slug?.toString()} count={id?.toString()} />
           ) : authorized ? (
-            <DisplayFormDashboardBySlug slug={slug?.toString()} />
+            <DisplayFormDashboardBySlug
+              slug={slug?.toString()}
+              responseListProps={{
+                onClickResponse: (response) => {
+                  router.push(`${slug}?id=${response?.count}`);
+                },
+              }}
+            />
           ) : (
             <DisplayForm
               slug={slug?.toString()}

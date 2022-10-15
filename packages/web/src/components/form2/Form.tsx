@@ -28,7 +28,7 @@ import Backdrop from '../common/Backdrop';
 import FormFields from './FormFields';
 import FormView from './FormView';
 import FormSetting from './FormSetting';
-import ResponseList from '../response/ResponseList';
+import ResponseList, { IResponseList } from '../response/ResponseList';
 import Actions from './Actions';
 import { onAlert } from '../../utils/alert';
 import InlineInput from '../common/InlineInput';
@@ -71,9 +71,15 @@ interface IFormProps {
   form: IForm;
   drawerMode?: boolean;
   onSlugChange?: (newSlug: string) => void;
+  responseListProps?: Partial<IResponseList>;
 }
 
-export default function Form({ form, drawerMode = false, onSlugChange }: IFormProps): any {
+export default function Form({
+  form,
+  drawerMode = false,
+  onSlugChange,
+  responseListProps,
+}: IFormProps): any {
   const {
     handleOnChange,
     handleOnSettingsChange,
@@ -273,6 +279,7 @@ export default function Form({ form, drawerMode = false, onSlugChange }: IFormPr
               {options.currentTab === 'Preview' && (
                 <Paper variant="outlined" className="px-2">
                   <FormView
+                    {...responseListProps}
                     form={{ ...form, settings: { ...form.settings, widgetType: 'form' } }}
                   />
                 </Paper>
@@ -298,7 +305,7 @@ export default function Form({ form, drawerMode = false, onSlugChange }: IFormPr
                   <Paper variant="outlined">
                     <BulkUploadAction form={form} />
                   </Paper>
-                  <ResponseList form={form} />
+                  <ResponseList {...responseListProps} form={form} />
                 </>
               )}
               {options.currentTab === 'Design' && (
