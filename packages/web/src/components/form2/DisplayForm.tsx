@@ -8,7 +8,7 @@ import FormView from './FormView';
 
 export type DisplayFormSettings = Parameters<typeof DisplayForm>[0]['settings'];
 interface ISettings {
-  widgetType?: 'both' | 'form' | 'response';
+  widgetType?: 'both' | 'form' | 'responses';
   formView?: 'fullForm' | 'oneField' | 'leaderboard' | 'button' | 'selectItem';
   whoCanSubmit?: 'all' | 'authUser';
   responsesView?: 'button' | 'table' | 'table2' | 'vertical';
@@ -136,6 +136,7 @@ export const DisplayForm = (props: IDisplayFormProps) => {
     ...defaultValueObject,
     ...value,
   }));
+
   if (props._id) {
     return (
       <div data-testid="FormPageById">

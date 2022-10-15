@@ -3,6 +3,7 @@ import type { NextPage, GetServerSideProps } from 'next';
 
 // WEB
 import { DisplayForm, DisplayFormSettings } from '../../../src/components/form2/DisplayForm';
+import { URLQueryToObj } from '../../../src/components/embed/embedLibs';
 
 interface EmbedFormProps {
   formSlug: string;
@@ -18,16 +19,14 @@ const EmbedForm: NextPage<EmbedFormProps> = ({ formSlug, queryFormSettings }: Em
 export default EmbedForm;
 
 export const getServerSideProps: GetServerSideProps<EmbedFormProps> = async (ctx) => {
-  const { formSlug, settings: settingsSTRING } = ctx.query;
+  const { formSlug } = ctx.query;
 
   let embeddedFormSettings = {};
   try {
-    embeddedFormSettings = JSON.parse(atob(settingsSTRING as string));
+    embeddedFormSettings = URLQueryToObj(ctx.query);
   } catch (e) {
     // eslint-disable-next-line no-console
-    console.log(
-      `Failed to parse (JSON) Embedded Form Settings | Faulty JSON String = ${settingsSTRING}`,
-    );
+    console.log(`Failed to parse Embedded Form Settings`);
   }
 
   if (!formSlug || Array.isArray(formSlug))

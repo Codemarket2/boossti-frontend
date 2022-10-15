@@ -30,6 +30,7 @@ export const EmbedFormTab = ({ form, onChange, oldSettings }: EditEmbeddedSettin
     iframeTag: getEmbedLink({
       FormSettings: formSettings,
       formSlug: form.slug,
+      filterSettings: false,
     }),
     showFormPreview: false,
     showFormSettings: false,
@@ -44,6 +45,7 @@ export const EmbedFormTab = ({ form, onChange, oldSettings }: EditEmbeddedSettin
       iframeTag: getEmbedLink({
         FormSettings: formSettings,
         formSlug: form.slug,
+        filterSettings: false,
       }),
     });
   }, [formSettings]);

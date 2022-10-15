@@ -1,5 +1,7 @@
 import Head from 'next/head';
 import projectConfig from '@frontend/shared';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 interface IProps {
   title?: string;
@@ -9,25 +11,39 @@ interface IProps {
 }
 
 export default function HeadComponent({ title, description, image, url }: IProps) {
-  const sTitle = title || projectConfig.title;
-  const sDescription = description || projectConfig.description;
-  const sImage = image || projectConfig.image;
-  const sUrl = url ? `${projectConfig.url}${url}` : projectConfig.url;
+  const [state, setState] = useState({
+    title: title || projectConfig.title,
+    description: description || projectConfig.description,
+    image: image || projectConfig.image,
+    url: url ? `${projectConfig.url}${url}` : projectConfig.url,
+  });
+  const settings = useSelector(({ setting }: any) => setting);
+  useEffect(() => {
+    if (settings?.isApp && settings?.appName) {
+      setState((oldState) => ({
+        ...oldState,
+        title: settings?.appName,
+        description: settings?.appName,
+        url: location?.origin,
+      }));
+    }
+  }, [settings?.appName]);
+
   return (
     <Head>
-      <title key="title">{sTitle}</title>
-      <meta key="description" name="description" content={sDescription} />
-      <meta key="og-title" property="og:title" content={sTitle} />
-      <meta key="og-description" property="og:description" content={sDescription} />
-      <meta key="og-image" property="og:image" content={sImage} />
+      <title key="title">{state.title}</title>
+      <meta key="description" name="description" content={state.description} />
+      <meta key="og-title" property="og:title" content={state.title} />
+      <meta key="og-description" property="og:description" content={state.description} />
+      <meta key="og-image" property="og:image" content={state.image} />
       <meta key="og-type" property="og:type" content="article" />
-      <meta key="og-url" property="og:url" content={sUrl} />
-      <meta key="site-name" property="og:site_name" content={sTitle} />
+      <meta key="og-url" property="og:url" content={state.url} />
+      <meta key="site-name" property="og:site_name" content={state.title} />
       <meta key="twitter-card" name="twitter:card" content="summary_large_image" />
-      <meta key="twitter-title" property="twitter:title" content={sTitle} />
-      <meta key="twitter-description" property="twitter:description" content={sDescription} />
-      <meta key="twitter-image" property="twitter:image" content={sImage} />
-      <meta key="twitter-url" property="twitter:url" content={sUrl} />
+      <meta key="twitter-title" property="twitter:title" content={state.title} />
+      <meta key="twitter-description" property="twitter:description" content={state.description} />
+      <meta key="twitter-image" property="twitter:image" content={state.image} />
+      <meta key="twitter-url" property="twitter:url" content={state.url} />
     </Head>
   );
 }

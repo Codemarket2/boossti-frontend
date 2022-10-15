@@ -105,7 +105,10 @@ export const useGetApp = () => {
       const form = menuResponse?.values?.find((value) => value?.field === menuFormField?._id);
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      items.push({ label: label?.value, formSlug: slugify(form?.form?.name, { lower: true }) });
+      items.push({
+        label: label?.value,
+        formSlug: slugify(form?.form?.name || '', { lower: true }),
+      });
     });
     return items;
   };

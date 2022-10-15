@@ -6,7 +6,7 @@ import { DisplayResponse } from './DisplayResponse';
 import Table2 from './Table2';
 import Table from './Table';
 
-interface IProps {
+export interface IResponseList {
   form: any;
   workFlowFormResponseParentId?: string;
   showOnlyMyResponses?: boolean;
@@ -24,7 +24,7 @@ export default function ResponseList({
   isTemplateInstance,
   valueFilter,
   onClickResponse,
-}: IProps): any {
+}: IResponseList): any {
   const { data, error, loading, state, setState, refetch } = useGetResponses({
     formId: form?._id,
     onlyMy: showOnlyMyResponses,

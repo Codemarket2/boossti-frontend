@@ -47,12 +47,6 @@ import TabsList from './tabs/TabsList';
 import TabView from './tabs/TabView';
 import EmbedFormTab from '../embed/EmbedFormTab';
 
-interface IProps {
-  form: IForm;
-  drawerMode?: boolean;
-  onSlugChange?: (newSlug: string) => void;
-}
-
 const tabs = [
   'Fields',
   'Preview',
@@ -75,16 +69,28 @@ const initialState = {
   showFields: true,
 };
 
-export default function Form({ form, drawerMode = false, onSlugChange }: IProps): any {
-  const { handleOnChange, updateLoading, handleUpdateForm } = useUpdateForm({
+interface IFormProps {
+  form: IForm;
+  drawerMode?: boolean;
+  onSlugChange?: (newSlug: string) => void;
+}
+
+export default function Form({ form, drawerMode = false, onSlugChange }: IFormProps): any {
+  const {
+    handleOnChange,
+    handleOnSettingsChange,
+    updateLoading,
+    handleUpdateForm,
+    settings,
+  } = useUpdateForm({
     onAlert,
     form,
   });
+
   const { handleDelete } = useDeleteForm({
     onAlert,
   });
   const { formAllTabs } = useGetFormTabs(form?._id);
-
   const [options, setOptions] = useState(initialState);
 
   const router = useRouter();
@@ -104,18 +110,16 @@ export default function Form({ form, drawerMode = false, onSlugChange }: IProps)
       snackBar: 'Link copied to clipboard',
     });
   };
+
   const handlePublish = () => {
     setOptions({
       ...options,
-      snackBar: form?.settings?.published
+      snackBar: settings?.published
         ? 'Successfully unpublished the form'
         : 'Successfully published the form',
     });
-    handleOnChange({
-      settings: {
-        ...form.settings,
-        published: Boolean(!form?.settings?.published),
-      },
+    handleOnSettingsChange({
+      published: Boolean(!settings?.published),
     });
   };
 
@@ -135,263 +139,272 @@ export default function Form({ form, drawerMode = false, onSlugChange }: IProps)
     return <ErrorLoading />;
   }
 
-  // if (authorized) {
-  return (
-    <>
-      {options.backdrop && <Backdrop open />}
-      <div style={{ width: '100%' }}>
-        <Snackbar
-          open={Boolean(options.snackBar)}
-          autoHideDuration={4000}
-          onClose={() => setOptions({ ...options, snackBar: '' })}
-          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        >
-          <Alert onClose={() => setOptions({ ...options, snackBar: '' })} severity="success">
-            {options.snackBar}
-          </Alert>
-        </Snackbar>
-        {drawerMode ? (
-          <Typography variant="h5" className="py-2">
-            <InlineInput
-              placeholder="Form Name"
-              value={form?.name}
-              onChange={(e) => handleOnChange({ name: e.target.value })}
-            />
-          </Typography>
-        ) : (
-          <div className="d-sm-flex justify-content-between align-items-center">
-            <Breadcrumbs>
-              <Link href="/forms">Forms</Link>
+  if (authorized) {
+    return (
+      <>
+        {options.backdrop && <Backdrop open />}
+        <div style={{ width: '100%' }}>
+          <Snackbar
+            open={Boolean(options.snackBar)}
+            autoHideDuration={4000}
+            onClose={() => setOptions({ ...options, snackBar: '' })}
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          >
+            <Alert onClose={() => setOptions({ ...options, snackBar: '' })} severity="success">
+              {options.snackBar}
+            </Alert>
+          </Snackbar>
+          {drawerMode ? (
+            <Typography variant="h5" className="py-2">
               <InlineInput
                 placeholder="Form Name"
                 value={form?.name}
-                onChange={async (e) => {
-                  setOptions({ ...options, backdrop: true });
-                  const updatedForm = await handleUpdateForm({ name: e.target.value });
-                  setOptions({ ...options, backdrop: false });
-                  if (updatedForm?.slug && onSlugChange) {
-                    onSlugChange(updatedForm?.slug);
+                onChange={(e) => handleOnChange({ name: e.target.value })}
+              />
+            </Typography>
+          ) : (
+            <div className="d-sm-flex justify-content-between align-items-center">
+              <Breadcrumbs>
+                <Link href="/forms">Forms</Link>
+                <InlineInput
+                  placeholder="Form Name"
+                  value={form?.name}
+                  onChange={async (e) => {
+                    setOptions({ ...options, backdrop: true });
+                    const updatedForm = await handleUpdateForm({ name: e.target.value });
+                    setOptions({ ...options, backdrop: false });
+                    if (updatedForm?.slug && onSlugChange) {
+                      onSlugChange(updatedForm?.slug);
+                    }
+                  }}
+                />
+              </Breadcrumbs>
+              <div className="d-flex  align-items-center">
+                {updateLoading && <CircularProgress size={25} />}
+                <QRButton />
+                <Tooltip title="Copy form link">
+                  <IconButton className="ml-2" onClick={handleCopyLink} size="large">
+                    <ShareIcon />
+                  </IconButton>
+                </Tooltip>
+                <FormControlLabel
+                  className="m-0"
+                  control={
+                    <Switch
+                      color="primary"
+                      checked={settings?.published}
+                      onChange={handlePublish}
+                    />
                   }
-                }}
-              />
-            </Breadcrumbs>
-            <div className="d-flex  align-items-center">
-              {updateLoading && <CircularProgress size={25} />}
-              <QRButton />
-              <Tooltip title="Copy form link">
-                <IconButton className="ml-2" onClick={handleCopyLink} size="large">
-                  <ShareIcon />
-                </IconButton>
-              </Tooltip>
-              <FormControlLabel
-                className="m-0"
-                control={
-                  <Switch
-                    color="primary"
-                    checked={form?.settings?.published}
-                    onChange={handlePublish}
-                  />
-                }
-                label="Publish"
-              />
-              <Tooltip title="Delete">
-                <IconButton edge="end" onClick={onDelete} size="large">
-                  <DeleteIcon />
-                </IconButton>
-              </Tooltip>
+                  label="Publish"
+                />
+                <Tooltip title="Delete">
+                  <IconButton edge="end" onClick={onDelete} size="large">
+                    <DeleteIcon />
+                  </IconButton>
+                </Tooltip>
+              </div>
             </div>
-          </div>
-        )}
-        <Grid container spacing={1}>
-          {/* {!hideFields && (
+          )}
+          <Grid container spacing={1}>
+            {/* {!hideFields && (
               <Grid item xs={12} sm={4}>
                 Fields
               </Grid>
             )} */}
-          <Grid item xs={12} sm={options.formTabs ? 9 : 12}>
-            {/* sm={hideFields ? 12 : options.formTabs ? 5 : 8} */}
-            <Paper variant="outlined" className="d-flex align-item-center">
-              <Tabs
-                variant="scrollable"
-                value={options.currentTab}
-                indicatorColor="primary"
-                textColor="primary"
-                onChange={(event, newValue) => {
-                  router.query.tab = newValue;
-                  router.push(router);
-                }}
-              >
-                {tabs.map((label) => (
-                  <Tab key={label} label={label} value={label} />
-                ))}
-                {form?.name?.toUpperCase().includes('ROLE') && (
-                  <Tab label="Permissions" value="permissions" />
+            <Grid item xs={12} sm={options.formTabs ? 9 : 12}>
+              {/* sm={hideFields ? 12 : options.formTabs ? 5 : 8} */}
+              <Paper variant="outlined" className="d-flex align-item-center">
+                <Tabs
+                  variant="scrollable"
+                  value={options.currentTab}
+                  indicatorColor="primary"
+                  textColor="primary"
+                  onChange={(event, newValue) => {
+                    router.query.tab = newValue;
+                    router.push(router);
+                  }}
+                >
+                  {tabs.map((label) => (
+                    <Tab key={label} label={label} value={label} />
+                  ))}
+                  {form?.name?.toUpperCase().includes('ROLE') && (
+                    <Tab label="Permissions" value="permissions" />
+                  )}
+                  {formAllTabs?.map((tab) => (
+                    <Tab
+                      key={tab?._id}
+                      label={tab?.label || 'NA'}
+                      value={slugify(tab?.label, { lower: true })}
+                    />
+                  ))}
+                  {settings?.tabs?.map((tab) => (
+                    <Tab
+                      key={tab?._id}
+                      label={tab?.label || 'NA'}
+                      value={slugify(tab?.label, { lower: true })}
+                    />
+                  ))}
+                </Tabs>
+                {!options?.formTabs && (
+                  <Tooltip title="Add Tab">
+                    <IconButton
+                      color="primary"
+                      onClick={() => setOptions({ ...options, formTabs: !options?.formTabs })}
+                    >
+                      <AddCircle />
+                    </IconButton>
+                  </Tooltip>
                 )}
-                {formAllTabs?.map((tab) => (
-                  <Tab
-                    key={tab?._id}
-                    label={tab?.label || 'NA'}
-                    value={slugify(tab?.label, { lower: true })}
-                  />
-                ))}
-                {form?.settings?.tabs?.map((tab) => (
-                  <Tab
-                    key={tab?._id}
-                    label={tab?.label || 'NA'}
-                    value={slugify(tab?.label, { lower: true })}
-                  />
-                ))}
-              </Tabs>
-              {!options?.formTabs && (
-                <Tooltip title="Add Tab">
-                  <IconButton
-                    color="primary"
-                    onClick={() => setOptions({ ...options, formTabs: !options?.formTabs })}
-                  >
-                    <AddCircle />
-                  </IconButton>
-                </Tooltip>
-              )}
-            </Paper>
-            {options.currentTab === 'Fields' && (
-              <>
-                <FormFields
-                  fields={form.fields}
-                  setFields={(newFields) => handleOnChange({ fields: newFields })}
-                  parentFields={form.fields?.map((f) => ({
-                    ...f,
-                    formId: form._id,
-                    label: f?.label,
-                    formName: form?.name,
-                  }))}
-                />
-                <RelationFields formId={form?._id} />
-              </>
-            )}
-            {options.currentTab === 'Preview' && (
-              <Paper variant="outlined" className="px-2">
-                <FormView form={{ ...form, settings: { ...form.settings, widgetType: 'form' } }} />
               </Paper>
-            )}
-            {options.currentTab === 'Settings' && (
-              <>
-                <FormSetting
-                  formId={form?._id}
-                  settings={form.settings}
-                  state={form}
-                  onChange={(settings) =>
+              {options.currentTab === 'Fields' && (
+                <>
+                  <FormFields
+                    fields={form.fields}
+                    setFields={(newFields) => handleOnChange({ fields: newFields })}
+                    parentFields={form.fields?.map((f) => ({
+                      ...f,
+                      formId: form._id,
+                      label: f?.label,
+                      formName: form?.name,
+                    }))}
+                  />
+                  <RelationFields formId={form?._id} />
+                </>
+              )}
+              {options.currentTab === 'Preview' && (
+                <Paper variant="outlined" className="px-2">
+                  <FormView
+                    form={{ ...form, settings: { ...form.settings, widgetType: 'form' } }}
+                  />
+                </Paper>
+              )}
+              {options.currentTab === 'Settings' && (
+                <>
+                  <FormSetting
+                    formId={form?._id}
+                    settings={form.settings}
+                    state={form}
+                    onChange={
+                      (newSettings) => handleOnSettingsChange(newSettings)
+                      // handleOnChange({
+                      //   settings: { ...form.settings, ...settings },
+                      // })
+                    }
+                  />
+                </>
+              )}
+              {options.currentTab === 'Workflows' && <Workflows _id={form?._id} />}
+              {options.currentTab === 'Responses' && (
+                <>
+                  <Paper variant="outlined">
+                    <BulkUploadAction form={form} />
+                  </Paper>
+                  <ResponseList form={form} />
+                </>
+              )}
+              {options.currentTab === 'Design' && (
+                <DesignTab
+                  form={form}
+                  onChange={(newForm) =>
                     handleOnChange({
-                      settings: { ...form.settings, ...settings },
+                      ...form,
+                      ...newForm,
                     })
                   }
                 />
-              </>
+              )}
+              {options.currentTab === 'Actions' && (
+                <Actions
+                  formId={form?._id}
+                  fields={form?.fields}
+                  settings={settings}
+                  onChange={
+                    (actions) => handleOnSettingsChange({ actions })
+                    // handleOnChange({
+                    //   settings: { ...form.settings, actions },
+                    // })
+                  }
+                />
+              )}
+              {options.currentTab === 'Permissions' && (
+                <Permissions formId={form?._id} form={form} />
+              )}
+              {options.currentTab === 'Activity' && (
+                <AuditLog documentId={form?._id} formId={form?._id} />
+              )}
+              {options.currentTab === 'Conditions' && (
+                <FormConstraints
+                  form={form}
+                  onConstraintsChange={(constraints) => {
+                    handleOnSettingsChange({ constraints });
+                    // handleOnChange({
+                    //   settings: { ...form.settings, constraints },
+                    // });
+                  }}
+                  onFieldsChange={(newFields) =>
+                    handleOnChange({
+                      fields: newFields,
+                    })
+                  }
+                />
+              )}
+              {options.currentTab === 'Shopify' && (
+                <ShopifySettings
+                  shopify={settings?.shopify}
+                  onShopifyChange={
+                    (shopify) => handleOnSettingsChange({ shopify })
+                    // handleOnChange({ settings: { ...form.settings, shopify } })
+                  }
+                />
+              )}
+              {[...(formAllTabs || []), ...(settings?.tabs || [])]?.some(
+                (tab) => slugify(tab?.label, { lower: true }) === options.currentTab,
+              ) && (
+                <TabView
+                  formId={form?._id}
+                  tab={[...(formAllTabs || []), ...(settings?.tabs || [])]?.find(
+                    (tab) => slugify(tab?.label, { lower: true }) === options.currentTab,
+                  )}
+                />
+              )}
+            </Grid>
+            {options.formTabs && (
+              <Grid item xs={12} sm={3}>
+                <TabsList
+                  formAllTabs={formAllTabs}
+                  formId={form?._id}
+                  tabs={form?.settings?.tabs}
+                  onClose={() => setOptions({ ...options, formTabs: false })}
+                  onTabsChange={(newTabs) =>
+                    handleOnChange({
+                      settings: { ...form.settings, tabs: newTabs },
+                    })
+                  }
+                />
+              </Grid>
             )}
+
             {options.currentTab === 'Embedded Form' && (
               <EmbedFormTab form={form} oldSettings={form.settings} />
             )}
-            {options.currentTab === 'Workflows' && <Workflows _id={form?._id} />}
-            {options.currentTab === 'Responses' && (
-              <>
-                <Paper variant="outlined">
-                  <BulkUploadAction form={form} />
-                </Paper>
-                <ResponseList form={form} />
-              </>
-            )}
-            {options.currentTab === 'Design' && (
-              <DesignTab
-                form={form}
-                onChange={(newForm) =>
-                  handleOnChange({
-                    ...form,
-                    ...newForm,
-                  })
-                }
-              />
-            )}
-            {options.currentTab === 'Actions' && (
-              <Actions
-                formId={form?._id}
-                fields={form?.fields}
-                settings={form?.settings}
-                onChange={(actions) =>
-                  handleOnChange({
-                    settings: { ...form.settings, actions },
-                  })
-                }
-              />
-            )}
-            {options.currentTab === 'Permissions' && <Permissions formId={form?._id} form={form} />}
-            {options.currentTab === 'Activity' && (
-              <AuditLog documentId={form?._id} formId={form?._id} />
-            )}
-            {options.currentTab === 'Conditions' && (
-              <FormConstraints
-                form={form}
-                onConstraintsChange={(constraints) => {
-                  handleOnChange({
-                    settings: { ...form.settings, constraints },
-                  });
-                }}
-                onFieldsChange={(newFields) =>
-                  handleOnChange({
-                    fields: newFields,
-                  })
-                }
-              />
-            )}
-            {options.currentTab === 'Shopify' && (
-              <ShopifySettings
-                shopify={form?.settings?.shopify}
-                onShopifyChange={(shopify) =>
-                  handleOnChange({ settings: { ...form.settings, shopify } })
-                }
-              />
-            )}
-            {[...(formAllTabs || []), ...(form?.settings?.tabs || [])]?.some(
-              (tab) => slugify(tab?.label, { lower: true }) === options.currentTab,
-            ) && (
-              <TabView
-                formId={form?._id}
-                tab={[...(formAllTabs || []), ...(form?.settings?.tabs || [])]?.find(
-                  (tab) => slugify(tab?.label, { lower: true }) === options.currentTab,
-                )}
-              />
-            )}
           </Grid>
-          {options.formTabs && (
-            <Grid item xs={12} sm={3}>
-              <TabsList
-                formAllTabs={formAllTabs}
-                formId={form?._id}
-                tabs={form?.settings?.tabs}
-                onClose={() => setOptions({ ...options, formTabs: false })}
-                onTabsChange={(newTabs) =>
-                  handleOnChange({
-                    settings: { ...form.settings, tabs: newTabs },
-                  })
-                }
-              />
-            </Grid>
-          )}
-        </Grid>
-      </div>
-    </>
-  );
-  // }
+        </div>
+      </>
+    );
+  }
 
   // if (
-  //   form?.settings?.published &&
+  //   settings?.published &&
   //   authenticated
   //   // &&
-  //   // (form?.settings?.whoCanViewResponses === 'all' || form?.settings?.whoCanSubmit === 'all')
+  //   // (settings?.whoCanViewResponses === 'all' || settings?.whoCanSubmit === 'all')
   // ) {
   //   return (
   //     <Container>
   //       <FormView
   //         form={form}
-  //         // form={{ ...form, settings: { ...form?.settings, onlyMyResponses: true } }}
+  //         // form={{ ...form, settings: { ...settings, onlyMyResponses: true } }}
   //       />
   //     </Container>
   //   );

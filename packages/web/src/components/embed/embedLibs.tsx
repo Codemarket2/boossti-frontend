@@ -1,13 +1,81 @@
+import type { ParsedUrlQuery } from 'node:querystring';
+
 // WEB
 import { DisplayFormSettings } from '../form2/DisplayForm';
 
 export const CopytoClipboard = (text: string) => navigator.clipboard.writeText(text);
 
+const ObjToURLQuery = <T,>(obj: T) => {
+  return Object.keys(obj)
+    .map((key) => {
+      try {
+        let valueType = typeof obj[key] as string;
+        switch (valueType) {
+          case 'number':
+            valueType = 'n';
+            break;
+          case 'boolean':
+            valueType = 'b';
+            break;
+          case 'string':
+            valueType = 's';
+            break;
+          default:
+            // throw new Error(
+            //   `Unknown Type Found : typeof(value) => ${valueType} | value => ${obj[key]}`,
+            // );
+            return -1;
+        }
+        return `${valueType}${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`;
+      } catch (err) {
+        return -1;
+      }
+    })
+    .filter((val) => val !== -1)
+    .join('&');
+};
+
+export const URLQueryToObj = (URL: ParsedUrlQuery) => {
+  type AllowedValueTypes = number | boolean | string;
+  const constructedObject = Object.keys(URL).reduce((prev, key) => {
+    try {
+      const settingName = key.substring(1);
+      const valueType = key[0];
+      let val = URL[key] as AllowedValueTypes;
+
+      switch (valueType) {
+        case 'n':
+          val = Number(val);
+          break;
+        case 'b':
+          val = Boolean(val);
+          break;
+        case 's':
+          val = String(val);
+          break;
+        default:
+          throw new Error('Unknown Type of value');
+      }
+
+      // eslint-disable-next-line no-param-reassign
+      prev[settingName] = val;
+    } catch (err) {
+      // console.log(err);
+    }
+
+    return prev;
+  }, {});
+
+  return constructedObject;
+};
+
 export const getSrcURL = (formSettings: DisplayFormSettings, formSlug: string) => {
   const URL = `${window.location.origin}/embed/forms/${formSlug}`;
-  const Query = `?settings=${btoa(JSON.stringify(formSettings))}`;
+  const QueryString = ObjToURLQuery(formSettings);
 
-  return URL + Query;
+  if (!QueryString.length) return URL;
+
+  return `${URL}?${QueryString}`;
 };
 
 interface GetEmbedLinkProps {
@@ -18,12 +86,58 @@ interface GetEmbedLinkProps {
   /** Embedded Form Settings */
   FormSettings: DisplayFormSettings;
   formSlug: string;
+  filterSettings?: boolean;
 }
 
-export const getEmbedLink = (config: GetEmbedLinkProps) => {
-  const { IFrameTagConfig: IFrameConfig, FormSettings, formSlug } = config;
+export const getFilteredFormSettings = (FormSettings: GetEmbedLinkProps['FormSettings']) => {
+  const Settings: GetEmbedLinkProps['FormSettings'] = {};
+  if (FormSettings.widgetType === 'both') return FormSettings;
 
-  const link = getSrcURL(FormSettings, formSlug);
+  let allowedProps: string[] = [];
+
+  if (FormSettings.widgetType === 'form') {
+    allowedProps = allowedProps.concat([
+      'formView',
+      'whoCanSubmit',
+      'canSubmitOnlyOneResponse',
+      'editResponse',
+      'showFormTitle',
+    ]);
+
+    if (FormSettings.whoCanSubmit === 'authUser') {
+      allowedProps = allowedProps.concat(['viewAuthRequired']);
+    }
+
+    if (FormSettings.formView === 'selectItem') {
+      allowedProps = allowedProps.concat(['selectItemField']);
+    } else if (FormSettings.formView === 'button') {
+      allowedProps = allowedProps.concat(['buttonLabel']);
+    } else if (FormSettings.formView === 'leaderboard') {
+      allowedProps = allowedProps.concat(['minValue', 'maxValue']);
+    }
+  } else if (FormSettings.widgetType === 'responses') {
+    allowedProps = allowedProps.concat([
+      'responsesView',
+      'whoCanViewResponses',
+      'onlyMyResponses',
+      'showFormTitle',
+    ]);
+  }
+
+  allowedProps.forEach((key) => {
+    Settings[key] = FormSettings[key];
+  });
+
+  return Settings;
+};
+
+export const getEmbedLink = (config: GetEmbedLinkProps) => {
+  const { IFrameTagConfig: IFrameConfig, FormSettings, formSlug, filterSettings } = config;
+  let settings = FormSettings;
+
+  if (filterSettings) settings = getFilteredFormSettings(FormSettings);
+
+  const link = getSrcURL(settings, formSlug);
 
   return [
     '<iframe',
