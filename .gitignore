@@ -147,3 +147,6 @@ amplifytools.xcconfig
 
 
 temporary
+
+#Temp Page
+/packages/web/pages/forms/temp.tsx

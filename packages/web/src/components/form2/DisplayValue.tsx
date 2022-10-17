@@ -57,7 +57,6 @@ export default function DisplayValue({
   // if (field?.options?.systemCalculatedAndView) {
   //   return <DisplayFormulaValue formula={field?.options?.formula} />;
   // }
-
   switch (field?.fieldType) {
     case 'text':
     case 'textarea':
