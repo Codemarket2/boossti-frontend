@@ -378,7 +378,7 @@ describe('Selecting Form Field Type (label : Field Type*)', () => {
     expect(selectedFieldType).toBeFalsy();
   });
 
-  test('should have 24 types of fields', async () => {
+  test('should have 26 types of fields', async () => {
     render(<AddField {...getAppFieldMockProps()} />);
 
     const SelectComponent = getFieldTypeComponent();

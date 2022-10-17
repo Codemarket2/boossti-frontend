@@ -42,6 +42,7 @@ import 'react-phone-input-2/lib/style.css';
 import Webpage from '../grapesjs/grapesOverlay';
 import DisplayValue from './DisplayValue';
 import ResponseDrawer from '../response/ResponseDrawer';
+import Signature from '../signature/Signature';
 
 export interface FieldProps {
   field: IField;
@@ -256,6 +257,16 @@ export default function Field({
             <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
           )}
         </div>
+      );
+    }
+    case 'signature': {
+      return (
+        <>
+          <Signature
+            value={value?.value || ''}
+            onChange={(dataUrl) => onChange({ value: dataUrl })}
+          />
+        </>
       );
     }
     case 'webpage': {
