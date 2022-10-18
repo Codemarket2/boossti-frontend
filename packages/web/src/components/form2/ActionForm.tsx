@@ -1365,6 +1365,32 @@ export default function ActionForm({
                   </InputGroup>
                 </FormControl>
               </div>
+              <div className="d-flex align-items-center mt-3">
+                <FormControl
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  error={Boolean(formik.touched.whatsappMessage && formik.errors.whatsappMessage)}
+                >
+                  <InputGroup>
+                    <TextField
+                      // inputProps={{ 'data-testid': 'subject-input' }}
+                      fullWidth
+                      label="Whatsapp Message"
+                      variant="outlined"
+                      name="whatsappMessage"
+                      size="small"
+                      disabled={formik.isSubmitting}
+                      value={formik.values.whatsappMessage}
+                      onChange={formik.handleChange}
+                      error={
+                        formik.touched.whatsappMessage && Boolean(formik.errors.whatsappMessage)
+                      }
+                      helperText={formik.touched.whatsappMessage && formik.errors.whatsappMessage}
+                    />
+                  </InputGroup>
+                </FormControl>
+              </div>
             </>
           )}
           <InputGroup>
