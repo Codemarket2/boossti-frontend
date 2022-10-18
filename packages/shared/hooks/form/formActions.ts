@@ -172,6 +172,7 @@ type TFormValues = {
   phoneID: number;
   apiToken: string;
   groupName: string;
+  whatsappMessage: string;
 };
 
 const defaultFormValues: TFormValues = {
@@ -215,6 +216,7 @@ const defaultFormValues: TFormValues = {
   phoneID: null,
   apiToken: '',
   groupName: '',
+  whatsappMessage: ' ',
 };
 
 interface IProps extends IHooksProps {
