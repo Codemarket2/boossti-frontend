@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const GET_RESPONSE = gql`
-  query getResponse($_id: ID!) {
-    getResponse(_id: $_id) {
+  query getResponse($_id: ID!, $appId: ID) {
+    getResponse(_id: $_id, appId: $appId) {
       _id
       formId
       count
