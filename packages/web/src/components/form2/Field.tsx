@@ -42,6 +42,7 @@ import 'react-phone-input-2/lib/style.css';
 import Webpage from '../grapesjs/grapesOverlay';
 import DisplayValue from './DisplayValue';
 import ResponseDrawer from '../response/ResponseDrawer';
+import Signature from '../signature/Signature';
 
 export interface FieldProps {
   field: IField;
@@ -265,6 +266,16 @@ export default function Field({
             editMode
             value={value?.value || ''}
             onChange={(html) => onChange({ value: html })}
+          />
+        </>
+      );
+    }
+    case 'signature': {
+      return (
+        <>
+          <Signature
+            value={value?.value || ''}
+            onChange={(dataUrl) => onChange({ value: dataUrl })}
           />
         </>
       );
