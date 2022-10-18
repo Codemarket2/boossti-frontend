@@ -167,6 +167,11 @@ type TFormValues = {
   noOfInvites: number;
   keyword: string;
   tag: string;
+  phoneNumber: string;
+  productid: string;
+  phoneID: number;
+  apiToken: string;
+  groupName: string;
 };
 
 const defaultFormValues: TFormValues = {
@@ -205,6 +210,11 @@ const defaultFormValues: TFormValues = {
   noOfInvites: 0,
   keyword: '',
   tag: '',
+  phoneNumber: '',
+  productid: '',
+  phoneID: null,
+  apiToken: '',
+  groupName: '',
 };
 
 interface IProps extends IHooksProps {

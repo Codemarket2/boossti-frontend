@@ -278,6 +278,7 @@ export default function ActionForm({
                   <MenuItem value="updateCognitoUser">Update Cognito User</MenuItem>
                   <MenuItem value="deleteCognitoUser">Delete Cognito User</MenuItem>
                   <MenuItem value="linkedinInviteAutomation">LinkedIn Invite Automation </MenuItem>
+                  <MenuItem value="createWhatsappGroup">Create Whatsapp group </MenuItem>
                   <MenuItem
                     disabled={
                       !fields?.some(
@@ -794,6 +795,7 @@ export default function ActionForm({
               'sendInAppNotification',
               'sendPushNotification',
               'createCognitoUser',
+              'createWhatsappGroup',
             ]?.includes(formik.values.actionType) && (
               <ActionVariables
                 variables={formik.values.variables}
@@ -1235,6 +1237,132 @@ export default function ActionForm({
                         </MenuItem>
                       ))}
                   </Select>
+                </FormControl>
+              </div>
+            </>
+          )}
+          {['createWhatsappGroup'].includes(formik.values.actionType) && (
+            <>
+              <div className="d-flex align-items-center">
+                <FormControl
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  error={Boolean(formik.touched.cognitoGroupName && formik.errors.cognitoGroupName)}
+                >
+                  <InputLabel id="linkedinEmail">Phone Number</InputLabel>
+                  <Select
+                    labelId="phone number"
+                    id="phoneNumber"
+                    name="phoneNumber"
+                    value={formik.values.phoneNumber}
+                    onChange={formik.handleChange}
+                    label="Phone Number"
+                  >
+                    {fields
+                      ?.filter((f) => f.fieldType === 'phoneNumber' && f?.options?.required)
+                      ?.map((field) => (
+                        <MenuItem value={field._id} key={field._id}>
+                          {field.label}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+              </div>
+              <div className="d-flex align-items-center mt-3">
+                <FormControl
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  error={Boolean(formik.touched.productid && formik.errors.productid)}
+                >
+                  <InputGroup>
+                    <TextField
+                      // inputProps={{ 'data-testid': 'subject-input' }}
+                      fullWidth
+                      label="Product ID"
+                      variant="outlined"
+                      name="productid"
+                      size="small"
+                      disabled={formik.isSubmitting}
+                      value={formik.values.productid}
+                      onChange={formik.handleChange}
+                      error={formik.touched.productid && Boolean(formik.errors.productid)}
+                      helperText={formik.touched.productid && formik.errors.productid}
+                    />
+                  </InputGroup>
+                </FormControl>
+              </div>
+              <div className="d-flex align-items-center mt-3">
+                <FormControl
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  error={Boolean(formik.touched.phoneID && formik.errors.phoneID)}
+                >
+                  <InputGroup>
+                    <TextField
+                      // inputProps={{ 'data-testid': 'subject-input' }}
+                      fullWidth
+                      label="Phone ID"
+                      variant="outlined"
+                      name="phoneID"
+                      size="small"
+                      disabled={formik.isSubmitting}
+                      value={formik.values.phoneID}
+                      onChange={formik.handleChange}
+                      error={formik.touched.phoneID && Boolean(formik.errors.phoneID)}
+                      helperText={formik.touched.phoneID && formik.errors.phoneID}
+                    />
+                  </InputGroup>
+                </FormControl>
+              </div>
+              <div className="d-flex align-items-center mt-3">
+                <FormControl
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  error={Boolean(formik.touched.apiToken && formik.errors.apiToken)}
+                >
+                  <InputGroup>
+                    <TextField
+                      // inputProps={{ 'data-testid': 'subject-input' }}
+                      fullWidth
+                      label="API token"
+                      variant="outlined"
+                      name="apiToken"
+                      size="small"
+                      disabled={formik.isSubmitting}
+                      value={formik.values.apiToken}
+                      onChange={formik.handleChange}
+                      error={formik.touched.apiToken && Boolean(formik.errors.apiToken)}
+                      helperText={formik.touched.apiToken && formik.errors.apiToken}
+                    />
+                  </InputGroup>
+                </FormControl>
+              </div>
+              <div className="d-flex align-items-center mt-3">
+                <FormControl
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  error={Boolean(formik.touched.groupName && formik.errors.groupName)}
+                >
+                  <InputGroup>
+                    <TextField
+                      // inputProps={{ 'data-testid': 'subject-input' }}
+                      fullWidth
+                      label="Group Name"
+                      variant="outlined"
+                      name="groupName"
+                      size="small"
+                      disabled={formik.isSubmitting}
+                      value={formik.values.groupName}
+                      onChange={formik.handleChange}
+                      error={formik.touched.groupName && Boolean(formik.errors.groupName)}
+                      helperText={formik.touched.groupName && formik.errors.groupName}
+                    />
+                  </InputGroup>
                 </FormControl>
               </div>
             </>

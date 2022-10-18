@@ -27,7 +27,10 @@ export default function SignInForm({ successCallback }: IProps) {
     const onSuccess = (newPassword: string) => {
       forcePwdResetForm.hide();
       // uncomment for auto signin after resetting the password
-      // formik.setFieldValue('password', newPassword).then(() => formik.submitForm());
+      formik.setFieldValue('password', newPassword).then(() => {
+        // adding delay intentionally, as it takes a few seconds to update the password in the AWS Cognito
+        setTimeout(formik.submitForm, 500);
+      });
     };
 
     return (
@@ -45,10 +48,10 @@ export default function SignInForm({ successCallback }: IProps) {
       forgetPwdForm.hide();
 
       // uncomment for auto signin after resetting the password
-      // formik.setFieldValue('password', newPassword).then(() => {
-      //   // adding delay intentionally, as it takes a few seconds to update the password in the AWS Cognito
-      //   setTimeout(formik.submitForm, 200);
-      // });
+      formik.setFieldValue('password', newPassword).then(() => {
+        // adding delay intentionally, as it takes a few seconds to update the password in the AWS Cognito
+        setTimeout(formik.submitForm, 500);
+      });
     };
 
     return (

@@ -101,6 +101,8 @@ export function useSignIn({ onAlert = () => null, successCallback }: ISignInArgs
       } catch (err) {
         // if any challenge is occured then currentAuthenticatedUser() will throw error
         // just ignore the error
+        // eslint-disable-next-line no-console
+        console.error(err);
       }
 
       if (
