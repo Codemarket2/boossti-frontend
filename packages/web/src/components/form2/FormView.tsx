@@ -495,10 +495,12 @@ export function FormView({
   }, []);
 
   const getConditionForms = async (hiddenConditions) => {
-    const { responses: tempResponses, forms: tempForms } = await getConditionsFormAndResponse(
-      hiddenConditions,
-    );
-    setConditionFormsResponses({ responses: tempResponses, forms: tempForms });
+    if (!edit) {
+      const { responses: tempResponses, forms: tempForms } = await getConditionsFormAndResponse(
+        hiddenConditions,
+      );
+      setConditionFormsResponses({ responses: tempResponses, forms: tempForms });
+    }
   };
 
   const onChange = (sValue, valueIndex) => {
