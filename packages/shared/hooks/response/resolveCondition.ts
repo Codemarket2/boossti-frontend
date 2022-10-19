@@ -1,12 +1,19 @@
 import { useMutation } from '@apollo/client';
 import { useSelector } from 'react-redux';
 import { RESOLVE_CONDITION } from '../../graphql/mutation/response';
+import { ICondition } from '../../types';
 
-export const useResolveCondition = (responseId: string) => {
+export const useResolveCondition = () => {
   const [resolveConditionMutation] = useMutation(RESOLVE_CONDITION);
   const setting = useSelector((state: any) => state?.setting);
 
-  const handleResolveCondition = async (conditions) => {
+  const handleResolveCondition = async ({
+    conditions,
+    responseId,
+  }: {
+    conditions: ICondition[];
+    responseId: string;
+  }) => {
     try {
       const { data } = await resolveConditionMutation({
         variables: {
@@ -20,5 +27,6 @@ export const useResolveCondition = (responseId: string) => {
       alert(`Error while resolving condition, ${error?.message}`);
     }
   };
+
   return { handleResolveCondition };
 };

@@ -40,6 +40,7 @@ import FieldCondition from './field-condition/FieldCondition';
 import DefaultValue from './DefaultValue';
 // import HiddenCondition from './HiddenCondition';
 import FieldConditionForm, { SelectSubField } from './field-condition/FieldConditionForm';
+import AddConditionButton from './field-condition/AddConditionButton';
 
 interface IProps {
   onCancel?: () => void;
@@ -509,6 +510,20 @@ export default function AddField({
               )}
             </>
           )}
+          {['response'].includes(formik.values.fieldType) && (
+            <FormControlLabel
+              disabled={formik.isSubmitting}
+              control={
+                <Checkbox
+                  checked={formik.values.options?.showAsAddButton}
+                  onChange={({ target }) => onOptionChange({ showAsAddButton: target.checked })}
+                  name="showAsAddButton"
+                  color="primary"
+                />
+              }
+              label="Show as add button"
+            />
+          )}
           <div>
             <FormControlLabel
               className="mt-n2"
@@ -528,7 +543,7 @@ export default function AddField({
           <div>
             <FormControlLabel
               className="mt-n2"
-              disabled={formik.values.options?.default || formik.isSubmitting}
+              disabled={formik.isSubmitting}
               control={
                 <Checkbox
                   checked={formik.values.options?.hidden}
@@ -540,35 +555,38 @@ export default function AddField({
               label="Hidden"
             />
             {formik.values.options?.hidden && (
-              <div className="pl-2">
-                <FormControlLabel
-                  className="mt-n2"
-                  control={
-                    <Checkbox
-                      checked={formik.values.options?.hiddenConditions?.length > 0}
-                      onChange={({ target }) =>
-                        onOptionChange({
-                          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                          // @ts-ignore
-                          hiddenConditions: target.checked ? [{}] : null,
-                        })
-                      }
-                      name="showIf"
-                      color="primary"
-                    />
+              <div className="pl-3 mb-3 mt-n2">
+                <AddConditionButton
+                  conditions={formik.values.options?.hiddenConditions}
+                  onConditionsChange={(newConditions) =>
+                    onOptionChange({ hiddenConditions: newConditions })
                   }
-                  label="Show If condition"
                 />
-                {formik.values.options?.hiddenConditions?.length > 0 && (
-                  <FieldConditionForm
-                    conditions={formik.values.options?.hiddenConditions}
-                    onConditionsChange={(hiddenConditions) =>
-                      onOptionChange({
-                        hiddenConditions,
-                      })
-                    }
-                  />
-                )}
+              </div>
+            )}
+          </div>
+          <div>
+            <FormControlLabel
+              className="mt-n2"
+              disabled={formik.isSubmitting}
+              control={
+                <Checkbox
+                  checked={formik.values.options?.disabled}
+                  onChange={({ target }) => onOptionChange({ disabled: target.checked })}
+                  name="disabled"
+                  color="primary"
+                />
+              }
+              label="Disabled"
+            />
+            {formik.values.options?.disabled && (
+              <div className="pl-3 mb-3 mt-n2">
+                <AddConditionButton
+                  conditions={formik.values.options?.disabledConditions}
+                  onConditionsChange={(newConditions) =>
+                    onOptionChange({ disabledConditions: newConditions })
+                  }
+                />
               </div>
             )}
           </div>

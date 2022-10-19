@@ -17,7 +17,7 @@ export default function CreateResponseDrawer({
   createCallback,
 }: IProps): any {
   return (
-    <Overlay open={open} onClose={onClose} title={`Create new ${title}`}>
+    <Overlay open={open} onClose={onClose} title={`Add ${title}`}>
       <div className="p-2">
         <DisplayForm
           _id={formId}

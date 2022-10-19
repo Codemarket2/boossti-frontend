@@ -23,6 +23,7 @@ import {
   useCreateUpdateResponse,
   uniqueBetweenMultipleValues,
   useCheckIfAlreadySubmitted,
+  useResolveCondition,
 } from '@frontend/shared/hooks/response';
 import { validateResponse, validateValue } from '@frontend/shared/utils/validate';
 import { IValue } from '@frontend/shared/types';
@@ -426,7 +427,8 @@ export function FormView({
 }: FormViewProps): any {
   const [values, setValues] = useState(parseResponse({ values: initialValues })?.values || []);
   const { constraintErrors, constraintsLoading } = useConstraint({ form, values, responseId });
-
+  const { handleResolveCondition } = useResolveCondition();
+  const [enabledFields, setEnableFields] = useState({});
   const [submitState, setSubmitState] = useState(initialSubmitState);
   const authState = useSelector(({ auth }: any) => auth);
   const authenticated = authState?.authenticated;
@@ -492,7 +494,24 @@ export function FormView({
     if (hiddenConditions?.length > 0) {
       getConditionForms(hiddenConditions);
     }
+    resolveDisabledCondition();
   }, []);
+
+  const resolveDisabledCondition = async () => {
+    if (responseId && edit) {
+      // eslint-disable-next-line no-restricted-syntax
+      for (const field of fields) {
+        if (field?.options?.disabled && field?.options?.disabledConditions?.length > 0) {
+          // eslint-disable-next-line no-await-in-loop
+          const result = await handleResolveCondition({
+            responseId,
+            conditions: field?.options?.disabledConditions,
+          });
+          setEnableFields((oldEnabledFields) => ({ ...oldEnabledFields, [field?._id]: result }));
+        }
+      }
+    }
+  };
 
   const getConditionForms = async (hiddenConditions) => {
     if (!edit) {
@@ -538,7 +557,10 @@ export function FormView({
   const onSubmit = async () => {
     setSubmitState({ ...submitState, loading: true });
 
-    const validate = validateResponse(fields?.filter(filterHiddenFields), values);
+    const validate = validateResponse(
+      fields?.filter(filterHiddenFields).filter(filterDisabledFields),
+      values,
+    );
     if (validate) {
       setSubmitState({ ...submitState, validate, loading: false });
       return;
@@ -629,8 +651,18 @@ export function FormView({
     return !field?.options?.hidden;
   };
 
+  const filterDisabledFields = (field) => {
+    if (field?.options?.disabled) {
+      if (field?.options?.disabled?.disabledConditions?.length > 0 && enabledFields?.[field?._id]) {
+        return true;
+      }
+      return false;
+    }
+    return true;
+  };
+
   const disableSubmitButton =
-    validateResponse(fields?.filter(filterHiddenFields), values) ||
+    validateResponse(fields?.filter(filterHiddenFields).filter(filterDisabledFields), values) ||
     unique ||
     uniqueLoading ||
     constraintsLoading ||
@@ -711,7 +743,9 @@ export function FormView({
                             disabled={
                               edit && field.options.notEditable
                                 ? submitState.loading || field.options.notEditable
-                                : submitState.loading || field.options.systemCalculatedAndView
+                                : submitState.loading ||
+                                  field.options.systemCalculatedAndView ||
+                                  (field?.options?.disabled && !enabledFields?.[field?._id])
                             }
                             validate={submitState.validate}
                             onChangeValue={(changedValue) => {
