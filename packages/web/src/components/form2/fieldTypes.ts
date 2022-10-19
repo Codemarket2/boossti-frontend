@@ -110,6 +110,10 @@ type Webpage = {
   label: 'Webpage';
   value: 'webpage';
 };
+type SignatureType = {
+  label: 'Signature';
+  value: 'signature';
+};
 
 type TFieldType =
   | FormFieldType
@@ -137,6 +141,7 @@ type TFieldType =
   | DiagramType
   | FlowDiagramType
   | ConditionType
+  | SignatureType
   | Webpage;
 
 export const getFormFieldTypes = (isWidget: boolean): TFieldType[] => {
@@ -180,4 +185,5 @@ export const fieldTypes: TFieldType[] = [
   { label: 'Flow Diagram', value: 'flowDiagram' },
   { label: 'Condition', value: 'condition' },
   { label: 'Webpage', value: 'webpage' },
+  { label: 'Signature', value: 'signature' },
 ];
