@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { Fragment, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDeleteResponse, useResolveCondition } from '@frontend/shared/hooks/response';
 import Link from 'next/link';
 import Typography from '@mui/material/Typography';
@@ -9,33 +9,27 @@ import { useAuthorization } from '@frontend/shared/hooks/auth';
 import ListItemText from '@mui/material/ListItemText';
 import moment from 'moment';
 import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import { styled } from '@mui/material/styles';
 import { getUserName } from '@frontend/shared/hooks/user/getUserForm';
 import { parseResponse } from '@frontend/shared/hooks/response/getResponse';
 import Divider from '@mui/material/Divider';
 import EditResponseDrawer from './EditResponseDrawer';
 import Breadcrumbs from '../common/Breadcrumbs';
-import DisplayValue from '../form2/DisplayValue';
-import CommentLikeShare from '../comment/CommentLikeShare';
-import StarRating from '../starRating/starRating';
 import { QRButton } from '../qrcode/QRButton';
 import ResponseSections from './ResponseSection';
 import FormFieldsValue from '../form2/FormFieldsValue';
 import { onAlert } from '../../utils/alert';
 import BackdropComponent from '../common/Backdrop';
 import EditMode from '../common/EditMode';
-import DisplayFormulaValue from '../form2/field/formula/DisplayFormulaValue';
 import DisplayResponseById from './DisplayResponseById';
 import DeleteButton from '../common/DeleteButton';
 import RelationFields from '../form2/RelationFields';
 import RelationFieldView from '../form2/RelationFieldView';
-import DisplayRichText from '../common/DisplayRichText';
+import FieldValuesMap from './FieldValuesMap';
 
 interface DisplayResponseProps {
   form: any;
@@ -80,10 +74,10 @@ export function DisplayResponse({
 
   const userForm = useSelector(({ setting }: any) => setting.userForm);
 
-  const { handleResolveCondition } = useResolveCondition(response?._id);
+  const { handleResolveCondition } = useResolveCondition();
 
   const resolveCondition = async (fieldId, conditions) => {
-    const conditionResult = await handleResolveCondition(conditions);
+    const conditionResult = await handleResolveCondition({ conditions, responseId: response?._id });
     setFieldsConditionResult((oldState) => ({ ...oldState, [fieldId]: conditionResult }));
   };
 
@@ -235,57 +229,16 @@ export function DisplayResponse({
                       </>
                     ) : (
                       <div>
-                        {field.fieldType !== 'label' && (
-                          <Typography
-                            fontWeight="bold"
-                            className="d-flex align-items-center"
-                            data-testid="fields-display"
-                          >
-                            <div data-testid="label">{field?.label}</div>
-                            {authorized && (
-                              <Tooltip title="Edit">
-                                <IconButton
-                                  edge="end"
-                                  onClick={(e) =>
-                                    setState({ ...initialState, fieldId: field?._id })
-                                  }
-                                  size="small"
-                                >
-                                  <EditIcon fontSize="small" />
-                                </IconButton>
-                              </Tooltip>
-                            )}
-                          </Typography>
-                        )}
-                        <div data-testid="value">
-                          {field.fieldType === 'label' ? (
-                            <DisplayRichText value={field?.options?.staticText} />
-                          ) : field?.options?.systemCalculatedAndView ? (
-                            <DisplayFormulaValue
-                              formula={field?.options?.formula}
-                              field={field}
-                              values={response?.values}
-                            />
-                          ) : (
-                            <>
-                              {response?.values
-                                ?.filter((v) => v.field === field._id)
-                                .map((value) => (
-                                  <Fragment key={value?._id}>
-                                    <StyledBox style={{ display: 'flex', alignContent: 'center' }}>
-                                      <DisplayValue field={field} value={value} verticalView />
-                                    </StyledBox>
-                                    {field?.options?.showCommentBox && (
-                                      <CommentLikeShare threadId={value?._id} />
-                                    )}
-                                    {field?.options?.showStarRating && (
-                                      <StarRating parentId={value?._id} />
-                                    )}
-                                  </Fragment>
-                                ))}
-                            </>
-                          )}
-                        </div>
+                        <FieldValuesMap
+                          authorized={authorized}
+                          displayFieldLabel
+                          verticalView
+                          field={field}
+                          response={response}
+                          onClickEditField={(e) =>
+                            setState({ ...initialState, fieldId: field?._id })
+                          }
+                        />
                       </div>
                     )}
                   </div>
@@ -315,10 +268,3 @@ export function DisplayResponse({
     </>
   );
 }
-
-const StyledBox = styled(Box)(({ theme }) => ({
-  flexDirection: 'column',
-  [theme.breakpoints.up('md')]: {
-    flexDirection: 'row !important',
-  },
-}));

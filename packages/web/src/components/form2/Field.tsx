@@ -515,6 +515,7 @@ export default function Field({
                   )}
                 </div>
                 <Button
+                  disabled={disabled}
                   data-testid="response-button"
                   variant="contained"
                   size="small"
