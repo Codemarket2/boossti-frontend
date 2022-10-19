@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { UPDATE_FORM } from '../../graphql/mutation/form';
@@ -32,21 +32,21 @@ const updateCache = (slug, newFormData) => {
 
 export function useUpdateForm({ onAlert, form }: IProps) {
   const [saveToServer, setSaveToServer] = useState(false);
-  const [settingsOverrideKey, setSettingsOverrideKey] = useState('');
   const [updateFormMutation, { loading: updateLoading }] = useMutation<
     { updateForm: IForm },
     IForm
   >(UPDATE_FORM);
-  const settingGlobalState = useSelector((state: any) => state?.setting);
-  const settings = form?.settings?.override?.[settingsOverrideKey] || form?.settings;
+  // const [settingsOverrideKey, setSettingsOverrideKey] = useState('');
+  // const settingGlobalState = useSelector((state: any) => state?.setting);
+  const settings = form?.settings; // form?.settings?.override?.[settingsOverrideKey] || form?.settings;
 
-  useEffect(() => {
-    let newSettingOverrideKey = '';
-    if (settingGlobalState?.appResponse?._id) {
-      newSettingOverrideKey += `app_${settingGlobalState?.appResponse?._id}`;
-    }
-    setSettingsOverrideKey(newSettingOverrideKey);
-  }, [settingGlobalState?.appResponse?._id]);
+  // useEffect(() => {
+  //   let newSettingOverrideKey = '';
+  //   if (settingGlobalState?.appResponse?._id) {
+  //     newSettingOverrideKey += `app_${settingGlobalState?.appResponse?._id}`;
+  //   }
+  //   setSettingsOverrideKey(newSettingOverrideKey);
+  // }, [settingGlobalState?.appResponse?._id]);
 
   useEffect(() => {
     let timeOutId;
@@ -64,17 +64,18 @@ export function useUpdateForm({ onAlert, form }: IProps) {
 
   const handleOnSettingsChange = (newSettings) => {
     let tempSettings = { ...form?.settings };
-    if (settingsOverrideKey) {
-      tempSettings = {
-        ...tempSettings,
-        override: {
-          ...tempSettings?.override,
-          [settingsOverrideKey]: { ...settings, ...newSettings },
-        },
-      };
-    } else {
-      tempSettings = { ...settings, ...newSettings };
-    }
+    // if (settingsOverrideKey) {
+    //   tempSettings = {
+    //     ...tempSettings,
+    //     override: {
+    //       ...tempSettings?.override,
+    //       [settingsOverrideKey]: { ...settings, ...newSettings },
+    //     },
+    //   };
+    // } else {
+    //   tempSettings = { ...settings, ...newSettings };
+    // }
+    tempSettings = { ...settings, ...newSettings };
     handleOnChange({ ...form, settings: tempSettings });
   };
 
