@@ -46,6 +46,9 @@ export interface IFieldOptions {
   // hiddenCondition?: IHiddenCondition[];
   hiddenConditions?: ICondition[];
   addToAllForms?: boolean;
+  disabled: boolean;
+  disabledConditions: ICondition[];
+  showAsAddButton: boolean;
 }
 
 export interface IField {
@@ -67,13 +70,14 @@ export interface ICondition {
   left: ConditionPart;
   conditionType: '==' | '!=' | '>' | '<';
   right: ConditionRightPart;
-  // formId: string;
-  // fieldId: string;
-  // subFieldId: string;
-  // value: string;
-  // constantValue: string;
-  // formValue?: any;
 }
+
+export const defaultConditionObject: ICondition = {
+  operator: null,
+  left: null,
+  conditionType: null,
+  right: null,
+};
 
 export interface ConditionPart {
   formId: string;

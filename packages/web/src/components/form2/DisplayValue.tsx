@@ -17,6 +17,7 @@ import ReactFlow from '../react-flow/ReactFlow';
 // import DisplayFormulaValue from './formula/DisplayFormulaValue';
 import DisplayFieldCondition from './field/field-condition/DisplayFieldCondition';
 import GrapesOverlay from '../grapesjs/grapesOverlay';
+import DisplaySignature from '../signature/DisplaySignature';
 
 interface IProps {
   field: Partial<IField>;
@@ -173,6 +174,8 @@ export default function DisplayValue({
           <GrapesOverlay value={value?.value} />
         </div>
       );
+    case 'signature':
+      return <DisplaySignature value={value?.value} />;
     case 'formField':
       return (
         <div>

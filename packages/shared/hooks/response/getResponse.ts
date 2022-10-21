@@ -171,13 +171,14 @@ export async function getResponses({
 }
 
 export function useGetResponse(_id: string): any {
-  const { data, error, loading } = useQuery<{ getResponse: IResponse }, { _id: string }>(
-    GET_RESPONSE,
-    {
-      variables: { _id },
-      fetchPolicy: 'cache-and-network',
-    },
-  );
+  const setting = useSelector((state: any) => state?.setting);
+  const { data, error, loading } = useQuery<
+    { getResponse: IResponse },
+    { _id: string; appId: string }
+  >(GET_RESPONSE, {
+    variables: { _id, appId: setting?.appResponse?._id },
+    fetchPolicy: 'cache-and-network',
+  });
 
   useSubscription(UPDATE_RESPONSE_SUB, {
     variables: { _id: data?.getResponse?._id },

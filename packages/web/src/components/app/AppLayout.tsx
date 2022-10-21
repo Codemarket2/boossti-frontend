@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import AppMenu from './AppMenu';
 import AuthRequired from '../common/AuthRequired';
 import AppWrapper from './AppWrapper';
+import LogoutButton from '../common/LogoutButton';
 
 const drawerWidth = 200;
 
@@ -63,9 +64,12 @@ function AppLayout(props: Props) {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" noWrap component="div">
-              {setting?.appName}
-            </Typography>
+            <div className="w-100 d-flex align-items-center justify-content-between">
+              <Typography variant="h6" noWrap component="div">
+                {setting?.appName}
+              </Typography>
+              <LogoutButton />
+            </div>
           </Toolbar>
         </AppBar>
         <Box

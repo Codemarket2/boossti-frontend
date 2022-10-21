@@ -25,6 +25,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import Drawer from './Drawer';
 // import { routes } from '../../utils/routes';
 import { useDarkMode } from './DarkModeToggle';
+import LogoutButton from './LogoutButton';
 
 // const setActiveRouteColor = (activeRoute, linkRoute) => {
 //   return activeRoute === linkRoute ? 'primary' : 'default';
@@ -55,27 +56,17 @@ const MenuWrapper = styled('div')(({ theme }) => ({
 }));
 
 export default function AppBarComponent() {
-  const { authenticated, admin, attributes } = useSelector(({ auth }: any) => auth);
+  const { authenticated, admin } = useSelector(({ auth }: any) => auth);
   const { setting } = useSelector((state: any) => state);
-  const { handleLogout } = useHandleLogout();
-  const [anchorEl, setAnchorEl] = useState(null);
+
   const [showDrawer, setShowDrawer] = useState(false);
 
   const router = useRouter();
   const [activeRoute, setActiveRoute] = useState<string>('/');
   useDarkMode();
-  const open = Boolean(anchorEl);
 
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('sm'));
-
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   useEffect(() => {
     if (activeRoute !== router.pathname) {
@@ -129,74 +120,7 @@ export default function AppBarComponent() {
                 </IconButton>
               </Tooltip> */}
             </MenuWrapper>
-            <div>
-              <Tooltip title="Profile">
-                <IconButton
-                  aria-label="account of current user"
-                  aria-controls="menu-appbar"
-                  aria-haspopup="true"
-                  onClick={handleMenu}
-                  color="inherit"
-                  size="large"
-                >
-                  <AccountCircleIcon />
-                </IconButton>
-              </Tooltip>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={open}
-                onClose={handleClose}
-              >
-                {/* <Link href={`/user/${attributes['custom:_id']}`}>
-                  <MenuItem>
-                    <ListItemIcon className="mr-n3">
-                      <AccountCircleIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText primary="Profile" />
-                  </MenuItem>
-                </Link>
-                <Link href="/create-post" passHref>
-                  <MenuItem>
-                    <ListItemIcon className="mr-n3">
-                      <AddIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText primary="Create Post" />
-                  </MenuItem>
-                </Link> */}
-                <MenuItem>
-                  <ListItemIcon className="mr-n3">
-                    <AccountCircleIcon fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText primary={attributes?.email} />
-                </MenuItem>
-                <MenuItem
-                  onClick={() => {
-                    const anwser = confirm('Are you sure you want to logout');
-                    if (anwser) {
-                      handleClose();
-                      handleLogout();
-                    } else {
-                      handleClose();
-                    }
-                  }}
-                >
-                  <ListItemIcon className="mr-n3">
-                    <ExitToAppIcon fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText primary="Logout" />
-                </MenuItem>
-              </Menu>
-            </div>
+            <LogoutButton />
           </>
         ) : (
           <Link href="/auth">
