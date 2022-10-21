@@ -8,7 +8,13 @@ export default function Page() {
 
   return (
     <UserLayout authRequired={false} container={false}>
-      {slug && <ResponseScreen slug={slug?.toString()} count={count?.toString()} />}
+      {slug && (
+        <ResponseScreen
+          slug={slug?.toString()}
+          count={count?.toString()}
+          deleteCallback={(form) => router.push(`/forms/${form?.slug}`)}
+        />
+      )}
     </UserLayout>
   );
 }

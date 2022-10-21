@@ -40,7 +40,12 @@ export default function index() {
             {id && <Typography color="text.primary">{id}</Typography>}
           </Breadcrumbs>
           {id ? (
-            <ResponseScreen hideBreadcrumbs slug={slug?.toString()} count={id?.toString()} />
+            <ResponseScreen
+              hideBreadcrumbs
+              slug={slug?.toString()}
+              count={id?.toString()}
+              deleteCallback={(form) => router.push(`/dashboard/${slug}`)}
+            />
           ) : authorized ? (
             <DisplayFormDashboardBySlug
               slug={slug?.toString()}

@@ -89,7 +89,6 @@ export function DisplayResponseWithFormId({
       hideNavigation={hideNavigation}
       hideAuthor={hideAuthor}
       hideWorkflow={hideWorkflow}
-      isAuthorized={isAuthorized}
       deleteCallBack={deleteCallBack}
       hideDelete={hideDelete}
     />
