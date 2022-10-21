@@ -70,7 +70,6 @@ export default function FileLibraryWrapper({
     formId: form?._id, // || '631cfdd2bb5421884a6bbe2e',
     onlyMy: false,
     workFlowFormResponseParentId: null,
-    appId: null,
     valueFilter: {
       'values.field': fieldId, // || '631cfdf50eaa703a059e432c', //'631cfdf50eaa703a059e432c',
       'values.value': { $regex: 'image/', $options: 'i' },
