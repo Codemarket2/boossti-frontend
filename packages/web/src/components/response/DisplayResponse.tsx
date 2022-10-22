@@ -1,19 +1,16 @@
+import { useCheckPermission } from '@frontend/shared/hooks/permission';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useDeleteResponse, useResolveCondition } from '@frontend/shared/hooks/response';
 import Link from 'next/link';
 import Typography from '@mui/material/Typography';
 import { useUpdateSection } from '@frontend/shared/hooks/section';
-import EditIcon from '@mui/icons-material/Edit';
-import { useAuthorization } from '@frontend/shared/hooks/auth';
 import ListItemText from '@mui/material/ListItemText';
 import moment from 'moment';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
 import { getUserName } from '@frontend/shared/hooks/user/getUserForm';
 import { parseResponse } from '@frontend/shared/hooks/response/getResponse';
 import Divider from '@mui/material/Divider';
@@ -39,7 +36,7 @@ interface DisplayResponseProps {
   hideAuthor?: boolean;
   hideWorkflow?: boolean;
   deleteCallBack?: () => void;
-  isAuthorized?: boolean;
+  // isAuthorized?: boolean;
   hideDelete?: boolean;
 }
 
@@ -53,7 +50,7 @@ export function DisplayResponse({
   hideAuthor,
   hideWorkflow,
   deleteCallBack,
-  isAuthorized,
+  // isAuthorized,
   hideDelete,
 }: DisplayResponseProps) {
   const [state, setState] = useState(initialState);
@@ -61,9 +58,20 @@ export function DisplayResponse({
 
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
   const response = parseResponse(tempResponse);
-  const authorized =
-    useAuthorization([response?.createdBy?._id, form?.createdBy?._id], true) || isAuthorized;
-  const authorized2 = useAuthorization([form?.createdBy?._id], true);
+  // const authorized =
+  //   useAuthorization([response?.createdBy?._id, form?.createdBy?._id], true) || isAuthorized;
+  const { hasPermission: hasEditPermission } = useCheckPermission({
+    actionType: 'EDIT',
+    formId: form?._id,
+    responseId: response?._id,
+  });
+
+  const { hasPermission: hasDeletePermission } = useCheckPermission({
+    actionType: 'DELETE',
+    formId: form?._id,
+    responseId: response?._id,
+  });
+  // const authorized2 = useAuthorization([form?.createdBy?._id], true);
   const { section, onSectionChange, handleUpdateSection } = useUpdateSection({
     onAlert,
     _id:
@@ -95,7 +103,7 @@ export function DisplayResponse({
 
   const DeleteComponent = (
     <>
-      {!hideDelete && authorized && (
+      {!hideDelete && hasDeletePermission && (
         <DeleteButton
           tooltip="Delete Response"
           onClick={() => {
@@ -134,7 +142,7 @@ export function DisplayResponse({
           <div className="d-flex align-items-center">
             {!hideNavigation && (
               <>
-                {authorized && <EditMode />}
+                {hasEditPermission && <EditMode />}
                 <QRButton />
               </>
             )}
@@ -230,7 +238,7 @@ export function DisplayResponse({
                     ) : (
                       <div>
                         <FieldValuesMap
-                          authorized={authorized}
+                          authorized={hasEditPermission}
                           displayFieldLabel
                           verticalView
                           field={field}
@@ -248,7 +256,7 @@ export function DisplayResponse({
             <RelationFieldView responseId={response?._id} formId={form?._id} />
             {!hideWorkflow && section?.fields?.length > 0 && (
               <FormFieldsValue
-                authorized={authorized2}
+                authorized={hasEditPermission}
                 disableGrid={!editMode}
                 fields={section?.fields}
                 values={section?.values}

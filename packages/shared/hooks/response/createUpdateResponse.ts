@@ -8,11 +8,15 @@ import { stringifyValues } from '../section/updateSection';
 import { calculateSystemValues } from './calculateSystemValues';
 
 interface IProps extends IHooksProps {
+  parentResponseId?: string;
   workFlowFormResponseParentId?: string;
-  appId?: string;
 }
 
-export function useCreateUpdateResponse({ onAlert, workFlowFormResponseParentId }: IProps) {
+export function useCreateUpdateResponse({
+  onAlert,
+  workFlowFormResponseParentId,
+  parentResponseId,
+}: IProps) {
   const setting = useSelector((state: any) => state?.setting);
   const [createMutation, { loading: createLoading }] = useMutation<
     { createResponse: IResponse },
@@ -46,6 +50,7 @@ export function useCreateUpdateResponse({ onAlert, workFlowFormResponseParentId 
         ),
         appId: setting?.appResponse?._id,
         workFlowFormResponseParentId,
+        parentResponseId,
       };
       let response;
       if (edit) {

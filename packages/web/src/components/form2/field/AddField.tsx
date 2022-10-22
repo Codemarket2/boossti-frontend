@@ -315,26 +315,28 @@ export default function AddField({
               </InputGroup>
             </div>
           )}
-          <div>
-            <FormControlLabel
-              disabled={formik.isSubmitting}
-              control={
-                <Checkbox
-                  checked={formik.values.options?.dependentRelationship}
-                  onChange={({ target }) =>
-                    onOptionChange({ dependentRelationship: target.checked })
-                  }
-                  name="dependentRelationship"
-                  color="primary"
-                />
-              }
-              label="Dependent relationship"
-              data-testid="dependent-relationship-field-option"
-            />
-            <Tooltip title="If parent is deleted child is also deleted">
-              <InfoOutlined className="mt-n2 ml-n2" fontSize="small" />
-            </Tooltip>
-          </div>
+          {!formik.values.options?.selectItem && (
+            <div>
+              <FormControlLabel
+                disabled={formik.isSubmitting}
+                control={
+                  <Checkbox
+                    checked={formik.values.options?.dependentRelationship}
+                    onChange={({ target }) =>
+                      onOptionChange({ dependentRelationship: target.checked })
+                    }
+                    name="dependentRelationship"
+                    color="primary"
+                  />
+                }
+                label="Dependent relationship"
+                data-testid="dependent-relationship-field-option"
+              />
+              <Tooltip title="If parent is deleted child is also deleted">
+                <InfoOutlined className="mt-n2 ml-n2" fontSize="small" />
+              </Tooltip>
+            </div>
+          )}
         </div>
       )}
       {!isWidget && !isWidgetForm && !['template'].includes(formik.values.fieldType) && (
