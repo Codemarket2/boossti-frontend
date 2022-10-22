@@ -127,7 +127,6 @@ export function DisplayResponse({
 
   return (
     <>
-      parentResponseId-{response?.parentResponseId}
       <BackdropComponent open={deleteLoading || state.showBackdrop} />
       {!hideBreadcrumbs && (
         <div className="d-flex justify-content-between align-items-center" data-testid="breadcrumb">
