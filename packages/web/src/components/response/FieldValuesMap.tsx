@@ -1,7 +1,8 @@
 import { IField, IResponse } from '@frontend/shared/types';
 import Box from '@mui/material/Box';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { useCreateUpdateResponse, useResolveCondition } from '@frontend/shared/hooks/response';
+import { useDebounce } from '@frontend/shared/hooks/condition/debounce';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
@@ -44,20 +45,15 @@ export default function FieldValuesMap({
         conditions: field?.options?.disabledConditions,
         responseId: response?._id,
       });
-      // if (field?.label === 'ovens') {
-      //   debugger;
-      // }
       setDisabled(!result);
     }
   };
 
-  useEffect(() => {
-    checkDisabledCondition();
-  }, [response]);
-
-  // if (!field?.options?.selectItem && field?.options?.dependentRelationship) {
-  //   return <DependantResponses parentResponseId={response?._id} field={field} />;
-  // }
+  useDebounce({
+    callback: checkDisabledCondition,
+    listenForChange: true,
+    variable: response,
+  });
 
   const isDependantRelationship =
     !field?.options?.selectItem && field?.options?.dependentRelationship;
