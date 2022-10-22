@@ -24,9 +24,9 @@ export default function AddResponseButton({
     formId: field?.form?._id,
   });
 
-  if (error) {
-    return <ErrorLoading error={error} />;
-  }
+  // if (error) {
+  //   return <ErrorLoading error={error} />;
+  // }
 
   if (hasPermission) {
     return (
