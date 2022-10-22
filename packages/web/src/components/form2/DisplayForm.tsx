@@ -18,11 +18,11 @@ interface ISettings {
 
 interface IFormPage {
   settings?: ISettings;
-  appId?: string;
   modifyForm?: (form: IForm) => IForm;
   isTemplateInstance?: string;
   createCallback?: (response: any) => void;
   isPageOwner?: boolean;
+  parentResponseId?: string;
   workFlowFormResponseParentId?: string;
   valueFilter?: any;
   overrideValues?: any;
@@ -36,7 +36,6 @@ interface IProps extends IFormPage {
 export const FormPage = ({
   slug,
   settings = {},
-  appId,
   modifyForm,
   isTemplateInstance = '',
   createCallback,
@@ -45,6 +44,7 @@ export const FormPage = ({
   valueFilter,
   overrideValues,
   onClickResponse,
+  parentResponseId,
 }: IProps) => {
   const { data, error } = useGetFormBySlug(slug);
 
@@ -66,9 +66,9 @@ export const FormPage = ({
     <FormView
       form={form}
       isTemplateInstance={isTemplateInstance}
-      appId={appId}
       createCallback={createCallback}
       isPageOwner={isPageOwner}
+      parentResponseId={parentResponseId}
       workFlowFormResponseParentId={workFlowFormResponseParentId}
       valueFilter={valueFilter}
       overrideValues={overrideValues}
@@ -84,11 +84,11 @@ interface IFormPageByIdProps extends IFormPage {
 const FormPageById = ({
   _id,
   settings = {},
-  appId,
   modifyForm,
   isTemplateInstance = '',
   createCallback,
   isPageOwner,
+  parentResponseId,
   workFlowFormResponseParentId,
   valueFilter,
   overrideValues,
@@ -114,9 +114,9 @@ const FormPageById = ({
     <FormView
       form={form}
       isTemplateInstance={isTemplateInstance}
-      appId={appId}
       createCallback={createCallback}
       isPageOwner={isPageOwner}
+      parentResponseId={parentResponseId}
       workFlowFormResponseParentId={workFlowFormResponseParentId}
       valueFilter={valueFilter}
       overrideValues={overrideValues}

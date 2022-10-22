@@ -7,6 +7,7 @@ export const GET_RESPONSE = gql`
       formId
       count
       appId
+      parentResponseId
       workFlowFormResponseParentId
       values {
         _id
@@ -120,6 +121,7 @@ export const GET_RESPONSES = gql`
   query getResponses(
     $formId: ID!
     $appId: ID
+    $parentResponseId: ID
     $workFlowFormResponseParentId: ID
     $page: Int
     $limit: Int
@@ -131,6 +133,7 @@ export const GET_RESPONSES = gql`
     getResponses(
       formId: $formId
       appId: $appId
+      parentResponseId: $parentResponseId
       workFlowFormResponseParentId: $workFlowFormResponseParentId
       page: $page
       limit: $limit

@@ -56,7 +56,7 @@ import DisplayResponseById from '../response/DisplayResponseById';
 
 interface FormViewWrapperProps {
   form: IForm;
-  appId?: string;
+  parentResponseId?: string;
   workFlowFormResponseParentId?: string;
   createCallback?: (response: any) => void;
   setResponded?: () => void;
@@ -107,17 +107,17 @@ export default function FormViewWrapper({
   createCallback,
   setResponded,
   isPageOwner,
-  appId,
   isTemplateInstance = '',
   isAuthorized,
   valueFilter,
   overrideValues,
   onClickResponse,
+  parentResponseId,
 }: FormViewWrapperProps): any {
   const { admin: isAdmin, authenticated } = useSelector(({ auth }: any) => auth);
   const { handleCreateUpdateResponse, createLoading } = useCreateUpdateResponse({
+    parentResponseId,
     onAlert,
-    appId,
     workFlowFormResponseParentId,
   });
   const { alreadySubmitted } = useCheckIfAlreadySubmitted({
@@ -130,8 +130,8 @@ export default function FormViewWrapper({
   const { data, error, refetch } = useGetResponses({
     formId: form?._id,
     onlyMy: showOnlyMyResponses,
+    parentResponseId,
     workFlowFormResponseParentId,
-    appId,
     valueFilter,
   });
 
@@ -273,20 +273,20 @@ export default function FormViewWrapper({
                           color="primary"
                           loading={createLoading}
                           onClick={async () => {
-                            if (appId) {
-                              if (!selectState.selectedFullResponse) {
-                                alert('Please select the response');
-                              } else {
-                                await handleCreateUpdateResponse({
-                                  payload: { ...selectState.selectedFullResponse },
-                                  edit: true,
-                                  fields: form?.fields,
-                                });
-                                await refetch();
-                                setState(initialState);
-                                setSelectState(initialSelectState);
-                              }
-                            }
+                            // if (appId) {
+                            //   if (!selectState.selectedFullResponse) {
+                            //     alert('Please select the response');
+                            //   } else {
+                            //     await handleCreateUpdateResponse({
+                            //       payload: { ...selectState.selectedFullResponse },
+                            //       edit: true,
+                            //       fields: form?.fields,
+                            //     });
+                            //     await refetch();
+                            //     setState(initialState);
+                            //     setSelectState(initialSelectState);
+                            //   }
+                            // }
                           }}
                         >
                           Submit
@@ -364,7 +364,6 @@ export default function FormViewWrapper({
                     form={form}
                     workFlowFormResponseParentId={workFlowFormResponseParentId}
                     showOnlyMyResponses={showOnlyMyResponses}
-                    appId={appId}
                     isTemplateInstance={isTemplateInstance}
                     valueFilter={valueFilter}
                     onClickResponse={onClickResponse}
@@ -377,7 +376,6 @@ export default function FormViewWrapper({
               form={form}
               workFlowFormResponseParentId={workFlowFormResponseParentId}
               showOnlyMyResponses={showOnlyMyResponses}
-              appId={appId}
               isTemplateInstance={isTemplateInstance}
               valueFilter={valueFilter}
               onClickResponse={onClickResponse}
@@ -633,6 +631,7 @@ export function FormView({
     setUniqueLoading,
     setUnique,
     validate: submitState.validate,
+    onCancel,
   };
 
   const filterHiddenFields = (field) => {
