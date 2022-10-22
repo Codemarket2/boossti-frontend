@@ -44,6 +44,7 @@ const initialState = { showMenu: null, edit: false, showBackdrop: false, fieldId
 
 export function DisplayResponse({
   form,
+  // response,
   response: tempResponse,
   hideBreadcrumbs,
   hideNavigation,
@@ -57,9 +58,14 @@ export function DisplayResponse({
   const [fieldsConditionResult, setFieldsConditionResult] = useState({});
 
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
-  const response = parseResponse(tempResponse);
-  // const authorized =
-  //   useAuthorization([response?.createdBy?._id, form?.createdBy?._id], true) || isAuthorized;
+  const [response, setResponse] = useState(parseResponse(tempResponse));
+
+  useEffect(() => {
+    if (tempResponse) {
+      setResponse((oldResponse) => ({ ...oldResponse, ...parseResponse(tempResponse) }));
+    }
+  }, [tempResponse]);
+
   const { hasPermission: hasEditPermission } = useCheckPermission({
     actionType: 'EDIT',
     formId: form?._id,
@@ -71,7 +77,7 @@ export function DisplayResponse({
     formId: form?._id,
     responseId: response?._id,
   });
-  // const authorized2 = useAuthorization([form?.createdBy?._id], true);
+
   const { section, onSectionChange, handleUpdateSection } = useUpdateSection({
     onAlert,
     _id:
@@ -116,8 +122,8 @@ export function DisplayResponse({
   );
 
   const filterFields = (field) => {
-    if (field?.options?.hidden && field?.options?.hiddenConditions?.length > 0) {
-      if (fieldsConditionResult?.[field?._id]) {
+    if (field?.options?.hidden) {
+      if (field?.options?.hiddenConditions?.length > 0 && fieldsConditionResult?.[field?._id]) {
         return true;
       }
       return false;

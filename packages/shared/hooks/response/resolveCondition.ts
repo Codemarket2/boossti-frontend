@@ -24,6 +24,7 @@ export const useResolveCondition = () => {
       });
       return data?.resolveCondition === true;
     } catch (error) {
+      // debugger;
       return false;
       // alert(`Error while resolving condition, ${error?.message}`);
     }
