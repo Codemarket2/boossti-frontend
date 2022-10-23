@@ -7,6 +7,7 @@ import Delete from '@mui/icons-material/Delete';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import AdapterMoment from '@mui/lab/AdapterMoment';
 import DateTimePicker from '@mui/lab/DateTimePicker';
@@ -43,6 +44,7 @@ import Webpage from '../grapesjs/grapesOverlay';
 import DisplayValue from './DisplayValue';
 import ResponseDrawer from '../response/ResponseDrawer';
 import Signature from '../signature/Signature';
+import CraftJSField from '../craftJS/craftJSField';
 
 export interface FieldProps {
   field: IField;
@@ -635,6 +637,17 @@ export default function Field({
         </>
       );
     }
+
+    case 'craftjs': {
+      return (
+        <>
+          <CraftJSField
+            onChange={(PageContentJSON) => onChange({ field: field?._id, value: PageContentJSON })}
+          />
+        </>
+      );
+    }
+
     default: {
       const textValidation = validateValue(validate, value, {
         ...field,

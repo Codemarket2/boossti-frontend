@@ -19,6 +19,7 @@
   "dependencies": {
     "@apollo/client": "3.3.21",
     "@ckeditor/ckeditor5-react": "^3.0.2",
+    "@craftjs/core": "^0.2.0-beta.8",
     "@date-io/moment": "1.x",
     "@emotion/cache": "^11.7.1",
     "@emotion/react": "^11.8.2",
@@ -57,6 +58,7 @@
     "immer": "^9.0.5",
     "jest": "^27.5.1",
     "lodash": "^4.17.21",
+    "lzutf8": "^0.6.3",
     "mathjs": "^10.6.4",
     "moment": "2.29.1",
     "next": "12.1.4",
