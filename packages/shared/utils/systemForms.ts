@@ -22,4 +22,20 @@ export const systemForms = {
       status: 'status',
     },
   },
+  workflow: {
+    slug: 'work-flow',
+    fields: {
+      workflowTitle: 'workflow title',
+      step1: 'step 1',
+      steps: 'steps',
+    },
+  },
+  workflowSteps: {
+    slug: 'workflow-steps',
+    fields: {
+      stepName: 'step name',
+      stepForm: 'step form',
+      condition: 'condition',
+    },
+  },
 };
