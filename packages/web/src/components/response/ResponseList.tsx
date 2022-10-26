@@ -29,7 +29,6 @@ export default function ResponseList({
     formId: form?._id,
     onlyMy: showOnlyMyResponses,
     workFlowFormResponseParentId,
-    appId,
     valueFilter,
   });
 

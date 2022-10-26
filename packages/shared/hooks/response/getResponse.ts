@@ -27,7 +27,7 @@ interface IProps {
   formField?: string;
   onlyMy?: boolean;
   workFlowFormResponseParentId?: string;
-  appId?: string;
+  parentResponseId?: string;
   search?: string;
   valueFilter?: any;
   noAppIdFilter?: boolean;
@@ -40,7 +40,7 @@ export function useGetResponses({
   formField = null,
   onlyMy = false,
   workFlowFormResponseParentId = null,
-  // appId,
+  parentResponseId,
   search = null,
   valueFilter,
   noAppIdFilter,
@@ -85,6 +85,7 @@ export function useGetResponses({
     {
       formId: string;
       appId: string;
+      parentResponseId: string;
       workFlowFormResponseParentId: string;
       page: number;
       limit: number;
@@ -97,6 +98,7 @@ export function useGetResponses({
     variables: {
       ...state,
       formId,
+      parentResponseId,
       workFlowFormResponseParentId,
       onlyMy,
       appId,

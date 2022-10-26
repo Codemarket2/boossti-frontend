@@ -23,7 +23,7 @@ const Signature = ({ value, onChange }: Iprops) => {
   const [canvasDimensions, setCanvasDimensions] = useState<{
     height: number;
     width: number;
-  }>({ height: 200, width: 300 });
+  }>({ height: 120, width: 300 });
 
   const { height: windowHeight, width: windowWidth } = useWindowSize();
 
