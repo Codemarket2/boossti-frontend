@@ -22,14 +22,6 @@ export default function Sidebar() {
   return (
     <aside className="mt-1">
       <div>
-        {/* <div
-          className="dndnode input"
-          onDragStart={(event) => onDragStart(event, 'customNode', { label: 'Sample text...' })}
-          draggable
-        >
-          Text Node
-        </div> */}
-        {/* <Typography>Forms</Typography> */}
         <TextField
           fullWidth
           size="small"
