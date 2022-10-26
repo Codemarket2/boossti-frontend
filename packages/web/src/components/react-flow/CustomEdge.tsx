@@ -1,7 +1,7 @@
 import Edit from '@mui/icons-material/Edit';
 import { IconButton } from '@mui/material';
 import React, { useContext, useState } from 'react';
-import { getBezierPath, getEdgeCenter, EdgeProps } from 'react-flow-renderer';
+import { getBezierPath, EdgeProps } from 'reactflow';
 import EditEdge from './EditEdge';
 import { FlowContext } from './FlowEditor';
 
@@ -23,7 +23,7 @@ export default function CustomEdge({
 }: EdgeProps) {
   const { onEdgeChange, editMode } = useContext(FlowContext);
   const [edit, setEdit] = useState(false);
-  const edgePath = getBezierPath({
+  const [edgePath, labelX, labelY] = getBezierPath({
     sourceX,
     sourceY,
     sourcePosition,
@@ -31,18 +31,16 @@ export default function CustomEdge({
     targetY,
     targetPosition,
   });
-  const [edgeCenterX, edgeCenterY] = getEdgeCenter({
-    sourceX,
-    sourceY,
-    targetX,
-    targetY,
-  });
 
   return (
     <>
       <path
         id={id}
-        style={style}
+        style={{
+          ...style,
+          strokeWidth: selected ? 2 : style?.strokeWidth,
+          stroke: selected ? 'black' : style?.stroke,
+        }}
         className="react-flow__edge-path"
         d={edgePath}
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -53,8 +51,8 @@ export default function CustomEdge({
         <foreignObject
           width={foreignObjectSize}
           height={foreignObjectSize}
-          x={edgeCenterX - foreignObjectSize / 2}
-          y={edgeCenterY - foreignObjectSize / 2}
+          x={labelX - foreignObjectSize / 2}
+          y={labelY - foreignObjectSize / 2}
           className="edgebutton-foreignobject"
           requiredExtensions="http://www.w3.org/1999/xhtml"
         >
