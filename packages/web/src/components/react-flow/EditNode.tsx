@@ -167,13 +167,11 @@ export default function EditNode({ open, data, onChange, onClose }: IProps) {
                       onChange={({ target }) => onPortChange(port?._id, { color: target?.value })}
                     />
                   </Tooltip>
-                  {portIndex !== 0 && (
-                    <Tooltip title="Delete Port">
-                      <IconButton color="error" size="small" onClick={() => deletePort(port?._id)}>
-                        <Delete fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                  )}
+                  <Tooltip title="Delete Port">
+                    <IconButton color="error" size="small" onClick={() => deletePort(port?._id)}>
+                      <Delete fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
                 </div>
                 <Slider
                   defaultValue={50}

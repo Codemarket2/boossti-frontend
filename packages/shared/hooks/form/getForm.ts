@@ -148,7 +148,7 @@ export function useGetFormTabRelations(_id: string) {
 }
 
 export function useGetFormBySlug(slug: string) {
-  const [getFormBySlug2, setGetFormBySlug] = useState(null);
+  const [getFormBySlug2, setGetFormBySlug] = useState<IForm>(null);
   const { data, error, loading } = useQuery<{ getFormBySlug: IForm }, { slug: string }>(
     GET_FORM_BY_SLUG,
     {
@@ -184,7 +184,7 @@ export async function getForm(_id: string) {
 }
 
 export async function getFormBySlug(slug: string) {
-  let form = null;
+  let form: IForm = null;
   const response = await guestClient.query({
     query: GET_FORM_BY_SLUG,
     variables: { slug },

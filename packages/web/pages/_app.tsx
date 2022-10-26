@@ -31,6 +31,7 @@ import createEmotionCache from '../src/utils/createEmotionCache';
 
 // // CSS from node modules
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'reactflow/dist/style.css';
 
 import '../src/assets/css/ckeditor.css';
 import '../src/assets/css/common.css';

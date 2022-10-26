@@ -42,8 +42,8 @@ export default function EditEdge({ open, edge, onEdgeChange, onClose }: IProps) 
               onChange={({ target }) => {
                 setState({
                   ...state,
-                  style: { stroke: target.value },
-                  markerEnd: { color: target.value, type: 'arrowclosed' },
+                  style: { ...state?.style, stroke: target.value },
+                  markerEnd: { type: 'arrowclosed', color: target.value },
                 });
               }}
             />

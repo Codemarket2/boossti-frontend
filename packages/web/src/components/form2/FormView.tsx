@@ -367,6 +367,7 @@ export default function FormViewWrapper({
                     isTemplateInstance={isTemplateInstance}
                     valueFilter={valueFilter}
                     onClickResponse={onClickResponse}
+                    parentResponseId={parentResponseId}
                   />
                 </Overlay>
               )}
@@ -379,6 +380,7 @@ export default function FormViewWrapper({
               isTemplateInstance={isTemplateInstance}
               valueFilter={valueFilter}
               onClickResponse={onClickResponse}
+              parentResponseId={parentResponseId}
             />
           )}
         </>

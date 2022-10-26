@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 import Card from '@mui/material/Card';
 import React, { memo, useContext, useState } from 'react';
-import { Handle, NodeProps } from 'react-flow-renderer';
+import { Handle, NodeProps } from 'reactflow';
 import { Tooltip } from '@mui/material';
 import DisplayRichText from '../common/DisplayRichText';
 import { DisplayForm } from '../form2/DisplayForm';
