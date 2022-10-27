@@ -181,17 +181,17 @@ export const GET_FORMS = gql`
         _id
         name
         slug
-        # fields {
-        #   _id
-        #   label
-        #   fieldType
-        #   options
-        #   template {
-        #     _id
-        #     title
-        #     slug
-        #   }
-        # }
+        fields {
+          _id
+          # label
+          # fieldType
+          # options
+          # template {
+          #   _id
+          #   title
+          #   slug
+          # }
+        }
         # settings
         # published
         createdBy {
