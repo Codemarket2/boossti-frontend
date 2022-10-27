@@ -4,7 +4,11 @@
 // OTHER
 import { useNode, Element } from '@craftjs/core';
 
-const Container = ({ children }) => {
+interface ContainerProps {
+  children?: JSX.Element | JSX.Element[];
+}
+
+const Container = ({ children }: ContainerProps) => {
   const {
     connectors: { connect, drag },
   } = useNode();

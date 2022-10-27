@@ -1,20 +1,21 @@
 import { useState, useMemo, useEffect } from 'react';
 
 // MUI
-import Button from '@mui/material/Button';
+import MaterialButton from '@mui/material/Button';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
 // OTHERS
 import lz from 'lzutf8';
-import { useEditor, Editor, Frame } from '@craftjs/core';
+import { Editor, Frame } from '@craftjs/core';
+
+// CRAFTJS - WEB
+import { decodePageContent } from './libs/PageContent';
+import Container from './components/Container';
+import Button from './components/Button';
+import FormDisplay from './components/Form/FormDisplay';
 
 // WEB
 import ScreenOverlay from '../common/Overlay';
-import Container from './components/Container';
-import Btn from './components/Button';
-
-const decodePageContent = (PageContent: PageContentViewerProps['PageContent']) =>
-  lz.decompress(lz.decodeBase64(PageContent));
 
 interface PageContentViewerProps {
   PageContent: string;
@@ -29,7 +30,7 @@ const PageContentViewer = ({ PageContent }: PageContentViewerProps) => {
 
   if (!decodedPC) return <div>Please Wait...</div>;
   return (
-    <Editor resolver={{ Container, Btn }} enabled={false}>
+    <Editor resolver={{ Container, Button, FormDisplay }} enabled={false}>
       <Frame json={decodedPC} />
     </Editor>
   );
@@ -55,14 +56,14 @@ export const PageViewerOverlayBtn = (props: PageViewerOverlayBtnProps) => {
   }
 
   return (
-    <Button
+    <MaterialButton
       onClick={() => setShowPage(true)}
       variant="contained"
       size="small"
       startIcon={<VisibilityIcon />}
     >
       View React Page
-    </Button>
+    </MaterialButton>
   );
 };
 

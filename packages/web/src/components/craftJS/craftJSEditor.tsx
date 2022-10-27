@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 // MUI
-import Button from '@mui/material/Button';
+import MaterialButton from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import AppBar from '@mui/material/AppBar';
@@ -15,11 +15,15 @@ import SaveIcon from '@mui/icons-material/Save';
 import { Editor, Frame, Element, useEditor } from '@craftjs/core';
 import lz from 'lzutf8';
 
+// CRAFTJS - WEB
+import Container from './components/Container';
+import Button from './components/Button';
+import SidePanelToolBox from './SidePanelToolBox';
+import FormDisplay from './components/Form/FormDisplay';
+import { decodePageContent, encodePageContent } from './libs/PageContent';
+
 // WEB
 import Overlay from '../common/Overlay';
-import Container from './components/Container';
-import Btn from './components/Button';
-import SidePanelToolBox from './SidePanelToolBox';
 
 interface TitleBarProps {
   onClose: () => void;
@@ -37,18 +41,18 @@ const TitleBar = ({ onClose, onSave }: TitleBarProps) => {
         </Typography>
 
         <Stack direction="row">
-          <Button
+          <MaterialButton
             className="ml-2"
             startIcon={<SaveIcon />}
-            onClick={() => onSave && onSave(lz.encodeBase64(lz.compress(query.serialize())))}
+            onClick={() => onSave && onSave(encodePageContent(query.serialize()))}
             color="primary"
             variant="contained"
             size="small"
           >
             Save
-          </Button>
+          </MaterialButton>
 
-          <Button
+          <MaterialButton
             className="ml-2"
             startIcon={<CloseIcon />}
             onClick={onClose}
@@ -57,39 +61,44 @@ const TitleBar = ({ onClose, onSave }: TitleBarProps) => {
             size="small"
           >
             Close
-          </Button>
+          </MaterialButton>
         </Stack>
       </Toolbar>
     </AppBar>
   );
 };
 
-interface CraftJSEditorProps {
+export interface CraftJSEditorProps {
   showEditor: boolean;
   onClose: () => void;
   onChange?: TitleBarProps['onSave'];
+  EncodedPageContent?: string;
 }
 
-const CraftJSEditor = ({ onClose, showEditor, onChange }: CraftJSEditorProps) => {
-  const [reactPageContent, setReactPageContent] = useState<string>();
+const CraftJSEditor = ({
+  onClose,
+  showEditor,
+  onChange,
+  EncodedPageContent,
+}: CraftJSEditorProps) => {
+  const [reactPageContent] = useState<string>(
+    EncodedPageContent ? decodePageContent(EncodedPageContent) : '',
+  );
 
   return (
     <>
       <Overlay
         open={showEditor}
         onClose={onClose}
-        maxWidth="100vw"
-        minWidth="100vw"
         style={{
-          // display: 'flex',
-          // flexFlow: 'column no-wrap',
-          // backgroundColor: 'black',
+          maxWidth: '100vw',
+          minWidth: '100vw',
           minHeight: '100%',
           maxHeight: '100%',
         }}
         hideAppBar
       >
-        <Editor resolver={{ Container, Btn }}>
+        <Editor resolver={{ Container, Button, FormDisplay }}>
           <div
             style={{
               display: 'grid',
@@ -107,14 +116,14 @@ const CraftJSEditor = ({ onClose, showEditor, onChange }: CraftJSEditorProps) =>
               }}
             >
               <Box style={{ width: '100%' }}>
-                <Frame>
+                <Frame data={reactPageContent}>
                   <div style={{ display: 'flex', flexFlow: 'column nowrap', gap: '0' }}>
                     <Element is={Container} canvas>
-                      <Btn text="Button 1" />
+                      <Button text="Button 1" />
                     </Element>
 
                     <Element is={Container} canvas>
-                      <Btn text="Button 2" />
+                      <Button text="Button 2" />
                     </Element>
                   </div>
                 </Frame>

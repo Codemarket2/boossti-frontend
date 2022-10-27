@@ -4,19 +4,21 @@ import { useState } from 'react';
 import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
 
-// WEB
-import CraftJSEditor from './craftJSEditor';
+// CRAFTJS - WEB
+import CraftJSEditor, { CraftJSEditorProps } from './craftJSEditor';
 
 interface CraftJSFieldProp {
   onChange?: Parameters<typeof CraftJSEditor>[0]['onChange'];
+  EncodedPageContent?: CraftJSEditorProps['EncodedPageContent'];
 }
 
-const CraftJSField = ({ onChange }: CraftJSFieldProp) => {
+const CraftJSField = ({ onChange, EncodedPageContent }: CraftJSFieldProp) => {
   const [showEditor, setShowEditor] = useState(false);
 
   if (showEditor)
     return (
       <CraftJSEditor
+        EncodedPageContent={EncodedPageContent}
         onChange={onChange}
         onClose={() => setShowEditor(false)}
         showEditor={showEditor}

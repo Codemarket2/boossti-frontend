@@ -642,6 +642,7 @@ export default function Field({
       return (
         <>
           <CraftJSField
+            EncodedPageContent={value?.value}
             onChange={(PageContentJSON) => onChange({ field: field?._id, value: PageContentJSON })}
           />
         </>
