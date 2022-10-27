@@ -83,7 +83,7 @@ export default function FlowEditor({
       }
       dropData = JSON.parse(dropData);
 
-      if (!dropData?.data || !dropData?.nodeType) {
+      if (!dropData?.data?._id || !dropData?.nodeType) {
         return;
       }
 
@@ -91,18 +91,24 @@ export default function FlowEditor({
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
       });
+
+      const ports = [];
+      dropData?.data?.fields?.forEach((field) => {
+        ports.push({
+          _id: generateObjectId(),
+          fieldId: field?._id,
+          position: 'top',
+          type: 'target',
+        });
+      });
       const newNode = {
         id: generateObjectId(),
         type: dropData?.nodeType,
         position,
         data: {
-          ...dropData?.data,
-          ports: [
-            { _id: generateObjectId(), position: 'top', type: 'target' },
-            { _id: generateObjectId(), position: 'bottom', type: 'source' },
-            { _id: generateObjectId(), position: 'left', type: 'target' },
-            { _id: generateObjectId(), position: 'right', type: 'source' },
-          ],
+          formId: dropData?.data?._id,
+          label: dropData?.data?.name,
+          ports,
         },
       };
       setNodes((nds) => nds.concat(newNode));
@@ -149,7 +155,7 @@ export default function FlowEditor({
                 <Background color="#aaa" gap={16} />
               </ReactFlow>
             </div>
-            {editMode && <Sidebar />}
+            {editMode && <Sidebar nodes={nodes} />}
           </ReactFlowProvider>
         </div>
       </div>

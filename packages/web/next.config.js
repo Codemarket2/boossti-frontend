@@ -23,6 +23,7 @@ module.exports = withPlugins([withTM, withImages], {
   eslint: {
     ignoreDuringBuild: true,
   },
+  // swcMinify: true,
 });
 
 // module.exports = withPlugins([withPWA, withTM, withImages]);
