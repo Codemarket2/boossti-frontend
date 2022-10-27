@@ -58,6 +58,7 @@ export interface FieldProps {
   setUnique?: any;
   responseId?: string;
   setUniqueLoading?: (args: boolean) => void;
+  onCancel?: () => void;
 }
 
 const objectId = generateObjectId();
@@ -72,6 +73,7 @@ export default function Field({
   setUnique,
   responseId,
   setUniqueLoading,
+  onCancel,
 }: FieldProps): any {
   useCheckUnique({
     formId,
@@ -471,6 +473,9 @@ export default function Field({
       );
     }
     case 'response': {
+      // if (field?.options?.dependentRelationship) {
+      //   return <>field?.options?.dependentRelationship</>;
+      // }
       return (
         <>
           <div data-testid="response">
@@ -510,8 +515,12 @@ export default function Field({
                       title={field?.label}
                       formId={field?.form?._id}
                       createCallback={(newResponse) => {
-                        onChange({ field: field?._id, response: newResponse });
-                        setAddOption({ ...addOption, showDrawer: false });
+                        if (field?.options?.dependentRelationship) {
+                          onCancel();
+                        } else {
+                          onChange({ field: field?._id, response: newResponse });
+                          setAddOption({ ...addOption, showDrawer: false });
+                        }
                       }}
                     />
                   )}

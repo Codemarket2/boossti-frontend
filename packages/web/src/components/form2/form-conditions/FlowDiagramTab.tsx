@@ -1,6 +1,6 @@
 import { IForm, IFormulaVariable } from '@frontend/shared/types/form';
 import { generateObjectId } from '@frontend/shared/utils/objectId';
-import { MarkerType } from 'react-flow-renderer';
+import { MarkerType } from 'reactflow';
 import FlowEditor from '../../react-flow/FlowEditor';
 
 interface FlowDiagramTabProps {

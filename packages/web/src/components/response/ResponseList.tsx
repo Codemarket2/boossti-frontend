@@ -10,27 +10,27 @@ export interface IResponseList {
   form: any;
   workFlowFormResponseParentId?: string;
   showOnlyMyResponses?: boolean;
-  appId?: string;
   isTemplateInstance?: string;
   valueFilter?: any;
   onClickResponse?: (response, form) => void;
+  parentResponseId?: string;
 }
 
 export default function ResponseList({
   form,
   workFlowFormResponseParentId,
   showOnlyMyResponses,
-  appId,
   isTemplateInstance,
   valueFilter,
   onClickResponse,
+  parentResponseId,
 }: IResponseList): any {
   const { data, error, loading, state, setState, refetch } = useGetResponses({
     formId: form?._id,
     onlyMy: showOnlyMyResponses,
     workFlowFormResponseParentId,
-    appId,
     valueFilter,
+    parentResponseId,
   });
 
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });

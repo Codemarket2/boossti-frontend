@@ -7,7 +7,7 @@ import ReactFlow, {
   Controls,
   Background,
   MarkerType,
-} from 'react-flow-renderer';
+} from 'reactflow';
 import { generateObjectId } from '@frontend/shared/utils/objectId';
 import Sidebar from './Sidebar';
 import CustomNode from './CustomNode';
@@ -15,6 +15,7 @@ import CustomNode2 from './CustomNode2';
 import CustomEdge from './CustomEdge';
 import Overlay from '../common/Overlay';
 import { defaultEdges, defaultNodes } from './defaultNodes';
+import LeftColumn from './LeftColumn';
 
 const nodeTypes = {
   customNode: CustomNode,
@@ -52,27 +53,8 @@ export default function FlowEditor({
   const [edges, setEdges, onEdgesChange] = useEdgesState(flow?.edges || defaultEdges);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
-  const onConnect = useCallback(
-    (params) =>
-      setEdges((eds) =>
-        addEdge(
-          {
-            ...params,
-            markerEnd: {
-              type: MarkerType.ArrowClosed,
-              color: '#808080',
-            },
-            animated: true,
-            type: 'customEdge',
-            style: {
-              stroke: '#808080',
-            },
-          },
-          eds,
-        ),
-      ),
-    [],
-  );
+  const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), []);
+
   const onNodeChange = useCallback((id, newData) => {
     setNodes((nds) => nds.map((node) => (node?.id === id ? { ...node, data: newData } : node)));
   }, []);
@@ -101,7 +83,7 @@ export default function FlowEditor({
       }
       dropData = JSON.parse(dropData);
 
-      if (!dropData?.data || !dropData?.nodeType) {
+      if (!dropData?.data?._id || !dropData?.nodeType) {
         return;
       }
 
@@ -109,18 +91,24 @@ export default function FlowEditor({
         x: event.clientX - reactFlowBounds.left,
         y: event.clientY - reactFlowBounds.top,
       });
+
+      const ports = [];
+      dropData?.data?.fields?.forEach((field) => {
+        ports.push({
+          _id: generateObjectId(),
+          fieldId: field?._id,
+          position: 'top',
+          type: 'target',
+        });
+      });
       const newNode = {
         id: generateObjectId(),
         type: dropData?.nodeType,
         position,
         data: {
-          ...dropData?.data,
-          ports: [
-            { _id: generateObjectId(), position: 'top', type: 'target' },
-            { _id: generateObjectId(), position: 'bottom', type: 'source' },
-            { _id: generateObjectId(), position: 'left', type: 'target' },
-            { _id: generateObjectId(), position: 'right', type: 'source' },
-          ],
+          formId: dropData?.data?._id,
+          label: dropData?.data?.name,
+          ports,
         },
       };
       setNodes((nds) => nds.concat(newNode));
@@ -128,11 +116,22 @@ export default function FlowEditor({
     [reactFlowInstance],
   );
 
+  const defaultEdgeOptions = {
+    type: 'customEdge',
+    animated: true,
+    style: { strokeWidth: 2, stroke: '#808080' },
+    markerEnd: {
+      type: MarkerType.ArrowClosed,
+      color: '#808080',
+    },
+  };
+
   const Editor = (
     <FlowContext.Provider value={{ onNodeChange, editMode, onEdgeChange }}>
       <div style={{ height: 'calc(100vh - 50px)', minHeight: 300 }}>
         <div className="dndflow">
           <ReactFlowProvider>
+            {editMode && nodes?.length > 0 && <LeftColumn nodes={nodes} edges={edges} />}
             <div className="reactflow-wrapper" ref={reactFlowWrapper}>
               <ReactFlow
                 nodeTypes={nodeTypes}
@@ -148,14 +147,15 @@ export default function FlowEditor({
                 fitView
                 nodesDraggable={editMode}
                 nodesConnectable={editMode}
-                // elementsSelectable={editMode}
                 deleteKeyCode={['Backspace', 'Delete']}
+                defaultEdgeOptions={defaultEdgeOptions}
+                minZoom={0.2}
               >
                 <Controls showInteractive={editMode} />
                 <Background color="#aaa" gap={16} />
               </ReactFlow>
             </div>
-            {editMode && <Sidebar />}
+            {editMode && <Sidebar nodes={nodes} />}
           </ReactFlowProvider>
         </div>
       </div>

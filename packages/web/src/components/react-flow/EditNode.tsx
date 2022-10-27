@@ -24,6 +24,8 @@ interface IProps {
 }
 
 interface IPort {
+  _id: string;
+  fieldId: string;
   position: 'top' | 'bottom' | 'left' | 'right';
   type: 'source' | 'target';
   color: string;
@@ -56,7 +58,7 @@ export default function EditNode({ open, data, onChange, onClose }: IProps) {
   };
 
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog fullWidth open={open} onClose={onClose}>
       <DialogTitle>Edit Node</DialogTitle>
       <DialogContent dividers>
         <div style={{ minWidth: 300 }}>
@@ -134,6 +136,11 @@ export default function EditNode({ open, data, onChange, onClose }: IProps) {
               <div key={port?._id}>
                 <div className="py-2 d-flex align-items-center">
                   {portIndex + 1}.
+                  <SelectFormFields
+                    formId={state?.formId}
+                    value={port?.fieldId}
+                    onChange={(fieldId) => onPortChange(port?._id, { fieldId })}
+                  />
                   <FormControl size="small" fullWidth>
                     <InputLabel>Position</InputLabel>
                     <Select
@@ -167,13 +174,11 @@ export default function EditNode({ open, data, onChange, onClose }: IProps) {
                       onChange={({ target }) => onPortChange(port?._id, { color: target?.value })}
                     />
                   </Tooltip>
-                  {portIndex !== 0 && (
-                    <Tooltip title="Delete Port">
-                      <IconButton color="error" size="small" onClick={() => deletePort(port?._id)}>
-                        <Delete fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                  )}
+                  <Tooltip title="Delete Port">
+                    <IconButton color="error" size="small" onClick={() => deletePort(port?._id)}>
+                      <Delete fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
                 </div>
                 <Slider
                   defaultValue={50}

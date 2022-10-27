@@ -31,7 +31,6 @@ export default function TemplateIntances({ template }: IProps) {
             buttonLabel: customSettings?.buttonLabel || `Create ${template?.title}`,
             responsesView: 'table',
           }}
-          appId={template?._id}
           isTemplateInstance={template?.slug}
         />
       )}

@@ -1,22 +1,20 @@
+import { useCheckPermission } from '@frontend/shared/hooks/permission';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useDeleteResponse, useResolveCondition } from '@frontend/shared/hooks/response';
 import Link from 'next/link';
 import Typography from '@mui/material/Typography';
 import { useUpdateSection } from '@frontend/shared/hooks/section';
-import EditIcon from '@mui/icons-material/Edit';
-import { useAuthorization } from '@frontend/shared/hooks/auth';
 import ListItemText from '@mui/material/ListItemText';
 import moment from 'moment';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
 import { getUserName } from '@frontend/shared/hooks/user/getUserForm';
 import { parseResponse } from '@frontend/shared/hooks/response/getResponse';
-import Divider from '@mui/material/Divider';
+import { systemForms } from '@frontend/shared/utils/systemForms';
+import { IForm } from '@frontend/shared/types';
 import EditResponseDrawer from './EditResponseDrawer';
 import Breadcrumbs from '../common/Breadcrumbs';
 import { QRButton } from '../qrcode/QRButton';
@@ -30,16 +28,17 @@ import DeleteButton from '../common/DeleteButton';
 import RelationFields from '../form2/RelationFields';
 import RelationFieldView from '../form2/RelationFieldView';
 import FieldValuesMap from './FieldValuesMap';
+import WorkflowStep1 from './workflow/WorkflowStep1';
+import WorkflowSteps from './workflow/WorkflowSteps';
 
 interface DisplayResponseProps {
-  form: any;
+  form: IForm;
   response: any;
   hideBreadcrumbs?: boolean;
   hideNavigation?: boolean;
   hideAuthor?: boolean;
   hideWorkflow?: boolean;
   deleteCallBack?: () => void;
-  isAuthorized?: boolean;
   hideDelete?: boolean;
 }
 
@@ -53,17 +52,32 @@ export function DisplayResponse({
   hideAuthor,
   hideWorkflow,
   deleteCallBack,
-  isAuthorized,
   hideDelete,
 }: DisplayResponseProps) {
   const [state, setState] = useState(initialState);
   const [fieldsConditionResult, setFieldsConditionResult] = useState({});
 
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
-  const response = parseResponse(tempResponse);
-  const authorized =
-    useAuthorization([response?.createdBy?._id, form?.createdBy?._id], true) || isAuthorized;
-  const authorized2 = useAuthorization([form?.createdBy?._id], true);
+  const [response, setResponse] = useState(parseResponse(tempResponse));
+
+  useEffect(() => {
+    if (tempResponse) {
+      setResponse((oldResponse) => ({ ...oldResponse, ...parseResponse(tempResponse) }));
+    }
+  }, [tempResponse]);
+
+  const { hasPermission: hasEditPermission } = useCheckPermission({
+    actionType: 'EDIT',
+    formId: form?._id,
+    responseId: response?._id,
+  });
+
+  const { hasPermission: hasDeletePermission } = useCheckPermission({
+    actionType: 'DELETE',
+    formId: form?._id,
+    responseId: response?._id,
+  });
+
   const { section, onSectionChange, handleUpdateSection } = useUpdateSection({
     onAlert,
     _id:
@@ -95,7 +109,7 @@ export function DisplayResponse({
 
   const DeleteComponent = (
     <>
-      {!hideDelete && authorized && (
+      {!hideDelete && hasDeletePermission && (
         <DeleteButton
           tooltip="Delete Response"
           onClick={() => {
@@ -108,14 +122,137 @@ export function DisplayResponse({
   );
 
   const filterFields = (field) => {
-    if (field?.options?.hidden && field?.options?.hiddenConditions?.length > 0) {
-      if (fieldsConditionResult?.[field?._id]) {
+    if (field?.options?.hidden) {
+      if (field?.options?.hiddenConditions?.length > 0 && fieldsConditionResult?.[field?._id]) {
         return true;
       }
       return false;
     }
     return true;
   };
+
+  const DetailComponent = (
+    <>
+      {response?.workFlowFormResponseParentId && section?.options?.showRelation && (
+        <DisplayResponseById
+          responseId={response?.workFlowFormResponseParentId}
+          hideBreadcrumbs
+          hideWorkflow
+        />
+      )}
+      <Paper
+        variant="outlined"
+        style={!hideLeftNavigation ? { border: 'none' } : {}}
+        className={`d-flex ${
+          section?.options?.belowResponse ? 'flex-column-reverse' : 'flex-column'
+        }`}
+      >
+        <div className="p-2">
+          <div className="d-flex align-items-center">
+            {!hideAuthor && (
+              <div>
+                <Typography variant="body1" data-testid="userName">
+                  {`by ${getUserName(userForm, response?.createdBy)} `}
+                </Typography>
+                <Typography data-testid="createdAt" variant="body2">
+                  {`created at ${moment(response?.createdAt).format('l')} ${moment(
+                    response?.createdAt,
+                  ).format('LT')}`}
+                </Typography>
+                {response?.workFlowFormResponseParentId && (
+                  <Typography variant="body1">was submitted as workflow</Typography>
+                )}
+              </div>
+            )}
+            {hideBreadcrumbs && DeleteComponent}
+          </div>
+          <div className="mt-3" data-testid="ID">
+            <Typography fontWeight="bold">ID</Typography>
+            {response?.count}
+          </div>
+          {form?.fields?.filter(filterFields)?.map((field) => {
+            return (
+              <div key={field?._id} className="mt-3">
+                {field?._id === state.fieldId ? (
+                  <>
+                    <EditResponseDrawer
+                      fieldId={state.fieldId}
+                      form={form}
+                      response={response}
+                      onClose={() => setState(initialState)}
+                    />
+                  </>
+                ) : (
+                  <div>
+                    <FieldValuesMap
+                      authorized={hasEditPermission}
+                      displayFieldLabel
+                      verticalView
+                      field={field}
+                      response={response}
+                      onClickEditField={(e) => setState({ ...initialState, fieldId: field?._id })}
+                    />
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+        <RelationFieldView responseId={response?._id} formId={form?._id} />
+        {!hideWorkflow && section?.fields?.length > 0 && (
+          <FormFieldsValue
+            authorized={hasEditPermission}
+            disableGrid={!editMode}
+            fields={section?.fields}
+            values={section?.values}
+            layouts={section?.options?.layouts || {}}
+            handleValueChange={handleUpdateSection}
+            onLayoutChange={(layouts) =>
+              onSectionChange({
+                options: { ...section?.options, layouts },
+              })
+            }
+            workFlowFormResponseParentId={response?._id}
+          />
+        )}
+        {response?.workFlowFormResponseParentId && (
+          <WorkflowSteps
+            parentResponseId={response?._id}
+            workflowId={response?.workFlowFormResponseParentId}
+          />
+        )}
+      </Paper>
+    </>
+  );
+
+  const LeftNavigation = (
+    <div
+      className={`d-flex ${
+        section?.options?.belowResponse ? 'flex-column-reverse' : 'flex-column'
+      }`}
+    >
+      <Paper variant="outlined">
+        <List dense component="nav">
+          <ListItem button>
+            <ListItemText primary="ID" />
+          </ListItem>
+          <div data-testid="fieldName">
+            {form?.fields?.map((field) => (
+              <ListItem button key={field._id}>
+                <ListItemText primary={field?.label} />
+              </ListItem>
+            ))}
+          </div>
+        </List>
+      </Paper>
+      <RelationFields formId={form?._id} previewMode />
+      {section?.fields?.length > 0 && (
+        <ResponseSections authorized={false} section={section} onSectionChange={(sec) => null} />
+      )}
+    </div>
+  );
+
+  const isWorkflowDetail = form?.slug === systemForms?.workflow?.slug;
 
   return (
     <>
@@ -134,7 +271,7 @@ export function DisplayResponse({
           <div className="d-flex align-items-center">
             {!hideNavigation && (
               <>
-                {authorized && <EditMode />}
+                {hasEditPermission && <EditMode />}
                 <QRButton />
               </>
             )}
@@ -145,124 +282,15 @@ export function DisplayResponse({
       <Grid container spacing={1}>
         {hideLeftNavigation && (
           <Grid data-testid="hideLeftNavigation" item xs={3}>
-            <div
-              className={`d-flex ${
-                section?.options?.belowResponse ? 'flex-column-reverse' : 'flex-column'
-              }`}
-            >
-              <Paper variant="outlined">
-                <List dense component="nav">
-                  <ListItem button>
-                    <ListItemText primary="Form Fields" />
-                  </ListItem>
-                  <Divider />
-                  <ListItem button>
-                    <ListItemText primary="ID" />
-                  </ListItem>
-                  <div data-testid="fieldName">
-                    {form?.fields?.map((field) => (
-                      <ListItem button key={field._id}>
-                        <ListItemText primary={field?.label} />
-                      </ListItem>
-                    ))}
-                  </div>
-                </List>
-              </Paper>
-              <RelationFields formId={form?._id} previewMode />
-              <ResponseSections
-                authorized={false}
-                section={section}
-                onSectionChange={(sec) => null}
-              />
-            </div>
+            {isWorkflowDetail ? DetailComponent : LeftNavigation}
           </Grid>
         )}
         <Grid item xs={!hideLeftNavigation ? 12 : 9}>
-          {response?.workFlowFormResponseParentId && section?.options?.showRelation && (
-            <DisplayResponseById
-              responseId={response?.workFlowFormResponseParentId}
-              hideBreadcrumbs
-              hideWorkflow
-            />
+          {isWorkflowDetail ? (
+            <WorkflowStep1 workflowForm={form} workflowResponse={response} />
+          ) : (
+            DetailComponent
           )}
-          <Paper
-            variant="outlined"
-            style={!hideLeftNavigation ? { border: 'none' } : {}}
-            className={`d-flex ${
-              section?.options?.belowResponse ? 'flex-column-reverse' : 'flex-column'
-            }`}
-          >
-            <div className="p-2">
-              <div className="d-flex align-items-center">
-                {!hideAuthor && (
-                  <div>
-                    <Typography variant="body1" data-testid="userName">
-                      {`by ${getUserName(userForm, response?.createdBy)} `}
-                    </Typography>
-                    <Typography data-testid="createdAt" variant="body2">
-                      {`created at ${moment(response?.createdAt).format('l')} ${moment(
-                        response?.createdAt,
-                      ).format('LT')}`}
-                    </Typography>
-                    {response?.workFlowFormResponseParentId && (
-                      <Typography variant="body1">was submitted as workflow</Typography>
-                    )}
-                  </div>
-                )}
-                {hideBreadcrumbs && DeleteComponent}
-              </div>
-              <div className="mt-3" data-testid="ID">
-                <Typography fontWeight="bold">ID</Typography>
-                {response?.count}
-              </div>
-              {form?.fields?.filter(filterFields)?.map((field) => {
-                return (
-                  <div key={field?._id} className="mt-3">
-                    {field?._id === state.fieldId ? (
-                      <>
-                        <EditResponseDrawer
-                          fieldId={state.fieldId}
-                          form={form}
-                          response={response}
-                          onClose={() => setState(initialState)}
-                        />
-                      </>
-                    ) : (
-                      <div>
-                        <FieldValuesMap
-                          authorized={authorized}
-                          displayFieldLabel
-                          verticalView
-                          field={field}
-                          response={response}
-                          onClickEditField={(e) =>
-                            setState({ ...initialState, fieldId: field?._id })
-                          }
-                        />
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-            <RelationFieldView responseId={response?._id} formId={form?._id} />
-            {!hideWorkflow && section?.fields?.length > 0 && (
-              <FormFieldsValue
-                authorized={authorized2}
-                disableGrid={!editMode}
-                fields={section?.fields}
-                values={section?.values}
-                layouts={section?.options?.layouts || {}}
-                handleValueChange={handleUpdateSection}
-                onLayoutChange={(layouts) =>
-                  onSectionChange({
-                    options: { ...section?.options, layouts },
-                  })
-                }
-                workFlowFormResponseParentId={response?._id}
-              />
-            )}
-          </Paper>
         </Grid>
       </Grid>
     </>

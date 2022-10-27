@@ -1,10 +1,17 @@
 import { useGetForms } from '@frontend/shared/hooks/form';
+import { IForm } from '@frontend/shared/types';
 import Search from '@mui/icons-material/Search';
+import { Tooltip } from '@mui/material';
 import TextField from '@mui/material/TextField';
-import React from 'react';
+import React, { Fragment } from 'react';
+import { useReactFlow } from 'reactflow';
 import ErrorLoading from '../common/ErrorLoading';
 
-export default function Sidebar() {
+interface ISidebar {
+  nodes: any[];
+}
+
+export default function Sidebar({ nodes }: ISidebar) {
   const { data, error, loading, state, setState } = useGetForms({ page: 1, limit: 10 });
 
   const onDragStart = (event, nodeType, nodeData) => {
@@ -22,14 +29,6 @@ export default function Sidebar() {
   return (
     <aside className="mt-1">
       <div>
-        {/* <div
-          className="dndnode input"
-          onDragStart={(event) => onDragStart(event, 'customNode', { label: 'Sample text...' })}
-          draggable
-        >
-          Text Node
-        </div> */}
-        {/* <Typography>Forms</Typography> */}
         <TextField
           fullWidth
           size="small"
@@ -46,16 +45,11 @@ export default function Sidebar() {
         ) : (
           <div style={{ maxHeight: 'calc(100vh - 180px)', overflowY: 'auto' }}>
             {data?.getForms?.data?.map((form) => (
-              <div
-                key={form?._id}
-                className="dndnode"
-                onDragStart={(event) =>
-                  onDragStart(event, 'customNode2', { formId: form?._id, label: form?.name })
-                }
-                draggable
-              >
-                {form?.name}
-              </div>
+              <ListItem
+                form={form}
+                existingNode={nodes?.find((node) => node?.data?.formId === form?._id)}
+                onDragStart={onDragStart}
+              />
             ))}
           </div>
         )}
@@ -63,3 +57,38 @@ export default function Sidebar() {
     </aside>
   );
 }
+
+interface IListItem {
+  form: IForm;
+  existingNode: any;
+  onDragStart: any;
+}
+
+const ListItem = ({ form, existingNode, onDragStart }: IListItem) => {
+  const { setCenter } = useReactFlow();
+  return (
+    <Fragment key={form?._id}>
+      <Tooltip
+        placement="left"
+        title={existingNode?.id ? 'This form is already present, click to goto the node' : 'Drag'}
+      >
+        <div
+          className="dndnode"
+          onClick={() => {
+            if (existingNode?.id) {
+              setCenter(existingNode?.position?.x, existingNode?.position?.y, {
+                duration: 800,
+              });
+            }
+          }}
+          onDragStart={(event) => {
+            onDragStart(event, 'customNode2', form);
+          }}
+          draggable={!existingNode?.id}
+        >
+          {form?.name}
+        </div>
+      </Tooltip>
+    </Fragment>
+  );
+};
