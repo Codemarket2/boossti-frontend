@@ -1374,12 +1374,13 @@ export default function ActionForm({
                 >
                   <InputGroup>
                     <TextField
-                      // inputProps={{ 'data-testid': 'subject-input' }}
                       fullWidth
-                      label="Whatsapp Message"
+                      label="whatsappMessage*"
                       variant="outlined"
                       name="whatsappMessage"
                       size="small"
+                      rows={50}
+                      multiline
                       disabled={formik.isSubmitting}
                       value={formik.values.whatsappMessage}
                       onChange={formik.handleChange}
@@ -1391,6 +1392,21 @@ export default function ActionForm({
                   </InputGroup>
                 </FormControl>
               </div>
+              {/* <div className="d-flex align-items-center mt-3">
+                <InputGroup>
+                  <InputLabel>whatsappMessage</InputLabel>
+                  <RichTextarea
+                    // testId="body-input"
+                    value={formik.values.whatsappMessage}
+                    onChange={(newValue) => formik.setFieldValue('whatsappMessage', newValue)}
+                  />
+                  {formik.touched.whatsappMessage && formik.errors.whatsappMessage && (
+                    <FormHelperText className="text-danger">
+                      {formik.errors.whatsappMessage}
+                    </FormHelperText>
+                  )}
+                </InputGroup>
+              </div> */}
             </>
           )}
           <InputGroup>
