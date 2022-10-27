@@ -1,14 +1,8 @@
-import { FunctionComponent } from 'react';
+import { FunctionComponent, ReactNode } from 'react';
 
-interface PanelSectionProps extends FunctionComponent {
+interface PanelSectionProps {
   title: string;
-  children?:
-    | React.ReactNode
-    | React.ReactNode[]
-    | JSX.Element
-    | JSX.Element[]
-    | React.ReactElement
-    | React.ReactElement[];
+  children?: JSX.Element;
 }
 const PanelSection = ({ title, children }: PanelSectionProps) => {
   return (

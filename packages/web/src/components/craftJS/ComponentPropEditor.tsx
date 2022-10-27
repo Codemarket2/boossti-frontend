@@ -16,10 +16,12 @@ interface SelectedComponentsProps {
 const useComponentSettings = () => {
   const [selectedComponent, setSelectedComponent] = useState<SelectedComponentsProps | null>(null);
 
-  const { actions, selectedNodeId, editorState, query } = useEditor((state, query) => {
-    const [currentNodeId] = state.events.selected;
+  const { actions, selectedNodeId, editorState, query } = useEditor((state, _query) => {
+    const currentNodeId = state.events.selected.size
+      ? state.events.selected.values().next().value
+      : null;
 
-    return { selectedNodeId: currentNodeId, editorState: state, query };
+    return { selectedNodeId: currentNodeId, editorState: state, query: _query };
   });
 
   useEffect(() => {
@@ -34,7 +36,7 @@ const useComponentSettings = () => {
       try {
         actions.delete(selectedNodeId);
       } catch (err) {
-        alert('Failed to delete the seleted component', err);
+        alert('Failed to delete the seleted component');
       }
     };
 
