@@ -1,6 +1,9 @@
-import { Button, Divider, List, ListItem, ListItemText, Typography } from '@mui/material';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useReactFlow } from 'reactflow';
+import TreeView from '@mui/lab/TreeView';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import TreeItem from '@mui/lab/TreeItem';
 
 interface ILeftColumn {
   nodes: any[];
@@ -8,17 +11,14 @@ interface ILeftColumn {
 }
 
 const getSteps = ({ stepCount = 1, node, edges, nodes }) => {
-  let newForms = [];
+  const newForms = [];
   edges
     ?.filter((edge) => edge?.source === node?.id)
     ?.forEach((edge) => {
       const stepNode = nodes?.find((n) => n?.id === edge?.target);
       if (stepNode?.id) {
-        newForms.push({ node: stepNode, stepCount });
         const nextSteps = getSteps({ node: stepNode, stepCount: stepCount + 1, edges, nodes });
-        if (nextSteps?.length > 0) {
-          newForms = [...newForms, ...nextSteps];
-        }
+        newForms.push({ node: stepNode, stepCount, childNodes: nextSteps });
       }
     });
   return newForms;
@@ -26,10 +26,9 @@ const getSteps = ({ stepCount = 1, node, edges, nodes }) => {
 
 export default function LeftColumn({ nodes, edges }: ILeftColumn) {
   const [forms, setForms] = useState([]);
-  const { setViewport, getViewport, fitBounds } = useReactFlow();
   useEffect(() => {
     if (nodes?.length > 0 && edges) {
-      let newForms = [];
+      const newForms = [];
       const step1Nodes = nodes?.filter((node) => {
         const targetEdges = edges?.filter((edge) => edge?.target === node?.id);
         if (!(targetEdges?.length > 0)) {
@@ -38,9 +37,8 @@ export default function LeftColumn({ nodes, edges }: ILeftColumn) {
         return false;
       });
       step1Nodes?.forEach((step1Node) => {
-        newForms.push({ node: step1Node, stepCount: 1 });
         const nextSteps = getSteps({ nodes, edges, node: step1Node, stepCount: 2 });
-        newForms = [...newForms, ...nextSteps];
+        newForms.push({ node: step1Node, stepCount: 1, childNodes: nextSteps });
       });
       setForms(newForms);
     }
@@ -49,27 +47,34 @@ export default function LeftColumn({ nodes, edges }: ILeftColumn) {
   return (
     <aside className="mt-1">
       <div className="">
-        <List dense disablePadding>
-          {forms?.map((form, i) => (
-            <Fragment key={form?.node?.id}>
-              {i !== 0 && form?.stepCount === 1 && <Divider />}
-              <ListItem
-                button
-                onClick={() => {
-                  const selectedNode = form?.node;
-                  const currentViewPort = getViewport();
-                  setViewport(
-                    { ...currentViewPort, zoom: currentViewPort?.zoom },
-                    { duration: 500 },
-                  );
-                }}
-              >
-                <ListItemText primary={`${form?.stepCount}). ${form?.node?.data?.label}`} />
-              </ListItem>
-            </Fragment>
+        <TreeView
+          aria-label="file system navigator"
+          defaultCollapseIcon={<ExpandMoreIcon />}
+          defaultExpandIcon={<ChevronRightIcon />}
+          sx={{ height: 240, flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
+        >
+          {forms?.map((form) => (
+            <Item item={form} key={form?.node?.id} />
           ))}
-        </List>
+        </TreeView>
       </div>
     </aside>
   );
 }
+
+const Item = ({ item }: { item: any }) => {
+  const { setCenter } = useReactFlow();
+  return (
+    <TreeItem
+      onClick={() => {
+        setCenter(item?.node?.position?.x, item?.node?.position?.y, { duration: 800 });
+      }}
+      nodeId={item?.node?.id}
+      label={item?.node?.data?.label}
+    >
+      {item?.childNodes?.map((childNode) => (
+        <Item key={childNode?.node?.id} item={childNode} />
+      ))}
+    </TreeItem>
+  );
+};
