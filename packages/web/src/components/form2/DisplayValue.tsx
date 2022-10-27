@@ -18,6 +18,7 @@ import ReactFlow from '../react-flow/ReactFlow';
 import DisplayFieldCondition from './field/field-condition/DisplayFieldCondition';
 import GrapesOverlay from '../grapesjs/grapesOverlay';
 import DisplaySignature from '../signature/DisplaySignature';
+import { PageViewerOverlayBtn as CraftsJSPageViewer } from '../craftJS/craftJSPageViewer';
 
 interface IProps {
   field: Partial<IField>;
@@ -186,6 +187,8 @@ export default function DisplayValue({
           />
         </div>
       );
+    case 'craftjs':
+      return <CraftsJSPageViewer PageContent={value?.value} />;
     default:
       return <>{value?.value}</>;
   }
