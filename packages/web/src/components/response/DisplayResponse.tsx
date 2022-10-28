@@ -5,33 +5,33 @@ import { useDeleteResponse, useResolveCondition } from '@frontend/shared/hooks/r
 import Link from 'next/link';
 import Typography from '@mui/material/Typography';
 import { useUpdateSection } from '@frontend/shared/hooks/section';
-import ListItemText from '@mui/material/ListItemText';
 import moment from 'moment';
 import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Grid';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
+// import ListItemText from '@mui/material/ListItemText';
+// import Grid from '@mui/material/Grid';
+// import List from '@mui/material/List';
+// import ListItem from '@mui/material/ListItem';
+// import { systemForms } from '@frontend/shared/utils/systemForms';
 import { getUserName } from '@frontend/shared/hooks/user/getUserForm';
 import { parseResponse } from '@frontend/shared/hooks/response/getResponse';
-import { systemForms } from '@frontend/shared/utils/systemForms';
 import { IForm } from '@frontend/shared/types';
 import EditResponseDrawer from './EditResponseDrawer';
 import Breadcrumbs from '../common/Breadcrumbs';
 import { QRButton } from '../qrcode/QRButton';
-import ResponseSections from './ResponseSection';
 import FormFieldsValue from '../form2/FormFieldsValue';
 import { onAlert } from '../../utils/alert';
 import BackdropComponent from '../common/Backdrop';
 import EditMode from '../common/EditMode';
 import DisplayResponseById from './DisplayResponseById';
 import DeleteButton from '../common/DeleteButton';
-import RelationFields from '../form2/RelationFields';
 import RelationFieldView from '../form2/RelationFieldView';
 import FieldValuesMap from './FieldValuesMap';
-import WorkflowStep1 from './workflow/WorkflowStep1';
 import WorkflowSteps from './workflow/WorkflowSteps';
+// import ResponseSections from './ResponseSection';
+// import WorkflowStep1 from './workflow/WorkflowStep1';
+// import RelationFields from '../form2/RelationFields';
 
-interface DisplayResponseProps {
+export interface DisplayResponseProps {
   form: IForm;
   response: any;
   hideBreadcrumbs?: boolean;
@@ -225,34 +225,34 @@ export function DisplayResponse({
     </>
   );
 
-  const LeftNavigation = (
-    <div
-      className={`d-flex ${
-        section?.options?.belowResponse ? 'flex-column-reverse' : 'flex-column'
-      }`}
-    >
-      <Paper variant="outlined">
-        <List dense component="nav">
-          <ListItem button>
-            <ListItemText primary="ID" />
-          </ListItem>
-          <div data-testid="fieldName">
-            {form?.fields?.map((field) => (
-              <ListItem button key={field._id}>
-                <ListItemText primary={field?.label} />
-              </ListItem>
-            ))}
-          </div>
-        </List>
-      </Paper>
-      <RelationFields formId={form?._id} previewMode />
-      {section?.fields?.length > 0 && (
-        <ResponseSections authorized={false} section={section} onSectionChange={(sec) => null} />
-      )}
-    </div>
-  );
+  // const LeftNavigation = (
+  //   <div
+  //     className={`d-flex ${
+  //       section?.options?.belowResponse ? 'flex-column-reverse' : 'flex-column'
+  //     }`}
+  //   >
+  //     <Paper variant="outlined">
+  //       <List dense component="nav">
+  //         <ListItem button>
+  //           <ListItemText primary="ID" />
+  //         </ListItem>
+  //         <div data-testid="fieldName">
+  //           {form?.fields?.map((field) => (
+  //             <ListItem button key={field._id}>
+  //               <ListItemText primary={field?.label} />
+  //             </ListItem>
+  //           ))}
+  //         </div>
+  //       </List>
+  //     </Paper>
+  //     <RelationFields formId={form?._id} previewMode />
+  //     {section?.fields?.length > 0 && (
+  //       <ResponseSections authorized={false} section={section} onSectionChange={(sec) => null} />
+  //     )}
+  //   </div>
+  // );
 
-  const isWorkflowDetail = form?.slug === systemForms?.workflow?.slug;
+  // const isWorkflowDetail = form?.slug === systemForms?.workflow?.slug;
 
   return (
     <>
@@ -262,8 +262,8 @@ export function DisplayResponse({
           {!hideNavigation && (
             <div data-testid="navigation">
               <Breadcrumbs>
-                <Link href="/forms">Forms</Link>
-                <Link href={`/forms/${form.slug}`}>{form?.name}</Link>
+                <Link href="/feed">Forms</Link>
+                <Link href={`/form/${form.slug}`}>{form?.name}</Link>
                 <Typography>{response.count}</Typography>
               </Breadcrumbs>
             </div>
@@ -279,7 +279,8 @@ export function DisplayResponse({
           </div>
         </div>
       )}
-      <Grid container spacing={1}>
+      {DetailComponent}
+      {/* <Grid container spacing={1}>
         {hideLeftNavigation && (
           <Grid data-testid="hideLeftNavigation" item xs={3}>
             {isWorkflowDetail ? DetailComponent : LeftNavigation}
@@ -292,7 +293,7 @@ export function DisplayResponse({
             DetailComponent
           )}
         </Grid>
-      </Grid>
+      </Grid> */}
     </>
   );
 }

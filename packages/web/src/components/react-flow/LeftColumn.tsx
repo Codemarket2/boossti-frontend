@@ -26,6 +26,7 @@ const getSteps = ({ stepCount = 1, node, edges, nodes }) => {
 
 export default function LeftColumn({ nodes, edges }: ILeftColumn) {
   const [forms, setForms] = useState([]);
+  const [nodeIds, setNodeIds] = useState(nodes?.map((node) => node?.id));
   useEffect(() => {
     if (nodes?.length > 0 && edges) {
       const newForms = [];
@@ -48,6 +49,8 @@ export default function LeftColumn({ nodes, edges }: ILeftColumn) {
     <aside className="mt-1">
       <div className="">
         <TreeView
+          onNodeToggle={(event, newNodeIds) => setNodeIds(newNodeIds)}
+          expanded={nodeIds}
           aria-label="file system navigator"
           defaultCollapseIcon={<ExpandMoreIcon />}
           defaultExpandIcon={<ChevronRightIcon />}
@@ -67,7 +70,7 @@ const Item = ({ item }: { item: any }) => {
   return (
     <TreeItem
       onClick={() => {
-        setCenter(item?.node?.position?.x, item?.node?.position?.y, { duration: 800 });
+        setCenter(item?.node?.position?.x, item?.node?.position?.y, { duration: 500 });
       }}
       nodeId={item?.node?.id}
       label={item?.node?.data?.label}

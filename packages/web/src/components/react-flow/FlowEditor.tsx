@@ -128,10 +128,18 @@ export default function FlowEditor({
 
   const Editor = (
     <FlowContext.Provider value={{ onNodeChange, editMode, onEdgeChange }}>
-      <div style={{ height: 'calc(100vh - 50px)', minHeight: 300 }}>
+      <div
+        data-testid="react-flow-renderer"
+        style={{
+          height: 'calc(100vh - 50px)',
+          minHeight: 300,
+          width: '100%',
+          border: '1px solid lightgrey',
+        }}
+      >
         <div className="dndflow">
           <ReactFlowProvider>
-            {editMode && nodes?.length > 0 && <LeftColumn nodes={nodes} edges={edges} />}
+            {nodes?.length > 0 && <LeftColumn nodes={nodes} edges={edges} />}
             <div className="reactflow-wrapper" ref={reactFlowWrapper}>
               <ReactFlow
                 nodeTypes={nodeTypes}
@@ -152,7 +160,7 @@ export default function FlowEditor({
                 minZoom={0.2}
               >
                 <Controls showInteractive={editMode} />
-                <Background color="#aaa" gap={16} />
+                <Background color="#aaa" gap={12} />
               </ReactFlow>
             </div>
             {editMode && <Sidebar nodes={nodes} />}

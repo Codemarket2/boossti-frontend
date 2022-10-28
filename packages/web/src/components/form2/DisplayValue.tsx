@@ -166,7 +166,9 @@ export default function DisplayValue({
     case 'diagram':
       return <DisplayDiagram diagram={value?.options?.diagram} />;
     case 'flowDiagram':
-      return <ReactFlow _id={value?._id} flow={value?.options?.flowDiagram} />;
+      return (
+        <ReactFlow _id={value?._id} flow={value?.options?.flowDiagram} noOverlay={verticalView} />
+      );
     case 'condition':
       return <DisplayFieldCondition conditions={value?.options?.conditions} />;
     case 'webpage':

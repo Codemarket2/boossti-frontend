@@ -67,23 +67,7 @@ export default function DrawerContent({ showDrawer, toggleDrawer, admin }: IProp
       <List style={{ minWidth: 300 }}>
         <DarkModeToggle />
         <Divider />
-        <Link href="/forms/apps">
-          <ListItem button selected={checkActiveRoute(activeRoute, '/templates')}>
-            <ListItemIcon>
-              <ListIcon />
-            </ListItemIcon>
-            <ListItemText primary="Apps" />
-          </ListItem>
-        </Link>
-        <Link href="/forms">
-          <ListItem button selected={checkActiveRoute(activeRoute, '/forms')}>
-            <ListItemIcon>
-              <TuneIcon />
-            </ListItemIcon>
-            <ListItemText primary="Forms" />
-          </ListItem>
-        </Link>
-        <Link href="/feeds">
+        <Link href="/feed">
           <ListItem button selected={checkActiveRoute(activeRoute, '/feeds')}>
             <ListItemIcon>
               <TuneIcon />
@@ -91,6 +75,22 @@ export default function DrawerContent({ showDrawer, toggleDrawer, admin }: IProp
             <ListItemText primary="Feeds" />
           </ListItem>
         </Link>
+        <Link href="/form/apps">
+          <ListItem button selected={checkActiveRoute(activeRoute, '/templates')}>
+            <ListItemIcon>
+              <ListIcon />
+            </ListItemIcon>
+            <ListItemText primary="Apps" />
+          </ListItem>
+        </Link>
+        {/* <Link href="/forms">
+          <ListItem button selected={checkActiveRoute(activeRoute, '/forms')}>
+            <ListItemIcon>
+              <TuneIcon />
+            </ListItemIcon>
+            <ListItemText primary="Forms" />
+          </ListItem>
+        </Link> */}
         <Link href="/emails">
           <ListItem button selected={checkActiveRoute(activeRoute, '/emails')}>
             <ListItemIcon>

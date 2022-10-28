@@ -3,7 +3,7 @@ import Feeds from '../../src/components/form2/feed/Feeds';
 
 export default function FeedPage() {
   return (
-    <UserLayout container={false} authRequired>
+    <UserLayout container={false} authRequired feedLayout>
       <Feeds />
     </UserLayout>
   );

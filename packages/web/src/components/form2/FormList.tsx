@@ -35,6 +35,7 @@ export default function FormList({ hideHeader, customLink, selectedForm }: IProp
         onSearchChange={(newSearch) => setState({ ...state, search: newSearch })}
         searchLoading={loading}
         handleAddNew={() => router.push(`/forms/new`)}
+        addIconButton
       >
         <Typography color="textPrimary">Forms</Typography>
       </ListHeader2>
@@ -42,7 +43,7 @@ export default function FormList({ hideHeader, customLink, selectedForm }: IProp
         {error || !data || !data.getForms ? (
           <ErrorLoading error={error} />
         ) : (
-          <List dense className="p-0">
+          <List dense disablePadding>
             {data.getForms.data.map((form, i) => (
               <Fragment key={form._id}>
                 {i > 0 && <Divider />}

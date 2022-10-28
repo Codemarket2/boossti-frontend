@@ -16,7 +16,7 @@ export default function Page(): any {
   };
 
   return (
-    <UserLayout container={false} authRequired>
+    <UserLayout container={false} authRequired feedLayout>
       {slug ? <FormPage slug={slug.toString()} onSlugChange={onSlugChange} /> : <ErrorLoading />}
     </UserLayout>
   );
