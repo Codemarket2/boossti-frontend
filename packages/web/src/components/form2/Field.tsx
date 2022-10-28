@@ -626,6 +626,7 @@ export default function Field({
               editMode
               flow={value?.options?.flowDiagram}
               onFlowChange={(flowDiagram) => onChange({ options: { flowDiagram } })}
+              noOverlay
             />
             {validation.error && (
               <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>

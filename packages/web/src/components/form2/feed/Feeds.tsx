@@ -1,5 +1,9 @@
 import { useGetFormBySlug } from '@frontend/shared/hooks/form';
+import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
+import { IconButton, Paper, Tooltip } from '@mui/material';
 import Grid from '@mui/material/Grid';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -12,36 +16,31 @@ import FormList from '../FormList';
 import FormView from '../FormView';
 
 export default function Feeds() {
-  const [formSlug, setFormSlug] = useState('');
+  // const [formSlug, setFormSlug] = useState('');
+  // const [selectedTab, setSelectedTab] = useState('forms');
+  // const [leftMenuOpen, setLeftMenuOpen] = useState(true);
   const router = useRouter();
 
-  useEffect(() => {
-    if (router.query?.form) {
-      setFormSlug(router.query?.form?.toString());
-    }
-  }, [router.query]);
+  // useEffect(() => {
+  //   if (router.query?.form) {
+  //     setFormSlug(router.query?.form?.toString());
+  //     setSelectedTab(
+  //       router.query?.form?.toString() === 'work-flow-diagram' ? 'workflows' : 'forms',
+  //     );
+  //   } else {
+  //     setFormSlug('');
+  //     setSelectedTab('forms');
+  //   }
+  // }, [router.query?.form]);
 
-  return (
-    <Grid container spacing={0.5}>
-      <Grid item xs={12} sm={3}>
-        <FormList
-          hideHeader
-          customLink={(form) => `/feeds?form=${form?.slug}&tab=Responses`}
-          selectedForm={formSlug}
-        />
-      </Grid>
-      <Grid item xs={12} sm={9}>
-        {formSlug ? (
-          <>
-            <DisplayForm formSlug={formSlug} />
-          </>
-        ) : (
-          <Typography textAlign="center" variant="h4" className="mt-5">
-            Select form from the list
-          </Typography>
-        )}
-      </Grid>
-    </Grid>
+  return router.query?.form ? (
+    <>
+      <DisplayForm formSlug={router.query?.form?.toString()} />
+    </>
+  ) : (
+    <Typography textAlign="center" variant="h4" className="mt-5">
+      Select form from the list
+    </Typography>
   );
 }
 

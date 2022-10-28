@@ -316,17 +316,17 @@ describe('checks the working of switch case', () => {
     const displayFieldCondition = screen.getByTestId('displayFieldCondition-output');
     expect(displayFieldCondition).toBeInTheDocument();
   });
-  it('checks react flow rendering', () => {
-    const props = getInitialProps();
-    props.field.fieldType = 'reactFlow';
+  // it('checks react flow rendering', () => {
+  //   const props = getInitialProps();
+  //   props.field.fieldType = 'reactFlow';
 
-    render(<ReactFlowTest {...props} />);
+  //   render(<ReactFlowTest {...props} />);
 
-    const reactFlow = screen.getByTestId('reactFlow-output');
-    expect(reactFlow).toBeInTheDocument();
-    const button = screen.getByTestId('button');
-    expect(button).toBeInTheDocument();
-    expect(button).toHaveTextContent('View Flow Diagram');
-    fireEvent.click(button);
-  });
+  //   const reactFlow = screen.getByTestId('reactFlow-output');
+  //   expect(reactFlow).toBeInTheDocument();
+  //   const button = screen.getByTestId('button');
+  //   expect(button).toBeInTheDocument();
+  //   expect(button).toHaveTextContent('View Flow Diagram');
+  //   fireEvent.click(button);
+  // });
 });

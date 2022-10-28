@@ -40,7 +40,7 @@ export default function Page() {
   }
 
   if (globalState.auth.authenticated) {
-    router.push('/feeds');
+    router.push('/feed');
   }
 
   return <HomeScreen />;

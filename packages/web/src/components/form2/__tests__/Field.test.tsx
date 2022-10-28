@@ -260,13 +260,13 @@ describe('Test cases for Field component', () => {
     const diagram = screen.getByTestId('diagram');
     expect(diagram).toBeInTheDocument();
   });
-  it('checks rendering of flow Diagram', () => {
-    const props = getInitialProps();
-    props.field.fieldType = 'flowDiagram';
-    render(<FieldTest {...props} />);
-    const flowDiagra = screen.getByTestId('flow-diagram');
-    expect(flowDiagra).toBeInTheDocument();
-  });
+  // it('checks rendering of flow Diagram', () => {
+  //   const props = getInitialProps();
+  //   props.field.fieldType = 'flowDiagram';
+  //   render(<FieldTest {...props} />);
+  //   const flowDiagra = screen.getByTestId('flow-diagram');
+  //   expect(flowDiagra).toBeInTheDocument();
+  // });
   it('checks rendering of condition', () => {
     const props = getInitialProps();
     props.field.fieldType = 'condition';

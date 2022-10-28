@@ -7,12 +7,12 @@ export default function Page() {
   const { count, slug } = router.query;
 
   return (
-    <UserLayout authRequired={false} container={false}>
+    <UserLayout authRequired={false} container={false} feedLayout>
       {slug && (
         <ResponseScreen
           slug={slug?.toString()}
           count={count?.toString()}
-          deleteCallback={(form) => router.push(`/forms/${form?.slug}`)}
+          deleteCallback={(form) => router.push(`/form/${form?.slug}`)}
         />
       )}
     </UserLayout>

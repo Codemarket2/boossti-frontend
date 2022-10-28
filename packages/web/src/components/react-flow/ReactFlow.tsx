@@ -9,9 +9,16 @@ interface ReactFlowProps {
   flow: IFlow;
   onFlowChange?: (flow: IFlow) => void;
   editMode?: boolean;
+  noOverlay?: boolean;
 }
 
-export default function ReactFlow({ _id, flow, onFlowChange, editMode }: ReactFlowProps) {
+export default function ReactFlow({
+  _id,
+  flow,
+  onFlowChange,
+  editMode,
+  noOverlay,
+}: ReactFlowProps) {
   const [editor, setEditor] = useState(false);
   const router = useRouter();
 
@@ -43,8 +50,23 @@ export default function ReactFlow({ _id, flow, onFlowChange, editMode }: ReactFl
       setEditor(false);
     }
   }, [router?.query?.editMode]);
+
+  if (noOverlay) {
+    return (
+      <FlowEditor
+        editMode={editMode}
+        open={editor}
+        onClose={() => toggleEditor()}
+        flow={flow}
+        onFlowChange={(newFlow) => {
+          if (editMode) onFlowChange(newFlow);
+        }}
+      />
+    );
+  }
+
   return (
-    <div data-testid="reactFlow-output">
+    <div data-testid="reactFlow-output" className="w-100">
       <Button
         data-testid="button"
         size="small"

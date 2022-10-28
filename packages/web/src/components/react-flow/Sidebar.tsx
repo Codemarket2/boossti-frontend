@@ -1,7 +1,8 @@
 import { useGetForms } from '@frontend/shared/hooks/form';
 import { IForm } from '@frontend/shared/types';
+import AddCircle from '@mui/icons-material/AddCircle';
 import Search from '@mui/icons-material/Search';
-import { Tooltip } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import React, { Fragment } from 'react';
 import { useReactFlow } from 'reactflow';
@@ -40,6 +41,13 @@ export default function Sidebar({ nodes }: ISidebar) {
             endAdornment: <Search />,
           }}
         />
+        <Tooltip title="Create new form" placement="left">
+          <a href="/form/new" target="_blank">
+            <IconButton color="primary">
+              <AddCircle fontSize="large" />
+            </IconButton>
+          </a>
+        </Tooltip>
         {loading || error ? (
           <ErrorLoading error={error} />
         ) : (

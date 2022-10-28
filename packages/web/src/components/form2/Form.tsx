@@ -169,7 +169,7 @@ export default function Form({
           ) : (
             <div className="d-sm-flex justify-content-between align-items-center">
               <Breadcrumbs>
-                <Link href="/forms">Forms</Link>
+                <Link href="/feed">Forms</Link>
                 <InlineInput
                   placeholder="Form Name"
                   value={form?.name}

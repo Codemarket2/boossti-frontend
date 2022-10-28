@@ -26,7 +26,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
 import AppBar from '../components/common/AppBar';
-import { FormPage } from '../../pages/forms/[slug]';
+import { DisplayForm } from '../components/form2/DisplayForm';
 
 const PREFIX = 'HomeScreen';
 
@@ -136,7 +136,7 @@ export default function SignInSide() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <FormPage slug="gift-card-campaigns" />
+            <DisplayForm slug="gift-card-campaigns" />
 
             <Box mt={5}>
               <Copyright />
