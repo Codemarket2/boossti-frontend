@@ -5,7 +5,7 @@ import Search from '@mui/icons-material/Search';
 import { IconButton, Tooltip } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import React, { Fragment } from 'react';
-import { useReactFlow } from 'reactflow';
+// import { useReactFlow } from 'reactflow';
 import ErrorLoading from '../common/ErrorLoading';
 
 interface ISidebar {
@@ -73,26 +73,28 @@ interface IListItem {
 }
 
 const ListItem = ({ form, existingNode, onDragStart }: IListItem) => {
-  const { setCenter } = useReactFlow();
+  // const { setCenter } = useReactFlow();
   return (
     <Fragment key={form?._id}>
       <Tooltip
         placement="left"
-        title={existingNode?.id ? 'This form is already present, click to goto the node' : 'Drag'}
+        title="Drag"
+        // title={existingNode?.id ? 'This form is already present, click to goto the node' : 'Drag'}
       >
         <div
           className="dndnode"
-          onClick={() => {
-            if (existingNode?.id) {
-              setCenter(existingNode?.position?.x, existingNode?.position?.y, {
-                duration: 800,
-              });
-            }
-          }}
+          // onClick={() => {
+          //   if (existingNode?.id) {
+          //     setCenter(existingNode?.position?.x, existingNode?.position?.y, {
+          //       duration: 800,
+          //     });
+          //   }
+          // }}
           onDragStart={(event) => {
             onDragStart(event, 'customNode2', form);
           }}
-          draggable={!existingNode?.id}
+          draggable
+          // draggable={!existingNode?.id}
         >
           {form?.name}
         </div>

@@ -39,7 +39,7 @@ import Formula from './formula/Formula';
 import FieldCondition from './field-condition/FieldCondition';
 import DefaultValue from './DefaultValue';
 // import HiddenCondition from './HiddenCondition';
-import FieldConditionForm, { SelectSubField } from './field-condition/FieldConditionForm';
+import { SelectSubField } from './field-condition/FieldConditionForm';
 import AddConditionButton from './field-condition/AddConditionButton';
 
 interface IProps {

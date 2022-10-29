@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, createContext } from 'react';
+import React, { useState, useRef, useCallback, createContext, useEffect } from 'react';
 import ReactFlow, {
   ReactFlowProvider,
   addEdge,
@@ -126,12 +126,16 @@ export default function FlowEditor({
     },
   };
 
+  useEffect(() => {
+    onFlowChange({ nodes, edges });
+  }, [edges, nodes]);
+
   const Editor = (
     <FlowContext.Provider value={{ onNodeChange, editMode, onEdgeChange }}>
       <div
         data-testid="react-flow-renderer"
         style={{
-          height: 'calc(100vh - 50px)',
+          height: 'calc(90vh - 50px)',
           minHeight: 300,
           width: '100%',
           border: '1px solid lightgrey',
