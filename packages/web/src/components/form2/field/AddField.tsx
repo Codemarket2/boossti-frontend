@@ -257,6 +257,35 @@ export default function AddField({
         field={formik.values}
         onConditionsChange={(newConditions) => onOptionChange({ conditions: newConditions })}
       />
+      {['flowDiagram'].includes(formik.values.fieldType) && (
+        <>
+          <FormControlLabel
+            className="mt-n2"
+            disabled={formik.isSubmitting}
+            control={
+              <Checkbox
+                checked={formik.values.options?.functionalityFlowDiagram}
+                onChange={({ target }) =>
+                  onOptionChange({ functionalityFlowDiagram: target.checked })
+                }
+                name="functionalityFlowDiagram"
+                color="primary"
+              />
+            }
+            label="Functionality Flow Diagram"
+          />
+          {formik.values.options?.functionalityFlowDiagram && (
+            <div className="pl-3 mb-3 mt-n2">
+              <AddConditionButton
+                conditions={formik.values.options?.functionalityFlowDiagramConditions}
+                onConditionsChange={(newConditions) =>
+                  onOptionChange({ functionalityFlowDiagramConditions: newConditions })
+                }
+              />
+            </div>
+          )}
+        </>
+      )}
       {['response'].includes(formik.values.fieldType) && (
         <div>
           <div className="mt-n2">
