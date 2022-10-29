@@ -19,7 +19,7 @@ export default function NewForm() {
   const router = useRouter();
 
   const onSuccess = (form) => {
-    router.push(`/forms/${form.slug}`);
+    router.push(`/form/${form.slug}`);
   };
   const onFailure = () => {
     setShowBackdrop(false);

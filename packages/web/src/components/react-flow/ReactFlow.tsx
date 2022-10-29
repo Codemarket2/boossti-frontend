@@ -19,6 +19,7 @@ export default function ReactFlow({
   editMode,
   noOverlay,
 }: ReactFlowProps) {
+  const [init, setInit] = useState(false);
   const [editor, setEditor] = useState(false);
   const router = useRouter();
 
@@ -50,6 +51,14 @@ export default function ReactFlow({
       setEditor(false);
     }
   }, [router?.query?.editMode]);
+
+  useEffect(() => {
+    setInit(true);
+  }, []);
+
+  if (!init) {
+    return <>Loading Flow Diagram....</>;
+  }
 
   if (noOverlay) {
     return (

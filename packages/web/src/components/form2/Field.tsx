@@ -7,7 +7,6 @@ import Delete from '@mui/icons-material/Delete';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import AdapterMoment from '@mui/lab/AdapterMoment';
 import DateTimePicker from '@mui/lab/DateTimePicker';
@@ -625,7 +624,9 @@ export default function Field({
               _id={value?._id || objectId}
               editMode
               flow={value?.options?.flowDiagram}
-              onFlowChange={(flowDiagram) => onChange({ options: { flowDiagram } })}
+              onFlowChange={(flowDiagram) => {
+                onChange({ options: { flowDiagram } });
+              }}
               noOverlay
             />
             {validation.error && (

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, createContext } from 'react';
+import React, { useState, useRef, useCallback, createContext, useEffect } from 'react';
 import ReactFlow, {
   ReactFlowProvider,
   addEdge,
@@ -7,6 +7,7 @@ import ReactFlow, {
   Controls,
   Background,
   MarkerType,
+  ReactFlowInstance,
 } from 'reactflow';
 import { generateObjectId } from '@frontend/shared/utils/objectId';
 import Sidebar from './Sidebar';
@@ -14,7 +15,6 @@ import CustomNode from './CustomNode';
 import CustomNode2 from './CustomNode2';
 import CustomEdge from './CustomEdge';
 import Overlay from '../common/Overlay';
-import { defaultEdges, defaultNodes } from './defaultNodes';
 import LeftColumn from './LeftColumn';
 
 const nodeTypes = {
@@ -49,9 +49,9 @@ export default function FlowEditor({
   overlay,
 }: FlowEditorProps) {
   const reactFlowWrapper = useRef(null);
-  const [nodes, setNodes, onNodesChange] = useNodesState(flow?.nodes || defaultNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(flow?.edges || defaultEdges);
-  const [reactFlowInstance, setReactFlowInstance] = useState(null);
+  const [nodes, setNodes, onNodesChange] = useNodesState(flow?.nodes || []);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(flow?.edges || []);
+  const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance>(null);
 
   const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), []);
 
@@ -126,12 +126,16 @@ export default function FlowEditor({
     },
   };
 
+  useEffect(() => {
+    onFlowChange({ nodes, edges });
+  }, [edges, nodes]);
+
   const Editor = (
     <FlowContext.Provider value={{ onNodeChange, editMode, onEdgeChange }}>
       <div
         data-testid="react-flow-renderer"
         style={{
-          height: 'calc(100vh - 50px)',
+          height: 'calc(90vh - 50px)',
           minHeight: 300,
           width: '100%',
           border: '1px solid lightgrey',
