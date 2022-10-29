@@ -5,14 +5,15 @@ import Search from '@mui/icons-material/Search';
 import { IconButton, Tooltip } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import React, { Fragment } from 'react';
-// import { useReactFlow } from 'reactflow';
+import { useReactFlow } from 'reactflow';
 import ErrorLoading from '../common/ErrorLoading';
 
 interface ISidebar {
   nodes: any[];
+  functionalityFlowDiagram?: boolean;
 }
 
-export default function Sidebar({ nodes }: ISidebar) {
+export default function Sidebar({ nodes, functionalityFlowDiagram }: ISidebar) {
   const { data, error, loading, state, setState } = useGetForms({ page: 1, limit: 10 });
 
   const onDragStart = (event, nodeType, nodeData) => {
@@ -57,6 +58,7 @@ export default function Sidebar({ nodes }: ISidebar) {
                 form={form}
                 existingNode={nodes?.find((node) => node?.data?.formId === form?._id)}
                 onDragStart={onDragStart}
+                disableDragDuplicateNode={functionalityFlowDiagram}
               />
             ))}
           </div>
@@ -70,31 +72,31 @@ interface IListItem {
   form: IForm;
   existingNode: any;
   onDragStart: any;
+  disableDragDuplicateNode?: boolean;
 }
 
-const ListItem = ({ form, existingNode, onDragStart }: IListItem) => {
-  // const { setCenter } = useReactFlow();
+const ListItem = ({ form, existingNode, onDragStart, disableDragDuplicateNode }: IListItem) => {
+  const { setCenter } = useReactFlow();
+  const disable = disableDragDuplicateNode && existingNode?.id;
   return (
     <Fragment key={form?._id}>
       <Tooltip
         placement="left"
-        title="Drag"
-        // title={existingNode?.id ? 'This form is already present, click to goto the node' : 'Drag'}
+        title={disable ? 'This form is already present, click to goto the node' : 'Drag'}
       >
         <div
           className="dndnode"
-          // onClick={() => {
-          //   if (existingNode?.id) {
-          //     setCenter(existingNode?.position?.x, existingNode?.position?.y, {
-          //       duration: 800,
-          //     });
-          //   }
-          // }}
+          onClick={() => {
+            if (disable) {
+              setCenter(existingNode?.position?.x, existingNode?.position?.y, {
+                duration: 800,
+              });
+            }
+          }}
           onDragStart={(event) => {
             onDragStart(event, 'customNode2', form);
           }}
-          draggable
-          // draggable={!existingNode?.id}
+          draggable={!disable}
         >
           {form?.name}
         </div>

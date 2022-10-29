@@ -621,6 +621,7 @@ export default function Field({
         <>
           <div data-testid="flow-diagram">
             <ReactFlow
+              responseId={responseId}
               _id={value?._id || objectId}
               editMode
               flow={value?.options?.flowDiagram}
@@ -628,6 +629,10 @@ export default function Field({
                 onChange({ options: { flowDiagram } });
               }}
               noOverlay
+              functionalityFlowDiagram={Boolean(field?.options?.functionalityFlowDiagram)}
+              functionalityFlowDiagramConditions={
+                field?.options?.functionalityFlowDiagramConditions
+              }
             />
             {validation.error && (
               <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>

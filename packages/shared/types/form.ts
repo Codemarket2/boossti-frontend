@@ -43,12 +43,13 @@ export interface IFieldOptions {
   defaultValue: Partial<IValue>;
   tabField?: boolean;
   hidden?: boolean;
-  // hiddenCondition?: IHiddenCondition[];
   hiddenConditions?: ICondition[];
   addToAllForms?: boolean;
   disabled: boolean;
   disabledConditions: ICondition[];
   showAsAddButton: boolean;
+  functionalityFlowDiagram?: boolean;
+  functionalityFlowDiagramConditions?: ICondition[];
 }
 
 export interface IField {
