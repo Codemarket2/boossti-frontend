@@ -7,3 +7,4 @@ export { useFormActions } from './formActions';
 export { useInitializeSystem } from './initializeSystem';
 export { useAddConstraint } from './constraint';
 export { useGetFormTabs } from './getFormTabs';
+export { useGetFieldRules } from './getFieldRules';

@@ -271,6 +271,7 @@ export default function Form({
                       label: f?.label,
                       formName: form?.name,
                     }))}
+                    formId={form?._id}
                   />
                   <RelationFields formId={form?._id} />
                 </>
