@@ -31,6 +31,7 @@ import { IField, IForm } from '@frontend/shared/types/form';
 import { fileUpload } from '@frontend/shared/utils/fileUpload';
 
 // OTHERS
+import { useGetFieldRules } from '@frontend/shared/hooks/form';
 import ResponseList from '../response/ResponseList';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
@@ -114,6 +115,7 @@ export default function FormViewWrapper({
   onClickResponse,
   parentResponseId,
 }: FormViewWrapperProps): any {
+  const { rules } = useGetFieldRules({ formId: form?._id, fields: form?.fields });
   const { admin: isAdmin, authenticated } = useSelector(({ auth }: any) => auth);
   const { handleCreateUpdateResponse, createLoading } = useCreateUpdateResponse({
     parentResponseId,
