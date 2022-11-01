@@ -278,6 +278,21 @@ export default function AddField({
       </InputGroup>
       <Collapse in={collapse}>
         <>
+          {['condition'].includes(formik.values.fieldType) && (
+            <FormControlLabel
+              className="mt-n2"
+              disabled={formik.isSubmitting}
+              control={
+                <Checkbox
+                  checked={formik.values.options?.conditionRightPart}
+                  onChange={({ target }) => onOptionChange({ conditionRightPart: target.checked })}
+                  name="conditionRightPart"
+                  color="primary"
+                />
+              }
+              label="Value Selector (Condition right part)"
+            />
+          )}
           {['flowDiagram'].includes(formik.values.fieldType) && (
             <>
               <FormControlLabel
@@ -498,6 +513,22 @@ export default function AddField({
                             data-testid="show-as-checkbox-field-option"
                           />
                           <div className="mb-3">
+                            <FormControlLabel
+                              className="mt-n2 ml-2"
+                              disabled={formik.isSubmitting}
+                              control={
+                                <Checkbox
+                                  checked={formik.values.options?.selectOfFieldProps}
+                                  onChange={({ target }) =>
+                                    onOptionChange({ selectOfFieldProps: target.checked })
+                                  }
+                                  name="showAsCheckbox"
+                                  color="primary"
+                                />
+                              }
+                              label="Show list of Field Props"
+                            />
+                            <br />
                             <FormLabel>
                               Select Options
                               <Tooltip title="Add New Option">

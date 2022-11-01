@@ -257,10 +257,14 @@ const ConditionComponent = ({
           >
             <MenuItem value="constantValue">Constant Value</MenuItem>
             <MenuItem value="form">Form</MenuItem>
+            <MenuItem value="null">null</MenuItem>
             <ListSubheader>Global state (logged in User)</ListSubheader>
             <MenuItem value="auth._id">auth._id</MenuItem>
             <MenuItem value="auth.email">auth.email</MenuItem>
             <MenuItem value="auth.name">auth.name</MenuItem>
+            <ListSubheader>Boolean</ListSubheader>
+            <MenuItem value="true">true</MenuItem>
+            <MenuItem value="false">false</MenuItem>
             {formFields?.length > 0 && <ListSubheader>Form fields</ListSubheader>}
             {formFields
               ?.filter((formField) => formField?._id !== field?._id)

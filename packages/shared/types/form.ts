@@ -50,6 +50,8 @@ export interface IFieldOptions {
   showAsAddButton: boolean;
   functionalityFlowDiagram?: boolean;
   functionalityFlowDiagramConditions?: ICondition[];
+  selectOfFieldProps?: boolean;
+  conditionRightPart?: boolean;
 }
 
 export interface IField {

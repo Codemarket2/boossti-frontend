@@ -69,6 +69,8 @@ export const defaultOptions: IFieldOptions = {
   disabled: false,
   disabledConditions: null,
   showAsAddButton: false,
+  selectOfFieldProps: false,
+  conditionRightPart: false,
 };
 
 interface IValues extends IField {
