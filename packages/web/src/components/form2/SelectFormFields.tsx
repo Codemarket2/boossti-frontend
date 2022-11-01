@@ -52,6 +52,7 @@ export default function SelectFormFields({
         label={label}
       >
         <MenuItem value="_id">_id (Response ID)</MenuItem>
+        <MenuItem value="published">published</MenuItem>
         <MenuItem value="createdBy">createdBy (User)</MenuItem>
         <MenuItem value="createdAt">createdAt (Date)</MenuItem>
         {/* ?.filter((f) => ['text', 'email'].includes(f.fieldType)) */}

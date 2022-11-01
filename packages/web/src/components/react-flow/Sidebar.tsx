@@ -10,10 +10,10 @@ import ErrorLoading from '../common/ErrorLoading';
 
 interface ISidebar {
   nodes: any[];
-  functionalityFlowDiagram?: boolean;
+  diagramType?: string;
 }
 
-export default function Sidebar({ nodes, functionalityFlowDiagram }: ISidebar) {
+export default function Sidebar({ nodes, diagramType }: ISidebar) {
   const { data, error, loading, state, setState } = useGetForms({ page: 1, limit: 10 });
 
   const onDragStart = (event, nodeType, nodeData) => {
@@ -58,7 +58,7 @@ export default function Sidebar({ nodes, functionalityFlowDiagram }: ISidebar) {
                 form={form}
                 existingNode={nodes?.find((node) => node?.data?.formId === form?._id)}
                 onDragStart={onDragStart}
-                disableDragDuplicateNode={functionalityFlowDiagram}
+                disableDragDuplicateNode={diagramType === 'Work Flow Diagram'}
               />
             ))}
           </div>

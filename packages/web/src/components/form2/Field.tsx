@@ -44,6 +44,7 @@ import DisplayValue from './DisplayValue';
 import ResponseDrawer from '../response/ResponseDrawer';
 import Signature from '../signature/Signature';
 import CraftJSField from '../craftJS/craftJSField';
+import { fieldProps } from './field/fieldProps';
 
 export interface FieldProps {
   field: IField;
@@ -149,7 +150,9 @@ export default function Field({
         ) : (
           <Select
             label={field?.label}
-            options={field?.options?.selectOptions}
+            options={
+              field?.options?.selectOfFieldProps ? fieldProps : field?.options?.selectOptions
+            }
             value={value?.value || value?.valueNumber?.toString() || ''}
             onChange={(newValue) => {
               let valueObject: any = {};
@@ -623,7 +626,6 @@ export default function Field({
         <>
           <div data-testid="flow-diagram">
             <ReactFlow
-              responseId={responseId}
               _id={value?._id || objectId}
               editMode
               flow={value?.options?.flowDiagram}
@@ -631,10 +633,12 @@ export default function Field({
                 onChange({ options: { flowDiagram } });
               }}
               noOverlay
-              functionalityFlowDiagram={Boolean(field?.options?.functionalityFlowDiagram)}
-              functionalityFlowDiagramConditions={
-                field?.options?.functionalityFlowDiagramConditions
-              }
+              // diagramType={field?.options?.diagramType}
+              // responseId={responseId}
+              // functionalityFlowDiagram={Boolean(field?.options?.functionalityFlowDiagram)}
+              // functionalityFlowDiagramConditions={
+              //   field?.options?.functionalityFlowDiagramConditions
+              // }
             />
             {validation.error && (
               <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>

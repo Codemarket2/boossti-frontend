@@ -38,7 +38,7 @@ interface FlowEditorProps {
   editMode?: boolean;
   onFlowChange?: (flow: IFlow) => void;
   overlay?: boolean;
-  functionalityFlowDiagram?: boolean;
+  diagramType?: string;
 }
 
 export default function FlowEditor({
@@ -48,7 +48,7 @@ export default function FlowEditor({
   editMode = false,
   onFlowChange,
   overlay,
-  functionalityFlowDiagram,
+  diagramType,
 }: FlowEditorProps) {
   const reactFlowWrapper = useRef(null);
   const [nodes, setNodes, onNodesChange] = useNodesState(flow?.nodes || []);
@@ -169,9 +169,7 @@ export default function FlowEditor({
                 <Background color="#aaa" gap={12} />
               </ReactFlow>
             </div>
-            {editMode && (
-              <Sidebar functionalityFlowDiagram={functionalityFlowDiagram} nodes={nodes} />
-            )}
+            {editMode && <Sidebar diagramType={diagramType} nodes={nodes} />}
           </ReactFlowProvider>
         </div>
       </div>

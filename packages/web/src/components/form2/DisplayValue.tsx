@@ -82,7 +82,7 @@ export default function DisplayValue({
         <a
           target="_blank"
           rel="noreferrer"
-          href={`/forms/${slugify(value?.form?.name, { lower: true })}`}
+          href={`/form/${slugify(value?.form?.name, { lower: true })}`}
         >
           <Typography color="primary">{value?.form?.name}</Typography>
         </a>

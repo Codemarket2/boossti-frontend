@@ -12,9 +12,10 @@ interface ReactFlowProps {
   onFlowChange?: (flow: IFlow) => void;
   editMode?: boolean;
   noOverlay?: boolean;
-  functionalityFlowDiagram?: boolean;
-  functionalityFlowDiagramConditions?: ICondition[];
-  responseId?: string;
+  diagramType?: string;
+  // functionalityFlowDiagram?: boolean;
+  // functionalityFlowDiagramConditions?: ICondition[];
+  // responseId?: string;
 }
 
 export default function ReactFlow({
@@ -23,32 +24,33 @@ export default function ReactFlow({
   onFlowChange,
   editMode,
   noOverlay,
-  functionalityFlowDiagram: tempFunctionalityFlowDiagram,
-  functionalityFlowDiagramConditions,
-  responseId,
-}: ReactFlowProps) {
+  diagramType,
+}: // functionalityFlowDiagram: tempFunctionalityFlowDiagram,
+// functionalityFlowDiagramConditions,
+// responseId,
+ReactFlowProps) {
   const [init, setInit] = useState(false);
   const [editor, setEditor] = useState(false);
   const router = useRouter();
 
-  const [isFunctionalityFlowDiagram, setIsFunctionalityFlowDiagram] = useState(
-    tempFunctionalityFlowDiagram && !(functionalityFlowDiagramConditions?.length > 0),
-  );
-  const { handleResolveCondition } = useResolveCondition();
+  // const [isFunctionalityFlowDiagram, setIsFunctionalityFlowDiagram] = useState(
+  //   tempFunctionalityFlowDiagram && !(functionalityFlowDiagramConditions?.length > 0),
+  // );
+  // const { handleResolveCondition } = useResolveCondition();
 
-  const resolveCondition = async () => {
-    if (tempFunctionalityFlowDiagram && functionalityFlowDiagramConditions?.length > 0) {
-      const result = await handleResolveCondition({
-        conditions: functionalityFlowDiagramConditions,
-        responseId,
-      });
-      setIsFunctionalityFlowDiagram(result);
-    }
-  };
+  // const resolveCondition = async () => {
+  //   if (tempFunctionalityFlowDiagram && functionalityFlowDiagramConditions?.length > 0) {
+  //     const result = await handleResolveCondition({
+  //       conditions: functionalityFlowDiagramConditions,
+  //       responseId,
+  //     });
+  //     setIsFunctionalityFlowDiagram(result);
+  //   }
+  // };
 
-  useEffect(() => {
-    resolveCondition();
-  }, []);
+  // useEffect(() => {
+  //   resolveCondition();
+  // }, []);
 
   const toggleEditor = () => {
     if (editor) {
@@ -97,7 +99,7 @@ export default function ReactFlow({
         onFlowChange={(newFlow) => {
           if (editMode) onFlowChange(newFlow);
         }}
-        functionalityFlowDiagram={isFunctionalityFlowDiagram}
+        diagramType={diagramType}
       />
     );
   }
@@ -125,7 +127,7 @@ export default function ReactFlow({
           onFlowChange={(newFlow) => {
             if (editMode) onFlowChange(newFlow);
           }}
-          functionalityFlowDiagram={isFunctionalityFlowDiagram}
+          diagramType={diagramType}
         />
       )}
     </div>

@@ -11,7 +11,7 @@ export default function Page(): any {
 
   const onSlugChange = (newSlug) => {
     if (slug !== newSlug) {
-      router.push(`/forms/${newSlug}`);
+      router.push(`/form/${newSlug}`);
     }
   };
 

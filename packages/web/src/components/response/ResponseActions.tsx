@@ -58,7 +58,7 @@ export default function ResponseActions({
         <Tooltip title="Open Response">
           <IconButton
             onClick={() => {
-              router.push(`/forms/${form.slug}/response/${response.count}`);
+              router.push(`/form/${form.slug}/response/${response.count}`);
             }}
             edge="start"
             size="large"

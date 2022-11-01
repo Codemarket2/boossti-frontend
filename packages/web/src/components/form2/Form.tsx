@@ -134,7 +134,7 @@ export default function Form({
         ...options,
         backdrop: true,
       });
-      handleDelete(form?._id, () => router.push('/forms'));
+      handleDelete(form?._id, () => router.push('/feed'));
     }
   };
 
