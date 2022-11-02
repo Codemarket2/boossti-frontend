@@ -52,7 +52,7 @@ export default function Sidebar({ nodes, diagramType }: ISidebar) {
         {loading || error ? (
           <ErrorLoading error={error} />
         ) : (
-          <div style={{ maxHeight: 'calc(100vh - 180px)', overflowY: 'auto' }}>
+          <div style={{ maxHeight: 'calc(90vh - 180px)', overflowY: 'auto' }}>
             {data?.getForms?.data?.map((form) => (
               <ListItem
                 form={form}

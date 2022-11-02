@@ -2,7 +2,7 @@ import { useState } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { IHooksProps } from '../../types/common';
-import { ConditionPart } from '../../types';
+import { IConditionPart } from '../../types';
 
 const validationSchema = yup.object({
   active: yup.boolean(),
@@ -141,7 +141,7 @@ type TFormValues = {
   phoneFieldId: string;
   senderEmail: string;
   receiverType: string;
-  emailFieldId: ConditionPart;
+  emailFieldId: IConditionPart;
   nameFieldId: string;
   receiverEmails: string[];
   variables: TVariables[];
