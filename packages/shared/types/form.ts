@@ -70,7 +70,7 @@ export interface IFormula {
 
 export interface ICondition {
   operator: 'AND' | 'OR';
-  left: ConditionPart;
+  left: IConditionPart;
   conditionType: '==' | '!=' | '>' | '<';
   right: ConditionRightPart;
 }
@@ -82,21 +82,21 @@ export const defaultConditionObject: ICondition = {
   right: null,
 };
 
-export interface ConditionPart {
+export interface IConditionPart {
   formId: string;
   fieldId: string;
-  subField: ConditionPart;
+  subField: IConditionPart;
   responseId?: string;
 }
 
-interface ConditionRightPart extends ConditionPart {
+interface ConditionRightPart extends IConditionPart {
   value: string;
   constantValue: string;
   responseId: string;
   subField: ConditionRightPartSubField;
 }
 
-export interface ConditionRightPartSubField extends ConditionPart {
+export interface ConditionRightPartSubField extends IConditionPart {
   subField: ConditionRightPartSubField;
   responseId: string;
 }

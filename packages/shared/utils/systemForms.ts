@@ -41,7 +41,7 @@ export const systemForms = {
   rules: {
     slug: 'rules',
     fields: {
-      // form: 'form',
+      name: 'name',
       field: 'field',
       ruleType: 'Rule Type',
       condition: 'Condition',

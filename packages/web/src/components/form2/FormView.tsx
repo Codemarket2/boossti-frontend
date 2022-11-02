@@ -115,7 +115,6 @@ export default function FormViewWrapper({
   onClickResponse,
   parentResponseId,
 }: FormViewWrapperProps): any {
-  const { rules } = useGetFieldRules({ formId: form?._id, fields: form?.fields });
   const { admin: isAdmin, authenticated } = useSelector(({ auth }: any) => auth);
   const { handleCreateUpdateResponse, createLoading } = useCreateUpdateResponse({
     parentResponseId,
@@ -427,6 +426,7 @@ export function FormView({
   form,
   overrideValues,
 }: FormViewProps): any {
+  const { rules } = useGetFieldRules({ formId: form?._id, fields: tempFields || form?.fields });
   const [values, setValues] = useState(parseResponse({ values: initialValues })?.values || []);
   const { constraintErrors, constraintsLoading } = useConstraint({ form, values, responseId });
   const { handleResolveCondition } = useResolveCondition();
@@ -739,6 +739,7 @@ export function FormView({
                         ) : (
                           <Field
                             {...fieldProps}
+                            rules={rules?.[field?._id]}
                             field={{
                               ...field,
                               label: `${field?.label} ${field?.options?.required ? '*' : ''}`,
@@ -787,13 +788,14 @@ export function FormView({
                                   <Skeleton height={200} />
                                 ) : (
                                   <Field
+                                    {...fieldProps}
+                                    rules={rules?.[field?._id]}
                                     field={{
                                       ...field,
                                       label: field?.options?.required
                                         ? `${field?.label}*`
                                         : field?.label,
                                     }}
-                                    {...fieldProps}
                                     disabled={submitState.loading}
                                     onChangeValue={(changedValue) =>
                                       onChange({ ...changedValue, field: field._id }, valueIndex)

@@ -89,19 +89,19 @@ ReactFlowProps) {
     return <>Loading Flow Diagram....</>;
   }
 
+  const flowEditorProps = {
+    editMode,
+    open: editor,
+    onClose: () => toggleEditor(),
+    flow,
+    onFlowChange: (newFlow) => {
+      if (editMode) onFlowChange(newFlow);
+    },
+    diagramType,
+  };
+
   if (noOverlay) {
-    return (
-      <FlowEditor
-        editMode={editMode}
-        open={editor}
-        onClose={() => toggleEditor()}
-        flow={flow}
-        onFlowChange={(newFlow) => {
-          if (editMode) onFlowChange(newFlow);
-        }}
-        diagramType={diagramType}
-      />
-    );
+    return <FlowEditor {...flowEditorProps} />;
   }
 
   return (
@@ -117,19 +117,7 @@ ReactFlowProps) {
       >
         {editMode ? 'Edit' : 'View'} Flow Diagram
       </Button>
-      {editor && (
-        <FlowEditor
-          overlay
-          editMode={editMode}
-          open={editor}
-          onClose={() => toggleEditor()}
-          flow={flow}
-          onFlowChange={(newFlow) => {
-            if (editMode) onFlowChange(newFlow);
-          }}
-          diagramType={diagramType}
-        />
-      )}
+      {editor && <FlowEditor {...flowEditorProps} overlay />}
     </div>
   );
 }

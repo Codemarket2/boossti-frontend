@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import moment from 'moment';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
@@ -18,6 +18,7 @@ import { validateValue } from '@frontend/shared/utils/validate';
 import { IField } from '@frontend/shared/types/form';
 import { IValue } from '@frontend/shared/types/response';
 import { generateObjectId } from '@frontend/shared/utils/objectId';
+import { fieldProps } from '@frontend/shared/utils/fieldProps';
 import ReactFlow from '../react-flow/ReactFlow';
 import RichTextarea from '../common/RichTextarea2';
 import DisplayRichText from '../common/DisplayRichText';
@@ -44,7 +45,7 @@ import DisplayValue from './DisplayValue';
 import ResponseDrawer from '../response/ResponseDrawer';
 import Signature from '../signature/Signature';
 import CraftJSField from '../craftJS/craftJSField';
-import { fieldProps } from './field/fieldProps';
+import ConditionPart from './field/field-condition/ConditionPart';
 
 export interface FieldProps {
   field: IField;
@@ -59,9 +60,18 @@ export interface FieldProps {
   responseId?: string;
   setUniqueLoading?: (args: boolean) => void;
   onCancel?: () => void;
+  rules?: any;
 }
 
 const objectId = generateObjectId();
+
+const getDefaultOptions = () => {
+  const options = {};
+  fieldProps?.forEach((fieldProp) => {
+    options[fieldProp] = null;
+  });
+  return options;
+};
 
 export default function Field({
   field,
@@ -74,7 +84,10 @@ export default function Field({
   responseId,
   setUniqueLoading,
   onCancel,
+  rules,
 }: FieldProps): any {
+  const [options, setOptions] = useState<any>(getDefaultOptions());
+
   useCheckUnique({
     formId,
     value,
@@ -84,6 +97,36 @@ export default function Field({
     responseId,
     setUniqueLoading,
   });
+
+  useEffect(() => {
+    if (rules && Object.keys(rules)?.length > 0) {
+      getRuleValues();
+    }
+  }, [rules]);
+
+  const getRuleValues = () => {
+    Object.keys(rules)?.forEach((key) => {
+      const rule = rules[key];
+      let ruleValue = options?.[key] || null;
+      if (rule?.ruleType === 'If') {
+        //
+      } else {
+        if (rule?.value?.value === 'true') {
+          ruleValue = true;
+        }
+        if (rule?.value?.value === 'false') {
+          ruleValue = false;
+        }
+        if (rule?.value?.value === 'null') {
+          ruleValue = null;
+        }
+        if (rule?.value?.value === 'constantValue' && rule?.value?.constantValue) {
+          ruleValue = rule?.value?.constantValue;
+        }
+      }
+      setOptions((oldOptions) => ({ ...oldOptions, [key]: ruleValue }));
+    });
+  };
 
   const onChange = (payload) => {
     onChangeValue({ ...value, field: field?._id, ...payload });
@@ -181,7 +224,6 @@ export default function Field({
         <div data-testid="date">
           <LocalizationProvider
             dateAdapter={AdapterMoment}
-
             //  libInstance={moment} utils={MomentUtils}
           >
             <div data-testid="date-picker">
@@ -562,7 +604,6 @@ export default function Field({
         </>
       );
     }
-
     case 'formField': {
       return (
         <>
@@ -589,7 +630,6 @@ export default function Field({
         </>
       );
     }
-
     case 'board': {
       return (
         <>
@@ -633,7 +673,7 @@ export default function Field({
                 onChange({ options: { flowDiagram } });
               }}
               noOverlay
-              // diagramType={field?.options?.diagramType}
+              diagramType={options?.diagramType}
               // responseId={responseId}
               // functionalityFlowDiagram={Boolean(field?.options?.functionalityFlowDiagram)}
               // functionalityFlowDiagramConditions={
@@ -647,7 +687,18 @@ export default function Field({
         </>
       );
     }
+
     case 'condition': {
+      if (field?.options?.conditionRightPart) {
+        return (
+          <ConditionPart
+            conditionPart={value?.options?.conditions?.[0]?.right}
+            onConditionPartChange={(newConditionPart) =>
+              onChange({ options: { conditions: [{ right: newConditionPart }] } })
+            }
+          />
+        );
+      }
       return (
         <>
           <div data-testid="condition">
