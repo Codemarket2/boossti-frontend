@@ -8,9 +8,10 @@ interface UseCreateCommentProps {
   threadId: string;
   parentIds?: string[];
   refetch: any;
+  path: string;
 }
 
-export function useCreateComment({ parentIds, threadId, refetch }: UseCreateCommentProps) {
+export function useCreateComment({ parentIds, threadId, refetch, path }: UseCreateCommentProps) {
   const [createCommentMutation, { loading }] = useMutation(CREATE_COMMENT);
   const [inputVal, setInputVal] = useState('');
 
@@ -24,6 +25,7 @@ export function useCreateComment({ parentIds, threadId, refetch }: UseCreateComm
           body: inputVal,
           parentIds,
           threadId,
+          path,
         },
         update: (store, { data }) => {
           try {
@@ -33,7 +35,6 @@ export function useCreateComment({ parentIds, threadId, refetch }: UseCreateComm
                 parentIds,
               },
             });
-
             store.writeQuery({
               query: GET_COMMENTS_BY_PARENT_ID,
               data: produce(getComment, (draft: any) => {
