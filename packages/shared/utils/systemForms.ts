@@ -49,4 +49,13 @@ export const systemForms = {
       value: 'Value',
     },
   },
+  feed: {
+    slug: 'feed',
+    fields: {
+      message: 'message',
+      link: 'link',
+      status: 'status',
+      receiver: 'receiver',
+    },
+  },
 };
