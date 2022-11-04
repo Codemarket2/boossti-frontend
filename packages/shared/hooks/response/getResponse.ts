@@ -172,7 +172,7 @@ export async function getResponses({
   return data?.getResponses;
 }
 
-export function useGetResponse(_id: string): any {
+export function useGetResponse(_id: string) {
   const setting = useSelector((state: any) => state?.setting);
   const { data, error, loading } = useQuery<
     { getResponse: IResponse },
