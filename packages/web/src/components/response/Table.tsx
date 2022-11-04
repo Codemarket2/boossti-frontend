@@ -105,7 +105,7 @@ export default function ResponseTable({
                 <TableRow key={response._id} hover>
                   <TableCell>
                     <span>
-                      <Link href={`/forms/users/response/${response?.createdBy?.count}`}>
+                      <Link href={`/form/users/response/${response?.createdBy?.count}`}>
                         <a>
                           <u>{getUserName(userForm, response?.createdBy)}</u>
                         </a>
@@ -126,14 +126,14 @@ export default function ResponseTable({
                               if (onClickResponse) {
                                 onClickResponse(response, form);
                               } else {
-                                router.push(`/forms/${form.slug}/response/${response.count}`);
+                                router.push(`/form/${form.slug}/response/${response.count}`);
                               }
                             }}
                           >
                             <u>{response?.count}</u>
                           </span>
                         ) : (
-                          <Link href={`/forms/${form.slug}/response/${response.count}`}>
+                          <Link href={`/form/${form.slug}/response/${response.count}`}>
                             <a>{response?.count}</a>
                           </Link>
                         )}

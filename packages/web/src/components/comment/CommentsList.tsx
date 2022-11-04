@@ -42,6 +42,7 @@ export default function CommentsList({
     parentIds,
     threadId,
     refetch,
+    path: router.asPath,
   });
   const { handleDelete, loading: deleteLoading } = useDeleteComment(refetch);
 

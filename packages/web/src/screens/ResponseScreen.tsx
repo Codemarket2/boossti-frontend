@@ -41,7 +41,6 @@ interface IProps2 {
 
 export function ResponseChild({ form, count, hideBreadcrumbs, deleteCallback }: IProps2) {
   const { data, error } = useGetResponseByCount(form?._id, count);
-  // const router = useRouter();
 
   if (error || !data) {
     return <ErrorLoading error={error} />;

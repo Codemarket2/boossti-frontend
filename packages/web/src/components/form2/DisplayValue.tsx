@@ -82,7 +82,7 @@ export default function DisplayValue({
         <a
           target="_blank"
           rel="noreferrer"
-          href={`/forms/${slugify(value?.form?.name, { lower: true })}`}
+          href={`/form/${slugify(value?.form?.name, { lower: true })}`}
         >
           <Typography color="primary">{value?.form?.name}</Typography>
         </a>
@@ -166,7 +166,9 @@ export default function DisplayValue({
     case 'diagram':
       return <DisplayDiagram diagram={value?.options?.diagram} />;
     case 'flowDiagram':
-      return <ReactFlow _id={value?._id} flow={value?.options?.flowDiagram} />;
+      return (
+        <ReactFlow _id={value?._id} flow={value?.options?.flowDiagram} noOverlay={verticalView} />
+      );
     case 'condition':
       return <DisplayFieldCondition conditions={value?.options?.conditions} />;
     case 'webpage':

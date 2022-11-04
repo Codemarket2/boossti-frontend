@@ -16,7 +16,7 @@ interface IProps {
   limit?: number;
 }
 
-export function useGetForms({ page = 1, limit = 20 }: IProps) {
+export function useGetForms({ page = 1, limit = 10 }: IProps) {
   const [state, setState] = useState({
     page,
     limit,

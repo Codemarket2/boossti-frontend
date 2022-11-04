@@ -1,16 +1,14 @@
 import { useGetForm } from '@frontend/shared/hooks/form';
-import { ConditionPart, ICondition, IField, IForm } from '@frontend/shared/types/form';
+import { IConditionPart, ICondition, IField, IForm } from '@frontend/shared/types/form';
 import Add from '@mui/icons-material/Add';
 import Delete from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
-import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import ListSubheader from '@mui/material/ListSubheader';
 import FormHelperText from '@mui/material/FormHelperText';
 import Skeleton from '@mui/material/Skeleton';
 import { useEffect, useState } from 'react';
@@ -18,10 +16,11 @@ import { IResponse } from '@frontend/shared/types';
 import { useGetResponse } from '@frontend/shared/hooks/response';
 import InputGroup from '../../../common/InputGroup';
 import SelectFormFields from '../../SelectFormFields';
-import { getFieldCondition } from './DisplayFieldCondition';
+import DisplayFieldCondition from './DisplayFieldCondition';
 import SelectForm from '../../SelectForm';
 import ErrorLoading from '../../../common/ErrorLoading';
 import SelectResponse from '../../../response/SelectResponse';
+import ConditionPart from './ConditionPart';
 
 interface ConditionFormProps {
   conditions: ICondition[];
@@ -38,8 +37,8 @@ export default function FieldConditionForm({
   onConditionsChange,
   conditions: initialConditions,
 }: ConditionFormProps) {
-  const [forms, setForms] = useState({});
-  const [responses, setResponses] = useState({});
+  // const [forms, setForms] = useState({});
+  // const [responses, setResponses] = useState({});
   const defaultConditions = initialConditions?.length > 0 ? initialConditions : [defaultCondition];
   const [tempConditions, setTempConditions] = useState<ICondition[]>(defaultConditions);
 
@@ -69,7 +68,7 @@ export default function FieldConditionForm({
   return (
     <div>
       {field?._id && <Typography>Edit Condition</Typography>}
-      {getFieldCondition({ conditions, formFields, forms, responses })}
+      <DisplayFieldCondition conditions={conditions} />
       <div className={field?._id ? 'pl-3' : ''}>
         {conditions?.map((condition, conditionIndex) => (
           <ConditionComponent
@@ -79,17 +78,7 @@ export default function FieldConditionForm({
             field={field}
             onChange={(newCondition) => onChange(conditionIndex, newCondition)}
             deleteCondition={() => deleteCondition(conditionIndex)}
-            formFields={formFields}
-            setForm={(newForm) => {
-              if (!forms?.[newForm?._id]?._id) {
-                setForms({ ...forms, [newForm?._id]: newForm });
-              }
-            }}
-            setResponses={(newResponse) => {
-              if (!responses?.[newResponse?._id]?._id) {
-                setResponses({ ...forms, [newResponse?._id]: newResponse });
-              }
-            }}
+            // formFields={formFields}
           />
         ))}
         {conditions[conditions?.length - 1]?.right?.value && (
@@ -129,9 +118,6 @@ interface ConditionComponentProps {
   field: IField;
   onChange: (newCondition: Partial<ICondition>) => void;
   deleteCondition: () => void;
-  formFields: any[];
-  setForm: (form: any) => void;
-  setResponses: (response: IResponse) => void;
 }
 
 const ConditionComponent = ({
@@ -140,31 +126,19 @@ const ConditionComponent = ({
   field = null,
   onChange,
   deleteCondition,
-  formFields,
-  setForm,
-  setResponses,
 }: ConditionComponentProps) => {
   const [formNames, setFormNames] = useState({ left: '', right: '' });
   const { data, error } = useGetForm(condition?.left?.formId || field?.form?._id);
-  const { data: dataRight } = useGetForm(condition?.right?.formId);
 
   const leftForm = data?.getForm;
-  const rightForm = dataRight?.getForm;
 
   useEffect(() => {
     if (leftForm?._id) {
-      setForm(leftForm);
       if (!condition?.left?.formId) {
         onChange({ left: { ...condition?.left, formId: leftForm?._id } });
       }
     }
   }, [leftForm]);
-
-  useEffect(() => {
-    if (rightForm?._id) {
-      setForm(rightForm);
-    }
-  }, [rightForm]);
 
   return (
     <div>
@@ -198,7 +172,7 @@ const ConditionComponent = ({
                 : null
             }
             onChange={(from) => {
-              const payload: ConditionPart = { ...condition?.left, formId: from?._id };
+              const payload: IConditionPart = { ...condition?.left, formId: from?._id };
               if (condition?.left?.formId !== from?._id) {
                 payload.fieldId = null;
                 payload.responseId = null;
@@ -214,7 +188,6 @@ const ConditionComponent = ({
       )}
       {(condition?.left?.formId || field?.form?._id) && (
         <SelectSubField
-          setForm={setForm}
           subField={condition?.left}
           onChange={(newLeft) => onChange({ left: { ...condition.left, ...newLeft } })}
         />
@@ -245,89 +218,16 @@ const ConditionComponent = ({
           {!condition?.conditionType && <FormHelperText>Required</FormHelperText>}
         </FormControl>
       </InputGroup>
-      <InputGroup>
-        <FormControl size="small" fullWidth error={!condition?.right}>
-          <InputLabel>Value</InputLabel>
-          <Select
-            value={condition?.right?.value}
-            label="Value"
-            onChange={({ target }) =>
-              onChange({ right: { ...condition?.right, value: target.value } })
-            }
-          >
-            <MenuItem value="constantValue">Constant Value</MenuItem>
-            <MenuItem value="form">Form</MenuItem>
-            <ListSubheader>Global state (logged in User)</ListSubheader>
-            <MenuItem value="auth._id">auth._id</MenuItem>
-            <MenuItem value="auth.email">auth.email</MenuItem>
-            <MenuItem value="auth.name">auth.name</MenuItem>
-            {formFields?.length > 0 && <ListSubheader>Form fields</ListSubheader>}
-            {formFields
-              ?.filter((formField) => formField?._id !== field?._id)
-              ?.map((formField) => (
-                <MenuItem value={formField?._id} key={formField?._id}>
-                  {formField?.label}
-                </MenuItem>
-              ))}
-          </Select>
-          {!condition?.right?.value && <FormHelperText>Required</FormHelperText>}
-        </FormControl>
-      </InputGroup>
-      {condition?.right?.value === 'constantValue' && (
-        <InputGroup>
-          <TextField
-            fullWidth
-            label="Constant Value"
-            size="small"
-            value={condition?.right?.constantValue}
-            onChange={({ target }) =>
-              onChange({ right: { ...condition?.right, constantValue: target.value } })
-            }
-            error={!condition?.right?.constantValue}
-            helperText={!condition?.right?.constantValue && 'Required'}
-          />
-        </InputGroup>
-      )}
-      {condition?.right?.value === 'form' && (
-        <>
-          <InputGroup>
-            <SelectForm
-              value={
-                condition?.right?.formId
-                  ? { _id: condition?.right?.formId, name: rightForm?.name || formNames?.right }
-                  : null
-              }
-              onChange={(from) => {
-                const payload = { ...condition?.right, formId: from?._id };
-                if (condition?.right?.formId !== from?._id) {
-                  payload.fieldId = null;
-                  payload.responseId = null;
-                  payload.subField = null;
-                }
-                onChange({ right: payload });
-                setFormNames({ ...formNames, right: from?.name });
-              }}
-              error={!condition?.right?.formId}
-              helperText={!condition?.right?.formId && 'Required'}
-            />
-          </InputGroup>
-          {condition?.right?.formId && (
-            <SelectSubField
-              selectResponse
-              setResponses={setResponses}
-              setForm={setForm}
-              subField={condition?.right}
-              onChange={(newRight) => onChange({ right: { ...condition.right, ...newRight } })}
-            />
-          )}
-        </>
-      )}
+      <ConditionPart
+        conditionPart={condition?.right}
+        onConditionPartChange={(newConditionPart) => onChange({ right: newConditionPart })}
+      />
     </div>
   );
 };
 
 interface SelectSubFieldProps {
-  subField: ConditionPart;
+  subField: IConditionPart;
   onChange: (fieldId: any) => void;
   setForm?: (form: IForm) => void;
   selectResponse?: boolean;
@@ -348,7 +248,7 @@ export const SelectSubField = ({
   const { data: responseData } = useGetResponse(subField?.responseId);
 
   const response = responseData?.getResponse;
-  const handleChange = (newSubField: Partial<ConditionPart>) => {
+  const handleChange = (newSubField: Partial<IConditionPart>) => {
     onChange({ ...subField, ...newSubField });
   };
 

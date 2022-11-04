@@ -59,7 +59,7 @@ export default function EditNode({ open, data, onChange, onClose }: IProps) {
 
   return (
     <Dialog fullWidth open={open} onClose={onClose}>
-      <DialogTitle>Edit Node</DialogTitle>
+      <DialogTitle data-testid="editNode_dialog">Edit Node</DialogTitle>
       <DialogContent dividers>
         <div style={{ minWidth: 300 }}>
           <InputGroup>
@@ -70,6 +70,7 @@ export default function EditNode({ open, data, onChange, onClose }: IProps) {
                   <Select
                     labelId="demo-simple-select-standard-label"
                     id="demo-simple-select-standard"
+                    data-testid="editNode_formDisplay"
                     value={state.formView || 'formName'}
                     onChange={({ target }) => setState({ ...state, formView: target.value })}
                     label="Form view"
@@ -119,6 +120,7 @@ export default function EditNode({ open, data, onChange, onClose }: IProps) {
             <InputLabel>
               Ports
               <IconButton
+                data-testid="editNode_addPort"
                 color="primary"
                 size="small"
                 onClick={() => {
@@ -133,7 +135,7 @@ export default function EditNode({ open, data, onChange, onClose }: IProps) {
               </IconButton>
             </InputLabel>
             {state?.ports?.map((port, portIndex) => (
-              <div key={port?._id}>
+              <div key={port?._id} data-testid="editNode_port">
                 <div className="py-2 d-flex align-items-center">
                   {portIndex + 1}.
                   <SelectFormFields
@@ -175,7 +177,12 @@ export default function EditNode({ open, data, onChange, onClose }: IProps) {
                     />
                   </Tooltip>
                   <Tooltip title="Delete Port">
-                    <IconButton color="error" size="small" onClick={() => deletePort(port?._id)}>
+                    <IconButton
+                      data-testid="editNode_deletePort"
+                      color="error"
+                      size="small"
+                      onClick={() => deletePort(port?._id)}
+                    >
                       <Delete fontSize="small" />
                     </IconButton>
                   </Tooltip>

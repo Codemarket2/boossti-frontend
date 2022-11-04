@@ -20,7 +20,15 @@ import _ from 'lodash';
 import { defaultOptions } from '@frontend/shared/hooks/form/addFields';
 import SelectFormMock, { SelectFormMockData } from '../__mocks__/SelectForm';
 import SelectFormFieldsMock, { SelectFormFieldsMockData } from '../__mocks__/SelectFormFields';
-import { render, within, screen, waitFor, prettyDOM, logDOM } from '../../../../../jest/test-utils';
+import {
+  render,
+  within,
+  screen,
+  waitFor,
+  prettyDOM,
+  logDOM,
+  fireEvent,
+} from '../../../../../jest/test-utils';
 import AddField from '../AddField';
 
 const FIELD_TYPES = [
@@ -572,6 +580,9 @@ describe('Field Options / Attributes', () => {
       'System calculated & view',
     ])(`checking '%s' Field Option`, async (fieldOption) => {
       render(<AddField {...getAppFieldMockProps()} />);
+      const viewAllButton = screen.getByTestId('view-all-field-options-button');
+      fireEvent.click(viewAllButton);
+      await new Promise((r) => setTimeout(r, 1000));
       TEST_FIELD_OPTION[fieldOption]();
     });
   });
@@ -588,6 +599,9 @@ describe('Field Options / Attributes', () => {
       'System calculated & view',
     ])(`checking '%s' Field Option`, async (fieldOption) => {
       render(<AddField {...getAppFieldMockProps()} />);
+      const viewAllButton = screen.getByTestId('view-all-field-options-button');
+      fireEvent.click(viewAllButton);
+      await new Promise((r) => setTimeout(r, 1000));
       await selectFieldType('Form');
       TEST_FIELD_OPTION[fieldOption]();
     });
@@ -605,6 +619,9 @@ describe('Field Options / Attributes', () => {
       'System calculated & view',
     ])(`checking '%s' Field Option`, async (fieldOption) => {
       render(<AddField {...getAppFieldMockProps()} />);
+      const viewAllButton = screen.getByTestId('view-all-field-options-button');
+      fireEvent.click(viewAllButton);
+      await new Promise((r) => setTimeout(r, 1000));
       await selectFieldType('Form Response');
       TEST_FIELD_OPTION[fieldOption]();
     });

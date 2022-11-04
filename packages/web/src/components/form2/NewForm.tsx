@@ -19,7 +19,7 @@ export default function NewForm() {
   const router = useRouter();
 
   const onSuccess = (form) => {
-    router.push(`/forms/${form.slug}`);
+    router.push(`/form/${form.slug}`);
   };
   const onFailure = () => {
     setShowBackdrop(false);
@@ -44,7 +44,7 @@ export default function NewForm() {
   return (
     <div>
       <Breadcrumbs>
-        <Link href="/forms">Forms</Link>
+        <Link href="/form">Forms</Link>
         <Typography color="textPrimary">New</Typography>
       </Breadcrumbs>
       <Paper variant="outlined">
@@ -68,7 +68,7 @@ export default function NewForm() {
           isDefault
           field={state.field}
           onSave={onSave}
-          onCancel={() => router.push('/forms')}
+          onCancel={() => router.push('/feed')}
         />
       </Paper>
       <BackdropComponent open={showBackdrop || createLoading} />

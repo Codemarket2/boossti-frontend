@@ -2,7 +2,7 @@
 /* eslint-disable no-restricted-syntax */
 import { getForm } from '@frontend/shared/hooks/form';
 import { IResponse } from '@frontend/shared/types';
-import { ConditionPart, ICondition, IField, IForm } from '@frontend/shared/types/form';
+import { IConditionPart, ICondition, IField, IForm } from '@frontend/shared/types/form';
 import React, { useEffect, useState } from 'react';
 import slugify from 'slugify';
 import moment from 'moment';
@@ -30,7 +30,7 @@ export default function DisplayFieldCondition({
 
   useEffect(() => {
     getForms();
-  }, []);
+  }, [conditions]);
 
   return (
     <div data-testid="displayFieldCondition-output">
@@ -100,7 +100,7 @@ export const getFieldCondition = ({
 };
 
 const getSubFieldsLabel = (
-  subField: ConditionPart,
+  subField: IConditionPart,
   forms: { [key: string]: IForm },
   responses?: { [key: string]: IResponse },
 ) => {
@@ -139,7 +139,7 @@ const slugifyVariable = (value = '') => {
 
 const schemaFields = ['_id', 'createdAt', 'createdBy'];
 
-const getFormIds = (part: ConditionPart) => {
+const getFormIds = (part: IConditionPart) => {
   let formIds: string[] = [];
   if (part?.formId) {
     formIds.push(part?.formId);
@@ -153,7 +153,7 @@ const getFormIds = (part: ConditionPart) => {
   return formIds;
 };
 
-const getResponseIds = (part: ConditionPart) => {
+const getResponseIds = (part: IConditionPart) => {
   let responseIds: string[] = [];
   if (part?.responseId) {
     responseIds.push(part?.responseId);

@@ -11,12 +11,12 @@ export default function Page(): any {
 
   const onSlugChange = (newSlug) => {
     if (slug !== newSlug) {
-      router.push(`/forms/${newSlug}`);
+      router.push(`/form/${newSlug}`);
     }
   };
 
   return (
-    <UserLayout container={false} authRequired>
+    <UserLayout container={false} authRequired feedLayout>
       {slug ? <FormPage slug={slug.toString()} onSlugChange={onSlugChange} /> : <ErrorLoading />}
     </UserLayout>
   );

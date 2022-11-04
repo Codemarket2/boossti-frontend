@@ -3,33 +3,18 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import projectConfig from '@frontend/shared';
-import { useHandleLogout } from '@frontend/shared/hooks/auth';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
 import Button from '@mui/material/Button';
-// import AddIcon from '@mui/icons-material/Add';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-// import HomeIcon from '@mui/icons-material/Home';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import Tooltip from '@mui/material/Tooltip';
 import { styled, useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-// import Notification from '../notification/Notification';
 import Drawer from './Drawer';
-// import { routes } from '../../utils/routes';
 import { useDarkMode } from './DarkModeToggle';
 import LogoutButton from './LogoutButton';
-
-// const setActiveRouteColor = (activeRoute, linkRoute) => {
-//   return activeRoute === linkRoute ? 'primary' : 'default';
-// };
 
 const StyledTitle = styled(Typography)(({ theme }) => ({
   width: '100%',
@@ -84,12 +69,7 @@ export default function AppBarComponent() {
                 <MenuIcon role="button" className="mr-0" />
               </IconButton>
             </Tooltip>
-            <Drawer
-              toggleDrawer={setShowDrawer}
-              showDrawer={showDrawer}
-              // darkMode={darkMode}
-              admin={admin}
-            />
+            <Drawer toggleDrawer={setShowDrawer} showDrawer={showDrawer} admin={admin} />
           </>
         ) : null}
         <Link href="/">

@@ -17,7 +17,6 @@ import Tooltip from '@mui/material/Tooltip';
 import { useUpdateForm, useDeleteForm, useGetFormTabs } from '@frontend/shared/hooks/form';
 import { useAuthorization } from '@frontend/shared/hooks/auth';
 import Link from 'next/link';
-import Container from '@mui/material/Container';
 import AddCircle from '@mui/icons-material/AddCircle';
 import { IForm } from '@frontend/shared/types/form';
 import slugify from 'slugify';
@@ -135,7 +134,7 @@ export default function Form({
         ...options,
         backdrop: true,
       });
-      handleDelete(form?._id, () => router.push('/forms'));
+      handleDelete(form?._id, () => router.push('/feed'));
     }
   };
 
@@ -169,7 +168,7 @@ export default function Form({
           ) : (
             <div className="d-sm-flex justify-content-between align-items-center">
               <Breadcrumbs>
-                <Link href="/forms">Forms</Link>
+                <Link href="/feed">Forms</Link>
                 <InlineInput
                   placeholder="Form Name"
                   value={form?.name}
@@ -272,6 +271,7 @@ export default function Form({
                       label: f?.label,
                       formName: form?.name,
                     }))}
+                    formId={form?._id}
                   />
                   <RelationFields formId={form?._id} />
                 </>
@@ -395,21 +395,17 @@ export default function Form({
     );
   }
 
-  // if (
-  //   settings?.published &&
-  //   authenticated
-  //   // &&
-  //   // (settings?.whoCanViewResponses === 'all' || settings?.whoCanSubmit === 'all')
-  // ) {
-  //   return (
-  //     <Container>
-  //       <FormView
-  //         form={form}
-  //         // form={{ ...form, settings: { ...settings, onlyMyResponses: true } }}
-  //       />
-  //     </Container>
-  //   );
-  // }
+  if (settings?.published && authenticated) {
+    return (
+      <>
+        <Breadcrumbs>
+          <Link href="/feed">Forms</Link>
+          <Typography>{form?.name}</Typography>
+        </Breadcrumbs>
+        <FormView form={form} />
+      </>
+    );
+  }
 
   if (!authenticated) {
     return <UnAuthorised />;

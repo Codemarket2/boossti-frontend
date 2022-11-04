@@ -38,4 +38,24 @@ export const systemForms = {
       condition: 'condition',
     },
   },
+  rules: {
+    slug: 'rules',
+    fields: {
+      name: 'name',
+      field: 'field',
+      ruleType: 'Rule Type',
+      condition: 'Condition',
+      props: 'Props',
+      value: 'Value',
+    },
+  },
+  feed: {
+    slug: 'feed',
+    fields: {
+      message: 'message',
+      link: 'link',
+      status: 'status',
+      receiver: 'receiver',
+    },
+  },
 };
