@@ -1,10 +1,11 @@
+import { useGetFormBySlug } from '@frontend/shared/hooks/form';
+import { systemForms } from '@frontend/shared/utils/systemForms';
 import UserLayout from '../../src/components/common/UserLayout';
-import Feeds from '../../src/components/form2/feed/Feeds';
 
 export default function FeedPage() {
   return (
     <UserLayout container={false} authRequired feedLayout>
-      <Feeds />
+      {null}
     </UserLayout>
   );
 }

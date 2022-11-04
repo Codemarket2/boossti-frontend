@@ -10,8 +10,8 @@ import { client, guestClient } from '@frontend/shared/graphql';
 import { setDefaultThemeAction } from '@frontend/shared/redux/actions/setting';
 import awsExports from '@frontend/shared/aws-exports';
 import { store } from '@frontend/shared/redux';
-import { useInitializeSystem } from '@frontend/shared/hooks/form';
-import { useLogoHook } from '@frontend/shared/hooks/metaTags';
+// import { useInitializeSystem } from '@frontend/shared/hooks/form';
+// import { useLogoHook } from '@frontend/shared/hooks/metaTags';
 import CssBaseline from '@mui/material/CssBaseline';
 import { useCurrentAuthenticatedUser } from '@frontend/shared/hooks/auth';
 import { useGetUserForm } from '@frontend/shared/hooks/user/getUserForm';
@@ -22,7 +22,7 @@ import GlobalStyles from '@mui/material/GlobalStyles';
 import TagManager from 'react-gtm-module';
 import LoadingBar from '../src/components/common/LoadingBar';
 import Head from '../src/components/common/Head';
-import { useOneSignal } from '../src/components/notification/onesignal';
+// import { useOneSignal } from '../src/components/notification/onesignal';
 import { setDefaultTheme } from '../src/components/customMUI/commonFunc';
 import createEmotionCache from '../src/utils/createEmotionCache';
 // import { light, dark } from '../src/utils/theme/palette';
@@ -38,6 +38,7 @@ import '../src/assets/css/common.css';
 import '../src/components/react-flow/styles.css';
 import '../src/components/syncfusion-diagram/styles.css';
 import LoadingOverlay from '../src/components/common/LoadingOverlay';
+import UpdateFeedStatus from '../src/components/form2/feed/UpdateFeedStatus';
 
 const customsSignInUrl =
   process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : 'https://www.boossti.com/';
@@ -68,6 +69,7 @@ function App({ Component, pageProps, emotionCache = clientSideEmotionCache }: My
   const { authenticated } = useSelector(({ auth }: any) => auth);
   const settings = useSelector(({ setting }: any) => setting);
   const dispatch = useDispatch();
+  const router = useRouter();
   // useInitializeSystem();
 
   // useOneSignal();
@@ -126,6 +128,9 @@ function App({ Component, pageProps, emotionCache = clientSideEmotionCache }: My
             }}
           />
           {loading && <LoadingOverlay />}
+          {authenticated && router?.query?.feedId && (
+            <UpdateFeedStatus feedId={router?.query?.feedId?.toString()} />
+          )}
           <Component {...pageProps} />
         </MuiThemeProvider>
       </ApolloProvider>

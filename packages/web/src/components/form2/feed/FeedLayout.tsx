@@ -6,6 +6,7 @@ import Tabs from '@mui/material/Tabs';
 import { useRouter } from 'next/router';
 import React, { ReactNode, useEffect, useState } from 'react';
 import FormList from '../FormList';
+import FeedWrapper from './FeedWrapper';
 
 interface IFeedLayout {
   children: ReactNode;
@@ -74,6 +75,7 @@ export default function FeedLayout({ children }: IFeedLayout) {
         )}
       </Grid>
       <Grid item xs={12} sm={leftMenuOpen ? 9 : 11.6}>
+        <FeedWrapper showList={router.pathname === '/feed'} />
         {children}
       </Grid>
     </Grid>

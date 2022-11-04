@@ -72,7 +72,7 @@ export default function DrawerContent({ showDrawer, toggleDrawer, admin }: IProp
             <ListItemIcon>
               <TuneIcon />
             </ListItemIcon>
-            <ListItemText primary="Feeds" />
+            <ListItemText primary="Feed" />
           </ListItem>
         </Link>
         <Link href="/form/apps">
@@ -83,14 +83,6 @@ export default function DrawerContent({ showDrawer, toggleDrawer, admin }: IProp
             <ListItemText primary="Apps" />
           </ListItem>
         </Link>
-        {/* <Link href="/forms">
-          <ListItem button selected={checkActiveRoute(activeRoute, '/forms')}>
-            <ListItemIcon>
-              <TuneIcon />
-            </ListItemIcon>
-            <ListItemText primary="Forms" />
-          </ListItem>
-        </Link> */}
         <Link href="/emails">
           <ListItem button selected={checkActiveRoute(activeRoute, '/emails')}>
             <ListItemIcon>
