@@ -1,4 +1,5 @@
 import { useSubscription } from '@apollo/client';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ADDED_COMMENT2 } from '../../graphql/subscription/comment';
@@ -33,26 +34,29 @@ export const useNewFeed = ({ refetch, count, feedResponses, feedForm }: IUseNewF
       setOldCount(count);
     } else if (count && oldCount < count) {
       setOldCount(count);
-      audio?.play();
       const feedResponse = feedResponses?.[0];
-      const messageField = feedForm?.fields?.find(
-        (field) =>
-          field?.label?.toLowerCase() === systemForms?.feed?.fields?.message?.toLowerCase(),
-      );
-      const messageValue = feedResponse?.values?.find((value) => value?.field === messageField?._id)
-        ?.value;
+      if (moment(feedResponse?.createdAt) > moment().subtract(2, 'minutes')) {
+        const messageField = feedForm?.fields?.find(
+          (field) =>
+            field?.label?.toLowerCase() === systemForms?.feed?.fields?.message?.toLowerCase(),
+        );
+        const messageValue = feedResponse?.values?.find(
+          (value) => value?.field === messageField?._id,
+        )?.value;
 
-      const linkField = feedForm?.fields?.find(
-        (field) => field?.label?.toLowerCase() === systemForms?.feed?.fields?.link?.toLowerCase(),
-      );
-      const linkValue = feedResponse?.values?.find((value) => value?.field === linkField?._id)
-        ?.value;
-      setNewFeed({
-        createdAt: feedResponse?.createdAt,
-        message: messageValue,
-        link: linkValue,
-        _id: feedResponse?._id,
-      });
+        const linkField = feedForm?.fields?.find(
+          (field) => field?.label?.toLowerCase() === systemForms?.feed?.fields?.link?.toLowerCase(),
+        );
+        const linkValue = feedResponse?.values?.find((value) => value?.field === linkField?._id)
+          ?.value;
+        audio?.play();
+        setNewFeed({
+          createdAt: feedResponse?.createdAt,
+          message: messageValue,
+          link: linkValue,
+          _id: feedResponse?._id,
+        });
+      }
     }
   }, [count]);
 
