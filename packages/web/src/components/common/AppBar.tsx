@@ -15,6 +15,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import Drawer from './Drawer';
 import { useDarkMode } from './DarkModeToggle';
 import LogoutButton from './LogoutButton';
+import FeedWrapper from '../form2/feed/FeedWrapper';
 
 const StyledTitle = styled(Typography)(({ theme }) => ({
   width: '100%',
@@ -90,16 +91,17 @@ export default function AppBarComponent() {
         {authenticated ? (
           <>
             {/* <Notification /> */}
-            <MenuWrapper>
-              {/* <Tooltip title="Home">
+            {/* <MenuWrapper>
+              <Tooltip title="Home">
                 <IconButton
                   onClick={() => router.push(routes.feeds)}
                   color={setActiveRouteColor(activeRoute, routes.feeds)}
                 >
                   <HomeIcon />
                 </IconButton>
-              </Tooltip> */}
-            </MenuWrapper>
+              </Tooltip>
+            </MenuWrapper> */}
+            <FeedWrapper />
             <LogoutButton />
           </>
         ) : (

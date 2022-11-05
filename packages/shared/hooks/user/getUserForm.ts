@@ -37,7 +37,7 @@ export const getUserAttributes = (userForm, userResponse) => {
 export const getUserName = (userForm, userResponse) => {
   let fullName = '';
   if (!userResponse?._id) {
-    fullName = 'Unauthorized';
+    fullName = 'Unauthenticated';
   } else {
     const user = getUserAttributes(userForm, userResponse);
     if (user?.firstName) {

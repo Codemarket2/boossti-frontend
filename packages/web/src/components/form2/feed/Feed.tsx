@@ -5,9 +5,11 @@ import { getCreatedAtDate } from '@frontend/shared/utils/date';
 import { systemForms } from '@frontend/shared/utils/systemForms';
 import Notifications from '@mui/icons-material/Notifications';
 import CircularProgress from '@mui/material/CircularProgress';
+import Popover from '@mui/material/Popover';
+import Close from '@mui/icons-material/Close';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
-import Button from '@mui/material/Button';
+// import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import Snackbar from '@mui/material/Snackbar';
 import Link from 'next/link';
@@ -18,17 +20,18 @@ import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import Breadcrumbs from '../../common/Breadcrumbs';
-import ErrorLoading from '../../common/ErrorLoading';
+import Badge from '@mui/material/Badge';
+import IconButton from '@mui/material/IconButton';
 import InputGroup from '../../common/InputGroup';
+import ErrorLoading from '../../common/ErrorLoading';
 
 interface IFeedProps {
   feedForm: IForm;
-  showList: boolean;
 }
 
-export default function Feed({ feedForm, showList }: IFeedProps) {
-  const [filter, setFilter] = useState({ status: 'all' });
+export default function Feed({ feedForm }: IFeedProps) {
+  const [filter, setFilter] = useState({ status: 'unread' });
+  const [show, setShow] = useState(null);
   const attributes = useSelector((state: any) => state?.auth?.attributes);
   const receiverField = feedForm?.fields?.find(
     (field) => field?.label?.toLowerCase() === systemForms?.feed?.fields?.receiver?.toLowerCase(),
@@ -61,7 +64,6 @@ export default function Feed({ feedForm, showList }: IFeedProps) {
   const { data, error, refetch, loading } = useGetResponses({
     formId: feedForm?._id,
     valueFilter,
-    limit: showList ? 10 : 2,
   });
 
   const { newFeed, setNewFeed } = useNewFeed({
@@ -76,7 +78,7 @@ export default function Feed({ feedForm, showList }: IFeedProps) {
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
         open={Boolean(newFeed)}
-        autoHideDuration={6000}
+        autoHideDuration={4000}
         onClose={() => setNewFeed(null)}
       >
         <a target="_blank" rel="noreferrer" href={`${newFeed?.link}&feedId=${newFeed?._id}`}>
@@ -91,48 +93,69 @@ export default function Feed({ feedForm, showList }: IFeedProps) {
           </Alert>
         </a>
       </Snackbar>
-      {showList && (
-        <div>
-          <Breadcrumbs>
-            <Typography color="textPrimary">Feed</Typography>
-          </Breadcrumbs>
-          <div className="d-flex align-items-center">
-            <InputGroup>
-              <FormControl size="small">
-                <InputLabel>Status</InputLabel>
-                <Select
-                  value={filter?.status}
-                  label="Status"
-                  onChange={(event) =>
-                    setFilter((oldFilter) => ({ ...oldFilter, status: event?.target?.value }))
-                  }
-                >
-                  <MenuItem value="all">All</MenuItem>
-                  <MenuItem value="read">Read</MenuItem>
-                  <MenuItem value="unread">Unread</MenuItem>
-                </Select>
-              </FormControl>
-            </InputGroup>
-            <Typography className="ml-2">Total {data?.getResponses?.count} result found</Typography>
-            {loading && <CircularProgress className="ml-2" size={20} />}
-          </div>
-          <div>
-            {!data || error ? (
-              <ErrorLoading error={error} />
-            ) : (
-              <Paper className="p-2">
-                {data?.getResponses?.data?.map((feedResponse) => (
+      <IconButton color="inherit" onClick={(event) => setShow(event?.currentTarget)}>
+        <Badge badgeContent={data?.getResponses?.count} color="success">
+          <Notifications />
+        </Badge>
+      </IconButton>
+      <Popover
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        open={Boolean(show)}
+        anchorEl={show}
+        onClose={() => setShow(null)}
+      >
+        {show && (
+          <Paper className="p-2">
+            <div className="d-flex align-items-center justify-content-between">
+              <div className="d-flex align-items-center">
+                <InputGroup>
+                  <FormControl size="small">
+                    <InputLabel>Status</InputLabel>
+                    <Select
+                      value={filter?.status}
+                      label="Status"
+                      onChange={(event) =>
+                        setFilter((oldFilter) => ({ ...oldFilter, status: event?.target?.value }))
+                      }
+                    >
+                      <MenuItem value="all">All</MenuItem>
+                      <MenuItem value="read">Read</MenuItem>
+                      <MenuItem value="unread">Unread</MenuItem>
+                    </Select>
+                  </FormControl>
+                </InputGroup>
+                <Typography className="ml-2">
+                  Total {data?.getResponses?.count} result found
+                </Typography>
+                {loading && <CircularProgress className="ml-2" size={20} />}
+              </div>
+              <IconButton onClick={() => setShow(null)}>
+                <Close />
+              </IconButton>
+            </div>
+            <div>
+              {!data || error ? (
+                <ErrorLoading error={error} />
+              ) : (
+                data?.getResponses?.data?.map((feedResponse) => (
                   <FeedCard
                     key={feedResponse?._id}
                     feedForm={feedForm}
                     feedResponse={feedResponse}
                   />
-                ))}
-              </Paper>
-            )}
-          </div>
-        </div>
-      )}
+                ))
+              )}
+            </div>
+          </Paper>
+        )}
+      </Popover>
     </>
   );
 }
@@ -162,11 +185,13 @@ const FeedCard = ({ feedResponse, feedForm }: { feedResponse: IResponse; feedFor
         icon={<Notifications />}
         className="my-2"
         variant={statusValue === 'unread' ? 'filled' : 'outlined'}
-        action={
-          <Button color="inherit" size="small">
-            View
-          </Button>
-        }
+        // action={
+        //   <>
+        //     <Button color="inherit" size="small">
+        //       View
+        //     </Button>
+        //   </>
+        // }
       >
         <AlertTitle>{messageValue}</AlertTitle>
         {getCreatedAtDate(feedResponse?.createdAt, 2, 'lll')}
