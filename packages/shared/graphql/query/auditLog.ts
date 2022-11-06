@@ -6,10 +6,12 @@ export const GET_AUDIT_LOGS = gql`
       count
       data {
         _id
+        documentId
         action
         createdAt
         createdBy {
           _id
+          count
           values {
             field
             value
