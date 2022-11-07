@@ -177,11 +177,11 @@ export const GET_RESPONSES = gql`
           }
           response {
             _id
-            values {
-              field
-              value
-              # valueNumber
-            }
+            # values {
+            #   field
+            #   value
+            #   valueNumber
+            # }
           }
           options
         }

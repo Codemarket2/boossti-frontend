@@ -19,10 +19,13 @@ import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
+import Icon from '@mui/material/Icon';
 import InfoOutlined from '@mui/icons-material/InfoOutlined';
-import { Collapse } from '@mui/material';
+import Collapse from '@mui/material/Collapse';
+import Typography from '@mui/material/Typography';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import { ExpandLess } from '@mui/icons-material';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import Add from '@mui/icons-material/Add';
 
 // SHARED IMPORTS
 import { useAddFields } from '@frontend/shared/hooks/form';
@@ -914,6 +917,97 @@ export default function AddField({
                     )}
                   />
                 )}
+              {formik.values?.options?.engagementForms?.length > 0 ? (
+                <>
+                  <Typography>
+                    Engagement forms
+                    <Tooltip title="Add more Engagement forms">
+                      <IconButton
+                        color="primary"
+                        size="small"
+                        onClick={() =>
+                          onOptionChange({
+                            engagementForms: [...formik.values?.options?.engagementForms, null],
+                          })
+                        }
+                      >
+                        <AddCircleIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </Typography>
+                </>
+              ) : (
+                <Button
+                  startIcon={<Add />}
+                  size="small"
+                  onClick={() =>
+                    onOptionChange({
+                      engagementForms: [null],
+                    })
+                  }
+                >
+                  Add Engagement Form
+                </Button>
+              )}
+              {formik.values?.options?.engagementForms?.map(
+                (engagementForm, engagementFormIndex) => (
+                  <InputGroup
+                    key={engagementFormIndex}
+                    className="d-flex justify-content-between align-items-center"
+                  >
+                    <div className="w-100">
+                      <SelectForm
+                        label={`${engagementFormIndex + 1} Select Form`}
+                        value={engagementForm?._id ? engagementForm : null}
+                        onChange={(newEngagementForm) =>
+                          onOptionChange({
+                            engagementForms: formik.values?.options?.engagementForms?.map((ef, i) =>
+                              i === engagementFormIndex
+                                ? {
+                                    ...ef,
+                                    _id: newEngagementForm?._id,
+                                    name: newEngagementForm?.name,
+                                  }
+                                : ef,
+                            ),
+                          })
+                        }
+                      />
+                    </div>
+                    <TextField
+                      size="small"
+                      label="Icon Name"
+                      value={engagementForm?.icon}
+                      onChange={(event) =>
+                        onOptionChange({
+                          engagementForms: formik.values?.options?.engagementForms?.map((ef, i) =>
+                            i === engagementFormIndex
+                              ? {
+                                  ...ef,
+                                  icon: event?.target?.value,
+                                }
+                              : ef,
+                          ),
+                        })
+                      }
+                    />
+                    {engagementForm?.icon && <Icon>{engagementForm?.icon}</Icon>}
+                    <IconButton
+                      color="error"
+                      onClick={() => {
+                        const newForms = formik.values?.options?.engagementForms?.filter(
+                          (_, i) => i !== engagementFormIndex,
+                        );
+                        onOptionChange({
+                          engagementForms: newForms,
+                        });
+                      }}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </InputGroup>
+                ),
+              )}
             </>
           )}
         </>
