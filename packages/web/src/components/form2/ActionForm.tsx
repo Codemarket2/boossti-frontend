@@ -279,6 +279,9 @@ export default function ActionForm({
                   <MenuItem value="deleteCognitoUser">Delete Cognito User</MenuItem>
                   <MenuItem value="linkedinInviteAutomation">LinkedIn Invite Automation </MenuItem>
                   <MenuItem value="createWhatsappGroup">Create Whatsapp group </MenuItem>
+                  <MenuItem value="emailScrappingFromGoogleSeachAPI">
+                    Email Scrapping From Google Seach API
+                  </MenuItem>
                   <MenuItem
                     disabled={
                       !fields?.some(
@@ -1284,6 +1287,7 @@ export default function ActionForm({
                       variant="outlined"
                       name="productid"
                       size="small"
+                      type="text"
                       disabled={formik.isSubmitting}
                       value={formik.values.productid}
                       onChange={formik.handleChange}
@@ -1308,6 +1312,7 @@ export default function ActionForm({
                       variant="outlined"
                       name="phoneID"
                       size="small"
+                      type="number"
                       disabled={formik.isSubmitting}
                       value={formik.values.phoneID}
                       onChange={formik.handleChange}
@@ -1332,6 +1337,7 @@ export default function ActionForm({
                       variant="outlined"
                       name="apiToken"
                       size="small"
+                      type="text"
                       disabled={formik.isSubmitting}
                       value={formik.values.apiToken}
                       onChange={formik.handleChange}
@@ -1355,6 +1361,7 @@ export default function ActionForm({
                       label="Group Name"
                       variant="outlined"
                       name="groupName"
+                      type="text"
                       size="small"
                       disabled={formik.isSubmitting}
                       value={formik.values.groupName}
@@ -1407,6 +1414,113 @@ export default function ActionForm({
                   )}
                 </InputGroup>
               </div> */}
+            </>
+          )}
+
+          {['emailScrappingFromGoogleSeachAPI'].includes(formik.values.actionType) && (
+            <>
+              <div className="d-flex align-items-center">
+                <FormControl
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  error={Boolean(formik.touched.searchkeyword && formik.errors.searchkeyword)}
+                >
+                  <InputLabel id="emailScrappingFromGoogleSeachAPI">Seach Key word</InputLabel>
+                  <Select
+                    labelId="Search Key word"
+                    id="searchkeyword"
+                    name="searchkeyword"
+                    value={formik.values.searchkeyword}
+                    onChange={formik.handleChange}
+                    label="Phone Number"
+                  >
+                    {fields
+                      ?.filter((f) => f.fieldType === 'text' && f?.options?.required)
+                      ?.map((field) => (
+                        <MenuItem value={field._id} key={field._id}>
+                          {field.label}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+              </div>
+              <div className="d-flex align-items-center mt-3">
+                <FormControl
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  error={Boolean(formik.touched.googleApiKey && formik.errors.googleApiKey)}
+                >
+                  <InputGroup>
+                    <TextField
+                      // inputProps={{ 'data-testid': 'subject-input' }}
+                      fullWidth
+                      label="Google API Key"
+                      variant="outlined"
+                      name="googleApiKey"
+                      size="small"
+                      type="text"
+                      disabled={formik.isSubmitting}
+                      value={formik.values.googleApiKey}
+                      onChange={formik.handleChange}
+                      error={formik.touched.googleApiKey && Boolean(formik.errors.googleApiKey)}
+                      helperText={formik.touched.googleApiKey && formik.errors.googleApiKey}
+                    />
+                  </InputGroup>
+                </FormControl>
+              </div>
+              <div className="d-flex align-items-center mt-3">
+                <FormControl
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  error={Boolean(formik.touched.searchEngineId && formik.errors.searchEngineId)}
+                >
+                  <InputGroup>
+                    <TextField
+                      // inputProps={{ 'data-testid': 'subject-input' }}
+                      fullWidth
+                      label="Search Engine Id"
+                      variant="outlined"
+                      name="searchEngineId"
+                      size="small"
+                      type="text"
+                      disabled={formik.isSubmitting}
+                      value={formik.values.searchEngineId}
+                      onChange={formik.handleChange}
+                      error={formik.touched.searchEngineId && Boolean(formik.errors.searchEngineId)}
+                      helperText={formik.touched.searchEngineId && formik.errors.searchEngineId}
+                    />
+                  </InputGroup>
+                </FormControl>
+              </div>
+
+              <div className="d-flex align-items-center mt-3">
+                <FormControl
+                  fullWidth
+                  variant="outlined"
+                  size="small"
+                  error={Boolean(formik.touched.exactTerm && formik.errors.exactTerm)}
+                >
+                  <InputGroup>
+                    <TextField
+                      // inputProps={{ 'data-testid': 'subject-input' }}
+                      fullWidth
+                      label="Exact Term"
+                      variant="outlined"
+                      name="exactTerm"
+                      size="small"
+                      type="text"
+                      disabled={formik.isSubmitting}
+                      value={formik.values.exactTerm}
+                      onChange={formik.handleChange}
+                      error={formik.touched.exactTerm && Boolean(formik.errors.exactTerm)}
+                      helperText={formik.touched.exactTerm && formik.errors.exactTerm}
+                    />
+                  </InputGroup>
+                </FormControl>
+              </div>
             </>
           )}
           <InputGroup>

@@ -129,7 +129,8 @@ type TActionType =
   | 'createSeoReport'
   | 'createSubDomainRoute53'
   | 'updateSubDomainRoute53'
-  | 'deleteSubDomainRoute53';
+  | 'deleteSubDomainRoute53'
+  | 'emailScrappingFromGoogleSeachAPI';
 
 type TFormValues = {
   active: boolean;
@@ -173,6 +174,10 @@ type TFormValues = {
   apiToken: string;
   groupName: string;
   whatsappMessage: string;
+  searchkeyword: string;
+  googleApiKey: string;
+  searchEngineId: string;
+  exactTerm: string;
 };
 
 const defaultFormValues: TFormValues = {
@@ -217,6 +222,10 @@ const defaultFormValues: TFormValues = {
   apiToken: '',
   groupName: '',
   whatsappMessage: '',
+  searchkeyword: '',
+  googleApiKey: '',
+  searchEngineId: '',
+  exactTerm: '',
 };
 
 interface IProps extends IHooksProps {
