@@ -53,8 +53,8 @@ export default function AuditLogCard({ userForm, auditLog }: IAuditLogCard) {
           {auditLog.action} {auditLog.model}
           {auditLog.model === 'Response' && (
             <>
-              {JSON.parse(auditLog?.diff)?.formId ? (
-                <DisplayFormName formId={JSON.parse(auditLog?.diff)?.formId} />
+              {JSON.parse(auditLog?.difference)?.formId ? (
+                <DisplayFormName formId={JSON.parse(auditLog?.difference)?.formId} />
               ) : (
                 auditLog?.documentId && (
                   <DisplayFormNameByResponseId responseId={auditLog?.documentId} />
@@ -70,16 +70,19 @@ export default function AuditLogCard({ userForm, auditLog }: IAuditLogCard) {
           <Collapse in={showChanges}>
             {auditLog.model === 'Comment' ? (
               <>
-                <DisplayRichText value={JSON.parse(auditLog?.diff)?.body} />
+                <DisplayRichText value={JSON.parse(auditLog?.difference)?.body} />
               </>
             ) : isCreateResponse ? (
-              <DisplayResponseById responseId={JSON.parse(auditLog?.diff)?._id} hideBreadcrumbs />
+              <DisplayResponseById
+                responseId={JSON.parse(auditLog?.difference)?._id}
+                hideBreadcrumbs
+              />
             ) : (
               <>
-                {Object.keys(JSON.parse(auditLog?.diff) || {})?.map((key, index) => (
+                {Object.keys(JSON.parse(auditLog?.difference) || {})?.map((key, index) => (
                   <DisplayDiff
                     objectKey={key}
-                    value={JSON.parse(auditLog?.diff)[key]}
+                    value={JSON.parse(auditLog?.difference)[key]}
                     key={index}
                     level={1}
                   />

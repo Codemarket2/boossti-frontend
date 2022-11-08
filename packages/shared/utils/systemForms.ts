@@ -58,4 +58,15 @@ export const systemForms = {
       receiver: 'receiver',
     },
   },
+  activityLogCard: {
+    formId: '63686d8320fac17631f16588',
+    slug: 'activity-log-card',
+    fields: {
+      action: 'Action',
+      model: 'Model',
+      difference: 'Difference',
+      message: 'Message',
+      documentId: 'Document ID',
+    },
+  },
 };
