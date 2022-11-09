@@ -8,7 +8,7 @@
 
 import React, { useEffect } from 'react';
 import 'react-native-gesture-handler';
-import { Linking, Alert, Platform } from 'react-native';
+import { Linking, Alert, Platform, View, Text } from 'react-native';
 import {
   NavigationContainer,
   DarkTheme as NavigationDarkTheme,
@@ -95,6 +95,11 @@ const CombinedDarkTheme = {
 };
 
 const App = () => {
+  // return (
+  //   <View>
+  //     <Text>Users</Text>
+  //   </View>
+  // );
   return (
     <ReduxProvider store={store}>
       <PersistGate loading={null} persistor={persistor}>
