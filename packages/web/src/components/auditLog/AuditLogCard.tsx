@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import Collapse from '@mui/material/Collapse';
@@ -12,6 +12,8 @@ import { useGetResponse } from '@frontend/shared/hooks/response';
 import CardContent from '@mui/material/CardContent';
 import MoreVert from '@mui/icons-material/MoreVert';
 import { IForm } from '@frontend/shared/types';
+import { OpenInNew } from '@mui/icons-material';
+import { Tooltip } from '@mui/material';
 import Link from 'next/link';
 import { useGetForm } from '@frontend/shared/hooks/form';
 import DisplayResponseById from '../response/DisplayResponseById';
@@ -24,7 +26,7 @@ interface IAuditLogCard {
 }
 
 export default function AuditLogCard({ userForm, auditLog }: IAuditLogCard) {
-  const [showChanges, setShowChanges] = useState(false);
+  const [showChanges, setShowChanges] = useState(true);
 
   const isCreateResponse = auditLog.action === 'CREATE' && auditLog.model === 'Response';
 
@@ -49,17 +51,19 @@ export default function AuditLogCard({ userForm, auditLog }: IAuditLogCard) {
         subheader={moment(auditLog.createdAt).format('lll')}
       />
       <CardContent>
-        <Typography className="d-inline">
+        <Typography className="d-inlin">
           {auditLog.action} {auditLog.model}
+          {auditLog.model === 'Form' && <DisplayFormName formId={auditLog?.documentId} />}
           {auditLog.model === 'Response' && (
             <>
-              {JSON.parse(auditLog?.difference)?.formId ? (
+              <DisplayFormNameByResponseId responseId={auditLog?.documentId} />
+              {/* {JSON.parse(auditLog?.difference)?.formId ? (
                 <DisplayFormName formId={JSON.parse(auditLog?.difference)?.formId} />
               ) : (
                 auditLog?.documentId && (
                   <DisplayFormNameByResponseId responseId={auditLog?.documentId} />
                 )
-              )}
+              )} */}
             </>
           )}
         </Typography>
@@ -96,8 +100,20 @@ export default function AuditLogCard({ userForm, auditLog }: IAuditLogCard) {
   );
 }
 
-const DisplayFormName = ({ formId }: { formId: string }) => {
+const DisplayFormName = ({
+  formId,
+  setForm,
+}: {
+  formId: string;
+  setForm?: (form: IForm) => void;
+}) => {
   const { data } = useGetForm(formId);
+  useEffect(() => {
+    if (data?.getForm?._id && setForm) {
+      setForm(data?.getForm);
+    }
+  }, [data?.getForm]);
+
   if (data?.getForm?.name) {
     return (
       <>
@@ -111,8 +127,22 @@ const DisplayFormName = ({ formId }: { formId: string }) => {
 
 const DisplayFormNameByResponseId = ({ responseId }: { responseId: string }) => {
   const { data } = useGetResponse(responseId);
+  const [form, setForm] = useState(null);
   if (data?.getResponse?.formId) {
-    return <DisplayFormName formId={data?.getResponse?.formId} />;
+    return (
+      <>
+        <DisplayFormName formId={data?.getResponse?.formId} setForm={setForm} />
+        {form?.slug && (
+          <Link href={`/form/${form?.slug}/response/${data?.getResponse?.count}`}>
+            <Tooltip title="Open Response">
+              <Button size="small" endIcon={<OpenInNew />}>
+                Open
+              </Button>
+            </Tooltip>
+          </Link>
+        )}
+      </>
+    );
   }
   return null;
 };

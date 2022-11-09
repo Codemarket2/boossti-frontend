@@ -2,7 +2,7 @@ import Typography from '@mui/material/Typography';
 import { useSelector } from 'react-redux';
 import { useGetResponses } from '@frontend/shared/hooks/response';
 import { systemForms } from '@frontend/shared/utils/systemForms';
-import { useGetForm } from '@frontend/shared/hooks/form';
+import { useGetForm, useGetFormBySlug } from '@frontend/shared/hooks/form';
 import Pagination from '@mui/material/Pagination';
 import Skeleton from '@mui/material/Skeleton';
 import ErrorLoading from '../common/ErrorLoading';
@@ -15,15 +15,21 @@ interface IProps {
 
 export default function AuditLog({ documentId, formId }: IProps) {
   const userForm = useSelector(({ setting }: any) => setting.userForm);
-  const { data, error } = useGetForm(systemForms?.activityLogCard?.formId);
+
+  const { data, error } = useGetFormBySlug(systemForms?.activityLogCard?.slug);
+  // const { data, error } = useGetForm(systemForms?.activityLogCard?.formId);
+
+  const activityLogCardForm = data?.getFormBySlug;
+
   const documentIdField = getFieldByLabel(
     systemForms?.activityLogCard?.fields?.documentId,
-    data?.getForm?.fields,
+    activityLogCardForm?.fields,
   );
   const differenceField = getFieldByLabel(
     systemForms?.activityLogCard?.fields?.difference,
-    data?.getForm?.fields,
+    activityLogCardForm?.fields,
   );
+
   let valueFilter = {};
   if (documentId && formId) {
     valueFilter = {
@@ -33,14 +39,22 @@ export default function AuditLog({ documentId, formId }: IProps) {
       ],
     };
   }
-  const { data: responseData, error: responseError, state, setState } = useGetResponses({
-    formId: data?.getForm?._id,
+  const {
+    data: responseData,
+    error: responseError,
+    state,
+    setState,
+    loading: responseLoading,
+  } = useGetResponses({
+    formId: activityLogCardForm?._id,
     valueFilter,
   });
 
-  if (!data?.getForm?._id || error || responseError || !responseData) {
+  if (!activityLogCardForm?._id || error || responseError || !responseData) {
     return (
-      <ErrorLoading error={error}>
+      <ErrorLoading
+        error={error || (activityLogCardForm?._id && !responseLoading ? responseError : null)}
+      >
         <Skeleton height={150} />
         <Skeleton height={150} />
         <Skeleton height={150} />
@@ -48,7 +62,7 @@ export default function AuditLog({ documentId, formId }: IProps) {
     );
   }
 
-  const activityForm = data?.getForm;
+  const activityForm = activityLogCardForm;
   return (
     <div className="p-2">
       {responseData?.getResponses?.data
