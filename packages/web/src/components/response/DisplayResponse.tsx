@@ -7,11 +7,6 @@ import Typography from '@mui/material/Typography';
 import { useUpdateSection } from '@frontend/shared/hooks/section';
 import moment from 'moment';
 import Paper from '@mui/material/Paper';
-// import ListItemText from '@mui/material/ListItemText';
-// import Grid from '@mui/material/Grid';
-// import List from '@mui/material/List';
-// import ListItem from '@mui/material/ListItem';
-// import { systemForms } from '@frontend/shared/utils/systemForms';
 import { getUserName } from '@frontend/shared/hooks/user/getUserForm';
 import { parseResponse } from '@frontend/shared/hooks/response/getResponse';
 import { IForm } from '@frontend/shared/types';
@@ -27,9 +22,6 @@ import DeleteButton from '../common/DeleteButton';
 import RelationFieldView from '../form2/RelationFieldView';
 import FieldValuesMap from './FieldValuesMap';
 import WorkflowSteps from './workflow/WorkflowSteps';
-// import ResponseSections from './ResponseSection';
-// import WorkflowStep1 from './workflow/WorkflowStep1';
-// import RelationFields from '../form2/RelationFields';
 
 export interface DisplayResponseProps {
   form: IForm;
@@ -40,6 +32,7 @@ export interface DisplayResponseProps {
   hideWorkflow?: boolean;
   deleteCallBack?: () => void;
   hideDelete?: boolean;
+  previewMode?: boolean;
 }
 
 const initialState = { showMenu: null, edit: false, showBackdrop: false, fieldId: null };
@@ -53,6 +46,7 @@ export function DisplayResponse({
   hideWorkflow,
   deleteCallBack,
   hideDelete,
+  previewMode,
 }: DisplayResponseProps) {
   const [state, setState] = useState(initialState);
   const [fieldsConditionResult, setFieldsConditionResult] = useState({});
@@ -66,17 +60,19 @@ export function DisplayResponse({
     }
   }, [tempResponse]);
 
-  const { hasPermission: hasEditPermission } = useCheckPermission({
+  const { hasPermission: editPerm } = useCheckPermission({
     actionType: 'EDIT',
     formId: form?._id,
     responseId: response?._id,
   });
+  const hasEditPermission = editPerm && !previewMode;
 
-  const { hasPermission: hasDeletePermission } = useCheckPermission({
+  const { hasPermission: deletePerm } = useCheckPermission({
     actionType: 'DELETE',
     formId: form?._id,
     responseId: response?._id,
   });
+  const hasDeletePermission = deletePerm && !previewMode;
 
   const { section, onSectionChange, handleUpdateSection } = useUpdateSection({
     onAlert,
@@ -225,35 +221,6 @@ export function DisplayResponse({
     </>
   );
 
-  // const LeftNavigation = (
-  //   <div
-  //     className={`d-flex ${
-  //       section?.options?.belowResponse ? 'flex-column-reverse' : 'flex-column'
-  //     }`}
-  //   >
-  //     <Paper variant="outlined">
-  //       <List dense component="nav">
-  //         <ListItem button>
-  //           <ListItemText primary="ID" />
-  //         </ListItem>
-  //         <div data-testid="fieldName">
-  //           {form?.fields?.map((field) => (
-  //             <ListItem button key={field._id}>
-  //               <ListItemText primary={field?.label} />
-  //             </ListItem>
-  //           ))}
-  //         </div>
-  //       </List>
-  //     </Paper>
-  //     <RelationFields formId={form?._id} previewMode />
-  //     {section?.fields?.length > 0 && (
-  //       <ResponseSections authorized={false} section={section} onSectionChange={(sec) => null} />
-  //     )}
-  //   </div>
-  // );
-
-  // const isWorkflowDetail = form?.slug === systemForms?.workflow?.slug;
-
   return (
     <>
       <BackdropComponent open={deleteLoading || state.showBackdrop} />
@@ -280,20 +247,6 @@ export function DisplayResponse({
         </div>
       )}
       {DetailComponent}
-      {/* <Grid container spacing={1}>
-        {hideLeftNavigation && (
-          <Grid data-testid="hideLeftNavigation" item xs={3}>
-            {isWorkflowDetail ? DetailComponent : LeftNavigation}
-          </Grid>
-        )}
-        <Grid item xs={!hideLeftNavigation ? 12 : 9}>
-          {isWorkflowDetail ? (
-            <WorkflowStep1 workflowForm={form} workflowResponse={response} />
-          ) : (
-            DetailComponent
-          )}
-        </Grid>
-      </Grid> */}
     </>
   );
 }
