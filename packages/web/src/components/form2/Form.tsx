@@ -71,14 +71,10 @@ interface IFormProps {
   drawerMode?: boolean;
   onSlugChange?: (newSlug: string) => void;
   responseListProps?: Partial<IResponseList>;
+  previewMode?: boolean;
 }
 
-export default function Form({
-  form,
-  drawerMode = false,
-  onSlugChange,
-  responseListProps,
-}: IFormProps): any {
+export default function Form(props: IFormProps) {
   const {
     handleOnChange,
     handleOnSettingsChange,
@@ -87,9 +83,49 @@ export default function Form({
     settings,
   } = useUpdateForm({
     onAlert,
-    form,
+    // eslint-disable-next-line react/destructuring-assignment
+    form: props?.form,
   });
 
+  return (
+    <FormChild
+      {...props}
+      handleOnChange={(newForm) => {
+        if (props?.previewMode) {
+          handleOnChange(newForm);
+        }
+      }}
+      handleOnSettingsChange={(newSettings) => {
+        if (props?.previewMode) {
+          handleOnSettingsChange(newSettings);
+        }
+      }}
+      updateLoading={updateLoading}
+      handleUpdateForm={handleUpdateForm}
+      settings={settings}
+    />
+  );
+}
+
+interface IFormChild extends IFormProps {
+  handleOnChange: (newForm: any) => void;
+  updateLoading: boolean;
+  handleUpdateForm: (newForm?: Partial<IForm>) => Promise<IForm>;
+  settings: any;
+  handleOnSettingsChange: (newSetting: any) => void;
+}
+
+export function FormChild({
+  form,
+  drawerMode = false,
+  onSlugChange,
+  responseListProps,
+  handleOnChange,
+  handleOnSettingsChange,
+  updateLoading,
+  handleUpdateForm,
+  settings,
+}: IFormChild): any {
   const { handleDelete } = useDeleteForm({
     onAlert,
   });
@@ -210,11 +246,6 @@ export default function Form({
             </div>
           )}
           <Grid container spacing={1}>
-            {/* {!hideFields && (
-              <Grid item xs={12} sm={4}>
-                Fields
-              </Grid>
-            )} */}
             <Grid item xs={12} sm={options.formTabs ? 9 : 12}>
               {/* sm={hideFields ? 12 : options.formTabs ? 5 : 8} */}
               <Paper variant="outlined" className="d-flex align-item-center">
@@ -398,10 +429,12 @@ export default function Form({
   if (settings?.published && authenticated) {
     return (
       <>
-        <Breadcrumbs>
-          <Link href="/feed">Forms</Link>
-          <Typography>{form?.name}</Typography>
-        </Breadcrumbs>
+        {!drawerMode && (
+          <Breadcrumbs>
+            <Link href="/feed">Forms</Link>
+            <Typography>{form?.name}</Typography>
+          </Breadcrumbs>
+        )}
         <FormView form={form} />
       </>
     );

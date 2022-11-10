@@ -52,6 +52,7 @@ export interface IFieldOptions {
   functionalityFlowDiagramConditions?: ICondition[];
   selectOfFieldProps?: boolean;
   conditionRightPart?: boolean;
+  engagementForms?: any[];
 }
 
 export interface IField {

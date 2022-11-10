@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import Overlay from '../common/Overlay';
 import { getLabel } from './SelectResponse';
 import DisplayResponseById from './DisplayResponseById';
-import DisplayResponseValue from './DisplayResponseValue';
+import DisplayResponseValueWrapper from './DisplayResponseValue';
 
 interface IProps {
   open: boolean;
@@ -42,7 +42,7 @@ export const ShowResponseLabel = ({
 
   return (
     <div>
-      {label ? (
+      {label || (response && !response?._id && typeof response === 'string') ? (
         <>
           <Typography
             data-testid="button"
@@ -56,13 +56,20 @@ export const ShowResponseLabel = ({
             }}
             style={{ cursor: 'pointer' }}
           >
-            {label}
+            {label || (
+              <DisplayResponseValueWrapper
+                formId={formId}
+                responseId={response}
+                fieldId={formField}
+                onClickResponse={() => setShowOverlay(true)}
+              />
+            )}
           </Typography>
         </>
       ) : (
         <>
           {response?._id && (
-            <DisplayResponseValue
+            <DisplayResponseValueWrapper
               onClickResponse={() => setShowOverlay(true)}
               formId={formId}
               responseId={response?._id}
@@ -76,7 +83,7 @@ export const ShowResponseLabel = ({
           data-testid="overlay"
           open={showOverlay}
           onClose={() => setShowOverlay(false)}
-          responseId={response?._id}
+          responseId={response?._id || (typeof response === 'string' && response)}
         />
       )}
     </div>

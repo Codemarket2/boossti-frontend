@@ -17,14 +17,16 @@ export default function DisplayResponseValueWrapper({
   responseId,
   onClickResponse,
 }: IDisplayResponseValueWrapper) {
-  const { data, error } = useGetForm(formId);
+  const { data, error, loading } = useGetForm(formId);
 
-  const field = data?.getForm?.fields?.find(
-    (f) => f?._id === fieldId && f?.fieldType === 'response',
-  );
+  const field = data?.getForm?.fields?.find((f) => f?._id === fieldId);
 
   if (error) {
     return <ErrorLoading error={error} />;
+  }
+
+  if (loading) {
+    return <>loading...</>;
   }
 
   return (

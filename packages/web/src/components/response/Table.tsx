@@ -55,6 +55,9 @@ export default function ResponseTable({
 }: IProps) {
   const userForm = useSelector(({ setting }: any) => setting.userForm);
   const router = useRouter();
+
+  // return <>{JSON.stringify(responses)}responses</>;
+
   return (
     <div>
       <TableContainer component={Paper} variant="outlined">

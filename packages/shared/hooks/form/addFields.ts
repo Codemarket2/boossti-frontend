@@ -71,6 +71,7 @@ export const defaultOptions: IFieldOptions = {
   showAsAddButton: false,
   selectOfFieldProps: false,
   conditionRightPart: false,
+  engagementForms: null,
 };
 
 interface IValues extends IField {
