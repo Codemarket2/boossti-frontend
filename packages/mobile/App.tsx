@@ -1,11 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React, { useEffect } from 'react';
 import 'react-native-gesture-handler';
 import { Linking, Alert, Platform, View, Text } from 'react-native';
@@ -36,6 +28,7 @@ import MainStack from './src/navigation/MainStack';
 import { store, persistor } from './src/utils/store';
 import AuthLoadingModal from './src/components/auth/AuthLoadingModal';
 import { useOneSignal } from './src/utils/onesignal';
+import LoginPage from './src/screens/LoginPage';
 // import StorybookUI from './storybook';
 
 // Amplify.configure(config);
@@ -95,23 +88,24 @@ const CombinedDarkTheme = {
 };
 
 const App = () => {
-  // return (
-  //   <View>
-  //     <Text>Users</Text>
-  //   </View>
-  // );
   return (
-    <ReduxProvider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <ApolloProvider client={client}>
-          <Wrapper>
-            <AuthLoadingModal />
-            <MainStack />
-          </Wrapper>
-        </ApolloProvider>
-      </PersistGate>
-    </ReduxProvider>
+    <View style={{ flex: 1 }}>
+      {/* <Text>Users</Text> */}
+      <LoginPage />
+    </View>
   );
+  // return (
+  //   <ReduxProvider store={store}>
+  //     <PersistGate loading={null} persistor={persistor}>
+  //       <ApolloProvider client={client}>
+  //         <Wrapper>
+  //           <AuthLoadingModal />
+  //           <MainStack />
+  //         </Wrapper>
+  //       </ApolloProvider>
+  //     </PersistGate>
+  //   </ReduxProvider>
+  // );
 };
 
 // InitialData - This Component is created because the useCurrentAuthenticatedUser hook need to be call inside redux provider
