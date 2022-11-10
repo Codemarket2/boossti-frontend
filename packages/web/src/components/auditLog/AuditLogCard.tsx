@@ -1,8 +1,6 @@
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
-import Collapse from '@mui/material/Collapse';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import { getUserName } from '@frontend/shared/hooks/user/getUserForm';
@@ -10,15 +8,19 @@ import CardHeader from '@mui/material/CardHeader';
 import Avatar from '@mui/material/Avatar';
 import { useGetResponse } from '@frontend/shared/hooks/response';
 import CardContent from '@mui/material/CardContent';
-import MoreVert from '@mui/icons-material/MoreVert';
 import { IForm } from '@frontend/shared/types';
-import { OpenInNew } from '@mui/icons-material';
-import { Tooltip } from '@mui/material';
+import Close from '@mui/icons-material/Close';
 import Link from 'next/link';
 import { useGetForm } from '@frontend/shared/hooks/form';
-import DisplayResponseById from '../response/DisplayResponseById';
-import DisplayDiff from './DisplayDiff';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import Tooltip from '@mui/material/Tooltip';
+import { DisplayResponseWithFormId } from '../response/DisplayResponseById';
 import DisplayRichText from '../common/DisplayRichText';
+import Form from '../form2/Form';
 
 interface IAuditLogCard {
   userForm: IForm;
@@ -26,21 +28,13 @@ interface IAuditLogCard {
 }
 
 export default function AuditLogCard({ userForm, auditLog }: IAuditLogCard) {
-  const [showChanges, setShowChanges] = useState(true);
-
-  const isCreateResponse = auditLog.action === 'CREATE' && auditLog.model === 'Response';
-
   const userName = getUserName(userForm, auditLog?.createdBy);
+  const [compare, setCompare] = useState(false);
 
   return (
-    <Card variant="outlined" key={auditLog._id} className="my-2">
+    <Card variant="outlined" key={auditLog._id} className="my-3">
       <CardHeader
         avatar={<Avatar />}
-        action={
-          <IconButton aria-label="settings">
-            <MoreVert />
-          </IconButton>
-        }
         title={
           auditLog?.createdBy?.count ? (
             <Link href={`/form/users/response/${auditLog?.createdBy?.count}`}>{userName}</Link>
@@ -51,50 +45,86 @@ export default function AuditLogCard({ userForm, auditLog }: IAuditLogCard) {
         subheader={moment(auditLog.createdAt).format('lll')}
       />
       <CardContent>
-        <Typography className="d-inlin">
-          {auditLog.action} {auditLog.model}
-          {auditLog.model === 'Form' && <DisplayFormName formId={auditLog?.documentId} />}
-          {auditLog.model === 'Response' && (
-            <>
-              <DisplayFormNameByResponseId responseId={auditLog?.documentId} />
-              {/* {JSON.parse(auditLog?.difference)?.formId ? (
-                <DisplayFormName formId={JSON.parse(auditLog?.difference)?.formId} />
-              ) : (
-                auditLog?.documentId && (
-                  <DisplayFormNameByResponseId responseId={auditLog?.documentId} />
-                )
-              )} */}
-            </>
-          )}
-        </Typography>
-        <Button size="small" onClick={() => setShowChanges(!showChanges)}>
-          {showChanges ? 'Hide' : 'View'} {isCreateResponse ? 'Response' : 'Changes'}
-        </Button>
-        {showChanges && (
-          <Collapse in={showChanges}>
-            {auditLog.model === 'Comment' ? (
-              <>
-                <DisplayRichText value={JSON.parse(auditLog?.difference)?.body} />
-              </>
-            ) : isCreateResponse ? (
-              <DisplayResponseById
-                responseId={JSON.parse(auditLog?.difference)?._id}
-                hideBreadcrumbs
+        <div className="d-flex justify-content-between align-items-start">
+          <Typography>
+            {auditLog.action} {auditLog.model}
+            {auditLog.model === 'Form' ? (
+              <DisplayFormName formId={auditLog?.documentId} />
+            ) : auditLog.model === 'Response' ? (
+              <DisplayFormName
+                formId={auditLog?.difference?.formId}
+                startText="of"
+                endText="form"
               />
             ) : (
-              <>
-                {Object.keys(JSON.parse(auditLog?.difference) || {})?.map((key, index) => (
-                  <DisplayDiff
-                    objectKey={key}
-                    value={JSON.parse(auditLog?.difference)[key]}
-                    key={index}
-                    level={1}
-                  />
-                ))}
-              </>
+              auditLog.model === 'Comment'
             )}
-          </Collapse>
+          </Typography>
+          {auditLog?.action === 'UPDATE' && !compare && (
+            <Button size="small" onClick={() => setCompare(true)}>
+              Compare Old
+            </Button>
+          )}
+        </div>
+        {compare && (
+          <Paper
+            variant="outlined"
+            className="mt-2 d-flex align-item-center justify-content-between"
+          >
+            <div className="w-100">
+              <Tabs variant="fullWidth" textColor="inherit">
+                <Tab label="New" />
+                <Tab label="Old" />
+              </Tabs>
+            </div>
+            <Tooltip title="Close Compare">
+              <IconButton onClick={() => setCompare(false)}>
+                <Close />
+              </IconButton>
+            </Tooltip>
+          </Paper>
         )}
+        <Grid container>
+          <Grid item xs={compare ? 6 : 12} className={compare ? 'border p-1' : ''}>
+            {auditLog.model === 'Comment' ? (
+              <>
+                <DisplayRichText value={auditLog?.difference?.body} />
+              </>
+            ) : auditLog.model === 'Response' ? (
+              <DisplayResponseWithFormId
+                hideBreadcrumbs
+                hideAuthor
+                formId={auditLog?.difference?.formId}
+                response={auditLog?.difference}
+                previewMode
+              />
+            ) : (
+              auditLog.model === 'Form' && (
+                <>
+                  <Form form={auditLog?.difference} drawerMode previewMode />
+                </>
+              )
+            )}
+          </Grid>
+          {compare && (
+            <Grid item xs={6} className="border p-1">
+              {/* TODO - Get previous activityLog for this document and show it in the OLD TAB
+              show the difference between them  */}
+            </Grid>
+          )}
+        </Grid>
+        {/* (
+          <>
+            {Object.keys(auditLog?.difference || {})?.map((key, index) => (
+              <DisplayDiff
+                objectKey={key}
+                value={auditLog?.difference[key]}
+                key={index}
+                level={1}
+              />
+            ))}
+          </>
+        ) */}
       </CardContent>
     </Card>
   );
@@ -103,9 +133,13 @@ export default function AuditLogCard({ userForm, auditLog }: IAuditLogCard) {
 const DisplayFormName = ({
   formId,
   setForm,
+  startText = '',
+  endText = '',
 }: {
   formId: string;
   setForm?: (form: IForm) => void;
+  startText?: string;
+  endText?: string;
 }) => {
   const { data } = useGetForm(formId);
   useEffect(() => {
@@ -118,7 +152,8 @@ const DisplayFormName = ({
     return (
       <>
         {' '}
-        of <Link href={`/form/${data?.getForm?.slug}`}>{data?.getForm?.name}</Link> form
+        {startText} <Link href={`/form/${data?.getForm?.slug}`}>{data?.getForm?.name}</Link>{' '}
+        {endText}
       </>
     );
   }
@@ -132,7 +167,7 @@ const DisplayFormNameByResponseId = ({ responseId }: { responseId: string }) => 
     return (
       <>
         <DisplayFormName formId={data?.getResponse?.formId} setForm={setForm} />
-        {form?.slug && (
+        {/* {form?.slug && (
           <Link href={`/form/${form?.slug}/response/${data?.getResponse?.count}`}>
             <Tooltip title="Open Response">
               <Button size="small" endIcon={<OpenInNew />}>
@@ -140,7 +175,7 @@ const DisplayFormNameByResponseId = ({ responseId }: { responseId: string }) => 
               </Button>
             </Tooltip>
           </Link>
-        )}
+        )} */}
       </>
     );
   }

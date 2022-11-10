@@ -13,6 +13,7 @@ interface DisplayResponseByIdProps {
   hideWorkflow?: boolean;
   deleteCallBack?: () => void;
   hideDelete?: boolean;
+  previewMode?: boolean;
 }
 
 export default function DisplayResponseById({
@@ -23,6 +24,7 @@ export default function DisplayResponseById({
   hideWorkflow,
   hideDelete,
   deleteCallBack,
+  previewMode,
 }: DisplayResponseByIdProps) {
   const { data, error } = useGetResponse(responseId);
 
@@ -44,6 +46,7 @@ export default function DisplayResponseById({
       hideWorkflow={hideWorkflow}
       deleteCallBack={deleteCallBack}
       hideDelete={hideDelete}
+      previewMode={previewMode}
     />
   );
 }
@@ -55,9 +58,9 @@ interface DisplayResponseWithFormIdProps {
   hideNavigation?: boolean;
   hideAuthor?: boolean;
   hideWorkflow?: boolean;
-  isAuthorized?: boolean;
   deleteCallBack?: () => void;
   hideDelete?: boolean;
+  previewMode?: boolean;
 }
 
 export function DisplayResponseWithFormId({
@@ -67,9 +70,9 @@ export function DisplayResponseWithFormId({
   hideNavigation,
   hideAuthor,
   hideWorkflow,
-  isAuthorized,
   deleteCallBack,
   hideDelete,
+  previewMode,
 }: DisplayResponseWithFormIdProps) {
   const { data, error, loading } = useGetForm(formId);
 
@@ -91,6 +94,7 @@ export function DisplayResponseWithFormId({
       hideWorkflow={hideWorkflow}
       deleteCallBack={deleteCallBack}
       hideDelete={hideDelete}
+      previewMode={previewMode}
     />
   );
 }

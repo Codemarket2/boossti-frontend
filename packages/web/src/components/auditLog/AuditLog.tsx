@@ -2,9 +2,11 @@ import Typography from '@mui/material/Typography';
 import { useSelector } from 'react-redux';
 import { useGetResponses } from '@frontend/shared/hooks/response';
 import { systemForms } from '@frontend/shared/utils/systemForms';
-import { useGetForm, useGetFormBySlug } from '@frontend/shared/hooks/form';
+import { getForm, getFormBySlug, useGetFormBySlug } from '@frontend/shared/hooks/form';
 import Pagination from '@mui/material/Pagination';
 import Skeleton from '@mui/material/Skeleton';
+import { useEffect, useState } from 'react';
+import { IField, IForm, IResponse, IValue } from '@frontend/shared/types';
 import ErrorLoading from '../common/ErrorLoading';
 import AuditLogCard from './AuditLogCard';
 
@@ -15,11 +17,38 @@ interface IProps {
 
 export default function AuditLog({ documentId, formId }: IProps) {
   const userForm = useSelector(({ setting }: any) => setting.userForm);
+  const [forms, setForms] = useState({
+    activityLogCard: null,
+    model: null,
+    userActionTypes: null,
+  });
 
-  const { data, error } = useGetFormBySlug(systemForms?.activityLogCard?.slug);
-  // const { data, error } = useGetForm(systemForms?.activityLogCard?.formId);
+  const [formError, setFormError] = useState(null);
 
-  const activityLogCardForm = data?.getFormBySlug;
+  // const { data, error } = useGetFormBySlug(systemForms?.activityLogCard?.slug);
+  // const activityLogCardForm = data?.getFormBySlug;
+
+  const getForms = async () => {
+    try {
+      const activityLogCard = await getFormBySlug(systemForms?.activityLogCard?.slug);
+      const model = await getFormBySlug(systemForms?.model?.slug);
+      const userActionTypes = await getFormBySlug(systemForms?.userActionTypes?.slug);
+      if (!activityLogCard?._id || !model?._id || !userActionTypes?._id) {
+        throw new Error('activityLogCard, model, userActionTypes form not found');
+      }
+      setForms({ activityLogCard, model, userActionTypes });
+    } catch (error) {
+      setFormError(error);
+    }
+  };
+
+  useEffect(() => {
+    getForms();
+  }, []);
+
+  const activityLogCardForm = forms?.activityLogCard;
+  const modelForm = forms?.model;
+  const userActionTypesForm = forms?.userActionTypes;
 
   const documentIdField = getFieldByLabel(
     systemForms?.activityLogCard?.fields?.documentId,
@@ -50,10 +79,17 @@ export default function AuditLog({ documentId, formId }: IProps) {
     valueFilter,
   });
 
-  if (!activityLogCardForm?._id || error || responseError || !responseData) {
+  if (
+    !activityLogCardForm?._id ||
+    !modelForm?._id ||
+    !userActionTypesForm?._id ||
+    formError ||
+    responseError ||
+    !responseData
+  ) {
     return (
       <ErrorLoading
-        error={error || (activityLogCardForm?._id && !responseLoading ? responseError : null)}
+        error={formError || (activityLogCardForm?._id && !responseLoading ? responseError : null)}
       >
         <Skeleton height={150} />
         <Skeleton height={150} />
@@ -62,11 +98,12 @@ export default function AuditLog({ documentId, formId }: IProps) {
     );
   }
 
-  const activityForm = activityLogCardForm;
   return (
     <div className="p-2">
       {responseData?.getResponses?.data
-        ?.map((response) => getAuditLogs(response, activityForm))
+        ?.map((response) =>
+          getAuditLogs({ response, activityLogCardForm, modelForm, userActionTypesForm }),
+        )
         .map((auditLog, index) => (
           <AuditLogCard key={auditLog._id} auditLog={auditLog} userForm={userForm} />
         ))}
@@ -91,32 +128,58 @@ export default function AuditLog({ documentId, formId }: IProps) {
   );
 }
 
-const getAuditLogs = (response, activityForm) => {
-  const action = getFieldValueByLabel(
+interface IGetAuditLogs {
+  response: IResponse;
+  activityLogCardForm: IForm;
+  modelForm: IForm;
+  userActionTypesForm: IForm;
+}
+
+const getAuditLogs = ({
+  response,
+  activityLogCardForm,
+  modelForm,
+  userActionTypesForm,
+}: IGetAuditLogs) => {
+  const actionResponse = getFieldValueByLabel(
     systemForms?.activityLogCard?.fields?.action,
-    activityForm?.fields,
+    activityLogCardForm?.fields,
     response?.values,
+  )?.response;
+  const action = getFieldValueByLabel(
+    systemForms?.userActionTypes?.fields?.name,
+    userActionTypesForm?.fields,
+    actionResponse?.values,
   )?.value;
-  const model = getFieldValueByLabel(
+
+  const modelResponse = getFieldValueByLabel(
     systemForms?.activityLogCard?.fields?.model,
-    activityForm?.fields,
+    activityLogCardForm?.fields,
     response?.values,
+  )?.response;
+  const model = getFieldValueByLabel(
+    systemForms?.model?.fields?.name,
+    modelForm?.fields,
+    modelResponse?.values,
   )?.value;
+
   const documentId = getFieldValueByLabel(
     systemForms?.activityLogCard?.fields?.documentId,
-    activityForm?.fields,
+    activityLogCardForm?.fields,
     response?.values,
   )?.value;
-  const difference = getFieldValueByLabel(
+  const differenceString = getFieldValueByLabel(
     systemForms?.activityLogCard?.fields?.difference,
-    activityForm?.fields,
+    activityLogCardForm?.fields,
     response?.values,
   )?.value;
+  const difference = JSON.parse(differenceString || '');
   const message = getFieldValueByLabel(
     systemForms?.activityLogCard?.fields?.message,
-    activityForm?.fields,
+    activityLogCardForm?.fields,
     response?.values,
   )?.value;
+
   return {
     action,
     model,
@@ -129,8 +192,8 @@ const getAuditLogs = (response, activityForm) => {
   };
 };
 
-const getFieldValueByLabel = (fieldLabel, fields, values) => {
-  let value = null;
+const getFieldValueByLabel = (fieldLabel: string, fields: IField[], values: IValue[]) => {
+  let value: IValue = null;
   const field = getFieldByLabel(fieldLabel, fields);
   if (field?._id) {
     value = values?.find((v) => v?.field === field?._id);
