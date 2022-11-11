@@ -51,6 +51,8 @@ export default function FlowEditor({
   diagramType,
 }: FlowEditorProps) {
   const reactFlowWrapper = useRef(null);
+  // eslint-disable-next-line no-debugger
+  // debugger;
   const [nodes, setNodes, onNodesChange] = useNodesState(flow?.nodes || []);
   const [edges, setEdges, onEdgesChange] = useEdgesState(flow?.edges || []);
   const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance>(null);
@@ -143,10 +145,14 @@ export default function FlowEditor({
           border: '1px solid lightgrey',
         }}
       >
-        <div className="dndflow">
+        <div className="dndflow" data-testid="dndflow">
           <ReactFlowProvider>
             {nodes?.length > 0 && <LeftColumn nodes={nodes} edges={edges} />}
-            <div className="reactflow-wrapper" ref={reactFlowWrapper}>
+            <div
+              className="reactflow-wrapper"
+              data-testid="reactflow-wrapper"
+              ref={reactFlowWrapper}
+            >
               <ReactFlow
                 nodeTypes={nodeTypes}
                 edgeTypes={edgeTypes}
