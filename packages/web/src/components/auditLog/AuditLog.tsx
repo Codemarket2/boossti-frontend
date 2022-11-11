@@ -2,7 +2,8 @@ import Typography from '@mui/material/Typography';
 import { useSelector } from 'react-redux';
 import { useGetResponses } from '@frontend/shared/hooks/response';
 import { systemForms } from '@frontend/shared/utils/systemForms';
-import { getForm, getFormBySlug, useGetFormBySlug } from '@frontend/shared/hooks/form';
+import { getForm, getFormBySlug } from '@frontend/shared/hooks/form';
+import { useAuditLogSub } from '@frontend/shared/hooks/response/auditLogSub';
 import Pagination from '@mui/material/Pagination';
 import Skeleton from '@mui/material/Skeleton';
 import { useEffect, useState } from 'react';
@@ -24,9 +25,6 @@ export default function AuditLog({ documentId, formId }: IProps) {
   });
 
   const [formError, setFormError] = useState(null);
-
-  // const { data, error } = useGetFormBySlug(systemForms?.activityLogCard?.slug);
-  // const activityLogCardForm = data?.getFormBySlug;
 
   const getForms = async () => {
     try {
@@ -74,10 +72,13 @@ export default function AuditLog({ documentId, formId }: IProps) {
     state,
     setState,
     loading: responseLoading,
+    refetch,
   } = useGetResponses({
     formId: activityLogCardForm?._id,
     valueFilter,
   });
+
+  useAuditLogSub({ refetch });
 
   if (
     !activityLogCardForm?._id ||
@@ -102,10 +103,17 @@ export default function AuditLog({ documentId, formId }: IProps) {
     <div className="p-2">
       {responseData?.getResponses?.data
         ?.map((response) =>
-          getAuditLogs({ response, activityLogCardForm, modelForm, userActionTypesForm }),
+          getAuditLogObject({ response, activityLogCardForm, modelForm, userActionTypesForm }),
         )
         .map((auditLog, index) => (
-          <AuditLogCard key={auditLog._id} auditLog={auditLog} userForm={userForm} />
+          <AuditLogCard
+            key={auditLog._id}
+            auditLog={auditLog}
+            userForm={userForm}
+            activityLogCardForm={activityLogCardForm}
+            modelForm={modelForm}
+            userActionTypesForm={userActionTypesForm}
+          />
         ))}
       {responseData?.getResponses?.count > 0 && (
         <div className="d-flex justify-content-center">
@@ -135,7 +143,7 @@ interface IGetAuditLogs {
   userActionTypesForm: IForm;
 }
 
-const getAuditLogs = ({
+export const getAuditLogObject = ({
   response,
   activityLogCardForm,
   modelForm,
@@ -173,7 +181,7 @@ const getAuditLogs = ({
     activityLogCardForm?.fields,
     response?.values,
   )?.value;
-  const difference = JSON.parse(differenceString || '');
+  const difference = JSON.parse(differenceString);
   const message = getFieldValueByLabel(
     systemForms?.activityLogCard?.fields?.message,
     activityLogCardForm?.fields,
@@ -201,6 +209,6 @@ const getFieldValueByLabel = (fieldLabel: string, fields: IField[], values: IVal
   return value;
 };
 
-const getFieldByLabel = (fieldLabel, fields) => {
+export const getFieldByLabel = (fieldLabel, fields) => {
   return fields?.find((f) => f?.label?.toLowerCase() === fieldLabel?.toLowerCase());
 };

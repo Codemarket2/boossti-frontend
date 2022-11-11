@@ -1,5 +1,13 @@
 import { gql } from '@apollo/client';
 
+export const RESPONSE_SUB2 = gql`
+  subscription MySubscription {
+    responseSub {
+      _id
+    }
+  }
+`;
+
 export const RESPONSE_SUB = gql`
   subscription MySubscription($formId: ID!) {
     responseSub(formId: $formId) {

@@ -221,9 +221,23 @@ export default function FormFields({
           )}
           <List dense>
             {!isWidget && (
-              <ListItem button>
-                <ListItemText primary="ID" secondary={!previewMode && 'System generated'} />
-              </ListItem>
+              <>
+                <ListItem button>
+                  <ListItemText primary="ID" secondary={!previewMode && 'System generated'} />
+                </ListItem>
+                <ListItem button>
+                  <ListItemText
+                    primary="createdAt"
+                    secondary={!previewMode && 'date System generated'}
+                  />
+                </ListItem>
+                <ListItem button>
+                  <ListItemText
+                    primary="createdBy"
+                    secondary={!previewMode && 'user System generated'}
+                  />
+                </ListItem>
+              </>
             )}
             <DragDropContext onDragEnd={onDragEnd}>
               <Droppable droppableId="list">

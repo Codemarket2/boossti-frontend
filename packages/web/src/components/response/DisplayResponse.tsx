@@ -10,6 +10,7 @@ import Paper from '@mui/material/Paper';
 import { getUserName } from '@frontend/shared/hooks/user/getUserForm';
 import { parseResponse } from '@frontend/shared/hooks/response/getResponse';
 import { IForm } from '@frontend/shared/types';
+import { Tooltip } from '@mui/material';
 import EditResponseDrawer from './EditResponseDrawer';
 import Breadcrumbs from '../common/Breadcrumbs';
 import { QRButton } from '../qrcode/QRButton';
@@ -164,7 +165,13 @@ export function DisplayResponse({
           </div>
           <div className="mt-3" data-testid="ID">
             <Typography fontWeight="bold">ID</Typography>
-            {response?.count}
+            <Link href={`/form/${form?.slug}/response/${response?.count}`}>
+              <a>
+                <Tooltip title="Link to response">
+                  <span>{response?.count}</span>
+                </Tooltip>
+              </a>
+            </Link>
           </div>
           {form?.fields?.filter(filterFields)?.map((field) => {
             return (
