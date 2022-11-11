@@ -91,12 +91,12 @@ export default function Form(props: IFormProps) {
     <FormChild
       {...props}
       handleOnChange={(newForm) => {
-        if (props?.previewMode) {
+        if (!props?.previewMode) {
           handleOnChange(newForm);
         }
       }}
       handleOnSettingsChange={(newSettings) => {
-        if (props?.previewMode) {
+        if (!props?.previewMode) {
           handleOnSettingsChange(newSettings);
         }
       }}
