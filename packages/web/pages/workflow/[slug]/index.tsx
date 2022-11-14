@@ -8,12 +8,11 @@ import Form from '../../../src/components/form2/Form';
 export default function Page(): any {
   const router = useRouter();
   const { slug } = router.query;
-
   const { data, error } = useGetFormBySlug(slug?.toString());
 
   const onSlugChange = (newSlug) => {
     if (slug !== newSlug) {
-      router.push(`/form/${newSlug}`);
+      router.push(`/workflow/${newSlug}`);
     }
   };
 

@@ -22,7 +22,7 @@ interface IProps {
   treeDepth?: number;
 }
 
-export default function WorkFlowView({ field, treeDepth }: IProps) {
+export default function OldWorkFlowView({ field, treeDepth }: IProps) {
   const { data, error } = useGetSection(field?.options.settings?.customSectionId);
   const [isExpanded, setIsExpanded] = useState<boolean[]>([]);
   const [rexpanded, setRexpanded] = useState(false);

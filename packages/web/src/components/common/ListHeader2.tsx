@@ -19,6 +19,7 @@ interface IProps {
   buttons?: ReactNode;
   hideBreadcrumbs?: boolean;
   addIconButton?: boolean;
+  addIconLabel?: string;
 }
 
 export default function ListHeader2({
@@ -31,6 +32,7 @@ export default function ListHeader2({
   buttons,
   hideBreadcrumbs = false,
   addIconButton,
+  addIconLabel,
 }: IProps): any {
   return (
     <div className="d-sm-flex justify-content-between align-items-center">
@@ -53,7 +55,7 @@ export default function ListHeader2({
         />
         {handleAddNew &&
           (addIconButton ? (
-            <Tooltip title="Create New Form">
+            <Tooltip title={addIconLabel}>
               <IconButton color="primary" onClick={handleAddNew}>
                 <AddCircle fontSize="large" />
               </IconButton>

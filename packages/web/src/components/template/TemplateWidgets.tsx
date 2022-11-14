@@ -16,7 +16,7 @@ export default function TemplateWidgets({ template, previewMode, selectedWidget 
       setFields={(fields) => onTemplateChange({ fields })}
       title="Widgets"
       previewMode={previewMode}
-      isWidget
+      isWorkflow
       showWidgetExpand
       selectedField={selectedWidget}
     />
