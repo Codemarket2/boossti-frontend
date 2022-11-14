@@ -44,7 +44,7 @@ import DesignTab from './design/DesignTab';
 import RelationFields from './RelationFields';
 import TabsList from './tabs/TabsList';
 import TabView from './tabs/TabView';
-import WorkflowView from './WorkflowView';
+import WorkflowView from './Work_flowView';
 
 const tabs = [
   'Fields',

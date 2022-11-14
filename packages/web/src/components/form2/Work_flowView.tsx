@@ -3,7 +3,6 @@ import { Grid, Paper } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { DisplayForm } from './DisplayForm';
 import FormFields from './FormFields';
-import FormView from './FormView';
 
 interface IWorkflowView {
   form: IForm;
