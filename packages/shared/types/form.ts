@@ -53,6 +53,7 @@ export interface IFieldOptions {
   selectOfFieldProps?: boolean;
   conditionRightPart?: boolean;
   engagementForms?: any[];
+  // settings?: any;
 }
 
 export interface IField {

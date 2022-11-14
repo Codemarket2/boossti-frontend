@@ -44,10 +44,11 @@ import DesignTab from './design/DesignTab';
 import RelationFields from './RelationFields';
 import TabsList from './tabs/TabsList';
 import TabView from './tabs/TabView';
+import WorkflowView from './WorkflowView';
 
 const tabs = [
   'Fields',
-  'Preview',
+  'Form',
   'Settings',
   'Actions',
   'Workflows',
@@ -174,6 +175,8 @@ export function FormChild({
     }
   };
 
+  const isWorkflow = form?.settings?.isWorkflow;
+
   if (!form) {
     return <ErrorLoading />;
   }
@@ -204,7 +207,7 @@ export function FormChild({
           ) : (
             <div className="d-sm-flex justify-content-between align-items-center">
               <Breadcrumbs>
-                <Link href="/feed">Forms</Link>
+                <Link href="/feed">{isWorkflow ? 'Workflows' : 'Forms'}</Link>
                 <InlineInput
                   placeholder="Form Name"
                   value={form?.name}
@@ -247,7 +250,6 @@ export function FormChild({
           )}
           <Grid container spacing={1}>
             <Grid item xs={12} sm={options.formTabs ? 9 : 12}>
-              {/* sm={hideFields ? 12 : options.formTabs ? 5 : 8} */}
               <Paper variant="outlined" className="d-flex align-item-center">
                 <Tabs
                   variant="scrollable"
@@ -303,17 +305,24 @@ export function FormChild({
                       formName: form?.name,
                     }))}
                     formId={form?._id}
+                    isWorkflow={isWorkflow}
                   />
                   <RelationFields formId={form?._id} />
                 </>
               )}
-              {options.currentTab === 'Preview' && (
-                <Paper variant="outlined" className="px-2">
-                  <FormView
-                    {...responseListProps}
-                    form={{ ...form, settings: { ...form.settings, widgetType: 'form' } }}
-                  />
-                </Paper>
+              {options.currentTab === 'Form' && (
+                <>
+                  {isWorkflow ? (
+                    <WorkflowView form={form} />
+                  ) : (
+                    <Paper variant="outlined" className="px-2">
+                      <FormView
+                        {...responseListProps}
+                        form={{ ...form, settings: { ...form.settings, widgetType: 'form' } }}
+                      />
+                    </Paper>
+                  )}
+                </>
               )}
               {options.currentTab === 'Settings' && (
                 <>
@@ -431,7 +440,7 @@ export function FormChild({
       <>
         {!drawerMode && (
           <Breadcrumbs>
-            <Link href="/feed">Forms</Link>
+            <Link href="/feed">{isWorkflow ? 'Workflows' : 'Forms'}</Link>
             <Typography>{form?.name}</Typography>
           </Breadcrumbs>
         )}

@@ -11,7 +11,11 @@ import Breadcrumbs from '../common/Breadcrumbs';
 import InputGroup from '../common/InputGroup';
 import AddField from './field/AddField';
 
-export default function NewForm() {
+interface INewForm {
+  isWorkflow?: boolean;
+}
+
+export default function NewForm({ isWorkflow }: INewForm) {
   const [state, setState] = useState({ name: '', field: null, validate: false });
   const [showBackdrop, setShowBackdrop] = useState(false);
   const { handleCreateForm, createLoading } = useCreateForm({ onAlert });
@@ -21,6 +25,7 @@ export default function NewForm() {
   const onSuccess = (form) => {
     router.push(`/form/${form.slug}`);
   };
+
   const onFailure = () => {
     setShowBackdrop(false);
   };
@@ -36,7 +41,10 @@ export default function NewForm() {
     } else {
       setShowBackdrop(true);
       setState({ ...state, field });
-      const payload = { name: state.name, fields: [field] };
+      const payload: any = { name: state.name, fields: [field] };
+      if (isWorkflow) {
+        payload.settings = { isWorkflow: true };
+      }
       await handleCreateForm(payload, onSuccess, onFailure);
     }
   };
@@ -44,7 +52,7 @@ export default function NewForm() {
   return (
     <div>
       <Breadcrumbs>
-        <Link href="/form">Forms</Link>
+        <Link href="/feed">{isWorkflow ? 'Workflows' : 'Forms'}</Link>
         <Typography color="textPrimary">New</Typography>
       </Breadcrumbs>
       <Paper variant="outlined">
@@ -52,7 +60,7 @@ export default function NewForm() {
           <InputGroup>
             <TextField
               fullWidth
-              label="Form Name"
+              label={`${isWorkflow ? 'Workflow' : 'Form'} Name`}
               variant="outlined"
               name="name"
               size="small"
@@ -62,13 +70,14 @@ export default function NewForm() {
               helperText={state.validate && !state.name && 'Form name is required'}
             />
           </InputGroup>
-          <Typography>Default Form Field</Typography>
+          <Typography>{isWorkflow ? 'First Form' : 'Default Form Field'}</Typography>
         </div>
         <AddField
           isDefault
           field={state.field}
           onSave={onSave}
           onCancel={() => router.push('/feed')}
+          isWorkflow={isWorkflow}
         />
       </Paper>
       <BackdropComponent open={showBackdrop || createLoading} />

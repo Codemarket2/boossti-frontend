@@ -158,13 +158,12 @@ export const getFormFieldTypes = (isWidget: boolean): TFieldType[] => {
 
 export const templateWidgetTypes: TFieldType[] = [
   { label: 'Form', value: 'form' },
-  // { label: 'Template', value: 'template' },
+  { label: 'Form Response', value: 'response' },
 ];
 
 export const fieldTypes: TFieldType[] = [
-  { label: 'Form', value: 'form' },
+  ...templateWidgetTypes,
   { label: 'Form Field', value: 'formField' },
-  { label: 'Form Response', value: 'response' },
   { label: 'Text', value: 'text' },
   { label: 'Number', value: 'number' },
   { label: 'Password', value: 'password' },

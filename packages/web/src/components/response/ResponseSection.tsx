@@ -22,7 +22,7 @@ export default function ResponseSections({
         setFields={(fields: any) => onSectionChange({ fields })}
         title={title}
         previewMode={!authorized}
-        isWidget
+        isWorkflow
         parentPageFields={parentPageFields}
       />
     </>

@@ -19,10 +19,16 @@ interface IProps {
   hideHeader?: boolean;
   customLink?: (form: any) => string;
   selectedForm?: string;
+  isWorkflow?: boolean;
 }
 
-export default function FormList({ hideHeader, customLink, selectedForm }: IProps): any {
-  const { data, error, loading, state, setState } = useGetForms({});
+export default function FormList({
+  hideHeader,
+  customLink,
+  selectedForm,
+  isWorkflow,
+}: IProps): any {
+  const { data, error, loading, state, setState } = useGetForms({ isWorkflow });
   const router = useRouter();
 
   const userForm = useSelector(({ setting }: any) => setting.userForm);
@@ -34,8 +40,9 @@ export default function FormList({ hideHeader, customLink, selectedForm }: IProp
         search={state.search}
         onSearchChange={(newSearch) => setState({ ...state, search: newSearch })}
         searchLoading={loading}
-        handleAddNew={() => router.push(`/form/new`)}
+        handleAddNew={() => router.push(`/${isWorkflow ? 'workflow' : 'form'}/new`)}
         addIconButton
+        addIconLabel={`Create new ${isWorkflow ? 'workflow' : 'form'}`}
       >
         <Typography color="textPrimary">Forms</Typography>
       </ListHeader2>

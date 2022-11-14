@@ -19,9 +19,9 @@ import SettingsIcon from '@mui/icons-material/Settings';
 // import ShareIcon from '@mui/icons-material/Share';
 // import FileCopyIcon from '@mui/icons-material/FileCopy';
 // import { generateObjectId } from '@frontend/shared/utils/objectId';
+import { IField } from '@frontend/shared/types';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { useState } from 'react';
-import { useRouter } from 'next/router';
 import CRUDMenu from '../common/CRUDMenu';
 import AddField from './field/AddField';
 // import EditField from './EditField';
@@ -59,7 +59,7 @@ type IProps = {
   fields: any[];
   setFields: (newFields: any[]) => void;
   title?: string;
-  isWidget?: boolean;
+  isWorkflow?: boolean;
   previewMode?: boolean;
   parentPageFields?: any;
   parentFields?: any;
@@ -68,13 +68,15 @@ type IProps = {
   selectedField?: string;
   isTab?: boolean;
   formId?: string;
+  onClickField?: (field: IField) => void;
+  selectedFieldId?: string;
 };
 
 export default function FormFields({
   fields = [],
   setFields,
   title = 'Fields',
-  isWidget = false,
+  isWorkflow = false,
   previewMode = false,
   parentPageFields = [],
   tabName = 'form',
@@ -83,9 +85,10 @@ export default function FormFields({
   parentFields = [],
   isTab,
   formId,
+  onClickField,
+  selectedFieldId,
 }: IProps): any {
-  const [values, setValues] = useState(initialValues);
-  const router = useRouter();
+  const [state, setState] = useState(initialValues);
   const [isExpanded, setIsExpanded] = useState<boolean[]>([]);
 
   function onDragEnd(result) {
@@ -116,15 +119,12 @@ export default function FormFields({
         }),
       );
     }
-    setValues(initialValues);
+    setState(initialValues);
   };
 
-  const handleNavigate = (fieldLabel) => {
-    if (isWidget) {
-      const url = `${window.location.origin}${window.location.pathname}#${convertToSlug(
-        fieldLabel,
-      )}`;
-      router.push(url);
+  const handleOnClickField = (field: IField) => {
+    if (onClickField) {
+      onClickField(field);
     }
   };
 
@@ -142,26 +142,6 @@ export default function FormFields({
     );
   };
 
-  // const handleDuplicateField = () => {
-  //   const newField = { ...values.field, _id: generateObjectId() };
-  //   setFields([...fields, newField]);
-  //   setValues(initialValues);
-  // };
-
-  // const handleShareSection = (fieldLabel) => {
-  //   if (isWidget && fieldLabel) {
-  //     const url = `${window.location.origin}/page/${router.query?.itemSlug}#${convertToSlug(
-  //       fieldLabel,
-  //     )}`;
-  //     if ('clipboard' in navigator) {
-  //       navigator.clipboard.writeText(url);
-  //     } else {
-  //       document?.execCommand('copy', true, url);
-  //     }
-  //     setValues(initialValues);
-  //   }
-  // };
-
   const handleEditStyle = (fieldId: string, style: any) => {
     setFields(
       fields.map((field) =>
@@ -172,21 +152,21 @@ export default function FormFields({
 
   return (
     <Paper variant="outlined">
-      {values.editGrid ? (
+      {state.editGrid ? (
         <EditFieldGrid
-          field={fields.filter((f) => f._id === values.field._id)[0]}
+          field={fields.filter((f) => f._id === state.field._id)[0]}
           onFieldChange={(updatedField) => {
             setFields(
               fields?.map((field) => (field._id === updatedField._id ? updatedField : field)),
             );
           }}
-          onClose={() => setValues(initialValues)}
+          onClose={() => setState(initialValues)}
         />
       ) : (
         <>
           {!previewMode && (
             <>
-              {!values.showFormSettings && tabName === 'setting' ? (
+              {!state.showFormSettings && tabName === 'setting' ? (
                 <Typography variant="h5" className="d-flex align-items-center pl-2">
                   Manage Field Settings
                 </Typography>
@@ -195,9 +175,9 @@ export default function FormFields({
                   {title}
                   <Tooltip title="Add New Field">
                     <IconButton
-                      disabled={values.showForm}
+                      disabled={state.showForm}
                       color="primary"
-                      onClick={() => setValues({ ...initialValues, showForm: true })}
+                      onClick={() => setState({ ...initialValues, showForm: true })}
                       size="large"
                     >
                       <AddCircleIcon />
@@ -208,19 +188,19 @@ export default function FormFields({
               <Divider />
             </>
           )}
-          {values.showForm && (
+          {state.showForm && (
             <AddField
-              field={values.field}
+              field={state.field}
               onSave={onSave}
-              onCancel={() => setValues(initialValues)}
-              isWidget={isWidget}
+              onCancel={() => setState(initialValues)}
+              isWorkflow={isWorkflow}
               parentFields={parentFields}
               isTab={isTab}
               formId={formId}
             />
           )}
           <List dense>
-            {!isWidget && (
+            {!isWorkflow && (
               <>
                 <ListItem button>
                   <ListItemText primary="ID" secondary={!previewMode && 'System generated'} />
@@ -252,11 +232,11 @@ export default function FormFields({
                               <div>
                                 <ListItem
                                   button
-                                  onClick={() => handleNavigate(field.label)}
+                                  onClick={() => handleOnClickField(field)}
                                   selected={
                                     draggableSnapshot.isDragging ||
-                                    field?._id === values?.field?._id ||
-                                    selectedField === convertToSlug(field.label)
+                                    field?._id === state?.field?._id ||
+                                    selectedFieldId === field._id
                                   }
                                   ref={draggableProvided.innerRef}
                                   {...draggableProvided.draggableProps}
@@ -264,7 +244,9 @@ export default function FormFields({
                                 >
                                   <ListItemText
                                     primary={`${field.label}${field?.options?.required ? '*' : ''}`}
-                                    secondary={!previewMode && getFieldSecondaryText(field)}
+                                    secondary={
+                                      (!previewMode || isWorkflow) && getFieldSecondaryText(field)
+                                    }
                                   />
                                   {!snapshot.isDraggingOver && (
                                     <ListItemSecondaryAction>
@@ -286,7 +268,7 @@ export default function FormFields({
                                         <IconButton
                                           edge="end"
                                           onClick={(event) =>
-                                            setValues({
+                                            setState({
                                               ...initialValues,
                                               showMenu: event.currentTarget,
                                               field,
@@ -316,35 +298,35 @@ export default function FormFields({
             </DragDropContext>
           </List>
           <CRUDMenu
-            hideDelete={values.field?.options?.default}
-            show={values.showMenu}
-            onClose={() => setValues(initialValues)}
+            hideDelete={state.field?.options?.default}
+            show={state.showMenu}
+            onClose={() => setState(initialValues)}
             onDelete={() => {
-              setFields(fields.filter((field) => field._id !== values.field._id));
-              setValues(initialValues);
+              setFields(fields.filter((field) => field._id !== state.field._id));
+              setState(initialValues);
             }}
             onEdit={() => {
-              setValues({ ...values, showMenu: null, showForm: true });
+              setState({ ...state, showMenu: null, showForm: true });
             }}
           >
-            <MenuItem onClick={() => setValues({ ...values, showMenu: false, editStyle: true })}>
+            <MenuItem onClick={() => setState({ ...state, showMenu: false, editStyle: true })}>
               <ListItemIcon className="mr-n3">
                 <EditIcon fontSize="small" />
               </ListItemIcon>
               <ListItemText primary="Edit Style" />
             </MenuItem>
-            <MenuItem onClick={() => setValues({ ...values, showMenu: false, editGrid: true })}>
+            <MenuItem onClick={() => setState({ ...state, showMenu: false, editGrid: true })}>
               <ListItemIcon className="mr-n3">
                 <GridIcon fontSize="small" />
               </ListItemIcon>
               <ListItemText primary="Grid" />
             </MenuItem>
-            {values.field?.fieldType === 'form' && (
+            {state.field?.fieldType === 'form' && (
               <>
-                {values.field?.form?._id && (
+                {state.field?.form?._id && (
                   <>
                     <MenuItem
-                      onClick={() => setValues({ ...values, showMenu: false, editForm: true })}
+                      onClick={() => setState({ ...state, showMenu: false, editForm: true })}
                     >
                       <ListItemIcon className="mr-n3">
                         <EditIcon fontSize="small" />
@@ -353,7 +335,7 @@ export default function FormFields({
                     </MenuItem>
                     <MenuItem
                       onClick={() =>
-                        setValues({ ...values, showMenu: false, showFormSettings: true })
+                        setState({ ...state, showMenu: false, showFormSettings: true })
                       }
                     >
                       <ListItemIcon className="mr-n3">
@@ -365,47 +347,33 @@ export default function FormFields({
                 )}
               </>
             )}
-            {/* <MenuItem onClick={handleDuplicateField}>
-              <ListItemIcon className="mr-n3">
-                <FileCopyIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText primary="Duplicate" />
-            </MenuItem>
-            {isWidget && (
-              <MenuItem onClick={() => handleShareSection(values?.field?.label)}>
-                <ListItemIcon className="mr-n3">
-                  <ShareIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText primary="Share" />
-              </MenuItem>
-            )} */}
           </CRUDMenu>
         </>
       )}
-      {values.editStyle && (
+      {state.editStyle && (
         <StyleDrawer
-          onClose={() => setValues(initialValues)}
-          open={values.editStyle}
-          styles={fields?.filter((f) => f._id === values?.field?._id)?.pop()?.options?.style || {}}
-          onStylesChange={(value) => handleEditStyle(values?.field._id, value)}
+          onClose={() => setState(initialValues)}
+          open={state.editStyle}
+          styles={fields?.filter((f) => f._id === state?.field?._id)?.pop()?.options?.style || {}}
+          onStylesChange={(value) => handleEditStyle(state?.field._id, value)}
         />
       )}
-      {values.editForm && (
+      {state.editForm && (
         <EditFormDrawer
-          formId={values.field?.form?._id}
-          open={values.editForm}
-          onClose={() => setValues(initialValues)}
+          formId={state.field?.form?._id}
+          open={state.editForm}
+          onClose={() => setState(initialValues)}
         />
       )}
-      {values.showFormSettings && (
+      {state.showFormSettings && (
         <CustomFormSettings
-          isWidget={isWidget}
+          isWidget={isWorkflow}
           fields={fields}
-          formId={values.field?.form?._id}
-          open={values.showFormSettings}
-          onClose={() => setValues(initialValues)}
-          settings={fields?.filter((f) => f._id === values.field?._id)[0]?.options?.settings}
-          onSettingsChange={(value) => handleEditFormSettings(values.field?._id, value)}
+          formId={state.field?.form?._id}
+          open={state.showFormSettings}
+          onClose={() => setState(initialValues)}
+          settings={fields?.filter((f) => f._id === state.field?._id)[0]?.options?.settings}
+          onSettingsChange={(value) => handleEditFormSettings(state.field?._id, value)}
           parentPageFields={parentPageFields}
         />
       )}

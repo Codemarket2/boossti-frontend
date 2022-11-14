@@ -45,7 +45,7 @@ export default function TabsList({
           </IconButton>
         </Tooltip>
       </div>
-      <FormFields title="Tabs" isWidget fields={tabs} setFields={onTabsChange} isTab />
+      <FormFields title="Tabs" isWorkflow fields={tabs} setFields={onTabsChange} isTab />
       {formAllTabs?.length > 0 && (
         <Paper variant="outlined" className="mt-2">
           <Typography variant="h5" className="p-2">

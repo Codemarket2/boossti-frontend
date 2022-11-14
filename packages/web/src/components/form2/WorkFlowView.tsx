@@ -1,82 +1,45 @@
-import { useGetSection } from '@frontend/shared/hooks/section';
-import { useState } from 'react';
-import { List, Paper, Typography } from '@mui/material';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
-import IconButton from '@mui/material/IconButton';
-import DisplaySettings from './DisplaySettings';
+import { IField, IForm } from '@frontend/shared/types';
+import { Grid, Paper } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { DisplayForm } from './DisplayForm';
+import FormFields from './FormFields';
+import FormView from './FormView';
 
-interface Row2 {
-  id: string;
-  name: string;
-  treeDepth: number;
-  children?: Row2[];
-  parentId?: string;
-  isExpanded?: boolean;
-  rowHeight?: number;
+interface IWorkflowView {
+  form: IForm;
 }
 
-interface IProps {
-  field?: any;
-  treeDepth?: number;
-}
-
-export default function WorkFlowView({ field, treeDepth }: IProps) {
-  const { data, error } = useGetSection(field?.options.settings?.customSectionId);
-  const [isExpanded, setIsExpanded] = useState<boolean[]>([]);
-  const [rexpanded, setRexpanded] = useState(false);
-  if (error || !data) return <></>;
-  const section = data.getSection;
+export default function WorkflowView({ form }: IWorkflowView) {
+  const [field, setField] = useState<IField>(null);
+  useEffect(() => {
+    if (!field && form?.fields?.length > 0) {
+      setField(form?.fields?.[0]);
+    }
+  }, [form?.fields]);
 
   return (
-    <>
-      <div style={{ marginInlineStart: 10 }}>
-        <ListItem button>
-          <ListItemText style={{ marginInlineStart: 5 }} primary="WorkFlows" />
-          <ListItemSecondaryAction>
-            <IconButton
-              edge="start"
-              onClick={(event) => {
-                setRexpanded(!rexpanded);
-              }}
-              size="large"
-            >
-              {rexpanded ? '\u25BC' : '\u25B6'}
-            </IconButton>
-          </ListItemSecondaryAction>
-        </ListItem>
-        {rexpanded && (
-          <List style={{ marginInlineStart: 10 }}>
-            {section !== undefined &&
-              section.fields?.map((f: any, index: any) => {
-                const expanded = isExpanded[index] || false;
-                return (
-                  <div>
-                    <ListItem button>
-                      <ListItemText primary={f.label} />
-                      <ListItemSecondaryAction>
-                        <IconButton
-                          edge="start"
-                          onClick={(event) => {
-                            setIsExpanded({
-                              ...isExpanded,
-                              [index]: !expanded,
-                            });
-                          }}
-                          size="large"
-                        >
-                          {expanded ? '\u25BC' : '\u25B6'}
-                        </IconButton>
-                      </ListItemSecondaryAction>
-                    </ListItem>
-                    {expanded && <DisplaySettings field={f} treeDepth={treeDepth + 2} />}
-                  </div>
-                );
-              })}
-          </List>
-        )}
-      </div>
-    </>
+    <div>
+      <Grid container className="py-1">
+        <Grid xs={12} sm={3} item>
+          <FormFields
+            fields={form?.fields}
+            setFields={() => null}
+            previewMode
+            isWorkflow
+            onClickField={(selectedField) => setField(selectedField)}
+            selectedFieldId={field?._id}
+          />
+        </Grid>
+        <Grid xs={12} sm={9} item className="pl-2">
+          <Paper variant="outlined" className="px-2">
+            <DisplayForm _id={field?.form?._id} settings={{ widgetType: 'form' }} />
+            {/* <FormView
+              // {...responseListProps}
+              form={{ ...form, settings: { ...form.settings, widgetType: 'form' } }}
+            /> */}
+          </Paper>
+        </Grid>
+      </Grid>
+    </div>
   );
 }

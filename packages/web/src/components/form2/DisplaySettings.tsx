@@ -6,7 +6,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import IconButton from '@mui/material/IconButton';
-import WorkFlowView from './WorkFlowView';
+import OldWorkFlowView from './OldWorkFlowView';
 
 interface Row2 {
   id: string;
@@ -86,7 +86,7 @@ export default function TreeView({ field, treeDepth }: IProps) {
         columns={columns}
         rows={rows}
       />
-      <WorkFlowView field={field} treeDepth={treeDepth ? treeDepth + 1 : 1} />
+      <OldWorkFlowView field={field} treeDepth={treeDepth ? treeDepth + 1 : 1} />
     </>
   );
 }
