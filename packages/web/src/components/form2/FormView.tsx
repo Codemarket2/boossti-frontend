@@ -58,7 +58,7 @@ import DisplayResponseById from '../response/DisplayResponseById';
 interface FormViewWrapperProps {
   form: IForm;
   parentResponseId?: string;
-  workFlowFormResponseParentId?: string;
+  workflowId?: string;
   createCallback?: (response: any) => void;
   setResponded?: () => void;
   isPageOwner?: boolean;
@@ -104,7 +104,7 @@ const initialSelectState = {
 
 export default function FormViewWrapper({
   form,
-  workFlowFormResponseParentId,
+  workflowId,
   createCallback,
   setResponded,
   isPageOwner,
@@ -119,11 +119,11 @@ export default function FormViewWrapper({
   const { handleCreateUpdateResponse, createLoading } = useCreateUpdateResponse({
     parentResponseId,
     onAlert,
-    workFlowFormResponseParentId,
+    workflowId,
   });
   const { alreadySubmitted } = useCheckIfAlreadySubmitted({
     formId: form?._id,
-    workFlowFormResponseParentId,
+    workflowId,
   });
 
   const showOnlyMyResponses = !(isAdmin || isPageOwner) && form?.settings?.onlyMyResponses;
@@ -132,7 +132,7 @@ export default function FormViewWrapper({
     formId: form?._id,
     onlyMy: showOnlyMyResponses,
     parentResponseId,
-    workFlowFormResponseParentId,
+    workflowId,
     valueFilter,
   });
 
@@ -363,7 +363,7 @@ export default function FormViewWrapper({
                 >
                   <ResponseList
                     form={form}
-                    workFlowFormResponseParentId={workFlowFormResponseParentId}
+                    workflowId={workflowId}
                     showOnlyMyResponses={showOnlyMyResponses}
                     isTemplateInstance={isTemplateInstance}
                     valueFilter={valueFilter}
@@ -376,7 +376,7 @@ export default function FormViewWrapper({
           ) : (
             <ResponseList
               form={form}
-              workFlowFormResponseParentId={workFlowFormResponseParentId}
+              workflowId={workflowId}
               showOnlyMyResponses={showOnlyMyResponses}
               isTemplateInstance={isTemplateInstance}
               valueFilter={valueFilter}

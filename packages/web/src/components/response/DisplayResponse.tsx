@@ -8,9 +8,10 @@ import { useUpdateSection } from '@frontend/shared/hooks/section';
 import moment from 'moment';
 import Paper from '@mui/material/Paper';
 import { getUserName } from '@frontend/shared/hooks/user/getUserForm';
-import { parseResponse } from '@frontend/shared/hooks/response/getResponse';
+import { parseResponse, useGetResponse } from '@frontend/shared/hooks/response/getResponse';
 import { IForm } from '@frontend/shared/types';
 import { Tooltip } from '@mui/material';
+import { useGetForm } from '@frontend/shared/hooks/form';
 import EditResponseDrawer from './EditResponseDrawer';
 import Breadcrumbs from '../common/Breadcrumbs';
 import { QRButton } from '../qrcode/QRButton';
@@ -22,7 +23,10 @@ import DisplayResponseById from './DisplayResponseById';
 import DeleteButton from '../common/DeleteButton';
 import RelationFieldView from '../form2/RelationFieldView';
 import FieldValuesMap from './FieldValuesMap';
-import WorkflowSteps from './workflow/WorkflowSteps';
+import Workflow from './workflow/Workflow';
+import ErrorLoading from '../common/ErrorLoading';
+import WorkflowButtons from './workflow/WorkflowButtons';
+// import WorkflowSteps from './workflow/WorkflowSteps';
 
 export interface DisplayResponseProps {
   form: IForm;
@@ -50,6 +54,9 @@ export function DisplayResponse({
   previewMode,
 }: DisplayResponseProps) {
   const [state, setState] = useState(initialState);
+  const { data: workflowFormData, loading: workflowFormLoading } = useGetForm(
+    tempResponse?.workflowId,
+  );
   const [fieldsConditionResult, setFieldsConditionResult] = useState({});
 
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
@@ -75,13 +82,13 @@ export function DisplayResponse({
   });
   const hasDeletePermission = deletePerm && !previewMode;
 
-  const { section, onSectionChange, handleUpdateSection } = useUpdateSection({
-    onAlert,
-    _id:
-      (typeof response?.options === 'string' ? JSON.parse(response?.options) : response?.options)
-        ?.customSectionId || form._id,
-  });
-  const { editMode } = useSelector(({ setting }: any) => setting);
+  // const { section, onSectionChange, handleUpdateSection } = useUpdateSection({
+  //   onAlert,
+  //   _id:
+  //     (typeof response?.options === 'string' ? JSON.parse(response?.options) : response?.options)
+  //       ?.customSectionId || form._id,
+  // });
+  // const { editMode } = useSelector(({ setting }: any) => setting);
 
   const userForm = useSelector(({ setting }: any) => setting.userForm);
 
@@ -130,19 +137,15 @@ export function DisplayResponse({
 
   const DetailComponent = (
     <>
-      {response?.workFlowFormResponseParentId && section?.options?.showRelation && (
-        <DisplayResponseById
-          responseId={response?.workFlowFormResponseParentId}
-          hideBreadcrumbs
-          hideWorkflow
-        />
-      )}
+      {/* {response?.workflowId && section?.options?.showRelation && (
+        <DisplayResponseById responseId={response?.workflowId} hideBreadcrumbs hideWorkflow />
+      )} */}
       <Paper
         variant="outlined"
         style={!hideLeftNavigation ? { border: 'none' } : {}}
-        className={`d-flex ${
-          section?.options?.belowResponse ? 'flex-column-reverse' : 'flex-column'
-        }`}
+        // className={`d-flex ${
+        //   section?.options?.belowResponse ? 'flex-column-reverse' : 'flex-column'
+        // }`}
       >
         <div className="p-2">
           <div className="d-flex align-items-center">
@@ -156,13 +159,28 @@ export function DisplayResponse({
                     response?.createdAt,
                   ).format('LT')}`}
                 </Typography>
-                {response?.workFlowFormResponseParentId && (
-                  <Typography variant="body1">was submitted as workflow</Typography>
-                )}
               </div>
             )}
             {hideBreadcrumbs && DeleteComponent}
           </div>
+          {response?.workflowId && (
+            <div className="mt-3">
+              <Typography fontWeight="bold">Workflow</Typography>
+              {workflowFormData?.getForm?.name ? (
+                <Link href={`/workflow/${workflowFormData?.getForm?.slug}`}>
+                  {workflowFormData?.getForm?.name}
+                </Link>
+              ) : (
+                <>loading...</>
+              )}
+            </div>
+          )}
+          {response?.parentResponseId && (
+            <div className="mt-3">
+              <Typography fontWeight="bold">Parent</Typography>
+              <DisplayParentResponseName responseId={response?.parentResponseId} />
+            </div>
+          )}
           <div className="mt-3" data-testid="ID">
             <Typography fontWeight="bold">ID</Typography>
             <Link href={`/form/${form?.slug}/response/${response?.count}`}>
@@ -200,9 +218,12 @@ export function DisplayResponse({
               </div>
             );
           })}
+          {workflowFormData?.getForm?._id && !response?.parentResponseId && (
+            <WorkflowButtons response={response} />
+          )}
         </div>
         <RelationFieldView responseId={response?._id} formId={form?._id} />
-        {!hideWorkflow && section?.fields?.length > 0 && (
+        {/* {!hideWorkflow && section?.fields?.length > 0 && (
           <FormFieldsValue
             authorized={hasEditPermission}
             disableGrid={!editMode}
@@ -215,15 +236,12 @@ export function DisplayResponse({
                 options: { ...section?.options, layouts },
               })
             }
-            workFlowFormResponseParentId={response?._id}
+            workflowId={response?._id}
           />
-        )}
-        {response?.workFlowFormResponseParentId && (
-          <WorkflowSteps
-            parentResponseId={response?._id}
-            workflowId={response?.workFlowFormResponseParentId}
-          />
-        )}
+        )} */}
+        {/* {response?.workflowId && (
+          <WorkflowSteps parentResponseId={response?._id} workflowId={response?.workflowId} />
+        )} */}
       </Paper>
     </>
   );
@@ -257,3 +275,25 @@ export function DisplayResponse({
     </>
   );
 }
+
+const DisplayParentResponseName = ({ responseId }: { responseId: string }) => {
+  const { data, error, loading } = useGetResponse(responseId);
+  const { data: formData, loading: formLoading } = useGetForm(data?.getResponse?.formId);
+
+  if (!formData?.getForm?._id && (loading || formLoading)) {
+    return <>loading...</>;
+  }
+
+  if (error) {
+    <ErrorLoading error={error} />;
+  }
+
+  if (formData?.getForm?.name) {
+    return (
+      <Link href={`/form/${formData?.getForm?.slug}/response/${data?.getResponse?.count}`}>
+        {formData?.getForm?.name}
+      </Link>
+    );
+  }
+  return null;
+};

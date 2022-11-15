@@ -8,7 +8,7 @@ import Table from './Table';
 
 export interface IResponseList {
   form: any;
-  workFlowFormResponseParentId?: string;
+  workflowId?: string;
   showOnlyMyResponses?: boolean;
   isTemplateInstance?: string;
   valueFilter?: any;
@@ -18,7 +18,7 @@ export interface IResponseList {
 
 export default function ResponseList({
   form,
-  workFlowFormResponseParentId,
+  workflowId,
   showOnlyMyResponses,
   isTemplateInstance,
   valueFilter,
@@ -28,7 +28,7 @@ export default function ResponseList({
   const { data, error, loading, state, setState, refetch } = useGetResponses({
     formId: form?._id,
     onlyMy: showOnlyMyResponses,
-    workFlowFormResponseParentId,
+    workflowId,
     valueFilter,
     parentResponseId,
   });

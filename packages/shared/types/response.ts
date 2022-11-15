@@ -3,6 +3,8 @@ import { IForm } from './form';
 
 export interface IResponse extends ISchema {
   formId: any;
+  workflowId?: string;
+  parentResponseId?: string;
   appId: string;
   count: number;
   values: IValue[];
