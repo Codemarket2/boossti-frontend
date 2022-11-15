@@ -45,6 +45,7 @@ import RelationFields from './RelationFields';
 import TabsList from './tabs/TabsList';
 import TabView from './tabs/TabView';
 import WorkflowView from './Work_flowView';
+import { DisplayForm } from './DisplayForm';
 
 const tabs = [
   'Fields',
@@ -342,10 +343,22 @@ export function FormChild({
               {options.currentTab === 'Workflows' && <Workflows _id={form?._id} />}
               {options.currentTab === 'Responses' && (
                 <>
-                  <Paper variant="outlined">
-                    <BulkUploadAction form={form} />
-                  </Paper>
-                  <ResponseList {...responseListProps} form={form} />
+                  {isWorkflow ? (
+                    <>
+                      <DisplayForm
+                        _id={form?.fields?.[0]?.form?._id}
+                        settings={{ widgetType: 'responses' }}
+                        workflowId={form?._id}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <Paper variant="outlined">
+                        <BulkUploadAction form={form} />
+                      </Paper>
+                      <ResponseList {...responseListProps} form={form} />
+                    </>
+                  )}
                 </>
               )}
               {options.currentTab === 'Design' && (

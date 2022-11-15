@@ -7,8 +7,8 @@ export const GET_RESPONSE = gql`
       formId
       count
       appId
+      workflowId
       parentResponseId
-      workFlowFormResponseParentId
       values {
         _id
         field
@@ -66,7 +66,8 @@ export const GET_RESPONSE_BY_COUNT = gql`
       formId
       count
       appId
-      workFlowFormResponseParentId
+      workflowId
+      parentResponseId
       values {
         _id
         field
@@ -122,7 +123,7 @@ export const GET_RESPONSES = gql`
     $formId: ID!
     $appId: ID
     $parentResponseId: ID
-    $workFlowFormResponseParentId: ID
+    $workflowId: ID
     $page: Int
     $limit: Int
     $search: String
@@ -134,7 +135,7 @@ export const GET_RESPONSES = gql`
       formId: $formId
       appId: $appId
       parentResponseId: $parentResponseId
-      workFlowFormResponseParentId: $workFlowFormResponseParentId
+      workflowId: $workflowId
       page: $page
       limit: $limit
       search: $search
@@ -148,7 +149,8 @@ export const GET_RESPONSES = gql`
         formId
         count
         appId
-        workFlowFormResponseParentId
+        workflowId
+        parentResponseId
         values {
           _id
           field
@@ -213,7 +215,8 @@ export const GET_MY_RESPONSES = gql`
         }
         count
         appId
-        workFlowFormResponseParentId
+        workflowId
+        parentResponseId
         values {
           _id
           field

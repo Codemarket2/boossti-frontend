@@ -217,6 +217,12 @@ export default function FormFields({
                     secondary={!previewMode && 'user System generated'}
                   />
                 </ListItem>
+                <ListItem button>
+                  <ListItemText
+                    primary="workflowId"
+                    secondary={!previewMode && 'System generated'}
+                  />
+                </ListItem>
               </>
             )}
             <DragDropContext onDragEnd={onDragEnd}>

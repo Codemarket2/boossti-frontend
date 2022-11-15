@@ -5,7 +5,7 @@ export const CREATE_RESPONSE = gql`
     $formId: ID!
     $appId: ID
     $parentResponseId: ID
-    $workFlowFormResponseParentId: ID
+    $workflowId: ID
     $values: [ValueInput]
     $options: AWSJSON
   ) {
@@ -13,7 +13,7 @@ export const CREATE_RESPONSE = gql`
       formId: $formId
       appId: $appId
       parentResponseId: $parentResponseId
-      workFlowFormResponseParentId: $workFlowFormResponseParentId
+      workflowId: $workflowId
       values: $values
       options: $options
     ) {
@@ -22,7 +22,7 @@ export const CREATE_RESPONSE = gql`
       count
       appId
       parentResponseId
-      workFlowFormResponseParentId
+      workflowId
       values {
         _id
         field
@@ -80,7 +80,8 @@ export const UPDATE_RESPONSE = gql`
       formId
       count
       appId
-      workFlowFormResponseParentId
+      workflowId
+      parentResponseId
       values {
         _id
         field

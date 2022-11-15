@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useGetResponses } from './getResponse';
 
-export function useCheckIfAlreadySubmitted({ formId, workFlowFormResponseParentId }) {
+export function useCheckIfAlreadySubmitted({ formId, workflowId }) {
   const { data, refetch } = useGetResponses({
     formId,
-    workFlowFormResponseParentId,
+    workflowId,
     onlyMy: true,
     limit: 1,
   });

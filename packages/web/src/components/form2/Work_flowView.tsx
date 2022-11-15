@@ -16,6 +16,8 @@ export default function WorkflowView({ form }: IWorkflowView) {
     }
   }, [form?.fields]);
 
+  const isFirstField = field?._id === form?.fields?.[0]?._id;
+
   return (
     <div>
       <Grid container className="py-1">
@@ -30,12 +32,19 @@ export default function WorkflowView({ form }: IWorkflowView) {
           />
         </Grid>
         <Grid xs={12} sm={9} item className="pl-2">
-          <Paper variant="outlined" className="px-2">
-            <DisplayForm _id={field?.form?._id} settings={{ widgetType: 'form' }} />
-            {/* <FormView
-              // {...responseListProps}
-              form={{ ...form, settings: { ...form.settings, widgetType: 'form' } }}
-            /> */}
+          <Paper
+            variant="outlined"
+            className="px-2"
+            style={{
+              opacity: isFirstField ? 1 : 0.5,
+              pointerEvents: isFirstField ? 'auto' : 'none',
+            }}
+          >
+            <DisplayForm
+              workflowId={form?._id}
+              _id={field?.form?._id}
+              settings={{ widgetType: 'form' }}
+            />
           </Paper>
         </Grid>
       </Grid>

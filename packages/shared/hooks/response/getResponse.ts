@@ -18,7 +18,7 @@ export const defaultQueryVariables = {
   formField: null,
   onlyMy: false,
   appId: null,
-  workFlowFormResponseParentId: null,
+  workflowId: null,
   valueFilter: '',
 };
 
@@ -26,7 +26,7 @@ interface IProps {
   formId: string;
   formField?: string;
   onlyMy?: boolean;
-  workFlowFormResponseParentId?: string;
+  workflowId?: string;
   parentResponseId?: string;
   search?: string;
   valueFilter?: any;
@@ -39,7 +39,7 @@ export function useGetResponses({
   formId,
   formField = null,
   onlyMy = false,
-  workFlowFormResponseParentId = null,
+  workflowId = null,
   parentResponseId,
   search = null,
   valueFilter,
@@ -86,7 +86,7 @@ export function useGetResponses({
       formId: string;
       appId: string;
       parentResponseId: string;
-      workFlowFormResponseParentId: string;
+      workflowId: string;
       page: number;
       limit: number;
       search: string;
@@ -99,7 +99,7 @@ export function useGetResponses({
       ...state,
       formId,
       parentResponseId,
-      workFlowFormResponseParentId,
+      workflowId,
       onlyMy,
       appId,
       valueFilter: filter,

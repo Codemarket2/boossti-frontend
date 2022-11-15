@@ -7,7 +7,7 @@ import NotFound from '../common/NotFound';
 import FormView from './FormView';
 
 interface ISettings {
-  widgetType?: 'both' | 'form' | 'response';
+  widgetType?: 'both' | 'form' | 'responses';
   formView?: 'fullForm' | 'oneField' | 'leaderboard' | 'button' | 'selectItem';
   whoCanSubmit?: 'all' | 'authUser';
   responsesView?: 'button' | 'table' | 'table2' | 'vertical';
@@ -23,7 +23,7 @@ interface IFormPage {
   createCallback?: (response: any) => void;
   isPageOwner?: boolean;
   parentResponseId?: string;
-  workFlowFormResponseParentId?: string;
+  workflowId?: string;
   valueFilter?: any;
   overrideValues?: any;
   onClickResponse?: (response, form) => void;
@@ -40,7 +40,7 @@ export const FormPage = ({
   isTemplateInstance = '',
   createCallback,
   isPageOwner,
-  workFlowFormResponseParentId,
+  workflowId,
   valueFilter,
   overrideValues,
   onClickResponse,
@@ -69,7 +69,7 @@ export const FormPage = ({
       createCallback={createCallback}
       isPageOwner={isPageOwner}
       parentResponseId={parentResponseId}
-      workFlowFormResponseParentId={workFlowFormResponseParentId}
+      workflowId={workflowId}
       valueFilter={valueFilter}
       overrideValues={overrideValues}
       onClickResponse={onClickResponse}
@@ -89,7 +89,7 @@ const FormPageById = ({
   createCallback,
   isPageOwner,
   parentResponseId,
-  workFlowFormResponseParentId,
+  workflowId,
   valueFilter,
   overrideValues,
   onClickResponse,
@@ -117,7 +117,7 @@ const FormPageById = ({
       createCallback={createCallback}
       isPageOwner={isPageOwner}
       parentResponseId={parentResponseId}
-      workFlowFormResponseParentId={workFlowFormResponseParentId}
+      workflowId={workflowId}
       valueFilter={valueFilter}
       overrideValues={overrideValues}
       onClickResponse={onClickResponse}

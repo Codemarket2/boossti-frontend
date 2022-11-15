@@ -19,6 +19,7 @@ import { useRouter } from 'next/router';
 import { IField } from '@frontend/shared/types/form';
 import WorkflowButtons from './workflow/WorkflowButtons';
 import FieldValuesMap from './FieldValuesMap';
+import { useGetForm } from '@frontend/shared/hooks/form';
 
 interface IProps {
   search: string;
@@ -55,8 +56,6 @@ export default function ResponseTable({
 }: IProps) {
   const userForm = useSelector(({ setting }: any) => setting.userForm);
   const router = useRouter();
-
-  // return <>{JSON.stringify(responses)}responses</>;
 
   return (
     <div>
@@ -98,6 +97,7 @@ export default function ResponseTable({
               <TableRow>
                 <TableCell>CreatedBy</TableCell>
                 <TableCell>ID</TableCell>
+                <TableCell>Workflow</TableCell>
                 {form?.fields?.map((field, i) => (
                   <TableCell key={i}>{field.label}</TableCell>
                 ))}
@@ -143,12 +143,17 @@ export default function ResponseTable({
                       </span>
                     </Tooltip>
                   </TableCell>
+                  <TableCell>
+                    <DisplayWorkflowName workflowId={response?.workflowId} />
+                  </TableCell>
                   {form?.fields?.map((field: IField, i) => (
                     <TableCell key={i}>
                       <FieldValuesMap field={field} response={response} />
                     </TableCell>
                   ))}
-                  <WorkflowButtons response={response} />
+                  {response?.workflowId && !response?.parentResponseId && (
+                    <WorkflowButtons response={response} tableCellView />
+                  )}
                 </TableRow>
               ))}
             </TableBody>
@@ -158,3 +163,15 @@ export default function ResponseTable({
     </div>
   );
 }
+
+const DisplayWorkflowName = ({ workflowId }: { workflowId: string }) => {
+  const { data } = useGetForm(workflowId);
+  if (data?.getForm?.name) {
+    return (
+      <>
+        <Link href={`/workflow/${data?.getForm?.slug}`}>{data?.getForm?.name}</Link>
+      </>
+    );
+  }
+  return null;
+};
