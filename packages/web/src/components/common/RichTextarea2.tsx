@@ -77,6 +77,7 @@ function mentionCustomization(editor) {
 
 const editorConfiguration = {
   toolbar: [
+    'codeBlock',
     'heading',
     '|',
     'bold',
@@ -99,7 +100,6 @@ const editorConfiguration = {
     '|',
     'link',
     'insertTable',
-    'codeBlock',
     'imageUpload',
     'mediaEmbed',
     '|',

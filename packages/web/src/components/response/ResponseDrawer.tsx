@@ -4,6 +4,7 @@ import Overlay from '../common/Overlay';
 import { getLabel } from './SelectResponse';
 import DisplayResponseById from './DisplayResponseById';
 import DisplayResponseValueWrapper from './DisplayResponseValue';
+import DisplayRichText from '../common/DisplayRichText';
 
 interface IProps {
   open: boolean;
@@ -56,7 +57,7 @@ export const ShowResponseLabel = ({
             }}
             style={{ cursor: 'pointer' }}
           >
-            {label || (
+            {<DisplayRichText value={label} /> || (
               <DisplayResponseValueWrapper
                 formId={formId}
                 responseId={response}
