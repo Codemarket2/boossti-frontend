@@ -20,6 +20,8 @@ import Link from 'next/link';
 import AddCircle from '@mui/icons-material/AddCircle';
 import { IForm } from '@frontend/shared/types/form';
 import slugify from 'slugify';
+import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
 import { useSelector } from 'react-redux';
 import ErrorLoading from '../common/ErrorLoading';
 import Breadcrumbs from '../common/Breadcrumbs';
@@ -44,16 +46,17 @@ import DesignTab from './design/DesignTab';
 import RelationFields from './RelationFields';
 import TabsList from './tabs/TabsList';
 import TabView from './tabs/TabView';
-import WorkflowView from './Work_flowView';
+// import WorkflowView from './Work_flowView';
 import { DisplayForm } from './DisplayForm';
+import Overlay from '../common/Overlay';
 
 const tabs = [
   'Fields',
-  'Form',
+  'Responses',
+  // 'Form',
   'Settings',
   'Actions',
   'Workflows',
-  'Responses',
   'Design',
   'Activity',
   'Conditions',
@@ -66,6 +69,7 @@ const initialState = {
   backdrop: false,
   formTabs: false,
   showFields: true,
+  showAddOverlay: false,
 };
 
 interface IFormProps {
@@ -132,29 +136,29 @@ export function FormChild({
     onAlert,
   });
   const { formAllTabs } = useGetFormTabs(form?._id);
-  const [options, setOptions] = useState(initialState);
+  const [state, setState] = useState(initialState);
 
   const router = useRouter();
   const authorized = useAuthorization([form?.createdBy?._id], true);
-  const authenticated = useSelector((state: any) => state?.auth?.authenticated);
+  const authenticated = useSelector((globalState: any) => globalState?.auth?.authenticated);
 
   useEffect(() => {
     if (router?.query?.tab) {
-      setOptions({ ...options, currentTab: router?.query?.tab?.toString() });
+      setState({ ...state, currentTab: router?.query?.tab?.toString() });
     }
   }, [router?.query?.tab]);
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window?.location?.href);
-    setOptions({
-      ...options,
+    setState({
+      ...state,
       snackBar: 'Link copied to clipboard',
     });
   };
 
   const handlePublish = () => {
-    setOptions({
-      ...options,
+    setState({
+      ...state,
       snackBar: settings?.published
         ? 'Successfully unpublished the form'
         : 'Successfully published the form',
@@ -168,8 +172,8 @@ export function FormChild({
     // eslint-disable-next-line no-restricted-globals
     const anwser = confirm('Are you sure you want to delete this form?');
     if (anwser) {
-      setOptions({
-        ...options,
+      setState({
+        ...state,
         backdrop: true,
       });
       handleDelete(form?._id, () => router.push('/feed'));
@@ -183,18 +187,37 @@ export function FormChild({
   }
 
   if (authorized) {
+    const FieldsComponent = (
+      <>
+        {' '}
+        <FormFields
+          title={isWorkflow ? 'Steps' : 'Fields'}
+          fields={form.fields}
+          setFields={(newFields) => handleOnChange({ fields: newFields })}
+          parentFields={form.fields?.map((f) => ({
+            ...f,
+            formId: form._id,
+            label: f?.label,
+            formName: form?.name,
+          }))}
+          formId={form?._id}
+          isWorkflow={isWorkflow}
+        />
+        <RelationFields formId={form?._id} />
+      </>
+    );
     return (
       <>
-        {options.backdrop && <Backdrop open />}
+        {state.backdrop && <Backdrop open />}
         <div style={{ width: '100%' }}>
           <Snackbar
-            open={Boolean(options.snackBar)}
+            open={Boolean(state.snackBar)}
             autoHideDuration={4000}
-            onClose={() => setOptions({ ...options, snackBar: '' })}
+            onClose={() => setState({ ...state, snackBar: '' })}
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           >
-            <Alert onClose={() => setOptions({ ...options, snackBar: '' })} severity="success">
-              {options.snackBar}
+            <Alert onClose={() => setState({ ...state, snackBar: '' })} severity="success">
+              {state.snackBar}
             </Alert>
           </Snackbar>
           {drawerMode ? (
@@ -213,9 +236,9 @@ export function FormChild({
                   placeholder="Form Name"
                   value={form?.name}
                   onChange={async (e) => {
-                    setOptions({ ...options, backdrop: true });
+                    setState({ ...state, backdrop: true });
                     const updatedForm = await handleUpdateForm({ name: e.target.value });
-                    setOptions({ ...options, backdrop: false });
+                    setState({ ...state, backdrop: false });
                     if (updatedForm?.slug && onSlugChange) {
                       onSlugChange(updatedForm?.slug);
                     }
@@ -250,11 +273,11 @@ export function FormChild({
             </div>
           )}
           <Grid container spacing={1}>
-            <Grid item xs={12} sm={options.formTabs ? 9 : 12}>
+            <Grid item xs={12} sm={state.formTabs ? 9 : 12}>
               <Paper variant="outlined" className="d-flex align-item-center">
                 <Tabs
                   variant="scrollable"
-                  value={options.currentTab}
+                  value={state.currentTab}
                   indicatorColor="primary"
                   textColor="primary"
                   onChange={(event, newValue) => {
@@ -263,7 +286,11 @@ export function FormChild({
                   }}
                 >
                   {tabs.map((label) => (
-                    <Tab key={label} label={label} value={label} />
+                    <Tab
+                      key={label}
+                      label={isWorkflow && label === 'Fields' ? 'Steps' : label}
+                      value={label}
+                    />
                   ))}
                   {form?.name?.toUpperCase().includes('ROLE') && (
                     <Tab label="Permissions" value="permissions" />
@@ -283,157 +310,189 @@ export function FormChild({
                     />
                   ))}
                 </Tabs>
-                {!options?.formTabs && (
+                {!state?.formTabs && (
                   <Tooltip title="Add Tab">
                     <IconButton
                       color="primary"
-                      onClick={() => setOptions({ ...options, formTabs: !options?.formTabs })}
+                      onClick={() => setState({ ...state, formTabs: !state?.formTabs })}
                     >
                       <AddCircle />
                     </IconButton>
                   </Tooltip>
                 )}
               </Paper>
-              {options.currentTab === 'Fields' && (
-                <>
-                  <FormFields
-                    fields={form.fields}
-                    setFields={(newFields) => handleOnChange({ fields: newFields })}
-                    parentFields={form.fields?.map((f) => ({
-                      ...f,
-                      formId: form._id,
-                      label: f?.label,
-                      formName: form?.name,
-                    }))}
-                    formId={form?._id}
-                    isWorkflow={isWorkflow}
-                  />
-                  <RelationFields formId={form?._id} />
-                </>
-              )}
-              {options.currentTab === 'Form' && (
-                <>
-                  {isWorkflow ? (
-                    <WorkflowView form={form} />
-                  ) : (
-                    <Paper variant="outlined" className="px-2">
-                      <FormView
-                        {...responseListProps}
-                        form={{ ...form, settings: { ...form.settings, widgetType: 'form' } }}
-                      />
-                    </Paper>
-                  )}
-                </>
-              )}
-              {options.currentTab === 'Settings' && (
-                <>
-                  <FormSetting
-                    formId={form?._id}
-                    settings={form.settings}
-                    state={form}
-                    onChange={
-                      (newSettings) => handleOnSettingsChange(newSettings)
-                      // handleOnChange({
-                      //   settings: { ...form.settings, ...settings },
-                      // })
-                    }
-                  />
-                </>
-              )}
-              {options.currentTab === 'Workflows' && <Workflows _id={form?._id} />}
-              {options.currentTab === 'Responses' && (
-                <>
-                  {isWorkflow ? (
+              <Grid container>
+                {state.currentTab !== 'Fields' && (
+                  <Grid item xs={12} sm={3}>
+                    {FieldsComponent}
+                  </Grid>
+                )}
+                <Grid item xs={12} sm={state.currentTab === 'Fields' ? 12 : 9}>
+                  {state.currentTab === 'Fields' && <>{FieldsComponent}</>}
+                  {/* {options.currentTab === 'Form' && (
                     <>
-                      <DisplayForm
-                        _id={form?.fields?.[0]?.form?._id}
-                        settings={{ widgetType: 'responses' }}
-                        workflowId={form?._id}
+                      {isWorkflow ? (
+                        <WorkflowView form={form} />
+                      ) : (
+                        <Paper variant="outlined" className="px-2">
+                          <FormView
+                            {...responseListProps}
+                            form={{ ...form, settings: { ...form.settings, widgetType: 'form' } }}
+                          />
+                        </Paper>
+                      )}
+                    </>
+                  )} */}
+                  {state.currentTab === 'Responses' && (
+                    <>
+                      <>
+                        <div className="py-3 d-flex justify-content-end px-2">
+                          <Button
+                            startIcon={<AddIcon />}
+                            variant="contained"
+                            className="mr-2"
+                            size="small"
+                            onClick={() =>
+                              setState((oldState) => ({ ...oldState, showAddOverlay: true }))
+                            }
+                          >
+                            Add {form?.name}
+                          </Button>
+                          {state.showAddOverlay && (
+                            <Overlay
+                              open={state.showAddOverlay}
+                              onClose={() =>
+                                setState((oldState) => ({ ...oldState, showAddOverlay: false }))
+                              }
+                              title={`Add ${
+                                isWorkflow ? form?.fields?.[0]?.form?.name : form?.name
+                              }`}
+                            >
+                              <div className="p-2">
+                                {isWorkflow ? (
+                                  <DisplayForm
+                                    _id={form?.fields?.[0]?.form?._id}
+                                    settings={{ widgetType: 'form' }}
+                                    workflowId={form?._id}
+                                  />
+                                ) : (
+                                  <FormView
+                                    {...responseListProps}
+                                    form={{
+                                      ...form,
+                                      settings: { ...form.settings, widgetType: 'form' },
+                                    }}
+                                  />
+                                )}
+                              </div>
+                            </Overlay>
+                          )}
+                          <BulkUploadAction form={form} />
+                        </div>
+                        {isWorkflow ? (
+                          <DisplayForm
+                            _id={form?.fields?.[0]?.form?._id}
+                            settings={{ widgetType: 'responses' }}
+                            workflowId={form?._id}
+                          />
+                        ) : (
+                          <ResponseList {...responseListProps} form={form} />
+                        )}
+                      </>
+                    </>
+                  )}
+                  {state.currentTab === 'Settings' && (
+                    <>
+                      <FormSetting
+                        formId={form?._id}
+                        settings={form.settings}
+                        state={form}
+                        onChange={
+                          (newSettings) => handleOnSettingsChange(newSettings)
+                          // handleOnChange({
+                          //   settings: { ...form.settings, ...settings },
+                          // })
+                        }
                       />
                     </>
-                  ) : (
-                    <>
-                      <Paper variant="outlined">
-                        <BulkUploadAction form={form} />
-                      </Paper>
-                      <ResponseList {...responseListProps} form={form} />
-                    </>
                   )}
-                </>
-              )}
-              {options.currentTab === 'Design' && (
-                <DesignTab
-                  form={form}
-                  onChange={(newForm) =>
-                    handleOnChange({
-                      ...form,
-                      ...newForm,
-                    })
-                  }
-                />
-              )}
-              {options.currentTab === 'Actions' && (
-                <Actions
-                  formId={form?._id}
-                  fields={form?.fields}
-                  settings={settings}
-                  onChange={
-                    (actions) => handleOnSettingsChange({ actions })
-                    // handleOnChange({
-                    //   settings: { ...form.settings, actions },
-                    // })
-                  }
-                />
-              )}
-              {options.currentTab === 'Permissions' && (
-                <Permissions formId={form?._id} form={form} />
-              )}
-              {options.currentTab === 'Activity' && (
-                <AuditLog documentId={form?._id} formId={form?._id} />
-              )}
-              {options.currentTab === 'Conditions' && (
-                <FormConstraints
-                  form={form}
-                  onConstraintsChange={(constraints) => {
-                    handleOnSettingsChange({ constraints });
-                    // handleOnChange({
-                    //   settings: { ...form.settings, constraints },
-                    // });
-                  }}
-                  onFieldsChange={(newFields) =>
-                    handleOnChange({
-                      fields: newFields,
-                    })
-                  }
-                />
-              )}
-              {options.currentTab === 'Shopify' && (
-                <ShopifySettings
-                  shopify={settings?.shopify}
-                  onShopifyChange={
-                    (shopify) => handleOnSettingsChange({ shopify })
-                    // handleOnChange({ settings: { ...form.settings, shopify } })
-                  }
-                />
-              )}
-              {[...(formAllTabs || []), ...(settings?.tabs || [])]?.some(
-                (tab) => slugify(tab?.label, { lower: true }) === options.currentTab,
-              ) && (
-                <TabView
-                  formId={form?._id}
-                  tab={[...(formAllTabs || []), ...(settings?.tabs || [])]?.find(
-                    (tab) => slugify(tab?.label, { lower: true }) === options.currentTab,
+                  {state.currentTab === 'Workflows' && <Workflows _id={form?._id} />}
+
+                  {state.currentTab === 'Design' && (
+                    <DesignTab
+                      form={form}
+                      onChange={(newForm) =>
+                        handleOnChange({
+                          ...form,
+                          ...newForm,
+                        })
+                      }
+                    />
                   )}
-                />
-              )}
+                  {state.currentTab === 'Actions' && (
+                    <Actions
+                      formId={form?._id}
+                      fields={form?.fields}
+                      settings={settings}
+                      onChange={
+                        (actions) => handleOnSettingsChange({ actions })
+                        // handleOnChange({
+                        //   settings: { ...form.settings, actions },
+                        // })
+                      }
+                    />
+                  )}
+                  {state.currentTab === 'Permissions' && (
+                    <Permissions formId={form?._id} form={form} />
+                  )}
+                  {state.currentTab === 'Activity' && (
+                    <AuditLog documentId={form?._id} formId={form?._id} />
+                  )}
+                  {state.currentTab === 'Conditions' && (
+                    <FormConstraints
+                      form={form}
+                      onConstraintsChange={(constraints) => {
+                        handleOnSettingsChange({ constraints });
+                        // handleOnChange({
+                        //   settings: { ...form.settings, constraints },
+                        // });
+                      }}
+                      onFieldsChange={(newFields) =>
+                        handleOnChange({
+                          fields: newFields,
+                        })
+                      }
+                    />
+                  )}
+                  {state.currentTab === 'Shopify' && (
+                    <ShopifySettings
+                      shopify={settings?.shopify}
+                      onShopifyChange={
+                        (shopify) => handleOnSettingsChange({ shopify })
+                        // handleOnChange({ settings: { ...form.settings, shopify } })
+                      }
+                    />
+                  )}
+                  {[...(formAllTabs || []), ...(settings?.tabs || [])]?.some(
+                    (tab) => slugify(tab?.label, { lower: true }) === state.currentTab,
+                  ) && (
+                    <TabView
+                      formId={form?._id}
+                      tab={[...(formAllTabs || []), ...(settings?.tabs || [])]?.find(
+                        (tab) => slugify(tab?.label, { lower: true }) === state.currentTab,
+                      )}
+                    />
+                  )}
+                </Grid>
+              </Grid>
             </Grid>
-            {options.formTabs && (
+            {state.formTabs && (
               <Grid item xs={12} sm={3}>
                 <TabsList
                   formAllTabs={formAllTabs}
                   formId={form?._id}
                   tabs={form?.settings?.tabs}
-                  onClose={() => setOptions({ ...options, formTabs: false })}
+                  onClose={() => setState({ ...state, formTabs: false })}
                   onTabsChange={(newTabs) =>
                     handleOnChange({
                       settings: { ...form.settings, tabs: newTabs },

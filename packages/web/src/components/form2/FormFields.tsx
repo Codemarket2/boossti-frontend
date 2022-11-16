@@ -16,15 +16,11 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import GridIcon from '@mui/icons-material/GridOn';
 import EditIcon from '@mui/icons-material/Edit';
 import SettingsIcon from '@mui/icons-material/Settings';
-// import ShareIcon from '@mui/icons-material/Share';
-// import FileCopyIcon from '@mui/icons-material/FileCopy';
-// import { generateObjectId } from '@frontend/shared/utils/objectId';
 import { IField } from '@frontend/shared/types';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { useState } from 'react';
 import CRUDMenu from '../common/CRUDMenu';
 import AddField from './field/AddField';
-// import EditField from './EditField';
 import EditFieldGrid from './EditFieldGrid';
 import EditFormDrawer from './EditFormDrawer';
 import CustomFormSettings from './CustomFormSettings';
@@ -173,7 +169,7 @@ export default function FormFields({
               ) : (
                 <Typography variant="h5" className="d-flex align-items-center pl-2">
                   {title}
-                  <Tooltip title="Add New Field">
+                  <Tooltip title={`Add New ${title}`}>
                     <IconButton
                       disabled={state.showForm}
                       color="primary"
