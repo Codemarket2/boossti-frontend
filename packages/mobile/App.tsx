@@ -89,23 +89,17 @@ const CombinedDarkTheme = {
 
 const App = () => {
   return (
-    <View style={{ flex: 1 }}>
-      {/* <Text>Users</Text> */}
-      <LoginPage />
-    </View>
+    <ReduxProvider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <ApolloProvider client={client}>
+          <Wrapper>
+            <AuthLoadingModal />
+            <MainStack />
+          </Wrapper>
+        </ApolloProvider>
+      </PersistGate>
+    </ReduxProvider>
   );
-  // return (
-  //   <ReduxProvider store={store}>
-  //     <PersistGate loading={null} persistor={persistor}>
-  //       <ApolloProvider client={client}>
-  //         <Wrapper>
-  //           <AuthLoadingModal />
-  //           <MainStack />
-  //         </Wrapper>
-  //       </ApolloProvider>
-  //     </PersistGate>
-  //   </ReduxProvider>
-  // );
 };
 
 // InitialData - This Component is created because the useCurrentAuthenticatedUser hook need to be call inside redux provider

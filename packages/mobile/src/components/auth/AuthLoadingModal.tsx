@@ -2,7 +2,7 @@ import colors from '@frontend/shared/config/colors';
 import React from 'react';
 import { View, Modal } from 'react-native';
 import { useSelector } from 'react-redux';
-import { ActivityIndicator } from 'react-native-paper';
+import { ActivityIndicator, Text } from 'react-native-paper';
 
 export default function LoadingModal() {
   const authLoading = useSelector(({ auth }: any) => auth.authLoading);
