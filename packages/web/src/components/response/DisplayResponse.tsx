@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { useDeleteResponse, useResolveCondition } from '@frontend/shared/hooks/response';
 import Link from 'next/link';
 import Typography from '@mui/material/Typography';
-import { useUpdateSection } from '@frontend/shared/hooks/section';
 import moment from 'moment';
 import Paper from '@mui/material/Paper';
 import { getUserName } from '@frontend/shared/hooks/user/getUserForm';
@@ -15,18 +14,14 @@ import { useGetForm } from '@frontend/shared/hooks/form';
 import EditResponseDrawer from './EditResponseDrawer';
 import Breadcrumbs from '../common/Breadcrumbs';
 import { QRButton } from '../qrcode/QRButton';
-import FormFieldsValue from '../form2/FormFieldsValue';
 import { onAlert } from '../../utils/alert';
 import BackdropComponent from '../common/Backdrop';
 import EditMode from '../common/EditMode';
-import DisplayResponseById from './DisplayResponseById';
 import DeleteButton from '../common/DeleteButton';
 import RelationFieldView from '../form2/RelationFieldView';
 import FieldValuesMap from './FieldValuesMap';
-import Workflow from './workflow/Workflow';
 import ErrorLoading from '../common/ErrorLoading';
 import WorkflowButtons from './workflow/WorkflowButtons';
-// import WorkflowSteps from './workflow/WorkflowSteps';
 
 export interface DisplayResponseProps {
   form: IForm;
@@ -72,6 +67,7 @@ export function DisplayResponse({
     actionType: 'EDIT',
     formId: form?._id,
     responseId: response?._id,
+    model: 'Response',
   });
   const hasEditPermission = editPerm && !previewMode;
 
@@ -79,6 +75,7 @@ export function DisplayResponse({
     actionType: 'DELETE',
     formId: form?._id,
     responseId: response?._id,
+    model: 'Response',
   });
   const hasDeletePermission = deletePerm && !previewMode;
 
@@ -140,13 +137,7 @@ export function DisplayResponse({
       {/* {response?.workflowId && section?.options?.showRelation && (
         <DisplayResponseById responseId={response?.workflowId} hideBreadcrumbs hideWorkflow />
       )} */}
-      <Paper
-        variant="outlined"
-        style={!hideLeftNavigation ? { border: 'none' } : {}}
-        // className={`d-flex ${
-        //   section?.options?.belowResponse ? 'flex-column-reverse' : 'flex-column'
-        // }`}
-      >
+      <Paper variant="outlined" style={!hideLeftNavigation ? { border: 'none' } : {}}>
         <div className="p-2">
           <div className="d-flex align-items-center">
             {!hideAuthor && (

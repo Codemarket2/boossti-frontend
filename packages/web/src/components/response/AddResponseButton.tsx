@@ -2,8 +2,8 @@ import { useCheckPermission } from '@frontend/shared/hooks/permission';
 import { IField } from '@frontend/shared/types';
 import Button from '@mui/material/Button';
 import React, { useState } from 'react';
-import ErrorLoading from '../common/ErrorLoading';
 import CreateResponseDrawer from './CreateResponseDrawer';
+// import ErrorLoading from '../common/ErrorLoading';
 
 interface IAddResponseButton {
   field: IField;
@@ -22,6 +22,7 @@ export default function AddResponseButton({
   const { hasPermission, error } = useCheckPermission({
     actionType: 'CREATE',
     formId: field?.form?._id,
+    model: 'Response',
   });
 
   // if (error) {
