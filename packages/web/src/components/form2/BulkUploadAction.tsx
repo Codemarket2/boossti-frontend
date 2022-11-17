@@ -105,7 +105,7 @@ export default function BulkUploadAction({ form }: IProps) {
       <Tooltip title="Bulk upload responses from file ( .xlsx, .csv, .xls)">
         <Button
           size="small"
-          variant="outlined"
+          // variant="outlined"
           startIcon={<UploadFileIcon />}
           onClick={() => setState({ ...state, showForm: true })}
         >

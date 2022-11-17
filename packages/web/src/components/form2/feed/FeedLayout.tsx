@@ -58,9 +58,7 @@ export default function FeedLayout({ children }: IFeedLayout) {
             <FormList
               hideHeader
               customLink={(form) =>
-                `/${selectedTab === 'workflows' ? 'workflow' : 'form'}/${form?.slug}${
-                  selectedTab === 'workflows' ? '' : '?tab=Responses'
-                }`
+                `/${selectedTab === 'workflows' ? 'workflow' : 'form'}/${form?.slug}`
               }
               selectedForm={formSlug}
               isWorkflow={selectedTab === 'workflows'}
