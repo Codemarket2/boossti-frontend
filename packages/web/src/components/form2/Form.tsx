@@ -20,8 +20,6 @@ import Link from 'next/link';
 import AddCircle from '@mui/icons-material/AddCircle';
 import { IForm } from '@frontend/shared/types/form';
 import slugify from 'slugify';
-import Button from '@mui/material/Button';
-import AddIcon from '@mui/icons-material/Add';
 import { useSelector } from 'react-redux';
 import ErrorLoading from '../common/ErrorLoading';
 import Breadcrumbs from '../common/Breadcrumbs';
@@ -46,14 +44,13 @@ import DesignTab from './design/DesignTab';
 import RelationFields from './RelationFields';
 import TabsList from './tabs/TabsList';
 import TabView from './tabs/TabView';
-// import WorkflowView from './Work_flowView';
 import { DisplayForm } from './DisplayForm';
-import Overlay from '../common/Overlay';
+import WorkflowView from './Work_flowView';
 
 const tabs = [
   'Fields',
+  'Form',
   'Responses',
-  // 'Form',
   'Settings',
   'Actions',
   'Workflows',
@@ -64,7 +61,7 @@ const tabs = [
 ];
 
 const initialState = {
-  currentTab: 'Fields',
+  currentTab: 'Form',
   snackBar: '',
   backdrop: false,
   formTabs: false,
@@ -143,9 +140,11 @@ export function FormChild({
   const authenticated = useSelector((globalState: any) => globalState?.auth?.authenticated);
 
   useEffect(() => {
+    let { currentTab } = initialState;
     if (router?.query?.tab) {
-      setState({ ...state, currentTab: router?.query?.tab?.toString() });
+      currentTab = router?.query?.tab?.toString();
     }
+    setState({ ...state, currentTab });
   }, [router?.query?.tab]);
 
   const handleCopyLink = () => {
@@ -186,64 +185,43 @@ export function FormChild({
     return <ErrorLoading />;
   }
 
-  if (authorized) {
-    const FieldsComponent = (
-      <>
-        {' '}
-        <FormFields
-          title={isWorkflow ? 'Steps' : 'Fields'}
-          fields={form.fields}
-          setFields={(newFields) => handleOnChange({ fields: newFields })}
-          parentFields={form.fields?.map((f) => ({
-            ...f,
-            formId: form._id,
-            label: f?.label,
-            formName: form?.name,
-          }))}
-          formId={form?._id}
-          isWorkflow={isWorkflow}
-        />
-        <RelationFields formId={form?._id} />
-      </>
-    );
+  if (authorized || (settings?.published && authenticated)) {
     return (
       <>
         {state.backdrop && <Backdrop open />}
         <div style={{ width: '100%' }}>
-          <Snackbar
-            open={Boolean(state.snackBar)}
-            autoHideDuration={4000}
-            onClose={() => setState({ ...state, snackBar: '' })}
-            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-          >
-            <Alert onClose={() => setState({ ...state, snackBar: '' })} severity="success">
-              {state.snackBar}
-            </Alert>
-          </Snackbar>
           {drawerMode ? (
             <Typography variant="h5" className="py-2">
-              <InlineInput
-                placeholder="Form Name"
-                value={form?.name}
-                onChange={(e) => handleOnChange({ name: e.target.value })}
-              />
+              {authorized ? (
+                <InlineInput
+                  placeholder="Form Name"
+                  value={form?.name}
+                  onChange={(e) => handleOnChange({ name: e.target.value })}
+                />
+              ) : (
+                <Typography>{form?.name}</Typography>
+              )}
             </Typography>
           ) : (
             <div className="d-sm-flex justify-content-between align-items-center">
               <Breadcrumbs>
                 <Link href="/feed">{isWorkflow ? 'Workflows' : 'Forms'}</Link>
-                <InlineInput
-                  placeholder="Form Name"
-                  value={form?.name}
-                  onChange={async (e) => {
-                    setState({ ...state, backdrop: true });
-                    const updatedForm = await handleUpdateForm({ name: e.target.value });
-                    setState({ ...state, backdrop: false });
-                    if (updatedForm?.slug && onSlugChange) {
-                      onSlugChange(updatedForm?.slug);
-                    }
-                  }}
-                />
+                {authorized ? (
+                  <InlineInput
+                    placeholder="Form Name"
+                    value={form?.name}
+                    onChange={async (e) => {
+                      setState({ ...state, backdrop: true });
+                      const updatedForm = await handleUpdateForm({ name: e.target.value });
+                      setState({ ...state, backdrop: false });
+                      if (updatedForm?.slug && onSlugChange) {
+                        onSlugChange(updatedForm?.slug);
+                      }
+                    }}
+                  />
+                ) : (
+                  <Typography>{form?.name}</Typography>
+                )}
               </Breadcrumbs>
               <div className="d-flex  align-items-center">
                 {updateLoading && <CircularProgress size={25} />}
@@ -253,152 +231,143 @@ export function FormChild({
                     <ShareIcon />
                   </IconButton>
                 </Tooltip>
-                <FormControlLabel
-                  className="m-0"
-                  control={
-                    <Switch
-                      color="primary"
-                      checked={settings?.published}
-                      onChange={handlePublish}
+                {authorized && (
+                  <>
+                    <FormControlLabel
+                      className="m-0"
+                      control={
+                        <Switch
+                          color="primary"
+                          checked={settings?.published}
+                          onChange={handlePublish}
+                        />
+                      }
+                      label="Publish"
                     />
-                  }
-                  label="Publish"
-                />
-                <Tooltip title="Delete">
-                  <IconButton edge="end" onClick={onDelete} size="large">
-                    <DeleteIcon />
-                  </IconButton>
-                </Tooltip>
+                    <Tooltip title="Delete">
+                      <IconButton edge="end" onClick={onDelete} size="large">
+                        <DeleteIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </>
+                )}
               </div>
             </div>
           )}
           <Grid container spacing={1}>
             <Grid item xs={12} sm={state.formTabs ? 9 : 12}>
-              <Paper variant="outlined" className="d-flex align-item-center">
+              <Paper variant="outlined" className="d-flex align-item-center ">
                 <Tabs
-                  variant="scrollable"
+                  className="w-100"
+                  variant={authorized ? 'scrollable' : 'fullWidth'}
                   value={state.currentTab}
                   indicatorColor="primary"
                   textColor="primary"
                   onChange={(event, newValue) => {
-                    router.query.tab = newValue;
+                    if (newValue === 'Form') {
+                      delete router.query.tab;
+                    } else {
+                      router.query.tab = newValue;
+                    }
                     router.push(router);
                   }}
                 >
-                  {tabs.map((label) => (
-                    <Tab
-                      key={label}
-                      label={isWorkflow && label === 'Fields' ? 'Steps' : label}
-                      value={label}
-                    />
-                  ))}
-                  {form?.name?.toUpperCase().includes('ROLE') && (
-                    <Tab label="Permissions" value="permissions" />
+                  {tabs
+                    .filter((label) => authorized || ['Form', 'Responses'].includes(label))
+                    .map((label) => (
+                      <Tab
+                        key={label}
+                        label={isWorkflow && label === 'Fields' ? 'Steps' : label}
+                        value={label}
+                      />
+                    ))}
+                  {authorized && (
+                    <>
+                      {form?.name?.toUpperCase().includes('ROLE') && (
+                        <Tab label="Permissions" value="permissions" />
+                      )}
+                      {formAllTabs?.map((tab) => (
+                        <Tab
+                          key={tab?._id}
+                          label={tab?.label || 'NA'}
+                          value={slugify(tab?.label, { lower: true })}
+                        />
+                      ))}
+                      {settings?.tabs?.map((tab) => (
+                        <Tab
+                          key={tab?._id}
+                          label={tab?.label || 'NA'}
+                          value={slugify(tab?.label, { lower: true })}
+                        />
+                      ))}
+                    </>
                   )}
-                  {formAllTabs?.map((tab) => (
-                    <Tab
-                      key={tab?._id}
-                      label={tab?.label || 'NA'}
-                      value={slugify(tab?.label, { lower: true })}
-                    />
-                  ))}
-                  {settings?.tabs?.map((tab) => (
-                    <Tab
-                      key={tab?._id}
-                      label={tab?.label || 'NA'}
-                      value={slugify(tab?.label, { lower: true })}
-                    />
-                  ))}
                 </Tabs>
-                {!state?.formTabs && (
-                  <Tooltip title="Add Tab">
-                    <IconButton
-                      color="primary"
-                      onClick={() => setState({ ...state, formTabs: !state?.formTabs })}
-                    >
-                      <AddCircle />
-                    </IconButton>
-                  </Tooltip>
+                {authorized && (
+                  <>
+                    {!state?.formTabs && (
+                      <Tooltip title="Add Tab">
+                        <IconButton
+                          color="primary"
+                          onClick={() => setState({ ...state, formTabs: !state?.formTabs })}
+                        >
+                          <AddCircle />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  </>
                 )}
               </Paper>
-              <Grid container>
-                {state.currentTab !== 'Fields' && (
-                  <Grid item xs={12} sm={3}>
-                    {FieldsComponent}
-                  </Grid>
-                )}
-                <Grid item xs={12} sm={state.currentTab === 'Fields' ? 12 : 9}>
-                  {state.currentTab === 'Fields' && <>{FieldsComponent}</>}
-                  {/* {options.currentTab === 'Form' && (
+              {state.currentTab === 'Form' && (
+                <>
+                  {isWorkflow ? (
+                    <WorkflowView form={form} />
+                  ) : (
+                    <Paper variant="outlined" className="px-2">
+                      <FormView
+                        {...responseListProps}
+                        form={{ ...form, settings: { ...form.settings, widgetType: 'form' } }}
+                      />
+                    </Paper>
+                  )}
+                </>
+              )}
+              {state.currentTab === 'Responses' && (
+                <>
+                  <>
+                    <Paper className="py-3 d-flex justify-content-end px-2">
+                      <BulkUploadAction form={form} />
+                    </Paper>
+                    {isWorkflow ? (
+                      <DisplayForm
+                        _id={form?.fields?.[0]?.form?._id}
+                        settings={{ widgetType: 'responses' }}
+                        workflowId={form?._id}
+                      />
+                    ) : (
+                      <ResponseList {...responseListProps} form={form} />
+                    )}
+                  </>
+                </>
+              )}
+              {authorized && (
+                <>
+                  {state.currentTab === 'Fields' && (
                     <>
-                      {isWorkflow ? (
-                        <WorkflowView form={form} />
-                      ) : (
-                        <Paper variant="outlined" className="px-2">
-                          <FormView
-                            {...responseListProps}
-                            form={{ ...form, settings: { ...form.settings, widgetType: 'form' } }}
-                          />
-                        </Paper>
-                      )}
-                    </>
-                  )} */}
-                  {state.currentTab === 'Responses' && (
-                    <>
-                      <>
-                        <div className="py-3 d-flex justify-content-end px-2">
-                          <Button
-                            startIcon={<AddIcon />}
-                            variant="contained"
-                            className="mr-2"
-                            size="small"
-                            onClick={() =>
-                              setState((oldState) => ({ ...oldState, showAddOverlay: true }))
-                            }
-                          >
-                            Add {form?.name}
-                          </Button>
-                          {state.showAddOverlay && (
-                            <Overlay
-                              open={state.showAddOverlay}
-                              onClose={() =>
-                                setState((oldState) => ({ ...oldState, showAddOverlay: false }))
-                              }
-                              title={`Add ${
-                                isWorkflow ? form?.fields?.[0]?.form?.name : form?.name
-                              }`}
-                            >
-                              <div className="p-2">
-                                {isWorkflow ? (
-                                  <DisplayForm
-                                    _id={form?.fields?.[0]?.form?._id}
-                                    settings={{ widgetType: 'form' }}
-                                    workflowId={form?._id}
-                                  />
-                                ) : (
-                                  <FormView
-                                    {...responseListProps}
-                                    form={{
-                                      ...form,
-                                      settings: { ...form.settings, widgetType: 'form' },
-                                    }}
-                                  />
-                                )}
-                              </div>
-                            </Overlay>
-                          )}
-                          <BulkUploadAction form={form} />
-                        </div>
-                        {isWorkflow ? (
-                          <DisplayForm
-                            _id={form?.fields?.[0]?.form?._id}
-                            settings={{ widgetType: 'responses' }}
-                            workflowId={form?._id}
-                          />
-                        ) : (
-                          <ResponseList {...responseListProps} form={form} />
-                        )}
-                      </>
+                      <FormFields
+                        title={isWorkflow ? 'Steps' : 'Fields'}
+                        fields={form.fields}
+                        setFields={(newFields) => handleOnChange({ fields: newFields })}
+                        parentFields={form.fields?.map((f) => ({
+                          ...f,
+                          formId: form._id,
+                          label: f?.label,
+                          formName: form?.name,
+                        }))}
+                        formId={form?._id}
+                        isWorkflow={isWorkflow}
+                      />
+                      <RelationFields formId={form?._id} />
                     </>
                   )}
                   {state.currentTab === 'Settings' && (
@@ -417,7 +386,6 @@ export function FormChild({
                     </>
                   )}
                   {state.currentTab === 'Workflows' && <Workflows _id={form?._id} />}
-
                   {state.currentTab === 'Design' && (
                     <DesignTab
                       form={form}
@@ -483,8 +451,8 @@ export function FormChild({
                       )}
                     />
                   )}
-                </Grid>
-              </Grid>
+                </>
+              )}
             </Grid>
             {state.formTabs && (
               <Grid item xs={12} sm={3}>
@@ -502,21 +470,17 @@ export function FormChild({
               </Grid>
             )}
           </Grid>
+          <Snackbar
+            open={Boolean(state.snackBar)}
+            autoHideDuration={4000}
+            onClose={() => setState({ ...state, snackBar: '' })}
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          >
+            <Alert onClose={() => setState({ ...state, snackBar: '' })} severity="success">
+              {state.snackBar}
+            </Alert>
+          </Snackbar>
         </div>
-      </>
-    );
-  }
-
-  if (settings?.published && authenticated) {
-    return (
-      <>
-        {!drawerMode && (
-          <Breadcrumbs>
-            <Link href="/feed">{isWorkflow ? 'Workflows' : 'Forms'}</Link>
-            <Typography>{form?.name}</Typography>
-          </Breadcrumbs>
-        )}
-        <FormView form={form} />
       </>
     );
   }
