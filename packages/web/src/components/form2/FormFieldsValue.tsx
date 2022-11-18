@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { WidthProvider, Responsive } from 'react-grid-layout';
 import CRUDMenu from '../common/CRUDMenu';
-import { FormView } from './FormView';
+import { FormViewChild } from './FormView';
 import DisplayValue from './DisplayValue';
 import BackdropComponent from '../common/Backdrop';
 import CommentLikeShare from '../comment/CommentLikeShare';
@@ -147,7 +147,7 @@ export default function FormFieldsValue({
               ) : (
                 <>
                   {state.showForm && state.field?._id === field?._id ? (
-                    <FormView
+                    <FormViewChild
                       fields={[field]}
                       handleSubmit={(tempValues) => handleSubmit(tempValues)}
                       onCancel={() => setState(initialState)}
@@ -224,7 +224,7 @@ export default function FormFieldsValue({
                   ) : (
                     <>
                       {state.showForm && state.field?._id === field?._id ? (
-                        <FormView
+                        <FormViewChild
                           fields={[field]}
                           handleSubmit={(tempValues) => handleSubmit(tempValues)}
                           onCancel={() => setState(initialState)}

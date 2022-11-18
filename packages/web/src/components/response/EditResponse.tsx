@@ -1,20 +1,21 @@
 import { useCreateUpdateResponse } from '@frontend/shared/hooks/response';
 import { useAuthorization } from '@frontend/shared/hooks/auth';
+import { IForm, IResponse } from '@frontend/shared/types';
 import { onAlert } from '../../utils/alert';
 import NotFound from '../common/NotFound';
 import Overlay from '../common/Overlay';
-import { FormView } from '../form2/FormView';
+import { FormViewChild } from '../form2/FormView';
 
 interface IProps {
-  form: any;
-  response: any;
+  form: IForm;
+  response: IResponse;
   onClose: () => void;
   open?: boolean;
   overlay?: boolean;
   fieldId?: string;
 }
 
-export default function EditResponseDrawer({
+export default function EditResponse({
   fieldId,
   form,
   response,
@@ -26,13 +27,19 @@ export default function EditResponseDrawer({
     onAlert,
   });
   const authorized = useAuthorization([response?.createdBy?._id, form?.createdBy?._id], true);
+
   const handleSubmit = async (values: any[]) => {
     const payload = {
       values,
       _id: response?._id,
     };
-    await handleCreateUpdateResponse({ payload, edit: true, fields: form?.fields });
-    onClose();
+    const updatedResponse = await handleCreateUpdateResponse({
+      payload,
+      edit: true,
+      fields: form?.fields,
+    });
+    // onClose();
+    return updatedResponse;
   };
 
   const getFields = () => {
@@ -40,30 +47,36 @@ export default function EditResponseDrawer({
       return form?.fields
         ?.filter((f) => f?._id === fieldId)
         ?.map((f) => {
-          let options = f?.options || {};
+          let options: any = f?.options || {};
           if (typeof options === 'string') {
             options = JSON.parse(options);
           }
           options = { ...options, required: true };
+          // return { ...f, options };
           return { ...f, options };
         });
     }
     return form?.fields;
   };
 
+  const inlineEdit = Boolean(fieldId);
+
   const EditComponent = (
     <div>
       {authorized ? (
-        <FormView
-          inlineEdit={Boolean(fieldId)}
+        <FormViewChild
+          inlineEdit={inlineEdit}
           fields={getFields()}
           initialValues={response?.values}
           handleSubmit={handleSubmit}
           loading={updateLoading}
           edit
           formId={form?._id}
+          form={form}
           responseId={response?._id}
           onCancel={onClose}
+          formView={!inlineEdit && form?.settings?.formView}
+          showMessage={(r) => onClose()}
         />
       ) : (
         <NotFound />

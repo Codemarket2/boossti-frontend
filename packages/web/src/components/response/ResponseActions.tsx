@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { IconButton, TableCell, Tooltip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import EditResponseDrawer from './EditResponseDrawer';
+import EditResponse from './EditResponse';
 import Authorization from '../common/Authorization';
 import DeleteButton from '../common/DeleteButton';
 import { onAlert } from '../../utils/alert';
@@ -45,7 +45,7 @@ export default function ResponseActions({
           </Tooltip>
           {selectedResponse?._id === response?._id && (
             <>
-              <EditResponseDrawer
+              <EditResponse
                 overlay
                 open
                 form={form}

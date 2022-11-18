@@ -327,6 +327,13 @@ export function FormChild({
                       <FormView
                         {...responseListProps}
                         form={{ ...form, settings: { ...form.settings, widgetType: 'form' } }}
+                        createCallback={(response) =>
+                          router.push(
+                            `/form/${form?.slug}/response/${response?.count}${
+                              router?.query?.field ? `?field=${router?.query?.field}` : ''
+                            }`,
+                          )
+                        }
                       />
                     </Paper>
                   )}
