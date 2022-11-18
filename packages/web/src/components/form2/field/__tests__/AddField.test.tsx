@@ -80,10 +80,10 @@ const FIELD_TYPES = [
     label: 'Date & Time',
     value: 'dateTime',
   },
-  {
-    label: 'Image',
-    value: 'image',
-  },
+  // {
+  //   label: 'Image',
+  //   value: 'image',
+  // },
   {
     label: 'File',
     value: 'file',
@@ -400,7 +400,7 @@ describe('Selecting Form Field Type (label : Field Type*)', () => {
     const Menu = within(document.getElementById('fieldType-menu')).getByRole('listbox');
     const options = within(Menu).getAllByRole('option');
 
-    const TOTAL_OPTIONS = 28;
+    const TOTAL_OPTIONS = 27;
     expect(options).toHaveLength(TOTAL_OPTIONS);
   });
 

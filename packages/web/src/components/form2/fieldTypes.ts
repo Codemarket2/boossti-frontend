@@ -175,7 +175,7 @@ export const fieldTypes: TFieldType[] = [
   { label: 'Phone Number', value: 'phoneNumber' },
   { label: 'Date', value: 'date' },
   { label: 'Date & Time', value: 'dateTime' },
-  { label: 'Image', value: 'image' },
+  // { label: 'Image', value: 'image' },
   { label: 'File', value: 'file' },
   // { label: 'Media (Images/Video)', value: 'media' },
   { label: 'Address', value: 'address' },

@@ -53,7 +53,7 @@ export const initialValues = {
 
 type IProps = {
   fields: any[];
-  setFields: (newFields: any[]) => void;
+  setFields?: (newFields: any[]) => void;
   title?: string;
   isWorkflow?: boolean;
   previewMode?: boolean;
@@ -66,11 +66,12 @@ type IProps = {
   formId?: string;
   onClickField?: (field: IField) => void;
   selectedFieldId?: string;
+  hideSystemFields?: boolean;
 };
 
 export default function FormFields({
   fields = [],
-  setFields,
+  setFields = (newFields) => null,
   title = 'Fields',
   isWorkflow = false,
   previewMode = false,
@@ -83,6 +84,7 @@ export default function FormFields({
   formId,
   onClickField,
   selectedFieldId,
+  hideSystemFields,
 }: IProps): any {
   const [state, setState] = useState(initialValues);
   const [isExpanded, setIsExpanded] = useState<boolean[]>([]);
@@ -196,31 +198,6 @@ export default function FormFields({
             />
           )}
           <List dense>
-            {!isWorkflow && (
-              <>
-                <ListItem button>
-                  <ListItemText primary="ID" secondary={!previewMode && 'System generated'} />
-                </ListItem>
-                <ListItem button>
-                  <ListItemText
-                    primary="createdAt"
-                    secondary={!previewMode && 'date System generated'}
-                  />
-                </ListItem>
-                <ListItem button>
-                  <ListItemText
-                    primary="createdBy"
-                    secondary={!previewMode && 'user System generated'}
-                  />
-                </ListItem>
-                <ListItem button>
-                  <ListItemText
-                    primary="workflowId"
-                    secondary={!previewMode && 'System generated'}
-                  />
-                </ListItem>
-              </>
-            )}
             <DragDropContext onDragEnd={onDragEnd}>
               <Droppable droppableId="list">
                 {(provided, snapshot) => (
@@ -245,7 +222,9 @@ export default function FormFields({
                                   {...draggableProvided.dragHandleProps}
                                 >
                                   <ListItemText
-                                    primary={`${field.label}${field?.options?.required ? '*' : ''}`}
+                                    primary={`${index + 1}. ${field.label}${
+                                      field?.options?.required ? '*' : ''
+                                    }`}
                                     secondary={
                                       (!previewMode || isWorkflow) && getFieldSecondaryText(field)
                                     }
@@ -298,6 +277,31 @@ export default function FormFields({
                 )}
               </Droppable>
             </DragDropContext>
+            {!(isWorkflow || hideSystemFields) && (
+              <>
+                <ListItem button>
+                  <ListItemText primary="ID" secondary={!previewMode && 'System generated'} />
+                </ListItem>
+                <ListItem button>
+                  <ListItemText
+                    primary="createdAt"
+                    secondary={!previewMode && 'date System generated'}
+                  />
+                </ListItem>
+                <ListItem button>
+                  <ListItemText
+                    primary="createdBy"
+                    secondary={!previewMode && 'user System generated'}
+                  />
+                </ListItem>
+                <ListItem button>
+                  <ListItemText
+                    primary="workflowId"
+                    secondary={!previewMode && 'System generated'}
+                  />
+                </ListItem>
+              </>
+            )}
           </List>
           <CRUDMenu
             hideDelete={state.field?.options?.default}
