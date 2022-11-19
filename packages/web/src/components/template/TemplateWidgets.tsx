@@ -18,7 +18,7 @@ export default function TemplateWidgets({ template, previewMode, selectedWidget 
       previewMode={previewMode}
       isWorkflow
       showWidgetExpand
-      selectedField={selectedWidget}
+      // selectedField={selectedWidget}
     />
   );
 }

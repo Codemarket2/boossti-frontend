@@ -9,7 +9,11 @@ import Paper from '@mui/material/Paper';
 import { getUserName } from '@frontend/shared/hooks/user/getUserForm';
 import { parseResponse, useGetResponse } from '@frontend/shared/hooks/response/getResponse';
 import { IForm } from '@frontend/shared/types';
-import { Button, Tooltip } from '@mui/material';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import KeyboardDoubleArrowRight from '@mui/icons-material/KeyboardDoubleArrowRight';
 import { useGetForm } from '@frontend/shared/hooks/form';
 import { useRouter } from 'next/router';
 import EditResponse from './EditResponse';
@@ -23,6 +27,7 @@ import RelationFieldView from '../form2/RelationFieldView';
 import FieldValuesMap from './FieldValuesMap';
 import ErrorLoading from '../common/ErrorLoading';
 import WorkflowButtons from './workflow/WorkflowButtons';
+import FormFields from '../form2/FormFields';
 
 export interface DisplayResponseProps {
   form: IForm;
@@ -42,6 +47,7 @@ const initialState = {
   showBackdrop: false,
   fieldId: null,
   field: null,
+  minimizeFieldsMenu: false,
 };
 
 export function DisplayResponse({
@@ -85,15 +91,10 @@ export function DisplayResponse({
   });
   const hasDeletePermission = deletePerm && !previewMode;
 
-  // const { section, onSectionChange, handleUpdateSection } = useUpdateSection({
-  //   onAlert,
-  //   _id:
-  //     (typeof response?.options === 'string' ? JSON.parse(response?.options) : response?.options)
-  //       ?.customSectionId || form._id,
-  // });
-  // const { editMode } = useSelector(({ setting }: any) => setting);
-
-  const userForm = useSelector(({ setting }: any) => setting.userForm);
+  const {
+    setting: { userForm },
+    auth: { admin },
+  } = useSelector((globalState: any) => globalState);
 
   const { handleResolveCondition } = useResolveCondition();
 
@@ -113,12 +114,17 @@ export function DisplayResponse({
   }, [state?.fieldId]);
 
   useEffect(() => {
-    if (router?.query?.field && Number(router?.query?.field) > 0 && hasEditPermission) {
+    if (
+      router?.query?.field &&
+      Number(router?.query?.field) > 0 &&
+      hasEditPermission &&
+      router?.query?.count === response?.count
+    ) {
       setState((oldState) => ({ ...oldState, field: Number(router?.query?.field) }));
     }
   }, [router?.query?.field, hasEditPermission]);
 
-  const hideLeftNavigation = !(hideAuthor || hideNavigation || hideBreadcrumbs);
+  const hideLeftNavigation = hideAuthor || hideNavigation || hideBreadcrumbs;
 
   const DeleteComponent = (
     <>
@@ -145,9 +151,36 @@ export function DisplayResponse({
   };
 
   const DetailComponent = (
-    <>
-      <Paper variant="outlined" style={!hideLeftNavigation ? { border: 'none' } : {}}>
-        <div className="p-2">
+    <Paper variant="outlined" className="p-2" style={hideLeftNavigation ? { border: 'none' } : {}}>
+      <Grid container>
+        <Grid xs={12} sm={state.minimizeFieldsMenu ? 0.5 : 3} item>
+          {state.minimizeFieldsMenu ? (
+            <div>
+              <Tooltip title="Maximize Fields Menu">
+                <IconButton
+                  edge="start"
+                  color="primary"
+                  onClick={() =>
+                    setState((oldState) => ({ ...oldState, minimizeFieldsMenu: false }))
+                  }
+                >
+                  <KeyboardDoubleArrowRight />
+                </IconButton>
+              </Tooltip>
+            </div>
+          ) : (
+            <div className="pr-2">
+              <FormFields
+                previewMode={!admin}
+                fields={form?.fields}
+                onClickMinimize={() =>
+                  setState((oldState) => ({ ...oldState, minimizeFieldsMenu: true }))
+                }
+              />
+            </div>
+          )}
+        </Grid>
+        <Grid xs={12} sm={state.minimizeFieldsMenu ? 11.5 : 9} item>
           <div className="d-flex align-items-center">
             {!hideAuthor && (
               <div>
@@ -231,9 +264,9 @@ export function DisplayResponse({
           {workflowFormData?.getForm?._id && !response?.parentResponseId && (
             <WorkflowButtons response={response} />
           )}
-        </div>
-        <RelationFieldView responseId={response?._id} formId={form?._id} />
-        {/* {!hideWorkflow && section?.fields?.length > 0 && (
+
+          <RelationFieldView responseId={response?._id} formId={form?._id} />
+          {/* {!hideWorkflow && section?.fields?.length > 0 && (
           <FormFieldsValue
             authorized={hasEditPermission}
             disableGrid={!editMode}
@@ -249,11 +282,12 @@ export function DisplayResponse({
             workflowId={response?._id}
           />
         )} */}
-        {/* {response?.workflowId && (
+          {/* {response?.workflowId && (
           <WorkflowSteps parentResponseId={response?._id} workflowId={response?.workflowId} />
         )} */}
-      </Paper>
-    </>
+        </Grid>
+      </Grid>
+    </Paper>
   );
 
   return (

@@ -7,7 +7,7 @@ import Delete from '@mui/icons-material/Delete';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
-import Button from '@mui/material/Button';
+// import Button from '@mui/material/Button';
 import AdapterMoment from '@mui/lab/AdapterMoment';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import DatePicker from '@mui/lab/DatePicker';
@@ -19,6 +19,8 @@ import { IField } from '@frontend/shared/types/form';
 import { IValue } from '@frontend/shared/types/response';
 import { generateObjectId } from '@frontend/shared/utils/objectId';
 import { fieldProps } from '@frontend/shared/utils/fieldProps';
+import Add from '@mui/icons-material/Add';
+import Tooltip from '@mui/material/Tooltip';
 import ReactFlow from '../react-flow/ReactFlow';
 import RichTextarea from '../common/RichTextarea2';
 import DisplayRichText from '../common/DisplayRichText';
@@ -569,7 +571,7 @@ export default function Field({
                     />
                   )}
                 </div>
-                <Button
+                {/* <Button
                   disabled={disabled}
                   data-testid="response-button"
                   variant="contained"
@@ -578,7 +580,18 @@ export default function Field({
                   onClick={() => setAddOption({ ...addOption, showDrawer: true })}
                 >
                   Add Response
-                </Button>
+                </Button> */}
+                <Tooltip title="Add Response">
+                  <IconButton
+                    data-testid="response-button"
+                    onClick={() => setAddOption({ ...addOption, showDrawer: true })}
+                    size="small"
+                    color="primary"
+                    sx={{ border: '1px solid' }}
+                  >
+                    <Add />
+                  </IconButton>
+                </Tooltip>
               </>
             )}
           </div>
