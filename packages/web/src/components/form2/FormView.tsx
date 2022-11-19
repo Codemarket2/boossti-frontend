@@ -16,6 +16,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIosRounded from '@mui/icons-material/ArrowBackIosRounded';
 import ArrowForwardIosRounded from '@mui/icons-material/ArrowForwardIosRounded';
 import Tooltip from '@mui/material/Tooltip';
+import KeyboardDoubleArrowRight from '@mui/icons-material/KeyboardDoubleArrowRight';
 
 // SHARED
 import { parseResponse, useGetResponses } from '@frontend/shared/hooks/response/getResponse';
@@ -31,7 +32,7 @@ import { IValue } from '@frontend/shared/types';
 import { IField, IForm } from '@frontend/shared/types/form';
 
 // OTHERS
-import { useGetFieldRules } from '@frontend/shared/hooks/form';
+import { useGetFieldRules, useUpdateForm } from '@frontend/shared/hooks/form';
 import { useDebounce } from '@frontend/shared/hooks/condition/debounce';
 import ResponseList from '../response/ResponseList';
 import InputGroup from '../common/InputGroup';
@@ -457,6 +458,7 @@ export function FormViewChild({
     }
   };
   useDebounce({ callback: autoSaveCallback, time: 1500, listenForChange: true, variable: values });
+  const { handleOnChange } = useUpdateForm({ onAlert, form });
 
   const localStorageKey = `unsavedResponse${form?._id}${edit}${responseId}`;
 
@@ -470,6 +472,7 @@ export function FormViewChild({
       index: null,
     },
     showResponseDrawer: '',
+    minimizeFields: false,
   });
 
   const [unique, setUnique] = useState(false);
@@ -482,7 +485,6 @@ export function FormViewChild({
   // ONLY SHOW & VALIDATE REQUIRED FIELDS
   const fields = tempFields?.filter((field: IField) => {
     return (
-      field?.options?.required &&
       !field?.options?.systemCalculatedAndSaved &&
       !overrideValues?.some((v) => v?.field === field?._id)
     );
@@ -781,31 +783,52 @@ export function FormViewChild({
         </Overlay>
       )}
       <Grid container>
-        <Grid xs={12} sm={3} item className="pr-2">
-          <FormFields
-            fields={fields}
-            previewMode
-            hideSystemFields
-            selectedFieldId={fields?.[state.page]?._id}
-            onClickField={(field) => {
-              let fieldIndex = 0;
-              fields?.some((f, i) => {
-                if (f?._id === field?._id) {
-                  fieldIndex = i;
-                  return true;
+        <Grid xs={12} sm={state.minimizeFields ? 0.5 : 3} item className="pr-2">
+          {state.minimizeFields ? (
+            <>
+              <Tooltip title="Maximize Fields Menu">
+                <IconButton
+                  edge="start"
+                  color="primary"
+                  onClick={() => setState((oldState) => ({ ...oldState, minimizeFields: false }))}
+                >
+                  <KeyboardDoubleArrowRight />
+                </IconButton>
+              </Tooltip>
+            </>
+          ) : (
+            <FormFields
+              previewMode={!authState?.admin}
+              fields={fields}
+              setFields={(newFields) => {
+                if (authState?.admin) {
+                  handleOnChange({ fields: newFields });
                 }
-                return false;
-              });
-              if (router?.query?.slug === form?.slug) {
-                router.query.field = (fieldIndex + 1)?.toString();
-                router.push(router);
-              } else {
-                setState((oldState) => ({ ...oldState, page: fieldIndex }));
+              }}
+              onClickMinimize={() =>
+                setState((oldState) => ({ ...oldState, minimizeFields: true }))
               }
-            }}
-          />
+              selectedFieldId={fields?.[state.page]?._id}
+              onClickField={(field) => {
+                let fieldIndex = 0;
+                fields?.some((f, i) => {
+                  if (f?._id === field?._id) {
+                    fieldIndex = i;
+                    return true;
+                  }
+                  return false;
+                });
+                if (router?.query?.slug === form?.slug) {
+                  router.query.field = (fieldIndex + 1)?.toString();
+                  router.push(router);
+                } else {
+                  setState((oldState) => ({ ...oldState, page: fieldIndex }));
+                }
+              }}
+            />
+          )}
         </Grid>
-        <Grid xs={12} sm={9} item>
+        <Grid xs={12} sm={state.minimizeFields ? 11.5 : 9} item>
           <Grid container spacing={0} data-testid="fieldWiseView">
             <div className="d-flex w-100 justify-content-end my-2 align-items-center">
               {(submitState.loading || loading) && <Typography>Auto saving...</Typography>}
@@ -823,7 +846,7 @@ export function FormViewChild({
             </div>
             {(formView === 'oneField' && fields?.length > 1 ? [fields[state.page]] : fields)
               ?.filter(filterHiddenFields)
-              ?.map((field: any) => (
+              ?.map((field: any, fieldIndex) => (
                 <Grid
                   item
                   xs={field?.options?.grid?.xs || 12}
@@ -837,10 +860,8 @@ export function FormViewChild({
                     <InputGroup key={field._id}>
                       {!['label'].includes(field.fieldType) && (
                         <Typography data-testid="text-danger">
-                          <span className={field?.options?.required ? 'text-danger' : ''}>
-                            {field?.label}
-                            {field?.options?.required && '*'}
-                          </span>
+                          {fieldIndex + 1}. {field?.label}
+                          {field?.options?.required && <span className="text-danger">*</span>}
                           <DisplayConstraintError
                             fields={fields}
                             fieldId={field._id}

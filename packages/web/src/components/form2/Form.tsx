@@ -50,7 +50,7 @@ import WorkflowView from './Work_flowView';
 const tabs = [
   'Fields',
   'Form',
-  'Responses',
+  'Results',
   'Settings',
   'Actions',
   'Workflows',
@@ -273,7 +273,7 @@ export function FormChild({
                   }}
                 >
                   {tabs
-                    .filter((label) => authorized || ['Form', 'Responses'].includes(label))
+                    .filter((label) => authorized || ['Form', 'Results'].includes(label))
                     .map((label) => (
                       <Tab
                         key={label}
@@ -339,7 +339,7 @@ export function FormChild({
                   )}
                 </>
               )}
-              {state.currentTab === 'Responses' && (
+              {state.currentTab === 'Results' && (
                 <>
                   <>
                     <Paper className="py-3 d-flex justify-content-end px-2">
@@ -373,6 +373,7 @@ export function FormChild({
                         }))}
                         formId={form?._id}
                         isWorkflow={isWorkflow}
+                        showSystemFields
                       />
                       <RelationFields formId={form?._id} />
                     </>

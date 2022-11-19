@@ -17,8 +17,13 @@ import GridIcon from '@mui/icons-material/GridOn';
 import EditIcon from '@mui/icons-material/Edit';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { IField } from '@frontend/shared/types';
+import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUp';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import DragIndicator from '@mui/icons-material/DragIndicator';
+import KeyboardDoubleArrowLeft from '@mui/icons-material/KeyboardDoubleArrowLeft';
 import { useState } from 'react';
+import Button from '@mui/material/Button';
 import CRUDMenu from '../common/CRUDMenu';
 import AddField from './field/AddField';
 import EditFieldGrid from './EditFieldGrid';
@@ -49,6 +54,7 @@ export const initialValues = {
   editGrid: false,
   editForm: false,
   showFormSettings: false,
+  showSystemFields: false,
 };
 
 type IProps = {
@@ -61,12 +67,12 @@ type IProps = {
   parentFields?: any;
   tabName?: string;
   showWidgetExpand?: boolean;
-  selectedField?: string;
   isTab?: boolean;
   formId?: string;
   onClickField?: (field: IField) => void;
   selectedFieldId?: string;
-  hideSystemFields?: boolean;
+  onClickMinimize?: () => void;
+  showSystemFields?: boolean;
 };
 
 export default function FormFields({
@@ -78,13 +84,13 @@ export default function FormFields({
   parentPageFields = [],
   tabName = 'form',
   showWidgetExpand = false,
-  selectedField,
   parentFields = [],
   isTab,
   formId,
   onClickField,
   selectedFieldId,
-  hideSystemFields,
+  onClickMinimize,
+  showSystemFields,
 }: IProps): any {
   const [state, setState] = useState(initialValues);
   const [isExpanded, setIsExpanded] = useState<boolean[]>([]);
@@ -169,19 +175,28 @@ export default function FormFields({
                   Manage Field Settings
                 </Typography>
               ) : (
-                <Typography variant="h5" className="d-flex align-items-center pl-2">
-                  {title}
-                  <Tooltip title={`Add New ${title}`}>
-                    <IconButton
-                      disabled={state.showForm}
-                      color="primary"
-                      onClick={() => setState({ ...initialValues, showForm: true })}
-                      size="large"
-                    >
-                      <AddCircleIcon />
-                    </IconButton>
-                  </Tooltip>
-                </Typography>
+                <div className="d-flex align-items-center justify-content-between">
+                  <Typography variant="h5" className="d-flex align-items-center pl-2">
+                    {title}
+                    <Tooltip title={`Add New ${title}`}>
+                      <IconButton
+                        disabled={state.showForm}
+                        color="primary"
+                        onClick={() => setState({ ...initialValues, showForm: true })}
+                        size="large"
+                      >
+                        <AddCircleIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </Typography>
+                  {onClickMinimize && (
+                    <Tooltip title="Minimize Menu">
+                      <IconButton onClick={onClickMinimize}>
+                        <KeyboardDoubleArrowLeft />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                </div>
               )}
               <Divider />
             </>
@@ -208,7 +223,10 @@ export default function FormFields({
                         <>
                           <Draggable key={field._id} draggableId={field._id} index={index}>
                             {(draggableProvided, draggableSnapshot) => (
-                              <div>
+                              <div
+                                ref={draggableProvided.innerRef}
+                                {...draggableProvided.draggableProps}
+                              >
                                 <ListItem
                                   button
                                   onClick={() => handleOnClickField(field)}
@@ -217,17 +235,30 @@ export default function FormFields({
                                     field?._id === state?.field?._id ||
                                     selectedFieldId === field._id
                                   }
-                                  ref={draggableProvided.innerRef}
-                                  {...draggableProvided.draggableProps}
-                                  {...draggableProvided.dragHandleProps}
                                 >
+                                  {!previewMode && (
+                                    <ListItemIcon>
+                                      <Tooltip title="Drag">
+                                        <IconButton
+                                          edge="start"
+                                          {...draggableProvided.dragHandleProps}
+                                        >
+                                          <DragIndicator />
+                                        </IconButton>
+                                      </Tooltip>
+                                    </ListItemIcon>
+                                  )}
                                   <ListItemText
-                                    primary={`${index + 1}. ${field.label}${
-                                      field?.options?.required ? '*' : ''
-                                    }`}
-                                    secondary={
-                                      (!previewMode || isWorkflow) && getFieldSecondaryText(field)
+                                    className="ml-n2"
+                                    primary={
+                                      <>
+                                        {index + 1}. {field.label}
+                                        {field?.options?.required && (
+                                          <span className="text-danger">*</span>
+                                        )}
+                                      </>
                                     }
+                                    secondary={getFieldSecondaryText(field)}
                                   />
                                   {!snapshot.isDraggingOver && (
                                     <ListItemSecondaryAction>
@@ -277,29 +308,45 @@ export default function FormFields({
                 )}
               </Droppable>
             </DragDropContext>
-            {!(isWorkflow || hideSystemFields) && (
+            {showSystemFields && (
               <>
-                <ListItem button>
-                  <ListItemText primary="ID" secondary={!previewMode && 'System generated'} />
-                </ListItem>
-                <ListItem button>
-                  <ListItemText
-                    primary="createdAt"
-                    secondary={!previewMode && 'date System generated'}
-                  />
-                </ListItem>
-                <ListItem button>
-                  <ListItemText
-                    primary="createdBy"
-                    secondary={!previewMode && 'user System generated'}
-                  />
-                </ListItem>
-                <ListItem button>
-                  <ListItemText
-                    primary="workflowId"
-                    secondary={!previewMode && 'System generated'}
-                  />
-                </ListItem>
+                <Button
+                  size="small"
+                  onClick={() =>
+                    setState((oldState) => ({
+                      ...oldState,
+                      showSystemFields: !state.showSystemFields,
+                    }))
+                  }
+                  endIcon={state.showSystemFields ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+                >
+                  {state.showSystemFields ? 'Hide' : 'Show'} system fields
+                </Button>
+                {state.showSystemFields && (
+                  <>
+                    <ListItem button>
+                      <ListItemText primary="ID" secondary={!previewMode && 'System generated'} />
+                    </ListItem>
+                    <ListItem button>
+                      <ListItemText
+                        primary="createdAt"
+                        secondary={!previewMode && 'date System generated'}
+                      />
+                    </ListItem>
+                    <ListItem button>
+                      <ListItemText
+                        primary="createdBy"
+                        secondary={!previewMode && 'user System generated'}
+                      />
+                    </ListItem>
+                    <ListItem button>
+                      <ListItemText
+                        primary="workflowId"
+                        secondary={!previewMode && 'System generated'}
+                      />
+                    </ListItem>
+                  </>
+                )}
               </>
             )}
           </List>
