@@ -56,6 +56,7 @@ export function ResponseChild({ form, count, hideBreadcrumbs, deleteCallback }: 
       form={form}
       hideBreadcrumbs={hideBreadcrumbs}
       deleteCallBack={deleteCallback}
+      defaultShowFieldsMenu
     />
   );
 }
