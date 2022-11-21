@@ -1,9 +1,9 @@
 import { IField, IResponse } from '@frontend/shared/types';
-import Box from '@mui/material/Box';
+// import Box from '@mui/material/Box';
 import React, { Fragment, useState } from 'react';
 import { useCreateUpdateResponse, useResolveCondition } from '@frontend/shared/hooks/response';
 import { useDebounce } from '@frontend/shared/hooks/condition/debounce';
-import { styled } from '@mui/material/styles';
+// import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
@@ -14,7 +14,7 @@ import DisplayValue from '../form2/DisplayValue';
 import DisplayFormulaValue from '../form2/field/formula/DisplayFormulaValue';
 import StarRating from '../starRating/starRating';
 import AddResponseButton from './AddResponseButton';
-import DependantResponses from './DependantResponses';
+// import DependantResponses from './DependantResponses';
 import { onAlert } from '../../utils/alert';
 
 interface IFieldValuesMap {
@@ -51,12 +51,11 @@ export default function FieldValuesMap({
 
   useDebounce({
     callback: checkDisabledCondition,
-    listenForChange: true,
-    variable: response,
+    value: response,
   });
 
-  const isDependantRelationship =
-    !field?.options?.selectItem && field?.options?.dependentRelationship;
+  // const isDependantRelationship =
+  //   !field?.options?.selectItem && field?.options?.dependentRelationship;
 
   return (
     <>
@@ -69,7 +68,7 @@ export default function FieldValuesMap({
               data-testid="fields-display"
             >
               <div data-testid="label">{field?.label}</div>
-              {authorized && !disabled && !isDependantRelationship && (
+              {authorized && !disabled && (
                 <Tooltip title="Edit">
                   <IconButton
                     edge="end"
@@ -89,9 +88,10 @@ export default function FieldValuesMap({
         </>
       )}
       <div data-testid="value">
-        {isDependantRelationship ? (
+        {/* isDependantRelationship ? (
           <DependantResponses disabled={disabled} parentResponseId={response?._id} field={field} />
-        ) : field.fieldType === 'label' ? (
+        ) : */}
+        {field.fieldType === 'label' ? (
           <DisplayRichText value={field?.options?.staticText} />
         ) : field?.options?.systemCalculatedAndView ? (
           <DisplayFormulaValue
@@ -103,9 +103,9 @@ export default function FieldValuesMap({
           <>
             {fieldValues.map((value) => (
               <Fragment key={value?._id}>
-                <StyledBox style={{ display: 'flex', alignContent: 'center' }}>
-                  <DisplayValue field={field} value={value} verticalView={verticalView} />
-                </StyledBox>
+                {/* <StyledBox style={{ display: 'flex', alignContent: 'center' }}>
+                </StyledBox> */}
+                <DisplayValue field={field} value={value} verticalView={verticalView} />
                 {verticalView && (
                   <>
                     {field?.options?.showCommentBox && <CommentLikeShare threadId={value?._id} />}
@@ -140,9 +140,9 @@ export default function FieldValuesMap({
   );
 }
 
-const StyledBox = styled(Box)(({ theme }) => ({
-  flexDirection: 'column',
-  [theme.breakpoints.up('md')]: {
-    flexDirection: 'row !important',
-  },
-}));
+// const StyledBox = styled(Box)(({ theme }) => ({
+//   flexDirection: 'column',
+//   [theme.breakpoints.up('md')]: {
+//     flexDirection: 'row !important',
+//   },
+// }));

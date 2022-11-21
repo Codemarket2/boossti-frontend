@@ -14,6 +14,7 @@ interface DisplayResponseByIdProps {
   deleteCallBack?: () => void;
   hideDelete?: boolean;
   previewMode?: boolean;
+  viewLess?: boolean;
 }
 
 export default function DisplayResponseById({
@@ -25,6 +26,7 @@ export default function DisplayResponseById({
   hideDelete,
   deleteCallBack,
   previewMode,
+  viewLess,
 }: DisplayResponseByIdProps) {
   const { data, error } = useGetResponse(responseId);
 
@@ -47,6 +49,7 @@ export default function DisplayResponseById({
       deleteCallBack={deleteCallBack}
       hideDelete={hideDelete}
       previewMode={previewMode}
+      viewLess={viewLess}
     />
   );
 }
@@ -61,6 +64,7 @@ interface DisplayResponseWithFormIdProps {
   deleteCallBack?: () => void;
   hideDelete?: boolean;
   previewMode?: boolean;
+  viewLess?: boolean;
 }
 
 export function DisplayResponseWithFormId({
@@ -73,6 +77,7 @@ export function DisplayResponseWithFormId({
   deleteCallBack,
   hideDelete,
   previewMode,
+  viewLess,
 }: DisplayResponseWithFormIdProps) {
   const { data, error, loading } = useGetForm(formId);
 
@@ -95,6 +100,7 @@ export function DisplayResponseWithFormId({
       deleteCallBack={deleteCallBack}
       hideDelete={hideDelete}
       previewMode={previewMode}
+      viewLess={viewLess}
     />
   );
 }

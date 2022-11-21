@@ -1,6 +1,6 @@
 import { useCheckPermission } from '@frontend/shared/hooks/permission';
 import { useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDeleteResponse, useResolveCondition } from '@frontend/shared/hooks/response';
 import Link from 'next/link';
 import Typography from '@mui/material/Typography';
@@ -39,6 +39,8 @@ export interface DisplayResponseProps {
   deleteCallBack?: () => void;
   hideDelete?: boolean;
   previewMode?: boolean;
+  defaultShowFieldsMenu?: boolean;
+  viewLess?: boolean;
 }
 
 const initialState = {
@@ -47,7 +49,7 @@ const initialState = {
   showBackdrop: false,
   fieldId: null,
   field: null,
-  minimizeFieldsMenu: false,
+  showFieldsMenu: false,
 };
 
 export function DisplayResponse({
@@ -60,6 +62,8 @@ export function DisplayResponse({
   deleteCallBack,
   hideDelete,
   previewMode,
+  defaultShowFieldsMenu,
+  viewLess,
 }: DisplayResponseProps) {
   const [state, setState] = useState(initialState);
   const { data: workflowFormData, loading: workflowFormLoading } = useGetForm(
@@ -69,13 +73,8 @@ export function DisplayResponse({
   const router = useRouter();
 
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
-  const [response, setResponse] = useState(parseResponse(tempResponse));
 
-  useEffect(() => {
-    if (tempResponse) {
-      setResponse((oldResponse) => ({ ...oldResponse, ...parseResponse(tempResponse) }));
-    }
-  }, [tempResponse]);
+  const response = useMemo(() => parseResponse(tempResponse), [tempResponse]);
 
   const { hasPermission: editPerm } = useCheckPermission({
     actionType: 'EDIT',
@@ -118,7 +117,7 @@ export function DisplayResponse({
       router?.query?.field &&
       Number(router?.query?.field) > 0 &&
       hasEditPermission &&
-      router?.query?.count === response?.count
+      router?.query?.count?.toString() === response?.count?.toString()
     ) {
       setState((oldState) => ({ ...oldState, field: Number(router?.query?.field) }));
     }
@@ -150,37 +149,41 @@ export function DisplayResponse({
     return true;
   };
 
+  useEffect(() => {
+    if (!state.showFieldsMenu && defaultShowFieldsMenu) {
+      setState((oldState) => ({ ...oldState, showFieldsMenu: true }));
+    }
+  }, []);
+
   const DetailComponent = (
     <Paper variant="outlined" className="p-2" style={hideLeftNavigation ? { border: 'none' } : {}}>
       <Grid container>
-        <Grid xs={12} sm={state.minimizeFieldsMenu ? 0.5 : 3} item>
-          {state.minimizeFieldsMenu ? (
-            <div>
-              <Tooltip title="Maximize Fields Menu">
-                <IconButton
-                  edge="start"
-                  color="primary"
-                  onClick={() =>
-                    setState((oldState) => ({ ...oldState, minimizeFieldsMenu: false }))
-                  }
-                >
-                  <KeyboardDoubleArrowRight />
-                </IconButton>
-              </Tooltip>
-            </div>
-          ) : (
+        <Grid xs={12} sm={state.showFieldsMenu ? 3 : 0.5} item>
+          {state.showFieldsMenu ? (
             <div className="pr-2">
               <FormFields
                 previewMode={!admin}
                 fields={form?.fields}
                 onClickMinimize={() =>
-                  setState((oldState) => ({ ...oldState, minimizeFieldsMenu: true }))
+                  setState((oldState) => ({ ...oldState, showFieldsMenu: false }))
                 }
               />
             </div>
+          ) : (
+            <div>
+              <Tooltip title="Maximize Fields Menu">
+                <IconButton
+                  edge="start"
+                  color="primary"
+                  onClick={() => setState((oldState) => ({ ...oldState, showFieldsMenu: true }))}
+                >
+                  <KeyboardDoubleArrowRight />
+                </IconButton>
+              </Tooltip>
+            </div>
           )}
         </Grid>
-        <Grid xs={12} sm={state.minimizeFieldsMenu ? 11.5 : 9} item>
+        <Grid xs={12} sm={state.showFieldsMenu ? 9 : 11.5} item>
           <div className="d-flex align-items-center">
             {!hideAuthor && (
               <div>
@@ -261,11 +264,14 @@ export function DisplayResponse({
               </div>
             );
           })}
-          {workflowFormData?.getForm?._id && !response?.parentResponseId && (
-            <WorkflowButtons response={response} />
+          {!viewLess && (
+            <>
+              {workflowFormData?.getForm?._id && !response?.parentResponseId && (
+                <WorkflowButtons response={response} />
+              )}
+              <RelationFieldView responseId={response?._id} formId={form?._id} />
+            </>
           )}
-
-          <RelationFieldView responseId={response?._id} formId={form?._id} />
           {/* {!hideWorkflow && section?.fields?.length > 0 && (
           <FormFieldsValue
             authorized={hasEditPermission}

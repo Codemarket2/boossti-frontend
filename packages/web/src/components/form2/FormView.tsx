@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
@@ -17,6 +17,7 @@ import ArrowBackIosRounded from '@mui/icons-material/ArrowBackIosRounded';
 import ArrowForwardIosRounded from '@mui/icons-material/ArrowForwardIosRounded';
 import Tooltip from '@mui/material/Tooltip';
 import KeyboardDoubleArrowRight from '@mui/icons-material/KeyboardDoubleArrowRight';
+import CircularProgress from '@mui/material/CircularProgress';
 
 // SHARED
 import { parseResponse, useGetResponses } from '@frontend/shared/hooks/response/getResponse';
@@ -457,7 +458,7 @@ export function FormViewChild({
       onSave();
     }
   };
-  useDebounce({ callback: autoSaveCallback, time: 1500, listenForChange: true, variable: values });
+  useDebounce({ callback: autoSaveCallback, time: 2000, value: values });
   const { handleOnChange } = useUpdateForm({ onAlert, form });
 
   const localStorageKey = `unsavedResponse${form?._id}${edit}${responseId}`;
@@ -483,12 +484,16 @@ export function FormViewChild({
   });
 
   // ONLY SHOW & VALIDATE REQUIRED FIELDS
-  const fields = tempFields?.filter((field: IField) => {
-    return (
-      !field?.options?.systemCalculatedAndSaved &&
-      !overrideValues?.some((v) => v?.field === field?._id)
-    );
-  });
+  const fields = useMemo(
+    () =>
+      tempFields?.filter((field: IField) => {
+        return (
+          !field?.options?.systemCalculatedAndSaved &&
+          !overrideValues?.some((v) => v?.field === field?._id)
+        );
+      }),
+    [tempFields, overrideValues],
+  );
 
   const {
     uniqueBetweenMultipleValuesLoading,
@@ -502,7 +507,6 @@ export function FormViewChild({
     if (state.hideField) {
       setState((oldState) => ({ ...oldState, hideField: false }));
     }
-
     if (values?.length > 0 && !edit) {
       window?.localStorage?.setItem(localStorageKey, JSON.stringify(values));
     }
@@ -557,9 +561,6 @@ export function FormViewChild({
   };
 
   const onChange = (sValue, valueIndex) => {
-    if (!submitState?.onChanged) {
-      setSubmitState((oldSubmitState) => ({ ...oldSubmitState, onChanged: true }));
-    }
     let newValue = { ...defaultValue, ...sValue };
     if (form?.slug === 'template') {
       const tempField = fields?.find(
@@ -587,8 +588,10 @@ export function FormViewChild({
     if (!changed) {
       newValues = [...values, newValue];
     }
-
     setValues(newValues);
+    if (!submitState?.onChanged) {
+      setSubmitState((oldSubmitState) => ({ ...oldSubmitState, onChanged: true }));
+    }
   };
 
   const onSubmit = async () => {
@@ -605,8 +608,6 @@ export function FormViewChild({
       setSubmitState({ ...submitState, loading: false });
       return setState((oldState) => ({ ...oldState, showAuthModal: true }));
     }
-    // const payload = overrideValues?.length > 0 ? [...overrideValues, ...values] : [...values];
-    // const response = await handleSubmit(payload);
     const response = await onSave();
     if (response) {
       setSubmitState(initialSubmitState);
@@ -739,13 +740,13 @@ export function FormViewChild({
       <div data-testid="submitButton">
         <LoadingButton
           disabled={disableSubmitButton}
-          loading={submitState.loading || loading}
+          loading={!disableSubmitButton && (submitState.loading || loading)}
           onClick={onSubmit}
           variant="contained"
           color="primary"
           size="small"
         >
-          Submit
+          Save
         </LoadingButton>
       </div>
     </Tooltip>
@@ -831,14 +832,19 @@ export function FormViewChild({
         <Grid xs={12} sm={state.minimizeFields ? 11.5 : 9} item>
           <Grid container spacing={0} data-testid="fieldWiseView">
             <div className="d-flex w-100 justify-content-end my-2 align-items-center">
-              {(submitState.loading || loading) && <Typography>Auto saving...</Typography>}
+              {(submitState.loading || loading) && (
+                <Typography className="d-flex align-items-center">
+                  <CircularProgress color="inherit" size={20} className="mr-2" />
+                  saving...
+                </Typography>
+              )}
               {CancelButton}
               <LoadingButton
                 className="ml-2"
                 size="small"
                 variant="contained"
                 disabled={disableSubmitButton}
-                loading={submitState.loading || loading}
+                loading={!disableSubmitButton && (submitState.loading || loading)}
                 onClick={onSubmit}
               >
                 Publish

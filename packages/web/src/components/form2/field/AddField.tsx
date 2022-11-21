@@ -80,7 +80,7 @@ export default function AddField({
     }
   }, [field]);
 
-  const isWidgetForm = formik.values.fieldType === 'form' && isWorkflow;
+  // const isWidgetForm = formik.values.fieldType === 'form' && isWorkflow;
 
   return (
     <form className="px-2" onSubmit={formik.handleSubmit}>
@@ -148,8 +148,7 @@ export default function AddField({
             error={formik.touched.form && Boolean(formik.errors.form)}
             helperText={formik.touched.form && formik.errors.form}
           />
-
-          {formik.values.form && formik.values.fieldType === 'response' && (
+          {/* {formik.values.form && formik.values.fieldType === 'response' && (
             <div className="mt-3">
               <SelectFormFields
                 formId={formik.values.form?._id}
@@ -159,7 +158,7 @@ export default function AddField({
                 helperText={!formik.values.options?.formField && 'required'}
               />
             </div>
-          )}
+          )} */}
         </InputGroup>
       )}
       {isTab && formik.values.fieldType === 'form' && (
@@ -323,12 +322,12 @@ export default function AddField({
                   label="Two way relationship"
                   data-testid="two-way-relationship-field-option"
                 />
-                <Tooltip title="Parent will have child Id & child will have parent Id">
+                <Tooltip title="On child response you can see what is the parent response">
                   <InfoOutlined className="mt-n2 ml-n2" fontSize="small" />
                 </Tooltip>
               </div>
               {formik.values.options?.twoWayRelationship && (
-                <div>
+                <div className="pl-3">
                   <InputGroup>
                     <TextField
                       fullWidth
@@ -337,11 +336,11 @@ export default function AddField({
                       name="relationLabel"
                       value={formik.values.options.relationLabel}
                       onChange={({ target }) => onOptionChange({ relationLabel: target.value })}
-                      error={!formik.values.options.relationLabel}
-                      helperText={!formik.values.options?.relationLabel && 'Required'}
+                      // error={!formik.values.options.relationLabel}
+                      // helperText={!formik.values.options?.relationLabel && 'Required'}
                     />
                   </InputGroup>
-                  <InputGroup>
+                  {/* <InputGroup>
                     <FormControl
                       fullWidth
                       size="small"
@@ -366,7 +365,7 @@ export default function AddField({
                         <FormHelperText>Required</FormHelperText>
                       )}
                     </FormControl>
-                  </InputGroup>
+                  </InputGroup> */}
                 </div>
               )}
               {!formik.values.options?.selectItem && (

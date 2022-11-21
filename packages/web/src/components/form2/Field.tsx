@@ -519,9 +519,6 @@ export default function Field({
       );
     }
     case 'response': {
-      // if (field?.options?.dependentRelationship) {
-      //   return <>field?.options?.dependentRelationship</>;
-      // }
       return (
         <>
           <div data-testid="response">
