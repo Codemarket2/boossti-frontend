@@ -102,14 +102,6 @@ export default function Album() {
         <div className={classes.heroContent}>
           <Container className={classes.cardGrid} maxWidth="md">
             <Grid container spacing={1}>
-              <Grid item xs={12} sm={12} md={12} lg={12}>
-                <div className="text-center">
-                  <Button variant="contained" color="primary" className="m-2">
-                    Create Your website performance report
-                  </Button>
-                  <DisplayForm slug="website-performance-report" />
-                </div>
-              </Grid>
               <Grid xs={12} sm={12} md={6} lg={6}>
                 <Grid container className="mt-5">
                   {cards2.map((card, i) => (
@@ -136,15 +128,6 @@ export default function Album() {
                     </Grid>
                   ))}
                 </Grid>
-              </Grid>
-
-              <Grid item xs={12} sm={12} md={6} lg={6}>
-                <div className="text-center">
-                  <Button variant="contained" color="primary" className="m-2">
-                    Tell Us About Your Project
-                  </Button>
-                  <DisplayForm slug="boossti-interest-form" />
-                </div>
               </Grid>
             </Grid>
           </Container>
