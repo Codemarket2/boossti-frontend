@@ -16,7 +16,7 @@ import ErrorLoading from '../components/common/ErrorLoading';
 import FormView from '../components/form2/FormView';
 import NotFound from '../components/common/NotFound';
 import { DisplayForm } from '../components/form2/DisplayForm';
-
+import CloudHosting from '../components/CloudHosting';
 const PREFIX = 'FormPage';
 const classes = {
   icon: `${PREFIX}-icon`,
@@ -98,7 +98,7 @@ export default function Album() {
   return (
     <>
       <AppBar />
-      <main>
+      {/* <main>
         <div className={classes.heroContent}>
           <Container className={classes.cardGrid} maxWidth="md">
             <Grid container spacing={1}>
@@ -132,9 +132,9 @@ export default function Album() {
             </Grid>
           </Container>
         </div>
-
-        {/* End hero unit */}
-      </main>
+      </main> */}
+      {/* End hero unit */}
+      <CloudHosting />
       {/* Footer */}
       <footer className={classes.footer}>
         <Typography variant="h6" align="center" gutterBottom>
