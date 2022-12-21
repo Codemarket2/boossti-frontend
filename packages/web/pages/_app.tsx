@@ -75,6 +75,7 @@ function App({ Component, pageProps, emotionCache = clientSideEmotionCache }: My
   // useOneSignal();
   // useLogoHook();
   const { loading } = useGetApp();
+
   const theme = createTheme(adaptV4Theme(settings.theme));
 
   useEffect(() => {

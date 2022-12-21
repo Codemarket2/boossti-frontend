@@ -7,6 +7,7 @@ export const light = {
       main: 'rgb(247, 249, 250)',
       dark: '#e8eaf6',
     },
+
     cardShadow: 'rgba(23, 70, 161, .11)',
     mode: 'light',
     primary: {
@@ -36,6 +37,9 @@ export const light = {
       level1: '#FFFFFF',
       footer: '#1b1642',
     },
+  },
+  layout: {
+    contentWidth: 1236,
   },
   typography,
 };
@@ -76,6 +80,9 @@ export const dark = {
       level1: '#2D3748',
       footer: '#18181f',
     },
+  },
+  layout: {
+    contentWidth: 1236,
   },
   typography,
 };
