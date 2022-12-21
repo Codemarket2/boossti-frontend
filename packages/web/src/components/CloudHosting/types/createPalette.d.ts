@@ -10,7 +10,7 @@ declare module '@material-ui/core/styles/createPalette' {
     footer: string;
   }
 
-  interface PaletteOptions { 
+  interface PaletteOptions {
     cardShadow?: string;
     alternate: {
       main: string;

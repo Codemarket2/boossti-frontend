@@ -15,7 +15,7 @@ const Story = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
     <div className={className} {...rest}>
       <SectionHeader title="Who we are" label="Our Story" data-aos="fade-up" />
       <Grid container spacing={isMd ? 4 : 2}>
-        <Grid item xs={12} sm={6} data-aos={'fade-up'}>
+        <Grid item xs={12} sm={6} data-aos="fade-up">
           <DescriptionListIcon
             title="Who are we?"
             subtitle="Our sign up is dead simple. We only require your basic company information and what type of data storage you want. Our sign up is dead simple. We only require your basic company information and what type of data storage you want."
@@ -25,7 +25,7 @@ const Story = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
             align="left"
           />
         </Grid>
-        <Grid item xs={12} sm={6} data-aos={'fade-up'}>
+        <Grid item xs={12} sm={6} data-aos="fade-up">
           <DescriptionListIcon
             title="What’s up with the name?"
             subtitle="We support bulk uploading via SQL, integrations with most data storage products, or you can use our API. Simply select where you'd like to transfer your data and we'll being the process of migrating it instantly."
@@ -39,7 +39,7 @@ const Story = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
             align="left"
           />
         </Grid>
-        <Grid item container justify="center" xs={12} data-aos={'fade-up'}>
+        <Grid item container justify="center" xs={12} data-aos="fade-up">
           <Button variant="outlined" color="primary">
             Learn more
           </Button>

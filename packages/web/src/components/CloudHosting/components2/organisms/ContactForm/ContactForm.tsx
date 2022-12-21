@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography, Grid, Button, TextField } from '@material-ui/core';
@@ -41,9 +42,9 @@ const ContactForm = (): JSX.Element => {
   React.useEffect(() => {
     const errors = validate(formState.values, schema);
 
-    setFormState(formState => ({
+    setFormState((formState) => ({
       ...formState,
-      isValid: errors ? false : true,
+      isValid: !errors,
       errors: errors || {},
     }));
   }, [formState.values]);
@@ -51,14 +52,12 @@ const ContactForm = (): JSX.Element => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.persist();
 
-    setFormState(formState => ({
+    setFormState((formState) => ({
       ...formState,
       values: {
         ...formState.values,
         [event.target.name]:
-          event.target.type === 'checkbox'
-            ? event.target.checked
-            : event.target.value,
+          event.target.type === 'checkbox' ? event.target.checked : event.target.value,
       },
       touched: {
         ...formState.touched,
@@ -67,8 +66,8 @@ const ContactForm = (): JSX.Element => {
     }));
   };
 
-  const hasError = (field: string ): boolean =>
-    formState.touched[field] && formState.errors[field] ? true : false;
+  const hasError = (field: string): boolean =>
+    !!(formState.touched[field] && formState.errors[field]);
 
   return (
     <div className={classes.root}>
@@ -95,9 +94,7 @@ const ContactForm = (): JSX.Element => {
               size="medium"
               name="fullname"
               fullWidth
-              helperText={
-                hasError('fullname') ? formState.errors.fullname[0] : null
-              }
+              helperText={hasError('fullname') ? formState.errors.fullname[0] : null}
               error={hasError('fullname')}
               onChange={handleChange}
               type="text"
@@ -126,9 +123,7 @@ const ContactForm = (): JSX.Element => {
               variant="outlined"
               name="message"
               fullWidth
-              helperText={
-                hasError('message') ? formState.errors.message[0] : null
-              }
+              helperText={hasError('message') ? formState.errors.message[0] : null}
               error={hasError('message')}
               onChange={handleChange}
               multiline

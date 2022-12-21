@@ -46,7 +46,8 @@ const IconText = ({
         variant="subtitle1"
         color="textPrimary"
         className={clsx('icon-text__typography', classes.title)}
-        {...typographyProps}>
+        {...typographyProps}
+      >
         {title}
       </Typography>
     </div>

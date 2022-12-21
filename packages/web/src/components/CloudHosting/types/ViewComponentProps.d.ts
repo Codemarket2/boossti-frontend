@@ -1,3 +1,4 @@
+/* eslint-disable */
 interface ViewComponentProps {
   className?: string;
   data?: any;

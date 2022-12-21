@@ -9,7 +9,7 @@ import {
   Avatar,
   ListItemText,
 } from '@material-ui/core';
-import { CardBase } from '../../organisms';
+import { CardBase } from '..';
 
 const useStyles = makeStyles((theme) => ({
   root: {

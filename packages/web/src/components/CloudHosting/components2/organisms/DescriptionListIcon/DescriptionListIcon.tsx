@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Typography } from '@material-ui/core';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   title: {
     fontWeight: 700,
   },
@@ -28,7 +28,14 @@ const DescriptionListIcon = ({
 }: DescriptionListIconProps): JSX.Element => {
   const classes = useStyles();
 
-  let gridJustify: ('center' | 'flex-start' | 'flex-end' | 'space-between' | 'space-around' | 'space-evenly' | undefined) = 'center';
+  let gridJustify:
+    | 'center'
+    | 'flex-start'
+    | 'flex-end'
+    | 'space-between'
+    | 'space-around'
+    | 'space-evenly'
+    | undefined = 'center';
 
   if (align === 'left') {
     gridJustify = 'flex-start';
@@ -37,12 +44,7 @@ const DescriptionListIcon = ({
   }
 
   return (
-    <Grid
-      container
-      spacing={2}
-      {...rest}
-      className={clsx('description-list-icon', className)}
-    >
+    <Grid container spacing={2} {...rest} className={clsx('description-list-icon', className)}>
       <Grid
         item
         container

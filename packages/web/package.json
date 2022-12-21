@@ -45,6 +45,7 @@
     "axios": "^0.22.0",
     "bootstrap": "4.4.1",
     "browser-image-compression": "^1.0.17",
+    "clsx": "^1.2.1",
     "dot-prop-immutable": "^2.1.1",
     "grapesjs": "^0.18.4",
     "grapesjs-blocks-basic": "^1.0.1",

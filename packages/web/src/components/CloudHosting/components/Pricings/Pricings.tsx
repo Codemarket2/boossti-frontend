@@ -36,7 +36,7 @@ const Pricings = ({ data, className, ...rest }: ViewComponentProps): JSX.Element
           <Grid item container alignItems="center" xs={12} md={6} data-aos="fade-up" key={index}>
             <CardPricingStandard
               variant="outlined"
-              withShadow={item.isHighlighted ? true : false}
+              withShadow={!!item.isHighlighted}
               title={item.title}
               liftUp
               priceComponent={

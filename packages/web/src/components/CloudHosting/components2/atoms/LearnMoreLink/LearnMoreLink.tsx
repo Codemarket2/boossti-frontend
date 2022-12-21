@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Typography, IconButton } from '@material-ui/core';
 import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: 'inline-flex',
     alignItems: 'center',
@@ -38,7 +38,6 @@ const LearnMoreLink = ({
   typographyProps = {},
   ...rest
 }: LearnMoreLinkProps): JSX.Element => {
-
   const classes = useStyles();
 
   const children = (
@@ -54,7 +53,7 @@ const LearnMoreLink = ({
       </Typography>
       <IconButton
         className={clsx('learn-more-link__icon-button', classes.icon)}
-        color={'primary'}
+        color="primary"
         {...iconProps}
       >
         <ArrowRightAltIcon className="learn-more-link__arrow" />
@@ -63,11 +62,7 @@ const LearnMoreLink = ({
   );
 
   return (
-    <a
-      href={href}
-      className={clsx('learn-more-link', classes.root, className)}
-      {...rest}
-    >
+    <a href={href} className={clsx('learn-more-link', classes.root, className)} {...rest}>
       {children}
     </a>
   );

@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Typography, IconButton } from '@material-ui/core';
 import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
 import { IconAlternate } from '../../molecules';
-import { CardBase } from '../../organisms';
+import { CardBase } from '..';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -71,7 +71,8 @@ const CardCategoryLink = ({
               variant="h6"
               align={align}
               className={classes.fontWeight700}
-              {...titleProps}>
+              {...titleProps}
+            >
               {title}
             </Typography>
           </Grid>
@@ -81,7 +82,8 @@ const CardCategoryLink = ({
                 variant="subtitle1"
                 align={align}
                 color="textSecondary"
-                {...subtitleProps}>
+                {...subtitleProps}
+              >
                 {subtitle}
               </Typography>
             </Grid>

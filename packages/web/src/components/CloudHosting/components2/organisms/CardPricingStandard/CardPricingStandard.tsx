@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography, ListItem, Divider, List, Grid } from '@material-ui/core';
-import { CardBase } from '../../organisms';
+import { CardBase } from '..';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,14 +40,16 @@ const CardPricingStandard = ({
     <CardBase
       className={clsx('card-pricing-standard', classes.root, className)}
       align="left"
-      {...rest}>
+      {...rest}
+    >
       <Grid container spacing={2} className="card-pricing-standard__wrapper">
         <Grid item xs={12} className="card-pricing-standard__headline">
           <Typography
             variant="h5"
             gutterBottom
             className="card-pricing-standard__title"
-            {...titleProps}>
+            {...titleProps}
+          >
             {title}
           </Typography>
           {subtitle && (
@@ -55,7 +57,8 @@ const CardPricingStandard = ({
               variant="subtitle1"
               color="textSecondary"
               className="card-pricing-standard__subtitle"
-              {...subtitleProps}>
+              {...subtitleProps}
+            >
               {subtitle}
             </Typography>
           )}
@@ -73,13 +76,12 @@ const CardPricingStandard = ({
                 <ListItem
                   key={index}
                   disableGutters
-                  className="card-pricing-standard__feature-list-item">
+                  className="card-pricing-standard__feature-list-item"
+                >
                   {featureCheckComponent && (
                     <div
-                      className={clsx(
-                        'card-pricing-standard__feature-check',
-                        classes.featureCheck,
-                      )}>
+                      className={clsx('card-pricing-standard__feature-check', classes.featureCheck)}
+                    >
                       {featureCheckComponent}
                     </div>
                   )}
@@ -87,7 +89,8 @@ const CardPricingStandard = ({
                     variant="h6"
                     noWrap
                     className="card-pricing-standard__feature-title"
-                    {...featureTitleProps}>
+                    {...featureTitleProps}
+                  >
                     {item}
                   </Typography>
                 </ListItem>
@@ -105,7 +108,8 @@ const CardPricingStandard = ({
               component="p"
               align="center"
               className="card-pricing-standard__disclaimer-title"
-              {...disclaimerProps}>
+              {...disclaimerProps}
+            >
               {disclaimer}
             </Typography>
           </Grid>

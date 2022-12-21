@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Typography } from '@material-ui/core';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     marginBottom: theme.spacing(3),
     [theme.breakpoints.up('md')]: {
@@ -49,7 +49,14 @@ const SectionHeader = ({
   ...rest
 }: SectionHeaderProps): JSX.Element => {
   const classes = useStyles();
-  let justifyGrid: ('center' | 'flex-start' | 'flex-end' | 'space-between' | 'space-around' | 'space-evenly' | undefined) = 'center';
+  let justifyGrid:
+    | 'center'
+    | 'flex-start'
+    | 'flex-end'
+    | 'space-between'
+    | 'space-around'
+    | 'space-evenly'
+    | undefined = 'center';
   if (align === 'left') {
     justifyGrid = 'flex-start';
   } else if (align === 'right') {
@@ -97,11 +104,7 @@ const SectionHeader = ({
         <Typography
           variant={titleVariant}
           align={align || 'center'}
-          className={clsx(
-            'section-header__title',
-            classes.title,
-            titleClasses ? titleClasses : {},
-          )}
+          className={clsx('section-header__title', classes.title, titleClasses || {})}
           color="textPrimary"
           {...titleProps}
         >
@@ -131,13 +134,7 @@ const SectionHeader = ({
             className="section-header__cta-container"
           >
             {ctaGroup.map((item, index) => (
-              <div
-                key={index}
-                className={clsx(
-                  'section-header__cta-item-wrapper',
-                  classes.cta,
-                )}
-              >
+              <div key={index} className={clsx('section-header__cta-item-wrapper', classes.cta)}>
                 {item}
               </div>
             ))}

@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { colors } from '@material-ui/core';
-import { Section } from '../../organisms';
+import { Section } from '..';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -63,7 +63,7 @@ const HeroBackground = ({
       background: backgroundColor,
     },
     backgroundPosition: {
-      backgroundPosition: backgroundPosition,
+      backgroundPosition,
     },
   }));
 
@@ -77,13 +77,10 @@ const HeroBackground = ({
         backgroundColor ? customClasses.backgroundColor : classes.colorDefault,
         className,
       )}
-      {...rest}>
+      {...rest}
+    >
       <div className={clsx('hero-background__wrapper', classes.heroWrapper)}>
-        <Section
-          className={clsx(
-            contentSectionClassName ? contentSectionClassName : '',
-            'hero-background__section',
-          )}>
+        <Section className={clsx(contentSectionClassName || '', 'hero-background__section')}>
           {children}
         </Section>
       </div>

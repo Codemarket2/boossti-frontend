@@ -77,7 +77,7 @@ function App({ Component, pageProps, emotionCache = clientSideEmotionCache }: My
   const { loading } = useGetApp();
 
   const theme = createTheme(adaptV4Theme(settings.theme));
-  debugger;
+
   useEffect(() => {
     setDefaultTheme().then((res: any) => dispatch(setDefaultThemeAction(res)));
     // const jssStyles = document.querySelector('#jss-server-side');

@@ -3,26 +3,22 @@ export const features = {
     {
       icon: 'fas fa-bolt',
       title: 'Fast',
-      subtitle:
-        'Instead of constantly worrying about when your home will be in demand',
+      subtitle: 'Instead of constantly worrying about when your home will be in demand',
     },
     {
       icon: 'fas fa-puzzle-piece',
       title: 'Integrity',
-      subtitle:
-        'Instead of constantly worrying about when your home will be in demand',
+      subtitle: 'Instead of constantly worrying about when your home will be in demand',
     },
     {
       icon: 'fas fa-bullseye',
       title: 'Targeted',
-      subtitle:
-        'Instead of constantly worrying about when your home will be in demand',
+      subtitle: 'Instead of constantly worrying about when your home will be in demand',
     },
     {
       icon: 'fas fa-bullhorn',
       title: 'Efficient',
-      subtitle:
-        'Instead of constantly worrying about when your home will be in demand',
+      subtitle: 'Instead of constantly worrying about when your home will be in demand',
     },
   ],
   properties: [
@@ -43,14 +39,12 @@ export const howItWorks = [
   {
     icon: 'fas fa-bolt',
     title: 'Share',
-    subtitle:
-      'Our sign up is dead simple. We only require your basic company information',
+    subtitle: 'Our sign up is dead simple. We only require your basic company information',
   },
   {
     icon: 'fas fa-puzzle-piece',
     title: 'Send Message',
-    subtitle:
-      'We support bulk uploading via SQL, integrations with most data storage products',
+    subtitle: 'We support bulk uploading via SQL, integrations with most data storage products',
   },
   {
     icon: 'fas fa-bullseye',

@@ -37,7 +37,7 @@ const CountUpNumber = ({
   return (
     <div className={clsx('countup-number', className)} {...rest}>
       <VisibilitySensor
-        onChange={isVisible => setViewPortVisibility(isVisible)}
+        onChange={(isVisible) => setViewPortVisibility(isVisible)}
         delayedCall
         {...visibilitySensorProps}
       >

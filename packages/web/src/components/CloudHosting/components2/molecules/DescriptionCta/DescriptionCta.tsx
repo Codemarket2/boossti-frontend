@@ -28,7 +28,14 @@ const DescriptionCta = ({
     defaultMatches: true,
   });
 
-  let justifyGrid: ('center' | 'flex-start' | 'flex-end' | 'space-between' | 'space-around' | 'space-evenly' | undefined) = 'center';
+  let justifyGrid:
+    | 'center'
+    | 'flex-start'
+    | 'flex-end'
+    | 'space-between'
+    | 'space-around'
+    | 'space-evenly'
+    | undefined = 'center';
   if (align === 'left') {
     justifyGrid = isSm ? 'flex-end' : 'flex-start';
   } else if (align === 'right') {

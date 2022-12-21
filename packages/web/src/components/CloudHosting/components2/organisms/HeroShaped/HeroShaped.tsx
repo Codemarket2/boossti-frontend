@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { Divider } from '@material-ui/core';
-import { Section } from '../../organisms';
+import { Section } from '..';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,7 +15,8 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: '100%',
     display: 'flex',
-    maxWidth: theme.layout.contentWidth,
+    // maxWidth: theme.layout.contentWidth,
+    maxWidth: 1236,
     margin: '0 auto',
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column-reverse',

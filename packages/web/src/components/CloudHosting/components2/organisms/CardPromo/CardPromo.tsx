@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Typography } from '@material-ui/core';
 import { IconAlternate } from '../../molecules';
-import { CardBase } from '../../organisms';
+import { CardBase } from '..';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -68,7 +68,8 @@ const CardPromo = ({
             align={align}
             className={clsx('card-promo__title', classes.fontWeight700)}
             color={titleColor || 'textPrimary'}
-            {...titleProps}>
+            {...titleProps}
+          >
             {title}
           </Typography>
         </Grid>
@@ -78,7 +79,8 @@ const CardPromo = ({
               variant="h6"
               align={align}
               className={clsx('card-promo__subtitle', classes.fontWeight700)}
-              {...subtitleProps}>
+              {...subtitleProps}
+            >
               {subtitle}
             </Typography>
           </Grid>
@@ -90,7 +92,8 @@ const CardPromo = ({
               color="textSecondary"
               align={align}
               className="card-promo__description"
-              {...descriptionProps}>
+              {...descriptionProps}
+            >
               {description}
             </Typography>
           </Grid>

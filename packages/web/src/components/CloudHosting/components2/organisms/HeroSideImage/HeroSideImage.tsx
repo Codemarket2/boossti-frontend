@@ -73,16 +73,18 @@ const HeroSideImage = ({
       container
       className={clsx('hero-side-image', classes.root, className)}
       direction={reverse ? 'row-reverse' : 'row'}
-      {...rest}>
+      {...rest}
+    >
       <Grid
         item
         xs={12}
         md={6}
-        className={clsx('hero-side-image__image-wrapper', classes.imageWrapper)}>
+        className={clsx('hero-side-image__image-wrapper', classes.imageWrapper)}
+      >
         <Image
           src={imageSrc}
-          srcSet={imageSrcSet ? imageSrcSet : ''}
-          alt={'...'}
+          srcSet={imageSrcSet || ''}
+          alt="..."
           className={clsx('hero-side-image__image', classes.image)}
           lazy={false}
         />

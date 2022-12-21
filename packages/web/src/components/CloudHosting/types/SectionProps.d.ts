@@ -1,3 +1,4 @@
+/* eslint-disable */
 interface SectionProps {
   /**
    * External classes
@@ -21,5 +22,5 @@ interface SectionProps {
   disablePadding?: boolean;
 
   // All other props
-  [x:string]: any;
+  [x: string]: any;
 }

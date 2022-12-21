@@ -60,7 +60,8 @@ const IconAlternate = ({
         backgroundClasses.background,
         className,
       )}
-      {...rest}>
+      {...rest}
+    >
       <Icon
         size={size}
         fontIconClass={fontIconClass}

@@ -1,10 +1,12 @@
+/* eslint-disable */
+
 import React from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { useMediaQuery, Grid, Typography } from '@material-ui/core';
 import Swiper from 'swiper';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   swiperSlide: {
     paddingBottom: theme.spacing(3),
     [theme.breakpoints.up('sm')]: {
@@ -51,30 +53,15 @@ const SwiperNumber = ({
   });
 
   return (
-    <div
-      className={clsx(
-        'swiper-number',
-        'swiper-container',
-        className,
-      )}
-      {...rest}
-    >
+    <div className={clsx('swiper-number', 'swiper-container', className)} {...rest}>
       <div className="swiper-number__wrapper swiper-wrapper">
         {items.map((item, index) => (
           <div
-            className={clsx(
-              'swiper-number__item',
-              classes.swiperSlide,
-              'swiper-slide',
-            )}
+            className={clsx('swiper-number__item', classes.swiperSlide, 'swiper-slide')}
             key={index}
             style={{ width: 'auto' }}
           >
-            <Grid
-              container
-              spacing={1}
-              className="swiper-number__item-container"
-            >
+            <Grid container spacing={1} className="swiper-number__item-container">
               <Grid item xs={12} className="swiper-number__number-wrapper">
                 <Typography
                   variant="h3"

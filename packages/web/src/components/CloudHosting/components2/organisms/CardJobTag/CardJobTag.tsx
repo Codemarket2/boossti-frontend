@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Typography, colors } from '@material-ui/core';
-import { CardBase } from '../../organisms';
+import { CardBase } from '..';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -71,7 +71,8 @@ const CardJobTag = ({
               style={{
                 background: badgeColor,
                 borderColor: badgeColor,
-              }}>
+              }}
+            >
               <Typography component="span" variant="body2" className={classes.textWhite}>
                 {badgeTitle}
               </Typography>

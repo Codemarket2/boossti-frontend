@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
@@ -80,17 +81,14 @@ const SwiperImage = ({
         {items.map((item, index) => (
           <div
             className={clsx('swiper-image__slide', 'swiper-slide', classes.swiperSlide)}
-            key={index}>
+            key={index}
+          >
             <Image
               src={item.src}
               alt={item.alt}
               srcSet={item.srcSet}
               lazyProps={{ width: '100%', height: '100%' }}
-              className={clsx(
-                'swiper-image__item',
-                classes.image,
-                imageClassName ? imageClassName : {},
-              )}
+              className={clsx('swiper-image__item', classes.image, imageClassName || {})}
             />
           </div>
         ))}

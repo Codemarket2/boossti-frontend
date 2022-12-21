@@ -48,7 +48,8 @@ const OverlapedImages = ({
             'overlaped-images__item-wrapper',
             classes.imageGrid,
             classes.imageGridFirstItem,
-          )}>
+          )}
+        >
           <Image
             src={image1.src}
             srcSet={image1.srcSet}
@@ -73,7 +74,8 @@ const OverlapedImages = ({
             'overlaped-images__item-wrapper',
             classes.imageGrid,
             classes.imageGridLastItem,
-          )}>
+          )}
+        >
           <Image
             src={image3.src}
             srcSet={image3.srcSet}

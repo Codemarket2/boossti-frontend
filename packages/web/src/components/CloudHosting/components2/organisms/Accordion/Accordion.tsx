@@ -55,7 +55,8 @@ const Accordion = ({
                   variant="h6"
                   color="textPrimary"
                   className="accorion_item-title"
-                  {...titleProps}>
+                  {...titleProps}
+                >
                   {item.title}
                 </Typography>
               </Grid>
@@ -65,7 +66,8 @@ const Accordion = ({
                     variant="subtitle1"
                     color="textSecondary"
                     className="accorion_item-subtitle"
-                    {...subtitleProps}>
+                    {...subtitleProps}
+                  >
                     {item.subtitle}
                   </Typography>
                 </Grid>
@@ -79,7 +81,8 @@ const Accordion = ({
                   variant="body1"
                   color="textPrimary"
                   className="accordion__collapsable-text"
-                  {...textProps}>
+                  {...textProps}
+                >
                   {item.text}
                 </Typography>
               </Grid>

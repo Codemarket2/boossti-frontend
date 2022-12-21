@@ -43,8 +43,7 @@ const Section = ({
   ...rest
 }: SectionProps): JSX.Element => {
   const classes = useStyles();
-  const theme = useTheme();
-  debugger;
+
   return (
     <section
       className={clsx(

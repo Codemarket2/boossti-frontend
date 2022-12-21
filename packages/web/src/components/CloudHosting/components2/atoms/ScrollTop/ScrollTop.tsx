@@ -24,7 +24,7 @@ const ScrollTop = (): JSX.Element => {
     if (window) {
       window.scrollTo({
         top: 0,
-        behavior: 'smooth'
+        behavior: 'smooth',
       });
     }
   };
@@ -38,6 +38,6 @@ const ScrollTop = (): JSX.Element => {
       </div>
     </Zoom>
   );
-}
+};
 
 export default ScrollTop;

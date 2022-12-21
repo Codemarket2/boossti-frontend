@@ -68,14 +68,16 @@ const DarkModeToggler = ({
     <span className={clsx(classes.root, className)} {...rest} onClick={onClick}>
       <div className={clsx(classes.border, themeMode === 'dark' ? classes.borderDark : '')} />
       <div
-        className={clsx(classes.modeToggler, themeMode === 'dark' ? classes.modeTogglerDark : '')}>
+        className={clsx(classes.modeToggler, themeMode === 'dark' ? classes.modeTogglerDark : '')}
+      >
         <svg
           className={classes.modeTogglerIcon}
           aria-hidden="true"
           width="14"
           height="13"
           viewBox="0 0 14 13"
-          xmlns="http://www.w3.org/2000/svg">
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <path
             fillRule="evenodd"
             clipRule="evenodd"

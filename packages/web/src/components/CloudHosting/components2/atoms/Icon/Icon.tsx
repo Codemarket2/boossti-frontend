@@ -21,20 +21,21 @@ const useStyles = makeStyles(() => ({
 /**
  * Component to display the icon
  *
- * @param {Object} props 
+ * @param {Object} props
  */
-const Icon = ({ fontIconClass, size = 'small', fontIconColor, className, ...rest }: IconProps): JSX.Element => {
+const Icon = ({
+  fontIconClass,
+  size = 'small',
+  fontIconColor,
+  className,
+  ...rest
+}: IconProps): JSX.Element => {
   const classes = useStyles();
 
   return (
     <NoSsr>
       <i
-        className={clsx(
-          'icon',
-          fontIconClass,
-          classes[size],
-          className,
-        )}
+        className={clsx('icon', fontIconClass, classes[size], className)}
         style={{ color: fontIconColor }}
         {...rest}
       />

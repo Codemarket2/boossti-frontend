@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import { Section } from '../../organisms';
+import { Section } from '..';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -25,10 +25,10 @@ const HeroSimpleBackground = ({
       backgroundImage: `url(${backgroundImage})`,
     },
     backgroundSize: {
-      backgroundSize: backgroundSize,
+      backgroundSize,
     },
     backgroundPosition: {
-      backgroundPosition: backgroundPosition,
+      backgroundPosition,
     },
   }));
   const backgroundClasses = useBackground();
@@ -43,7 +43,8 @@ const HeroSimpleBackground = ({
         backgroundClasses.backgroundSize,
         backgroundClasses.backgroundPosition,
       )}
-      {...rest}>
+      {...rest}
+    >
       <Section className="hero-simple-background__section">{children}</Section>
     </div>
   );

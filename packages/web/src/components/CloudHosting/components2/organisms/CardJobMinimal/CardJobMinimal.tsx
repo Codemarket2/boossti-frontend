@@ -61,12 +61,14 @@ const CardJobMinimal = ({
     <div className={clsx(classes.root, 'card-job-minimal')} {...rest}>
       <div
         className={clsx(classes.cardJobMinimalBody, 'card-job-minimal__body')}
-        style={!showArrow ? { marginRight: 0 } : {}}>
+        style={!showArrow ? { marginRight: 0 } : {}}
+      >
         <div className="card-job-minimal__title-container">
           <Typography
             variant="subtitle1"
             className={clsx(classes.title, 'card-job-minimal__title')}
-            {...titleProps}>
+            {...titleProps}
+          >
             {title}
           </Typography>
         </div>
@@ -75,7 +77,8 @@ const CardJobMinimal = ({
             variant="body2"
             color="textSecondary"
             className="card-job-minimal__location"
-            {...subtitleProps}>
+            {...subtitleProps}
+          >
             {subtitle}
           </Typography>
         </div>

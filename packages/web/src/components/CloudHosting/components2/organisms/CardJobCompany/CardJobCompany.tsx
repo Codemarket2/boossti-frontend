@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Typography, Avatar } from '@material-ui/core';
-import { CardBase } from '../../organisms';
+import { CardBase } from '..';
 import { LearnMoreLink } from '../../atoms';
 
 const useStyles = makeStyles((theme) => ({

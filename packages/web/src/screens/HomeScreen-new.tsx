@@ -17,6 +17,7 @@ import FormView from '../components/form2/FormView';
 import NotFound from '../components/common/NotFound';
 import { DisplayForm } from '../components/form2/DisplayForm';
 import CloudHosting from '../components/CloudHosting';
+
 const PREFIX = 'FormPage';
 const classes = {
   icon: `${PREFIX}-icon`,
