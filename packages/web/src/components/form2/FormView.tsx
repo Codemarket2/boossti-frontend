@@ -991,9 +991,7 @@ export function FormViewChild({
                         <Droppable droppableId="saved-lists">
                           {(provided) => (
                             <div ref={provided.innerRef} {...provided.droppableProps}>
-                              {console.log(values)}
                               {filterValues(values, field).map((value: any, valueIndex ) => {
-                                console.log(valueIndex)
                                 return (
                                   <>
                                     <Draggable key={valueIndex} draggableId={`${valueIndex}`} index={valueIndex}>
