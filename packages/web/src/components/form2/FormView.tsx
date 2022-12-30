@@ -495,13 +495,11 @@ export function FormViewChild({
       }),
     [tempFields, overrideValues],
   );
-  const {
-    uniqueBetweenMultipleValuesLoading,
-    uniqueBetweenMultipleValuesError,
-  } = uniqueBetweenMultipleValues({
-    fields,
-    values,
-  });
+  const { uniqueBetweenMultipleValuesLoading, uniqueBetweenMultipleValuesError } =
+    uniqueBetweenMultipleValues({
+      fields,
+      values,
+    });
 
   useEffect(() => {
     if (state.hideField) {
