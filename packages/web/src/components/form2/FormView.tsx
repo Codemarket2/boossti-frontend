@@ -909,6 +909,28 @@ export function FormViewChild({
                                 field={field}
                               />
                             )}
+                          {field?.options?.multipleValues && (
+                            <div data-testid="addOneMoreValue">
+                              <Typography
+                                className="my-2"
+                                style={{ cursor: 'pointer' }}
+                                onClick={() => {
+                                  if (field?.fieldType === 'richTextarea') {
+                                    setState((oldState) => ({ ...oldState, hideField: true }));
+                                  }
+                                  onAddOneMoreValue(field);
+                                }}
+                              >
+                                <AddIcon fontSize="small" />
+                                <Tooltip
+                                  title={`You can add multiple values for ${field?.label} field`}
+                                >
+                                  <u>add more {field?.label}</u>
+                                  {/* <InfoOutlined className="ml-1" fontSize="small" /> */}
+                                </Tooltip>
+                              </Typography>
+                            </div>
+                          )}
                         </Typography>
                       )}
                       {field?.options?.systemCalculatedAndView && (
