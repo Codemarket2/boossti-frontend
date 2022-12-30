@@ -156,7 +156,7 @@ export default function FormFieldsValue({
                   ) : (
                     <>
                       <Typography className="d-flex align-items-center mt-2">
-                        {console.log(field)}
+                        {field?.label}
                         {authorized &&
                           (field.options?.multipleValues ||
                             !values?.some((v) => v.field === field._id)) && (
