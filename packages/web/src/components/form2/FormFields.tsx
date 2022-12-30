@@ -219,6 +219,7 @@ export default function FormFields({
                   <div ref={provided.innerRef} {...provided.droppableProps}>
                     {fields?.map((field: any, index: number) => {
                       const expanded = isExpanded[index] || false;
+                      console.log(index);
                       return (
                         <>
                           <Draggable key={field._id} draggableId={field._id} index={index}>
