@@ -922,7 +922,7 @@ export function FormViewChild({
                                 <Tooltip
                                   title={`You can add multiple values for ${field?.label} field`}
                                 >
-                                  <u>add moree {field?.label}</u>
+                                  <u>add more {field?.label}</u>
                                   {/* <InfoOutlined className="ml-1" fontSize="small" /> */}
                                 </Tooltip>
                               </Typography>
