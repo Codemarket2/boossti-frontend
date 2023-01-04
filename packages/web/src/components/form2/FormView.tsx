@@ -984,25 +984,30 @@ export function FormViewChild({
                           </div>
                         </div>
                       </>
-                                            <DragDropContext onDragEnd={onDragEnd}>
+                      <DragDropContext onDragEnd={onDragEnd}>
                         <Droppable droppableId="saved-lists">
                           {(provided) => (
                             <div ref={provided.innerRef} {...provided.droppableProps}>
-                              {filterValues(values, field).map((value: any, valueIndex ) => {
+                              {filterValues(values, field).map((value: any, valueIndex) => {
                                 return (
                                   <>
-                                    <Draggable key={valueIndex} draggableId={`${valueIndex}`} index={valueIndex}>
+                                    <Draggable
+                                      key={valueIndex}
+                                      draggableId={`${valueIndex}`}
+                                      index={valueIndex}
+                                    >
                                       {(draggableProvided) => (
                                         <div
                                           ref={draggableProvided.innerRef}
                                           {...draggableProvided.draggableProps}
                                           {...draggableProvided.dragHandleProps}
                                         >
-                                          <div className="mt-3" key={valueIndex} >
-                                            {valueIndex !== filterValues(values, field)?.length - 1 && (
+                                          <div className="mt-3" key={valueIndex}>
+                                            {valueIndex !==
+                                              filterValues(values, field)?.length - 1 && (
                                               <>
                                                 {state.editValue?.fieldId === field._id &&
-                                                  state.editValue?.index === valueIndex ? (
+                                                state.editValue?.index === valueIndex ? (
                                                   <>
                                                     <div className="w-100">
                                                       {state.hideField ? (
@@ -1050,16 +1055,24 @@ export function FormViewChild({
                                                   <div className="mb-2 d-flex align-items-start">
                                                     <div className="w-100">
                                                       <DisplayValue value={value} field={field} />
-                                                      {validateValue(submitState.validate, value, field).error && (
+                                                      {validateValue(
+                                                        submitState.validate,
+                                                        value,
+                                                        field,
+                                                      ).error && (
                                                         <FormHelperText className="text-danger">
                                                           {
-                                                            validateValue(submitState.validate, value, field)
-                                                              .errorMessage
+                                                            validateValue(
+                                                              submitState.validate,
+                                                              value,
+                                                              field,
+                                                            ).errorMessage
                                                           }
                                                         </FormHelperText>
                                                       )}
                                                     </div>
-                                                    {state.showResponseDrawer === `${field?._id}-${value?._id}` &&
+                                                    {state.showResponseDrawer ===
+                                                      `${field?._id}-${value?._id}` &&
                                                       value?.response?._id && (
                                                         <ResponseDrawer
                                                           open
@@ -1101,7 +1114,9 @@ export function FormViewChild({
                                                       <Tooltip title="Delete Value">
                                                         <IconButton
                                                           edge="end"
-                                                          onClick={() => onRemoveOneValue(field._id, valueIndex)}
+                                                          onClick={() =>
+                                                            onRemoveOneValue(field._id, valueIndex)
+                                                          }
                                                         >
                                                           <DeleteIcon />
                                                         </IconButton>
@@ -1116,7 +1131,7 @@ export function FormViewChild({
                                       )}
                                     </Draggable>
                                   </>
-                                )
+                                );
                               })}
                               {provided.placeholder}
                             </div>
