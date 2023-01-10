@@ -495,7 +495,6 @@ export function FormViewChild({
       }),
     [tempFields, overrideValues],
   );
-
   const {
     uniqueBetweenMultipleValuesLoading,
     uniqueBetweenMultipleValuesError,
@@ -662,14 +661,20 @@ export function FormViewChild({
     return result;
   };
   function onDragEnd(result) {
+    const field = fields.find((item) => item._id === result.source.droppableId);
     if (!result.destination) {
       return;
     }
     if (result.destination.index === result.source.index) {
       return;
     }
-    const newFields = reorder(values, result.source.index, result.destination.index);
-    setValues(newFields);
+    const newFields = reorder(
+      filterValues(values, field),
+      result.source.index,
+      result.destination.index,
+    );
+    const finalValues = combineArrays(values, newFields);
+    setValues(finalValues);
   }
 
   const fieldProps = {
@@ -985,15 +990,15 @@ export function FormViewChild({
                         </div>
                       </>
                       <DragDropContext onDragEnd={onDragEnd}>
-                        <Droppable droppableId="saved-lists">
+                        <Droppable droppableId={field._id}>
                           {(provided) => (
                             <div ref={provided.innerRef} {...provided.droppableProps}>
                               {filterValues(values, field).map((value: any, valueIndex) => {
                                 return (
                                   <>
                                     <Draggable
-                                      key={valueIndex}
-                                      draggableId={`${valueIndex}`}
+                                      key={value._id}
+                                      draggableId={value._id}
                                       index={valueIndex}
                                     >
                                       {(draggableProvided) => (
@@ -1211,7 +1216,6 @@ export function FormViewChild({
 export const filterValues = (values, field) => {
   // const defaultFieldValue = field?.options?.defaultValue || {};
   let newValues = [{ ...defaultValue, field: field._id }];
-
   if (values.some((f) => f.field === field._id)) {
     if (field?.options?.multipleValues) {
       newValues = values.filter((f) => f.field === field._id);
@@ -1229,4 +1233,21 @@ export const filterValues = (values, field) => {
     }
     return { ...value, options: newOptions };
   });
+};
+
+export const combineArrays = (values, newFields) => {
+  const finalValues = values;
+  let newFeildsArray = newFields;
+  values.forEach((value, index) => {
+    const newFeildElement = newFeildsArray[0];
+    if (value.field === newFeildElement?.field) {
+      if (value._id === newFeildElement._id) {
+        newFeildsArray = newFeildsArray.filter((item) => item._id !== newFeildElement._id);
+      } else {
+        finalValues[index] = newFeildElement;
+        newFeildsArray = newFeildsArray.filter((item) => item._id !== newFeildElement._id);
+      }
+    }
+  });
+  return finalValues;
 };
