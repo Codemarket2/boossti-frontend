@@ -31,6 +31,7 @@ import EditFormDrawer from './EditFormDrawer';
 import CustomFormSettings from './CustomFormSettings';
 import StyleDrawer from '../style/StyleDrawer';
 import DisplaySettings from './DisplaySettings';
+import FieldConditionDrawer from './field/FieldConditionDrawer';
 
 export function convertToSlug(text: string): string {
   return text
@@ -47,6 +48,7 @@ const reorder = (list, startIndex, endIndex) => {
 };
 
 export const initialValues = {
+  editRules: null,
   showMenu: null,
   field: null,
   showForm: false,
@@ -368,6 +370,13 @@ export default function FormFields({
               </ListItemIcon>
               <ListItemText primary="Edit Style" />
             </MenuItem>
+
+            <MenuItem onClick={() => setState({ ...state, showMenu: false, editRules: true })}>
+              <ListItemIcon className="mr-n3">
+                <EditIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Rules" />
+            </MenuItem>
             <MenuItem onClick={() => setState({ ...state, showMenu: false, editGrid: true })}>
               <ListItemIcon className="mr-n3">
                 <GridIcon fontSize="small" />
@@ -402,6 +411,13 @@ export default function FormFields({
             )}
           </CRUDMenu>
         </>
+      )}
+      {state.editRules && (
+        <FieldConditionDrawer
+          open={state.editRules}
+          onClose={() => setState(initialValues)}
+          field={state.field}
+        />
       )}
       {state.editStyle && (
         <StyleDrawer
