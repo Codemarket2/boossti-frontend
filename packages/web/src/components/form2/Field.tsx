@@ -46,6 +46,7 @@ import Webpage from '../grapesjs/grapesOverlay';
 import DisplayValue from './DisplayValue';
 import ResponseDrawer from '../response/ResponseDrawer';
 import Signature from '../signature/Signature';
+import Card from '../card/Card';
 import CraftJSField from '../craftJS/craftJSField';
 import ConditionPart from './field/field-condition/ConditionPart';
 
@@ -327,6 +328,13 @@ export default function Field({
             value={value?.value || ''}
             onChange={(dataUrl) => onChange({ value: dataUrl })}
           />
+        </>
+      );
+    }
+    case 'card': {
+      return (
+        <>
+          <Card value={value?.value || ''} onChange={(card: string) => onChange({ value: card })} />
         </>
       );
     }
