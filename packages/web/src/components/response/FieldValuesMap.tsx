@@ -56,7 +56,6 @@ export default function FieldValuesMap({
 
   // const isDependantRelationship =
   //   !field?.options?.selectItem && field?.options?.dependentRelationship;
-
   return (
     <>
       {displayFieldLabel && (
@@ -105,7 +104,30 @@ export default function FieldValuesMap({
               <Fragment key={value?._id}>
                 {/* <StyledBox style={{ display: 'flex', alignContent: 'center' }}>
                 </StyledBox> */}
-                <DisplayValue field={field} value={value} verticalView={verticalView} />
+                {field.options.multipleValues && value.value !== '' ? (
+                  <>
+                    <Typography className="d-flex align-items-center" data-testid="fields-display">
+                      {authorized && !disabled && (
+                        <Tooltip title="Edit">
+                          <IconButton
+                            edge="end"
+                            onClick={() => {
+                              if (onClickEditField) {
+                                onClickEditField(field?._id);
+                              }
+                            }}
+                            size="small"
+                          >
+                            <EditIcon fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                      )}
+                    </Typography>
+                    <DisplayValue field={field} value={value} verticalView={verticalView} />
+                  </>
+                ) : (
+                  <DisplayValue field={field} value={value} verticalView={verticalView} />
+                )}
                 {verticalView && (
                   <>
                     {field?.options?.showCommentBox && <CommentLikeShare threadId={value?._id} />}
