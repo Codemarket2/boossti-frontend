@@ -114,6 +114,10 @@ type SignatureType = {
   label: 'Signature';
   value: 'signature';
 };
+type CardType = {
+  label: 'Card';
+  value: 'card';
+};
 type CraftJs = {
   label: 'CraftJS';
   value: 'craftjs';
@@ -147,6 +151,7 @@ export type TFieldType =
   | ConditionType
   | SignatureType
   | Webpage
+  | CardType
   | CraftJs;
 
 export const getFormFieldTypes = (isWidget: boolean): TFieldType[] => {
@@ -190,5 +195,6 @@ export const fieldTypes: TFieldType[] = [
   { label: 'Condition', value: 'condition' },
   { label: 'Webpage', value: 'webpage' },
   { label: 'Signature', value: 'signature' },
+  { label: 'Card', value: 'card' },
   { label: 'CraftJS', value: 'craftjs' },
 ];

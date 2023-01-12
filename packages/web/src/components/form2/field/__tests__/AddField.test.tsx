@@ -386,7 +386,7 @@ describe('Selecting Form Field Type (label : Field Type*)', () => {
     expect(selectedFieldType).toBeFalsy();
   });
 
-  test('should have 27 types of fields', async () => {
+  test('should have 28 types of fields', async () => {
     render(<AddField {...getAppFieldMockProps()} />);
 
     const SelectComponent = getFieldTypeComponent();
@@ -400,7 +400,7 @@ describe('Selecting Form Field Type (label : Field Type*)', () => {
     const Menu = within(document.getElementById('fieldType-menu')).getByRole('listbox');
     const options = within(Menu).getAllByRole('option');
 
-    const TOTAL_OPTIONS = 27;
+    const TOTAL_OPTIONS = 28;
     expect(options).toHaveLength(TOTAL_OPTIONS);
   });
 

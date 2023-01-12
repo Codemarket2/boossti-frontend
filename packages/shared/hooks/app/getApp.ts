@@ -127,7 +127,6 @@ export const useGetApp = () => {
       if (domain?.includes('localhost')) {
         domain = process.env.NEXT_PUBLIC_APP_DOMAIN;
       }
-
       getApp(domain);
     }
     setLoading(false);
