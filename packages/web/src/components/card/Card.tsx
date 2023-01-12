@@ -1,5 +1,5 @@
 /* eslint-disable no-unneeded-ternary */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -17,15 +17,6 @@ export interface ICard {
   name: string;
   number: string | number;
 }
-
-// const demoCardState = {
-//   cvc: '501',
-//   expiry: '05/27',
-//   focused: undefined,
-//   name: 'John Doe',
-//   number: '4532523851543181',
-// };
-
 interface IError {
   isError: boolean;
   message: string;
@@ -66,6 +57,28 @@ export default function Card({ value, onChange }: IProps) {
     number: getInitialError(),
   });
 
+  useEffect(() => {
+    if (value) {
+      const data: any = JSON.parse(value);
+      setCardState((prev) => {
+        return {
+          ...prev,
+          cvc: parseInt(data.cvc, 10),
+          expiry: data.expiry,
+          name: data.name,
+          number: parseInt(data.number, 10),
+        };
+      });
+      setSubmitState('success');
+      setCardError({
+        cvc: getInitialError(),
+        expiry: getInitialError(),
+        name: getInitialError(),
+        number: getInitialError(),
+      });
+    }
+  }, []);
+
   const handleInputFocus = (e: any) =>
     setCardState((prev) => {
       return { ...prev, focused: e.target.name };
@@ -78,6 +91,7 @@ export default function Card({ value, onChange }: IProps) {
     const numberRegExp = /^[0-9]{16}$/i;
     const cvcRegExp = /^[0-9]{3}$/i;
     const expiryRegExp = /^0[1-9]|1[0-2]\/[0-9][0-9]$/i;
+    const nameRegExp = /^[a-zA-Z ]{2,30}$/;
 
     switch (name) {
       case 'number':
@@ -127,10 +141,36 @@ export default function Card({ value, onChange }: IProps) {
         setCardState((prev) => {
           return { ...prev, name: val };
         });
+        if (!nameRegExp.test(val)) {
+          setCardError((prev) => {
+            return { ...prev, name: { isError: true, message: 'Enter appropriate name' } };
+          });
+        } else {
+          setCardError((prev) => {
+            return { ...prev, name: { isError: false, message: '' } };
+          });
+        }
         break;
       default:
         break;
     }
+  };
+
+  const handleReset = () => {
+    setCardState({
+      cvc: '',
+      expiry: '',
+      focused: undefined,
+      name: '',
+      number: '',
+    });
+    setSubmitState('primary');
+    setCardError({
+      cvc: getInitialError(),
+      expiry: getInitialError(),
+      name: getInitialError(),
+      number: getInitialError(),
+    });
   };
 
   const handleCardSubmit = (e: any) => {
@@ -192,6 +232,7 @@ export default function Card({ value, onChange }: IProps) {
             pr: '1rem',
           }}
           onSubmit={handleCardSubmit}
+          onReset={handleReset}
           noValidate
           className=""
           autoComplete="off"
@@ -204,6 +245,9 @@ export default function Card({ value, onChange }: IProps) {
               id="outlined-required"
               label="Card Number"
               placeholder="XXXX-XXXX-XXXX-XXXX"
+              InputProps={{
+                readOnly: submitState === 'success' ? true : false,
+              }}
               error={cardError.number.isError}
               helperText={cardError.number.isError ? cardError.number.message : null}
               onFocus={handleInputFocus}
@@ -216,7 +260,11 @@ export default function Card({ value, onChange }: IProps) {
               type="text"
               id="outlined-required"
               label="Name"
+              InputProps={{
+                readOnly: submitState === 'success' ? true : false,
+              }}
               error={cardError.name.isError}
+              helperText={cardError.name.isError ? cardError.name.message : null}
               onFocus={handleInputFocus}
               value={cardState.name}
               onChange={handleInputChange}
@@ -230,6 +278,9 @@ export default function Card({ value, onChange }: IProps) {
                 id="outlined-required"
                 label="Expiry"
                 placeholder="MM/YY"
+                InputProps={{
+                  readOnly: submitState === 'success' ? true : false,
+                }}
                 helperText={cardError.expiry.isError ? cardError.expiry.message : null}
                 error={cardError.expiry.isError}
                 onFocus={handleInputFocus}
@@ -242,6 +293,9 @@ export default function Card({ value, onChange }: IProps) {
                 type="number"
                 id="outlined-required"
                 label="CVV"
+                InputProps={{
+                  readOnly: submitState === 'success' ? true : false,
+                }}
                 helperText={cardError.cvc.isError ? cardError.cvc.message : null}
                 error={cardError.cvc.isError}
                 onFocus={handleInputFocus}
@@ -255,16 +309,24 @@ export default function Card({ value, onChange }: IProps) {
                   cardError.cvc.isError ||
                   cardError.number.isError ||
                   cardError.expiry.isError ||
-                  cardError.name.isError
+                  cardError.name.isError ||
+                  submitState === 'success'
                     ? true
                     : false
                 }
                 type="submit"
                 color={submitState}
-                sx={{ mt: '0.25rem', width: '8rem' }}
-                variant="outlined"
+                sx={{ mt: '0.25rem', width: '8.75rem' }}
+                variant="contained"
               >
                 Submit
+              </Button>
+              <Button
+                type="reset"
+                sx={{ mt: '0.25rem', width: '8.75rem', ml: '0.5rem', backgroundColor: 'seagreen' }}
+                variant="contained"
+              >
+                Reset
               </Button>
             </Box>
           </div>

@@ -22,6 +22,7 @@ import GrapesOverlay from '../grapesjs/grapesOverlay';
 import DisplaySignature from '../signature/DisplaySignature';
 import { PageViewerOverlayBtn as CraftsJSPageViewer } from '../craftJS/craftJSPageViewer';
 import DisplayResponseById from '../response/DisplayResponseById';
+import DisplayCard from '../card/DisplayCard';
 
 interface IProps {
   field: Partial<IField>;
@@ -226,6 +227,8 @@ export default function DisplayValue({
       );
     case 'signature':
       return <DisplaySignature value={value?.value} />;
+    case 'card':
+      return <DisplayCard value={value?.value} />;
     case 'formField':
       return (
         <div>
