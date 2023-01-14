@@ -2,18 +2,21 @@ export const features = {
   items: [
     {
       icon: 'fas fa-bolt',
-      title: 'Fast',
-      subtitle: 'Instead of constantly worrying about when your home will be in demand',
+      title: 'Why Online',
+      subtitle:
+        'The retail sales through e-commerce escalated to $5717 billion in 2022 and it is expected to reach $8148 billion in 2026.. So convert your business to online before your competitor does it.',
     },
     {
       icon: 'fas fa-puzzle-piece',
-      title: 'Integrity',
-      subtitle: 'Instead of constantly worrying about when your home will be in demand',
+      title: 'For StartUps',
+      subtitle:
+        'Turn your app idea into a working prototype in days. Then share it with internal teams and investors. Bypass your internal development teams and get your apps built fast. Never get stung by spiralling costs.',
     },
     {
       icon: 'fas fa-bullseye',
-      title: 'Targeted',
-      subtitle: 'Instead of constantly worrying about when your home will be in demand',
+      title: 'For Large Companies',
+      subtitle:
+        'Manage your team`s workload with a fully customizable point system. Roll up points from subtasks, break them out by assignee, and easily sort them to track your workspace at a glance',
     },
     {
       icon: 'fas fa-bullhorn',

@@ -69,15 +69,14 @@ const Hero = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
               titleVariant="h3"
               title={
                 <span className={classes.textWhite}>
-                  Designed secure.
+                  Build Applications faster than ever !
                   <br />
-                  Built for anything.
+                  Get Started Now,
                 </span>
               }
               subtitle={
                 <span className={classes.textWhite}>
-                  Forward thinking businesses use our cloud backup service to ensure data
-                  reliability and safety.
+                  Grab the online customers to increase your revenue…. Sell online and offline
                 </span>
               }
               ctaGroup={[
