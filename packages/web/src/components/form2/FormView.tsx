@@ -30,7 +30,7 @@ import {
   useResolveCondition,
 } from '@frontend/shared/hooks/response';
 import { validateResponse, validateValue } from '@frontend/shared/utils/validate';
-import { IValue } from '@frontend/shared/types';
+import { IValue, IResponse } from '@frontend/shared/types';
 import { IField, IForm } from '@frontend/shared/types/form';
 
 // OTHERS
@@ -59,6 +59,7 @@ import FieldUnique from './field/FieldUnique';
 import UniqueMultipleValue from './field/UniqueMultipleValue';
 import DisplayResponseById from '../response/DisplayResponseById';
 import FormFields from './FormFields';
+import FieldValuesMap from '../response/FieldValuesMap';
 
 interface FormViewWrapperProps {
   form: IForm;
@@ -239,6 +240,7 @@ export default function FormView({
 
   const FVC = (
     <FormViewChild
+      responseForm={null}
       overrideValues={overrideValues}
       authRequired={form?.settings?.whoCanSubmit !== 'all'}
       fields={form?.fields}
@@ -419,6 +421,10 @@ export interface FormViewChildProps {
   responseId?: string;
   form?: any;
   inlineEdit?: boolean;
+  inlineEditFieldId?: string;
+  inlineEditValueId?: string;
+  authorized?: boolean;
+  responseForm: IResponse;
   overrideValues?: IValue[];
   showMessage?: (response) => void;
 }
@@ -430,7 +436,11 @@ const initialSubmitState = {
 };
 
 export function FormViewChild({
-  inlineEdit = false,
+  inlineEdit,
+  inlineEditFieldId,
+  inlineEditValueId,
+  authorized,
+  responseForm,
   fields: tempFields,
   handleSubmit,
   loading,
@@ -887,90 +897,195 @@ export function FormViewChild({
                 >
                   <div style={field?.options?.style || {}}>
                     <InputGroup key={field._id}>
-                      {!['label'].includes(field.fieldType) && (
-                        <Typography data-testid="text-danger">
-                          {fieldIndex + 1}. {field?.label}
-                          {field?.options?.required && <span className="text-danger">*</span>}
-                          <DisplayConstraintError
-                            fields={fields}
-                            fieldId={field._id}
-                            constraintErrors={constraintErrors}
-                            constraintsLoading={constraintsLoading}
-                          />
-                          {field?.options?.unique && (
-                            <FieldUnique
-                              existingResponseId={unique}
-                              uniqueLoading={uniqueLoading}
-                            />
-                          )}
-                          {field?.options?.multipleValues &&
-                            field?.options?.uniqueBetweenMultipleValues && (
-                              <UniqueMultipleValue
-                                loading={uniqueBetweenMultipleValuesLoading}
-                                error={uniqueBetweenMultipleValuesError}
-                                field={field}
+                      {!inlineEdit && (
+                        <>
+                          {!['label'].includes(field.fieldType) && (
+                            <Typography data-testid="text-danger">
+                              {fieldIndex + 1}. {field?.label}
+                              {field?.options?.required && <span className="text-danger">*</span>}
+                              <DisplayConstraintError
+                                fields={fields}
+                                fieldId={field._id}
+                                constraintErrors={constraintErrors}
+                                constraintsLoading={constraintsLoading}
                               />
-                            )}
-                          {field?.options?.multipleValues && (
-                            <div data-testid="addOneMoreValue">
-                              <Typography
-                                className="my-2"
-                                style={{ cursor: 'pointer' }}
-                                onClick={() => {
-                                  if (field?.fieldType === 'richTextarea') {
-                                    setState((oldState) => ({ ...oldState, hideField: true }));
-                                  }
-                                  onAddOneMoreValue(field);
-                                }}
-                              >
-                                <AddIcon fontSize="small" />
-                                <Tooltip
-                                  title={`You can add multiple values for ${field?.label} field`}
-                                >
-                                  <u>add more {field?.label}</u>
-                                  {/* <InfoOutlined className="ml-1" fontSize="small" /> */}
-                                </Tooltip>
-                              </Typography>
-                            </div>
+                              {field?.options?.unique && (
+                                <FieldUnique
+                                  existingResponseId={unique}
+                                  uniqueLoading={uniqueLoading}
+                                />
+                              )}
+                              {field?.options?.multipleValues &&
+                                field?.options?.uniqueBetweenMultipleValues && (
+                                  <UniqueMultipleValue
+                                    loading={uniqueBetweenMultipleValuesLoading}
+                                    error={uniqueBetweenMultipleValuesError}
+                                    field={field}
+                                  />
+                                )}
+                              {field?.options?.multipleValues && (
+                                <div data-testid="addOneMoreValue">
+                                  <Typography
+                                    className="my-2"
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={() => {
+                                      if (field?.fieldType === 'richTextarea') {
+                                        setState((oldState) => ({ ...oldState, hideField: true }));
+                                      }
+                                      onAddOneMoreValue(field);
+                                    }}
+                                  >
+                                    <AddIcon fontSize="small" />
+                                    <Tooltip
+                                      title={`You can add multiple values for ${field?.label} field`}
+                                    >
+                                      <u>add more {field?.label}</u>
+                                      {/* <InfoOutlined className="ml-1" fontSize="small" /> */}
+                                    </Tooltip>
+                                  </Typography>
+                                </div>
+                              )}
+                            </Typography>
                           )}
-                        </Typography>
+                        </>
                       )}
-                      {field?.options?.systemCalculatedAndView && (
-                        <div className="mb-2">
-                          <DisplayFormula formula={field?.options?.formula} fields={fields} />
-                        </div>
-                      )}
-                      <>
-                        <div className="w-100">
-                          <div data-testid="field">
-                            {state.hideField ? (
-                              <Skeleton height={200} />
-                            ) : (
-                              <Field
-                                {...fieldProps}
-                                rules={rules?.[field?._id]}
-                                field={{
-                                  ...field,
-                                  label: `${field?.label} ${field?.options?.required ? '*' : ''}`,
-                                }}
-                                disabled={
-                                  edit && field.options.notEditable
-                                    ? submitState.loading || field.options.notEditable
-                                    : submitState.loading ||
-                                      field.options.systemCalculatedAndView ||
-                                      (field?.options?.disabled && !enabledFields?.[field?._id])
-                                }
-                                validate={submitState.validate}
-                                onChangeValue={(changedValue) => {
-                                  if (!field?.options?.systemCalculatedAndView) {
-                                    onChange(
-                                      { ...changedValue, field: field._id },
-                                      filterValues(values, field)?.length - 1,
-                                    );
-                                  }
-                                }}
-                                value={
-                                  field.options.systemCalculatedAndView
+                      {inlineEdit ? (
+                        <>
+                          {inlineEditFieldId === field?._id ? (
+                            <>
+                              {!['label'].includes(field.fieldType) && (
+                                <Typography data-testid="text-danger">
+                                  {fieldIndex + 1}. {field?.label}
+                                  {field?.options?.required && (
+                                    <span className="text-danger">*</span>
+                                  )}
+                                  <DisplayConstraintError
+                                    fields={fields}
+                                    fieldId={field._id}
+                                    constraintErrors={constraintErrors}
+                                    constraintsLoading={constraintsLoading}
+                                  />
+                                  {field?.options?.unique && (
+                                    <FieldUnique
+                                      existingResponseId={unique}
+                                      uniqueLoading={uniqueLoading}
+                                    />
+                                  )}
+                                  {field?.options?.multipleValues &&
+                                    field?.options?.uniqueBetweenMultipleValues && (
+                                      <UniqueMultipleValue
+                                        loading={uniqueBetweenMultipleValuesLoading}
+                                        error={uniqueBetweenMultipleValuesError}
+                                        field={field}
+                                      />
+                                    )}
+                                  {field?.options?.multipleValues && inlineEditValueId === '' && (
+                                    <div data-testid="addOneMoreValue">
+                                      <Typography
+                                        className="my-2"
+                                        style={{ cursor: 'pointer' }}
+                                        onClick={() => {
+                                          if (field?.fieldType === 'richTextarea') {
+                                            setState((oldState) => ({
+                                              ...oldState,
+                                              hideField: true,
+                                            }));
+                                          }
+                                          onAddOneMoreValue(field);
+                                        }}
+                                      >
+                                        <AddIcon fontSize="small" />
+                                        <Tooltip
+                                          title={`You can add multiple values for ${field?.label} field`}
+                                        >
+                                          <u>add more {field?.label}</u>
+                                          {/* <InfoOutlined className="ml-1" fontSize="small" /> */}
+                                        </Tooltip>
+                                      </Typography>
+                                    </div>
+                                  )}
+                                  {formView === 'oneField' && (
+                                    <div className="w-100 d-flex justify-content-between my-2">
+                                      <div data-testid="backButton">
+                                        {state.page > 0 && (
+                                          <Button
+                                            variant="outlined"
+                                            size="small"
+                                            startIcon={<ArrowBackIosRounded fontSize="small" />}
+                                            onClick={() => handlePageChange(state.page - 1)}
+                                          >
+                                            Back
+                                          </Button>
+                                        )}
+                                      </div>
+                                      {state.page !== fields?.length - 1 ? (
+                                        <div data-testid="nextButton">
+                                          <Button
+                                            variant="outlined"
+                                            size="small"
+                                            disabled={
+                                              uniqueBetweenMultipleValuesError?.length > 0 ||
+                                              uniqueBetweenMultipleValuesLoading ||
+                                              unique ||
+                                              uniqueLoading
+                                            }
+                                            endIcon={<ArrowForwardIosRounded fontSize="small" />}
+                                            onClick={() => {
+                                              setSubmitState({ ...submitState, loading: true });
+                                              let validate = false;
+                                              values
+                                                .filter(
+                                                  (value) => value.field === fields[state.page]._id,
+                                                )
+                                                ?.forEach((tempValue) => {
+                                                  if (
+                                                    validateValue(true, tempValue, {
+                                                      ...fields[state.page],
+                                                    }).error
+                                                  ) {
+                                                    validate = true;
+                                                  }
+                                                });
+                                              setSubmitState({
+                                                ...submitState,
+                                                validate,
+                                                loading: false,
+                                              });
+                                              if (!validate) {
+                                                handlePageChange(state.page + 1);
+                                              }
+                                            }}
+                                          >
+                                            Next
+                                          </Button>
+                                        </div>
+                                      ) : (
+                                        <>{SubmitButtonComponent}</>
+                                      )}
+                                    </div>
+                                  )}
+                                  {formView !== 'oneField' && (
+                                    <Grid item xs={12}>
+                                      <InputGroup style={{ display: 'flex' }}>
+                                        {SubmitButtonComponent}
+                                        {CancelButton}
+                                      </InputGroup>
+                                    </Grid>
+                                  )}
+                                </Typography>
+                              )}
+                              {field?.options?.systemCalculatedAndView && (
+                                <div className="mb-2">
+                                  <DisplayFormula
+                                    formula={field?.options?.formula}
+                                    fields={fields}
+                                  />
+                                </div>
+                              )}
+                              {inlineEditValueId !== '' ? (
+                                <>
+                                  {' '}
+                                  {(field.options.systemCalculatedAndView
                                     ? {
                                         valueNumber: evaluateFormula(
                                           getFormula(
@@ -983,228 +1098,795 @@ export function FormViewChild({
                                     : filterValues(values, field)[
                                         filterValues(values, field)?.length - 1
                                       ]
-                                }
+                                  )?.value !== '' && (
+                                    <>
+                                      <div className="w-100">
+                                        <div data-testid="field">
+                                          {state.hideField ? (
+                                            <Skeleton height={200} />
+                                          ) : (
+                                            <Field
+                                              {...fieldProps}
+                                              rules={rules?.[field?._id]}
+                                              field={{
+                                                ...field,
+                                                label: `${field?.label} ${
+                                                  field?.options?.required ? '*' : ''
+                                                }`,
+                                              }}
+                                              disabled={
+                                                edit && field.options.notEditable
+                                                  ? submitState.loading || field.options.notEditable
+                                                  : submitState.loading ||
+                                                    field.options.systemCalculatedAndView ||
+                                                    (field?.options?.disabled &&
+                                                      !enabledFields?.[field?._id])
+                                              }
+                                              validate={submitState.validate}
+                                              onChangeValue={(changedValue) => {
+                                                if (!field?.options?.systemCalculatedAndView) {
+                                                  onChange(
+                                                    { ...changedValue, field: field._id },
+                                                    filterValues(values, field)?.length - 1,
+                                                  );
+                                                }
+                                              }}
+                                              value={
+                                                field.options.systemCalculatedAndView
+                                                  ? {
+                                                      valueNumber: evaluateFormula(
+                                                        getFormula(
+                                                          field?.options?.formula?.variables,
+                                                          [],
+                                                          values,
+                                                        ),
+                                                      ),
+                                                    }
+                                                  : filterValues(values, field)[
+                                                      filterValues(values, field)?.length - 1
+                                                    ]
+                                              }
+                                            />
+                                          )}
+                                        </div>
+                                      </div>
+                                    </>
+                                  )}
+                                  <DragDropContext onDragEnd={onDragEnd}>
+                                    <Droppable droppableId={field._id}>
+                                      {(provided) => (
+                                        <div ref={provided.innerRef} {...provided.droppableProps}>
+                                          {filterValues(values, field).map(
+                                            (value: any, valueIndex) => {
+                                              return (
+                                                <>
+                                                  <Draggable
+                                                    key={value._id}
+                                                    draggableId={value._id}
+                                                    index={valueIndex}
+                                                  >
+                                                    {(draggableProvided) => (
+                                                      <div
+                                                        ref={draggableProvided.innerRef}
+                                                        {...draggableProvided.draggableProps}
+                                                        {...draggableProvided.dragHandleProps}
+                                                      >
+                                                        <div className="mt-3" key={valueIndex}>
+                                                          {valueIndex !==
+                                                            filterValues(values, field)?.length -
+                                                              1 && (
+                                                            <>
+                                                              {state.editValue?.fieldId ===
+                                                                field._id &&
+                                                              state.editValue?.index ===
+                                                                valueIndex ? (
+                                                                <>
+                                                                  <div className="w-100">
+                                                                    {state.hideField ? (
+                                                                      <Skeleton height={200} />
+                                                                    ) : (
+                                                                      <Field
+                                                                        {...fieldProps}
+                                                                        rules={rules?.[field?._id]}
+                                                                        field={{
+                                                                          ...field,
+                                                                          label: field?.options
+                                                                            ?.required
+                                                                            ? `${field?.label}*`
+                                                                            : field?.label,
+                                                                        }}
+                                                                        disabled={
+                                                                          submitState.loading
+                                                                        }
+                                                                        onChangeValue={(
+                                                                          changedValue,
+                                                                        ) =>
+                                                                          onChange(
+                                                                            {
+                                                                              ...changedValue,
+                                                                              field: field._id,
+                                                                            },
+                                                                            valueIndex,
+                                                                          )
+                                                                        }
+                                                                        value={value}
+                                                                      />
+                                                                    )}
+                                                                  </div>
+                                                                  <Button
+                                                                    className="my-2"
+                                                                    size="small"
+                                                                    color="primary"
+                                                                    variant="contained"
+                                                                    onClick={() =>
+                                                                      setState((oldState) => ({
+                                                                        ...oldState,
+                                                                        editValue: {
+                                                                          fieldId: null,
+                                                                          index: null,
+                                                                        },
+                                                                      }))
+                                                                    }
+                                                                  >
+                                                                    Save
+                                                                  </Button>
+                                                                </>
+                                                              ) : (
+                                                                <div className="mb-2 d-flex align-items-start">
+                                                                  <div className="w-100">
+                                                                    <DisplayValue
+                                                                      value={value}
+                                                                      field={field}
+                                                                    />
+                                                                    {validateValue(
+                                                                      submitState.validate,
+                                                                      value,
+                                                                      field,
+                                                                    ).error && (
+                                                                      <FormHelperText className="text-danger">
+                                                                        {
+                                                                          validateValue(
+                                                                            submitState.validate,
+                                                                            value,
+                                                                            field,
+                                                                          ).errorMessage
+                                                                        }
+                                                                      </FormHelperText>
+                                                                    )}
+                                                                  </div>
+                                                                  {state.showResponseDrawer ===
+                                                                    `${field?._id}-${value?._id}` &&
+                                                                    value?.response?._id && (
+                                                                      <ResponseDrawer
+                                                                        open
+                                                                        onClose={() =>
+                                                                          setState((oldState) => ({
+                                                                            ...oldState,
+                                                                            showResponseDrawer: '',
+                                                                          }))
+                                                                        }
+                                                                        responseId={
+                                                                          value?.response?._id
+                                                                        }
+                                                                      />
+                                                                    )}
+                                                                  {value._id ===
+                                                                    inlineEditValueId && (
+                                                                    <>
+                                                                      <Tooltip title="Edit Value">
+                                                                        <IconButton
+                                                                          onClick={() => {
+                                                                            if (
+                                                                              field?.fieldType ===
+                                                                                'response' &&
+                                                                              !field?.options
+                                                                                ?.selectItem
+                                                                            ) {
+                                                                              setState(
+                                                                                (oldState) => ({
+                                                                                  ...oldState,
+                                                                                  showResponseDrawer: `${field?._id}-${value?._id}`,
+                                                                                }),
+                                                                              );
+                                                                            } else {
+                                                                              setState(
+                                                                                (oldState) => ({
+                                                                                  ...oldState,
+                                                                                  editValue: {
+                                                                                    fieldId:
+                                                                                      field._id,
+                                                                                    index: valueIndex,
+                                                                                  },
+                                                                                }),
+                                                                              );
+                                                                            }
+                                                                          }}
+                                                                        >
+                                                                          <EditIcon />
+                                                                        </IconButton>
+                                                                      </Tooltip>
+                                                                      {!value?.options
+                                                                        ?.defaultWidget && (
+                                                                        <Tooltip title="Delete Value">
+                                                                          <IconButton
+                                                                            edge="end"
+                                                                            onClick={() =>
+                                                                              onRemoveOneValue(
+                                                                                field._id,
+                                                                                valueIndex,
+                                                                              )
+                                                                            }
+                                                                          >
+                                                                            <DeleteIcon />
+                                                                          </IconButton>
+                                                                        </Tooltip>
+                                                                      )}
+                                                                    </>
+                                                                  )}
+                                                                </div>
+                                                              )}
+                                                            </>
+                                                          )}
+                                                        </div>
+                                                      </div>
+                                                    )}
+                                                  </Draggable>
+                                                </>
+                                              );
+                                            },
+                                          )}
+                                          {provided.placeholder}
+                                        </div>
+                                      )}
+                                    </Droppable>
+                                  </DragDropContext>
+                                </>
+                              ) : (
+                                <>
+                                  <div className="w-100">
+                                    <div data-testid="field">
+                                      {state.hideField ? (
+                                        <Skeleton height={200} />
+                                      ) : (
+                                        <Field
+                                          {...fieldProps}
+                                          rules={rules?.[field?._id]}
+                                          field={{
+                                            ...field,
+                                            label: `${field?.label} ${
+                                              field?.options?.required ? '*' : ''
+                                            }`,
+                                          }}
+                                          disabled={
+                                            edit && field.options.notEditable
+                                              ? submitState.loading || field.options.notEditable
+                                              : submitState.loading ||
+                                                field.options.systemCalculatedAndView ||
+                                                (field?.options?.disabled &&
+                                                  !enabledFields?.[field?._id])
+                                          }
+                                          validate={submitState.validate}
+                                          onChangeValue={(changedValue) => {
+                                            if (!field?.options?.systemCalculatedAndView) {
+                                              onChange(
+                                                { ...changedValue, field: field._id },
+                                                filterValues(values, field)?.length - 1,
+                                              );
+                                            }
+                                          }}
+                                          value={
+                                            field.options.systemCalculatedAndView
+                                              ? {
+                                                  valueNumber: evaluateFormula(
+                                                    getFormula(
+                                                      field?.options?.formula?.variables,
+                                                      [],
+                                                      values,
+                                                    ),
+                                                  ),
+                                                }
+                                              : filterValues(values, field)[
+                                                  filterValues(values, field)?.length - 1
+                                                ]
+                                          }
+                                        />
+                                      )}
+                                    </div>
+                                  </div>
+                                  <DragDropContext onDragEnd={onDragEnd}>
+                                    <Droppable droppableId={field._id}>
+                                      {(provided) => (
+                                        <div ref={provided.innerRef} {...provided.droppableProps}>
+                                          {filterValues(values, field).map(
+                                            (value: any, valueIndex) => {
+                                              return (
+                                                <>
+                                                  <Draggable
+                                                    key={value._id}
+                                                    draggableId={value._id}
+                                                    index={valueIndex}
+                                                  >
+                                                    {(draggableProvided) => (
+                                                      <div
+                                                        ref={draggableProvided.innerRef}
+                                                        {...draggableProvided.draggableProps}
+                                                        {...draggableProvided.dragHandleProps}
+                                                      >
+                                                        <div className="mt-3" key={valueIndex}>
+                                                          {valueIndex !==
+                                                            filterValues(values, field)?.length -
+                                                              1 && (
+                                                            <>
+                                                              {state.editValue?.fieldId ===
+                                                                field._id &&
+                                                              state.editValue?.index ===
+                                                                valueIndex ? (
+                                                                <>
+                                                                  <div className="w-100">
+                                                                    {state.hideField ? (
+                                                                      <Skeleton height={200} />
+                                                                    ) : (
+                                                                      <Field
+                                                                        {...fieldProps}
+                                                                        rules={rules?.[field?._id]}
+                                                                        field={{
+                                                                          ...field,
+                                                                          label: field?.options
+                                                                            ?.required
+                                                                            ? `${field?.label}*`
+                                                                            : field?.label,
+                                                                        }}
+                                                                        disabled={
+                                                                          submitState.loading
+                                                                        }
+                                                                        onChangeValue={(
+                                                                          changedValue,
+                                                                        ) =>
+                                                                          onChange(
+                                                                            {
+                                                                              ...changedValue,
+                                                                              field: field._id,
+                                                                            },
+                                                                            valueIndex,
+                                                                          )
+                                                                        }
+                                                                        value={value}
+                                                                      />
+                                                                    )}
+                                                                  </div>
+                                                                  <Button
+                                                                    className="my-2"
+                                                                    size="small"
+                                                                    color="primary"
+                                                                    variant="contained"
+                                                                    onClick={() =>
+                                                                      setState((oldState) => ({
+                                                                        ...oldState,
+                                                                        editValue: {
+                                                                          fieldId: null,
+                                                                          index: null,
+                                                                        },
+                                                                      }))
+                                                                    }
+                                                                  >
+                                                                    Save
+                                                                  </Button>
+                                                                </>
+                                                              ) : (
+                                                                <div className="mb-2 d-flex align-items-start">
+                                                                  <div className="w-100">
+                                                                    <DisplayValue
+                                                                      value={value}
+                                                                      field={field}
+                                                                    />
+                                                                    {validateValue(
+                                                                      submitState.validate,
+                                                                      value,
+                                                                      field,
+                                                                    ).error && (
+                                                                      <FormHelperText className="text-danger">
+                                                                        {
+                                                                          validateValue(
+                                                                            submitState.validate,
+                                                                            value,
+                                                                            field,
+                                                                          ).errorMessage
+                                                                        }
+                                                                      </FormHelperText>
+                                                                    )}
+                                                                  </div>
+                                                                  {state.showResponseDrawer ===
+                                                                    `${field?._id}-${value?._id}` &&
+                                                                    value?.response?._id && (
+                                                                      <ResponseDrawer
+                                                                        open
+                                                                        onClose={() =>
+                                                                          setState((oldState) => ({
+                                                                            ...oldState,
+                                                                            showResponseDrawer: '',
+                                                                          }))
+                                                                        }
+                                                                        responseId={
+                                                                          value?.response?._id
+                                                                        }
+                                                                      />
+                                                                    )}
+                                                                  {inlineEditValueId !== '' && (
+                                                                    <>
+                                                                      <Tooltip title="Edit Value">
+                                                                        <IconButton
+                                                                          onClick={() => {
+                                                                            if (
+                                                                              field?.fieldType ===
+                                                                                'response' &&
+                                                                              !field?.options
+                                                                                ?.selectItem
+                                                                            ) {
+                                                                              setState(
+                                                                                (oldState) => ({
+                                                                                  ...oldState,
+                                                                                  showResponseDrawer: `${field?._id}-${value?._id}`,
+                                                                                }),
+                                                                              );
+                                                                            } else {
+                                                                              setState(
+                                                                                (oldState) => ({
+                                                                                  ...oldState,
+                                                                                  editValue: {
+                                                                                    fieldId:
+                                                                                      field._id,
+                                                                                    index: valueIndex,
+                                                                                  },
+                                                                                }),
+                                                                              );
+                                                                            }
+                                                                          }}
+                                                                        >
+                                                                          <EditIcon />
+                                                                        </IconButton>
+                                                                      </Tooltip>
+                                                                      {!value?.options
+                                                                        ?.defaultWidget && (
+                                                                        <Tooltip title="Delete Value">
+                                                                          <IconButton
+                                                                            edge="end"
+                                                                            onClick={() =>
+                                                                              onRemoveOneValue(
+                                                                                field._id,
+                                                                                valueIndex,
+                                                                              )
+                                                                            }
+                                                                          >
+                                                                            <DeleteIcon />
+                                                                          </IconButton>
+                                                                        </Tooltip>
+                                                                      )}
+                                                                    </>
+                                                                  )}
+                                                                </div>
+                                                              )}
+                                                            </>
+                                                          )}
+                                                        </div>
+                                                      </div>
+                                                    )}
+                                                  </Draggable>
+                                                </>
+                                              );
+                                            },
+                                          )}
+                                          {provided.placeholder}
+                                        </div>
+                                      )}
+                                    </Droppable>
+                                  </DragDropContext>
+                                </>
+                              )}
+                            </>
+                          ) : (
+                            <>
+                              <FieldValuesMap
+                                authorized={authorized}
+                                displayFieldLabel
+                                verticalView
+                                field={field}
+                                response={responseForm}
+                                showEdit={false}
                               />
-                            )}
-                          </div>
-                        </div>
-                      </>
-                      <DragDropContext onDragEnd={onDragEnd}>
-                        <Droppable droppableId={field._id}>
-                          {(provided) => (
-                            <div ref={provided.innerRef} {...provided.droppableProps}>
-                              {filterValues(values, field).map((value: any, valueIndex) => {
-                                return (
-                                  <>
-                                    <Draggable
-                                      key={value._id}
-                                      draggableId={value._id}
-                                      index={valueIndex}
-                                    >
-                                      {(draggableProvided) => (
-                                        <div
-                                          ref={draggableProvided.innerRef}
-                                          {...draggableProvided.draggableProps}
-                                          {...draggableProvided.dragHandleProps}
+                            </>
+                          )}
+                        </>
+                      ) : (
+                        <>
+                          {field?.options?.systemCalculatedAndView && (
+                            <div className="mb-2">
+                              <DisplayFormula formula={field?.options?.formula} fields={fields} />
+                            </div>
+                          )}
+                          <>
+                            <div className="w-100">
+                              <div data-testid="field">
+                                {state.hideField ? (
+                                  <Skeleton height={200} />
+                                ) : (
+                                  <Field
+                                    {...fieldProps}
+                                    rules={rules?.[field?._id]}
+                                    field={{
+                                      ...field,
+                                      label: `${field?.label} ${
+                                        field?.options?.required ? '*' : ''
+                                      }`,
+                                    }}
+                                    disabled={
+                                      edit && field.options.notEditable
+                                        ? submitState.loading || field.options.notEditable
+                                        : submitState.loading ||
+                                          field.options.systemCalculatedAndView ||
+                                          (field?.options?.disabled && !enabledFields?.[field?._id])
+                                    }
+                                    validate={submitState.validate}
+                                    onChangeValue={(changedValue) => {
+                                      if (!field?.options?.systemCalculatedAndView) {
+                                        onChange(
+                                          { ...changedValue, field: field._id },
+                                          filterValues(values, field)?.length - 1,
+                                        );
+                                      }
+                                    }}
+                                    value={
+                                      field.options.systemCalculatedAndView
+                                        ? {
+                                            valueNumber: evaluateFormula(
+                                              getFormula(
+                                                field?.options?.formula?.variables,
+                                                [],
+                                                values,
+                                              ),
+                                            ),
+                                          }
+                                        : filterValues(values, field)[
+                                            filterValues(values, field)?.length - 1
+                                          ]
+                                    }
+                                  />
+                                )}
+                              </div>
+                            </div>
+                          </>
+                          <DragDropContext onDragEnd={onDragEnd}>
+                            <Droppable droppableId={field._id}>
+                              {(provided) => (
+                                <div ref={provided.innerRef} {...provided.droppableProps}>
+                                  {filterValues(values, field).map((value: any, valueIndex) => {
+                                    return (
+                                      <>
+                                        <Draggable
+                                          key={value._id}
+                                          draggableId={value._id}
+                                          index={valueIndex}
                                         >
-                                          <div className="mt-3" key={valueIndex}>
-                                            {valueIndex !==
-                                              filterValues(values, field)?.length - 1 && (
-                                              <>
-                                                {state.editValue?.fieldId === field._id &&
-                                                state.editValue?.index === valueIndex ? (
+                                          {(draggableProvided) => (
+                                            <div
+                                              ref={draggableProvided.innerRef}
+                                              {...draggableProvided.draggableProps}
+                                              {...draggableProvided.dragHandleProps}
+                                            >
+                                              <div className="mt-3" key={valueIndex}>
+                                                {valueIndex !==
+                                                  filterValues(values, field)?.length - 1 && (
                                                   <>
-                                                    <div className="w-100">
-                                                      {state.hideField ? (
-                                                        <Skeleton height={200} />
-                                                      ) : (
-                                                        <Field
-                                                          {...fieldProps}
-                                                          rules={rules?.[field?._id]}
-                                                          field={{
-                                                            ...field,
-                                                            label: field?.options?.required
-                                                              ? `${field?.label}*`
-                                                              : field?.label,
-                                                          }}
-                                                          disabled={submitState.loading}
-                                                          onChangeValue={(changedValue) =>
-                                                            onChange(
-                                                              { ...changedValue, field: field._id },
-                                                              valueIndex,
-                                                            )
-                                                          }
-                                                          value={value}
-                                                        />
-                                                      )}
-                                                    </div>
-                                                    <Button
-                                                      className="my-2"
-                                                      size="small"
-                                                      color="primary"
-                                                      variant="contained"
-                                                      onClick={() =>
-                                                        setState((oldState) => ({
-                                                          ...oldState,
-                                                          editValue: {
-                                                            fieldId: null,
-                                                            index: null,
-                                                          },
-                                                        }))
-                                                      }
-                                                    >
-                                                      Save
-                                                    </Button>
-                                                  </>
-                                                ) : (
-                                                  <div className="mb-2 d-flex align-items-start">
-                                                    <div className="w-100">
-                                                      <DisplayValue value={value} field={field} />
-                                                      {validateValue(
-                                                        submitState.validate,
-                                                        value,
-                                                        field,
-                                                      ).error && (
-                                                        <FormHelperText className="text-danger">
-                                                          {
-                                                            validateValue(
-                                                              submitState.validate,
-                                                              value,
-                                                              field,
-                                                            ).errorMessage
-                                                          }
-                                                        </FormHelperText>
-                                                      )}
-                                                    </div>
-                                                    {state.showResponseDrawer ===
-                                                      `${field?._id}-${value?._id}` &&
-                                                      value?.response?._id && (
-                                                        <ResponseDrawer
-                                                          open
-                                                          onClose={() =>
-                                                            setState((oldState) => ({
-                                                              ...oldState,
-                                                              showResponseDrawer: '',
-                                                            }))
-                                                          }
-                                                          responseId={value?.response?._id}
-                                                        />
-                                                      )}
-                                                    <Tooltip title="Edit Value">
-                                                      <IconButton
-                                                        onClick={() => {
-                                                          if (
-                                                            field?.fieldType === 'response' &&
-                                                            !field?.options?.selectItem
-                                                          ) {
-                                                            setState((oldState) => ({
-                                                              ...oldState,
-                                                              showResponseDrawer: `${field?._id}-${value?._id}`,
-                                                            }));
-                                                          } else {
+                                                    {state.editValue?.fieldId === field._id &&
+                                                    state.editValue?.index === valueIndex ? (
+                                                      <>
+                                                        <div className="w-100">
+                                                          {state.hideField ? (
+                                                            <Skeleton height={200} />
+                                                          ) : (
+                                                            <Field
+                                                              {...fieldProps}
+                                                              rules={rules?.[field?._id]}
+                                                              field={{
+                                                                ...field,
+                                                                label: field?.options?.required
+                                                                  ? `${field?.label}*`
+                                                                  : field?.label,
+                                                              }}
+                                                              disabled={submitState.loading}
+                                                              onChangeValue={(changedValue) =>
+                                                                onChange(
+                                                                  {
+                                                                    ...changedValue,
+                                                                    field: field._id,
+                                                                  },
+                                                                  valueIndex,
+                                                                )
+                                                              }
+                                                              value={value}
+                                                            />
+                                                          )}
+                                                        </div>
+                                                        <Button
+                                                          className="my-2"
+                                                          size="small"
+                                                          color="primary"
+                                                          variant="contained"
+                                                          onClick={() =>
                                                             setState((oldState) => ({
                                                               ...oldState,
                                                               editValue: {
-                                                                fieldId: field._id,
-                                                                index: valueIndex,
+                                                                fieldId: null,
+                                                                index: null,
                                                               },
-                                                            }));
-                                                          }
-                                                        }}
-                                                      >
-                                                        <EditIcon />
-                                                      </IconButton>
-                                                    </Tooltip>
-                                                    {!value?.options?.defaultWidget && (
-                                                      <Tooltip title="Delete Value">
-                                                        <IconButton
-                                                          edge="end"
-                                                          onClick={() =>
-                                                            onRemoveOneValue(field._id, valueIndex)
+                                                            }))
                                                           }
                                                         >
-                                                          <DeleteIcon />
-                                                        </IconButton>
-                                                      </Tooltip>
+                                                          Save
+                                                        </Button>
+                                                      </>
+                                                    ) : (
+                                                      <div className="mb-2 d-flex align-items-start">
+                                                        <div className="w-100">
+                                                          <DisplayValue
+                                                            value={value}
+                                                            field={field}
+                                                          />
+                                                          {validateValue(
+                                                            submitState.validate,
+                                                            value,
+                                                            field,
+                                                          ).error && (
+                                                            <FormHelperText className="text-danger">
+                                                              {
+                                                                validateValue(
+                                                                  submitState.validate,
+                                                                  value,
+                                                                  field,
+                                                                ).errorMessage
+                                                              }
+                                                            </FormHelperText>
+                                                          )}
+                                                        </div>
+                                                        {state.showResponseDrawer ===
+                                                          `${field?._id}-${value?._id}` &&
+                                                          value?.response?._id && (
+                                                            <ResponseDrawer
+                                                              open
+                                                              onClose={() =>
+                                                                setState((oldState) => ({
+                                                                  ...oldState,
+                                                                  showResponseDrawer: '',
+                                                                }))
+                                                              }
+                                                              responseId={value?.response?._id}
+                                                            />
+                                                          )}
+                                                        <Tooltip title="Edit Value">
+                                                          <IconButton
+                                                            onClick={() => {
+                                                              if (
+                                                                field?.fieldType === 'response' &&
+                                                                !field?.options?.selectItem
+                                                              ) {
+                                                                setState((oldState) => ({
+                                                                  ...oldState,
+                                                                  showResponseDrawer: `${field?._id}-${value?._id}`,
+                                                                }));
+                                                              } else {
+                                                                setState((oldState) => ({
+                                                                  ...oldState,
+                                                                  editValue: {
+                                                                    fieldId: field._id,
+                                                                    index: valueIndex,
+                                                                  },
+                                                                }));
+                                                              }
+                                                            }}
+                                                          >
+                                                            <EditIcon />
+                                                          </IconButton>
+                                                        </Tooltip>
+                                                        {!value?.options?.defaultWidget && (
+                                                          <Tooltip title="Delete Value">
+                                                            <IconButton
+                                                              edge="end"
+                                                              onClick={() =>
+                                                                onRemoveOneValue(
+                                                                  field._id,
+                                                                  valueIndex,
+                                                                )
+                                                              }
+                                                            >
+                                                              <DeleteIcon />
+                                                            </IconButton>
+                                                          </Tooltip>
+                                                        )}
+                                                      </div>
                                                     )}
-                                                  </div>
+                                                  </>
                                                 )}
-                                              </>
-                                            )}
-                                          </div>
-                                        </div>
-                                      )}
-                                    </Draggable>
-                                  </>
-                                );
-                              })}
-                              {provided.placeholder}
-                            </div>
-                          )}
-                        </Droppable>
-                      </DragDropContext>
+                                              </div>
+                                            </div>
+                                          )}
+                                        </Draggable>
+                                      </>
+                                    );
+                                  })}
+                                  {provided.placeholder}
+                                </div>
+                              )}
+                            </Droppable>
+                          </DragDropContext>
+                        </>
+                      )}
                       {/* add multiple value block here for bottom view */}
                     </InputGroup>
                   </div>
                 </Grid>
               ))}
-            {formView === 'oneField' && (
-              <div className="w-100 d-flex justify-content-between my-2">
-                <div data-testid="backButton">
-                  {state.page > 0 && (
-                    <Button
-                      variant="outlined"
-                      size="small"
-                      startIcon={<ArrowBackIosRounded fontSize="small" />}
-                      onClick={() => handlePageChange(state.page - 1)}
-                    >
-                      Back
-                    </Button>
-                  )}
-                </div>
-                {state.page !== fields?.length - 1 ? (
-                  <div data-testid="nextButton">
-                    <Button
-                      variant="outlined"
-                      size="small"
-                      disabled={
-                        uniqueBetweenMultipleValuesError?.length > 0 ||
-                        uniqueBetweenMultipleValuesLoading ||
-                        unique ||
-                        uniqueLoading
-                      }
-                      endIcon={<ArrowForwardIosRounded fontSize="small" />}
-                      onClick={() => {
-                        setSubmitState({ ...submitState, loading: true });
-                        let validate = false;
-                        values
-                          .filter((value) => value.field === fields[state.page]._id)
-                          ?.forEach((tempValue) => {
-                            if (validateValue(true, tempValue, { ...fields[state.page] }).error) {
-                              validate = true;
+            {!inlineEdit && (
+              <>
+                {formView === 'oneField' && (
+                  <div className="w-100 d-flex justify-content-between my-2">
+                    <div data-testid="backButton">
+                      {state.page > 0 && (
+                        <Button
+                          variant="outlined"
+                          size="small"
+                          startIcon={<ArrowBackIosRounded fontSize="small" />}
+                          onClick={() => handlePageChange(state.page - 1)}
+                        >
+                          Back
+                        </Button>
+                      )}
+                    </div>
+                    {state.page !== fields?.length - 1 ? (
+                      <div data-testid="nextButton">
+                        <Button
+                          variant="outlined"
+                          size="small"
+                          disabled={
+                            uniqueBetweenMultipleValuesError?.length > 0 ||
+                            uniqueBetweenMultipleValuesLoading ||
+                            unique ||
+                            uniqueLoading
+                          }
+                          endIcon={<ArrowForwardIosRounded fontSize="small" />}
+                          onClick={() => {
+                            setSubmitState({ ...submitState, loading: true });
+                            let validate = false;
+                            values
+                              .filter((value) => value.field === fields[state.page]._id)
+                              ?.forEach((tempValue) => {
+                                if (
+                                  validateValue(true, tempValue, { ...fields[state.page] }).error
+                                ) {
+                                  validate = true;
+                                }
+                              });
+                            setSubmitState({ ...submitState, validate, loading: false });
+                            if (!validate) {
+                              handlePageChange(state.page + 1);
                             }
-                          });
-                        setSubmitState({ ...submitState, validate, loading: false });
-                        if (!validate) {
-                          handlePageChange(state.page + 1);
-                        }
-                      }}
-                    >
-                      Next
-                    </Button>
+                          }}
+                        >
+                          Next
+                        </Button>
+                      </div>
+                    ) : (
+                      <>{SubmitButtonComponent}</>
+                    )}
                   </div>
-                ) : (
-                  <>{SubmitButtonComponent}</>
                 )}
-              </div>
-            )}
-            {formView !== 'oneField' && (
-              <Grid item xs={12}>
-                <InputGroup style={{ display: 'flex' }}>
-                  {SubmitButtonComponent}
-                  {CancelButton}
-                </InputGroup>
-              </Grid>
+                {formView !== 'oneField' && (
+                  <Grid item xs={12}>
+                    <InputGroup style={{ display: 'flex' }}>
+                      {SubmitButtonComponent}
+                      {CancelButton}
+                    </InputGroup>
+                  </Grid>
+                )}
+              </>
             )}
           </Grid>
         </Grid>

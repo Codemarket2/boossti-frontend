@@ -23,12 +23,14 @@ interface IFieldValuesMap {
   verticalView?: boolean;
   authorized?: boolean;
   displayFieldLabel?: boolean;
-  onClickEditField?: (fieldId: string) => void;
+  showEdit?: boolean;
+  onClickEditField?: (fieldId: string, valueId: string) => void;
 }
 
 export default function FieldValuesMap({
   field,
   response,
+  showEdit = true,
   verticalView,
   authorized,
   displayFieldLabel,
@@ -67,13 +69,13 @@ export default function FieldValuesMap({
               data-testid="fields-display"
             >
               <div data-testid="label">{field?.label}</div>
-              {authorized && !disabled && (
+              {authorized && !disabled && showEdit && (
                 <Tooltip title="Edit">
                   <IconButton
                     edge="end"
                     onClick={() => {
                       if (onClickEditField) {
-                        onClickEditField(field?._id);
+                        onClickEditField(field?._id, '');
                       }
                     }}
                     size="small"
@@ -107,13 +109,13 @@ export default function FieldValuesMap({
                 {field.options.multipleValues && value.value !== '' ? (
                   <>
                     <Typography className="d-flex align-items-center" data-testid="fields-display">
-                      {authorized && !disabled && (
+                      {authorized && !disabled && showEdit && (
                         <Tooltip title="Edit">
                           <IconButton
                             edge="end"
                             onClick={() => {
                               if (onClickEditField) {
-                                onClickEditField(field?._id);
+                                onClickEditField(field?._id, value?._id);
                               }
                             }}
                             size="small"
