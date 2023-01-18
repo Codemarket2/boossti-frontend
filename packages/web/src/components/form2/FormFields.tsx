@@ -148,6 +148,20 @@ export default function FormFields({
     );
   };
 
+  const handleEditFieldRule = (fieldId: string, options_: any) => {
+    setFields(
+      fields?.map((field) => {
+        if (field._id === fieldId) {
+          return {
+            ...field,
+            options: { ...field?.options, ...options_ },
+          };
+        }
+        return field;
+      }),
+    );
+  };
+
   const handleEditStyle = (fieldId: string, style: any) => {
     setFields(
       fields.map((field) =>
@@ -417,6 +431,7 @@ export default function FormFields({
           open={state.editRules}
           onClose={() => setState(initialValues)}
           field={state.field}
+          handleConditionChange={handleEditFieldRule}
         />
       )}
       {state.editStyle && (
