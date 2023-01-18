@@ -16,7 +16,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import GridIcon from '@mui/icons-material/GridOn';
 import EditIcon from '@mui/icons-material/Edit';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { IField } from '@frontend/shared/types';
+import { ICondition, IField } from '@frontend/shared/types';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUp';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
@@ -152,6 +152,20 @@ export default function FormFields({
     setFields(
       fields.map((field) =>
         field._id === fieldId ? { ...field, options: { ...field?.options, style } } : field,
+      ),
+    );
+  };
+  const handleEditRule = (fieldId: string, rulesCondition: ICondition[], moveToField: IField) => {
+    setFields(
+      fields.map((field) =>
+        field._id === fieldId ? { ...field, options: { ...field?.options, moveToField } } : field,
+      ),
+    );
+    setFields(
+      fields.map((field) =>
+        field._id === fieldId
+          ? { ...field, options: { ...field?.options, rulesCondition } }
+          : field,
       ),
     );
   };
@@ -414,6 +428,14 @@ export default function FormFields({
       )}
       {state.editRules && (
         <FieldConditionDrawer
+          formId={formId}
+          onChange={handleEditRule}
+          rulesCondition={
+            fields?.filter((f) => f._id === state?.field?._id)?.pop()?.options?.rulesCondition || []
+          }
+          moveToField={
+            fields?.filter((f) => f._id === state?.field?._id)?.pop()?.options?.moveToField || {}
+          }
           open={state.editRules}
           onClose={() => setState(initialValues)}
           field={state.field}
