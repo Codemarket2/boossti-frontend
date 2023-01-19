@@ -24,7 +24,7 @@ import ConditionPart from './ConditionPart';
 
 interface ConditionFormProps {
   conditions: ICondition[];
-  onConditionsChange: (newConditions: ICondition[], permission: any) => void;
+  onConditionsChange: (newConditions: ICondition[]) => void;
   formFields?: IField[];
   field?: IField;
   onCancel?: () => void;
@@ -48,7 +48,7 @@ export default function FieldConditionForm({
     if (field?._id) {
       setTempConditions(newConditions);
     } else {
-      onConditionsChange(newConditions, '');
+      onConditionsChange(newConditions);
     }
   };
 
@@ -61,7 +61,7 @@ export default function FieldConditionForm({
   };
 
   const handleSave = () => {
-    onConditionsChange(conditions, 'view');
+    onConditionsChange(conditions);
     onCancel();
   };
 
@@ -165,26 +165,9 @@ const ConditionComponent = ({
       )}
       {!field?.form?._id && (
         <InputGroup>
-          <FormControl size="small" fullWidth error={!condition?.conditionType}>
-            <InputLabel>Action</InputLabel>
-
-            <Select
-              value="view"
-              label="Condition Type"
-              onChange={({ target }: any) => onChange({ conditionType: target.value })}
-            >
-              <MenuItem value="view">View</MenuItem>
-            </Select>
-          </FormControl>
-        </InputGroup>
-      )}
-      {!field?.form?._id && (
-        <InputGroup>
           <SelectForm
             value={
-              condition?.left?.formId === 'auth'
-                ? { _id: condition?.left?.formId, name: 'Auth' }
-                : condition?.left?.formId
+              condition?.left?.formId
                 ? { _id: condition?.left?.formId, name: leftForm?.name || formNames?.left }
                 : null
             }
@@ -203,7 +186,7 @@ const ConditionComponent = ({
           />
         </InputGroup>
       )}
-      {(condition?.left?.formId || field?.form?._id) && condition?.left?.formId !== 'auth' && (
+      {(condition?.left?.formId || field?.form?._id) && (
         <SelectSubField
           subField={condition?.left}
           onChange={(newLeft) => onChange({ left: { ...condition.left, ...newLeft } })}

@@ -7,7 +7,6 @@ interface IResolveCondition {
   responses: { [key: string]: IResponse };
   leftPartResponse: Partial<IResponse>;
   authState: any;
-  permission: any;
 }
 
 export const resolveCondition = ({
@@ -16,7 +15,6 @@ export const resolveCondition = ({
   conditions,
   leftPartResponse,
   authState,
-  permission,
 }: IResolveCondition) => {
   let result = false;
   conditions.forEach((condition) => {
@@ -38,10 +36,6 @@ export const resolveCondition = ({
         } else if (condition?.conditionType === '!=') {
           result = leftValue !== rightValue;
         }
-    } else if (condition.left?.formId === 'auth' && permission === 'view') {
-      if (condition?.conditionType === '!=' && authState && authState.authenticated) {
-        result = authState.authenticated !== condition.right?.value;
-      }
     }
   });
   return result;
