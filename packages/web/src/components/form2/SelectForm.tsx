@@ -113,6 +113,13 @@ export default function SelectForm({
     });
   };
 
+  const formOptions = () => {
+    if (data?.getForms?.data) {
+      return [...data.getForms.data, { name: 'Auth', slug: 'auth', _id: 'auth' }];
+    }
+    return [{ name: 'Auth', slug: 'auth', _id: 'auth' }];
+  };
+
   return queryError ? (
     <ErrorLoading error={queryError} />
   ) : (
@@ -135,7 +142,7 @@ export default function SelectForm({
         onInputChange={(event, newInputValue) => {
           setState({ ...state, search: newInputValue });
         }}
-        options={data?.getForms?.data || []}
+        options={formOptions() || []}
         filterOptions={(options, params) => {
           const filtered = filter(options, params);
           if (params.inputValue !== '' && !loading && !(data?.getForms?.data?.length > 0)) {

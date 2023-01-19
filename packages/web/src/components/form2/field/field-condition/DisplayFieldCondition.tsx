@@ -61,7 +61,10 @@ export const getFieldCondition = ({
     // leftside;
     if (condition?.left?.formId) {
       const form = forms[condition?.left?.formId];
-      const formName = slugifyVariable(form?.name);
+      let formName = slugifyVariable(form?.name);
+      if (condition?.left?.formId === 'auth') {
+        formName = 'auth';
+      }
       conditionString += ` $${formName}`;
       if (condition?.left?.fieldId) {
         const subFieldLabel = getSubFieldsLabel(condition?.left, forms);
