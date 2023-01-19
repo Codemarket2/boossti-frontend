@@ -17,7 +17,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { useEffect } from 'react';
 import DisplayValue from './DisplayValue';
 import Field, { FieldProps } from './Field';
-import { filterValues, combineArrays } from './FormView';
+import { filterValues } from './FormView';
 import ResponseDrawer from '../response/ResponseDrawer';
 import LoadingButton from '../common/LoadingButton';
 import InputGroup from '../common/InputGroup';
@@ -114,8 +114,25 @@ export default function DragAndDropFormValues({
       result.source.index,
       result.destination.index,
     );
-    const finalValues = combineArrays(values, newFields);
+    const finalValues = combineArrays(newFields);
     setValues(finalValues);
+  };
+
+  const combineArrays = (newFields) => {
+    const finalValues = values;
+    let newFeildsArray = newFields;
+    values.forEach((value, index) => {
+      const newFeildElement = newFeildsArray[0];
+      if (value.field === newFeildElement?.field) {
+        if (value._id === newFeildElement._id) {
+          newFeildsArray = newFeildsArray.filter((item) => item._id !== newFeildElement._id);
+        } else {
+          finalValues[index] = newFeildElement;
+          newFeildsArray = newFeildsArray.filter((item) => item._id !== newFeildElement._id);
+        }
+      }
+    });
+    return finalValues;
   };
   const SubmitButtonComponent = (
     <Tooltip title={disableSubmitButton ? 'Enter value for all required fields' : 'Submit form'}>
