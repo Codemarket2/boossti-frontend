@@ -696,7 +696,6 @@ export function FormViewChild({
         forms: conditionFormsResponses?.forms,
         responses: conditionFormsResponses?.responses,
         authState,
-        permission: field?.options?.permission ? field?.options?.permission : 'view',
       });
       return result;
     }

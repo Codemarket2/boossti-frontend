@@ -17,24 +17,9 @@ interface IProps {
   onClose: () => void;
   open: boolean;
   field: IField;
-  handleConditionChange: (fieldId: string, options_: any) => void;
 }
 
-export default function FieldConditionDrawer({
-  open,
-  onClose,
-  field,
-  handleConditionChange,
-}: IProps) {
-  const handelChange = (fieldId, params, permission) => {
-    let options = {};
-    // console.log('params', params);
-    if (params[0]?.left?.formId === 'auth' && params[0]?.conditionType && params[0]?.right?.value) {
-      options = { hidden: true, hiddenConditions: params, permission };
-    }
-    handleConditionChange(fieldId, options);
-  };
-
+export default function FieldConditionDrawer({ open, onClose, field }: IProps) {
   return (
     <Drawer
       ModalProps={{ BackdropProps: { invisible: true } }}
@@ -57,9 +42,9 @@ export default function FieldConditionDrawer({
         </div>
         <FieldConditionForm
           field={field}
-          conditions={field?.options?.hiddenConditions}
+          conditions={[]}
           /* eslint-disable-next-line  */
-          onConditionsChange={(param, permission) => handelChange(field?._id, param, permission)}
+          onConditionsChange={() => {}}
           onCancel={() => {
             onClose();
           }}
