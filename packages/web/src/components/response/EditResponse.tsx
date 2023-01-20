@@ -14,11 +14,13 @@ interface IProps {
   overlay?: boolean;
   fieldId?: string;
   valueId?: string;
+  editMode?: string;
 }
 
 export default function EditResponse({
   fieldId,
   valueId,
+  editMode,
   form,
   response,
   open,
@@ -70,6 +72,7 @@ export default function EditResponse({
           inlineEdit={inlineEdit}
           inlineEditFieldId={fieldId}
           inlineEditValueId={valueId}
+          editMode={editMode}
           authorized={authorized}
           responseForm={response}
           // fields={getFields()}

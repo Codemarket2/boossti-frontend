@@ -39,6 +39,7 @@ export interface DragAndDropFormValuesProps {
   formView?: string;
   disableSubmitButton?: any;
   loading?: boolean;
+  editMode?: string;
   onSubmit?: () => Promise<void>;
   onCancel?: () => void;
 }
@@ -76,9 +77,10 @@ export default function DragAndDropFormValues({
   onSubmit,
   onCancel,
   formView,
+  editMode,
 }: DragAndDropFormValuesProps) {
   useEffect(() => {
-    if (inlineEditValueId !== '') {
+    if (inlineEditValueId !== null) {
       if (field?.fieldType === 'response' && !field?.options?.selectItem) {
         setState((oldState) => ({
           ...oldState,
@@ -186,7 +188,7 @@ export default function DragAndDropFormValues({
                               {...draggableProvided.draggableProps}
                               {...draggableProvided.dragHandleProps}
                             >
-                              {!field?.options?.multipleValues ? (
+                              {editMode === 'addValue' ? (
                                 <>
                                   <div className="mt-3" key={valueIndex}>
                                     {valueIndex !== filterValues(values, field)?.length - 1 && (

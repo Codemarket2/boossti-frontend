@@ -51,6 +51,7 @@ const initialState = {
   valueId: null,
   field: null,
   showFieldsMenu: false,
+  editMode: null,
 };
 
 export function DisplayResponse({
@@ -248,7 +249,7 @@ export function DisplayResponse({
                       verticalView
                       field={field}
                       response={response}
-                      onClickEditField={(fieldId, valueId) => {
+                      onClickEditField={(fieldId, valueId, editMode) => {
                         let fieldIndex = 1;
                         form?.fields?.forEach((f, i) => {
                           if (f?._id === field?._id) {
@@ -262,6 +263,7 @@ export function DisplayResponse({
                           field: fieldIndex,
                           fieldId: field?._id,
                           valueId,
+                          editMode,
                         });
                       }}
                     />
@@ -340,6 +342,7 @@ export function DisplayResponse({
             form={form}
             fieldId={state?.fieldId}
             valueId={state?.valueId}
+            editMode={state?.editMode}
             response={response}
             onClose={() => {
               setState(initialState);

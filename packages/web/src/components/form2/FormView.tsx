@@ -423,6 +423,7 @@ export interface FormViewChildProps {
   inlineEdit?: boolean;
   inlineEditFieldId?: string;
   inlineEditValueId?: string;
+  editMode?: string;
   authorized?: boolean;
   responseForm?: IResponse;
   overrideValues?: IValue[];
@@ -439,6 +440,7 @@ export function FormViewChild({
   inlineEdit,
   inlineEditFieldId,
   inlineEditValueId,
+  editMode,
   authorized,
   responseForm,
   fields: tempFields,
@@ -631,9 +633,9 @@ export function FormViewChild({
   };
 
   const onSave = async () => {
-    let payload =
+    const payload =
       overrideValues?.length > 0 && !edit ? [...overrideValues, ...values] : [...values];
-    payload = payload.filter((value) => !(value?.form === null && value?.value === ''));
+    // payload = payload.filter((value) => !(value?.form === null && value?.value === ''));
     const response = await handleSubmit(payload);
     window?.localStorage?.removeItem(localStorageKey);
     return response;
@@ -905,7 +907,7 @@ export function FormViewChild({
                                         field={field}
                                       />
                                     )}
-                                  {inlineEditValueId === '' && (
+                                  {inlineEditValueId === null && (
                                     <>
                                       {formView !== 'oneField' && (
                                         <Grid item xs={12}>
@@ -917,6 +919,31 @@ export function FormViewChild({
                                       )}
                                     </>
                                   )}
+                                  {field?.options?.multipleValues && editMode === 'addValue' && (
+                                    <div data-testid="addOneMoreValue">
+                                      <Typography
+                                        className="my-2"
+                                        style={{ cursor: 'pointer' }}
+                                        onClick={() => {
+                                          if (field?.fieldType === 'richTextarea') {
+                                            setState((oldState) => ({
+                                              ...oldState,
+                                              hideField: true,
+                                            }));
+                                          }
+                                          onAddOneMoreValue(field);
+                                        }}
+                                      >
+                                        <AddIcon fontSize="small" />
+                                        <Tooltip
+                                          title={`You can add multiple values for ${field?.label} field`}
+                                        >
+                                          <u>add more {field?.label}</u>
+                                          {/* <InfoOutlined className="ml-1" fontSize="small" /> */}
+                                        </Tooltip>
+                                      </Typography>
+                                    </div>
+                                  )}
                                 </Typography>
                               )}
                               {field?.options?.systemCalculatedAndView && (
@@ -927,7 +954,7 @@ export function FormViewChild({
                                   />
                                 </div>
                               )}
-                              {!field?.options?.multipleValues && (
+                              {editMode === 'addValue' && (
                                 <>
                                   <div className="w-100">
                                     <div data-testid="field">
@@ -986,6 +1013,7 @@ export function FormViewChild({
                                 fields={fields}
                                 state={state}
                                 values={values}
+                                editMode={editMode}
                                 rules={rules}
                                 fieldProps={fieldProps}
                                 submitState={submitState}

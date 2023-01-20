@@ -6,6 +6,7 @@ import { useDebounce } from '@frontend/shared/hooks/condition/debounce';
 // import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
+import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import CommentLikeShare from '../comment/CommentLikeShare';
@@ -24,7 +25,7 @@ interface IFieldValuesMap {
   authorized?: boolean;
   displayFieldLabel?: boolean;
   showEdit?: boolean;
-  onClickEditField?: (fieldId: string, valueId: string) => void;
+  onClickEditField?: (fieldId: string, valueId: string, editMode: string) => void;
 }
 
 export default function FieldValuesMap({
@@ -70,19 +71,36 @@ export default function FieldValuesMap({
             >
               <div data-testid="label">{field?.label}</div>
               {authorized && !disabled && showEdit && (
-                <Tooltip title="Edit">
-                  <IconButton
-                    edge="end"
-                    onClick={() => {
-                      if (onClickEditField) {
-                        onClickEditField(field?._id, '');
-                      }
-                    }}
-                    size="small"
-                  >
-                    <EditIcon fontSize="small" />
-                  </IconButton>
-                </Tooltip>
+                <>
+                  <Tooltip title="Edit">
+                    <IconButton
+                      edge="end"
+                      onClick={() => {
+                        if (onClickEditField) {
+                          onClickEditField(field?._id, null, 'editField');
+                        }
+                      }}
+                      size="small"
+                    >
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                  {field?.options?.multipleValues && (
+                    <Tooltip title="Add New Value">
+                      <IconButton
+                        edge="end"
+                        onClick={() => {
+                          if (onClickEditField) {
+                            onClickEditField(field?._id, null, 'addValue');
+                          }
+                        }}
+                        size="small"
+                      >
+                        <AddIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                </>
               )}
             </Typography>
           )}
@@ -115,7 +133,7 @@ export default function FieldValuesMap({
                             edge="end"
                             onClick={() => {
                               if (onClickEditField) {
-                                onClickEditField(field?._id, value?._id);
+                                onClickEditField(field?._id, value?._id, 'editValue');
                               }
                             }}
                             size="small"
