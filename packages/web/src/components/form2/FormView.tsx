@@ -410,7 +410,6 @@ export default function FormView({
 
 export interface FormViewChildProps {
   fields: IField[];
-  handleSubmit: (payload: any) => any;
   loading?: boolean;
   onCancel?: () => void;
   initialValues?: any[];
@@ -428,6 +427,7 @@ export interface FormViewChildProps {
   responseForm?: IResponse;
   overrideValues?: IValue[];
   showMessage?: (response) => void;
+  handleSubmit: (values: any[]) => Promise<any>;
 }
 
 const initialSubmitState = {
@@ -919,7 +919,7 @@ export function FormViewChild({
                                       )}
                                     </>
                                   )}
-                                  {field?.options?.multipleValues && editMode === 'addValue' && (
+                                  {editMode === 'addValue' && (
                                     <div data-testid="addOneMoreValue">
                                       <Typography
                                         className="my-2"
@@ -954,7 +954,8 @@ export function FormViewChild({
                                   />
                                 </div>
                               )}
-                              {editMode === 'addValue' && (
+                              {(editMode === 'addValue' ||
+                                (!field?.options?.multipleValues && editMode === 'editField')) && (
                                 <>
                                   <div className="w-100">
                                     <div data-testid="field">
@@ -1008,27 +1009,29 @@ export function FormViewChild({
                                   </div>
                                 </>
                               )}
-                              <DragAndDropFormValues
-                                field={field}
-                                fields={fields}
-                                state={state}
-                                values={values}
-                                editMode={editMode}
-                                rules={rules}
-                                fieldProps={fieldProps}
-                                submitState={submitState}
-                                onChange={onChange}
-                                setState={setState}
-                                setValues={setValues}
-                                onRemoveOneValue={onRemoveOneValue}
-                                inlineEdit={inlineEdit}
-                                inlineEditValueId={inlineEditValueId}
-                                formView={formView}
-                                onCancel={onCancel}
-                                onSubmit={onSubmit}
-                                loading={loading}
-                                disableSubmitButton={disableSubmitButton}
-                              />
+                              {field?.option?.multipleValues && (
+                                <DragAndDropFormValues
+                                  field={field}
+                                  fields={fields}
+                                  state={state}
+                                  values={values}
+                                  editMode={editMode}
+                                  rules={rules}
+                                  fieldProps={fieldProps}
+                                  submitState={submitState}
+                                  onChange={onChange}
+                                  setState={setState}
+                                  setValues={setValues}
+                                  onRemoveOneValue={onRemoveOneValue}
+                                  inlineEdit={inlineEdit}
+                                  inlineEditValueId={inlineEditValueId}
+                                  formView={formView}
+                                  onCancel={onCancel}
+                                  onSubmit={onSubmit}
+                                  loading={loading}
+                                  disableSubmitButton={disableSubmitButton}
+                                />
+                              )}
                             </>
                           ) : (
                             <FieldValuesMap
@@ -1038,6 +1041,8 @@ export function FormViewChild({
                               field={field}
                               response={responseForm}
                               showEdit={false}
+                              form={form}
+                              inlineEdit={inlineEdit}
                             />
                           )}
                         </>

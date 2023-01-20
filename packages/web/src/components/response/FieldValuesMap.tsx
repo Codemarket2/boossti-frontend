@@ -1,4 +1,4 @@
-import { IField, IResponse } from '@frontend/shared/types';
+import { IField, IResponse, IForm } from '@frontend/shared/types';
 // import Box from '@mui/material/Box';
 import React, { Fragment, useState } from 'react';
 import { useCreateUpdateResponse, useResolveCondition } from '@frontend/shared/hooks/response';
@@ -6,6 +6,7 @@ import { useDebounce } from '@frontend/shared/hooks/condition/debounce';
 // import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
+import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
@@ -15,6 +16,7 @@ import DisplayValue from '../form2/DisplayValue';
 import DisplayFormulaValue from '../form2/field/formula/DisplayFormulaValue';
 import StarRating from '../starRating/starRating';
 import AddResponseButton from './AddResponseButton';
+
 // import DependantResponses from './DependantResponses';
 import { onAlert } from '../../utils/alert';
 
@@ -26,6 +28,8 @@ interface IFieldValuesMap {
   displayFieldLabel?: boolean;
   showEdit?: boolean;
   onClickEditField?: (fieldId: string, valueId: string, editMode: string) => void;
+  form: IForm;
+  inlineEdit?: boolean;
 }
 
 export default function FieldValuesMap({
@@ -36,9 +40,14 @@ export default function FieldValuesMap({
   authorized,
   displayFieldLabel,
   onClickEditField,
+  form,
+  inlineEdit = false,
 }: IFieldValuesMap) {
   const { handleCreateUpdateResponse } = useCreateUpdateResponse({ onAlert });
-  const fieldValues = response?.values?.filter((v) => v.field === field._id);
+  // const fieldValues = response?.values?.filter((v) => v.field === field._id);
+  const [fieldValues, setFieldValues] = useState(
+    response?.values?.filter((v) => v.field === field._id),
+  );
   const [disabled, setDisabled] = useState(false || field?.options?.disabled);
   const { handleResolveCondition } = useResolveCondition();
 
@@ -56,6 +65,21 @@ export default function FieldValuesMap({
     callback: checkDisabledCondition,
     value: response,
   });
+
+  const removeFieldValue = async (valueId: string) => {
+    const oldValues = Array.from(fieldValues);
+    const newValues = oldValues.filter((value) => value?._id !== valueId);
+    const payload = {
+      newValues,
+      _id: response?._id,
+    };
+    const updatedResponse = await handleCreateUpdateResponse({
+      payload,
+      edit: true,
+      fields: form?.fields,
+    });
+    setFieldValues(updatedResponse?.values?.filter((value) => value?.field === field?._id));
+  };
 
   // const isDependantRelationship =
   //   !field?.options?.selectItem && field?.options?.dependentRelationship;
@@ -143,6 +167,16 @@ export default function FieldValuesMap({
                         </Tooltip>
                       )}
                     </Typography>
+                    {/* {!inlineEdit && !value?.options?.defaultWidget &&  (
+                      <Tooltip title="Delete Value">
+                        <IconButton
+                          edge="end"
+                          onClick={() => removeFieldValue(value?._id)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Tooltip>
+                    )} */}
                     <DisplayValue field={field} value={value} verticalView={verticalView} />
                   </>
                 ) : (
