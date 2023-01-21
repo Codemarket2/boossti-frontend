@@ -427,7 +427,7 @@ export interface FormViewChildProps {
   responseForm?: IResponse;
   overrideValues?: IValue[];
   showMessage?: (response) => void;
-  handleSubmit: (values: any[]) => Promise<any>;
+  handleSubmit: (payload: any) => any;
 }
 
 const initialSubmitState = {
@@ -633,9 +633,23 @@ export function FormViewChild({
   };
 
   const onSave = async () => {
+    let newValues = Array.from(values);
+    fields.forEach((field) => {
+      if (field?.options?.multipleValues) {
+        const newValue = { ...defaultValue, field: field._id, value: '' };
+        const fieldValues = values.filter((f) => f.field === field._id);
+        if (
+          !validateValue(true, fieldValues[fieldValues.length - 1], {
+            ...field,
+            options: { ...field.options, required: true },
+          }).error
+        ) {
+          newValues = [...newValues, newValue];
+        }
+      }
+    });
     const payload =
-      overrideValues?.length > 0 && !edit ? [...overrideValues, ...values] : [...values];
-    // payload = payload.filter((value) => !(value?.form === null && value?.value === ''));
+      overrideValues?.length > 0 && !edit ? [...overrideValues, ...newValues] : [...newValues];
     const response = await handleSubmit(payload);
     window?.localStorage?.removeItem(localStorageKey);
     return response;
@@ -679,7 +693,6 @@ export function FormViewChild({
   const filterHiddenFields = (field) => {
     if (field?.options?.hidden && field?.options?.hiddenConditions?.length > 0) {
       if (edit) return true;
-      // debugger;
       const result = resolveCondition({
         conditions: field?.options?.hiddenConditions,
         leftPartResponse: { formId, values },
@@ -919,31 +932,6 @@ export function FormViewChild({
                                       )}
                                     </>
                                   )}
-                                  {editMode === 'addValue' && (
-                                    <div data-testid="addOneMoreValue">
-                                      <Typography
-                                        className="my-2"
-                                        style={{ cursor: 'pointer' }}
-                                        onClick={() => {
-                                          if (field?.fieldType === 'richTextarea') {
-                                            setState((oldState) => ({
-                                              ...oldState,
-                                              hideField: true,
-                                            }));
-                                          }
-                                          onAddOneMoreValue(field);
-                                        }}
-                                      >
-                                        <AddIcon fontSize="small" />
-                                        <Tooltip
-                                          title={`You can add multiple values for ${field?.label} field`}
-                                        >
-                                          <u>add more {field?.label}</u>
-                                          {/* <InfoOutlined className="ml-1" fontSize="small" /> */}
-                                        </Tooltip>
-                                      </Typography>
-                                    </div>
-                                  )}
                                 </Typography>
                               )}
                               {field?.options?.systemCalculatedAndView && (
@@ -1009,7 +997,7 @@ export function FormViewChild({
                                   </div>
                                 </>
                               )}
-                              {field?.option?.multipleValues && (
+                              {field?.options?.multipleValues && (
                                 <DragAndDropFormValues
                                   field={field}
                                   fields={fields}
@@ -1041,8 +1029,6 @@ export function FormViewChild({
                               field={field}
                               response={responseForm}
                               showEdit={false}
-                              form={form}
-                              inlineEdit={inlineEdit}
                             />
                           )}
                         </>

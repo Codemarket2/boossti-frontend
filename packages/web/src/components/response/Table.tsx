@@ -148,7 +148,7 @@ export default function ResponseTable({
                   </TableCell>
                   {form?.fields?.map((field: IField, i) => (
                     <TableCell key={i}>
-                      <FieldValuesMap field={field} response={response} form={form} />
+                      <FieldValuesMap field={field} response={response} />
                     </TableCell>
                   ))}
                   {response?.workflowId && !response?.parentResponseId && (

@@ -249,7 +249,6 @@ export function DisplayResponse({
                       verticalView
                       field={field}
                       response={response}
-                      form={form}
                       onClickEditField={(fieldId, valueId, editMode) => {
                         let fieldIndex = 1;
                         form?.fields?.forEach((f, i) => {
