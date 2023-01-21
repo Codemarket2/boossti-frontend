@@ -148,6 +148,7 @@ export default function FormFieldsValue({
                 <>
                   {state.showForm && state.field?._id === field?._id ? (
                     <FormViewChild
+                      responseForm={null}
                       fields={[field]}
                       handleSubmit={(tempValues) => handleSubmit(tempValues)}
                       onCancel={() => setState(initialState)}
@@ -225,6 +226,7 @@ export default function FormFieldsValue({
                     <>
                       {state.showForm && state.field?._id === field?._id ? (
                         <FormViewChild
+                          responseForm={null}
                           fields={[field]}
                           handleSubmit={(tempValues) => handleSubmit(tempValues)}
                           onCancel={() => setState(initialState)}

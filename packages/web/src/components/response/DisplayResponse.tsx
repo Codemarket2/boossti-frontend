@@ -48,8 +48,10 @@ const initialState = {
   edit: false,
   showBackdrop: false,
   fieldId: null,
+  valueId: null,
   field: null,
   showFieldsMenu: false,
+  editMode: null,
 };
 
 export function DisplayResponse({
@@ -247,16 +249,22 @@ export function DisplayResponse({
                       verticalView
                       field={field}
                       response={response}
-                      onClickEditField={(e) => {
+                      onClickEditField={(fieldId, valueId, editMode) => {
                         let fieldIndex = 1;
                         form?.fields?.forEach((f, i) => {
                           if (f?._id === field?._id) {
                             fieldIndex = i + 1;
                           }
                         });
-                        router.query.field = fieldIndex?.toString();
-                        router.push(router);
-                        setState({ ...initialState, field: fieldIndex });
+                        // router.query.field = fieldIndex?.toString();
+                        // router.push(router);
+                        setState({
+                          ...initialState,
+                          field: fieldIndex,
+                          fieldId: field?._id,
+                          valueId,
+                          editMode,
+                        });
                       }}
                     />
                   </div>
@@ -332,6 +340,9 @@ export function DisplayResponse({
         <Paper variant="outlined" className="p-2">
           <EditResponse
             form={form}
+            fieldId={state?.fieldId}
+            valueId={state?.valueId}
+            editMode={state?.editMode}
             response={response}
             onClose={() => {
               setState(initialState);

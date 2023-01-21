@@ -6,6 +6,8 @@ import { useDebounce } from '@frontend/shared/hooks/condition/debounce';
 // import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import CommentLikeShare from '../comment/CommentLikeShare';
@@ -14,6 +16,7 @@ import DisplayValue from '../form2/DisplayValue';
 import DisplayFormulaValue from '../form2/field/formula/DisplayFormulaValue';
 import StarRating from '../starRating/starRating';
 import AddResponseButton from './AddResponseButton';
+
 // import DependantResponses from './DependantResponses';
 import { onAlert } from '../../utils/alert';
 
@@ -23,19 +26,26 @@ interface IFieldValuesMap {
   verticalView?: boolean;
   authorized?: boolean;
   displayFieldLabel?: boolean;
-  onClickEditField?: (fieldId: string) => void;
+  showEdit?: boolean;
+  onClickEditField?: (fieldId: string, valueId: string, editMode: string) => void;
+  inlineEdit?: boolean;
 }
 
 export default function FieldValuesMap({
   field,
   response,
+  showEdit = true,
   verticalView,
   authorized,
   displayFieldLabel,
   onClickEditField,
+  inlineEdit,
 }: IFieldValuesMap) {
   const { handleCreateUpdateResponse } = useCreateUpdateResponse({ onAlert });
   const fieldValues = response?.values?.filter((v) => v.field === field._id);
+  // const [fieldValues, setFieldValues] = useState(
+  //   response?.values?.filter((v) => v.field === field._id),
+  // );
   const [disabled, setDisabled] = useState(false || field?.options?.disabled);
   const { handleResolveCondition } = useResolveCondition();
 
@@ -56,7 +66,6 @@ export default function FieldValuesMap({
 
   // const isDependantRelationship =
   //   !field?.options?.selectItem && field?.options?.dependentRelationship;
-
   return (
     <>
       {displayFieldLabel && (
@@ -68,20 +77,37 @@ export default function FieldValuesMap({
               data-testid="fields-display"
             >
               <div data-testid="label">{field?.label}</div>
-              {authorized && !disabled && (
-                <Tooltip title="Edit">
-                  <IconButton
-                    edge="end"
-                    onClick={() => {
-                      if (onClickEditField) {
-                        onClickEditField(field?._id);
-                      }
-                    }}
-                    size="small"
-                  >
-                    <EditIcon fontSize="small" />
-                  </IconButton>
-                </Tooltip>
+              {authorized && !disabled && showEdit && (
+                <>
+                  <Tooltip title="Edit">
+                    <IconButton
+                      edge="end"
+                      onClick={() => {
+                        if (onClickEditField) {
+                          onClickEditField(field?._id, null, 'editField');
+                        }
+                      }}
+                      size="small"
+                    >
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                  {field?.options?.multipleValues && (
+                    <Tooltip title="Add New Value">
+                      <IconButton
+                        edge="end"
+                        onClick={() => {
+                          if (onClickEditField) {
+                            onClickEditField(field?._id, null, 'addValue');
+                          }
+                        }}
+                        size="small"
+                      >
+                        <AddIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                </>
               )}
             </Typography>
           )}
@@ -105,7 +131,30 @@ export default function FieldValuesMap({
               <Fragment key={value?._id}>
                 {/* <StyledBox style={{ display: 'flex', alignContent: 'center' }}>
                 </StyledBox> */}
-                <DisplayValue field={field} value={value} verticalView={verticalView} />
+                {field.options.multipleValues && value.value !== '' ? (
+                  <>
+                    <Typography className="d-flex align-items-center" data-testid="fields-display">
+                      {authorized && !disabled && showEdit && (
+                        <Tooltip title="Edit">
+                          <IconButton
+                            edge="end"
+                            onClick={() => {
+                              if (onClickEditField) {
+                                onClickEditField(field?._id, value?._id, 'editValue');
+                              }
+                            }}
+                            size="small"
+                          >
+                            <EditIcon fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                      )}
+                    </Typography>
+                    <DisplayValue field={field} value={value} verticalView={verticalView} />
+                  </>
+                ) : (
+                  <DisplayValue field={field} value={value} verticalView={verticalView} />
+                )}
                 {verticalView && (
                   <>
                     {field?.options?.showCommentBox && <CommentLikeShare threadId={value?._id} />}
