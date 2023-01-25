@@ -256,7 +256,7 @@ export function DisplayResponse({
                         });
                         router.query.field = fieldIndex?.toString();
                         router.push(router);
-                        setState({ ...initialState, field: fieldIndex });
+                        setState({ ...initialState, field: fieldIndex, fieldId: field?._id });
                       }}
                     />
                   </div>
@@ -328,7 +328,8 @@ export function DisplayResponse({
           </div>
         </div>
       )}
-      {state?.field && hasEditPermission ? (
+      {DetailComponent}
+      {/* {state?.field && hasEditPermission ? (
         <Paper variant="outlined" className="p-2">
           <EditResponse
             form={form}
@@ -342,7 +343,7 @@ export function DisplayResponse({
         </Paper>
       ) : (
         DetailComponent
-      )}
+      )} */}
     </>
   );
 }

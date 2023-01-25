@@ -474,7 +474,7 @@ export function FormViewChild({
       index: null,
     },
     showResponseDrawer: '',
-    minimizeFields: false,
+    minimizeFields: true,
   });
 
   const [unique, setUnique] = useState(false);
