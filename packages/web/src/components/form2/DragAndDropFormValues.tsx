@@ -188,90 +188,9 @@ export default function DragAndDropFormValues({
                               {...draggableProvided.draggableProps}
                               {...draggableProvided.dragHandleProps}
                             >
-                              {editMode === 'addValue' ? (
-                                <>
-                                  <div className="mt-3" key={valueIndex}>
-                                    {valueIndex !== filterValues(values, field)?.length - 1 && (
-                                      <>
-                                        {state.editValue?.fieldId === field._id &&
-                                        state.editValue?.valueId === value?._id ? (
-                                          <>
-                                            <div className="w-100">
-                                              {state.hideField ? (
-                                                <Skeleton height={200} />
-                                              ) : (
-                                                <Field
-                                                  {...fieldProps}
-                                                  rules={rules?.[field?._id]}
-                                                  field={{
-                                                    ...field,
-                                                    label: field?.options?.required
-                                                      ? `${field?.label}*`
-                                                      : field?.label,
-                                                  }}
-                                                  disabled={submitState.loading}
-                                                  onChangeValue={(changedValue) =>
-                                                    onChange(
-                                                      {
-                                                        ...changedValue,
-                                                        field: field._id,
-                                                      },
-                                                      valueIndex,
-                                                    )
-                                                  }
-                                                  value={value}
-                                                />
-                                              )}
-                                            </div>
-                                            {formView !== 'oneField' && (
-                                              <Grid item xs={12}>
-                                                <InputGroup style={{ display: 'flex' }}>
-                                                  {SubmitButtonComponent}
-                                                  {CancelButton}
-                                                </InputGroup>
-                                              </Grid>
-                                            )}
-                                          </>
-                                        ) : (
-                                          <div className="mb-2 d-flex align-items-start">
-                                            <div className="w-100">
-                                              <DisplayValue value={value} field={field} />
-                                              {validateValue(submitState.validate, value, field)
-                                                .error && (
-                                                <FormHelperText className="text-danger">
-                                                  {
-                                                    validateValue(
-                                                      submitState.validate,
-                                                      value,
-                                                      field,
-                                                    ).errorMessage
-                                                  }
-                                                </FormHelperText>
-                                              )}
-                                            </div>
-                                            {state.showResponseDrawer ===
-                                              `${field?._id}-${value?._id}` &&
-                                              value?.response?._id && (
-                                                <ResponseDrawer
-                                                  open
-                                                  onClose={() =>
-                                                    setState((oldState) => ({
-                                                      ...oldState,
-                                                      showResponseDrawer: '',
-                                                    }))
-                                                  }
-                                                  responseId={value?.response?._id}
-                                                />
-                                              )}
-                                          </div>
-                                        )}
-                                      </>
-                                    )}
-                                  </div>
-                                </>
-                              ) : (
-                                <>
-                                  <div className="mt-3" key={valueIndex}>
+                              <>
+                                <div className="mt-3" key={valueIndex}>
+                                  {valueIndex !== filterValues(values, field)?.length - 1 && (
                                     <>
                                       {state.editValue?.fieldId === field._id &&
                                       state.editValue?.valueId === value?._id ? (
@@ -343,9 +262,9 @@ export default function DragAndDropFormValues({
                                         </div>
                                       )}
                                     </>
-                                  </div>
-                                </>
-                              )}
+                                  )}
+                                </div>
+                              </>
                             </div>
                           )}
                         </Draggable>

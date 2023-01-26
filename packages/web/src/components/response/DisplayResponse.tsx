@@ -8,7 +8,7 @@ import moment from 'moment';
 import Paper from '@mui/material/Paper';
 import { getUserName } from '@frontend/shared/hooks/user/getUserForm';
 import { parseResponse, useGetResponse } from '@frontend/shared/hooks/response/getResponse';
-import { IForm } from '@frontend/shared/types';
+import { IForm, IField } from '@frontend/shared/types';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
@@ -43,6 +43,14 @@ export interface DisplayResponseProps {
   viewLess?: boolean;
 }
 
+export interface InlineEditStateProps {
+  editMode: string;
+  fieldId: string;
+  valueId: string;
+  edit: boolean;
+  field: IField;
+}
+
 const initialState = {
   showMenu: null,
   edit: false,
@@ -52,6 +60,14 @@ const initialState = {
   field: null,
   showFieldsMenu: false,
   editMode: null,
+};
+
+const initialInlineEditState = {
+  editMode: null,
+  fieldId: null,
+  valueId: null,
+  edit: false,
+  field: null,
 };
 
 export function DisplayResponse({
@@ -68,6 +84,12 @@ export function DisplayResponse({
   viewLess,
 }: DisplayResponseProps) {
   const [state, setState] = useState(initialState);
+
+  // added by saichidvi
+  const [inlineEditState, setInlineEditState] = useState<InlineEditStateProps>(
+    initialInlineEditState,
+  );
+
   const { data: workflowFormData, loading: workflowFormLoading } = useGetForm(
     tempResponse?.workflowId,
   );
@@ -232,13 +254,19 @@ export function DisplayResponse({
           {form?.fields?.filter(filterFields)?.map((field) => {
             return (
               <div key={field?._id} className="mt-3">
-                {field?._id === state.fieldId ? (
+                {field?._id === inlineEditState?.fieldId ? (
                   <>
                     <EditResponse
-                      fieldId={state.fieldId}
                       form={form}
+                      field={field}
                       response={response}
-                      onClose={() => setState(initialState)}
+                      fieldId={state.fieldId}
+                      hasEditPermission={hasEditPermission}
+                      onClose={() => {
+                        setState(initialState);
+                        setInlineEditState(initialInlineEditState);
+                      }}
+                      inlineEditState={inlineEditState}
                     />
                   </>
                 ) : (
@@ -262,6 +290,22 @@ export function DisplayResponse({
                           ...initialState,
                           field: fieldIndex,
                           fieldId: field?._id,
+                          valueId,
+                          editMode,
+                        });
+                      }}
+                      onClose={() => {
+                        setState(initialState);
+                        setInlineEditState(initialInlineEditState);
+                      }}
+                      form={form}
+                      inlineEditState={inlineEditState}
+                      onClickInlineEdit={(fieldId, valueId, editMode) => {
+                        setInlineEditState({
+                          ...inlineEditState,
+                          edit: true,
+                          field,
+                          fieldId,
                           valueId,
                           editMode,
                         });
@@ -336,9 +380,10 @@ export function DisplayResponse({
           </div>
         </div>
       )}
-      {state?.field && hasEditPermission ? (
+      {/* {state?.field && hasEditPermission ? (
         <Paper variant="outlined" className="p-2">
           <EditResponse
+            field={field}
             form={form}
             fieldId={state?.fieldId}
             valueId={state?.valueId}
@@ -353,7 +398,8 @@ export function DisplayResponse({
         </Paper>
       ) : (
         DetailComponent
-      )}
+      )} */}
+      {DetailComponent}
     </>
   );
 }
