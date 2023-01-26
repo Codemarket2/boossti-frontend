@@ -50,6 +50,8 @@ const initialState = {
   fieldId: null,
   field: null,
   showFieldsMenu: false,
+  valueId: null,
+  editMode: null,
 };
 
 export function DisplayResponse({
@@ -227,7 +229,7 @@ export function DisplayResponse({
               </a>
             </Link>
           </div>
-          {form?.fields?.filter(filterFields)?.map((field) => {
+          {form?.fields?.filter(filterFields)?.map((field, index) => {
             return (
               <div key={field?._id} className="mt-3">
                 {field?._id === state.fieldId ? (
@@ -237,6 +239,8 @@ export function DisplayResponse({
                       form={form}
                       response={response}
                       onClose={() => setState(initialState)}
+                      valueId={state?.valueId}
+                      editMode={state?.editMode}
                     />
                   </>
                 ) : (
@@ -247,7 +251,7 @@ export function DisplayResponse({
                       verticalView
                       field={field}
                       response={response}
-                      onClickEditField={(e) => {
+                      onClickEditField={(fieldId, valueId, editMode) => {
                         let fieldIndex = 1;
                         form?.fields?.forEach((f, i) => {
                           if (f?._id === field?._id) {
@@ -256,7 +260,13 @@ export function DisplayResponse({
                         });
                         router.query.field = fieldIndex?.toString();
                         router.push(router);
-                        setState({ ...initialState, field: fieldIndex, fieldId: field?._id });
+                        setState({
+                          ...initialState,
+                          field: fieldIndex,
+                          fieldId,
+                          valueId,
+                          editMode,
+                        });
                       }}
                     />
                   </div>
