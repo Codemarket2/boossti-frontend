@@ -36,7 +36,7 @@ import Workflows from '../response/Workflows';
 import BulkUploadAction from './BulkUploadAction';
 import NotFound from '../common/NotFound';
 import UnAuthorised from '../common/UnAuthorised';
-import Permissions from './Permissions';
+// import Permissions from './Permissions';
 import AuditLog from '../auditLog/AuditLog';
 import FormConstraints from './form-conditions/FormConstraints';
 import ShopifySettings from './shopify/ShopifySettings';
@@ -281,27 +281,22 @@ export function FormChild({
                         value={label}
                       />
                     ))}
-                  {authorized && (
-                    <>
-                      {form?.name?.toUpperCase().includes('ROLE') && (
-                        <Tab label="Permissions" value="permissions" />
-                      )}
-                      {formAllTabs?.map((tab) => (
-                        <Tab
-                          key={tab?._id}
-                          label={tab?.label || 'NA'}
-                          value={slugify(tab?.label, { lower: true })}
-                        />
-                      ))}
-                      {settings?.tabs?.map((tab) => (
-                        <Tab
-                          key={tab?._id}
-                          label={tab?.label || 'NA'}
-                          value={slugify(tab?.label, { lower: true })}
-                        />
-                      ))}
-                    </>
-                  )}
+                  {authorized &&
+                    formAllTabs?.map((tab) => (
+                      <Tab
+                        key={tab?._id}
+                        label={tab?.label || 'NA'}
+                        value={slugify(tab?.label, { lower: true })}
+                      />
+                    ))}
+                  {authorized &&
+                    settings?.tabs?.map((tab) => (
+                      <Tab
+                        key={tab?._id}
+                        label={tab?.label || 'NA'}
+                        value={slugify(tab?.label, { lower: true })}
+                      />
+                    ))}
                 </Tabs>
                 {authorized && (
                   <>
@@ -418,9 +413,9 @@ export function FormChild({
                       }
                     />
                   )}
-                  {state.currentTab === 'Permissions' && (
+                  {/* {state.currentTab === 'Permissions' && (
                     <Permissions formId={form?._id} form={form} />
-                  )}
+                  )} */}
                   {state.currentTab === 'Activity' && (
                     <AuditLog documentId={form?._id} formId={form?._id} />
                   )}
