@@ -24,6 +24,7 @@ import DragIndicator from '@mui/icons-material/DragIndicator';
 import KeyboardDoubleArrowLeft from '@mui/icons-material/KeyboardDoubleArrowLeft';
 import { useState } from 'react';
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 import CRUDMenu from '../common/CRUDMenu';
 import AddField from './field/AddField';
 import EditFieldGrid from './EditFieldGrid';
@@ -31,7 +32,8 @@ import EditFormDrawer from './EditFormDrawer';
 import CustomFormSettings from './CustomFormSettings';
 import StyleDrawer from '../style/StyleDrawer';
 import DisplaySettings from './DisplaySettings';
-import FieldConditionDrawer from './field/FieldConditionDrawer';
+// import FieldConditionDrawer from './field/FieldConditionDrawer';
+import Rules from './rules/Rules';
 
 export function convertToSlug(text: string): string {
   return text
@@ -58,6 +60,18 @@ export const initialValues = {
   showFormSettings: false,
   showSystemFields: false,
 };
+
+interface IState {
+  editRules: boolean;
+  showMenu: any;
+  field: IField;
+  showForm: boolean;
+  editStyle: boolean;
+  editGrid: boolean;
+  editForm: boolean;
+  showFormSettings: boolean;
+  showSystemFields: boolean;
+}
 
 type IProps = {
   fields: any[];
@@ -94,7 +108,7 @@ export default function FormFields({
   onClickMinimize,
   showSystemFields,
 }: IProps): any {
-  const [state, setState] = useState(initialValues);
+  const [state, setState] = useState<IState>(initialValues);
   const [isExpanded, setIsExpanded] = useState<boolean[]>([]);
 
   function onDragEnd(result) {
@@ -299,6 +313,23 @@ export default function FormFields({
                                 {field?.fieldType === 'form' && expanded && (
                                   <DisplaySettings field={field} />
                                 )}
+                                {state.editRules && field?._id === state?.field?._id && (
+                                  <Box sx={{ pl: 3 }}>
+                                    <Rules
+                                      onClose={() => setState(initialValues)}
+                                      rules={field?.options.rules}
+                                      onRulesChange={(newRules) => {
+                                        setFields(
+                                          fields?.map((f) =>
+                                            f._id === field?._id
+                                              ? { ...f, options: { ...f.options, rules: newRules } }
+                                              : f,
+                                          ),
+                                        );
+                                      }}
+                                    />
+                                  </Box>
+                                )}
                               </div>
                             )}
                           </Draggable>
@@ -370,7 +401,6 @@ export default function FormFields({
               </ListItemIcon>
               <ListItemText primary="Edit Style" />
             </MenuItem>
-
             <MenuItem onClick={() => setState({ ...state, showMenu: false, editRules: true })}>
               <ListItemIcon className="mr-n3">
                 <EditIcon fontSize="small" />
@@ -411,13 +441,6 @@ export default function FormFields({
             )}
           </CRUDMenu>
         </>
-      )}
-      {state.editRules && (
-        <FieldConditionDrawer
-          open={state.editRules}
-          onClose={() => setState(initialValues)}
-          field={state.field}
-        />
       )}
       {state.editStyle && (
         <StyleDrawer
