@@ -979,7 +979,11 @@ export function FormViewChild({
                             )}
                           </Typography>
                           {formView !== 'oneField' &&
-                            (inlineEdit ? editMode === 'editField' : false) && (
+                            (inlineEdit
+                              ? field?.options?.multipleValues
+                                ? editMode === 'editField'
+                                : false
+                              : false) && (
                               <Grid item xs={12}>
                                 <InputGroup style={{ display: 'flex' }}>
                                   {SubmitButtonComponent}
@@ -994,7 +998,13 @@ export function FormViewChild({
                           <DisplayFormula formula={field?.options?.formula} fields={fields} />
                         </div>
                       )}
-                      {(!inlineEdit || editMode === 'addValue') && (
+                      {(!inlineEdit ||
+                        editMode === 'addValue' ||
+                        (inlineEdit
+                          ? !field?.options?.multipleValues
+                            ? editMode === 'editField'
+                            : false
+                          : false)) && (
                         <>
                           <div className="w-100">
                             <div data-testid="field">
@@ -1043,7 +1053,12 @@ export function FormViewChild({
                               )}
                             </div>
                           </div>
-                          {(inlineEdit ? editMode === 'addValue' : false) && (
+                          {((inlineEdit ? editMode === 'addValue' : false) ||
+                            (inlineEdit
+                              ? !field?.options?.multipleValues
+                                ? editMode === 'editField'
+                                : false
+                              : false)) && (
                             <Grid item xs={12}>
                               <InputGroup style={{ display: 'flex' }}>
                                 {SubmitButtonComponent}
@@ -1061,8 +1076,8 @@ export function FormViewChild({
                                 return (
                                   <>
                                     <Draggable
-                                      key={value._id}
-                                      draggableId={value._id}
+                                      key={value?._id}
+                                      draggableId={valueIndex?.toString()}
                                       index={valueIndex}
                                       isDragDisabled={
                                         inlineEdit ? !(editMode === 'editField') : false

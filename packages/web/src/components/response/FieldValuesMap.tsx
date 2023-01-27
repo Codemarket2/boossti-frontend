@@ -87,19 +87,23 @@ export default function FieldValuesMap({
                       <EditIcon fontSize="small" />
                     </IconButton>
                   </Tooltip>
-                  <Tooltip title="Add New Value">
-                    <IconButton
-                      edge="end"
-                      onClick={() => {
-                        if (onClickEditField) {
-                          onClickEditField(field?._id, null, 'addValue');
-                        }
-                      }}
-                      size="small"
-                    >
-                      <AddIcon fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
+                  {(field?.options?.multipleValues ? true : fieldValues.length === 0) && (
+                    <>
+                      <Tooltip title="Add New Value">
+                        <IconButton
+                          edge="end"
+                          onClick={() => {
+                            if (onClickEditField) {
+                              onClickEditField(field?._id, null, 'addValue');
+                            }
+                          }}
+                          size="small"
+                        >
+                          <AddIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                    </>
+                  )}
                   <Tooltip title="Delete Field">
                     <IconButton
                       edge="end"
@@ -189,7 +193,7 @@ export default function FieldValuesMap({
                   <>
                     {authorized && !disabled && (
                       <>
-                        <Tooltip title="Edit">
+                        {/* <Tooltip title="Edit">
                           <IconButton
                             edge="end"
                             onClick={() => {
@@ -201,7 +205,7 @@ export default function FieldValuesMap({
                           >
                             <EditIcon fontSize="small" />
                           </IconButton>
-                        </Tooltip>
+                        </Tooltip> */}
                         <Tooltip title="Delete Field">
                           <IconButton
                             edge="end"
