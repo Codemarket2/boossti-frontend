@@ -13,6 +13,8 @@ interface IProps {
   open?: boolean;
   overlay?: boolean;
   fieldId?: string;
+  valueId?: string;
+  editMode?: string;
 }
 
 export default function EditResponse({
@@ -22,6 +24,8 @@ export default function EditResponse({
   open,
   onClose,
   overlay,
+  valueId,
+  editMode,
 }: IProps): any {
   const { handleCreateUpdateResponse, updateLoading } = useCreateUpdateResponse({
     onAlert,
@@ -58,7 +62,6 @@ export default function EditResponse({
     }
     return form?.fields;
   };
-
   const inlineEdit = Boolean(fieldId);
 
   const EditComponent = (
@@ -77,6 +80,8 @@ export default function EditResponse({
           onCancel={onClose}
           formView={!inlineEdit && form?.settings?.formView}
           showMessage={(r) => onClose()}
+          valueId={valueId}
+          editMode={editMode}
         />
       ) : (
         <NotFound />
