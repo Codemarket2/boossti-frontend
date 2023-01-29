@@ -1,7 +1,11 @@
 import { useCheckPermission } from '@frontend/shared/hooks/permission';
 import { useSelector } from 'react-redux';
 import { useEffect, useMemo, useState } from 'react';
-import { useDeleteResponse, useResolveCondition } from '@frontend/shared/hooks/response';
+import {
+  useDeleteResponse,
+  useResolveCondition,
+  useCreateUpdateResponse,
+} from '@frontend/shared/hooks/response';
 import Link from 'next/link';
 import Typography from '@mui/material/Typography';
 import moment from 'moment';
@@ -16,6 +20,7 @@ import Tooltip from '@mui/material/Tooltip';
 import KeyboardDoubleArrowRight from '@mui/icons-material/KeyboardDoubleArrowRight';
 import { useGetForm } from '@frontend/shared/hooks/form';
 import { useRouter } from 'next/router';
+
 import EditResponse from './EditResponse';
 import Breadcrumbs from '../common/Breadcrumbs';
 import { QRButton } from '../qrcode/QRButton';
@@ -28,6 +33,8 @@ import FieldValuesMap from './FieldValuesMap';
 import ErrorLoading from '../common/ErrorLoading';
 import WorkflowButtons from './workflow/WorkflowButtons';
 import FormFields from '../form2/FormFields';
+
+// inlineEdit  related imports
 
 export interface DisplayResponseProps {
   form: IForm;
@@ -99,6 +106,11 @@ export function DisplayResponse({
 
   const { handleResolveCondition } = useResolveCondition();
 
+  // inlineEdit related variables
+  const { handleCreateUpdateResponse, updateLoading } = useCreateUpdateResponse({
+    onAlert,
+  });
+
   const resolveCondition = async (fieldId, conditions) => {
     const conditionResult = await handleResolveCondition({ conditions, responseId: response?._id });
     setFieldsConditionResult((oldState) => ({ ...oldState, [fieldId]: conditionResult }));
@@ -151,11 +163,44 @@ export function DisplayResponse({
     return true;
   };
 
+  const deleteValue = async (valueId) => {
+    const newValues = response?.values.filter((value) => value?._id !== valueId);
+    const payload = {
+      values: newValues,
+      _id: response?._id,
+    };
+    const newResponse = await handleCreateUpdateResponse({
+      payload,
+      edit: true,
+      fields: form?.fields,
+    });
+    if (newResponse) {
+      setState(initialState);
+    }
+  };
+  const deleteField = async (fieldId) => {
+    const newValues = response?.values?.filter((value) => value?.field !== fieldId);
+    const payload = {
+      values: newValues,
+      _id: response?._id,
+    };
+    const newResponse = await handleCreateUpdateResponse({
+      payload,
+      edit: true,
+      fields: form?.fields,
+    });
+    if (newResponse) {
+      setState(initialState);
+    }
+  };
+
   useEffect(() => {
     if (!state.showFieldsMenu && defaultShowFieldsMenu) {
       setState((oldState) => ({ ...oldState, showFieldsMenu: true }));
     }
   }, []);
+
+  // inlinEdit Related
 
   const DetailComponent = (
     <Paper variant="outlined" className="p-2" style={hideLeftNavigation ? { border: 'none' } : {}}>
@@ -260,13 +305,19 @@ export function DisplayResponse({
                         });
                         router.query.field = fieldIndex?.toString();
                         router.push(router);
-                        setState({
-                          ...initialState,
-                          field: fieldIndex,
-                          fieldId,
-                          valueId,
-                          editMode,
-                        });
+                        if (editMode === 'deleteValue') {
+                          deleteValue(valueId);
+                        } else if (editMode === 'deleteField') {
+                          deleteField(fieldId);
+                        } else {
+                          setState({
+                            ...initialState,
+                            field: fieldIndex,
+                            fieldId,
+                            valueId,
+                            editMode,
+                          });
+                        }
                       }}
                     />
                   </div>

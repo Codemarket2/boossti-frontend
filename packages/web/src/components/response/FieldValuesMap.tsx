@@ -107,11 +107,11 @@ export default function FieldValuesMap({
                   <Tooltip title="Delete Field">
                     <IconButton
                       edge="end"
-                      // onClick={() => {
-                      //   if (onClickEditField) {
-                      //     onClickEditField(field?._id, null, 'deleteField');
-                      //   }
-                      // }}
+                      onClick={() => {
+                        if (onClickEditField) {
+                          onClickEditField(field?._id, null, 'deleteField');
+                        }
+                      }}
                     >
                       <DeleteIcon />
                     </IconButton>
@@ -157,13 +157,13 @@ export default function FieldValuesMap({
                                 <EditIcon fontSize="small" />
                               </IconButton>
                             </Tooltip>
-                            <Tooltip title="Delete Field">
+                            <Tooltip title="Delete Value">
                               <IconButton
                                 edge="end"
                                 onClick={() => {
-                                  // if (onClickEditField) {
-                                  //   onClickEditField(field?._id, value?._id, 'deleteValue');
-                                  // }
+                                  if (onClickEditField) {
+                                    onClickEditField(field?._id, value?._id, 'deleteValue');
+                                  }
                                 }}
                               >
                                 <DeleteIcon />
