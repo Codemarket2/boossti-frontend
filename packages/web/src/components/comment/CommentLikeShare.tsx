@@ -3,16 +3,13 @@ import IconButton from '@mui/material/IconButton';
 import CommentIcon from '@mui/icons-material/ModeComment';
 import ShareIcon from '@mui/icons-material/Share';
 import Divider from '@mui/material/Divider';
-import { useGetActionCounts , useGetComments } from '@frontend/shared/hooks/comment/getComment';
+import { useGetActionCounts } from '@frontend/shared/hooks/comment/getComment';
 import Tooltip from '@mui/material/Tooltip';
 import { useRouter } from 'next/router';
-import { useCreateComment } from '@frontend/shared/hooks/comment/createComment';
 import ErrorLoading from '../common/ErrorLoading';
 import Like from '../like/Like';
 import CommentsList from './CommentsList';
-import CommentInput from './CommentInput';
-
-import BasicModal from '../common/BasicModal';
+import Overlay from '../common/Overlay';
 
 interface CommentLikeShareProps {
   threadId: string;
@@ -31,17 +28,6 @@ const spacingStyles = {
   borderLeft: '1px solid lightgrey',
   marginLeft: 17,
   paddingLeft: 26,
-};
-
-const modalStyle = {
-  position: 'absolute' as const,
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  border: '2px solid #fff',
-  backgroundColor: '#fff',
-  p: 4,
 };
 
 export default function CommentLikeShare({
@@ -91,15 +77,8 @@ export default function CommentLikeShare({
     // router.push(router);
   };
   const [showComment, setShowComment] = useState(false);
-  const [showInlineCommentInput, setShowInlineCommentInput] = useState(false);
-  const [commentCount, setCommentCount] = useState(data?.getActionCounts?.commentCount ?? 0);
 
   const handleToggleCommentsList = () => {
-    if (commentCount === 0) {
-      setShowInlineCommentInput(true);
-      return;
-    }
-
     if (isReply) {
       let oldChildThreads = [];
       if (router.query.childThreadId) {
@@ -126,7 +105,7 @@ export default function CommentLikeShare({
         router.query.threadId = threadId;
       }
     }
-    router.push(router);
+    router.push(router, undefined, { scroll: false });
   };
 
   useEffect(() => {
@@ -178,29 +157,6 @@ export default function CommentLikeShare({
     </div>
   );
 
-  let commentIds = [];
-  if (router?.query?.childThreadId) {
-    commentIds = Array.isArray(router?.query?.childThreadId)
-      ? router?.query?.childThreadId
-      : [router?.query?.childThreadId];
-  }
-  if (router?.query?.commentId) {
-    commentIds = [...commentIds, router?.query?.commentId];
-  }
-
-  const { refetch } = useGetComments(threadId, commentIds);
-
-  const { handleSave, inputVal, setInputVal, loading: submitLoading } = useCreateComment({
-    parentIds,
-    threadId,
-    refetch,
-    path: router.asPath,
-  });
-
-  const handleChange = (e) => {
-    setInputVal(e);
-  };
-
   return (
     <div className="mt-n2">
       {error && <ErrorLoading error={error} />}
@@ -224,9 +180,9 @@ export default function CommentLikeShare({
               <CommentIcon />
             </IconButton>
           </Tooltip>
-          {commentCount > 0 && (
-            <Tooltip title={`${commentCount} Comments`}>
-              <span className="mr-2">{commentCount}</span>
+          {data?.getActionCounts?.commentCount > 0 && (
+            <Tooltip title={`${data?.getActionCounts?.commentCount} Comments`}>
+              <span className="mr-2">{data?.getActionCounts?.commentCount}</span>
             </Tooltip>
           )}
           <Tooltip title={copy ? 'link copied' : 'share link'} onClick={copyLink}>
@@ -237,45 +193,16 @@ export default function CommentLikeShare({
           {children}
         </div>
       </div>
-      {isReply ? (
-        (showHideComments || showComment) && (
-          <>
-            {showDivider && <Divider />}
-            {CommentsListComponent}
-          </>
-        )
-      ) : showInlineCommentInput ? (
+      {(showHideComments || showComment) && (
         <>
-          <CommentInput
-            label="Add Comment"
-            handleChange={handleChange} // what is this
-            inputVal={inputVal}
-            onClick={() => {
-              handleSave();
-              setShowInlineCommentInput(false);
-              setCommentCount(commentCount + 1);
-            }}
-            loading={submitLoading}
-            onCancel={() => {
-              setShowInlineCommentInput(false);
-              setInputVal('');
-            }}
-          />
+          {showDivider && <Divider />}
+          {CommentsListComponent}
         </>
-      ) : (
-        <BasicModal
-          open={showComment}
-          onClose={() => handleToggleCommentsList()}
-          title="Comments"
-          style={modalStyle}
-        >
-          <div className="p-2"> {CommentsListComponent}</div>
-        </BasicModal>
       )}
     </div>
   );
 }
 
 // <Overlay open={showComment} onClose={() => handleToggleCommentsList()} title="Comments">
-//         <div className="p-2">{CommentsListComponent}</div>
-//       </Overlay>
+//           <div className="p-2">{CommentsListComponent}</div>
+//         </Overlay>
