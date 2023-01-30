@@ -63,7 +63,7 @@ export default function CommentsList({
             <Skeleton height={60} />
             <Skeleton height={60} />
           </ErrorLoading>
-        ) : data?.getCommentsByThreadId?.data.length == 0 ? (
+        ) : data?.getCommentsByThreadId?.data.length === 0 ? (
           <div className="p-4">No Comments...</div>
         ) : (
           data?.getCommentsByThreadId?.data?.map((comment, index) => (

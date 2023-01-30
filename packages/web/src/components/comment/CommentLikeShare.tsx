@@ -3,15 +3,15 @@ import IconButton from '@mui/material/IconButton';
 import CommentIcon from '@mui/icons-material/ModeComment';
 import ShareIcon from '@mui/icons-material/Share';
 import Divider from '@mui/material/Divider';
-import { useGetActionCounts } from '@frontend/shared/hooks/comment/getComment';
+import { useGetActionCounts , useGetComments } from '@frontend/shared/hooks/comment/getComment';
 import Tooltip from '@mui/material/Tooltip';
 import { useRouter } from 'next/router';
+import { useCreateComment } from '@frontend/shared/hooks/comment/createComment';
 import ErrorLoading from '../common/ErrorLoading';
 import Like from '../like/Like';
 import CommentsList from './CommentsList';
 import CommentInput from './CommentInput';
-import { useCreateComment } from '@frontend/shared/hooks/comment/createComment';
-import { useGetComments } from '@frontend/shared/hooks/comment/getComment';
+
 import BasicModal from '../common/BasicModal';
 
 interface CommentLikeShareProps {
@@ -34,7 +34,7 @@ const spacingStyles = {
 };
 
 const modalStyle = {
-  position: 'absolute' as 'absolute',
+  position: 'absolute' as const,
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
