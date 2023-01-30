@@ -52,14 +52,21 @@ export default function CommentsList({
 
   return (
     <div className="pt-1 mb-2">
-      {error || !data?.getCommentsByThreadId ? (
-        <ErrorLoading error={error}>
-          <Skeleton height={60} />
-          <Skeleton height={60} />
-        </ErrorLoading>
-      ) : (
-        data?.getCommentsByThreadId?.data?.map((comment, index) => (
-          <div>
+      <div
+        style={{
+          overflow: 'scroll',
+          maxHeight: '40vh',
+        }}
+      >
+        {error || !data?.getCommentsByThreadId ? (
+          <ErrorLoading error={error}>
+            <Skeleton height={60} />
+            <Skeleton height={60} />
+          </ErrorLoading>
+        ) : data?.getCommentsByThreadId?.data.length == 0 ? (
+          <div className="p-4">No Comments...</div>
+        ) : (
+          data?.getCommentsByThreadId?.data?.map((comment, index) => (
             <DisplayComment
               key={comment._id}
               parentIds={parentIds}
@@ -71,9 +78,9 @@ export default function CommentsList({
               shareIndex={shareIndex}
               fieldTitle={fieldTitle}
             />
-          </div>
-        ))
-      )}
+          ))
+        )}
+      </div>
       {showInput && (
         <div>
           <CommentInput
