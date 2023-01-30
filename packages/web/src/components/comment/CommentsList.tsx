@@ -52,28 +52,35 @@ export default function CommentsList({
 
   return (
     <div className="pt-1 mb-2">
-      {error || !data?.getCommentsByThreadId ? (
-        <ErrorLoading error={error}>
-          <Skeleton height={60} />
-          <Skeleton height={60} />
-        </ErrorLoading>
-      ) : (
-        data?.getCommentsByThreadId?.data?.map((comment, index) => (
-          <div>
-            <DisplayComment
-              key={comment._id}
-              parentIds={parentIds}
-              threadId={threadId}
-              comment={comment}
-              index={index}
-              handleDelete={handleDelete}
-              itemSlug={itemSlug}
-              shareIndex={shareIndex}
-              fieldTitle={fieldTitle}
-            />
-          </div>
-        ))
-      )}
+      <div
+        style={{
+          overflow: 'auto',
+          maxHeight: '40vh',
+        }}
+      >
+        {error || !data?.getCommentsByThreadId ? (
+          <ErrorLoading error={error}>
+            <Skeleton height={60} />
+            <Skeleton height={60} />
+          </ErrorLoading>
+        ) : (
+          data?.getCommentsByThreadId?.data?.map((comment, index) => (
+            <div>
+              <DisplayComment
+                key={comment._id}
+                parentIds={parentIds}
+                threadId={threadId}
+                comment={comment}
+                index={index}
+                handleDelete={handleDelete}
+                itemSlug={itemSlug}
+                shareIndex={shareIndex}
+                fieldTitle={fieldTitle}
+              />
+            </div>
+          ))
+        )}
+      </div>
       {showInput && (
         <div>
           <CommentInput
