@@ -147,3 +147,7 @@ amplifytools.xcconfig
 
 
 temporary
+
+# modern yarn
+.yarn/install-state.gz
+.yarn/cache
