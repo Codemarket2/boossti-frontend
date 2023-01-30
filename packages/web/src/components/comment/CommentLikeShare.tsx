@@ -9,7 +9,10 @@ import { useRouter } from 'next/router';
 import ErrorLoading from '../common/ErrorLoading';
 import Like from '../like/Like';
 import CommentsList from './CommentsList';
-import Overlay from '../common/Overlay';
+import CommentInput from './CommentInput';
+import { useCreateComment } from '@frontend/shared/hooks/comment/createComment';
+import { useGetComments } from '@frontend/shared/hooks/comment/getComment';
+import BasicModal from '../common/BasicModal';
 
 interface CommentLikeShareProps {
   threadId: string;
@@ -28,6 +31,17 @@ const spacingStyles = {
   borderLeft: '1px solid lightgrey',
   marginLeft: 17,
   paddingLeft: 26,
+};
+
+const modalStyle = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  border: '2px solid #fff',
+  backgroundColor: '#fff',
+  p: 4,
 };
 
 export default function CommentLikeShare({
@@ -77,8 +91,15 @@ export default function CommentLikeShare({
     // router.push(router);
   };
   const [showComment, setShowComment] = useState(false);
+  const [showInlineCommentInput, setShowInlineCommentInput] = useState(false);
+  const [commentCount, setCommentCount] = useState(data?.getActionCounts?.commentCount ?? 0);
 
   const handleToggleCommentsList = () => {
+    if (commentCount === 0) {
+      setShowInlineCommentInput(true);
+      return;
+    }
+
     if (isReply) {
       let oldChildThreads = [];
       if (router.query.childThreadId) {
@@ -157,6 +178,29 @@ export default function CommentLikeShare({
     </div>
   );
 
+  let commentIds = [];
+  if (router?.query?.childThreadId) {
+    commentIds = Array.isArray(router?.query?.childThreadId)
+      ? router?.query?.childThreadId
+      : [router?.query?.childThreadId];
+  }
+  if (router?.query?.commentId) {
+    commentIds = [...commentIds, router?.query?.commentId];
+  }
+
+  const { refetch } = useGetComments(threadId, commentIds);
+
+  const { handleSave, inputVal, setInputVal, loading: submitLoading } = useCreateComment({
+    parentIds,
+    threadId,
+    refetch,
+    path: router.asPath,
+  });
+
+  const handleChange = (e) => {
+    setInputVal(e);
+  };
+
   return (
     <div className="mt-n2">
       {error && <ErrorLoading error={error} />}
@@ -180,9 +224,9 @@ export default function CommentLikeShare({
               <CommentIcon />
             </IconButton>
           </Tooltip>
-          {data?.getActionCounts?.commentCount > 0 && (
-            <Tooltip title={`${data.getActionCounts.commentCount} Comments`}>
-              <span className="mr-2">{data.getActionCounts.commentCount}</span>
+          {commentCount > 0 && (
+            <Tooltip title={`${commentCount} Comments`}>
+              <span className="mr-2">{commentCount}</span>
             </Tooltip>
           )}
           <Tooltip title={copy ? 'link copied' : 'share link'} onClick={copyLink}>
@@ -200,11 +244,38 @@ export default function CommentLikeShare({
             {CommentsListComponent}
           </>
         )
+      ) : showInlineCommentInput ? (
+        <>
+          <CommentInput
+            label="Add Comment"
+            handleChange={handleChange} // what is this
+            inputVal={inputVal}
+            onClick={() => {
+              handleSave();
+              setShowInlineCommentInput(false);
+              setCommentCount(commentCount + 1);
+            }}
+            loading={submitLoading}
+            onCancel={() => {
+              setShowInlineCommentInput(false);
+              setInputVal('');
+            }}
+          />
+        </>
       ) : (
-        <Overlay open={showComment} onClose={() => handleToggleCommentsList()} title="Comments">
-          <div className="p-2">{CommentsListComponent}</div>
-        </Overlay>
+        <BasicModal
+          open={showComment}
+          onClose={() => handleToggleCommentsList()}
+          title="Comments"
+          style={modalStyle}
+        >
+          <div className="p-2"> {CommentsListComponent}</div>
+        </BasicModal>
       )}
     </div>
   );
 }
+
+// <Overlay open={showComment} onClose={() => handleToggleCommentsList()} title="Comments">
+//         <div className="p-2">{CommentsListComponent}</div>
+//       </Overlay>
