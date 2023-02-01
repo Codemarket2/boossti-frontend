@@ -20,7 +20,7 @@ import { IField } from '@frontend/shared/types/form';
 import WorkflowButtons from './workflow/WorkflowButtons';
 import FieldValuesMap from './FieldValuesMap';
 import { useGetForm } from '@frontend/shared/hooks/form';
-import { DataGrid, GridColDef, GridToolbar  } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
 
 interface IProps {
   search: string;
@@ -66,95 +66,95 @@ export default function ResponseTable({
         </a>
       </Link>
       <br />
-      <span>{`${moment(params.row.createdAt).format('l')} ${moment(
-        params.row.createdAt,
-      ).format('LT')}`}</span>
+      <span>{`${moment(params.row.createdAt).format('l')} ${moment(params.row.createdAt).format(
+        'LT',
+      )}`}</span>
     </span>
-  )
+  );
 
   const IDCell = (params) => (
     <Tooltip title="Open Response">
-        <span>
-          {onClickResponse ? (
-            <span
-              style={{ cursor: 'pointer' }}
-              onClick={() => {
-                if (onClickResponse) {
-                  onClickResponse(params.row, form);
-                } else {
-                  router.push(`/form/${form.slug}/response/${params.row.count}`);
-                }
-              }}
-            >
-              <u>{responses[1]?.count}</u>
-            </span>
-          ) : (
-            <Link href={`/form/${form.slug}/response/${params.row.count}`}>
-              <a>{params.row?.count}</a>
-            </Link>
-          )}
-        </span>
-      </Tooltip>
-  )
+      <span>
+        {onClickResponse ? (
+          <span
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              if (onClickResponse) {
+                onClickResponse(params.row, form);
+              } else {
+                router.push(`/form/${form.slug}/response/${params.row.count}`);
+              }
+            }}
+          >
+            <u>{responses[1]?.count}</u>
+          </span>
+        ) : (
+          <Link href={`/form/${form.slug}/response/${params.row.count}`}>
+            <a>{params.row?.count}</a>
+          </Link>
+        )}
+      </span>
+    </Tooltip>
+  );
 
-  const WorkflowCell = (params) => (
-    <DisplayWorkflowName workflowId={params.row?.workflowId} />
-  )
+  const WorkflowCell = (params) => <DisplayWorkflowName workflowId={params.row?.workflowId} />;
 
-  const FieldValueCell = (field, params) => (
-      <FieldValuesMap field={field} response={params.row} />
-  )
+  const FieldValueCell = (field, params) => <FieldValuesMap field={field} response={params.row} />;
 
   // console.log(form)
 
-  const fieldValuesArray:GridColDef[] = form.fields.map((field: IField) => {
+  const fieldValuesArray: GridColDef[] = form.fields.map((field: IField) => {
     return {
       field: field.label,
       headerName: field.label,
       width: 130,
-      renderCell: ()=> <FieldValueCell field={field}/>
-    }
-  })
+      renderCell: () => <FieldValueCell field={field} />,
+    };
+  });
 
-  console.log(fieldValuesArray)
+  console.log(fieldValuesArray);
 
-  const columns:GridColDef[] = [
+  const columns: GridColDef[] = [
     {
       field: 'createdBy',
       headerName: 'CreatedBy',
       width: 130,
-      renderCell: CreatedByCell
+      renderCell: CreatedByCell,
     },
     {
       field: 'id',
       headerName: 'ID',
       width: 50,
-      renderCell: IDCell
+      renderCell: IDCell,
     },
     {
       field: 'workflow',
       headerName: 'Workflow',
       width: 130,
-      renderCell: WorkflowCell 
+      renderCell: WorkflowCell,
     },
-    ...fieldValuesArray
-  ]
+    ...fieldValuesArray,
+  ];
 
   const rows = responses?.map((res, i) => {
     return {
       id: i,
-      ...res
-    }
-  })
+      ...res,
+    };
+  });
 
   // console.log(columns)
-  console.log(rows)
+  console.log(rows);
 
   return (
     <div style={{ height: 600, width: '100%' }}>
-      <DataGrid rows={rows} columns={columns} components={{
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        components={{
           Toolbar: GridToolbar,
-        }}/>
+        }}
+      />
       {/* <TableContainer component={Paper} variant="outlined">
         <div className="d-flex justify-content-between align-items-center">
           <TextField
