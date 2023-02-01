@@ -193,6 +193,10 @@ export function DisplayResponse({
       setState(initialState);
     }
   };
+  const scrollToField = (formId: string, fieldId: string) => {
+    const element = document.getElementById(`${formId}${fieldId}`);
+    element.scrollIntoView({ behavior: 'smooth' });
+  };
 
   useEffect(() => {
     if (!state.showFieldsMenu && defaultShowFieldsMenu) {
@@ -214,6 +218,10 @@ export function DisplayResponse({
                 onClickMinimize={() =>
                   setState((oldState) => ({ ...oldState, showFieldsMenu: false }))
                 }
+                onClickScrollToField={(formId, fieldId) => {
+                  scrollToField(formId, fieldId);
+                }}
+                formId={form?._id}
               />
             </div>
           ) : (
@@ -276,7 +284,7 @@ export function DisplayResponse({
           </div>
           {form?.fields?.filter(filterFields)?.map((field, index) => {
             return (
-              <div key={field?._id} className="mt-3">
+              <div key={field?._id} className="mt-3" id={`${form?._id}${field?._id}`}>
                 {field?._id === state.fieldId ? (
                   <>
                     <EditResponse
