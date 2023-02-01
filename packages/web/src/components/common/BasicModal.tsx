@@ -19,18 +19,16 @@ interface IBasicModal {
   hideAppBar?: boolean;
 }
 
-
-
 export default function BasicModal({
   open,
   onClose,
   title,
   children,
   secondButton = null,
-  minWidth='60vw',
-  maxWidth='85vw',
+  minWidth = '60vw',
+  maxWidth = '85vw',
   style,
-  hideAppBar=false,
+  hideAppBar = false,
 }: IBasicModal) {
   return (
     <div>

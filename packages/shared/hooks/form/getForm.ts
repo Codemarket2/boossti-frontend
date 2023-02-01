@@ -156,7 +156,6 @@ export function useGetFormBySlug(slug: string) {
       variables: { slug },
     },
   );
-
   useSubscription(UPDATED_FORM, {
     variables: { _id: getFormBySlug2?._id },
   });
