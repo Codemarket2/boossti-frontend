@@ -10,7 +10,7 @@ interface ISettings {
   widgetType?: 'both' | 'form' | 'responses';
   formView?: 'fullForm' | 'oneField' | 'leaderboard' | 'button' | 'selectItem';
   whoCanSubmit?: 'all' | 'authUser';
-  responsesView?: 'button' | 'table' | 'table2' | 'vertical';
+  responsesView?: 'button' | 'table' | 'table2' | 'vertical' | 'filter';
   whoCanViewResponses?: 'all' | 'authUser';
   onlyMyResponses?: boolean;
   buttonLabel?: string;

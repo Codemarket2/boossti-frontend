@@ -8,6 +8,7 @@ import Table from './Table';
 import { ResponseViewSelectInput } from '../form2/FormSetting';
 import Paper from '@mui/material/Paper';
 import { useState } from 'react';
+import FilterTable from './FilterTable';
 
 export interface IResponseList {
   form: any;
@@ -76,6 +77,14 @@ export default function ResponseList({
             page={state.page - 1}
             onPageChange={(e, newPage) => setState({ ...state, page: newPage + 1 })}
             onRowsPerPageChange={(e) => setState({ ...state, limit: parseInt(e.target.value) })}
+          />
+        </>
+      ) : responsesView === 'filter' ? (
+        <>
+          <FilterTable 
+            form={form}
+            responses={data?.getResponses?.data}
+            // onClickResponse={onClickResponse}
           />
         </>
       ) : (

@@ -269,6 +269,7 @@ export const ResponseViewSelectInput = ({
         <MenuItem value="vertical">Vertical</MenuItem>
         <MenuItem value="table2">Table 2</MenuItem>
         <MenuItem value="button">Button</MenuItem>
+        <MenuItem value="filter">Filter Table</MenuItem>
       </TextField>
     </>
   );
