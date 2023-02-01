@@ -122,10 +122,39 @@ export default function FormFields({
     setFields(newFields);
   }
 
-  const onSave = (field, action) => {
+  const onSave = (tempField, action) => {
+    // debugger;
+    const field = { ...tempField };
     if (action === 'create') {
+      // if (field?.fieldType === 'response') {
+      //   field.options = {
+      //     ...field?.options,
+      //     createRelationField: true,
+      //   };
+      // }
+      // debugger;
       setFields([...fields, field]);
     } else if (action === 'update') {
+      // const selectedField = fields?.find((oldF) => oldF?._id === field?._id);
+      // if (selectedField?._id && field?.fieldType !== selectedField?.fieldType) {
+      //   if (field?.fieldType === 'response') {
+      //     field.options = {
+      //       ...field?.options,
+      //       createRelationField: true,
+      //     };
+      //   } else if (selectedField?.fieldType === 'response') {
+      //     field.options = {
+      //       ...field?.options,
+      //       deleteRelationField: true,
+      //     };
+      //   }
+      //   if (oldField?.form?._id !== field?.form?._id) {
+      //     field.options = {
+      //       ...field?.options,
+      //       updateRelationField: true,
+      //     };
+      //   }
+      // }
       setFields(
         fields.map((oldField) => {
           if (oldField._id === field._id) {
