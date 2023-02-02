@@ -343,8 +343,7 @@ export default function FormFields({
                                           {expanded ? '\u25BC' : '\u25B6'}
                                         </IconButton>
                                       )}
-                                      {/* !field?.options?.relationField */}
-                                      {!previewMode && (
+                                      {!previewMode && !field?.options?.relationField && (
                                         <IconButton
                                           edge="end"
                                           onClick={(event) =>
