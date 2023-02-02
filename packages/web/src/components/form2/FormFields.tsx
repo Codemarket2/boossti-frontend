@@ -123,38 +123,53 @@ export default function FormFields({
   }
 
   const onSave = (tempField, action) => {
-    // debugger;
     const field = { ...tempField };
     if (action === 'create') {
-      // if (field?.fieldType === 'response') {
-      //   field.options = {
-      //     ...field?.options,
-      //     createRelationField: true,
-      //   };
-      // }
-      // debugger;
+      if (field?.fieldType === 'response') {
+        field.options = {
+          ...field?.options,
+          createRelationField: true,
+        };
+      }
       setFields([...fields, field]);
     } else if (action === 'update') {
-      // const selectedField = fields?.find((oldF) => oldF?._id === field?._id);
-      // if (selectedField?._id && field?.fieldType !== selectedField?.fieldType) {
-      //   if (field?.fieldType === 'response') {
-      //     field.options = {
-      //       ...field?.options,
-      //       createRelationField: true,
-      //     };
-      //   } else if (selectedField?.fieldType === 'response') {
-      //     field.options = {
-      //       ...field?.options,
-      //       deleteRelationField: true,
-      //     };
-      //   }
-      //   if (oldField?.form?._id !== field?.form?._id) {
-      //     field.options = {
-      //       ...field?.options,
-      //       updateRelationField: true,
-      //     };
-      //   }
-      // }
+      const selectedField = fields?.find((oldF) => oldF?._id === field?._id);
+      if (selectedField?._id) {
+        if (
+          field?.fieldType === selectedField?.fieldType &&
+          field?.fieldType === 'response' &&
+          selectedField?.form?._id !== field?.form?._id
+        ) {
+          // update form
+          if (selectedField?.form?._id !== field?.form?._id) {
+            field.options = {
+              ...field?.options,
+              updateRelationField: true,
+              oldFormId: selectedField?.form?._id,
+            };
+          }
+        } else if (
+          field?.fieldType !== selectedField?.fieldType &&
+          field?.fieldType === 'response'
+        ) {
+          // new
+          field.options = {
+            ...field?.options,
+            createRelationField: true,
+          };
+        } else if (
+          field?.fieldType !== selectedField?.fieldType &&
+          selectedField?.fieldType === 'response'
+        ) {
+          // remove
+          field.options = {
+            ...field?.options,
+            deleteRelationField: true,
+            oldFormId: selectedField?.form?._id,
+          };
+        }
+      }
+
       setFields(
         fields.map((oldField) => {
           if (oldField._id === field._id) {
@@ -321,7 +336,8 @@ export default function FormFields({
                                           {expanded ? '\u25BC' : '\u25B6'}
                                         </IconButton>
                                       )}
-                                      {!previewMode && !field?.options?.relationField && (
+                                      {/* !field?.options?.relationField */}
+                                      {!previewMode && (
                                         <IconButton
                                           edge="end"
                                           onClick={(event) =>
