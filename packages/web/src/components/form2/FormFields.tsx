@@ -89,6 +89,7 @@ type IProps = {
   selectedFieldId?: string;
   onClickMinimize?: () => void;
   showSystemFields?: boolean;
+  onClickScrollToField?: (formId: string, fieldId: string) => void;
 };
 
 export default function FormFields({
@@ -107,6 +108,7 @@ export default function FormFields({
   selectedFieldId,
   onClickMinimize,
   showSystemFields,
+  onClickScrollToField,
 }: IProps): any {
   const [state, setState] = useState<IState>(initialValues);
   const [isExpanded, setIsExpanded] = useState<boolean[]>([]);
@@ -289,7 +291,12 @@ export default function FormFields({
                               >
                                 <ListItem
                                   button
-                                  onClick={() => handleOnClickField(field)}
+                                  onClick={() => {
+                                    handleOnClickField(field);
+                                    if (formId && onClickScrollToField) {
+                                      onClickScrollToField(formId, field?._id);
+                                    }
+                                  }}
                                   selected={
                                     draggableSnapshot.isDragging ||
                                     field?._id === state?.field?._id ||

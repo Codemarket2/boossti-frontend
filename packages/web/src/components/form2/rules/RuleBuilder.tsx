@@ -3,6 +3,7 @@ import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField } fro
 import React, { useState } from 'react';
 import InputGroup from '../../common/InputGroup';
 import FieldConditionForm from '../field/field-condition/FieldConditionForm';
+import { DisplayForm } from '../DisplayForm';
 
 interface RuleBuilderProps {
   initialRule: IRule;
@@ -46,6 +47,15 @@ export default function RuleBuilder({ initialRule, onSave, onClose }: RuleBuilde
             </Select>
           </FormControl>
         </InputGroup>
+        {rule.ruleType === 'accessControl' ? (
+          <DisplayForm
+            slug="permissions"
+            settings={{ formView: 'button', buttonLabel: 'ADD PERMISSIONS' }}
+          />
+        ) : (
+          ''
+        )}
+
         <InputGroup>
           <FormControl variant="outlined" fullWidth size="small" required>
             <InputLabel>Trigger</InputLabel>
