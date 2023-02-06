@@ -109,21 +109,22 @@ export default function FieldValuesMap({
                 {field?.options?.multipleValues ? (
                   <>
                     {index !== fieldValues?.length - 1 && (
-                      <>
+                      <div>
                         <Fragment key={value?._id}>
-                          {/* <StyledBox style={{ display: 'flex', alignContent: 'center' }}>
-                </StyledBox> */}
-                          {authorized && !disabled && (
-                            <>
-                              <InlineEditMenu
-                                item="value"
-                                field={field}
-                                valueId={value?._id}
-                                fieldId={field?._id}
-                                onClickEditField={onClickEditField}
-                              />
-                            </>
-                          )}
+                          {authorized &&
+                            !disabled &&
+                            value?.form === null &&
+                            value?.response === null && (
+                              <>
+                                <InlineEditMenu
+                                  item="value"
+                                  field={field}
+                                  valueId={value?._id}
+                                  fieldId={field?._id}
+                                  onClickEditField={onClickEditField}
+                                />
+                              </>
+                            )}
                           <DisplayValue field={field} value={value} verticalView={verticalView} />
                           {verticalView && (
                             <>
@@ -136,7 +137,7 @@ export default function FieldValuesMap({
                             </>
                           )}
                         </Fragment>
-                      </>
+                      </div>
                     )}
                   </>
                 ) : (
@@ -144,7 +145,7 @@ export default function FieldValuesMap({
                     <Fragment key={value?._id}>
                       {/* <StyledBox style={{ display: 'flex', alignContent: 'center' }}>
                 </StyledBox> */}
-                      {authorized && !disabled && (
+                      {authorized && !disabled && value?.form === null && value?.response === null && (
                         <div>
                           <InlineEditMenu
                             item="value"

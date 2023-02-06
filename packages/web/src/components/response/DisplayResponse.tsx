@@ -58,6 +58,7 @@ const initialState = {
   field: null,
   showFieldsMenu: false,
   valueId: null,
+  responseId: null,
   editMode: null,
 };
 
@@ -312,7 +313,7 @@ export function DisplayResponse({
                           }
                         });
                         router.query.field = fieldIndex?.toString();
-                        router.push(router);
+                        router.push(router, undefined, { scroll: false });
                         if (editMode === 'deleteValue') {
                           deleteValue(valueId);
                         } else if (editMode === 'deleteField') {
@@ -323,6 +324,7 @@ export function DisplayResponse({
                             field: fieldIndex,
                             fieldId,
                             valueId,
+                            responseId: response?._id,
                             editMode,
                           });
                         }
