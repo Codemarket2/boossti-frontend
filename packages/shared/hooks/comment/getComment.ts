@@ -72,7 +72,7 @@ export const useGetComment = (_id) => {
 };
 
 export const useGetActionCounts = (threadId: string) => {
-  const { data, error, loading } = useQuery(GET_ACTION_COUNTS, {
+  const { data, error, loading, refetch } = useQuery(GET_ACTION_COUNTS, {
     variables: {
       threadId,
     },
@@ -82,5 +82,6 @@ export const useGetActionCounts = (threadId: string) => {
     data,
     error,
     loading,
+    refetch,
   };
 };
