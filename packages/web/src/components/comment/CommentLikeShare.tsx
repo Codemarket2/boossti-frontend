@@ -9,7 +9,6 @@ import { useRouter } from 'next/router';
 import ErrorLoading from '../common/ErrorLoading';
 import Like from '../like/Like';
 import CommentsList from './CommentsList';
-import Overlay from '../common/Overlay';
 
 interface CommentLikeShareProps {
   threadId: string;
