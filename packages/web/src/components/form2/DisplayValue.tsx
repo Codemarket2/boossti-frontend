@@ -1,5 +1,5 @@
 // import Link from 'next/link';
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import moment from 'moment';
 import Avatar from '@mui/material/Avatar';
 import { Box, Button, Typography } from '@mui/material';
@@ -29,8 +29,7 @@ interface IProps {
   value: any;
   imageAvatar?: boolean;
   verticalView?: boolean;
-  inlineEditResponseId?: string;
-  onClickResponse?: () => void;
+  onClickResponse?: (vieMore: boolean) => void;
 }
 
 export default function DisplayValue({
@@ -39,7 +38,6 @@ export default function DisplayValue({
   imageAvatar,
   verticalView,
   onClickResponse,
-  inlineEditResponseId,
 }: IProps) {
   const value: any = { ...tempValue };
   const [state, setState] = useState({
@@ -98,6 +96,9 @@ export default function DisplayValue({
               hideBreadcrumbs
               responseId={value?.response?._id}
               viewLess={!state.viewMoreResponse}
+              handleViewLess={(viewMore: boolean) => {
+                setState({ ...state, viewMoreResponse: viewMore });
+              }}
             />
           </div>
           {ViewMoreButton}
