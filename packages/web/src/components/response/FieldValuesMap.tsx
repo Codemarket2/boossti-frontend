@@ -16,6 +16,7 @@ import DisplayValue from '../form2/DisplayValue';
 import DisplayFormulaValue from '../form2/field/formula/DisplayFormulaValue';
 import StarRating from '../starRating/starRating';
 import AddResponseButton from './AddResponseButton';
+import InlineEditMenu from './InlineEditMenu';
 // import DependantResponses from './DependantResponses';
 import { onAlert } from '../../utils/alert';
 
@@ -74,48 +75,15 @@ export default function FieldValuesMap({
               <div data-testid="label">{field?.label}</div>
               {authorized && !disabled && (
                 <>
-                  <Tooltip title="Edit">
-                    <IconButton
-                      edge="end"
-                      onClick={() => {
-                        if (onClickEditField) {
-                          onClickEditField(field?._id, null, 'editField');
-                        }
-                      }}
-                      size="small"
-                    >
-                      <EditIcon fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
-                  {(field?.options?.multipleValues ? true : fieldValues.length === 0) && (
-                    <>
-                      <Tooltip title="Add New Value">
-                        <IconButton
-                          edge="end"
-                          onClick={() => {
-                            if (onClickEditField) {
-                              onClickEditField(field?._id, null, 'addValue');
-                            }
-                          }}
-                          size="small"
-                        >
-                          <AddIcon fontSize="small" />
-                        </IconButton>
-                      </Tooltip>
-                    </>
+                  {(field?.options?.multipleValues || fieldValues?.length === 0) && (
+                    <InlineEditMenu
+                      item="field"
+                      field={field}
+                      valueId={null}
+                      fieldId={field?._id}
+                      onClickEditField={onClickEditField}
+                    />
                   )}
-                  <Tooltip title="Delete Field">
-                    <IconButton
-                      edge="end"
-                      onClick={() => {
-                        if (onClickEditField) {
-                          onClickEditField(field?._id, null, 'deleteField');
-                        }
-                      }}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </Tooltip>
                 </>
               )}
             </Typography>
@@ -142,38 +110,20 @@ export default function FieldValuesMap({
                   <>
                     {index !== fieldValues?.length - 1 && (
                       <>
-                        {authorized && !disabled && (
-                          <>
-                            <Tooltip title="Edit">
-                              <IconButton
-                                edge="end"
-                                onClick={() => {
-                                  if (onClickEditField) {
-                                    onClickEditField(field?._id, value?._id, 'editValue');
-                                  }
-                                }}
-                                size="small"
-                              >
-                                <EditIcon fontSize="small" />
-                              </IconButton>
-                            </Tooltip>
-                            <Tooltip title="Delete Value">
-                              <IconButton
-                                edge="end"
-                                onClick={() => {
-                                  if (onClickEditField) {
-                                    onClickEditField(field?._id, value?._id, 'deleteValue');
-                                  }
-                                }}
-                              >
-                                <DeleteIcon />
-                              </IconButton>
-                            </Tooltip>
-                          </>
-                        )}
                         <Fragment key={value?._id}>
                           {/* <StyledBox style={{ display: 'flex', alignContent: 'center' }}>
                 </StyledBox> */}
+                          {authorized && !disabled && (
+                            <>
+                              <InlineEditMenu
+                                item="value"
+                                field={field}
+                                valueId={value?._id}
+                                fieldId={field?._id}
+                                onClickEditField={onClickEditField}
+                              />
+                            </>
+                          )}
                           <DisplayValue field={field} value={value} verticalView={verticalView} />
                           {verticalView && (
                             <>
@@ -191,38 +141,20 @@ export default function FieldValuesMap({
                   </>
                 ) : (
                   <>
-                    {authorized && !disabled && (
-                      <>
-                        {/* <Tooltip title="Edit">
-                          <IconButton
-                            edge="end"
-                            onClick={() => {
-                              if (onClickEditField) {
-                                onClickEditField(field?._id, value?._id, 'editValue');
-                              }
-                            }}
-                            size="small"
-                          >
-                            <EditIcon fontSize="small" />
-                          </IconButton>
-                        </Tooltip> */}
-                        <Tooltip title="Delete Field">
-                          <IconButton
-                            edge="end"
-                            onClick={() => {
-                              if (onClickEditField) {
-                                onClickEditField(field?._id, value?._id, 'deleteValue');
-                              }
-                            }}
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        </Tooltip>
-                      </>
-                    )}
                     <Fragment key={value?._id}>
                       {/* <StyledBox style={{ display: 'flex', alignContent: 'center' }}>
                 </StyledBox> */}
+                      {authorized && !disabled && (
+                        <div>
+                          <InlineEditMenu
+                            item="value"
+                            field={field}
+                            valueId={value?._id}
+                            fieldId={field?._id}
+                            onClickEditField={onClickEditField}
+                          />
+                        </div>
+                      )}
                       <DisplayValue field={field} value={value} verticalView={verticalView} />
                       {verticalView && (
                         <>
