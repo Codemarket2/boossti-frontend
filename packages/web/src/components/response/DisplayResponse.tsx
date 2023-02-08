@@ -48,6 +48,7 @@ export interface DisplayResponseProps {
   previewMode?: boolean;
   defaultShowFieldsMenu?: boolean;
   viewLess?: boolean;
+  handleViewLess?: (viewMore: boolean) => void;
 }
 
 const initialState = {
@@ -58,6 +59,7 @@ const initialState = {
   field: null,
   showFieldsMenu: false,
   valueId: null,
+  responseId: null,
   editMode: null,
 };
 
@@ -73,6 +75,7 @@ export function DisplayResponse({
   previewMode,
   defaultShowFieldsMenu,
   viewLess,
+  handleViewLess,
 }: DisplayResponseProps) {
   const [state, setState] = useState(initialState);
   const { data: workflowFormData, loading: workflowFormLoading } = useGetForm(
@@ -191,6 +194,9 @@ export function DisplayResponse({
     });
     if (newResponse) {
       setState(initialState);
+      if (handleViewLess) {
+        handleViewLess(false);
+      }
     }
   };
   const scrollToField = (formId: string, fieldId: string) => {
@@ -312,7 +318,7 @@ export function DisplayResponse({
                           }
                         });
                         router.query.field = fieldIndex?.toString();
-                        router.push(router);
+                        router.push(router, undefined, { scroll: false });
                         if (editMode === 'deleteValue') {
                           deleteValue(valueId);
                         } else if (editMode === 'deleteField') {
@@ -323,8 +329,12 @@ export function DisplayResponse({
                             field: fieldIndex,
                             fieldId,
                             valueId,
+                            responseId: response?._id,
                             editMode,
                           });
+                          if (handleViewLess) {
+                            handleViewLess(true);
+                          }
                         }
                       }}
                     />
