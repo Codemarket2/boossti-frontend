@@ -122,7 +122,10 @@ type CraftJs = {
   label: 'CraftJS';
   value: 'craftjs';
 };
-
+type FieldType = {
+  label: 'Any';
+  value: 'any';
+}
 export type TFieldType =
   | FormFieldType
   | FormFieldFieldType
