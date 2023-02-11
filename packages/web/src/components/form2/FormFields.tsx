@@ -124,10 +124,54 @@ export default function FormFields({
     setFields(newFields);
   }
 
-  const onSave = (field, action) => {
+  const onSave = (tempField, action) => {
+    const field = { ...tempField };
     if (action === 'create') {
+      if (field?.fieldType === 'response') {
+        field.options = {
+          ...field?.options,
+          createRelationField: true,
+        };
+      }
       setFields([...fields, field]);
     } else if (action === 'update') {
+      const selectedField = fields?.find((oldF) => oldF?._id === field?._id);
+      if (selectedField?._id) {
+        if (
+          field?.fieldType === selectedField?.fieldType &&
+          field?.fieldType === 'response' &&
+          selectedField?.form?._id !== field?.form?._id
+        ) {
+          // update form
+          if (selectedField?.form?._id !== field?.form?._id) {
+            field.options = {
+              ...field?.options,
+              updateRelationField: true,
+              oldFormId: selectedField?.form?._id,
+            };
+          }
+        } else if (
+          field?.fieldType !== selectedField?.fieldType &&
+          field?.fieldType === 'response'
+        ) {
+          // new
+          field.options = {
+            ...field?.options,
+            createRelationField: true,
+          };
+        } else if (
+          field?.fieldType !== selectedField?.fieldType &&
+          selectedField?.fieldType === 'response'
+        ) {
+          // remove
+          field.options = {
+            ...field?.options,
+            deleteRelationField: true,
+            oldFormId: selectedField?.form?._id,
+          };
+        }
+      }
+
       setFields(
         fields.map((oldField) => {
           if (oldField._id === field._id) {
@@ -299,7 +343,7 @@ export default function FormFields({
                                           {expanded ? '\u25BC' : '\u25B6'}
                                         </IconButton>
                                       )}
-                                      {!previewMode && (
+                                      {!previewMode && !field?.options?.relationField && (
                                         <IconButton
                                           edge="end"
                                           onClick={(event) =>

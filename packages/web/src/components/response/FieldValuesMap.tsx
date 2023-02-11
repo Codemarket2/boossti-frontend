@@ -43,6 +43,7 @@ export default function FieldValuesMap({
   const fieldValues = response?.values?.filter((v) => v.field === field._id);
   const [disabled, setDisabled] = useState(false || field?.options?.disabled);
   const { handleResolveCondition } = useResolveCondition();
+  const [state, setState] = useState({ inlineEditViewMore: false });
 
   const checkDisabledCondition = async () => {
     if (field?.options?.disabled && field?.options?.disabledConditions?.length > 0) {
@@ -109,11 +110,9 @@ export default function FieldValuesMap({
                 {field?.options?.multipleValues ? (
                   <>
                     {index !== fieldValues?.length - 1 && (
-                      <>
+                      <div>
                         <Fragment key={value?._id}>
-                          {/* <StyledBox style={{ display: 'flex', alignContent: 'center' }}>
-                </StyledBox> */}
-                          {authorized && !disabled && (
+                          {authorized && !disabled && value?.response === null && (
                             <>
                               <InlineEditMenu
                                 item="value"
@@ -136,7 +135,7 @@ export default function FieldValuesMap({
                             </>
                           )}
                         </Fragment>
-                      </>
+                      </div>
                     )}
                   </>
                 ) : (
@@ -144,7 +143,7 @@ export default function FieldValuesMap({
                     <Fragment key={value?._id}>
                       {/* <StyledBox style={{ display: 'flex', alignContent: 'center' }}>
                 </StyledBox> */}
-                      {authorized && !disabled && (
+                      {authorized && !disabled && value?.response === null && (
                         <div>
                           <InlineEditMenu
                             item="value"
