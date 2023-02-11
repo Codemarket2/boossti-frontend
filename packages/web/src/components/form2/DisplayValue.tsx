@@ -1,5 +1,5 @@
 // import Link from 'next/link';
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment, useState } from 'react';
 import moment from 'moment';
 import Avatar from '@mui/material/Avatar';
 import { Box, Button, Typography } from '@mui/material';
@@ -29,7 +29,7 @@ interface IProps {
   value: any;
   imageAvatar?: boolean;
   verticalView?: boolean;
-  onClickResponse?: (vieMore: boolean) => void;
+  onClickResponse?: () => void;
 }
 
 export default function DisplayValue({
@@ -39,13 +39,13 @@ export default function DisplayValue({
   verticalView,
   onClickResponse,
 }: IProps) {
+  const [state, setState] = useState({ viewMoreResponse: false });
   const value: any = { ...tempValue };
-  const [state, setState] = useState({
-    viewMoreResponse: false,
-  });
+
   if (typeof value?.options === 'string') {
     value.options = JSON.parse(value?.options);
   }
+
   if (
     field?.options?.selectItem &&
     field?.options?.showAsCheckbox &&
@@ -75,7 +75,7 @@ export default function DisplayValue({
       }
       className="mb-2"
     >
-      {/* View {state.viewMoreResponse ? 'Less' : 'More'} */}
+      View {state.viewMoreResponse ? 'Less' : 'More'}
     </Button>
   );
 
@@ -89,16 +89,13 @@ export default function DisplayValue({
     case 'response': {
       return (
         <>
-          <div style={state.viewMoreResponse ? {} : { maxHeight: '160px', overflow: 'hidden' }}>
+          <div style={state.viewMoreResponse ? {} : { maxHeight: '150px', overflow: 'hidden' }}>
             <DisplayResponseById
               hideAuthor
               hideDelete
               hideBreadcrumbs
               responseId={value?.response?._id}
               viewLess={!state.viewMoreResponse}
-              handleViewLess={(viewMore: boolean) => {
-                setState({ ...state, viewMoreResponse: viewMore });
-              }}
             />
           </div>
           {ViewMoreButton}
