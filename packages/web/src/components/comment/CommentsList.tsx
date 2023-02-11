@@ -2,11 +2,11 @@ import Skeleton from '@mui/material/Skeleton';
 import { useCreateComment, useDeleteComment } from '@frontend/shared/hooks/comment/createComment';
 import { useRouter } from 'next/router';
 import { useGetComments, useGetActionCounts } from '@frontend/shared/hooks/comment/getComment';
+import { useState } from 'react';
 import CommentInput from './CommentInput';
 import DisplayComment from './DisplayComment';
 import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
-import { useState } from 'react';
 
 interface IComment {
   parentIds?: string[];
@@ -102,19 +102,8 @@ export default function CommentsList({
           ))
         )}
       </div>
-      
+
       <Backdrop open={deleteLoading || submitLoading} />
     </div>
   );
 }
-
-// Parent (boolean) -> childrens 
-// If the comment btn is clicked for any child then that comment input for that child gets true 
-// and the rest becomes false
-
-// PARENT COMPONENT
-// const [isChildCommentInputVisible, setIsChildCommentInputVisible] = useState(commentid);
-
-// const setChildCommentInputVisible = (comment_id) => {
-//   setIsChildCommentInputVisible(comment_id);
-// }

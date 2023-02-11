@@ -177,12 +177,14 @@ export default function CommentLikeShare({
         />
         <div>
           <Tooltip title={`${showComment ? 'Hide' : 'Show'} Comment`}>
-            <IconButton onClick={()=> {
-              if (setHideParentCommentInput) {
-                setHideParentCommentInput(!showComment)
-              }
-              handleToggleCommentsList();
-            }}>
+            <IconButton
+              onClick={() => {
+                if (setHideParentCommentInput) {
+                  setHideParentCommentInput(!showComment);
+                }
+                handleToggleCommentsList();
+              }}
+            >
               <CommentIcon />
             </IconButton>
           </Tooltip>
