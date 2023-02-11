@@ -6,6 +6,7 @@ import CommentInput from './CommentInput';
 import DisplayComment from './DisplayComment';
 import ErrorLoading from '../common/ErrorLoading';
 import Backdrop from '../common/Backdrop';
+import { useState } from 'react';
 
 interface IComment {
   parentIds?: string[];
@@ -55,13 +56,25 @@ export default function CommentsList({
   const handleChange = (e) => {
     setInputVal(e);
   };
+  const [hideParentCommentInput, setHideParentCommentInput] = useState(false);
 
   return (
     <div className="pt-1 mb-2">
+      {showInput && !hideParentCommentInput && (
+        <div>
+          <CommentInput
+            loading={submitLoading}
+            handleChange={handleChange}
+            onClick={handleSave}
+            inputVal={inputVal}
+            label={label}
+          />
+        </div>
+      )}
       <div
         style={{
           overflow: 'auto',
-          maxHeight: '40vh',
+          maxHeight: '100vh',
         }}
       >
         {error || !data?.getCommentsByThreadId ? (
@@ -82,23 +95,26 @@ export default function CommentsList({
                 itemSlug={itemSlug}
                 shareIndex={shareIndex}
                 fieldTitle={fieldTitle}
+                // toggling the state of Parent Comment Input
+                setHideParentCommentInput={setHideParentCommentInput}
               />
             </div>
           ))
         )}
       </div>
-      {showInput && (
-        <div>
-          <CommentInput
-            loading={submitLoading}
-            handleChange={handleChange}
-            onClick={handleSave}
-            inputVal={inputVal}
-            label={label}
-          />
-        </div>
-      )}
+      
       <Backdrop open={deleteLoading || submitLoading} />
     </div>
   );
 }
+
+// Parent (boolean) -> childrens 
+// If the comment btn is clicked for any child then that comment input for that child gets true 
+// and the rest becomes false
+
+// PARENT COMPONENT
+// const [isChildCommentInputVisible, setIsChildCommentInputVisible] = useState(commentid);
+
+// const setChildCommentInputVisible = (comment_id) => {
+//   setIsChildCommentInputVisible(comment_id);
+// }

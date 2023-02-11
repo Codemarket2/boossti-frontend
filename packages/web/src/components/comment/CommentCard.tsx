@@ -23,6 +23,7 @@ interface IDisplayComment {
   itemSlug?: string;
   shareIndex?: any;
   fieldTitle?: string;
+  setHideParentCommentInput?: (val: boolean) => void;
 }
 export default function CommentCard({
   parentIds,
@@ -34,6 +35,7 @@ export default function CommentCard({
   itemSlug,
   shareIndex,
   fieldTitle,
+  setHideParentCommentInput,
 }: IDisplayComment) {
   const router = useRouter();
   const [commentsListShown, setCommentsListShown] = useState(false);
@@ -91,6 +93,7 @@ export default function CommentCard({
           fieldTitle={fieldTitle}
           isReply
           onCommentsListToggle={(toggle) => setCommentsListShown(toggle)}
+          setHideParentCommentInput={setHideParentCommentInput}
         />
       </div>
     </div>

@@ -14,6 +14,7 @@ interface IDisplayComment {
   itemSlug?: string;
   shareIndex?: any;
   fieldTitle?: string;
+  setHideParentCommentInput?: (val: boolean) => void;
 }
 
 export default function DisplayComment({
@@ -25,6 +26,7 @@ export default function DisplayComment({
   itemSlug,
   shareIndex,
   fieldTitle,
+  setHideParentCommentInput,
 }: IDisplayComment) {
   const authorized = useAuthorization([comment?.createdBy?._id]);
 
@@ -69,6 +71,7 @@ export default function DisplayComment({
           itemSlug={itemSlug}
           shareIndex={shareIndex}
           fieldTitle={fieldTitle}
+          setHideParentCommentInput={setHideParentCommentInput}
         />
       )}
     </>
