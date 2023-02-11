@@ -703,48 +703,48 @@ describe("Field's Label Name (label : Label*)", () => {
     await waitFor(() => expect(labelNameInputEle).toHaveAccessibleDescription('Label is required'));
   });
 
-  // test('(important) should be able to enter a label name', async () => {
-  //   render(<AddField {...getAppFieldMockProps()} />);
+  test('(important) should be able to enter a label name', async () => {
+    render(<AddField {...getAppFieldMockProps()} />);
 
-  //   const labelComponent = getFieldLabelComponent();
-  //   const innerInput = getFieldLabelInpElement(labelComponent);
-  //   const user = userEvent.setup();
+    const labelComponent = getFieldLabelComponent();
+    const innerInput = getFieldLabelInpElement(labelComponent);
+    const user = userEvent.setup();
 
-  //   await user.click(labelComponent);
+    await user.click(labelComponent);
 
-  //   // CLEAR DEFAULT INPUT
-  //   // await act(() => user.clear(innerInput)); // gives issues
-  //   await user.clear(innerInput);
+    // CLEAR DEFAULT INPUT
+    // await act(() => user.clear(innerInput)); // gives issues
+    await user.clear(innerInput);
 
-  //   // TODO: add more kinds of test cases for better validation!
-  //   const TEST_INPUTS = [
-  //     {
-  //       type: 'label',
-  //       expect: 'label',
-  //     },
-  //     {
-  //       type: 'LABEL',
-  //       expect: 'LABEL',
-  //     },
-  //     {
-  //       type: 'Label123',
-  //       expect: 'Label123',
-  //     },
-  //     {
-  //       type: '!@#',
-  //       expect: '!@#',
-  //     },
-  //   ];
+    // TODO: add more kinds of test cases for better validation!
+    const TEST_INPUTS = [
+      {
+        type: 'label',
+        expect: 'label',
+      },
+      {
+        type: 'LABEL',
+        expect: 'LABEL',
+      },
+      {
+        type: 'Label123',
+        expect: 'Label123',
+      },
+      {
+        type: '!@#',
+        expect: '!@#',
+      },
+    ];
 
-  //   for (let i = 0; i < TEST_INPUTS.length; i += 1) {
-  //     const test = TEST_INPUTS[Number(i)];
+    for (let i = 0; i < TEST_INPUTS.length; i += 1) {
+      const test = TEST_INPUTS[Number(i)];
 
-  //     expect(innerInput).toHaveValue('');
-  //     await user.type(innerInput, test.type);
-  //     expect(innerInput).toHaveValue(test.expect);
-  //     await user.clear(innerInput);
-  //   }
-  // });
+      expect(innerInput).toHaveValue('');
+      await user.type(innerInput, test.type);
+      expect(innerInput).toHaveValue(test.expect);
+      await user.clear(innerInput);
+    }
+  });
 
   // ---------TEST CASES END-------------
 });
