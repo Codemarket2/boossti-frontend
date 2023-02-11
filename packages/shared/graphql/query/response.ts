@@ -180,7 +180,7 @@ export const GET_RESPONSES = gql`
           response {
             _id
             values {
-              _id
+              # _id
               field
               value
               # valueNumber

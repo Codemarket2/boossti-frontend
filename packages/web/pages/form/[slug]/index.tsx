@@ -10,7 +10,6 @@ export default function Page(): any {
   const { slug } = router.query;
 
   const { data, error } = useGetFormBySlug(slug?.toString());
-
   const onSlugChange = (newSlug) => {
     if (slug !== newSlug) {
       router.push(`/form/${newSlug}`);

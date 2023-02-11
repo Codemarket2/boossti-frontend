@@ -1002,7 +1002,7 @@ export function FormViewChild({
                         editMode === 'addValue' ||
                         (inlineEdit
                           ? !field?.options?.multipleValues
-                            ? editMode === 'editField'
+                            ? editMode === 'editField' || editMode === 'editValue'
                             : false
                           : false)) && (
                         <>
@@ -1056,7 +1056,7 @@ export function FormViewChild({
                           {((inlineEdit ? editMode === 'addValue' : false) ||
                             (inlineEdit
                               ? !field?.options?.multipleValues
-                                ? editMode === 'editField'
+                                ? editMode === 'editField' || editMode === 'editValue'
                                 : false
                               : false)) && (
                             <Grid item xs={12}>
