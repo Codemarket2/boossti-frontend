@@ -36,7 +36,7 @@ import { IField } from '@frontend/shared/types/form';
 import InputGroup from '../../common/InputGroup';
 import LoadingButton from '../../common/LoadingButton';
 import { onAlert } from '../../../utils/alert';
-import { getFormFieldTypes } from '../fieldTypes';
+import { getFormFieldTypes, fieldTypes } from '../fieldTypes';
 import RichTextarea from '../../common/RichTextarea2';
 import SelectForm from '../SelectForm';
 // import SelectFormFields from '../SelectFormFields';
@@ -127,6 +127,7 @@ export default function AddField({
               </MenuItem>
             ))}
           </Select>
+
           {formik.touched.fieldType && formik.errors.fieldType && (
             <FormHelperText id="fieldType-helperText" className="text-danger">
               {formik.errors.fieldType}

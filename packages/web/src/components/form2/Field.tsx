@@ -19,6 +19,8 @@ import { IField } from '@frontend/shared/types/form';
 import { IValue } from '@frontend/shared/types/response';
 import { generateObjectId } from '@frontend/shared/utils/objectId';
 import { fieldProps } from '@frontend/shared/utils/fieldProps';
+import { useAddFields } from '@frontend/shared/hooks/form';
+
 import Add from '@mui/icons-material/Add';
 import Tooltip from '@mui/material/Tooltip';
 import ReactFlow from '../react-flow/ReactFlow';
@@ -49,6 +51,12 @@ import Signature from '../signature/Signature';
 import Card from '../card/Card';
 import CraftJSField from '../craftJS/craftJSField';
 import ConditionPart from './field/field-condition/ConditionPart';
+import SelectFieldTypes from './SelectFieldTypes';
+import { evaluateFormula } from './field/formula/DisplayFormulaValue';
+import { getFormula } from './field/formula/DisplayFormula';
+import { filterValues } from './FormView';
+import { initialValues } from './FormFields';
+import { fieldTypes } from './fieldTypes';
 
 export interface FieldProps {
   field: IField;
@@ -63,9 +71,15 @@ export interface FieldProps {
   responseId?: string;
   setUniqueLoading?: (args: boolean) => void;
   onCancel?: () => void;
+  onSave?: () => void;
+  handleChange?: (sValue: any, valueIndex: any) => any;
   rules?: any;
 }
-
+export interface SFieldTypes {
+  field: IField;
+  value: Partial<IValue>;
+  formik: any;
+}
 const objectId = generateObjectId();
 
 const getDefaultOptions = () => {
@@ -75,12 +89,13 @@ const getDefaultOptions = () => {
   });
   return options;
 };
-
 export default function Field({
   field,
   disabled = false,
   validate,
   value,
+  handleChange,
+  onSave,
   onChangeValue,
   formId,
   setUnique,
@@ -90,7 +105,7 @@ export default function Field({
   rules,
 }: FieldProps): any {
   const [options, setOptions] = useState<any>(getDefaultOptions());
-
+  const { formik } = useAddFields({ onAlert, onSave });
   useCheckUnique({
     formId,
     value,
@@ -100,7 +115,6 @@ export default function Field({
     responseId,
     setUniqueLoading,
   });
-
   useEffect(() => {
     if (rules && Object.keys(rules)?.length > 0) {
       getRuleValues();
@@ -739,7 +753,25 @@ export default function Field({
         </>
       );
     }
-
+    case 'Any': {
+      return (
+        <>
+          <SelectFieldTypes field={field} value={value.options?.fieldType} formik={formik} />
+          <Field
+            field={{ ...field, fieldType: formik.values.fieldType }}
+            value={formik.values}
+            onChangeValue={(changedValue) => {
+              if (!field?.options?.systemCalculatedAndView) {
+                handleChange(
+                  { ...changedValue, field: field._id },
+                  filterValues(value, field)?.length - 1,
+                );
+              }
+            }}
+          />
+        </>
+      );
+    }
     default: {
       const textValidation = validateValue(validate, value, {
         ...field,

@@ -244,6 +244,16 @@ export default function DisplayValue({
       );
     case 'craftjs':
       return <CraftsJSPageViewer PageContent={value?.value} />;
+    case 'any': {
+      return (
+        <>
+          <DisplayValue
+            field={{ ...field, fieldType: value.options?.fieldType }}
+            value={value?.value}
+          />
+        </>
+      );
+    }
     default:
       return <>{value?.value}</>;
   }
