@@ -2,6 +2,7 @@ import Skeleton from '@mui/material/Skeleton';
 import { useCreateComment, useDeleteComment } from '@frontend/shared/hooks/comment/createComment';
 import { useRouter } from 'next/router';
 import { useGetComments, useGetActionCounts } from '@frontend/shared/hooks/comment/getComment';
+import { useState } from 'react';
 import CommentInput from './CommentInput';
 import DisplayComment from './DisplayComment';
 import ErrorLoading from '../common/ErrorLoading';
@@ -102,7 +103,6 @@ export default function CommentsList({
           ))
         )}
       </div>
-      
       <Backdrop open={deleteLoading || submitLoading} />
     </div>
   );
