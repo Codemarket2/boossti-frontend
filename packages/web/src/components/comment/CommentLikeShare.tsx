@@ -21,6 +21,7 @@ interface CommentLikeShareProps {
   showHideComments?: boolean;
   isReply?: boolean;
   onCommentsListToggle?: (toggle: boolean) => void;
+  setHideParentCommentInput?: (toggle: boolean) => void;
 }
 
 const spacingStyles = {
@@ -40,6 +41,7 @@ export default function CommentLikeShare({
   showHideComments,
   isReply,
   onCommentsListToggle,
+  setHideParentCommentInput,
 }: CommentLikeShareProps) {
   const router = useRouter();
   const { data, error } = useGetActionCounts(threadId);
@@ -175,7 +177,12 @@ export default function CommentLikeShare({
         />
         <div>
           <Tooltip title={`${showComment ? 'Hide' : 'Show'} Comment`}>
-            <IconButton onClick={handleToggleCommentsList}>
+            <IconButton onClick={()=> {
+              if (setHideParentCommentInput) {
+                setHideParentCommentInput(!showComment)
+              }
+              handleToggleCommentsList();
+            }}>
               <CommentIcon />
             </IconButton>
           </Tooltip>
