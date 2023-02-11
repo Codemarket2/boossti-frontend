@@ -1026,6 +1026,8 @@ export function FormViewChild({
                                         (field?.options?.disabled && !enabledFields?.[field?._id])
                                   }
                                   validate={submitState.validate}
+                                  onSave={onSave}
+                                  handleChange={onChange}
                                   onChangeValue={(changedValue) => {
                                     if (!field?.options?.systemCalculatedAndView) {
                                       onChange(
