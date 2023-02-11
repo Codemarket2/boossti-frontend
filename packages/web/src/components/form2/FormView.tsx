@@ -507,17 +507,6 @@ export function FormViewChild({
   });
 
   useEffect(() => {
-    if (inlineEdit && editMode) {
-      if (editMode === 'editField' || editMode === 'addValue') {
-        const element = document.getElementById(fields[0]?._id);
-        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      } else if (editMode === 'editValue' && valueId) {
-        const element1 = document.getElementById(valueId);
-        if (element1) {
-          element1.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      }
-    }
     if (inlineEdit && editMode === 'editValue') {
       const field = fields[0];
       const fieldValues = values.filter((value) => value?.field === field?._id);
@@ -940,7 +929,7 @@ export function FormViewChild({
                   key={field._id}
                 >
                   <div style={field?.options?.style || {}}>
-                    <InputGroup key={field._id} id={field?._id}>
+                    <InputGroup key={field._id}>
                       {!['label'].includes(field.fieldType) && (
                         <>
                           <Typography data-testid="text-danger">
@@ -1103,7 +1092,7 @@ export function FormViewChild({
                                           <div className="mt-3" key={valueIndex}>
                                             {valueIndex !==
                                               filterValues(values, field)?.length - 1 && (
-                                              <div id={value?._id}>
+                                              <>
                                                 {state.editValue?.fieldId === field._id &&
                                                 state.editValue?.index === valueIndex ? (
                                                   <>
@@ -1246,7 +1235,7 @@ export function FormViewChild({
                                                     )}
                                                   </div>
                                                 )}
-                                              </div>
+                                              </>
                                             )}
                                           </div>
                                         </div>
