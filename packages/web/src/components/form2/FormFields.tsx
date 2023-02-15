@@ -343,7 +343,7 @@ export default function FormFields({
                                           {expanded ? '\u25BC' : '\u25B6'}
                                         </IconButton>
                                       )}
-                                      {!previewMode && !field?.options?.relationField && (
+                                      {/* {!previewMode && !field?.options?.relationField && (
                                         <IconButton
                                           edge="end"
                                           onClick={(event) =>
@@ -357,7 +357,20 @@ export default function FormFields({
                                         >
                                           <MoreVertIcon />
                                         </IconButton>
-                                      )}
+                                      )} */}
+                                      <IconButton
+                                        edge="end"
+                                        onClick={(event) =>
+                                          setState({
+                                            ...initialValues,
+                                            showMenu: event.currentTarget,
+                                            field,
+                                          })
+                                        }
+                                        size="large"
+                                      >
+                                        <MoreVertIcon />
+                                      </IconButton>
                                     </ListItemSecondaryAction>
                                   )}
                                 </ListItem>

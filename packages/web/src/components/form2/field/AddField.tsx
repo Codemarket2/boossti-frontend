@@ -180,6 +180,25 @@ export default function AddField({
           </InputGroup>
         </>
       )}
+      {isTab && formik.values.fieldType === 'response' && (
+        <>
+          <InputGroup>
+            <FormControlLabel
+              className="mt-n2 ml-2"
+              disabled={formik.isSubmitting}
+              control={
+                <Checkbox
+                  checked={formik.values.options?.addToAllForms}
+                  onChange={({ target }) => onOptionChange({ addToAllForms: target.checked })}
+                  name="addToAllForms"
+                  color="primary"
+                />
+              }
+              label="Add tab to all forms"
+            />
+          </InputGroup>
+        </>
+      )}
       {formik?.values?.fieldType === 'label' && (
         <InputGroup>
           <RichTextarea

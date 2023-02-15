@@ -32,9 +32,8 @@ import {
 import { validateResponse, validateValue } from '@frontend/shared/utils/validate';
 import { IValue } from '@frontend/shared/types';
 import { IField, IForm } from '@frontend/shared/types/form';
-
 // OTHERS
-import { useGetFieldRules, useUpdateForm } from '@frontend/shared/hooks/form';
+import { useGetFieldRules, useUpdateForm, useGetFormBySlug } from '@frontend/shared/hooks/form';
 import { useDebounce } from '@frontend/shared/hooks/condition/debounce';
 import ResponseList from '../response/ResponseList';
 import InputGroup from '../common/InputGroup';
@@ -59,6 +58,7 @@ import FieldUnique from './field/FieldUnique';
 import UniqueMultipleValue from './field/UniqueMultipleValue';
 import DisplayResponseById from '../response/DisplayResponseById';
 import FormFields from './FormFields';
+import ActionVariables from './actions/ActionVariables';
 
 interface FormViewWrapperProps {
   form: IForm;
@@ -283,7 +283,56 @@ export default function FormView({
           ) : (
             <>
               {state.formDrawer && (
-                <Overlay open={state.formDrawer} onClose={() => setState(initialState)}>
+                <>
+                  {/* <Overlay open={state.formDrawer} onClose={() => setState(initialState)}>
+                    <div className="p-2">
+                      {form?.settings?.formView === 'selectItem' && !state.selectItemAdd ? (
+                        <>
+                          <SelectResponse
+                            label={form?.name}
+                            formId={form?._id}
+                            formField={form?.settings?.selectItemField}
+                            value={state.selectedResponse}
+                            onChange={(selectedResponse: any) =>
+                              setState({ ...state, selectedResponse })
+                            }
+                            onChangeFullResponse={(selectedFullResponse) =>
+                              setSelectState({ ...selectState, selectedFullResponse })
+                            }
+                            openDrawer={() => setState({ ...state, selectItemAdd: true })}
+                            allowCreate
+                          />
+                          <LoadingButton
+                            className="my-2"
+                            size="small"
+                            variant="contained"
+                            color="primary"
+                            loading={createLoading}
+                            onClick={async () => {
+                              // if (appId) {
+                              //   if (!selectState.selectedFullResponse) {
+                              //     alert('Please select the response');
+                              //   } else {
+                              //     await handleCreateUpdateResponse({
+                              //       payload: { ...selectState.selectedFullResponse },
+                              //       edit: true,
+                              //       fields: form?.fields,
+                              //     });
+                              //     await refetch();
+                              //     setState(initialState);
+                              //     setSelectState(initialSelectState);
+                              //   }
+                              // }
+                            }}
+                          >
+                            Submit
+                          </LoadingButton>
+                        </>
+                      ) : (
+                        <>{FVC}</>
+                      )}
+                    </div>
+                  </Overlay> */}
                   <div className="p-2">
                     {form?.settings?.formView === 'selectItem' && !state.selectItemAdd ? (
                       <>
@@ -331,23 +380,27 @@ export default function FormView({
                       <>{FVC}</>
                     )}
                   </div>
-                </Overlay>
+                </>
               )}
               {form?.settings?.formView === 'leaderboard' ? (
                 <Leaderboard formId={form?._id} settings={form?.settings} />
               ) : ['selectItem', 'button'].includes(form?.settings?.formView) ? (
                 <>
-                  <div className="text-center">
-                    <Button
-                      variant="contained"
-                      className="mb-2"
-                      size="small"
-                      startIcon={<AddIcon />}
-                      onClick={() => setState({ ...state, formDrawer: true })}
-                    >
-                      {form?.settings?.buttonLabel || form?.name}
-                    </Button>
-                  </div>
+                  {!state?.formDrawer && (
+                    <>
+                      <div className="text-center">
+                        <Button
+                          variant="contained"
+                          className="mb-2"
+                          size="small"
+                          startIcon={<AddIcon />}
+                          onClick={() => setState({ ...state, formDrawer: true })}
+                        >
+                          {form?.settings?.buttonLabel || form?.name}
+                        </Button>
+                      </div>
+                    </>
+                  )}
                 </>
               ) : (
                 <>{FVC}</>
@@ -486,6 +539,11 @@ export function FormViewChild({
     forms: {},
     responses: {},
   });
+
+  // variables for the template
+  const [variables, setVariables] = useState([{ name: '', field: '', formId: null }]);
+  const { slug } = router.query;
+  const { data, error } = useGetFormBySlug(slug?.toString());
 
   // ONLY SHOW & VALIDATE REQUIRED FIELDS
   const fields = useMemo(
@@ -796,8 +854,8 @@ export function FormViewChild({
   }, [state.page]);
 
   useEffect(() => {
-    const data = window?.localStorage?.getItem(localStorageKey);
-    const unsavedValues = JSON.parse(data);
+    const localStorageData = window?.localStorage?.getItem(localStorageKey);
+    const unsavedValues = JSON.parse(localStorageData);
     if (unsavedValues?.length > 0) {
       setValues(unsavedValues);
     }
@@ -988,6 +1046,19 @@ export function FormViewChild({
                                 </Typography>
                               </div>
                             )}
+                            {!inlineEdit &&
+                              field?.label === 'Template' &&
+                              field?.fieldType === 'richTextarea' && (
+                                <>
+                                  <ActionVariables
+                                    variables={variables}
+                                    onVariablesChange={(newVariables) => {
+                                      setVariables(newVariables);
+                                    }}
+                                    formId={data?.getFormBySlug?._id}
+                                  />
+                                </>
+                              )}
                           </Typography>
                           {formView !== 'oneField' &&
                             (inlineEdit
