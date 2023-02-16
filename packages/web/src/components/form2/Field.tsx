@@ -101,6 +101,7 @@ export default function Field({
   const router = useRouter();
   const { slug } = router.query;
   const { data, error } = useGetFormBySlug(slug?.toString());
+  const [variables, setVariables] = useState([{ name: '', field: '', formId: null }]);
 
   useCheckUnique({
     formId,
@@ -313,10 +314,17 @@ export default function Field({
         <>
           {!inlineEdit && field?.label === 'Template *' && (
             <>
-              <ActionVariables
+              {/* <ActionVariables
                 variables={value?.variables || [{ name: '', field: '', formId: null }]}
                 onVariablesChange={(newVariables) => {
                   onChange({ ...value, variables: newVariables });
+                }}
+                formId={data?.getFormBySlug?._id}
+              /> */}
+              <ActionVariables
+                variables={variables}
+                onVariablesChange={(newVariables) => {
+                  setVariables(newVariables);
                 }}
                 formId={data?.getFormBySlug?._id}
               />

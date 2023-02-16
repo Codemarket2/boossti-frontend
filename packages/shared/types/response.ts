@@ -11,11 +11,11 @@ export interface IResponse extends ISchema {
   options?: any;
 }
 
-export interface IVariables {
-  name: string;
-  field: string;
-  formId: string;
-}
+// export interface IVariables {
+//   name: string;
+//   field: string;
+//   formId: string;
+// }
 
 export interface IValue {
   _id: string;
@@ -31,5 +31,5 @@ export interface IValue {
   form: IForm | string | any;
   options: any;
   media: IMedia[];
-  variables: IVariables[];
+  // variables: IVariables[];
 }
