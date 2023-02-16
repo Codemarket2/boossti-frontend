@@ -86,7 +86,7 @@ export const defaultValue = {
   form: null,
   response: null,
   options: { option: false },
-  variables: [{ name: '', field: '', formId: null }],
+  // variables: [{ name: '', field: '', formId: null }],
   // tempMedia: [],
   // tempMediaFiles: [],
 };
@@ -962,25 +962,27 @@ export function FormViewChild({
         </Grid>
         <Grid xs={12} sm={state.minimizeFields ? 11.5 : 9} item>
           <Grid container spacing={0} data-testid="fieldWiseView">
-            <div className="d-flex w-100 justify-content-end my-2 align-items-center">
-              {(submitState.loading || loading) && (
-                <Typography className="d-flex align-items-center">
-                  <CircularProgress color="inherit" size={20} className="mr-2" />
-                  saving...
-                </Typography>
-              )}
-              {CancelButton}
-              <LoadingButton
-                className="ml-2"
-                size="small"
-                variant="contained"
-                disabled={disableSubmitButton}
-                loading={!disableSubmitButton && (submitState.loading || loading)}
-                onClick={onSubmit}
-              >
-                Publish
-              </LoadingButton>
-            </div>
+            {!inlineEdit && (
+              <div className="d-flex w-100 justify-content-end my-2 align-items-center">
+                {(submitState.loading || loading) && (
+                  <Typography className="d-flex align-items-center">
+                    <CircularProgress color="inherit" size={20} className="mr-2" />
+                    saving...
+                  </Typography>
+                )}
+                {CancelButton}
+                <LoadingButton
+                  className="ml-2"
+                  size="small"
+                  variant="contained"
+                  disabled={disableSubmitButton}
+                  loading={!disableSubmitButton && (submitState.loading || loading)}
+                  onClick={onSubmit}
+                >
+                  Publish
+                </LoadingButton>
+              </div>
+            )}
             {(formView === 'oneField' && fields?.length > 1 ? [fields[state.page]] : fields)
               ?.filter(filterHiddenFields)
               ?.map((field: any, fieldIndex) => (
@@ -1124,14 +1126,15 @@ export function FormViewChild({
                               ? !field?.options?.multipleValues
                                 ? editMode === 'editField' || editMode === 'editValue'
                                 : false
-                              : false)) && (
-                            <Grid item xs={12}>
-                              <InputGroup style={{ display: 'flex' }}>
-                                {SubmitButtonComponent}
-                                {CancelButton}
-                              </InputGroup>
-                            </Grid>
-                          )}
+                              : false)) &&
+                            field?.fieldType !== 'response' && (
+                              <Grid item xs={12}>
+                                <InputGroup style={{ display: 'flex' }}>
+                                  {SubmitButtonComponent}
+                                  {CancelButton}
+                                </InputGroup>
+                              </Grid>
+                            )}
                         </>
                       )}
                       <DragDropContext onDragEnd={onDragEnd} isDropDisabled={false}>
