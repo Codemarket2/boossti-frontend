@@ -86,6 +86,7 @@ export const defaultValue = {
   form: null,
   response: null,
   options: { option: false },
+  variables: [{ name: '', field: '', formId: null }],
   // tempMedia: [],
   // tempMediaFiles: [],
 };
@@ -539,11 +540,6 @@ export function FormViewChild({
     forms: {},
     responses: {},
   });
-
-  // variables for the template
-  const [variables, setVariables] = useState([{ name: '', field: '', formId: null }]);
-  const { slug } = router.query;
-  const { data, error } = useGetFormBySlug(slug?.toString());
 
   // ONLY SHOW & VALIDATE REQUIRED FIELDS
   const fields = useMemo(
@@ -1046,19 +1042,6 @@ export function FormViewChild({
                                 </Typography>
                               </div>
                             )}
-                            {!inlineEdit &&
-                              field?.label === 'Template' &&
-                              field?.fieldType === 'richTextarea' && (
-                                <>
-                                  <ActionVariables
-                                    variables={variables}
-                                    onVariablesChange={(newVariables) => {
-                                      setVariables(newVariables);
-                                    }}
-                                    formId={data?.getFormBySlug?._id}
-                                  />
-                                </>
-                              )}
                           </Typography>
                           {formView !== 'oneField' &&
                             (inlineEdit
@@ -1131,6 +1114,7 @@ export function FormViewChild({
                                           filterValues(values, field)?.length - 1
                                         ]
                                   }
+                                  inlineEdit={inlineEdit}
                                 />
                               )}
                             </div>
@@ -1203,6 +1187,7 @@ export function FormViewChild({
                                                               )
                                                             }
                                                             value={value}
+                                                            inlineEdit={inlineEdit}
                                                           />
                                                           {formView !== 'oneField' && inlineEdit && (
                                                             <Grid item xs={12}>

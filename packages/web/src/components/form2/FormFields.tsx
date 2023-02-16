@@ -264,15 +264,17 @@ export default function FormFields({
             </>
           )}
           {state.showForm && (
-            <AddField
-              field={state.field}
-              onSave={onSave}
-              onCancel={() => setState(initialValues)}
-              isWorkflow={isWorkflow}
-              parentFields={parentFields}
-              isTab={isTab}
-              formId={formId}
-            />
+            <>
+              <AddField
+                field={state.field}
+                onSave={onSave}
+                onCancel={() => setState(initialValues)}
+                isWorkflow={isWorkflow}
+                parentFields={parentFields}
+                isTab={isTab}
+                formId={formId}
+              />
+            </>
           )}
           <List dense>
             <DragDropContext onDragEnd={onDragEnd}>
