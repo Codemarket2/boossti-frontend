@@ -36,9 +36,7 @@ export default function ActionVariables({
           </IconButton>
         </Tooltip>
       </Typography>
-      <InputLabel>
-        Define Variables and use it in email subject and body. example - {`{{email}}`}
-      </InputLabel>
+      <InputLabel>Define Variables and use it in body. example - {`{{User Name}}`}</InputLabel>
       {variables.map((variable, variableIndex) => (
         <div className="d-flex align-items-top" key={variableIndex}>
           <TextField

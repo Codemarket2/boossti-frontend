@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import moment from 'moment';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
@@ -7,6 +8,7 @@ import Delete from '@mui/icons-material/Delete';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
+import { useGetFormBySlug } from '@frontend/shared/hooks/form';
 // import Button from '@mui/material/Button';
 import AdapterMoment from '@mui/lab/AdapterMoment';
 import DateTimePicker from '@mui/lab/DateTimePicker';
@@ -49,6 +51,7 @@ import Signature from '../signature/Signature';
 import Card from '../card/Card';
 import CraftJSField from '../craftJS/craftJSField';
 import ConditionPart from './field/field-condition/ConditionPart';
+import ActionVariables from './actions/ActionVariables';
 
 export interface FieldProps {
   field: IField;
@@ -64,6 +67,8 @@ export interface FieldProps {
   setUniqueLoading?: (args: boolean) => void;
   onCancel?: () => void;
   rules?: any;
+  inlineEdit?: boolean;
+  setValues?: () => void;
 }
 
 const objectId = generateObjectId();
@@ -88,8 +93,14 @@ export default function Field({
   setUniqueLoading,
   onCancel,
   rules,
+  inlineEdit,
 }: FieldProps): any {
   const [options, setOptions] = useState<any>(getDefaultOptions());
+
+  // variables for the template
+  const router = useRouter();
+  const { slug } = router.query;
+  const { data, error } = useGetFormBySlug(slug?.toString());
 
   useCheckUnique({
     formId,
@@ -299,15 +310,28 @@ export default function Field({
     }
     case 'richTextarea': {
       return (
-        <div data-testid="richTextarea">
-          <RichTextarea
-            value={value?.value || ''}
-            onChange={(newValue) => onChange({ value: newValue })}
-          />
-          {validation.error && (
-            <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
+        <>
+          {!inlineEdit && field?.label === 'Template *' && (
+            <>
+              <ActionVariables
+                variables={value?.variables || [{ name: '', field: '', formId: null }]}
+                onVariablesChange={(newVariables) => {
+                  onChange({ ...value, variables: newVariables });
+                }}
+                formId={data?.getFormBySlug?._id}
+              />
+            </>
           )}
-        </div>
+          <div data-testid="richTextarea">
+            <RichTextarea
+              value={value?.value || ''}
+              onChange={(newValue) => onChange({ value: newValue })}
+            />
+            {validation.error && (
+              <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
+            )}
+          </div>
+        </>
       );
     }
     case 'webpage': {

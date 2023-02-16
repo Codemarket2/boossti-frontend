@@ -89,7 +89,7 @@ export default function DisplayValue({
     case 'response': {
       return (
         <>
-          <div style={state.viewMoreResponse ? {} : { maxHeight: '160px', overflow: 'hidden' }}>
+          <div style={state.viewMoreResponse ? {} : { maxHeight: '158px', overflow: 'hidden' }}>
             <DisplayResponseById
               hideAuthor
               hideDelete
@@ -136,7 +136,7 @@ export default function DisplayValue({
                 ? {}
                 : state.viewMoreResponse
                 ? {}
-                : { maxHeight: '150px', overflow: 'hidden' }
+                : { maxHeight: '158px', overflow: 'hidden' }
             }
           >
             <DisplayRichText value={value?.value} />

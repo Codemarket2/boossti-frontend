@@ -29,6 +29,7 @@ interface IFieldValuesMap {
   authorized?: boolean;
   displayFieldLabel?: boolean;
   onClickEditField?: (fieldId: string, valueId: string, editMode: string) => void;
+  inlineEdit?: boolean;
 }
 
 export default function FieldValuesMap({
@@ -38,6 +39,7 @@ export default function FieldValuesMap({
   authorized,
   displayFieldLabel,
   onClickEditField,
+  inlineEdit = false,
 }: IFieldValuesMap) {
   const { handleCreateUpdateResponse } = useCreateUpdateResponse({ onAlert });
   const fieldValues = response?.values?.filter((v) => v.field === field._id);
@@ -76,7 +78,7 @@ export default function FieldValuesMap({
               <div data-testid="label">{field?.label}</div>
               {authorized && !disabled && (
                 <>
-                  {(field?.options?.multipleValues || fieldValues?.length === 0) && (
+                  {(field?.options?.multipleValues || fieldValues?.length === 0) && !inlineEdit && (
                     <InlineEditMenu
                       item="field"
                       field={field}
@@ -112,7 +114,7 @@ export default function FieldValuesMap({
                     {index !== fieldValues?.length - 1 && (
                       <div>
                         <Fragment key={value?._id}>
-                          {authorized && !disabled && value?.response === null && (
+                          {authorized && !disabled && !inlineEdit && (
                             <>
                               <InlineEditMenu
                                 item="value"
@@ -143,7 +145,7 @@ export default function FieldValuesMap({
                     <Fragment key={value?._id}>
                       {/* <StyledBox style={{ display: 'flex', alignContent: 'center' }}>
                 </StyledBox> */}
-                      {authorized && !disabled && value?.response === null && (
+                      {authorized && !disabled && !inlineEdit && (
                         <div>
                           <InlineEditMenu
                             item="value"

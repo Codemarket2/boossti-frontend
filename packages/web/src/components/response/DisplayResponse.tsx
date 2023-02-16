@@ -33,6 +33,7 @@ import FieldValuesMap from './FieldValuesMap';
 import ErrorLoading from '../common/ErrorLoading';
 import WorkflowButtons from './workflow/WorkflowButtons';
 import FormFields from '../form2/FormFields';
+import InlineEdit from './InlineEdit';
 
 // inlineEdit  related imports
 
@@ -310,6 +311,7 @@ export function DisplayResponse({
                       verticalView
                       field={field}
                       response={response}
+                      inlineEdit={state?.editMode !== null}
                       onClickEditField={(fieldId, valueId, editMode) => {
                         let fieldIndex = 1;
                         form?.fields?.forEach((f, i) => {
