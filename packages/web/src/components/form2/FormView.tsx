@@ -1126,15 +1126,14 @@ export function FormViewChild({
                               ? !field?.options?.multipleValues
                                 ? editMode === 'editField' || editMode === 'editValue'
                                 : false
-                              : false)) &&
-                            field?.fieldType !== 'response' && (
-                              <Grid item xs={12}>
-                                <InputGroup style={{ display: 'flex' }}>
-                                  {SubmitButtonComponent}
-                                  {CancelButton}
-                                </InputGroup>
-                              </Grid>
-                            )}
+                              : false)) && (
+                            <Grid item xs={12}>
+                              <InputGroup style={{ display: 'flex' }}>
+                                {SubmitButtonComponent}
+                                {CancelButton}
+                              </InputGroup>
+                            </Grid>
+                          )}
                         </>
                       )}
                       <DragDropContext onDragEnd={onDragEnd} isDropDisabled={false}>
