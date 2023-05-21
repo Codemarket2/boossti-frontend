@@ -16,6 +16,7 @@ interface IProps {
   maxWidth?: string;
   style?: CSSProperties;
   hideAppBar?: boolean;
+  anchor?: any;
 }
 
 export default function Overlay({
@@ -28,9 +29,10 @@ export default function Overlay({
   maxWidth = '85vw',
   hideAppBar = false,
   style = {},
+  anchor = 'right', // defalut open from right side.
 }: IProps) {
   return (
-    <Drawer anchor="right" open={open}>
+    <Drawer anchor={anchor} open={open}>
       <div style={{ minWidth, maxWidth, ...style }}>
         {!hideAppBar && (
           <AppBar color="transparent" position="static" elevation={1}>

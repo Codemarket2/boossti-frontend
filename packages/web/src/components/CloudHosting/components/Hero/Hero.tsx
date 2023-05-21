@@ -3,11 +3,14 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography, Button } from '@material-ui/core';
 import * as d3 from 'd3'; // This Library is used for displaying piechart
+import Box from '@mui/material/Box';
 import { Image } from '../../components2/atoms';
 import { SectionHeader } from '../../components2/molecules';
 import { Section } from '../../components2/organisms';
+import Overlay from '../../../common/Overlay';
+import TimeLine from '../Timeline/TimeLine';
+import InfoBox from './InfoBox';
 
-// import TimeLine from '../TimeLine/TimeLine';
 const useStyles = makeStyles((theme) => ({
   root: {
     background: 'white',
@@ -67,12 +70,21 @@ const Hero = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
   // Code for pieChart
   const width = 400;
   const height = 400;
-  const data = [
-    { label: 'Green', value: 30 },
-    { label: 'Orange', value: 50 },
-    { label: 'Banana', value: 20 },
-  ];
 
+  const [isOpen, setOpen] = useState(false);
+  const [arcData, setarcData] = useState<{ label: string; vale: number }>(null);
+  const data = [
+    { label: 'Channels', value: 30 },
+    { label: 'Community', value: 50 },
+    { label: 'Branding', value: 20 },
+  ];
+  // this function is when a particular arc is clicked
+  const handleArcClick = (event, dat) => {
+    // Perform your desired task here
+    // console.log('Clicked arc:', dat);
+    setarcData(dat);
+    setOpen(true);
+  };
   useEffect(() => {
     const svg = d3.select(svgRef.current).attr('width', width).attr('height', height);
 
@@ -93,7 +105,8 @@ const Hero = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
     arcs
       .append('path')
       .attr('d', arc)
-      .attr('fill', (d, i) => d3.schemeCategory10[i % 10]);
+      .attr('fill', (d, i) => d3.schemeCategory10[i % 10])
+      .on('click', (event, d) => handleArcClick(event, d.data));
 
     arcs
       .append('text')
@@ -138,7 +151,17 @@ const Hero = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
           <svg ref={svgRef} />
         </div>
       </div>
-      {/* <TimeLine /> */}
+      <Overlay
+        title=""
+        open={isOpen}
+        onClose={() => {
+          setOpen(false);
+        }}
+        anchor="left"
+      >
+        <InfoBox data={arcData} />
+      </Overlay>
+      <TimeLine />
     </div>
   );
 };
