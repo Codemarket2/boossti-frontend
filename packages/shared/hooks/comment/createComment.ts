@@ -88,7 +88,7 @@ export function useUpdateComment(id: string, setEdit: any) {
   };
 }
 
-export function useDeleteComment(refetch) {
+export function useDeleteComment(refetchComments, refetchCommentCount) {
   const [deleteCommentMutation, { data, loading, error }] = useMutation(DELETE_COMMENT);
   const handleDelete = async (commentId: string, threadId: string) => {
     await deleteCommentMutation({
@@ -123,7 +123,8 @@ export function useDeleteComment(refetch) {
         }
       },
     });
-    refetch();
+    refetchComments();
+    refetchCommentCount();
   };
 
   return {

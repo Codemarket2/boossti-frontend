@@ -39,12 +39,12 @@ import { onAlert } from '../../../utils/alert';
 import { getFormFieldTypes } from '../fieldTypes';
 import RichTextarea from '../../common/RichTextarea2';
 import SelectForm from '../SelectForm';
-import SelectFormFields from '../SelectFormFields';
+// import SelectFormFields from '../SelectFormFields';
 import Formula from './formula/Formula';
 import DefaultValue from './DefaultValue';
 import { SelectSubField } from './field-condition/FieldConditionForm';
 import AddConditionButton from './field-condition/AddConditionButton';
-import Rules from './Rules';
+// import Rules from './Rules';
 
 interface IProps {
   onCancel?: () => void;
@@ -162,6 +162,25 @@ export default function AddField({
         </InputGroup>
       )}
       {isTab && formik.values.fieldType === 'form' && (
+        <>
+          <InputGroup>
+            <FormControlLabel
+              className="mt-n2 ml-2"
+              disabled={formik.isSubmitting}
+              control={
+                <Checkbox
+                  checked={formik.values.options?.addToAllForms}
+                  onChange={({ target }) => onOptionChange({ addToAllForms: target.checked })}
+                  name="addToAllForms"
+                  color="primary"
+                />
+              }
+              label="Add tab to all forms"
+            />
+          </InputGroup>
+        </>
+      )}
+      {isTab && formik.values.fieldType === 'response' && (
         <>
           <InputGroup>
             <FormControlLabel
@@ -989,7 +1008,7 @@ export default function AddField({
           {/* )} */}
         </>
       </Collapse>
-      {formId && <Rules formId={formId} fieldId={formik?.values?._id} />}
+      {/* {formId && <Rules formId={formId} fieldId={formik?.values?._id} />} */}
       <div className="mb-2">
         <LoadingButton type="submit" loading={formLoading} size="small" data-testid="form-save-btn">
           Save

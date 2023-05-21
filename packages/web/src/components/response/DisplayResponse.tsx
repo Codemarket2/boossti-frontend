@@ -1,7 +1,11 @@
 import { useCheckPermission } from '@frontend/shared/hooks/permission';
 import { useSelector } from 'react-redux';
 import { useEffect, useMemo, useState } from 'react';
-import { useDeleteResponse, useResolveCondition } from '@frontend/shared/hooks/response';
+import {
+  useDeleteResponse,
+  useResolveCondition,
+  useCreateUpdateResponse,
+} from '@frontend/shared/hooks/response';
 import Link from 'next/link';
 import Typography from '@mui/material/Typography';
 import moment from 'moment';
@@ -16,6 +20,7 @@ import Tooltip from '@mui/material/Tooltip';
 import KeyboardDoubleArrowRight from '@mui/icons-material/KeyboardDoubleArrowRight';
 import { useGetForm } from '@frontend/shared/hooks/form';
 import { useRouter } from 'next/router';
+
 import EditResponse from './EditResponse';
 import Breadcrumbs from '../common/Breadcrumbs';
 import { QRButton } from '../qrcode/QRButton';
@@ -28,6 +33,9 @@ import FieldValuesMap from './FieldValuesMap';
 import ErrorLoading from '../common/ErrorLoading';
 import WorkflowButtons from './workflow/WorkflowButtons';
 import FormFields from '../form2/FormFields';
+import InlineEdit from './InlineEdit';
+
+// inlineEdit  related imports
 
 export interface DisplayResponseProps {
   form: IForm;
@@ -41,6 +49,7 @@ export interface DisplayResponseProps {
   previewMode?: boolean;
   defaultShowFieldsMenu?: boolean;
   viewLess?: boolean;
+  handleViewLess?: (viewMore: boolean) => void;
 }
 
 const initialState = {
@@ -50,6 +59,9 @@ const initialState = {
   fieldId: null,
   field: null,
   showFieldsMenu: false,
+  valueId: null,
+  responseId: null,
+  editMode: null,
 };
 
 export function DisplayResponse({
@@ -64,6 +76,7 @@ export function DisplayResponse({
   previewMode,
   defaultShowFieldsMenu,
   viewLess,
+  handleViewLess,
 }: DisplayResponseProps) {
   const [state, setState] = useState(initialState);
   const { data: workflowFormData, loading: workflowFormLoading } = useGetForm(
@@ -96,6 +109,11 @@ export function DisplayResponse({
   } = useSelector((globalState: any) => globalState);
 
   const { handleResolveCondition } = useResolveCondition();
+
+  // inlineEdit related variables
+  const { handleCreateUpdateResponse, updateLoading } = useCreateUpdateResponse({
+    onAlert,
+  });
 
   const resolveCondition = async (fieldId, conditions) => {
     const conditionResult = await handleResolveCondition({ conditions, responseId: response?._id });
@@ -149,11 +167,51 @@ export function DisplayResponse({
     return true;
   };
 
+  const deleteValue = async (valueId) => {
+    const newValues = response?.values.filter((value) => value?._id !== valueId);
+    const payload = {
+      values: newValues,
+      _id: response?._id,
+    };
+    const newResponse = await handleCreateUpdateResponse({
+      payload,
+      edit: true,
+      fields: form?.fields,
+    });
+    if (newResponse) {
+      setState(initialState);
+    }
+  };
+  const deleteField = async (fieldId) => {
+    const newValues = response?.values?.filter((value) => value?.field !== fieldId);
+    const payload = {
+      values: newValues,
+      _id: response?._id,
+    };
+    const newResponse = await handleCreateUpdateResponse({
+      payload,
+      edit: true,
+      fields: form?.fields,
+    });
+    if (newResponse) {
+      setState(initialState);
+      if (handleViewLess) {
+        handleViewLess(false);
+      }
+    }
+  };
+  const scrollToField = (formId: string, fieldId: string) => {
+    const element = document.getElementById(`${formId}${fieldId}`);
+    element.scrollIntoView({ behavior: 'smooth' });
+  };
+
   useEffect(() => {
     if (!state.showFieldsMenu && defaultShowFieldsMenu) {
       setState((oldState) => ({ ...oldState, showFieldsMenu: true }));
     }
   }, []);
+
+  // inlinEdit Related
 
   const DetailComponent = (
     <Paper variant="outlined" className="p-2" style={hideLeftNavigation ? { border: 'none' } : {}}>
@@ -167,6 +225,10 @@ export function DisplayResponse({
                 onClickMinimize={() =>
                   setState((oldState) => ({ ...oldState, showFieldsMenu: false }))
                 }
+                onClickScrollToField={(formId, fieldId) => {
+                  scrollToField(formId, fieldId);
+                }}
+                formId={form?._id}
               />
             </div>
           ) : (
@@ -227,9 +289,9 @@ export function DisplayResponse({
               </a>
             </Link>
           </div>
-          {form?.fields?.filter(filterFields)?.map((field) => {
+          {form?.fields?.filter(filterFields)?.map((field, index) => {
             return (
-              <div key={field?._id} className="mt-3">
+              <div key={field?._id} className="mt-3" id={`${form?._id}${field?._id}`}>
                 {field?._id === state.fieldId ? (
                   <>
                     <EditResponse
@@ -237,6 +299,8 @@ export function DisplayResponse({
                       form={form}
                       response={response}
                       onClose={() => setState(initialState)}
+                      valueId={state?.valueId}
+                      editMode={state?.editMode}
                     />
                   </>
                 ) : (
@@ -247,7 +311,8 @@ export function DisplayResponse({
                       verticalView
                       field={field}
                       response={response}
-                      onClickEditField={(e) => {
+                      inlineEdit={state?.editMode !== null}
+                      onClickEditField={(fieldId, valueId, editMode) => {
                         let fieldIndex = 1;
                         form?.fields?.forEach((f, i) => {
                           if (f?._id === field?._id) {
@@ -255,8 +320,24 @@ export function DisplayResponse({
                           }
                         });
                         router.query.field = fieldIndex?.toString();
-                        router.push(router);
-                        setState({ ...initialState, field: fieldIndex });
+                        router.push(router, undefined, { scroll: false });
+                        if (editMode === 'deleteValue') {
+                          deleteValue(valueId);
+                        } else if (editMode === 'deleteField') {
+                          deleteField(fieldId);
+                        } else {
+                          setState({
+                            ...initialState,
+                            field: fieldIndex,
+                            fieldId,
+                            valueId,
+                            responseId: response?._id,
+                            editMode,
+                          });
+                          if (handleViewLess) {
+                            handleViewLess(true);
+                          }
+                        }
                       }}
                     />
                   </div>
@@ -328,7 +409,8 @@ export function DisplayResponse({
           </div>
         </div>
       )}
-      {state?.field && hasEditPermission ? (
+      {DetailComponent}
+      {/* {state?.field && hasEditPermission ? (
         <Paper variant="outlined" className="p-2">
           <EditResponse
             form={form}
@@ -342,7 +424,7 @@ export function DisplayResponse({
         </Paper>
       ) : (
         DetailComponent
-      )}
+      )} */}
     </>
   );
 }

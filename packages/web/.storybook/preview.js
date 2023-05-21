@@ -12,6 +12,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 // import 'react-date-range/dist/theme/default.css';
 // import 'react-toastify/dist/ReactToastify.css';
 import { MockedProvider } from '@apollo/client/testing';
+import { AllTheProviders } from './AllProviders';
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
@@ -23,6 +24,13 @@ export const parameters = {
   },
   apolloClient: {
     MockedProvider,
-    // any props you want to pass to MockedProvider on every story
   },
 };
+
+export const withMuiTheme = (Story) => (
+  <AllTheProviders>
+    <Story />
+  </AllTheProviders>
+);
+
+export const decorators = [withMuiTheme];

@@ -54,8 +54,6 @@ export interface IFieldOptions {
   conditionRightPart?: boolean;
   engagementForms?: any[];
   // settings?: any;
-  rulesCondition?: ICondition[];
-  moveToField?: IField;
 }
 
 export interface IField {
