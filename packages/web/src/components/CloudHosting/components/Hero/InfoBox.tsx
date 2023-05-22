@@ -64,16 +64,29 @@ const Hero = ({ className, data, ...rest }: ViewComponentProps): JSX.Element => 
   return (
     <div className={clsx(classes.root, className)} {...rest}>
       <Box
+        borderRadius="10%"
         sx={{
-          border: '1px solid black',
-          width: 300,
+          border: '2px solid #758614',
+          width: 400,
           minHeight: 300,
-          marginLeft: '15vw',
+          marginLeft: '10vw',
           marginTop: '5vh',
+          backgroundColor: 'rgb(198,212,125)',
         }}
       >
-        <Box sx={{ border: '1px solid black', width: 300, marginLeft: '15vw', marginTop: '5vh' }} />
-        {data.label}
+        <Box sx={{ width: 400, minHeight: 100, paddingTop: 5 }}>
+          <Typography variant="h5" align="center">
+            {data.label}
+          </Typography>
+        </Box>
+        <Box
+          borderTop="2px solid #758614"
+          borderBottom="2px solid #758614"
+          sx={{ width: 395, minHeight: 200, backgroundColor: 'rgb(241,240,240)' }}
+        >
+          {data.label}
+        </Box>
+        <Box sx={{ width: 400, minHeight: 100 }}>{data.label}</Box>
       </Box>
     </div>
   );
