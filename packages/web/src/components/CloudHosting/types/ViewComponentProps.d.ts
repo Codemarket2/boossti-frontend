@@ -5,4 +5,5 @@ interface ViewComponentProps {
   themeMode?: string;
   // All other props
   [x: string]: any;
+  boxNumber?: Number;
 }

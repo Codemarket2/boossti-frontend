@@ -159,7 +159,10 @@ const Hero = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
         }}
         anchor="left"
       >
-        <InfoBox data={arcData} />
+        <div style={{ display: 'flex', flexDirection: 'row' }}>
+          <InfoBox data={arcData} boxNumber={1} />
+          <InfoBox data={arcData} boxNumber={2} />
+        </div>
       </Overlay>
       <TimeLine />
     </div>
