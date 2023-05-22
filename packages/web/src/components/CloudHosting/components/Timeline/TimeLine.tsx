@@ -1,65 +1,120 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Typography } from '@mui/material';
-import Timeline from '@mui/lab/Timeline';
-import TimelineItem from '@mui/lab/TimelineItem';
-import TimelineSeparator from '@mui/lab/TimelineSeparator';
-import TimelineConnector from '@mui/lab/TimelineConnector';
-import TimelineContent from '@mui/lab/TimelineContent';
-import TimelineDot from '@mui/lab/TimelineDot';
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepButton from '@mui/material/StepButton';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    padding: theme.spacing(2),
-  },
-}));
+const steps = [
+  'Select campaign settings',
+  'Create an ad group',
+  'Create an ad',
+  'Select campaign settings',
+  'Create an ad group',
+  'Create an ad',
+];
 
-const TimeLine = () => {
-  const classes = useStyles();
+export default function HorizontalNonLinearStepper() {
+  const [activeStep, setActiveStep] = React.useState(0);
+  const [completed, setCompleted] = React.useState<{
+    [k: number]: boolean;
+  }>({});
+
+  const totalSteps = () => {
+    return steps.length;
+  };
+
+  const completedSteps = () => {
+    return Object.keys(completed).length;
+  };
+
+  const isLastStep = () => {
+    return activeStep === totalSteps() - 1;
+  };
+
+  const allStepsCompleted = () => {
+    return completedSteps() === totalSteps();
+  };
+
+  const handleNext = () => {
+    const newActiveStep =
+      isLastStep() && !allStepsCompleted()
+        ? // It's the last step, but not all steps have been completed,
+          // find the first step that has been completed
+          steps.findIndex((step, i) => !(i in completed))
+        : activeStep + 1;
+    setActiveStep(newActiveStep);
+    handleComplete();
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleStep = (step: number) => () => {
+    setActiveStep(step);
+  };
+
+  const handleComplete = () => {
+    const newCompleted = completed;
+    newCompleted[activeStep] = true;
+    setCompleted(newCompleted);
+    // handleNext();
+  };
+
+  const handleReset = () => {
+    setActiveStep(0);
+    setCompleted({});
+  };
 
   return (
-    <div className={classes.root}>
-      <Timeline>
-        <TimelineItem>
-          <TimelineSeparator>
-            <TimelineDot />
-            <TimelineConnector />
-          </TimelineSeparator>
-          <TimelineContent>
-            <Typography variant="h6" component="span">
-              Event 1
-            </Typography>
-            <Typography>Event description goes here</Typography>
-          </TimelineContent>
-        </TimelineItem>
-        <TimelineItem>
-          <TimelineSeparator>
-            <TimelineDot />
-            <TimelineConnector />
-          </TimelineSeparator>
-          <TimelineContent>
-            <Typography variant="h6" component="span">
-              Event 2
-            </Typography>
-            <Typography>Event description goes here</Typography>
-          </TimelineContent>
-        </TimelineItem>
-        <TimelineItem>
-          <TimelineSeparator>
-            <TimelineDot />
-            <TimelineConnector />
-          </TimelineSeparator>
-          <TimelineContent>
-            <Typography variant="h6" component="span">
-              Event 3
-            </Typography>
-            <Typography>Event description goes here</Typography>
-          </TimelineContent>
-        </TimelineItem>
-        {/* Add more TimelineItems as needed */}
-      </Timeline>
-    </div>
+    <Box sx={{ width: '60%', marginX: '20%', marginTop: '30vh' }}>
+      <Stepper nonLinear activeStep={activeStep} alternativeLabel>
+        {steps.map((label, index) => (
+          <Step key={label} completed={completed[index]}>
+            <StepButton color="inherit" onClick={handleStep(index)}>
+              <Typography variant="h6">{label}</Typography>
+            </StepButton>
+          </Step>
+        ))}
+      </Stepper>
+      <div>
+        {allStepsCompleted() ? (
+          <>
+            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+              <Box sx={{ flex: '1 1 auto' }} />
+              <Button onClick={handleReset}>Reset</Button>
+            </Box>
+          </>
+        ) : (
+          <>
+            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+              <Button
+                color="inherit"
+                disabled={activeStep === 0}
+                onClick={handleBack}
+                sx={{ mr: 1 }}
+              >
+                Back
+              </Button>
+              <Box sx={{ flex: '1 1 auto' }} />
+              <Button onClick={handleNext} sx={{ mr: 1 }}>
+                Next
+              </Button>
+              {activeStep !== steps.length &&
+                (completed[activeStep]
+                  ? ''
+                  : // <Button onClick={handleComplete}>
+                    //   {completedSteps() === totalSteps() - 1
+                    //     ? 'Finish'
+                    //     : 'Complete Step'}
+                    // </Button>
+                    '')}
+            </Box>
+          </>
+        )}
+      </div>
+    </Box>
   );
-};
-
-export default TimeLine;
+}

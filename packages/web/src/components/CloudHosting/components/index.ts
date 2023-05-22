@@ -10,3 +10,4 @@ export { default as Reviews } from './Reviews';
 export { default as Storage } from './Storage';
 export { default as Story } from './Story';
 export { default as Support } from './Support';
+export { default as TimeLine } from './Timeline';

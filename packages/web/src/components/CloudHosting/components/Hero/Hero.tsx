@@ -3,12 +3,9 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography, Button } from '@material-ui/core';
 import * as d3 from 'd3'; // This Library is used for displaying piechart
-import Box from '@mui/material/Box';
-import { Image } from '../../components2/atoms';
 import { SectionHeader } from '../../components2/molecules';
 import { Section } from '../../components2/organisms';
 import Overlay from '../../../common/Overlay';
-import TimeLine from '../Timeline/TimeLine';
 import InfoBox from './InfoBox';
 
 const useStyles = makeStyles((theme) => ({
@@ -164,7 +161,6 @@ const Hero = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
           <InfoBox data={arcData} boxNumber={2} />
         </div>
       </Overlay>
-      <TimeLine />
     </div>
   );
 };

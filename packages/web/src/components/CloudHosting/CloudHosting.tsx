@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Section, SectionAlternate } from './components2/organisms';
 import {
+  TimeLine,
   About,
   Articles,
   Features,
@@ -33,6 +34,7 @@ const CloudHosting = (): JSX.Element => {
   return (
     <div>
       <Hero />
+      <TimeLine />
       <Section>
         <Features data={features} />
       </Section>
