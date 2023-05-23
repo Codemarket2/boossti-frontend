@@ -67,7 +67,20 @@ const Hero = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
   // Code for pieChart
   const width = 400;
   const height = 400;
+  const [hoveredArc, setHoveredArc] = useState(null);
 
+  // Function to handle mouseover event on pie arcs
+  const handleMouseOver = (event, d) => {
+    setHoveredArc(d.data);
+    setarcData(d.data);
+    setOpen(true);
+  };
+
+  // Function to handle mouseout event on pie arcs
+  const handleMouseOut = () => {
+    setHoveredArc(null);
+    // setOpen(false)
+  };
   const [isOpen, setOpen] = useState(false);
   const [arcData, setarcData] = useState<{ label: string; vale: number }>(null);
   const data = [
@@ -80,7 +93,7 @@ const Hero = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
     // Perform your desired task here
     // console.log('Clicked arc:', dat);
     setarcData(dat);
-    setOpen(true);
+    // setOpen(true);
   };
   useEffect(() => {
     const svg = d3.select(svgRef.current).attr('width', width).attr('height', height);
@@ -103,8 +116,9 @@ const Hero = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
       .append('path')
       .attr('d', arc)
       .attr('fill', (d, i) => d3.schemeCategory10[i % 10])
-      .on('click', (event, d) => handleArcClick(event, d.data));
-
+      .on('click', (event, d) => handleArcClick(event, d.data))
+      .on('mouseenter', handleMouseOver)
+      .on('mouseleave', handleMouseOut);
     arcs
       .append('text')
       .attr('transform', (d) => `translate(${arc.centroid(d)})`)
