@@ -61,30 +61,7 @@ const useStyles = makeStyles((theme) => ({
 const InfoBox = ({ className, boxNumber, data, ...rest }: ViewComponentProps): JSX.Element => {
   const classes = useStyles();
 
-  const brandingObj1 = {
-    heading: '1.Market Research',
-    subHeading: 'WHO?',
-    imgOne: '/humanQuestionMark.jpg',
-    imgTwo: '/whatImage.png',
-  };
-  const brandingObj2 = {
-    heading: '2.User Research',
-    subHeading: 'WHY? and HOW?',
-    imgOne: '/whyImage.png',
-    imgTwo: '/howImage.png',
-  };
-  const [dataObj, setDataObj] = useState(brandingObj1);
-  useEffect(() => {
-    if (data.label === 'Branding') {
-      if (boxNumber === 1) {
-        setDataObj(brandingObj1);
-      } else {
-        setDataObj(brandingObj2);
-      }
-    } else if (data.label === 'Channels') {
-      setDataObj(brandingObj2);
-    }
-  }, []);
+  const [dataObj, setDataObj] = useState(data);
 
   return (
     <div className={clsx(classes.root, className)} {...rest}>
@@ -108,7 +85,7 @@ const InfoBox = ({ className, boxNumber, data, ...rest }: ViewComponentProps): J
           borderTop="2px solid #758614"
           sx={{ width: 395, minHeight: 225, backgroundColor: 'white', display: 'inline-block' }}
         >
-          <Typography>{dataObj.subHeading}</Typography>
+          <Typography>{dataObj?.subHeading}</Typography>
           <div style={{ display: 'flex', flexDirection: 'row' }}>
             <img src={dataObj?.imgOne ? dataObj.imgOne : ''} height={200} width={200} alt="what" />
             <img src={dataObj?.imgTwo ? dataObj.imgTwo : ''} height={200} width={195} alt="hows" />

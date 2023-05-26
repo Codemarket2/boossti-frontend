@@ -5,8 +5,7 @@ import { Typography, Button } from '@material-ui/core';
 import * as d3 from 'd3'; // This Library is used for displaying piechart
 import { SectionHeader } from '../../components2/molecules';
 import { Section } from '../../components2/organisms';
-import Overlay from '../../../common/Overlay';
-import InfoBox from './InfoBox';
+import Boxes from '../Boxes/Boxes';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -68,21 +67,25 @@ const Hero = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
   const width = 400;
   const height = 400;
   const [hoveredArc, setHoveredArc] = useState(null);
-
+  const [showBox, setShowBox] = useState(false);
   // Function to handle mouseover event on pie arcs
   const handleMouseOver = (event, d) => {
     setHoveredArc(d.data);
     setarcData(d.data);
     setOpen(true);
+    // console.log("In")
+    setShowBox(true);
   };
 
   // Function to handle mouseout event on pie arcs
   const handleMouseOut = () => {
     setHoveredArc(null);
-    // setOpen(false)
+    setOpen(false);
+    setShowBox(false);
+    // console.log("out")
   };
   const [isOpen, setOpen] = useState(false);
-  const [arcData, setarcData] = useState<{ label: string; vale: number }>(null);
+  const [arcData, setarcData] = useState<{ label: string; value: number }>(null);
   const data = [
     { label: 'Channels', value: 30 },
     { label: 'Community', value: 50 },
@@ -124,57 +127,42 @@ const Hero = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
       .attr('transform', (d) => `translate(${arc.centroid(d)})`)
       .attr('text-anchor', 'middle')
       .text((d) => d.data.label);
-  }, [data, width, height]);
+  }, []);
   return (
     <div className={clsx(classes.root, className)} {...rest}>
       <div className={classes.hero}>
-        <Section className={classes.section}>
-          <div className={classes.sectionHeader}>
-            {/* <Typography variant="h6" gutterBottom className={classes.textBlue}>
+        {arcData && showBox ? (
+          <Boxes data={arcData} />
+        ) : (
+          <Section className={classes.section}>
+            <div className={classes.sectionHeader}>
+              {/* <Typography variant="h6" gutterBottom className={classes.textBlue}>
               Download Free for Mac, Windows and Linux OS
             </Typography> */}
-            <SectionHeader
-              titleVariant="h4"
-              title={<span className={classes.textBlue}>Growth Marketing Agency</span>}
-              subtitle={
-                <span className={classes.textBlue}>
-                  ROI driven,Powered by AI/ML,Data Science,App Coding & Emotional design-Email
-                  marketing , Social Media Marketing and community building
-                </span>
-              }
-              ctaGroup={[
-                <Button variant="contained" size="large">
-                  Explore
-                </Button>,
-              ]}
-              align="left"
-              data-aos="fade-up"
-            />
-          </div>
-        </Section>
-        {/* <Image
-          src="https://assets.maccarianagency.com/the-front/illustrations/macbook-dashboard.png"
-          className={classes.image}
-          data-aos="fade-up"
-          lazy={false}
-        /> */}
+              <SectionHeader
+                titleVariant="h4"
+                title={<span className={classes.textBlue}>Growth Marketing Agency</span>}
+                subtitle={
+                  <span className={classes.textBlue}>
+                    ROI driven,Powered by AI/ML,Data Science,App Coding & Emotional design-Email
+                    marketing , Social Media Marketing and community building
+                  </span>
+                }
+                ctaGroup={[
+                  <Button variant="contained" size="large">
+                    Explore
+                  </Button>,
+                ]}
+                align="left"
+                data-aos="fade-up"
+              />
+            </div>
+          </Section>
+        )}
         <div className={classes.pieChart}>
           <svg ref={svgRef} />
         </div>
       </div>
-      <Overlay
-        title=""
-        open={isOpen}
-        onClose={() => {
-          setOpen(false);
-        }}
-        anchor="left"
-      >
-        <div style={{ display: 'flex', flexDirection: 'row' }}>
-          <InfoBox data={arcData} boxNumber={1} />
-          <InfoBox data={arcData} boxNumber={2} />
-        </div>
-      </Overlay>
     </div>
   );
 };
