@@ -15,6 +15,7 @@ interface IObj {
   imgTwo: string;
 }
 const Boxes = ({ data }: IProps) => {
+  // For branding Box 1 and Box2
   const brandingObj1 = {
     heading: '1.Market Research',
     subHeading: 'WHO?',
@@ -27,28 +28,60 @@ const Boxes = ({ data }: IProps) => {
     imgOne: '/whyImage.png',
     imgTwo: '/howImage.png',
   };
-  const [dataObj1, setDataObj1] = useState<IObj>(brandingObj1);
-  const [dataObj2, setDataObj2] = useState(brandingObj2);
+  // For Channels Box1 and Box2
+  const channelsObj1 = {
+    heading: '1.Market Research',
+    subHeading: 'WHO?',
+    imgOne: '/humanQuestionMark.jpg',
+    imgTwo: '/whatImage.png',
+  };
+  const channelsObj2 = {
+    heading: '2.User Research',
+    subHeading: 'WHY? and HOW?',
+    imgOne: '/whyImage.png',
+    imgTwo: '/howImage.png',
+  };
 
-  useEffect(() => {
-    if (data.label === 'Branding') {
-      setDataObj1(brandingObj1);
-
-      setDataObj2(brandingObj2);
-    } else if (data.label === 'Channels') {
-      setDataObj1(brandingObj1);
-      setDataObj2(brandingObj1);
-    } else {
-      setDataObj1(brandingObj2);
-      setDataObj2(brandingObj2);
-    }
-  }, [data]);
-
+  // For Community Box1 and 2
+  const communityObj1 = {
+    heading: '1.Market Research',
+    subHeading: 'WHO?',
+    imgOne: '/humanQuestionMark.jpg',
+    imgTwo: '/whatImage.png',
+  };
+  const communityObj2 = {
+    heading: '2.User Research',
+    subHeading: 'WHY? and HOW?',
+    imgOne: '/whyImage.png',
+    imgTwo: '/howImage.png',
+  };
   return (
-    <div style={{ display: 'flex', flexDirection: 'row' }}>
-      <InfoBox data={dataObj1} boxNumber={1} />
-      <InfoBox data={dataObj2} boxNumber={2} />
-    </div>
+    <>
+      {data?.label === 'Branding' ? (
+        <div style={{ display: 'flex', flexDirection: 'row' }}>
+          <InfoBox data={brandingObj1} boxNumber={1} />
+          <InfoBox data={brandingObj2} boxNumber={2} />
+        </div>
+      ) : (
+        ''
+      )}
+      {data?.label === 'Channels' ? (
+        <div style={{ display: 'flex', flexDirection: 'row' }}>
+          <InfoBox data={channelsObj1} boxNumber={1} />
+          <InfoBox data={channelsObj2} boxNumber={2} />
+        </div>
+      ) : (
+        ''
+      )}
+      {data?.label === 'Community' ? (
+        <div style={{ display: 'flex', flexDirection: 'row' }}>
+          <InfoBox data={communityObj1} boxNumber={1} />
+          <InfoBox data={communityObj2} boxNumber={2} />
+        </div>
+      ) : (
+        ''
+      )}
+    </>
   );
 };
 export default Boxes;

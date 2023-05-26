@@ -72,7 +72,7 @@ const Hero = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
   const handleMouseOver = (event, d) => {
     setHoveredArc(d.data);
     setarcData(d.data);
-    setOpen(true);
+
     // console.log("In")
     setShowBox(true);
   };
@@ -80,11 +80,11 @@ const Hero = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
   // Function to handle mouseout event on pie arcs
   const handleMouseOut = () => {
     setHoveredArc(null);
-    setOpen(false);
+
     setShowBox(false);
     // console.log("out")
   };
-  const [isOpen, setOpen] = useState(false);
+
   const [arcData, setarcData] = useState<{ label: string; value: number }>(null);
   const data = [
     { label: 'Channels', value: 30 },
