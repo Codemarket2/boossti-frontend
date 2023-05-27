@@ -72,11 +72,11 @@ const InfoBox = ({ className, boxNumber, data, ...rest }: ViewComponentProps): J
           width: 400,
           minHeight: 360,
           // marginLeft: '10vw',
-          marginTop: '5vh',
+          // marginTop: '5vh',
           backgroundColor: 'rgb(198,212,125)',
         }}
       >
-        <Box sx={{ width: 400, minHeight: 100, paddingTop: 5 }}>
+        <Box sx={{ width: 400, minHeight: 100 }}>
           <Typography variant="h5" align="center">
             {dataObj?.heading ? dataObj.heading : ''}
           </Typography>

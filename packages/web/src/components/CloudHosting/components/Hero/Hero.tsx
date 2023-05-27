@@ -66,11 +66,11 @@ const Hero = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
   // Code for pieChart
   const width = 400;
   const height = 400;
-  const [hoveredArc, setHoveredArc] = useState(null);
+  const [isMouseMoving, setIsMouseMoving] = useState(true);
   const [showBox, setShowBox] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   // Function to handle mouseover event on pie arcs
   const handleMouseOver = (event, d) => {
-    setHoveredArc(d.data);
     setarcData(d.data);
 
     // console.log("In")
@@ -79,10 +79,7 @@ const Hero = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
 
   // Function to handle mouseout event on pie arcs
   const handleMouseOut = () => {
-    setHoveredArc(null);
-
-    setShowBox(false);
-    // console.log("out")
+    const x = 10;
   };
 
   const [arcData, setarcData] = useState<{ label: string; value: number }>(null);
@@ -132,7 +129,13 @@ const Hero = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
     <div className={clsx(classes.root, className)} {...rest}>
       <div className={classes.hero}>
         {arcData && showBox ? (
-          <Boxes data={arcData} />
+          <Boxes
+            data={arcData}
+            setIsHovered={setIsHovered}
+            onClose={() => {
+              setShowBox(false);
+            }}
+          />
         ) : (
           <Section className={classes.section}>
             <div className={classes.sectionHeader}>
