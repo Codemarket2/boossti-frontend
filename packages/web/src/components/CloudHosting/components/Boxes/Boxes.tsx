@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button } from '@material-ui/core';
+import IconButton from '@mui/material/IconButton';
 import Close from '@mui/icons-material/Close';
 import Grid from '@mui/material/Grid';
 import { makeStyles } from '@material-ui/core/styles';
@@ -23,6 +23,7 @@ interface IObj {
 const useStyles = makeStyles((theme) => ({
   closeButton: {
     marginBottom: '-5vh',
+    color: 'red',
   },
 }));
 
@@ -79,13 +80,14 @@ const Boxes = ({ data, setIsHovered, onClose }: IProps) => {
     >
       <Grid container justifyContent="flex-end">
         {' '}
-        <Button
+        <IconButton
+          aria-label="Close"
+          color="error"
           className={classes.closeButton}
-          variant="contained"
-          color="primary"
-          startIcon={<Close />}
           onClick={onClose}
-        />
+        >
+          <Close />
+        </IconButton>
       </Grid>
 
       {data?.label === 'Branding' ? (
