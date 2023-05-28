@@ -86,13 +86,13 @@ const InfoBox = ({ className, boxNumber, data, ...rest }: ViewComponentProps): J
           sx={{ width: 395, minHeight: 225, backgroundColor: 'white', display: 'inline-block' }}
         >
           <Typography>{dataObj?.subHeading}</Typography>
-          <div style={{ display: 'flex', flexDirection: 'row' }}>
+          {/* <div style={{ display: 'flex', flexDirection: 'row' }}>
             <img src={dataObj?.imgOne ? dataObj.imgOne : ''} height={200} width={200} alt="what" />
             <img src={dataObj?.imgTwo ? dataObj.imgTwo : ''} height={200} width={195} alt="hows" />
+          </div> */}
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <CardFlip />
           </div>
-          {/* <div style={{ display: 'flex', flexDirection: 'row' }}>
-           <CardFlip/>
-           </div> */}
         </Box>
         {/* <Box sx={{ width: 400, minHeight: 100 }}></Box> */}
       </Box>

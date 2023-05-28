@@ -3,6 +3,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import { makeStyles } from '@material-ui/core/styles';
+import ReactCardFlip from 'react-card-flip';
 
 const useStyles = makeStyles({
   card: {
@@ -27,32 +28,34 @@ function FlippingCard() {
   const classes = useStyles();
   const [isFlipped, setIsFlipped] = useState(false);
 
-  const handleMouseEnter = () => {
+  const handleMouseOver = () => {
     setIsFlipped(true);
   };
 
-  const handleMouseLeave = () => {
-    setIsFlipped(false);
-  };
-
   return (
-    <Card className={classes.card} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-      <CardContent
-        className={isFlipped ? `${classes.cardBack} ${classes.card}` : classes.cardFront}
-      >
-        {isFlipped ? (
-          <>
-            <CardMedia component="img" height="200" image="back-image.jpg" alt="Back Image" />
-            <h2>Back Side</h2>
-          </>
-        ) : (
-          <>
-            <CardMedia component="img" height="200" image="front-image.jpg" alt="Front Image" />
-            <h2>Front Side</h2>
-          </>
-        )}
-      </CardContent>
-    </Card>
+    <>
+      <Card>
+        <CardContent>
+          <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
+            {/* //Front Side  */}
+            <div onMouseEnter={handleMouseOver}>
+              <CardMedia
+                component="img"
+                height="200"
+                image="/humanQuestionMark.jpg"
+                alt="Human Question Mark"
+              />
+              <h2>Front Side</h2>
+            </div>
+            {/* Back Side */}
+            <div>
+              <CardMedia component="img" height="200" image="front-image.jpg" alt="Front Image" />
+              <h2>Back Side</h2>
+            </div>
+          </ReactCardFlip>
+        </CardContent>
+      </Card>
+    </>
   );
 }
 
