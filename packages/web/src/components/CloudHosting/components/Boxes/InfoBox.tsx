@@ -92,6 +92,7 @@ const InfoBox = ({ className, boxNumber, data, ...rest }: ViewComponentProps): J
           </div> */}
           <div style={{ display: 'flex', flexDirection: 'row' }}>
             <CardFlip />
+            <CardFlip />
           </div>
         </Box>
         {/* <Box sx={{ width: 400, minHeight: 100 }}></Box> */}

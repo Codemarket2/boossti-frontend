@@ -22,6 +22,11 @@ const useStyles = makeStyles({
     top: 0,
     zIndex: 1,
   },
+  flipBox: {
+    // minHieght  : "15vh",
+    minHieght: '20vh',
+    hieght: '15vh',
+  },
 });
 
 function FlippingCard() {
@@ -31,31 +36,39 @@ function FlippingCard() {
   const handleMouseOver = () => {
     setIsFlipped(true);
   };
-
+  const handleMouseOut = () => {
+    setIsFlipped(false);
+  };
   return (
-    <>
-      <Card>
-        <CardContent>
-          <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
-            {/* //Front Side  */}
-            <div onMouseEnter={handleMouseOver}>
+    <div>
+      <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
+        <div className={classes.flipBox} onMouseEnter={handleMouseOver}>
+          <Card>
+            <CardContent>
+              {/* //Front Side  */}
+
               <CardMedia
                 component="img"
-                height="200"
+                height="100"
                 image="/humanQuestionMark.jpg"
                 alt="Human Question Mark"
               />
+
               <h2>Front Side</h2>
-            </div>
-            {/* Back Side */}
-            <div>
-              <CardMedia component="img" height="200" image="front-image.jpg" alt="Front Image" />
+            </CardContent>
+          </Card>
+        </div>
+        <div className={classes.flipBox} onBlur={handleMouseOut}>
+          <Card style={{ minHeight: '28vh' }}>
+            <CardContent>
+              {/* Back Side */}
+
               <h2>Back Side</h2>
-            </div>
-          </ReactCardFlip>
-        </CardContent>
-      </Card>
-    </>
+            </CardContent>
+          </Card>
+        </div>
+      </ReactCardFlip>
+    </div>
   );
 }
 
