@@ -57,6 +57,12 @@ const useStyles = makeStyles((theme) => ({
       width: 'auto',
       transform: 'translateY(-50%) !important',
     },
+    [theme.breakpoints.down('md')]: {
+      position: 'static',
+
+      width: 'auto',
+      transform: 'translateX(25%) !important',
+    },
   },
 }));
 
