@@ -110,7 +110,7 @@ function EpisodeList() {
 					<div style={overlayStyles}>
 						<div style={formContainerStyles}>
 						<DisplayForm
-                slug="users"
+                slug="business-goals"
                 settings={{
                   widgetType: "form",
                   whoCanSubmit: "all",
