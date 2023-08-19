@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import slugify from "slugify";
+import slugify from 'slugify';
 import { updateSettingAction } from '../../redux/actions/setting';
 import { systemForms } from '../../utils/systemForms';
 import { getFormBySlug } from '../form';

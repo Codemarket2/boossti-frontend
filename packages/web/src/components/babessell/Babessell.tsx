@@ -6,7 +6,6 @@ import TwoPartition2 from './components/twopartion2/twoPartition2';
 import FourPartition from './components/fourPartition/fourPartition';
 import EpisodeList from './components/EpisodeList/EpisodeList';
 
-
 export default function Babessell(props) {
   const threePartitionOptions = {
     imageUrl:
@@ -23,7 +22,7 @@ export default function Babessell(props) {
   return (
     <>
       <Hero />
-      <EpisodeList/>
+      <EpisodeList />
       <TwoPartition
         imageUrl="https://edgestatic.azureedge.net/shared/cms/lrs1c69a1j/section-images/5ce78cc0a9a54d58ad65afcc2c4c76c7.png"
         title="Enhance your browsing capabilities with AI"
