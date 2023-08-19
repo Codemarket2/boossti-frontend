@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import slugify from 'slugify';
+import slugify from "slugify";
 import { updateSettingAction } from '../../redux/actions/setting';
 import { systemForms } from '../../utils/systemForms';
 import { getFormBySlug } from '../form';
@@ -71,7 +71,6 @@ export const useGetApp = () => {
       );
     } catch (error) {
       // eslint-disable-next-line no-console
-      console.log({ error });
       dispatch(updateSettingAction({ isApp: true, appError: error?.message }));
     }
   };
@@ -119,8 +118,8 @@ export const useGetApp = () => {
   useEffect(() => {
     let domain = window.location.host;
     if (
-      !['localhost:3000', 'www.boossti.com'].includes(domain) &&
-      !domain?.includes('.cloudfront.net')
+      (!['www.boossti.com'].includes(domain) && !domain?.includes('.cloudfront.net')) ||
+      process.env.NEXT_PUBLIC_APP_DOMAIN != null
     ) {
       setIsApp(true);
       dispatch(updateSettingAction({ isApp: true, appError: null }));
