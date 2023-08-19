@@ -3,7 +3,6 @@ import Hero from './components/Hero';
 import TwoPartition from './components/twopartition/twopartition';
 import ThreePartition from './components/threePartition';
 import TwoPartition2 from './components/twopartion2/twoPartition2';
-import FourPartition from './components/fourPartition/fourPartition';
 import EpisodeList from './components/EpisodeList/EpisodeList';
 
 export default function Babessell(props) {
