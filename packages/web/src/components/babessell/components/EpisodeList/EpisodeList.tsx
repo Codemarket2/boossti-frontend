@@ -1,4 +1,5 @@
-import React from "react";
+import { useState } from 'react';
+import { DisplayForm } from '../../../form2/DisplayForm';
 
 interface Episode {
 	name: string;
@@ -8,7 +9,7 @@ interface Episode {
 
 const episodes: Episode[] = [
 	{
-		name: `The Break-in`,
+		name: `Business Goals`,
 		number: `S12 - E1`,
 		thumbnail: `https://www.bravotv.com/sites/bravo/files/styles/watch-thumbnail--tablet-1_5x/public/media_mpx/thumbnails/tve-static-bravotv.akamaized.net/prod/image/943/167/RHBH_1201_Preview_1_Erika_Says_Sutton_Lead_Charge_800x450_2032508483758.jpg?h=ae1281eb&itok=zwGjtRsX`,
 	},
@@ -21,16 +22,6 @@ const episodes: Episode[] = [
 		name: `There's Sutton About Crystal`,
 		number: `S12 - E3`,
 		thumbnail: `https://www.bravotv.com/sites/bravo/files/styles/watch-thumbnail--tablet-1_5x/public/media_mpx/thumbnails/tve-static-bravotv.akamaized.net/prod/image/12/130/RHBH_1203_Preview_2_Dorit_Crystal_800x450_2036899907583.jpg?h=ae1281eb&itok=MCMPRlAh`,
-	},
-	{
-		name: `The Crystal Conundrum`,
-		number: `S12 - E4`,
-		thumbnail: `https://www.bravotv.com/sites/bravo/files/styles/watch-thumbnail--tablet-1_5x/public/media_mpx/thumbnails/tve-static-bravotv.akamaized.net/prod/image/957/463/RHBH_1210_FULL_EPISODE_THUMB_800x450_2055135299673.jpg?h=ae1281eb&itok=GJ4ZbNpV`,
-	},
-	{
-		name: `In Hot Water`,
-		number: `S12 - E5`,
-		thumbnail: `https://www.bravotv.com/sites/bravo/files/styles/watch-thumbnail--tablet-1_5x/public/media_mpx/thumbnails/tve-static-bravotv.akamaized.net/prod/image/256/667/RHBH_1207_Preview_1_Erika_Sutton_Friends_Again_800x450_2045748803552.jpg?h=ae1281eb&itok=lOglMNM4`,
 	},
 	{
 		name: `High Cries and Misty Demeanors`,
@@ -50,6 +41,42 @@ const episodes: Episode[] = [
 ];
 
 function EpisodeList() {
+	const [displayForm, setDisplayForm] = useState(false)
+	const [clickedImageIndex, setClickedImageIndex] = useState<number | null>(null);
+
+	function handleImageClick(index : number){
+		setClickedImageIndex(index)
+		setDisplayForm(true)
+	}
+
+	const episodeStyle: React.CSSProperties = {
+				display: "flex",
+				flexWrap: "wrap",
+				justifyContent: "center",
+				alignItems: "center",
+				gap: "30px",
+				padding: "3% 0 3% 0",
+			}
+	const overlayStyles: React.CSSProperties = {
+		position: "absolute",
+		top: 0,
+		left: 0,
+		width: "100%",
+		height: "100%",
+		display: "flex",
+		alignItems: "center",
+		justifyContent: "center",
+		backgroundColor: "rgba(0, 0, 0, 0.5)",
+		zIndex: 1,
+	  };
+	
+	  const formContainerStyles: React.CSSProperties = {
+		backgroundColor: "white",
+		padding: "20px",
+		borderRadius: "10px",
+		boxShadow: "0 0 10px rgba(0, 0, 0, 0.3)",
+	  }
+
 	const episodeInfo = episodes.map((episode, i) => (
 		<div
 			key={i}
@@ -77,7 +104,34 @@ function EpisodeList() {
 						display: "inline-block",
 						position: "relative",
 					}}
+					onClick={()=>handleImageClick(i)}
 				/>
+				{clickedImageIndex === i && displayForm && (
+					<div style={overlayStyles}>
+						<div style={formContainerStyles}>
+						<DisplayForm
+                slug="users"
+                settings={{
+                  widgetType: "form",
+                  whoCanSubmit: "all",
+                  formView: "oneField",
+                }}
+                modifyForm={(form) => {
+                  const newForm = { ...form };
+                  newForm.fields = newForm?.fields?.map((field) => {
+                    const newField = { ...field };
+                    if (newField?.label?.toLowerCase() === "roles") {
+                      newField.options.hidden = true;
+                    }
+                    return newField;
+                  });
+                  return newForm;
+                }}
+              />
+						</div>
+					</div>
+				)}
+
 				<p
 					className="text-overlay"
 					style={{
@@ -118,16 +172,8 @@ function EpisodeList() {
 	return (
 		<div
 			className="episodes"
-			style={{
-				display: "flex",
-				flexWrap: "wrap",
-				justifyContent: "center",
-				alignItems: "center",
-				gap: "30px",
-				padding: "3% 0 3% 0",
-			}}
-		>
-			{episodeInfo}
+			style={episodeStyle}
+		>{episodeInfo}
 		</div>
 	);
 }
