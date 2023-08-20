@@ -10,7 +10,7 @@ export default function AppDashboard() {
   const { appForm, appResponse } = useSelector((state: { setting: ISetting }) => state?.setting);
   const domain = window.location.host;
   if (
-    ['www.babessell.com', 'scrum.boossti.com'].includes(domain) ||
+    ['www.babessell.com', 'babessell.boossti.com'].includes(domain) ||
     process.env.NEXT_PUBLIC_APP_DOMAIN === 'babessell.boossti.com'
   ) {
     return <Babessell />;

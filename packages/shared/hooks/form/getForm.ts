@@ -144,7 +144,6 @@ export function useGetFormTabRelations(_id: string) {
       setForms(data.getFormTabRelations?.map((form) => parseForm(form)));
     }
   }, [data]);
-
   return { data: forms ? { getFormTabRelations: forms } : null, error, loading };
 }
 
