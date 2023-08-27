@@ -46,12 +46,14 @@ import TabsList from './tabs/TabsList';
 import TabView from './tabs/TabView';
 import { DisplayForm } from './DisplayForm';
 import WorkflowView from './Work_flowView';
+import EmbedFormTab from '../embed/EmbedFormTab';
 
 const tabs = [
   'Fields',
   'Form',
   'Results',
   'Settings',
+  'Embedded Form',
   'Actions',
   'Workflows',
   'Design',
@@ -455,6 +457,9 @@ export function FormChild({
                     />
                   )}
                 </>
+              )}
+              {state.currentTab === 'Embedded Form' && (
+                <EmbedFormTab form={form} oldSettings={form.settings} />
               )}
             </Grid>
             {state.formTabs && (
