@@ -9,6 +9,8 @@ export default function Page(): any {
   const router = useRouter();
   const { slug } = router.query;
 
+  const { data, error } = useGetFormBySlug(slug?.toString());
+
   const onSlugChange = (newSlug) => {
     if (slug !== newSlug) {
       router.push(`/form/${newSlug}`);
@@ -17,21 +19,13 @@ export default function Page(): any {
 
   return (
     <UserLayout container={false} authRequired feedLayout>
-      {slug ? <FormPage slug={slug.toString()} onSlugChange={onSlugChange} /> : <ErrorLoading />}
+      {error || !data ? (
+        <ErrorLoading error={error} />
+      ) : !data?.getFormBySlug?._id ? (
+        <NotFound />
+      ) : (
+        <Form form={data?.getFormBySlug} onSlugChange={onSlugChange} />
+      )}
     </UserLayout>
   );
 }
-
-export const FormPage = ({ slug, onSlugChange }: { slug: string; onSlugChange?: any }) => {
-  const { data, error } = useGetFormBySlug(slug);
-
-  if (error || !data) {
-    return <ErrorLoading error={error} />;
-  }
-
-  if (!data?.getFormBySlug?._id) {
-    return <NotFound />;
-  }
-
-  return <Form form={data?.getFormBySlug} onSlugChange={onSlugChange} />;
-};

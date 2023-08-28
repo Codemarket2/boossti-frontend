@@ -118,9 +118,11 @@ export const useGetApp = () => {
 
   useEffect(() => {
     let domain = window.location.host;
+
     if (
-      !['localhost:3000', 'www.boossti.com'].includes(domain) &&
-      !domain?.includes('.cloudfront.net')
+      (!['www.boossti.com', 'localhost:3000'].includes(domain) &&
+        !domain?.includes('.cloudfront.net')) ||
+      process.env.NEXT_PUBLIC_APP_IsApp === 'true'
     ) {
       setIsApp(true);
       dispatch(updateSettingAction({ isApp: true, appError: null }));
@@ -129,6 +131,7 @@ export const useGetApp = () => {
       }
       getApp(domain);
     }
+
     setLoading(false);
   }, [authenticated]);
 

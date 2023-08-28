@@ -1,5 +1,5 @@
 import { useGetFormRelations } from '@frontend/shared/hooks/form/getForm';
-import { Typography } from '@mui/material';
+import { Divider, Typography } from '@mui/material';
 import React from 'react';
 import ErrorLoading from '../common/ErrorLoading';
 import { DisplayForm } from './DisplayForm';
@@ -18,6 +18,14 @@ export default function RelationFieldView({ formId, responseId }: RelationFieldV
 
   return (
     <div>
+      {data?.getFormRelations?.length > 0 && (
+        <>
+          <Divider className="mt-4" />
+          <Typography variant="h5" className="p-2">
+            Relations
+          </Typography>
+        </>
+      )}
       {data?.getFormRelations?.map((relationForm) => {
         const field = relationForm?.fields?.find(
           (relationField) =>
@@ -33,7 +41,7 @@ export default function RelationFieldView({ formId, responseId }: RelationFieldV
                 <DisplayForm
                   _id={relationForm?._id}
                   settings={{
-                    widgetType: 'both',
+                    widgetType: 'responses',
                     formView: 'button',
                     responsesView: 'table',
                     buttonLabel: `Add ${field?.options?.relationLabel || relationForm?.name}`,

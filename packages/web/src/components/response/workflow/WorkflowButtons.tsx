@@ -1,37 +1,81 @@
-import { useUpdateSection } from '@frontend/shared/hooks/section';
-import { IResponse } from '@frontend/shared/types';
+import { useGetForm } from '@frontend/shared/hooks/form';
+import { useGetResponses } from '@frontend/shared/hooks/response';
+import { IField, IResponse } from '@frontend/shared/types';
+import { Typography } from '@mui/material';
 import TableCell from '@mui/material/TableCell';
 import React from 'react';
-import { onAlert } from '../../../utils/alert';
 import { DisplayForm } from '../../form2/DisplayForm';
+import { ShowResponseLabel } from '../ResponseDrawer';
 
 interface IWorkflowButton {
   response: IResponse;
+  tableCellView?: boolean;
 }
 
-export default function WorkflowButtons({ response }: IWorkflowButton) {
-  const { section } = useUpdateSection({
-    onAlert,
-    _id:
-      (typeof response?.options === 'string' ? JSON.parse(response?.options) : response?.options)
-        ?.customSectionId || response?.formId,
-  });
+export default function WorkflowButtons({ response, tableCellView }: IWorkflowButton) {
+  const { data } = useGetForm(response?.workflowId);
 
-  if (section?.fields?.length > 0) {
+  if (data?.getForm?.fields?.length > 0) {
     return (
-      <TableCell>
-        {section?.fields?.map((workflow) => (
-          <div>
-            <DisplayForm
-              workFlowFormResponseParentId={response?._id}
-              _id={workflow?.form?._id}
-              settings={{ formView: 'button', widgetType: 'form' }}
+      <>
+        {data?.getForm?.fields
+          ?.filter((field) => field?.form?._id !== response?.formId)
+          ?.map((field) => (
+            <Item
+              key={field?._id}
+              field={field}
+              workflowId={response?.workflowId}
+              parentResponseId={response?._id}
+              tableCellView={tableCellView}
             />
-          </div>
-        ))}
-      </TableCell>
+          ))}
+      </>
     );
   }
 
   return null;
 }
+
+const Item = ({
+  workflowId,
+  field,
+  parentResponseId,
+  tableCellView,
+}: {
+  field: IField;
+  workflowId: string;
+  parentResponseId: string;
+  tableCellView?: boolean;
+}) => {
+  const { data } = useGetResponses({ formId: field?.form?._id, workflowId, parentResponseId });
+
+  const Component = (
+    <>
+      <Typography fontWeight="bold">{field?.label}</Typography>
+      {data?.getResponses?.data?.[0]?._id ? (
+        <>
+          <ShowResponseLabel
+            formId={field?.form?._id}
+            formField={field.options?.formField}
+            response={data?.getResponses?.data?.[0]}
+          />
+        </>
+      ) : (
+        <>
+          <DisplayForm
+            workflowId={workflowId}
+            parentResponseId={parentResponseId}
+            _id={field?.form?._id}
+            settings={{ formView: 'button', widgetType: 'form' }}
+          />
+        </>
+      )}
+    </>
+  );
+
+  if (tableCellView) {
+    return <TableCell>{Component}</TableCell>;
+  }
+
+  return <div className="mt-4">{Component}</div>;
+};

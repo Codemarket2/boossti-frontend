@@ -1,5 +1,8 @@
-import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
-import { IconButton, Paper, Tooltip } from '@mui/material';
+import ArrowBackIos from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIos from '@mui/icons-material/ArrowForwardIos';
+import IconButton from '@mui/material/IconButton';
+import Paper from '@mui/material/Paper';
+import Tooltip from '@mui/material/Tooltip';
 import Grid from '@mui/material/Grid';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
@@ -20,14 +23,16 @@ export default function FeedLayout({ children }: IFeedLayout) {
   useEffect(() => {
     if (router.query?.form) {
       setFormSlug(router.query?.form?.toString());
-      setSelectedTab(
-        router.query?.form?.toString() === 'work-flow-diagram' ? 'workflows' : 'forms',
-      );
     } else {
       setFormSlug('');
-      setSelectedTab('forms');
     }
   }, [router.query?.form]);
+
+  useEffect(() => {
+    if (router.pathname === '/workflow/[slug]') {
+      setSelectedTab('workflows');
+    }
+  }, [router.pathname]);
 
   return (
     <Grid container spacing={0.5}>
@@ -38,12 +43,7 @@ export default function FeedLayout({ children }: IFeedLayout) {
               <Tabs
                 variant="fullWidth"
                 value={selectedTab}
-                onChange={(event, newValue) => {
-                  setSelectedTab(newValue);
-                  if (newValue === 'workflows') {
-                    router.push(`/form/work-flow-diagram?tab=Responses`);
-                  }
-                }}
+                onChange={(event, newValue) => setSelectedTab(newValue)}
                 aria-label="basic tabs example"
               >
                 <Tab label="Forms" value="forms" />
@@ -57,8 +57,11 @@ export default function FeedLayout({ children }: IFeedLayout) {
             </Paper>
             <FormList
               hideHeader
-              customLink={(form) => `/form/${form?.slug}?tab=Responses`}
+              customLink={(form) =>
+                `/${selectedTab === 'workflows' ? 'workflow' : 'form'}/${form?.slug}`
+              }
               selectedForm={formSlug}
+              isWorkflow={selectedTab === 'workflows'}
             />
           </>
         ) : (

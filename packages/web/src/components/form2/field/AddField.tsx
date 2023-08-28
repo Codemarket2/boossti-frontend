@@ -39,22 +39,18 @@ import { onAlert } from '../../../utils/alert';
 import { getFormFieldTypes } from '../fieldTypes';
 import RichTextarea from '../../common/RichTextarea2';
 import SelectForm from '../SelectForm';
-import SelectFormFields from '../SelectFormFields';
-import SelectTemplate from '../../template/SelectTemplate';
+// import SelectFormFields from '../SelectFormFields';
 import Formula from './formula/Formula';
-import FieldCondition from './field-condition/FieldCondition';
 import DefaultValue from './DefaultValue';
-// import HiddenCondition from './HiddenCondition';
 import { SelectSubField } from './field-condition/FieldConditionForm';
 import AddConditionButton from './field-condition/AddConditionButton';
-import { DisplayForm } from '../DisplayForm';
-import Rules from './Rules';
+// import Rules from './Rules';
 
 interface IProps {
   onCancel?: () => void;
   onSave: (field: any, action: string) => void;
   field: IField | null;
-  isWidget?: boolean;
+  isWorkflow?: boolean;
   isDefault?: boolean;
   parentFields?: any[];
   isTab?: boolean;
@@ -65,7 +61,7 @@ export default function AddField({
   onCancel,
   onSave,
   field = null,
-  isWidget = false,
+  isWorkflow,
   isDefault,
   parentFields = [],
   isTab,
@@ -84,13 +80,7 @@ export default function AddField({
     }
   }, [field]);
 
-  useEffect(() => {
-    if (isWidget) {
-      formik.setFieldValue('isWidget', true);
-    }
-  }, [isWidget]);
-
-  const isWidgetForm = formik.values.fieldType === 'form' && isWidget;
+  // const isWidgetForm = formik.values.fieldType === 'form' && isWorkflow;
 
   return (
     <form className="px-2" onSubmit={formik.handleSubmit}>
@@ -131,7 +121,7 @@ export default function AddField({
             inputProps={{ 'aria-describedby': 'fieldType-helperText' }}
             MenuProps={{ id: 'fieldType-menu' }}
           >
-            {getFormFieldTypes(isWidget)?.map((option, index) => (
+            {getFormFieldTypes(isWorkflow)?.map((option, index) => (
               <MenuItem value={option.value} key={index}>
                 {option.label}
               </MenuItem>
@@ -144,7 +134,7 @@ export default function AddField({
           )}
         </FormControl>
       </InputGroup>
-      {(['response'].includes(formik.values.fieldType) || isWidgetForm) && (
+      {['response'].includes(formik.values.fieldType) && (
         <InputGroup>
           <SelectForm
             value={formik.values.form}
@@ -158,8 +148,7 @@ export default function AddField({
             error={formik.touched.form && Boolean(formik.errors.form)}
             helperText={formik.touched.form && formik.errors.form}
           />
-
-          {formik.values.form && formik.values.fieldType === 'response' && (
+          {/* {formik.values.form && formik.values.fieldType === 'response' && (
             <div className="mt-3">
               <SelectFormFields
                 formId={formik.values.form?._id}
@@ -169,7 +158,7 @@ export default function AddField({
                 helperText={!formik.values.options?.formField && 'required'}
               />
             </div>
-          )}
+          )} */}
         </InputGroup>
       )}
       {isTab && formik.values.fieldType === 'form' && (
@@ -191,15 +180,24 @@ export default function AddField({
           </InputGroup>
         </>
       )}
-      {formik.values.fieldType === 'template' && (
-        <InputGroup>
-          <SelectTemplate
-            value={formik.values.template}
-            onChange={(newValue) => formik.setFieldValue('template', newValue, false)}
-            error={formik.touched.template && Boolean(formik.errors.template)}
-            helperText={formik.touched.template && formik.errors.template}
-          />
-        </InputGroup>
+      {isTab && formik.values.fieldType === 'response' && (
+        <>
+          <InputGroup>
+            <FormControlLabel
+              className="mt-n2 ml-2"
+              disabled={formik.isSubmitting}
+              control={
+                <Checkbox
+                  checked={formik.values.options?.addToAllForms}
+                  onChange={({ target }) => onOptionChange({ addToAllForms: target.checked })}
+                  name="addToAllForms"
+                  color="primary"
+                />
+              }
+              label="Add tab to all forms"
+            />
+          </InputGroup>
+        </>
       )}
       {formik?.values?.fieldType === 'label' && (
         <InputGroup>
@@ -343,12 +341,12 @@ export default function AddField({
                   label="Two way relationship"
                   data-testid="two-way-relationship-field-option"
                 />
-                <Tooltip title="Parent will have child Id & child will have parent Id">
+                <Tooltip title="On child response you can see what is the parent response">
                   <InfoOutlined className="mt-n2 ml-n2" fontSize="small" />
                 </Tooltip>
               </div>
               {formik.values.options?.twoWayRelationship && (
-                <div>
+                <div className="pl-3">
                   <InputGroup>
                     <TextField
                       fullWidth
@@ -357,11 +355,11 @@ export default function AddField({
                       name="relationLabel"
                       value={formik.values.options.relationLabel}
                       onChange={({ target }) => onOptionChange({ relationLabel: target.value })}
-                      error={!formik.values.options.relationLabel}
-                      helperText={!formik.values.options?.relationLabel && 'Required'}
+                      // error={!formik.values.options.relationLabel}
+                      // helperText={!formik.values.options?.relationLabel && 'Required'}
                     />
                   </InputGroup>
-                  <InputGroup>
+                  {/* <InputGroup>
                     <FormControl
                       fullWidth
                       size="small"
@@ -386,7 +384,7 @@ export default function AddField({
                         <FormHelperText>Required</FormHelperText>
                       )}
                     </FormControl>
-                  </InputGroup>
+                  </InputGroup> */}
                 </div>
               )}
               {!formik.values.options?.selectItem && (
@@ -413,448 +411,448 @@ export default function AddField({
               )}
             </div>
           )}
-          {!isWidget && !isWidgetForm && !['template'].includes(formik.values.fieldType) && (
-            <>
-              {!['label'].includes(formik.values.fieldType) && (
-                <DefaultValue
-                  field={formik.values}
-                  onDefaultValueChange={(defaultValue) => {
-                    onOptionChange({ defaultValue });
-                  }}
+          {/* {!isWorkflow && !isWidgetForm && ( */}
+          <>
+            {!['label'].includes(formik.values.fieldType) && (
+              <DefaultValue
+                field={formik.values}
+                onDefaultValueChange={(defaultValue) => {
+                  onOptionChange({ defaultValue });
+                }}
+              />
+            )}
+            {['response', 'text', 'number'].includes(formik.values.fieldType) && (
+              <>
+                <FormControlLabel
+                  disabled={formik.values.fieldType === 'form' || formik.isSubmitting}
+                  control={
+                    <Checkbox
+                      checked={
+                        formik.values.fieldType === 'form' || formik.values.options?.selectItem
+                      }
+                      onChange={({ target }) => onOptionChange({ selectItem: target.checked })}
+                      name="selectItem"
+                      color="primary"
+                    />
+                  }
+                  label={`Select Item ${
+                    formik.values.fieldType === 'response' ? '(Independent relation)' : ''
+                  }`}
+                  data-testid="select-item-field-option"
                 />
-              )}
-              {['response', 'text', 'number'].includes(formik.values.fieldType) && (
-                <>
-                  <FormControlLabel
-                    disabled={formik.values.fieldType === 'form' || formik.isSubmitting}
-                    control={
-                      <Checkbox
-                        checked={
-                          formik.values.fieldType === 'form' || formik.values.options?.selectItem
-                        }
-                        onChange={({ target }) => onOptionChange({ selectItem: target.checked })}
-                        name="selectItem"
-                        color="primary"
-                      />
-                    }
-                    label={`Select Item ${
-                      formik.values.fieldType === 'response' ? '(Independent relation)' : ''
-                    }`}
-                    data-testid="select-item-field-option"
-                  />
-                  {formik.values.fieldType !== 'form' && formik.values.options?.selectItem && (
-                    <>
-                      <FormControlLabel
-                        className="mt-n2 ml-2"
-                        disabled={formik.isSubmitting}
-                        control={
-                          <Checkbox
-                            checked={formik.values.options?.selectAllowCreate}
-                            onChange={({ target }) =>
-                              onOptionChange({ selectAllowCreate: target.checked })
-                            }
-                            name="selectAllowCreate"
-                            color="primary"
-                          />
-                        }
-                        label="Can create new option"
-                        data-testid="select-allow-create-field-option"
-                      />
-                      {formik.values.fieldType === 'response' ? (
-                        <div className="ml-3">
-                          <FormLabel>Show Options</FormLabel>
-                          <br />
-                          <FormControlLabel
-                            className="mt-n2"
-                            disabled={formik.isSubmitting}
-                            control={
-                              <Checkbox
-                                checked={formik.values.options?.showOptionCreatedByUser}
-                                onChange={({ target }) =>
-                                  onOptionChange({ showOptionCreatedByUser: target.checked })
-                                }
-                                name="showOptionCreatedByUser"
-                                color="primary"
-                              />
-                            }
-                            label="Created by user"
-                            data-testid="show-option-created-by-user-field-option"
-                          />
-                          <FormControlLabel
-                            className="mt-n2"
-                            disabled={formik.isSubmitting}
-                            control={
-                              <Checkbox
-                                checked={formik.values.options?.showOptionCreatedOnTemplate}
-                                onChange={({ target }) =>
-                                  onOptionChange({ showOptionCreatedOnTemplate: target.checked })
-                                }
-                                name="showOptionCreatedOnTemplate"
-                                color="primary"
-                              />
-                            }
-                            label="Created on template"
-                            data-testid="show-option-created-on-template-field-option"
-                          />
-                        </div>
-                      ) : (
-                        <>
+                {formik.values.fieldType !== 'form' && formik.values.options?.selectItem && (
+                  <>
+                    <FormControlLabel
+                      className="mt-n2 ml-2"
+                      disabled={formik.isSubmitting}
+                      control={
+                        <Checkbox
+                          checked={formik.values.options?.selectAllowCreate}
+                          onChange={({ target }) =>
+                            onOptionChange({ selectAllowCreate: target.checked })
+                          }
+                          name="selectAllowCreate"
+                          color="primary"
+                        />
+                      }
+                      label="Can create new option"
+                      data-testid="select-allow-create-field-option"
+                    />
+                    {formik.values.fieldType === 'response' ? (
+                      <div className="ml-3">
+                        <FormLabel>Show Options</FormLabel>
+                        <br />
+                        <FormControlLabel
+                          className="mt-n2"
+                          disabled={formik.isSubmitting}
+                          control={
+                            <Checkbox
+                              checked={formik.values.options?.showOptionCreatedByUser}
+                              onChange={({ target }) =>
+                                onOptionChange({ showOptionCreatedByUser: target.checked })
+                              }
+                              name="showOptionCreatedByUser"
+                              color="primary"
+                            />
+                          }
+                          label="Created by user"
+                          data-testid="show-option-created-by-user-field-option"
+                        />
+                        <FormControlLabel
+                          className="mt-n2"
+                          disabled={formik.isSubmitting}
+                          control={
+                            <Checkbox
+                              checked={formik.values.options?.showOptionCreatedOnTemplate}
+                              onChange={({ target }) =>
+                                onOptionChange({ showOptionCreatedOnTemplate: target.checked })
+                              }
+                              name="showOptionCreatedOnTemplate"
+                              color="primary"
+                            />
+                          }
+                          label="Created on template"
+                          data-testid="show-option-created-on-template-field-option"
+                        />
+                      </div>
+                    ) : (
+                      <>
+                        <FormControlLabel
+                          className="mt-n2 ml-2"
+                          disabled={formik.isSubmitting}
+                          control={
+                            <Checkbox
+                              checked={formik.values.options?.showAsCheckbox}
+                              onChange={({ target }) =>
+                                onOptionChange({ showAsCheckbox: target.checked })
+                              }
+                              name="showAsCheckbox"
+                              color="primary"
+                            />
+                          }
+                          label="Show as checkbox"
+                          data-testid="show-as-checkbox-field-option"
+                        />
+                        <div className="mb-3">
                           <FormControlLabel
                             className="mt-n2 ml-2"
                             disabled={formik.isSubmitting}
                             control={
                               <Checkbox
-                                checked={formik.values.options?.showAsCheckbox}
+                                checked={formik.values.options?.selectOfFieldProps}
                                 onChange={({ target }) =>
-                                  onOptionChange({ showAsCheckbox: target.checked })
+                                  onOptionChange({ selectOfFieldProps: target.checked })
                                 }
                                 name="showAsCheckbox"
                                 color="primary"
                               />
                             }
-                            label="Show as checkbox"
-                            data-testid="show-as-checkbox-field-option"
+                            label="Show list of Field Props"
                           />
-                          <div className="mb-3">
-                            <FormControlLabel
-                              className="mt-n2 ml-2"
-                              disabled={formik.isSubmitting}
-                              control={
-                                <Checkbox
-                                  checked={formik.values.options?.selectOfFieldProps}
-                                  onChange={({ target }) =>
-                                    onOptionChange({ selectOfFieldProps: target.checked })
-                                  }
-                                  name="showAsCheckbox"
-                                  color="primary"
-                                />
-                              }
-                              label="Show list of Field Props"
-                            />
-                            <br />
-                            <FormLabel>
-                              Select Options
-                              <Tooltip title="Add New Option">
-                                <IconButton
-                                  color="primary"
-                                  onClick={() =>
-                                    onOptionChange({
-                                      selectOptions:
-                                        formik.values.options?.selectOptions?.length > 0
-                                          ? [...formik.values?.options?.selectOptions, '']
-                                          : [''],
-                                    })
-                                  }
-                                >
-                                  <AddCircleIcon />
-                                </IconButton>
-                              </Tooltip>
-                            </FormLabel>
-                            {formik.values.options?.selectOptions?.map((option, index) => (
-                              <FormControl
-                                variant="outlined"
-                                fullWidth
-                                size="small"
-                                key={index}
-                                className="mt-2"
+                          <br />
+                          <FormLabel>
+                            Select Options
+                            <Tooltip title="Add New Option">
+                              <IconButton
+                                color="primary"
+                                onClick={() =>
+                                  onOptionChange({
+                                    selectOptions:
+                                      formik.values.options?.selectOptions?.length > 0
+                                        ? [...formik.values?.options?.selectOptions, '']
+                                        : [''],
+                                  })
+                                }
                               >
-                                <InputLabel htmlFor={`outlined-adornment-${index + 1}`}>
-                                  Option {index + 1}*
-                                </InputLabel>
-                                <OutlinedInput
-                                  id={`outlined-adornment-${index + 1}`}
-                                  type={formik.values?.fieldType === 'number' ? 'number' : 'text'}
-                                  error={!option}
-                                  value={option}
-                                  onChange={({ target }) =>
-                                    onOptionChange({
-                                      selectOptions: formik.values.options?.selectOptions?.map(
-                                        (m, i) => (i === index ? target.value : m),
-                                      ),
-                                    })
-                                  }
-                                  endAdornment={
-                                    <InputAdornment position="end">
-                                      <IconButton
-                                        aria-label="delete"
-                                        onClick={() =>
-                                          onOptionChange({
-                                            selectOptions: formik.values.options?.selectOptions?.filter(
-                                              (m, i) => i !== index,
-                                            ),
-                                          })
-                                        }
-                                        edge="end"
-                                        size="large"
-                                      >
-                                        <DeleteIcon />
-                                      </IconButton>
-                                    </InputAdornment>
-                                  }
-                                  // labelWidth={65}
-                                />
-                              </FormControl>
-                            ))}
-                          </div>
-                        </>
+                                <AddCircleIcon />
+                              </IconButton>
+                            </Tooltip>
+                          </FormLabel>
+                          {formik.values.options?.selectOptions?.map((option, index) => (
+                            <FormControl
+                              variant="outlined"
+                              fullWidth
+                              size="small"
+                              key={index}
+                              className="mt-2"
+                            >
+                              <InputLabel htmlFor={`outlined-adornment-${index + 1}`}>
+                                Option {index + 1}*
+                              </InputLabel>
+                              <OutlinedInput
+                                id={`outlined-adornment-${index + 1}`}
+                                type={formik.values?.fieldType === 'number' ? 'number' : 'text'}
+                                error={!option}
+                                value={option}
+                                onChange={({ target }) =>
+                                  onOptionChange({
+                                    selectOptions: formik.values.options?.selectOptions?.map(
+                                      (m, i) => (i === index ? target.value : m),
+                                    ),
+                                  })
+                                }
+                                endAdornment={
+                                  <InputAdornment position="end">
+                                    <IconButton
+                                      aria-label="delete"
+                                      onClick={() =>
+                                        onOptionChange({
+                                          selectOptions: formik.values.options?.selectOptions?.filter(
+                                            (m, i) => i !== index,
+                                          ),
+                                        })
+                                      }
+                                      edge="end"
+                                      size="large"
+                                    >
+                                      <DeleteIcon />
+                                    </IconButton>
+                                  </InputAdornment>
+                                }
+                                // labelWidth={65}
+                              />
+                            </FormControl>
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </>
+                )}
+              </>
+            )}
+            {['response'].includes(formik.values.fieldType) && (
+              <FormControlLabel
+                disabled={formik.isSubmitting}
+                control={
+                  <Checkbox
+                    checked={formik.values.options?.showAsAddButton}
+                    onChange={({ target }) => onOptionChange({ showAsAddButton: target.checked })}
+                    name="showAsAddButton"
+                    color="primary"
+                  />
+                }
+                label="Show as add button"
+              />
+            )}
+            <div>
+              <FormControlLabel
+                className="mt-n2"
+                disabled={formik.values.options?.default || formik.isSubmitting}
+                control={
+                  <Checkbox
+                    checked={isDefault || formik.values.options?.required}
+                    onChange={({ target }) => onOptionChange({ required: target.checked })}
+                    name="required"
+                    color="primary"
+                  />
+                }
+                label="Required"
+                data-testid="required-field-field-option"
+              />
+            </div>
+            <div>
+              <FormControlLabel
+                className="mt-n2"
+                disabled={formik.isSubmitting}
+                control={
+                  <Checkbox
+                    checked={formik.values.options?.hidden}
+                    onChange={({ target }) => onOptionChange({ hidden: target.checked })}
+                    name="hidden"
+                    color="primary"
+                  />
+                }
+                label="Hidden"
+              />
+              {formik.values.options?.hidden && (
+                <div className="pl-3 mb-3 mt-n2">
+                  <AddConditionButton
+                    conditions={formik.values.options?.hiddenConditions}
+                    onConditionsChange={(newConditions) =>
+                      onOptionChange({ hiddenConditions: newConditions })
+                    }
+                  />
+                </div>
+              )}
+            </div>
+            <div>
+              <FormControlLabel
+                className="mt-n2"
+                disabled={formik.isSubmitting}
+                control={
+                  <Checkbox
+                    checked={formik.values.options?.disabled}
+                    onChange={({ target }) => onOptionChange({ disabled: target.checked })}
+                    name="disabled"
+                    color="primary"
+                  />
+                }
+                label="Disabled"
+              />
+              {formik.values.options?.disabled && (
+                <div className="pl-3 mb-3 mt-n2">
+                  <AddConditionButton
+                    conditions={formik.values.options?.disabledConditions}
+                    onConditionsChange={(newConditions) =>
+                      onOptionChange({ disabledConditions: newConditions })
+                    }
+                  />
+                </div>
+              )}
+            </div>
+            <FormControlLabel
+              className="mt-n2"
+              disabled={formik.isSubmitting}
+              control={
+                <Checkbox
+                  checked={formik.values.options?.multipleValues}
+                  onChange={({ target }) => {
+                    const newOptions: any = { multipleValues: target.checked };
+                    if (!target.checked && formik.values.options?.uniqueBetweenMultipleValues) {
+                      newOptions.uniqueBetweenMultipleValues = false;
+                    }
+                    onOptionChange(newOptions);
+                  }}
+                  name="multipleValues"
+                  color="primary"
+                />
+              }
+              label="Multiple values"
+              data-testid="multiple-value-field-option"
+            />
+            {formik.values.options?.multipleValues && (
+              <div className="pl-3">
+                <FormControlLabel
+                  className="mt-n2"
+                  disabled={formik.isSubmitting}
+                  control={
+                    <Checkbox
+                      checked={formik.values.options?.uniqueBetweenMultipleValues}
+                      onChange={({ target }) =>
+                        onOptionChange({ uniqueBetweenMultipleValues: target.checked })
+                      }
+                      name="uniqueBetweenMultipleValues"
+                      color="primary"
+                    />
+                  }
+                  label="Unique Between Multiple values"
+                  data-testid="multiple-value-field-option"
+                />
+                {formik.values.fieldType === 'response' &&
+                  formik.values.options?.multipleValues &&
+                  formik.values.options?.uniqueBetweenMultipleValues && (
+                    <>
+                      {formik?.values?.options?.uniqueSubField?.formId ? (
+                        <Button
+                          size="small"
+                          color="error"
+                          startIcon={<DeleteIcon />}
+                          onClick={() => onOptionChange({ uniqueSubField: null })}
+                        >
+                          Delete sub field selection
+                        </Button>
+                      ) : (
+                        <Button
+                          size="small"
+                          onClick={() =>
+                            onOptionChange({
+                              uniqueSubField: { formId: formik.values?.form?._id },
+                            })
+                          }
+                        >
+                          Select Sub Field
+                        </Button>
+                      )}
+                      {formik?.values?.options?.uniqueSubField?.formId && (
+                        <SelectSubField
+                          subField={formik?.values?.options?.uniqueSubField}
+                          onChange={(uniqueSubField) => onOptionChange({ uniqueSubField })}
+                          setForm={() => null}
+                          setResponses={() => null}
+                        />
                       )}
                     </>
                   )}
-                </>
-              )}
-              {['response'].includes(formik.values.fieldType) && (
-                <FormControlLabel
-                  disabled={formik.isSubmitting}
-                  control={
-                    <Checkbox
-                      checked={formik.values.options?.showAsAddButton}
-                      onChange={({ target }) => onOptionChange({ showAsAddButton: target.checked })}
-                      name="showAsAddButton"
-                      color="primary"
-                    />
-                  }
-                  label="Show as add button"
-                />
-              )}
-              <div>
-                <FormControlLabel
-                  className="mt-n2"
-                  disabled={formik.values.options?.default || formik.isSubmitting}
-                  control={
-                    <Checkbox
-                      checked={isDefault || formik.values.options?.required}
-                      onChange={({ target }) => onOptionChange({ required: target.checked })}
-                      name="required"
-                      color="primary"
-                    />
-                  }
-                  label="Required"
-                  data-testid="required-field-field-option"
-                />
               </div>
-              <div>
+            )}
+            <br />
+            <FormControlLabel
+              className="mt-n2"
+              disabled={formik.isSubmitting}
+              control={
+                <Checkbox
+                  checked={formik.values.options?.unique}
+                  onChange={({ target }) => onOptionChange({ unique: target.checked })}
+                  name="unique"
+                  color="primary"
+                />
+              }
+              label="Unique"
+              data-testid="unique-field-option"
+            />
+            {formik.values?.options?.unique && (
+              <div className="pl-3 mt-n3">
                 <FormControlLabel
-                  className="mt-n2"
-                  disabled={formik.isSubmitting}
                   control={
                     <Checkbox
-                      checked={formik.values.options?.hidden}
-                      onChange={({ target }) => onOptionChange({ hidden: target.checked })}
-                      name="hidden"
-                      color="primary"
-                    />
-                  }
-                  label="Hidden"
-                />
-                {formik.values.options?.hidden && (
-                  <div className="pl-3 mb-3 mt-n2">
-                    <AddConditionButton
-                      conditions={formik.values.options?.hiddenConditions}
-                      onConditionsChange={(newConditions) =>
-                        onOptionChange({ hiddenConditions: newConditions })
+                      checked={formik.values?.options?.caseInsensitiveUnique}
+                      onChange={({ target }) =>
+                        onOptionChange({
+                          caseInsensitiveUnique: target.checked,
+                        })
                       }
-                    />
-                  </div>
-                )}
-              </div>
-              <div>
-                <FormControlLabel
-                  className="mt-n2"
-                  disabled={formik.isSubmitting}
-                  control={
-                    <Checkbox
-                      checked={formik.values.options?.disabled}
-                      onChange={({ target }) => onOptionChange({ disabled: target.checked })}
-                      name="disabled"
+                      name="caseInsensitiveUnique"
                       color="primary"
                     />
                   }
-                  label="Disabled"
+                  label="Case insensitive unique"
+                  data-testid="case-insensitive-unique-field-option"
                 />
-                {formik.values.options?.disabled && (
-                  <div className="pl-3 mb-3 mt-n2">
-                    <AddConditionButton
-                      conditions={formik.values.options?.disabledConditions}
-                      onConditionsChange={(newConditions) =>
-                        onOptionChange({ disabledConditions: newConditions })
-                      }
-                    />
-                  </div>
-                )}
               </div>
+            )}
+            <div>
               <FormControlLabel
                 className="mt-n2"
                 disabled={formik.isSubmitting}
                 control={
                   <Checkbox
-                    checked={formik.values.options?.multipleValues}
-                    onChange={({ target }) => {
-                      const newOptions: any = { multipleValues: target.checked };
-                      if (!target.checked && formik.values.options?.uniqueBetweenMultipleValues) {
-                        newOptions.uniqueBetweenMultipleValues = false;
-                      }
-                      onOptionChange(newOptions);
-                    }}
-                    name="multipleValues"
+                    checked={formik.values.options?.showCommentBox}
+                    onChange={({ target }) => onOptionChange({ showCommentBox: target.checked })}
+                    name="showCommentBox"
                     color="primary"
                   />
                 }
-                label="Multiple values"
-                data-testid="multiple-value-field-option"
+                label="Show comment box"
+                data-testid="show-comment-box-field-option"
               />
-              {formik.values.options?.multipleValues && (
-                <div className="pl-3">
-                  <FormControlLabel
-                    className="mt-n2"
-                    disabled={formik.isSubmitting}
-                    control={
-                      <Checkbox
-                        checked={formik.values.options?.uniqueBetweenMultipleValues}
-                        onChange={({ target }) =>
-                          onOptionChange({ uniqueBetweenMultipleValues: target.checked })
-                        }
-                        name="uniqueBetweenMultipleValues"
-                        color="primary"
-                      />
-                    }
-                    label="Unique Between Multiple values"
-                    data-testid="multiple-value-field-option"
-                  />
-                  {formik.values.fieldType === 'response' &&
-                    formik.values.options?.multipleValues &&
-                    formik.values.options?.uniqueBetweenMultipleValues && (
-                      <>
-                        {formik?.values?.options?.uniqueSubField?.formId ? (
-                          <Button
-                            size="small"
-                            color="error"
-                            startIcon={<DeleteIcon />}
-                            onClick={() => onOptionChange({ uniqueSubField: null })}
-                          >
-                            Delete sub field selection
-                          </Button>
-                        ) : (
-                          <Button
-                            size="small"
-                            onClick={() =>
-                              onOptionChange({
-                                uniqueSubField: { formId: formik.values?.form?._id },
-                              })
-                            }
-                          >
-                            Select Sub Field
-                          </Button>
-                        )}
-                        {formik?.values?.options?.uniqueSubField?.formId && (
-                          <SelectSubField
-                            subField={formik?.values?.options?.uniqueSubField}
-                            onChange={(uniqueSubField) => onOptionChange({ uniqueSubField })}
-                            setForm={() => null}
-                            setResponses={() => null}
-                          />
-                        )}
-                      </>
-                    )}
-                </div>
-              )}
-              <br />
-              <FormControlLabel
-                className="mt-n2"
-                disabled={formik.isSubmitting}
-                control={
-                  <Checkbox
-                    checked={formik.values.options?.unique}
-                    onChange={({ target }) => onOptionChange({ unique: target.checked })}
-                    name="unique"
-                    color="primary"
-                  />
-                }
-                label="Unique"
-                data-testid="unique-field-option"
-              />
-              {formik.values?.options?.unique && (
-                <div className="pl-3 mt-n3">
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={formik.values?.options?.caseInsensitiveUnique}
-                        onChange={({ target }) =>
-                          onOptionChange({
-                            caseInsensitiveUnique: target.checked,
-                          })
-                        }
-                        name="caseInsensitiveUnique"
-                        color="primary"
-                      />
-                    }
-                    label="Case insensitive unique"
-                    data-testid="case-insensitive-unique-field-option"
-                  />
-                </div>
-              )}
-              <div>
-                <FormControlLabel
-                  className="mt-n2"
-                  disabled={formik.isSubmitting}
-                  control={
-                    <Checkbox
-                      checked={formik.values.options?.showCommentBox}
-                      onChange={({ target }) => onOptionChange({ showCommentBox: target.checked })}
-                      name="showCommentBox"
-                      color="primary"
-                    />
+            </div>
+            <FormControlLabel
+              className="mt-n2"
+              disabled={formik.isSubmitting}
+              control={
+                <Checkbox
+                  checked={formik.values.options?.showStarRating}
+                  onChange={({ target }) => onOptionChange({ showStarRating: target.checked })}
+                  name="showStarRating"
+                  color="primary"
+                />
+              }
+              label="Show star rating"
+              data-testid="show-star-rating-field-option"
+            />
+            <br />
+            <FormControlLabel
+              className="mt-n2"
+              disabled={formik.isSubmitting}
+              control={
+                <Checkbox
+                  checked={formik.values.options?.notEditable}
+                  onChange={({ target }) => onOptionChange({ notEditable: target.checked })}
+                  name="notEditable"
+                  color="primary"
+                />
+              }
+              label="Response not editable"
+              data-testid="response-not-editable-field-option"
+            />
+            <br />
+            <FormControlLabel
+              className="mt-n2"
+              disabled={formik.isSubmitting}
+              control={
+                <Checkbox
+                  checked={formik.values.options?.systemCalculatedAndSaved}
+                  onChange={({ target }) =>
+                    onOptionChange({ systemCalculatedAndSaved: target.checked })
                   }
-                  label="Show comment box"
-                  data-testid="show-comment-box-field-option"
+                  name="systemCalculatedAndSaved"
+                  color="primary"
                 />
-              </div>
-              <FormControlLabel
-                className="mt-n2"
-                disabled={formik.isSubmitting}
-                control={
-                  <Checkbox
-                    checked={formik.values.options?.showStarRating}
-                    onChange={({ target }) => onOptionChange({ showStarRating: target.checked })}
-                    name="showStarRating"
-                    color="primary"
-                  />
-                }
-                label="Show star rating"
-                data-testid="show-star-rating-field-option"
-              />
-              <br />
-              <FormControlLabel
-                className="mt-n2"
-                disabled={formik.isSubmitting}
-                control={
-                  <Checkbox
-                    checked={formik.values.options?.notEditable}
-                    onChange={({ target }) => onOptionChange({ notEditable: target.checked })}
-                    name="notEditable"
-                    color="primary"
-                  />
-                }
-                label="Response not editable"
-                data-testid="response-not-editable-field-option"
-              />
-              <br />
-              <FormControlLabel
-                className="mt-n2"
-                disabled={formik.isSubmitting}
-                control={
-                  <Checkbox
-                    checked={formik.values.options?.systemCalculatedAndSaved}
-                    onChange={({ target }) =>
-                      onOptionChange({ systemCalculatedAndSaved: target.checked })
-                    }
-                    name="systemCalculatedAndSaved"
-                    color="primary"
-                  />
-                }
-                label="System calculated & saved"
-                data-testid="sys-calcAndsaved-field-option"
-              />
-              {/* {formik.values.options?.systemCalculatedAndSaved && (
+              }
+              label="System calculated & saved"
+              data-testid="sys-calcAndsaved-field-option"
+            />
+            {/* {formik.values.options?.systemCalculatedAndSaved && (
             <>
               <InputGroup>
                 <FormControl fullWidth size="small">
@@ -883,136 +881,134 @@ export default function AddField({
               </InputGroup>
             </>
           )} */}
-              <div>
-                <FormControlLabel
-                  className="mt-n2"
-                  disabled={formik.isSubmitting}
-                  control={
-                    <Checkbox
-                      checked={formik.values.options?.systemCalculatedAndView}
-                      onChange={({ target }) =>
-                        onOptionChange({ systemCalculatedAndView: target.checked })
-                      }
-                      name="systemCalculatedAndView"
-                      color="primary"
-                    />
-                  }
-                  label="System calculated & view"
-                  data-testid="sys-calAndview-field-option"
-                />
-              </div>
-              {[
-                formik.values.options?.systemCalculatedAndSaved,
-                formik.values.options?.systemCalculatedAndView,
-              ].includes(true) &&
-                formik.values.fieldType === 'number' && (
-                  <Formula
-                    formula={formik.values.options?.formula}
-                    onFormulaChange={(newFormula) => {
-                      const formula = formik.values.options?.formula || {};
-                      onOptionChange({ formula: { ...formula, ...newFormula } });
-                    }}
-                    fields={parentFields?.filter(
-                      (f) => f?.fieldType === 'number' && field?._id !== f?._id,
-                    )}
+            <div>
+              <FormControlLabel
+                className="mt-n2"
+                disabled={formik.isSubmitting}
+                control={
+                  <Checkbox
+                    checked={formik.values.options?.systemCalculatedAndView}
+                    onChange={({ target }) =>
+                      onOptionChange({ systemCalculatedAndView: target.checked })
+                    }
+                    name="systemCalculatedAndView"
+                    color="primary"
                   />
-                )}
-              {formik.values?.options?.engagementForms?.length > 0 ? (
-                <>
-                  <Typography>
-                    Engagement forms
-                    <Tooltip title="Add more Engagement forms">
-                      <IconButton
-                        color="primary"
-                        size="small"
-                        onClick={() =>
-                          onOptionChange({
-                            engagementForms: [...formik.values?.options?.engagementForms, null],
-                          })
-                        }
-                      >
-                        <AddCircleIcon />
-                      </IconButton>
-                    </Tooltip>
-                  </Typography>
-                </>
-              ) : (
-                <Button
-                  startIcon={<Add />}
-                  size="small"
-                  onClick={() =>
-                    onOptionChange({
-                      engagementForms: [null],
-                    })
-                  }
-                >
-                  Add Engagement Form
-                </Button>
+                }
+                label="System calculated & view"
+                data-testid="sys-calAndview-field-option"
+              />
+            </div>
+            {[
+              formik.values.options?.systemCalculatedAndSaved,
+              formik.values.options?.systemCalculatedAndView,
+            ].includes(true) &&
+              formik.values.fieldType === 'number' && (
+                <Formula
+                  formula={formik.values.options?.formula}
+                  onFormulaChange={(newFormula) => {
+                    const formula = formik.values.options?.formula || {};
+                    onOptionChange({ formula: { ...formula, ...newFormula } });
+                  }}
+                  fields={parentFields?.filter(
+                    (f) => f?.fieldType === 'number' && field?._id !== f?._id,
+                  )}
+                />
               )}
-              {formik.values?.options?.engagementForms?.map(
-                (engagementForm, engagementFormIndex) => (
-                  <InputGroup
-                    key={engagementFormIndex}
-                    className="d-flex justify-content-between align-items-center"
-                  >
-                    <div className="w-100">
-                      <SelectForm
-                        label={`${engagementFormIndex + 1} Select Form`}
-                        value={engagementForm?._id ? engagementForm : null}
-                        onChange={(newEngagementForm) =>
-                          onOptionChange({
-                            engagementForms: formik.values?.options?.engagementForms?.map((ef, i) =>
-                              i === engagementFormIndex
-                                ? {
-                                    ...ef,
-                                    _id: newEngagementForm?._id,
-                                    name: newEngagementForm?.name,
-                                  }
-                                : ef,
-                            ),
-                          })
-                        }
-                      />
-                    </div>
-                    <TextField
+            {formik.values?.options?.engagementForms?.length > 0 ? (
+              <>
+                <Typography>
+                  Engagement forms
+                  <Tooltip title="Add more Engagement forms">
+                    <IconButton
+                      color="primary"
                       size="small"
-                      label="Icon Name"
-                      value={engagementForm?.icon}
-                      onChange={(event) =>
+                      onClick={() =>
                         onOptionChange({
-                          engagementForms: formik.values?.options?.engagementForms?.map((ef, i) =>
-                            i === engagementFormIndex
-                              ? {
-                                  ...ef,
-                                  icon: event?.target?.value,
-                                }
-                              : ef,
-                          ),
+                          engagementForms: [...formik.values?.options?.engagementForms, null],
                         })
                       }
-                    />
-                    {engagementForm?.icon && <Icon>{engagementForm?.icon}</Icon>}
-                    <IconButton
-                      color="error"
-                      onClick={() => {
-                        const newForms = formik.values?.options?.engagementForms?.filter(
-                          (_, i) => i !== engagementFormIndex,
-                        );
-                        onOptionChange({
-                          engagementForms: newForms,
-                        });
-                      }}
                     >
-                      <DeleteIcon />
+                      <AddCircleIcon />
                     </IconButton>
-                  </InputGroup>
-                ),
-              )}
-            </>
-          )}
+                  </Tooltip>
+                </Typography>
+              </>
+            ) : (
+              <Button
+                startIcon={<Add />}
+                size="small"
+                onClick={() =>
+                  onOptionChange({
+                    engagementForms: [null],
+                  })
+                }
+              >
+                Add Engagement Form
+              </Button>
+            )}
+            {formik.values?.options?.engagementForms?.map((engagementForm, engagementFormIndex) => (
+              <InputGroup
+                key={engagementFormIndex}
+                className="d-flex justify-content-between align-items-center"
+              >
+                <div className="w-100">
+                  <SelectForm
+                    label={`${engagementFormIndex + 1} Select Form`}
+                    value={engagementForm?._id ? engagementForm : null}
+                    onChange={(newEngagementForm) =>
+                      onOptionChange({
+                        engagementForms: formik.values?.options?.engagementForms?.map((ef, i) =>
+                          i === engagementFormIndex
+                            ? {
+                                ...ef,
+                                _id: newEngagementForm?._id,
+                                name: newEngagementForm?.name,
+                              }
+                            : ef,
+                        ),
+                      })
+                    }
+                  />
+                </div>
+                <TextField
+                  size="small"
+                  label="Icon Name"
+                  value={engagementForm?.icon}
+                  onChange={(event) =>
+                    onOptionChange({
+                      engagementForms: formik.values?.options?.engagementForms?.map((ef, i) =>
+                        i === engagementFormIndex
+                          ? {
+                              ...ef,
+                              icon: event?.target?.value,
+                            }
+                          : ef,
+                      ),
+                    })
+                  }
+                />
+                {engagementForm?.icon && <Icon>{engagementForm?.icon}</Icon>}
+                <IconButton
+                  color="error"
+                  onClick={() => {
+                    const newForms = formik.values?.options?.engagementForms?.filter(
+                      (_, i) => i !== engagementFormIndex,
+                    );
+                    onOptionChange({
+                      engagementForms: newForms,
+                    });
+                  }}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </InputGroup>
+            ))}
+          </>
+          {/* )} */}
         </>
       </Collapse>
-      {formId && <Rules formId={formId} fieldId={formik?.values?._id} />}
+      {/* {formId && <Rules formId={formId} fieldId={formik?.values?._id} />} */}
       <div className="mb-2">
         <LoadingButton type="submit" loading={formLoading} size="small" data-testid="form-save-btn">
           Save

@@ -124,7 +124,7 @@ export default function AuditLogCard({
               </Tabs>
             </div>
             <Tooltip title="Close Compare">
-              <IconButton onClick={() => setState((oldState) => ({ ...oldState, compare: true }))}>
+              <IconButton onClick={() => setState((oldState) => ({ ...oldState, compare: false }))}>
                 <Close />
               </IconButton>
             </Tooltip>

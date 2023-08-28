@@ -1,28 +1,41 @@
 import { useCheckPermission } from '@frontend/shared/hooks/permission';
 import { useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
-import { useDeleteResponse, useResolveCondition } from '@frontend/shared/hooks/response';
+import { useEffect, useMemo, useState } from 'react';
+import {
+  useDeleteResponse,
+  useResolveCondition,
+  useCreateUpdateResponse,
+} from '@frontend/shared/hooks/response';
 import Link from 'next/link';
 import Typography from '@mui/material/Typography';
-import { useUpdateSection } from '@frontend/shared/hooks/section';
 import moment from 'moment';
 import Paper from '@mui/material/Paper';
 import { getUserName } from '@frontend/shared/hooks/user/getUserForm';
-import { parseResponse } from '@frontend/shared/hooks/response/getResponse';
+import { parseResponse, useGetResponse } from '@frontend/shared/hooks/response/getResponse';
 import { IForm } from '@frontend/shared/types';
-import { Tooltip } from '@mui/material';
-import EditResponseDrawer from './EditResponseDrawer';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import KeyboardDoubleArrowRight from '@mui/icons-material/KeyboardDoubleArrowRight';
+import { useGetForm } from '@frontend/shared/hooks/form';
+import { useRouter } from 'next/router';
+
+import EditResponse from './EditResponse';
 import Breadcrumbs from '../common/Breadcrumbs';
 import { QRButton } from '../qrcode/QRButton';
-import FormFieldsValue from '../form2/FormFieldsValue';
 import { onAlert } from '../../utils/alert';
 import BackdropComponent from '../common/Backdrop';
 import EditMode from '../common/EditMode';
-import DisplayResponseById from './DisplayResponseById';
 import DeleteButton from '../common/DeleteButton';
 import RelationFieldView from '../form2/RelationFieldView';
 import FieldValuesMap from './FieldValuesMap';
-import WorkflowSteps from './workflow/WorkflowSteps';
+import ErrorLoading from '../common/ErrorLoading';
+import WorkflowButtons from './workflow/WorkflowButtons';
+import FormFields from '../form2/FormFields';
+import InlineEdit from './InlineEdit';
+
+// inlineEdit  related imports
 
 export interface DisplayResponseProps {
   form: IForm;
@@ -34,9 +47,22 @@ export interface DisplayResponseProps {
   deleteCallBack?: () => void;
   hideDelete?: boolean;
   previewMode?: boolean;
+  defaultShowFieldsMenu?: boolean;
+  viewLess?: boolean;
+  handleViewLess?: (viewMore: boolean) => void;
 }
 
-const initialState = { showMenu: null, edit: false, showBackdrop: false, fieldId: null };
+const initialState = {
+  showMenu: null,
+  edit: false,
+  showBackdrop: false,
+  fieldId: null,
+  field: null,
+  showFieldsMenu: false,
+  valueId: null,
+  responseId: null,
+  editMode: null,
+};
 
 export function DisplayResponse({
   form,
@@ -48,18 +74,20 @@ export function DisplayResponse({
   deleteCallBack,
   hideDelete,
   previewMode,
+  defaultShowFieldsMenu,
+  viewLess,
+  handleViewLess,
 }: DisplayResponseProps) {
   const [state, setState] = useState(initialState);
+  const { data: workflowFormData, loading: workflowFormLoading } = useGetForm(
+    tempResponse?.workflowId,
+  );
   const [fieldsConditionResult, setFieldsConditionResult] = useState({});
+  const router = useRouter();
 
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
-  const [response, setResponse] = useState(parseResponse(tempResponse));
 
-  useEffect(() => {
-    if (tempResponse) {
-      setResponse((oldResponse) => ({ ...oldResponse, ...parseResponse(tempResponse) }));
-    }
-  }, [tempResponse]);
+  const response = useMemo(() => parseResponse(tempResponse), [tempResponse]);
 
   const { hasPermission: editPerm } = useCheckPermission({
     actionType: 'EDIT',
@@ -75,17 +103,17 @@ export function DisplayResponse({
   });
   const hasDeletePermission = deletePerm && !previewMode;
 
-  const { section, onSectionChange, handleUpdateSection } = useUpdateSection({
-    onAlert,
-    _id:
-      (typeof response?.options === 'string' ? JSON.parse(response?.options) : response?.options)
-        ?.customSectionId || form._id,
-  });
-  const { editMode } = useSelector(({ setting }: any) => setting);
-
-  const userForm = useSelector(({ setting }: any) => setting.userForm);
+  const {
+    setting: { userForm },
+    auth: { admin },
+  } = useSelector((globalState: any) => globalState);
 
   const { handleResolveCondition } = useResolveCondition();
+
+  // inlineEdit related variables
+  const { handleCreateUpdateResponse, updateLoading } = useCreateUpdateResponse({
+    onAlert,
+  });
 
   const resolveCondition = async (fieldId, conditions) => {
     const conditionResult = await handleResolveCondition({ conditions, responseId: response?._id });
@@ -102,7 +130,18 @@ export function DisplayResponse({
     }
   }, [state?.fieldId]);
 
-  const hideLeftNavigation = !(hideAuthor || hideNavigation || hideBreadcrumbs);
+  useEffect(() => {
+    if (
+      router?.query?.field &&
+      Number(router?.query?.field) > 0 &&
+      hasEditPermission &&
+      router?.query?.count?.toString() === response?.count?.toString()
+    ) {
+      setState((oldState) => ({ ...oldState, field: Number(router?.query?.field) }));
+    }
+  }, [router?.query?.field, hasEditPermission]);
+
+  const hideLeftNavigation = hideAuthor || hideNavigation || hideBreadcrumbs;
 
   const DeleteComponent = (
     <>
@@ -128,23 +167,85 @@ export function DisplayResponse({
     return true;
   };
 
+  const deleteValue = async (valueId) => {
+    const newValues = response?.values.filter((value) => value?._id !== valueId);
+    const payload = {
+      values: newValues,
+      _id: response?._id,
+    };
+    const newResponse = await handleCreateUpdateResponse({
+      payload,
+      edit: true,
+      fields: form?.fields,
+    });
+    if (newResponse) {
+      setState(initialState);
+    }
+  };
+  const deleteField = async (fieldId) => {
+    const newValues = response?.values?.filter((value) => value?.field !== fieldId);
+    const payload = {
+      values: newValues,
+      _id: response?._id,
+    };
+    const newResponse = await handleCreateUpdateResponse({
+      payload,
+      edit: true,
+      fields: form?.fields,
+    });
+    if (newResponse) {
+      setState(initialState);
+      if (handleViewLess) {
+        handleViewLess(false);
+      }
+    }
+  };
+  const scrollToField = (formId: string, fieldId: string) => {
+    const element = document.getElementById(`${formId}${fieldId}`);
+    element.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    if (!state.showFieldsMenu && defaultShowFieldsMenu) {
+      setState((oldState) => ({ ...oldState, showFieldsMenu: true }));
+    }
+  }, []);
+
+  // inlinEdit Related
+
   const DetailComponent = (
-    <>
-      {response?.workFlowFormResponseParentId && section?.options?.showRelation && (
-        <DisplayResponseById
-          responseId={response?.workFlowFormResponseParentId}
-          hideBreadcrumbs
-          hideWorkflow
-        />
-      )}
-      <Paper
-        variant="outlined"
-        style={!hideLeftNavigation ? { border: 'none' } : {}}
-        className={`d-flex ${
-          section?.options?.belowResponse ? 'flex-column-reverse' : 'flex-column'
-        }`}
-      >
-        <div className="p-2">
+    <Paper variant="outlined" className="p-2" style={hideLeftNavigation ? { border: 'none' } : {}}>
+      <Grid container>
+        <Grid xs={12} sm={state.showFieldsMenu ? 3 : 0.5} item>
+          {state.showFieldsMenu ? (
+            <div className="pr-2">
+              <FormFields
+                previewMode={!admin}
+                fields={form?.fields}
+                onClickMinimize={() =>
+                  setState((oldState) => ({ ...oldState, showFieldsMenu: false }))
+                }
+                onClickScrollToField={(formId, fieldId) => {
+                  scrollToField(formId, fieldId);
+                }}
+                formId={form?._id}
+              />
+            </div>
+          ) : (
+            <div>
+              <Tooltip title="Maximize Fields Menu">
+                <IconButton
+                  edge="start"
+                  color="primary"
+                  onClick={() => setState((oldState) => ({ ...oldState, showFieldsMenu: true }))}
+                >
+                  <KeyboardDoubleArrowRight />
+                </IconButton>
+              </Tooltip>
+            </div>
+          )}
+        </Grid>
+        <Grid xs={12} sm={state.showFieldsMenu ? 9 : 11.5} item>
           <div className="d-flex align-items-center">
             {!hideAuthor && (
               <div>
@@ -156,13 +257,28 @@ export function DisplayResponse({
                     response?.createdAt,
                   ).format('LT')}`}
                 </Typography>
-                {response?.workFlowFormResponseParentId && (
-                  <Typography variant="body1">was submitted as workflow</Typography>
-                )}
               </div>
             )}
             {hideBreadcrumbs && DeleteComponent}
           </div>
+          {response?.workflowId && (
+            <div className="mt-3">
+              <Typography fontWeight="bold">Workflow</Typography>
+              {workflowFormData?.getForm?.name ? (
+                <Link href={`/workflow/${workflowFormData?.getForm?.slug}`}>
+                  {workflowFormData?.getForm?.name}
+                </Link>
+              ) : (
+                <>loading...</>
+              )}
+            </div>
+          )}
+          {response?.parentResponseId && (
+            <div className="mt-3">
+              <Typography fontWeight="bold">Parent</Typography>
+              <DisplayParentResponseName responseId={response?.parentResponseId} />
+            </div>
+          )}
           <div className="mt-3" data-testid="ID">
             <Typography fontWeight="bold">ID</Typography>
             <Link href={`/form/${form?.slug}/response/${response?.count}`}>
@@ -173,16 +289,18 @@ export function DisplayResponse({
               </a>
             </Link>
           </div>
-          {form?.fields?.filter(filterFields)?.map((field) => {
+          {form?.fields?.filter(filterFields)?.map((field, index) => {
             return (
-              <div key={field?._id} className="mt-3">
+              <div key={field?._id} className="mt-3" id={`${form?._id}${field?._id}`}>
                 {field?._id === state.fieldId ? (
                   <>
-                    <EditResponseDrawer
+                    <EditResponse
                       fieldId={state.fieldId}
                       form={form}
                       response={response}
                       onClose={() => setState(initialState)}
+                      valueId={state?.valueId}
+                      editMode={state?.editMode}
                     />
                   </>
                 ) : (
@@ -193,16 +311,49 @@ export function DisplayResponse({
                       verticalView
                       field={field}
                       response={response}
-                      onClickEditField={(e) => setState({ ...initialState, fieldId: field?._id })}
+                      inlineEdit={state?.editMode !== null}
+                      onClickEditField={(fieldId, valueId, editMode) => {
+                        let fieldIndex = 1;
+                        form?.fields?.forEach((f, i) => {
+                          if (f?._id === field?._id) {
+                            fieldIndex = i + 1;
+                          }
+                        });
+                        router.query.field = fieldIndex?.toString();
+                        router.push(router, undefined, { scroll: false });
+                        if (editMode === 'deleteValue') {
+                          deleteValue(valueId);
+                        } else if (editMode === 'deleteField') {
+                          deleteField(fieldId);
+                        } else {
+                          setState({
+                            ...initialState,
+                            field: fieldIndex,
+                            fieldId,
+                            valueId,
+                            responseId: response?._id,
+                            editMode,
+                          });
+                          if (handleViewLess) {
+                            handleViewLess(true);
+                          }
+                        }
+                      }}
                     />
                   </div>
                 )}
               </div>
             );
           })}
-        </div>
-        <RelationFieldView responseId={response?._id} formId={form?._id} />
-        {!hideWorkflow && section?.fields?.length > 0 && (
+          {!viewLess && (
+            <>
+              {workflowFormData?.getForm?._id && !response?.parentResponseId && (
+                <WorkflowButtons response={response} />
+              )}
+              <RelationFieldView responseId={response?._id} formId={form?._id} />
+            </>
+          )}
+          {/* {!hideWorkflow && section?.fields?.length > 0 && (
           <FormFieldsValue
             authorized={hasEditPermission}
             disableGrid={!editMode}
@@ -215,17 +366,15 @@ export function DisplayResponse({
                 options: { ...section?.options, layouts },
               })
             }
-            workFlowFormResponseParentId={response?._id}
+            workflowId={response?._id}
           />
-        )}
-        {response?.workFlowFormResponseParentId && (
-          <WorkflowSteps
-            parentResponseId={response?._id}
-            workflowId={response?.workFlowFormResponseParentId}
-          />
-        )}
-      </Paper>
-    </>
+        )} */}
+          {/* {response?.workflowId && (
+          <WorkflowSteps parentResponseId={response?._id} workflowId={response?.workflowId} />
+        )} */}
+        </Grid>
+      </Grid>
+    </Paper>
   );
 
   return (
@@ -245,7 +394,14 @@ export function DisplayResponse({
           <div className="d-flex align-items-center">
             {!hideNavigation && (
               <>
-                {hasEditPermission && <EditMode />}
+                {hasEditPermission && (
+                  <>
+                    <Button disabled variant="contained" size="small">
+                      Publish
+                    </Button>
+                    <EditMode />
+                  </>
+                )}
                 <QRButton />
               </>
             )}
@@ -254,6 +410,43 @@ export function DisplayResponse({
         </div>
       )}
       {DetailComponent}
+      {/* {state?.field && hasEditPermission ? (
+        <Paper variant="outlined" className="p-2">
+          <EditResponse
+            form={form}
+            response={response}
+            onClose={() => {
+              setState(initialState);
+              delete router?.query?.field;
+              router.push(router);
+            }}
+          />
+        </Paper>
+      ) : (
+        DetailComponent
+      )} */}
     </>
   );
 }
+
+const DisplayParentResponseName = ({ responseId }: { responseId: string }) => {
+  const { data, error, loading } = useGetResponse(responseId);
+  const { data: formData, loading: formLoading } = useGetForm(data?.getResponse?.formId);
+
+  if (!formData?.getForm?._id && (loading || formLoading)) {
+    return <>loading...</>;
+  }
+
+  if (error) {
+    <ErrorLoading error={error} />;
+  }
+
+  if (formData?.getForm?.name) {
+    return (
+      <Link href={`/form/${formData?.getForm?.slug}/response/${data?.getResponse?.count}`}>
+        {formData?.getForm?.name}
+      </Link>
+    );
+  }
+  return null;
+};

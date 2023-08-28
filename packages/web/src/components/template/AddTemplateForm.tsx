@@ -55,7 +55,7 @@ export default function AddTemplateForm({ createCallback }: IProps) {
       </div>
       <Typography className="pl-2 mt-3">Default Widget</Typography>
       <AddField
-        isWidget
+        isWorkflow
         onSave={handleSave}
         field={null}
         onCancel={() => router.push('/templates')}

@@ -174,8 +174,8 @@ export const GET_FORM_BY_SLUG = gql`
 `;
 
 export const GET_FORMS = gql`
-  query MyQuery($page: Int, $limit: Int, $search: String) {
-    getForms(page: $page, limit: $limit, search: $search) {
+  query MyQuery($page: Int, $limit: Int, $search: String, $isWorkflow: Boolean) {
+    getForms(page: $page, limit: $limit, search: $search, isWorkflow: $isWorkflow) {
       count
       data {
         _id

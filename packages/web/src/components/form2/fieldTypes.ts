@@ -114,6 +114,10 @@ type SignatureType = {
   label: 'Signature';
   value: 'signature';
 };
+type CardType = {
+  label: 'Card';
+  value: 'card';
+};
 type CraftJs = {
   label: 'CraftJS';
   value: 'craftjs';
@@ -147,6 +151,7 @@ export type TFieldType =
   | ConditionType
   | SignatureType
   | Webpage
+  | CardType
   | CraftJs;
 
 export const getFormFieldTypes = (isWidget: boolean): TFieldType[] => {
@@ -158,13 +163,12 @@ export const getFormFieldTypes = (isWidget: boolean): TFieldType[] => {
 
 export const templateWidgetTypes: TFieldType[] = [
   { label: 'Form', value: 'form' },
-  // { label: 'Template', value: 'template' },
+  { label: 'Form Response', value: 'response' },
 ];
 
 export const fieldTypes: TFieldType[] = [
-  { label: 'Form', value: 'form' },
+  ...templateWidgetTypes,
   { label: 'Form Field', value: 'formField' },
-  { label: 'Form Response', value: 'response' },
   { label: 'Text', value: 'text' },
   { label: 'Number', value: 'number' },
   { label: 'Password', value: 'password' },
@@ -176,7 +180,7 @@ export const fieldTypes: TFieldType[] = [
   { label: 'Phone Number', value: 'phoneNumber' },
   { label: 'Date', value: 'date' },
   { label: 'Date & Time', value: 'dateTime' },
-  { label: 'Image', value: 'image' },
+  // { label: 'Image', value: 'image' },
   { label: 'File', value: 'file' },
   // { label: 'Media (Images/Video)', value: 'media' },
   { label: 'Address', value: 'address' },
@@ -191,5 +195,6 @@ export const fieldTypes: TFieldType[] = [
   { label: 'Condition', value: 'condition' },
   { label: 'Webpage', value: 'webpage' },
   { label: 'Signature', value: 'signature' },
+  { label: 'Card', value: 'card' },
   { label: 'CraftJS', value: 'craftjs' },
 ];

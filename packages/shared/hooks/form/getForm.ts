@@ -14,9 +14,10 @@ import { IForm } from '../../types';
 interface IProps {
   page?: number;
   limit?: number;
+  isWorkflow?: boolean;
 }
 
-export function useGetForms({ page = 1, limit = 10 }: IProps) {
+export function useGetForms({ page = 1, limit = 10, isWorkflow = false }: IProps) {
   const [state, setState] = useState({
     page,
     limit,
@@ -27,9 +28,9 @@ export function useGetForms({ page = 1, limit = 10 }: IProps) {
 
   const { data, error, loading, subscribeToMore } = useQuery<
     { getForms: { data: IForm[]; count: number } },
-    { page: number; limit: number; search: string }
+    { page: number; limit: number; search: string; isWorkflow: boolean }
   >(GET_FORMS, {
-    variables: { ...state },
+    variables: { ...state, isWorkflow },
     fetchPolicy: 'cache-and-network',
   });
 
@@ -143,7 +144,6 @@ export function useGetFormTabRelations(_id: string) {
       setForms(data.getFormTabRelations?.map((form) => parseForm(form)));
     }
   }, [data]);
-
   return { data: forms ? { getFormTabRelations: forms } : null, error, loading };
 }
 
@@ -155,7 +155,6 @@ export function useGetFormBySlug(slug: string) {
       variables: { slug },
     },
   );
-
   useSubscription(UPDATED_FORM, {
     variables: { _id: getFormBySlug2?._id },
   });

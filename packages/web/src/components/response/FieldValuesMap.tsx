@@ -1,21 +1,26 @@
 import { IField, IResponse } from '@frontend/shared/types';
-import Box from '@mui/material/Box';
+// import Box from '@mui/material/Box';
 import React, { Fragment, useState } from 'react';
 import { useCreateUpdateResponse, useResolveCondition } from '@frontend/shared/hooks/response';
 import { useDebounce } from '@frontend/shared/hooks/condition/debounce';
-import { styled } from '@mui/material/styles';
+// import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 import CommentLikeShare from '../comment/CommentLikeShare';
 import DisplayRichText from '../common/DisplayRichText';
 import DisplayValue from '../form2/DisplayValue';
 import DisplayFormulaValue from '../form2/field/formula/DisplayFormulaValue';
 import StarRating from '../starRating/starRating';
 import AddResponseButton from './AddResponseButton';
-import DependantResponses from './DependantResponses';
+import InlineEditMenu from './InlineEditMenu';
+// import DependantResponses from './DependantResponses';
 import { onAlert } from '../../utils/alert';
+
+// changes for the inlineEdit
 
 interface IFieldValuesMap {
   field: IField;
@@ -23,7 +28,8 @@ interface IFieldValuesMap {
   verticalView?: boolean;
   authorized?: boolean;
   displayFieldLabel?: boolean;
-  onClickEditField?: (fieldId: string) => void;
+  onClickEditField?: (fieldId: string, valueId: string, editMode: string) => void;
+  inlineEdit?: boolean;
 }
 
 export default function FieldValuesMap({
@@ -33,11 +39,13 @@ export default function FieldValuesMap({
   authorized,
   displayFieldLabel,
   onClickEditField,
+  inlineEdit = false,
 }: IFieldValuesMap) {
   const { handleCreateUpdateResponse } = useCreateUpdateResponse({ onAlert });
   const fieldValues = response?.values?.filter((v) => v.field === field._id);
   const [disabled, setDisabled] = useState(false || field?.options?.disabled);
   const { handleResolveCondition } = useResolveCondition();
+  const [state, setState] = useState({ inlineEditViewMore: false });
 
   const checkDisabledCondition = async () => {
     if (field?.options?.disabled && field?.options?.disabledConditions?.length > 0) {
@@ -51,12 +59,11 @@ export default function FieldValuesMap({
 
   useDebounce({
     callback: checkDisabledCondition,
-    listenForChange: true,
-    variable: response,
+    value: response,
   });
 
-  const isDependantRelationship =
-    !field?.options?.selectItem && field?.options?.dependentRelationship;
+  // const isDependantRelationship =
+  //   !field?.options?.selectItem && field?.options?.dependentRelationship;
 
   return (
     <>
@@ -69,29 +76,28 @@ export default function FieldValuesMap({
               data-testid="fields-display"
             >
               <div data-testid="label">{field?.label}</div>
-              {authorized && !disabled && !isDependantRelationship && (
-                <Tooltip title="Edit">
-                  <IconButton
-                    edge="end"
-                    onClick={() => {
-                      if (onClickEditField) {
-                        onClickEditField(field?._id);
-                      }
-                    }}
-                    size="small"
-                  >
-                    <EditIcon fontSize="small" />
-                  </IconButton>
-                </Tooltip>
+              {authorized && !disabled && (
+                <>
+                  {(field?.options?.multipleValues || fieldValues?.length === 0) && !inlineEdit && (
+                    <InlineEditMenu
+                      item="field"
+                      field={field}
+                      valueId={null}
+                      fieldId={field?._id}
+                      onClickEditField={onClickEditField}
+                    />
+                  )}
+                </>
               )}
             </Typography>
           )}
         </>
       )}
       <div data-testid="value">
-        {isDependantRelationship ? (
+        {/* isDependantRelationship ? (
           <DependantResponses disabled={disabled} parentResponseId={response?._id} field={field} />
-        ) : field.fieldType === 'label' ? (
+        ) : */}
+        {field.fieldType === 'label' ? (
           <DisplayRichText value={field?.options?.staticText} />
         ) : field?.options?.systemCalculatedAndView ? (
           <DisplayFormulaValue
@@ -101,18 +107,68 @@ export default function FieldValuesMap({
           />
         ) : fieldValues?.length > 0 ? (
           <>
-            {fieldValues.map((value) => (
-              <Fragment key={value?._id}>
-                <StyledBox style={{ display: 'flex', alignContent: 'center' }}>
-                  <DisplayValue field={field} value={value} verticalView={verticalView} />
-                </StyledBox>
-                {verticalView && (
+            {fieldValues.map((value, index) => (
+              <>
+                {field?.options?.multipleValues ? (
                   <>
-                    {field?.options?.showCommentBox && <CommentLikeShare threadId={value?._id} />}
-                    {field?.options?.showStarRating && <StarRating parentId={value?._id} />}
+                    {index !== fieldValues?.length - 1 && (
+                      <div>
+                        <Fragment key={value?._id}>
+                          {authorized && !disabled && !inlineEdit && (
+                            <>
+                              <InlineEditMenu
+                                item="value"
+                                field={field}
+                                valueId={value?._id}
+                                fieldId={field?._id}
+                                onClickEditField={onClickEditField}
+                              />
+                            </>
+                          )}
+                          <DisplayValue field={field} value={value} verticalView={verticalView} />
+                          {verticalView && (
+                            <>
+                              {field?.options?.showCommentBox && (
+                                <CommentLikeShare threadId={value?._id} />
+                              )}
+                              {field?.options?.showStarRating && (
+                                <StarRating parentId={value?._id} />
+                              )}
+                            </>
+                          )}
+                        </Fragment>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <Fragment key={value?._id}>
+                      {/* <StyledBox style={{ display: 'flex', alignContent: 'center' }}>
+                </StyledBox> */}
+                      {authorized && !disabled && !inlineEdit && (
+                        <div>
+                          <InlineEditMenu
+                            item="value"
+                            field={field}
+                            valueId={value?._id}
+                            fieldId={field?._id}
+                            onClickEditField={onClickEditField}
+                          />
+                        </div>
+                      )}
+                      <DisplayValue field={field} value={value} verticalView={verticalView} />
+                      {verticalView && (
+                        <>
+                          {field?.options?.showCommentBox && (
+                            <CommentLikeShare threadId={value?._id} />
+                          )}
+                          {field?.options?.showStarRating && <StarRating parentId={value?._id} />}
+                        </>
+                      )}
+                    </Fragment>
                   </>
                 )}
-              </Fragment>
+              </>
             ))}
           </>
         ) : (
@@ -140,9 +196,9 @@ export default function FieldValuesMap({
   );
 }
 
-const StyledBox = styled(Box)(({ theme }) => ({
-  flexDirection: 'column',
-  [theme.breakpoints.up('md')]: {
-    flexDirection: 'row !important',
-  },
-}));
+// const StyledBox = styled(Box)(({ theme }) => ({
+//   flexDirection: 'column',
+//   [theme.breakpoints.up('md')]: {
+//     flexDirection: 'row !important',
+//   },
+// }));

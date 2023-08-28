@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import moment from 'moment';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
@@ -7,7 +8,8 @@ import Delete from '@mui/icons-material/Delete';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
-import Button from '@mui/material/Button';
+import { useGetFormBySlug } from '@frontend/shared/hooks/form';
+// import Button from '@mui/material/Button';
 import AdapterMoment from '@mui/lab/AdapterMoment';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import DatePicker from '@mui/lab/DatePicker';
@@ -19,6 +21,8 @@ import { IField } from '@frontend/shared/types/form';
 import { IValue } from '@frontend/shared/types/response';
 import { generateObjectId } from '@frontend/shared/utils/objectId';
 import { fieldProps } from '@frontend/shared/utils/fieldProps';
+import Add from '@mui/icons-material/Add';
+import Tooltip from '@mui/material/Tooltip';
 import ReactFlow from '../react-flow/ReactFlow';
 import RichTextarea from '../common/RichTextarea2';
 import DisplayRichText from '../common/DisplayRichText';
@@ -44,8 +48,10 @@ import Webpage from '../grapesjs/grapesOverlay';
 import DisplayValue from './DisplayValue';
 import ResponseDrawer from '../response/ResponseDrawer';
 import Signature from '../signature/Signature';
+import Card from '../card/Card';
 import CraftJSField from '../craftJS/craftJSField';
 import ConditionPart from './field/field-condition/ConditionPart';
+import ActionVariables from './actions/ActionVariables';
 
 export interface FieldProps {
   field: IField;
@@ -61,6 +67,8 @@ export interface FieldProps {
   setUniqueLoading?: (args: boolean) => void;
   onCancel?: () => void;
   rules?: any;
+  inlineEdit?: boolean;
+  setValues?: () => void;
 }
 
 const objectId = generateObjectId();
@@ -85,8 +93,15 @@ export default function Field({
   setUniqueLoading,
   onCancel,
   rules,
+  inlineEdit,
 }: FieldProps): any {
   const [options, setOptions] = useState<any>(getDefaultOptions());
+
+  // variables for the template
+  const router = useRouter();
+  const { slug } = router.query;
+  const { data, error } = useGetFormBySlug(slug?.toString());
+  const [variables, setVariables] = useState([{ name: '', field: '', formId: null }]);
 
   useCheckUnique({
     formId,
@@ -296,15 +311,35 @@ export default function Field({
     }
     case 'richTextarea': {
       return (
-        <div data-testid="richTextarea">
-          <RichTextarea
-            value={value?.value || ''}
-            onChange={(newValue) => onChange({ value: newValue })}
-          />
-          {validation.error && (
-            <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
+        <>
+          {!inlineEdit && field?.label === 'Template *' && (
+            <>
+              {/* <ActionVariables
+                variables={value?.variables || [{ name: '', field: '', formId: null }]}
+                onVariablesChange={(newVariables) => {
+                  onChange({ ...value, variables: newVariables });
+                }}
+                formId={data?.getFormBySlug?._id}
+              /> */}
+              <ActionVariables
+                variables={variables}
+                onVariablesChange={(newVariables) => {
+                  setVariables(newVariables);
+                }}
+                formId={data?.getFormBySlug?._id}
+              />
+            </>
           )}
-        </div>
+          <div data-testid="richTextarea">
+            <RichTextarea
+              value={value?.value || ''}
+              onChange={(newValue) => onChange({ value: newValue })}
+            />
+            {validation.error && (
+              <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
+            )}
+          </div>
+        </>
       );
     }
     case 'webpage': {
@@ -325,6 +360,13 @@ export default function Field({
             value={value?.value || ''}
             onChange={(dataUrl) => onChange({ value: dataUrl })}
           />
+        </>
+      );
+    }
+    case 'card': {
+      return (
+        <>
+          <Card value={value?.value || ''} onChange={(card: string) => onChange({ value: card })} />
         </>
       );
     }
@@ -517,9 +559,6 @@ export default function Field({
       );
     }
     case 'response': {
-      // if (field?.options?.dependentRelationship) {
-      //   return <>field?.options?.dependentRelationship</>;
-      // }
       return (
         <>
           <div data-testid="response">
@@ -569,7 +608,7 @@ export default function Field({
                     />
                   )}
                 </div>
-                <Button
+                {/* <Button
                   disabled={disabled}
                   data-testid="response-button"
                   variant="contained"
@@ -578,7 +617,18 @@ export default function Field({
                   onClick={() => setAddOption({ ...addOption, showDrawer: true })}
                 >
                   Add Response
-                </Button>
+                </Button> */}
+                <Tooltip title="Add Response">
+                  <IconButton
+                    data-testid="response-button"
+                    onClick={() => setAddOption({ ...addOption, showDrawer: true })}
+                    size="small"
+                    color="primary"
+                    sx={{ border: '1px solid' }}
+                  >
+                    <Add />
+                  </IconButton>
+                </Tooltip>
               </>
             )}
           </div>

@@ -39,7 +39,7 @@ export default function WorkflowStep1({ workflowForm, workflowResponse }: IWorkf
     <Paper variant="outlined" className="p-2">
       {workflowResponse?._id ? (
         <DisplayForm
-          workFlowFormResponseParentId={workflowResponse?._id}
+          workflowId={workflowResponse?._id}
           _id={workflow?.step1?.stepFormId}
           settings={{ formView: 'button', buttonLabel: workflow?.step1?.stepName }}
         />

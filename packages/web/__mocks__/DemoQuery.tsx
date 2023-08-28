@@ -6,7 +6,7 @@ import { useGetResponses } from '@frontend/shared/hooks/response';
 
 export const variables = {
   formId: '62f687f8af282a8147d7fd8c',
-  workFlowFormResponseParentId: null,
+  workflowId: null,
   page: 1,
   limit: 10,
   search: '',
