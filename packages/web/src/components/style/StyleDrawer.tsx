@@ -50,17 +50,23 @@ export default function StyleDrawer({ open, onClose, styles = {}, onStylesChange
         <div className="d-flex justify-content-between align-items-center">
           <div>
             <span>Styles</span>
-            <IconButton onClick={handleResetStyle} size="small" edge="end">
+            <IconButton
+              data-testid="reset-button"
+              onClick={handleResetStyle}
+              size="small"
+              edge="end"
+            >
               <Refresh />
             </IconButton>
           </div>
-          <IconButton onClick={onClose} size="small" edge="end">
+          <IconButton data-testid="close-button" onClick={onClose} size="small" edge="end">
             <Close />
           </IconButton>
         </div>
         <InputGroup>
           <InputLabel>Text Color</InputLabel>
           <input
+            data-testid="text-color"
             type="color"
             defaultValue="#000000"
             name="color"
@@ -106,6 +112,7 @@ export default function StyleDrawer({ open, onClose, styles = {}, onStylesChange
           <FormControl size="small" variant="outlined" fullWidth>
             <InputLabel id="demo-simple-select-outlined-label">Font Family</InputLabel>
             <Select
+              data-testid="font-family"
               labelId="demo-simple-select-outlined-label"
               id="demo-simple-select-outlined"
               value={styles.fontFamily || 'systemDefault'}
@@ -129,6 +136,7 @@ export default function StyleDrawer({ open, onClose, styles = {}, onStylesChange
         <InputGroup>
           <InputLabel>Background Color</InputLabel>
           <input
+            data-testid="background-color"
             type="color"
             defaultValue="#ffffff"
             value={styles?.backgroundColor}
