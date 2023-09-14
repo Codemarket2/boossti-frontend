@@ -38,10 +38,10 @@ export default function Page() {
       </AppWrapper>
     );
   }
-
-  if (globalState.auth.authenticated) {
-    router.push('/feed');
-  }
+//This part of code redirect user from home page to feed if authenticated
+  // if (globalState.auth.authenticated) {
+  //   router.push('/feed');
+  // }
 
   return <HomeScreen />;
 }

@@ -3,9 +3,10 @@
   "configurations": [
     {
       "name": "Next.js: debug client-side",
-      "type": "msedge",
+      "type": "chrome",
       "request": "launch",
-      "url": "http://localhost:3000"
+      "url": "http://localhost:3000",
+       "webRoot": "${workspaceFolder}/packages/web"
     },
     {
       "name": "Next.js: debug full stack",
