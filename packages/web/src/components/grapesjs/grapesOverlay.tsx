@@ -7,7 +7,8 @@ import Grapesjs from '../../../pages/grapesjs';
 import Overlay from '../common/Overlay';
 // import GrapesjsEditor from './GrapesjsEditor';
 import EditMode from '../common/EditMode';
-
+import RichTextarea from '../common/RichTextarea2';
+import TextField from '@mui/material/TextField';
 const GrapesjsEditor = dynamic(() => import('./GrapesjsEditor'), {
   ssr: false,
 });
@@ -40,7 +41,28 @@ export default function Webpage({ editMode, value, onChange }: Iprops) {
       >
         {editMode ? 'Edit' : 'View'} Html Page
       </Button>
-
+      <br/>
+      {editMode && <>
+               or
+             <TextField
+          multiline={true}
+          rows={ 16}
+          fullWidth
+          
+          variant="outlined"
+          name="value"
+          size="small"
+          
+          onChange={({ target }) => {
+            onChange(target.value); 
+          }
+          }
+          value={value? value : ""}
+       
+          
+         
+        />
+       </>}
       {open && (
         <>
           <Overlay
@@ -54,6 +76,7 @@ export default function Webpage({ editMode, value, onChange }: Iprops) {
             hideAppBar={editMode}
           >
             {editMode ? (
+              <>
               <GrapesjsEditor
                 value={value}
                 onChange={(html) => {
@@ -61,6 +84,8 @@ export default function Webpage({ editMode, value, onChange }: Iprops) {
                   setopen(false);
                 }}
               />
+           
+            </>
             ) : (
               <div>{parse(value)}</div>
             )}

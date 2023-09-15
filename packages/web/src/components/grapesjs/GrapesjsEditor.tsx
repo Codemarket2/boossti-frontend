@@ -65,9 +65,9 @@ export default function GrapesjsEditor({
       height,
 
       plugins: [
-        'gjs-preset-newsletter',
+        'gjs-preset-webpage',
         footerPlugin,
-        [blockPlugin],
+        blockPlugin,
         customCodePlugin,
         navbarPlugin,
         scriptEditor,
@@ -77,13 +77,12 @@ export default function GrapesjsEditor({
         landingPagePlugin1,
         landingPagePlugin2,
       ],
-
+      pluginsOpts: {
+        'gjs-blocks-basic': { flexGrid: true },
+      },
       storageManager: false,
     });
 
-    if (value) {
-      editor.setComponents(value);
-    }
 
     editor.Panels.addButton('options', {
       id: 'options',
@@ -98,7 +97,30 @@ export default function GrapesjsEditor({
         alert('Saving to database');
       },
     });
-
+    editor.Panels.addButton("options", [
+      {
+        id: "undo",
+        className: "fa fa-undo icon-undo",
+        command: function (editor, sender) {
+          editor.UndoManager.undo(1);
+          sender.set("active", 0);
+        },
+        attributes: {
+          title: "Undo (CTRL/CMD + Z)",
+        },
+      },
+      {
+        id: "redo",
+        className: "fa fa-repeat icon-redo",
+        command: function (editor, sender) {
+          editor.UndoManager.redo(1);
+          sender.set("active", 0);
+        },
+        attributes: {
+          title: "Redo (CTRL/CMD + Y)",
+        },
+      },
+    ]);
     editor.Commands.add('open-assets', {
       run(editor2, sender, opts) {
         const assettarget = opts.target;
