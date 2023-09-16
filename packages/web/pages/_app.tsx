@@ -37,7 +37,7 @@ import '../src/assets/css/ckeditor.css';
 import '../src/assets/css/common.css';
 import '../src/components/react-flow/styles.css';
 import '../src/components/syncfusion-diagram/styles.css';
-import '../src/components/grapesjs/style.css'
+import '../src/components/grapesjs/style.css';
 import LoadingOverlay from '../src/components/common/LoadingOverlay';
 import UpdateFeedStatus from '../src/components/form2/feed/UpdateFeedStatus';
 
