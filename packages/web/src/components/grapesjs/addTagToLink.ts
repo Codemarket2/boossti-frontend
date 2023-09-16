@@ -1,4 +1,4 @@
-export const addTagToLink = (html: string) => {
+export const addTagToLink = (html: string) : string=> {
   let newHtml = html;
   const hrefs = newHtml.match(/href="([^"]*)/g);
   hrefs?.forEach((href, index) => {

@@ -42,7 +42,7 @@ export default function SocialSignIn({ signIn = true }: { signIn?: boolean }) {
       </StyledCaptionWrapper>
       <InputGroup>
         <Button
-          disabled
+          disabled={disableSocial}
           startIcon={<Google />}
           data-testid="google-signin-button"
           fullWidth
@@ -62,7 +62,7 @@ export default function SocialSignIn({ signIn = true }: { signIn?: boolean }) {
       </InputGroup>
       <InputGroup>
         <Button
-          disabled
+          disabled={disableSocial}
           startIcon={<Facebook />}
           data-testid="facebook-signin-button"
           fullWidth
