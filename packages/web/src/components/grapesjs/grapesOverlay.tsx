@@ -42,28 +42,24 @@ export default function Webpage({ editMode, value, onChange }: Iprops) {
       >
         {editMode ? 'Edit' : 'View'} Html Page
       </Button>
-      <br/>
-      {editMode && <>
-               or
-             <TextField
-          multiline
-          rows={ 16}
-          fullWidth
-          
-          variant="outlined"
-          name="value"
-          size="small"
-          
-          onChange={({ target }) => {
-            onChange(target.value); 
-          }
-          }
-          value={value || ""}
-       
-          
-         
-        />
-       </>}
+      <br />
+      {editMode && (
+        <>
+          or
+          <TextField
+            multiline
+            rows={16}
+            fullWidth
+            variant="outlined"
+            name="value"
+            size="small"
+            onChange={({ target }) => {
+              onChange(target.value);
+            }}
+            value={value || ''}
+          />
+        </>
+      )}
       {open && (
         <>
           <Overlay
