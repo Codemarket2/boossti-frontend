@@ -3,11 +3,19 @@ import { IForm } from './form';
 
 export interface IResponse extends ISchema {
   formId: any;
+  workflowId?: string;
+  parentResponseId?: string;
   appId: string;
-  installId: string;
   count: number;
   values: IValue[];
+  options?: any;
 }
+
+// export interface IVariables {
+//   name: string;
+//   field: string;
+//   formId: string;
+// }
 
 export interface IValue {
   _id: string;
@@ -20,7 +28,8 @@ export interface IValue {
   template: string;
   page: string;
   response: string | IResponse | any;
-  form: string | IForm;
+  form: IForm | string | any;
   options: any;
   media: IMedia[];
+  // variables: IVariables[];
 }

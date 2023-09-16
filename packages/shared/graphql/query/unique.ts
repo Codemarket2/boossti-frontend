@@ -2,16 +2,19 @@ import { gql } from '@apollo/client';
 
 export const GET_CHECK_UNIQUE = gql`
   query MyQuery(
+    $appId: ID
     $formId: ID!
-    $value: ValueInput
     $responseId: ID
-    $caseInsensitiveUnique: Boolean
+    $valueFilter: AWSJSON! # $value: ValueInput # $caseInsensitiveUnique: Boolean # $fieldType: String!
   ) {
     getCheckUnique(
+      appId: $appId
       formId: $formId
-      value: $value
       responseId: $responseId
-      caseInsensitiveUnique: $caseInsensitiveUnique
+      valueFilter: $valueFilter
+      # value: $value
+      # caseInsensitiveUnique: $caseInsensitiveUnique
+      # fieldType: $fieldType
     )
   }
 `;

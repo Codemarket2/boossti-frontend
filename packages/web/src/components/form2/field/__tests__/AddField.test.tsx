@@ -20,7 +20,15 @@ import _ from 'lodash';
 import { defaultOptions } from '@frontend/shared/hooks/form/addFields';
 import SelectFormMock, { SelectFormMockData } from '../__mocks__/SelectForm';
 import SelectFormFieldsMock, { SelectFormFieldsMockData } from '../__mocks__/SelectFormFields';
-import { render, within, screen, waitFor, prettyDOM, logDOM } from '../../../../../jest/test-utils';
+import {
+  render,
+  within,
+  screen,
+  waitFor,
+  prettyDOM,
+  logDOM,
+  fireEvent,
+} from '../../../../../jest/test-utils';
 import AddField from '../AddField';
 
 const FIELD_TYPES = [
@@ -72,10 +80,10 @@ const FIELD_TYPES = [
     label: 'Date & Time',
     value: 'dateTime',
   },
-  {
-    label: 'Image',
-    value: 'image',
-  },
+  // {
+  //   label: 'Image',
+  //   value: 'image',
+  // },
   {
     label: 'File',
     value: 'file',
@@ -220,13 +228,13 @@ interface IExtendedField extends IField {
   fieldType: TFieldTypeValues;
 }
 
-interface IFormValues extends IField {
-  isWidget: boolean;
-}
+// interface IFormValues extends IField {
+//   isWidget: boolean;
+// }
 
 type AppFieldProps = Parameters<typeof AddField>[0] & {
   field: IExtendedField;
-  onSave: jest.Mock<IFormValues>;
+  onSave: jest.Mock<IField>;
 };
 
 const getAppFieldMockProps = (extra?: Partial<AppFieldProps>): AppFieldProps => {
@@ -378,7 +386,7 @@ describe('Selecting Form Field Type (label : Field Type*)', () => {
     expect(selectedFieldType).toBeFalsy();
   });
 
-  test('should have 24 types of fields', async () => {
+  test('should have 28 types of fields', async () => {
     render(<AddField {...getAppFieldMockProps()} />);
 
     const SelectComponent = getFieldTypeComponent();
@@ -392,7 +400,7 @@ describe('Selecting Form Field Type (label : Field Type*)', () => {
     const Menu = within(document.getElementById('fieldType-menu')).getByRole('listbox');
     const options = within(Menu).getAllByRole('option');
 
-    const TOTAL_OPTIONS = 25;
+    const TOTAL_OPTIONS = 28;
     expect(options).toHaveLength(TOTAL_OPTIONS);
   });
 
@@ -572,6 +580,9 @@ describe('Field Options / Attributes', () => {
       'System calculated & view',
     ])(`checking '%s' Field Option`, async (fieldOption) => {
       render(<AddField {...getAppFieldMockProps()} />);
+      const viewAllButton = screen.getByTestId('view-all-field-options-button');
+      fireEvent.click(viewAllButton);
+      await new Promise((r) => setTimeout(r, 1000));
       TEST_FIELD_OPTION[fieldOption]();
     });
   });
@@ -588,6 +599,9 @@ describe('Field Options / Attributes', () => {
       'System calculated & view',
     ])(`checking '%s' Field Option`, async (fieldOption) => {
       render(<AddField {...getAppFieldMockProps()} />);
+      const viewAllButton = screen.getByTestId('view-all-field-options-button');
+      fireEvent.click(viewAllButton);
+      await new Promise((r) => setTimeout(r, 1000));
       await selectFieldType('Form');
       TEST_FIELD_OPTION[fieldOption]();
     });
@@ -605,6 +619,9 @@ describe('Field Options / Attributes', () => {
       'System calculated & view',
     ])(`checking '%s' Field Option`, async (fieldOption) => {
       render(<AddField {...getAppFieldMockProps()} />);
+      const viewAllButton = screen.getByTestId('view-all-field-options-button');
+      fireEvent.click(viewAllButton);
+      await new Promise((r) => setTimeout(r, 1000));
       await selectFieldType('Form Response');
       TEST_FIELD_OPTION[fieldOption]();
     });
@@ -741,7 +758,7 @@ describe('Form Save Button', () => {
       label: TFieldTypeLabels;
       value: TFieldTypeValues;
     };
-    OnSubmitFormData: IFormValues;
+    OnSubmitFormData: IField;
   }
 
   /**
@@ -781,7 +798,7 @@ describe('Form Save Button', () => {
         // TODO
         // form: SelectFormMockData,
         form: null,
-        isWidget: false,
+        // isWidget: false,
         label: FIELD_LABEL,
         template: null,
         options: _.merge(defaultOptions, {}),
@@ -794,11 +811,11 @@ describe('Form Save Button', () => {
   function getSubmitConfig(
     mockProps: ReturnType<typeof getAppFieldMockProps>,
     mockInput: Awaited<ReturnType<typeof enterRequiredFields>>,
-  ): IFormValues {
+  ): IField {
     const updatedData: Partial<typeof mockInput['OnSubmitFormData']> = {
       _id: expect.any(String),
       fieldType: mockInput.FIELD_TYPE.value,
-      isWidget: Boolean(mockProps.isWidget),
+      // isWidget: Boolean(mockProps.isWorkflow),
       label: mockInput.FIELD_LABEL,
     };
 
@@ -824,7 +841,7 @@ describe('Form Save Button', () => {
   describe('form should be submitted', () => {
     test('with minimum required fields', async () => {
       const mockProps = getAppFieldMockProps();
-      render(<AddField isWidget={false} {...mockProps} />);
+      render(<AddField isWorkflow={false} {...mockProps} />);
 
       await enterRequiredFields();
       const FormSaveBtn = getFormSaveBtn();
@@ -839,7 +856,7 @@ describe('Form Save Button', () => {
       describe.skip('field type', () => {
         test.only.each(FIELD_TYPES)(`having '$label' selected as Type of Field`, async (field) => {
           const mockProps = getAppFieldMockProps({
-            isWidget: false,
+            isWorkflow: false,
           });
 
           render(<AddField {...mockProps} />);
@@ -853,7 +870,7 @@ describe('Form Save Button', () => {
           await user.click(FormSaveBtn);
 
           const onSaveMock = mockProps.onSave.mock;
-          const ExpectedFieldConfig: IFormValues = getSubmitConfig(mockProps, mockInput);
+          const ExpectedFieldConfig: IField = getSubmitConfig(mockProps, mockInput);
           const ExpectedActionType = 'create';
           const ExpectedOnSaveArguments = [ExpectedFieldConfig, ExpectedActionType];
 
@@ -873,7 +890,7 @@ describe('Form Save Button', () => {
           `having '$label' Attribute of a field selected`,
           async (attr) => {
             const mockProps = getAppFieldMockProps({
-              isWidget: false,
+              isWorkflow: false,
             });
 
             const { getByTestId } = render(<AddField {...mockProps} />);

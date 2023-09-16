@@ -1,5 +1,13 @@
 import { gql } from '@apollo/client';
 
+export const RESPONSE_SUB2 = gql`
+  subscription MySubscription {
+    responseSub {
+      _id
+    }
+  }
+`;
+
 export const RESPONSE_SUB = gql`
   subscription MySubscription($formId: ID!) {
     responseSub(formId: $formId) {
@@ -7,8 +15,8 @@ export const RESPONSE_SUB = gql`
       formId
       count
       appId
-      installId
-      workFlowFormResponseParentId
+      workflowId
+      parentResponseId
       values {
         _id
         field
@@ -65,8 +73,8 @@ export const UPDATE_RESPONSE_SUB = gql`
       formId
       count
       appId
-      installId
-      workFlowFormResponseParentId
+      workflowId
+      parentResponseId
       values {
         _id
         field

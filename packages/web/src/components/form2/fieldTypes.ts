@@ -3,6 +3,11 @@ type FormFieldType = {
   value: 'form';
 };
 
+type FormFieldFieldType = {
+  label: 'Form Field';
+  value: 'formField';
+};
+
 type FormResponseType = {
   label: 'Form Response';
   value: 'response';
@@ -105,8 +110,22 @@ type Webpage = {
   label: 'Webpage';
   value: 'webpage';
 };
-type TFieldType =
+type SignatureType = {
+  label: 'Signature';
+  value: 'signature';
+};
+type CardType = {
+  label: 'Card';
+  value: 'card';
+};
+type CraftJs = {
+  label: 'CraftJS';
+  value: 'craftjs';
+};
+
+export type TFieldType =
   | FormFieldType
+  | FormFieldFieldType
   | FormResponseType
   | TextType
   | NumberType
@@ -130,7 +149,10 @@ type TFieldType =
   | DiagramType
   | FlowDiagramType
   | ConditionType
-  | Webpage;
+  | SignatureType
+  | Webpage
+  | CardType
+  | CraftJs;
 
 export const getFormFieldTypes = (isWidget: boolean): TFieldType[] => {
   if (isWidget) {
@@ -141,12 +163,12 @@ export const getFormFieldTypes = (isWidget: boolean): TFieldType[] => {
 
 export const templateWidgetTypes: TFieldType[] = [
   { label: 'Form', value: 'form' },
-  // { label: 'Template', value: 'template' },
+  { label: 'Form Response', value: 'response' },
 ];
 
 export const fieldTypes: TFieldType[] = [
-  { label: 'Form', value: 'form' },
-  { label: 'Form Response', value: 'response' },
+  ...templateWidgetTypes,
+  { label: 'Form Field', value: 'formField' },
   { label: 'Text', value: 'text' },
   { label: 'Number', value: 'number' },
   { label: 'Password', value: 'password' },
@@ -158,7 +180,7 @@ export const fieldTypes: TFieldType[] = [
   { label: 'Phone Number', value: 'phoneNumber' },
   { label: 'Date', value: 'date' },
   { label: 'Date & Time', value: 'dateTime' },
-  { label: 'Image', value: 'image' },
+  // { label: 'Image', value: 'image' },
   { label: 'File', value: 'file' },
   // { label: 'Media (Images/Video)', value: 'media' },
   { label: 'Address', value: 'address' },
@@ -172,4 +194,7 @@ export const fieldTypes: TFieldType[] = [
   { label: 'Flow Diagram', value: 'flowDiagram' },
   { label: 'Condition', value: 'condition' },
   { label: 'Webpage', value: 'webpage' },
+  { label: 'Signature', value: 'signature' },
+  { label: 'Card', value: 'card' },
+  { label: 'CraftJS', value: 'craftjs' },
 ];

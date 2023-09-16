@@ -9,7 +9,6 @@ import { useRouter } from 'next/router';
 import ErrorLoading from '../common/ErrorLoading';
 import Like from '../like/Like';
 import CommentsList from './CommentsList';
-import Overlay from '../common/Overlay';
 
 interface CommentLikeShareProps {
   threadId: string;
@@ -105,7 +104,7 @@ export default function CommentLikeShare({
         router.query.threadId = threadId;
       }
     }
-    router.push(router);
+    router.push(router, undefined, { scroll: false });
   };
 
   useEffect(() => {
@@ -181,8 +180,8 @@ export default function CommentLikeShare({
             </IconButton>
           </Tooltip>
           {data?.getActionCounts?.commentCount > 0 && (
-            <Tooltip title={`${data.getActionCounts.commentCount} Comments`}>
-              <span className="mr-2">{data.getActionCounts.commentCount}</span>
+            <Tooltip title={`${data?.getActionCounts?.commentCount} Comments`}>
+              <span className="mr-2">{data?.getActionCounts?.commentCount}</span>
             </Tooltip>
           )}
           <Tooltip title={copy ? 'link copied' : 'share link'} onClick={copyLink}>
@@ -193,18 +192,16 @@ export default function CommentLikeShare({
           {children}
         </div>
       </div>
-      {isReply ? (
-        (showHideComments || showComment) && (
-          <>
-            {showDivider && <Divider />}
-            {CommentsListComponent}
-          </>
-        )
-      ) : (
-        <Overlay open={showComment} onClose={() => handleToggleCommentsList()} title="Comments">
-          <div className="p-2">{CommentsListComponent}</div>
-        </Overlay>
+      {(showHideComments || showComment) && (
+        <>
+          {showDivider && <Divider />}
+          {CommentsListComponent}
+        </>
       )}
     </div>
   );
 }
+
+// <Overlay open={showComment} onClose={() => handleToggleCommentsList()} title="Comments">
+//           <div className="p-2">{CommentsListComponent}</div>
+//         </Overlay>

@@ -3,6 +3,9 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
 import InputGroup from '../common/InputGroup';
 import SelectFormFields from './SelectFormFields';
 import FormFields from './FormFields';
@@ -142,6 +145,17 @@ export default function FormSetting({ formId, settings, onChange, isWidget, stat
           <FormControlLabel
             control={
               <Checkbox
+                checked={settings?.canSubmitOnlyOneResponse}
+                onChange={({ target }) => onChange({ canSubmitOnlyOneResponse: target.checked })}
+                name="canSubmitOnlyOneResponse"
+                color="primary"
+              />
+            }
+            label="can submit only one response"
+          />
+          {/* <FormControlLabel
+            control={
+              <Checkbox
                 checked={settings?.multipleResponses ?? false}
                 onChange={({ target }) => onChange({ multipleResponses: target.checked })}
                 name="multipleValues"
@@ -149,7 +163,7 @@ export default function FormSetting({ formId, settings, onChange, isWidget, stat
               />
             }
             label="can submit multiple responses"
-          />
+          /> */}
           <br />
           <FormControlLabel
             control={
@@ -167,20 +181,11 @@ export default function FormSetting({ formId, settings, onChange, isWidget, stat
       {settings?.widgetType !== 'form' && (
         <>
           <InputGroup>
-            <TextField
-              select
+            <ResponseViewSelectInput
               fullWidth
-              size="small"
-              variant="outlined"
-              label="Responses view"
-              value={settings?.responsesView ?? 'table'}
-              onChange={({ target }) => onChange({ responsesView: target.value })}
-            >
-              <MenuItem value="button">Button</MenuItem>
-              <MenuItem value="table">Table</MenuItem>
-              <MenuItem value="table2">Table 2</MenuItem>
-              <MenuItem value="vertical">Vertical</MenuItem>
-            </TextField>
+              value={settings?.responsesView}
+              onChange={(newValue) => onChange({ responsesView: newValue })}
+            />
           </InputGroup>
           <InputGroup>
             <TextField
@@ -237,3 +242,34 @@ export default function FormSetting({ formId, settings, onChange, isWidget, stat
     </Paper>
   );
 }
+
+export const ResponseViewSelectInput = ({
+  value = 'table',
+  onChange,
+  fullWidth,
+  label = 'Responses view',
+}: {
+  value: string;
+  onChange: (newValue: string) => void;
+  fullWidth?: boolean;
+  label?: string;
+}) => {
+  return (
+    <>
+      <TextField
+        select
+        fullWidth={fullWidth}
+        size="small"
+        variant="outlined"
+        label={label}
+        value={value}
+        onChange={({ target }) => onChange(target.value)}
+      >
+        <MenuItem value="table">Table</MenuItem>
+        <MenuItem value="vertical">Vertical</MenuItem>
+        <MenuItem value="table2">Table 2</MenuItem>
+        <MenuItem value="button">Button</MenuItem>
+      </TextField>
+    </>
+  );
+};

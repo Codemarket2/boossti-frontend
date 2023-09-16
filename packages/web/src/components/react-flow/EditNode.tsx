@@ -1,7 +1,7 @@
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import Select, { SelectProps } from '@mui/material/Select';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -24,6 +24,8 @@ interface IProps {
 }
 
 interface IPort {
+  _id: string;
+  fieldId: string;
   position: 'top' | 'bottom' | 'left' | 'right';
   type: 'source' | 'target';
   color: string;
@@ -36,7 +38,7 @@ export default function EditNode({ open, data, onChange, onClose }: IProps) {
   const onPortChange = (portId: string, newPort: Partial<IPort>) => {
     let newPorts = state?.ports || [];
     let isNewPort = true;
-    newPorts = newPorts?.map((port, i) => {
+    newPorts = newPorts?.map((port: IPort) => {
       if (port?._id === portId) {
         isNewPort = false;
         return { ...port, ...newPort };
@@ -49,15 +51,15 @@ export default function EditNode({ open, data, onChange, onClose }: IProps) {
     setState({ ...state, ports: newPorts });
   };
 
-  const deletePort = (portId) => {
+  const deletePort = (portId: string) => {
     if (portId) {
-      setState({ ...state, ports: state?.ports?.filter((p) => p?._id !== portId) });
+      setState({ ...state, ports: state?.ports?.filter((p: Partial<IPort>) => p?._id !== portId) });
     }
   };
 
   return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Edit Node</DialogTitle>
+    <Dialog fullWidth open={open} onClose={onClose}>
+      <DialogTitle data-testid="editNode_dialog">Edit Node</DialogTitle>
       <DialogContent dividers>
         <div style={{ minWidth: 300 }}>
           <InputGroup>
@@ -68,6 +70,7 @@ export default function EditNode({ open, data, onChange, onClose }: IProps) {
                   <Select
                     labelId="demo-simple-select-standard-label"
                     id="demo-simple-select-standard"
+                    data-testid="editNode_formDisplay"
                     value={state.formView || 'formName'}
                     onChange={({ target }) => setState({ ...state, formView: target.value })}
                     label="Form view"
@@ -97,6 +100,7 @@ export default function EditNode({ open, data, onChange, onClose }: IProps) {
               </>
             )}
           </InputGroup>
+
           <InputGroup>
             <InputLabel>Background color</InputLabel>
             <input
@@ -105,6 +109,7 @@ export default function EditNode({ open, data, onChange, onClose }: IProps) {
               onChange={({ target }) => setState({ ...state, backgroundColor: target.value })}
             />
           </InputGroup>
+
           <InputGroup>
             <InputLabel>Text color</InputLabel>
             <input
@@ -113,35 +118,50 @@ export default function EditNode({ open, data, onChange, onClose }: IProps) {
               onChange={({ target }) => setState({ ...state, color: target.value })}
             />
           </InputGroup>
+
           <InputGroup>
             <InputLabel>
               Ports
               <IconButton
+                data-testid="editNode_addPort"
                 color="primary"
                 size="small"
                 onClick={() => {
                   let ports = [];
+                  // debugger;
                   if (state?.ports?.length) {
                     ports = state?.ports;
                   }
-                  setState({ ...state, ports: [...ports, {}] });
+                  // debugger;
+                  const newPorts = [
+                    ...ports,
+                    // { _id: generateObjectId(), position: 'bottom', type: 'source' },
+                    { _id: generateObjectId() },
+                  ];
+                  // debugger;
+                  setState({ ...state, ports: newPorts });
+                  // debugger;
                 }}
               >
                 <AddCircle fontSize="small" />
               </IconButton>
             </InputLabel>
-            {state?.ports?.map((port, portIndex) => (
-              <div key={port?._id}>
+
+            {state?.ports?.map((port: IPort, portIndex: number) => (
+              <div key={port?._id} data-testid="editNode_port">
                 <div className="py-2 d-flex align-items-center">
                   {portIndex + 1}.
+                  <SelectFormFields
+                    formId={state?.formId}
+                    value={port?.fieldId}
+                    onChange={(fieldId) => onPortChange(port?._id, { fieldId })}
+                  />
                   <FormControl size="small" fullWidth>
                     <InputLabel>Position</InputLabel>
                     <Select
                       label="Position"
                       value={port?.position}
-                      onChange={({ target }) =>
-                        onPortChange(port?._id, { position: target?.value })
-                      }
+                      onChange={(e: any) => onPortChange(port?._id, { position: e?.target?.value })}
                     >
                       <MenuItem value="top">Top</MenuItem>
                       <MenuItem value="bottom">Bottom</MenuItem>
@@ -154,7 +174,7 @@ export default function EditNode({ open, data, onChange, onClose }: IProps) {
                     <Select
                       label="Type"
                       value={port?.type}
-                      onChange={({ target }) => onPortChange(port?._id, { type: target?.value })}
+                      onChange={(e: any) => onPortChange(port?._id, { type: e?.target?.value })}
                     >
                       <MenuItem value="source">Source</MenuItem>
                       <MenuItem value="target">Target</MenuItem>
@@ -167,14 +187,18 @@ export default function EditNode({ open, data, onChange, onClose }: IProps) {
                       onChange={({ target }) => onPortChange(port?._id, { color: target?.value })}
                     />
                   </Tooltip>
-                  {portIndex !== 0 && (
-                    <Tooltip title="Delete Port">
-                      <IconButton color="error" size="small" onClick={() => deletePort(port?._id)}>
-                        <Delete fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                  )}
+                  <Tooltip title="Delete Port">
+                    <IconButton
+                      data-testid="editNode_deletePort"
+                      color="error"
+                      size="small"
+                      onClick={() => deletePort(port?._id)}
+                    >
+                      <Delete fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
                 </div>
+
                 <Slider
                   defaultValue={50}
                   value={port?.alignment}
@@ -191,6 +215,7 @@ export default function EditNode({ open, data, onChange, onClose }: IProps) {
           </InputGroup>
         </div>
       </DialogContent>
+
       <DialogActions>
         <Button onClick={() => onChange(state)} variant="contained" size="small">
           Save

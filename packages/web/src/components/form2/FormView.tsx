@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import { Auth } from 'aws-amplify';
+import { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 
 // MUI
 import Typography from '@mui/material/Typography';
@@ -15,17 +15,26 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIosRounded from '@mui/icons-material/ArrowBackIosRounded';
 import ArrowForwardIosRounded from '@mui/icons-material/ArrowForwardIosRounded';
+import Tooltip from '@mui/material/Tooltip';
+import KeyboardDoubleArrowRight from '@mui/icons-material/KeyboardDoubleArrowRight';
 import CircularProgress from '@mui/material/CircularProgress';
 
 // SHARED
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { parseResponse, useGetResponses } from '@frontend/shared/hooks/response/getResponse';
-import { useCreateUpdateResponse } from '@frontend/shared/hooks/response';
+import {
+  useConstraint,
+  useCreateUpdateResponse,
+  uniqueBetweenMultipleValues,
+  useCheckIfAlreadySubmitted,
+  useResolveCondition,
+} from '@frontend/shared/hooks/response';
 import { validateResponse, validateValue } from '@frontend/shared/utils/validate';
 import { IValue } from '@frontend/shared/types';
 import { IField, IForm } from '@frontend/shared/types/form';
-import { fileUpload } from '@frontend/shared/utils/fileUpload';
-
 // OTHERS
+import { useGetFieldRules, useUpdateForm, useGetFormBySlug } from '@frontend/shared/hooks/form';
+import { useDebounce } from '@frontend/shared/hooks/condition/debounce';
 import ResponseList from '../response/ResponseList';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
@@ -39,25 +48,26 @@ import DisplayValue from './DisplayValue';
 import Leaderboard from '../response/Leaderboard';
 import SelectResponse from '../response/SelectResponse';
 import { replaceVariables } from './variables';
-import projectConfig from '../../../../shared/index';
 import { evaluateFormula } from './field/formula/DisplayFormulaValue';
 import DisplayFormula, { getFormula } from './field/formula/DisplayFormula';
-import {
-  getConditionsFormAndResponse,
-  getFieldCondition,
-} from './field/field-condition/DisplayFieldCondition';
+import { getConditionsFormAndResponse } from './field/field-condition/DisplayFieldCondition';
 import { resolveCondition } from './field/field-condition/ResolveCondition';
+import ResponseDrawer from '../response/ResponseDrawer';
+import DisplayConstraintError from './form-conditions/DisplayConstraintError';
+import FieldUnique from './field/FieldUnique';
+import UniqueMultipleValue from './field/UniqueMultipleValue';
+import DisplayResponseById from '../response/DisplayResponseById';
+import FormFields from './FormFields';
+import ActionVariables from './actions/ActionVariables';
 
 interface FormViewWrapperProps {
   form: IForm;
-  appId?: string;
-  installId?: string;
-  workFlowFormResponseParentId?: string;
+  parentResponseId?: string;
+  workflowId?: string;
   createCallback?: (response: any) => void;
   setResponded?: () => void;
   isPageOwner?: boolean;
   isTemplateInstance?: string;
-  isAuthorized?: boolean;
   valueFilter?: any;
   overrideValues?: IValue[];
   onClickResponse?: (response, form) => void;
@@ -76,8 +86,9 @@ export const defaultValue = {
   form: null,
   response: null,
   options: { option: false },
-  tempMedia: [],
-  tempMediaFiles: [],
+  // variables: [{ name: '', field: '', formId: null }],
+  // tempMedia: [],
+  // tempMediaFiles: [],
 };
 
 const initialState = {
@@ -87,7 +98,6 @@ const initialState = {
   formDrawer: false,
   responseDrawer: false,
   selectedResponse: null,
-
   selectItemAdd: false,
 };
 
@@ -96,26 +106,28 @@ const initialSelectState = {
   selectedFullResponse: null,
 };
 
-export default function FormViewWrapper({
+export default function FormView({
   form,
-  workFlowFormResponseParentId,
+  workflowId,
   createCallback,
   setResponded,
   isPageOwner,
-  appId,
-  installId,
   isTemplateInstance = '',
-  isAuthorized,
   valueFilter,
   overrideValues,
   onClickResponse,
+  parentResponseId,
 }: FormViewWrapperProps): any {
   const { admin: isAdmin, authenticated } = useSelector(({ auth }: any) => auth);
+  const [responseId, setResponseId] = useState(null);
   const { handleCreateUpdateResponse, createLoading } = useCreateUpdateResponse({
+    parentResponseId,
     onAlert,
-    appId,
-    installId,
-    workFlowFormResponseParentId,
+    workflowId,
+  });
+  const { alreadySubmitted } = useCheckIfAlreadySubmitted({
+    formId: form?._id,
+    workflowId,
   });
 
   const showOnlyMyResponses = !(isAdmin || isPageOwner) && form?.settings?.onlyMyResponses;
@@ -123,79 +135,19 @@ export default function FormViewWrapper({
   const { data, error, refetch } = useGetResponses({
     formId: form?._id,
     onlyMy: showOnlyMyResponses,
-    workFlowFormResponseParentId,
-    appId,
-    installId,
+    parentResponseId,
+    workflowId,
     valueFilter,
   });
 
   const [state, setState] = useState(initialState);
   const [selectState, setSelectState] = useState(initialSelectState);
-  // const authenticated = useSelector(({ auth }: any) => auth.authenticated);
-
-  const [checkNewUser, setCheckNewUser] = useState(true);
-  const verifyIfUserExist = async (payload) => {
-    const { password, email, name } = payload;
-    try {
-      const response = await Auth.signUp({
-        username: email,
-        password,
-        attributes: {
-          email,
-          name,
-          picture: projectConfig.defaultProfile,
-        },
-      });
-      if (response) {
-        setCheckNewUser(true);
-      }
-    } catch (er) {
-      setCheckNewUser(false);
-    }
-  };
 
   const handleSubmit = async (values) => {
-    let nPassword = '';
-    if (
-      !authenticated &&
-      form?.settings?.actions?.length > 0 &&
-      form?.settings?.actions?.find((a) => a.actionType === 'generateNewUser')
-    ) {
-      let emailId = '';
-      let nameId = '';
-      const action = form.settings?.actions?.filter((a) => a.actionType === 'generateNewUser')[0];
-      emailId = action.emailFieldId;
-      nameId = action.nameFieldId;
-      let email = '';
-      let name = '';
-      values.forEach((element) => {
-        if (element.field === emailId) {
-          email = element.value;
-        } else if (element.field === nameId) {
-          name = element.value;
-        }
-      });
-      const payload = {
-        email,
-        name,
-        password: Math.random().toString(36).slice(2),
-      };
-      const { password } = payload;
-      nPassword = password;
-      await verifyIfUserExist(payload);
-    }
     let payload: any = { formId: form?._id, values };
     let options = {};
     if (form?.settings?.customResponseLayout && form?.settings?.customSectionId) {
       options = { ...options, customSectionId: form?.settings?.customSectionId };
-    }
-    if (form?.settings?.actions?.length > 0) {
-      options = {
-        ...options,
-        actions: form?.settings?.actions,
-        password: nPassword,
-        generateNewUserEmail: checkNewUser,
-      };
     }
 
     if (
@@ -223,18 +175,19 @@ export default function FormViewWrapper({
       options: JSON.stringify(options),
     };
 
-    const response = await handleCreateUpdateResponse({ payload, fields: form?.fields });
+    if (responseId) {
+      payload._id = responseId;
+    }
+
+    const response = await handleCreateUpdateResponse({
+      payload,
+      fields: form?.fields,
+      edit: !!responseId,
+    });
+
     if (response) {
-      let messages = [];
-      if (form?.settings?.actions?.length > 0) {
-        messages = await Promise.all(
-          form?.settings?.actions
-            ?.filter((a) => a?.actionType === 'showMessage' && a?.active)
-            ?.map(async (a) => {
-              const message = await replaceVariables(a?.body, a?.variables, form, response);
-              return message;
-            }),
-        );
+      if (!responseId) {
+        setResponseId(response?._id);
       }
       await refetch();
       if (createCallback) {
@@ -243,9 +196,24 @@ export default function FormViewWrapper({
       if (setResponded) {
         setResponded();
       }
-      setState({ ...initialState, submitted: true, messages, response });
+      // setState({ ...initialState, submitted: true, messages, response });
     }
     return response;
+  };
+
+  const showMessage = async (response) => {
+    let messages = [];
+    if (form?.settings?.actions?.length > 0) {
+      messages = await Promise.all(
+        form?.settings?.actions
+          ?.filter((a) => a?.actionType === 'showMessage' && a?.active)
+          ?.map(async (a) => {
+            const message = await replaceVariables(a?.body, a?.variables, form, response);
+            return message;
+          }),
+      );
+    }
+    setState({ ...initialState, submitted: true, messages, response });
   };
 
   const canSubmit =
@@ -262,6 +230,27 @@ export default function FormViewWrapper({
     (authenticated && isPageOwner && form?.settings?.whoCanViewResponses === 'onlyPageOwner') ||
     (authenticated && form?.settings?.whoCanViewResponses === 'authUser') ||
     form?.settings?.whoCanViewResponses === 'all';
+
+  if (alreadySubmitted && form?.settings?.canSubmitOnlyOneResponse) {
+    return (
+      <DisplayResponseById responseId={alreadySubmitted} hideBreadcrumbs deleteCallBack={refetch} />
+    );
+  }
+
+  const FVC = (
+    <FormViewChild
+      overrideValues={overrideValues}
+      authRequired={form?.settings?.whoCanSubmit !== 'all'}
+      fields={form?.fields}
+      handleSubmit={handleSubmit}
+      loading={createLoading}
+      formView={form?.settings?.formView}
+      formId={form?._id}
+      form={form}
+      showMessage={showMessage}
+      onCancel={state.formDrawer ? () => setState(initialState) : null}
+    />
+  );
 
   return (
     <div>
@@ -295,7 +284,56 @@ export default function FormViewWrapper({
           ) : (
             <>
               {state.formDrawer && (
-                <Overlay open={state.formDrawer} onClose={() => setState(initialState)}>
+                <>
+                  {/* <Overlay open={state.formDrawer} onClose={() => setState(initialState)}>
+                    <div className="p-2">
+                      {form?.settings?.formView === 'selectItem' && !state.selectItemAdd ? (
+                        <>
+                          <SelectResponse
+                            label={form?.name}
+                            formId={form?._id}
+                            formField={form?.settings?.selectItemField}
+                            value={state.selectedResponse}
+                            onChange={(selectedResponse: any) =>
+                              setState({ ...state, selectedResponse })
+                            }
+                            onChangeFullResponse={(selectedFullResponse) =>
+                              setSelectState({ ...selectState, selectedFullResponse })
+                            }
+                            openDrawer={() => setState({ ...state, selectItemAdd: true })}
+                            allowCreate
+                          />
+                          <LoadingButton
+                            className="my-2"
+                            size="small"
+                            variant="contained"
+                            color="primary"
+                            loading={createLoading}
+                            onClick={async () => {
+                              // if (appId) {
+                              //   if (!selectState.selectedFullResponse) {
+                              //     alert('Please select the response');
+                              //   } else {
+                              //     await handleCreateUpdateResponse({
+                              //       payload: { ...selectState.selectedFullResponse },
+                              //       edit: true,
+                              //       fields: form?.fields,
+                              //     });
+                              //     await refetch();
+                              //     setState(initialState);
+                              //     setSelectState(initialSelectState);
+                              //   }
+                              // }
+                            }}
+                          >
+                            Submit
+                          </LoadingButton>
+                        </>
+                      ) : (
+                        <>{FVC}</>
+                      )}
+                    </div>
+                  </Overlay> */}
                   <div className="p-2">
                     {form?.settings?.formView === 'selectItem' && !state.selectItemAdd ? (
                       <>
@@ -320,68 +358,53 @@ export default function FormViewWrapper({
                           color="primary"
                           loading={createLoading}
                           onClick={async () => {
-                            if (appId) {
-                              if (!selectState.selectedFullResponse) {
-                                alert('Please select the response');
-                              } else {
-                                await handleCreateUpdateResponse({
-                                  payload: { ...selectState.selectedFullResponse },
-                                  edit: true,
-                                  fields: form?.fields,
-                                });
-                                await refetch();
-                                setState(initialState);
-                                setSelectState(initialSelectState);
-                              }
-                            }
+                            // if (appId) {
+                            //   if (!selectState.selectedFullResponse) {
+                            //     alert('Please select the response');
+                            //   } else {
+                            //     await handleCreateUpdateResponse({
+                            //       payload: { ...selectState.selectedFullResponse },
+                            //       edit: true,
+                            //       fields: form?.fields,
+                            //     });
+                            //     await refetch();
+                            //     setState(initialState);
+                            //     setSelectState(initialSelectState);
+                            //   }
+                            // }
                           }}
                         >
                           Submit
                         </LoadingButton>
                       </>
                     ) : (
-                      <FormView
-                        overrideValues={overrideValues}
-                        authRequired={form?.settings?.whoCanSubmit !== 'all' && !isAuthorized}
-                        fields={form?.fields}
-                        handleSubmit={handleSubmit}
-                        loading={createLoading}
-                        fieldWiseView={form?.settings?.formView === 'oneField'}
-                        formId={form?._id}
-                        onCancel={() => setState(initialState)}
-                        form={form}
-                      />
+                      <>{FVC}</>
                     )}
                   </div>
-                </Overlay>
+                </>
               )}
               {form?.settings?.formView === 'leaderboard' ? (
                 <Leaderboard formId={form?._id} settings={form?.settings} />
               ) : ['selectItem', 'button'].includes(form?.settings?.formView) ? (
                 <>
-                  <div className="text-center">
-                    <Button
-                      variant="contained"
-                      className="mb-2"
-                      size="small"
-                      startIcon={<AddIcon />}
-                      onClick={() => setState({ ...state, formDrawer: true })}
-                    >
-                      {form?.settings?.buttonLabel || form?.name}
-                    </Button>
-                  </div>
+                  {!state?.formDrawer && (
+                    <>
+                      <div className="text-center">
+                        <Button
+                          variant="contained"
+                          className="mb-2"
+                          size="small"
+                          startIcon={<AddIcon />}
+                          onClick={() => setState({ ...state, formDrawer: true })}
+                        >
+                          {form?.settings?.buttonLabel || form?.name}
+                        </Button>
+                      </div>
+                    </>
+                  )}
                 </>
               ) : (
-                <FormView
-                  overrideValues={overrideValues}
-                  authRequired={form?.settings?.whoCanSubmit !== 'all'}
-                  fields={form?.fields}
-                  handleSubmit={handleSubmit}
-                  loading={createLoading}
-                  fieldWiseView={form?.settings?.formView === 'oneField'}
-                  formId={form?._id}
-                  form={form}
-                />
+                <>{FVC}</>
               )}
             </>
           )}
@@ -409,13 +432,12 @@ export default function FormViewWrapper({
                 >
                   <ResponseList
                     form={form}
-                    workFlowFormResponseParentId={workFlowFormResponseParentId}
+                    workflowId={workflowId}
                     showOnlyMyResponses={showOnlyMyResponses}
-                    appId={appId}
                     isTemplateInstance={isTemplateInstance}
-                    installId={installId}
                     valueFilter={valueFilter}
                     onClickResponse={onClickResponse}
+                    parentResponseId={parentResponseId}
                   />
                 </Overlay>
               )}
@@ -423,13 +445,12 @@ export default function FormViewWrapper({
           ) : (
             <ResponseList
               form={form}
-              workFlowFormResponseParentId={workFlowFormResponseParentId}
+              workflowId={workflowId}
               showOnlyMyResponses={showOnlyMyResponses}
-              appId={appId}
               isTemplateInstance={isTemplateInstance}
-              installId={installId}
               valueFilter={valueFilter}
               onClickResponse={onClickResponse}
+              parentResponseId={parentResponseId}
             />
           )}
         </>
@@ -438,29 +459,32 @@ export default function FormViewWrapper({
   );
 }
 
-export interface FormViewProps {
+export interface FormViewChildProps {
   fields: IField[];
   handleSubmit: (payload: any) => any;
   loading?: boolean;
   onCancel?: () => void;
   initialValues?: any[];
   authRequired?: boolean;
-  fieldWiseView?: boolean;
+  formView?: string;
   formId?: any;
   edit?: boolean;
   responseId?: string;
   form?: any;
-  responseCount?: number;
   inlineEdit?: boolean;
   overrideValues?: IValue[];
+  showMessage?: (response) => void;
+  valueId?: string;
+  editMode?: string;
 }
 
 const initialSubmitState = {
   validate: false,
   loading: false,
+  onChanged: false,
 };
 
-export function FormView({
+export function FormViewChild({
   inlineEdit = false,
   fields: tempFields,
   handleSubmit,
@@ -468,23 +492,48 @@ export function FormView({
   onCancel,
   initialValues = [],
   authRequired = false,
-  fieldWiseView = false,
+  formView,
   formId,
   edit,
   responseId,
   form,
-  responseCount,
   overrideValues,
-}: FormViewProps): any {
+  showMessage,
+  valueId,
+  editMode,
+}: FormViewChildProps): any {
+  const { rules } = useGetFieldRules({ formId: form?._id, fields: tempFields || form?.fields });
   const [values, setValues] = useState(parseResponse({ values: initialValues })?.values || []);
-  const [editValue, setEditValue] = useState({ fieldId: null, index: null });
+  const { constraintErrors, constraintsLoading } = useConstraint({ form, values, responseId });
+  const { handleResolveCondition } = useResolveCondition();
+  const [enabledFields, setEnableFields] = useState({});
   const [submitState, setSubmitState] = useState(initialSubmitState);
   const authState = useSelector(({ auth }: any) => auth);
   const authenticated = authState?.authenticated;
-  const [showAuthModal, setShowAuthModal] = useState(false);
+  const router = useRouter();
+  const autoSaveCallback = () => {
+    if (values.length > 0 && submitState.onChanged && edit) {
+      onSave();
+    }
+  };
+  useDebounce({ callback: autoSaveCallback, time: 2000, value: values });
+  const { handleOnChange } = useUpdateForm({ onAlert, form });
 
-  const [page, setPage] = useState(0);
-  const [hideField, setHideField] = useState(false);
+  const localStorageKey = `unsavedResponse${form?._id}${edit}${responseId}`;
+
+  const [state, setState] = useState({
+    displayExistingResponse: false,
+    showAuthModal: false,
+    page: 0,
+    hideField: false,
+    editValue: {
+      fieldId: null,
+      index: null,
+    },
+    showResponseDrawer: '',
+    minimizeFields: true,
+  });
+
   const [unique, setUnique] = useState(false);
   const [uniqueLoading, setUniqueLoading] = useState(false);
   const [conditionFormsResponses, setConditionFormsResponses] = useState({
@@ -493,17 +542,66 @@ export function FormView({
   });
 
   // ONLY SHOW & VALIDATE REQUIRED FIELDS
-  const fields = tempFields?.filter((field: IField) => {
-    return (
-      field?.options?.required &&
-      !field?.options?.systemCalculatedAndSaved &&
-      !overrideValues?.some((v) => v?.field === field?._id)
-    );
+  const fields = useMemo(
+    () =>
+      tempFields?.filter((field: IField) => {
+        return (
+          !field?.options?.systemCalculatedAndSaved &&
+          !overrideValues?.some((v) => v?.field === field?._id)
+        );
+      }),
+    [tempFields, overrideValues],
+  );
+  const {
+    uniqueBetweenMultipleValuesLoading,
+    uniqueBetweenMultipleValuesError,
+  } = uniqueBetweenMultipleValues({
+    fields,
+    values,
   });
 
   useEffect(() => {
-    if (hideField) {
-      setHideField(false);
+    if (inlineEdit && editMode) {
+      if (editMode === 'editField' || editMode === 'addValue') {
+        const element = document.getElementById(fields[0]?._id);
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else if (editMode === 'editValue' && valueId) {
+        const element1 = document.getElementById(valueId);
+        if (element1) {
+          element1.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+    }
+    if (inlineEdit && editMode === 'editValue') {
+      const field = fields[0];
+      const fieldValues = values.filter((value) => value?.field === field?._id);
+      if (field?.fieldType === 'response' && !field?.options?.selectItem) {
+        setState((oldState) => ({
+          ...oldState,
+          showResponseDrawer: `${field?._id}-${valueId}`,
+        }));
+      } else {
+        fieldValues.forEach((value, index) => {
+          if (value?._id === valueId) {
+            setState((oldState) => ({
+              ...oldState,
+              editValue: {
+                fieldId: field._id,
+                index,
+              },
+            }));
+          }
+        });
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (state.hideField) {
+      setState((oldState) => ({ ...oldState, hideField: false }));
+    }
+    if (values?.length > 0 && !edit) {
+      window?.localStorage?.setItem(localStorageKey, JSON.stringify(values));
     }
   }, [values]);
 
@@ -514,7 +612,7 @@ export function FormView({
       if (field?.options?.required && field?.options?.defaultValue) {
         if (!values?.some((v) => v?.field === field?._id)) {
           const tempValue = field?.options?.defaultValue || {};
-          defaultValues.push({ field: field?._id, ...tempValue });
+          defaultValues.push({ value: '', field: field?._id, ...tempValue });
         }
       }
       if (field?.options?.hidden && field?.options?.hiddenConditions?.length > 0) {
@@ -527,13 +625,32 @@ export function FormView({
     if (hiddenConditions?.length > 0) {
       getConditionForms(hiddenConditions);
     }
+    resolveDisabledCondition();
   }, []);
 
+  const resolveDisabledCondition = async () => {
+    if (responseId && edit) {
+      // eslint-disable-next-line no-restricted-syntax
+      for (const field of fields) {
+        if (field?.options?.disabled && field?.options?.disabledConditions?.length > 0) {
+          // eslint-disable-next-line no-await-in-loop
+          const result = await handleResolveCondition({
+            responseId,
+            conditions: field?.options?.disabledConditions,
+          });
+          setEnableFields((oldEnabledFields) => ({ ...oldEnabledFields, [field?._id]: result }));
+        }
+      }
+    }
+  };
+
   const getConditionForms = async (hiddenConditions) => {
-    const { responses: tempResponses, forms: tempForms } = await getConditionsFormAndResponse(
-      hiddenConditions,
-    );
-    setConditionFormsResponses({ responses: tempResponses, forms: tempForms });
+    if (!edit) {
+      const { responses: tempResponses, forms: tempForms } = await getConditionsFormAndResponse(
+        hiddenConditions,
+      );
+      setConditionFormsResponses({ responses: tempResponses, forms: tempForms });
+    }
   };
 
   const onChange = (sValue, valueIndex) => {
@@ -564,54 +681,61 @@ export function FormView({
     if (!changed) {
       newValues = [...values, newValue];
     }
-
     setValues(newValues);
+    if (!submitState?.onChanged) {
+      setSubmitState((oldSubmitState) => ({ ...oldSubmitState, onChanged: true }));
+    }
   };
 
   const onSubmit = async () => {
-    setSubmitState({ ...submitState, loading: true });
-
-    const validate = validateResponse(fields?.filter(filterHiddenFields), values);
+    setSubmitState((oldSubmitState) => ({ ...oldSubmitState, loading: true }));
+    const validate = validateResponse(
+      fields?.filter(filterHiddenFields).filter(filterDisabledFields),
+      values,
+    );
     if (validate) {
-      setSubmitState({ ...submitState, validate, loading: false });
+      setSubmitState((oldSubmitState) => ({ ...oldSubmitState, validate, loading: false }));
       return;
     }
     if (authRequired && !authenticated) {
       setSubmitState({ ...submitState, loading: false });
-      return setShowAuthModal(true);
+      return setState((oldState) => ({ ...oldState, showAuthModal: true }));
     }
-    // const payload = [];
-    const payload = overrideValues?.length > 0 ? [...overrideValues] : [];
-    for (let i = 0; i < values.length; i += 1) {
-      const value = { ...values[i] };
-      const field = fields?.filter((f) => f._id === value.field)[0];
-      if (field) {
-        if (field.fieldType === 'image' && value?.tempMedia?.length > 0) {
-          let newMedia = [];
-          if (value.tempMediaFiles.length > 0) {
-            // eslint-disable-next-line no-await-in-loop
-            newMedia = await fileUpload(value.tempMediaFiles, '/form-response');
-          }
-          if (newMedia?.length > 0) {
-            newMedia = newMedia.map((n, i2) => ({
-              url: n,
-              // caption: value?.tempMedia[i].caption,
-              caption: value?.tempMedia[i2].caption,
-            }));
-            value.media = newMedia;
-          }
-        }
-      }
-      const { tempMedia, tempMediaFiles, ...finalValue } = value;
-      payload.push(finalValue);
-    }
-    const response = await handleSubmit(payload);
+    const response = await onSave();
     if (response) {
       setSubmitState(initialSubmitState);
       setValues([]);
+      if (showMessage) {
+        showMessage(response);
+      }
     } else {
-      setSubmitState({ ...submitState, loading: false });
+      setSubmitState((oldSubmitState) => ({ ...oldSubmitState, loading: false }));
     }
+  };
+
+  const onSave = async () => {
+    let newValues = Array.from(values);
+    fields.forEach((field) => {
+      if (field?.options?.multipleValues) {
+        const newValue = { ...defaultValue, field: field._id, value: '' };
+        const fieldValues = values.filter((f) => f.field === field._id);
+        if (
+          !validateValue(true, fieldValues[fieldValues.length - 1], {
+            ...field,
+            options: { ...field.options, required: true },
+          }).error
+        ) {
+          newValues = [...newValues, newValue];
+        }
+      }
+    });
+    const payload =
+      overrideValues?.length > 0 && !edit ? [...overrideValues, ...newValues] : [...newValues];
+    const response = await handleSubmit(payload);
+    window?.localStorage?.removeItem(localStorageKey);
+    return response;
+    // setValues(response?.values);
+    // setSubmitState((oldSubmitState) => ({ ...oldSubmitState, loading: false }));
   };
 
   const onAddOneMoreValue = (field) => {
@@ -638,12 +762,36 @@ export function FormView({
     setValues([...oldValues, ...newValues]);
   };
 
+  const reorder = (list, startIndex, endIndex) => {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+    return result;
+  };
+  function onDragEnd(result) {
+    const field = fields.find((item) => item._id === result.source.droppableId);
+    if (!result.destination) {
+      return;
+    }
+    if (result.destination.index === result.source.index) {
+      return;
+    }
+    const newFields = reorder(
+      filterValues(values, field),
+      result.source.index,
+      result.destination.index,
+    );
+    const finalValues = combineArrays(values, newFields);
+    setValues(finalValues);
+  }
+
   const fieldProps = {
     formId,
     responseId,
     setUniqueLoading,
     setUnique,
     validate: submitState.validate,
+    onCancel,
   };
 
   const filterHiddenFields = (field) => {
@@ -662,267 +810,579 @@ export function FormView({
     return !field?.options?.hidden;
   };
 
+  const filterDisabledFields = (field) => {
+    if (field?.options?.disabled) {
+      if (field?.options?.disabled?.disabledConditions?.length > 0 && enabledFields?.[field?._id]) {
+        return true;
+      }
+      return false;
+    }
+    return true;
+  };
+
+  const handlePageChange = (newPage) => {
+    // setState((oldState) => ({ ...oldState, page: Number(newPage) }));
+    if (router?.query?.slug === form?.slug) {
+      router.query.field = (newPage + 1)?.toString();
+      router.push(router);
+    } else {
+      setState((oldState) => ({ ...oldState, page: newPage }));
+    }
+  };
+
+  useEffect(() => {
+    const page = Number(router?.query?.field) - 1;
+    if (
+      router?.query?.field &&
+      page > -1 &&
+      page !== state.page &&
+      router?.query?.slug === form?.slug
+    ) {
+      // handlePageChange(page);
+      setState((oldState) => ({ ...oldState, page }));
+    }
+  }, [router?.query?.field]);
+
+  useEffect(() => {
+    if (!edit && submitState?.onChanged && router?.query?.slug === form?.slug) {
+      onSave();
+    }
+  }, [state.page]);
+
+  useEffect(() => {
+    const localStorageData = window?.localStorage?.getItem(localStorageKey);
+    const unsavedValues = JSON.parse(localStorageData);
+    if (unsavedValues?.length > 0) {
+      setValues(unsavedValues);
+    }
+  }, []);
+
+  const disableSubmitButton =
+    validateResponse(fields?.filter(filterHiddenFields).filter(filterDisabledFields), values) ||
+    unique ||
+    uniqueLoading ||
+    constraintsLoading ||
+    constraintErrors?.find((con) => con?.existingResponseId)?.existingResponseId ||
+    uniqueBetweenMultipleValuesError?.length > 0 ||
+    uniqueBetweenMultipleValuesLoading;
+
+  const SubmitButtonComponent = (
+    <Tooltip title={disableSubmitButton ? 'Enter value for all required fields' : 'Submit form'}>
+      <div data-testid="submitButton">
+        <LoadingButton
+          disabled={disableSubmitButton}
+          loading={!disableSubmitButton && (submitState.loading || loading)}
+          onClick={onSubmit}
+          variant="contained"
+          color="primary"
+          size="small"
+        >
+          Save
+        </LoadingButton>
+      </div>
+    </Tooltip>
+  );
+
+  const CancelButton = (
+    <>
+      {onCancel && (
+        <div data-testid="cancelButton">
+          <Button
+            variant="outlined"
+            size="small"
+            className="ml-2"
+            onClick={onCancel}
+            disabled={submitState.loading || loading}
+          >
+            Close
+          </Button>
+        </div>
+      )}
+    </>
+  );
+
   return (
     <div className="position-relative">
-      {!authenticated && showAuthModal && (
-        <Overlay onClose={() => setShowAuthModal(false)} open={showAuthModal} minWidth="60vw">
+      {!authenticated && state.showAuthModal && (
+        <Overlay
+          onClose={() => setState((oldState) => ({ ...oldState, showAuthModal: false }))}
+          open={state.showAuthModal}
+          minWidth="60vw"
+        >
           <div className="p-2">
             <AuthScreen />
           </div>
         </Overlay>
       )}
-      <Grid container spacing={0} data-testid="fieldWiseView">
-        {(fieldWiseView && fields?.length > 1 ? [fields[page]] : fields)
-          ?.filter(filterHiddenFields)
-          ?.map((field: any) => (
-            <Grid
-              item
-              xs={field?.options?.grid?.xs || 12}
-              sm={field?.options?.grid?.sm}
-              md={field?.options?.grid?.md}
-              lg={field?.options?.grid?.lg}
-              xl={field?.options?.grid?.xl}
-              key={field._id}
-            >
-              <div style={field?.options?.style || {}}>
-                <InputGroup key={field._id}>
-                  <Typography
-                    data-testid="text-danger"
-                    className={field?.options?.required ? 'text-danger' : ''}
-                  >
-                    {field?.label}
-                    {field?.options?.required && '*'}
-                    {unique && field?.options?.unique && ' This field must be unique'}
-                    {uniqueLoading && field?.options?.unique && (
-                      <span className="ml-2">
-                        <CircularProgress size={10} />
-                      </span>
-                    )}
+      <Grid container>
+        <Grid xs={12} sm={state.minimizeFields ? 0.5 : 3} item className="pr-2">
+          {state.minimizeFields ? (
+            <>
+              <Tooltip title="Maximize Fields Menu">
+                <IconButton
+                  edge="start"
+                  color="primary"
+                  onClick={() => setState((oldState) => ({ ...oldState, minimizeFields: false }))}
+                >
+                  <KeyboardDoubleArrowRight />
+                </IconButton>
+              </Tooltip>
+            </>
+          ) : (
+            <FormFields
+              previewMode={!authState?.admin}
+              fields={fields}
+              setFields={(newFields) => {
+                if (authState?.admin) {
+                  handleOnChange({ fields: newFields });
+                }
+              }}
+              onClickMinimize={() =>
+                setState((oldState) => ({ ...oldState, minimizeFields: true }))
+              }
+              selectedFieldId={fields?.[state.page]?._id}
+              onClickField={(field) => {
+                let fieldIndex = 0;
+                fields?.some((f, i) => {
+                  if (f?._id === field?._id) {
+                    fieldIndex = i;
+                    return true;
+                  }
+                  return false;
+                });
+                if (router?.query?.slug === form?.slug) {
+                  router.query.field = (fieldIndex + 1)?.toString();
+                  router.push(router);
+                } else {
+                  setState((oldState) => ({ ...oldState, page: fieldIndex }));
+                }
+              }}
+            />
+          )}
+        </Grid>
+        <Grid xs={12} sm={state.minimizeFields ? 11.5 : 9} item>
+          <Grid container spacing={0} data-testid="fieldWiseView">
+            {!inlineEdit && (
+              <div className="d-flex w-100 justify-content-end my-2 align-items-center">
+                {(submitState.loading || loading) && (
+                  <Typography className="d-flex align-items-center">
+                    <CircularProgress color="inherit" size={20} className="mr-2" />
+                    saving...
                   </Typography>
-                  {field?.options?.systemCalculatedAndView && (
-                    <div className="mb-2">
-                      <DisplayFormula formula={field?.options?.formula} fields={fields} />
-                    </div>
-                  )}
-                  <>
-                    <div className="w-100">
-                      <div data-testid="field">
-                        {hideField ? (
-                          <Skeleton height={200} />
-                        ) : (
-                          <Field
-                            {...fieldProps}
-                            field={{
-                              ...field,
-                              label: `${field?.label} ${field?.options?.required ? '*' : ''}`,
-                            }}
-                            disabled={
-                              edit && field.options.notEditable
-                                ? submitState.loading || field.options.notEditable
-                                : submitState.loading || field.options.systemCalculatedAndView
-                            }
-                            validate={submitState.validate}
-                            onChangeValue={(changedValue) => {
-                              if (!field?.options?.systemCalculatedAndView) {
-                                onChange(
-                                  { ...changedValue, field: field._id },
-                                  filterValues(values, field)?.length - 1,
-                                );
-                              }
-                            }}
-                            value={
-                              field.options.systemCalculatedAndView
-                                ? {
-                                    valueNumber: evaluateFormula(
-                                      getFormula(field?.options?.formula?.variables, [], values),
-                                    ),
-                                  }
-                                : filterValues(values, field)[
-                                    filterValues(values, field)?.length - 1
-                                  ]
-                            }
-                          />
-                        )}
-                      </div>
-                    </div>
-                    {field?.options?.multipleValues && (
-                      <div data-testid="addOneMoreValue">
-                        <IconButton
-                          className="my-2"
-                          size="medium"
-                          color="primary"
-                          aria-label="add value"
-                          onClick={() => {
-                            if (field?.fieldType === 'richTextarea') {
-                              setHideField(true);
-                            }
-                            onAddOneMoreValue(field);
-                          }}
-                          sx={{ border: 1, borderRadius: '50%' }}
-                        >
-                          <AddIcon fontSize="inherit" />
-                        </IconButton>
-                      </div>
-                    )}
-                  </>
-                  {filterValues(values, field).map((value: any, valueIndex) => (
-                    <div key={valueIndex}>
-                      {valueIndex !== filterValues(values, field)?.length - 1 && (
+                )}
+                {CancelButton}
+                <LoadingButton
+                  className="ml-2"
+                  size="small"
+                  variant="contained"
+                  disabled={disableSubmitButton}
+                  loading={!disableSubmitButton && (submitState.loading || loading)}
+                  onClick={onSubmit}
+                >
+                  Publish
+                </LoadingButton>
+              </div>
+            )}
+            {(formView === 'oneField' && fields?.length > 1 ? [fields[state.page]] : fields)
+              ?.filter(filterHiddenFields)
+              ?.map((field: any, fieldIndex) => (
+                <Grid
+                  item
+                  xs={field?.options?.grid?.xs || 12}
+                  sm={field?.options?.grid?.sm}
+                  md={field?.options?.grid?.md}
+                  lg={field?.options?.grid?.lg}
+                  xl={field?.options?.grid?.xl}
+                  key={field._id}
+                >
+                  <div style={field?.options?.style || {}}>
+                    <InputGroup key={field._id} id={field?._id}>
+                      {!['label'].includes(field.fieldType) && (
                         <>
-                          {editValue.fieldId === field._id && editValue.index === valueIndex ? (
-                            <>
-                              <div className="w-100">
-                                {hideField ? (
-                                  <Skeleton height={200} />
-                                ) : (
-                                  <Field
-                                    field={{
-                                      ...field,
-                                      label: field?.options?.required
-                                        ? `${field?.label}*`
-                                        : field?.label,
-                                    }}
-                                    {...fieldProps}
-                                    disabled={submitState.loading}
-                                    onChangeValue={(changedValue) =>
-                                      onChange({ ...changedValue, field: field._id }, valueIndex)
+                          <Typography data-testid="text-danger">
+                            {fieldIndex + 1}. {field?.label}
+                            {field?.options?.required && <span className="text-danger">*</span>}
+                            <DisplayConstraintError
+                              fields={fields}
+                              fieldId={field._id}
+                              constraintErrors={constraintErrors}
+                              constraintsLoading={constraintsLoading}
+                            />
+                            {field?.options?.unique && (
+                              <FieldUnique
+                                existingResponseId={unique}
+                                uniqueLoading={uniqueLoading}
+                              />
+                            )}
+                            {field?.options?.multipleValues &&
+                              field?.options?.uniqueBetweenMultipleValues && (
+                                <UniqueMultipleValue
+                                  loading={uniqueBetweenMultipleValuesLoading}
+                                  error={uniqueBetweenMultipleValuesError}
+                                  field={field}
+                                />
+                              )}
+                            {!inlineEdit && field?.options?.multipleValues && (
+                              <div data-testid="addOneMoreValue">
+                                <Typography
+                                  className="my-2"
+                                  style={{ cursor: 'pointer' }}
+                                  onClick={() => {
+                                    if (field?.fieldType === 'richTextarea') {
+                                      setState((oldState) => ({ ...oldState, hideField: true }));
                                     }
-                                    value={value}
-                                  />
-                                )}
-                              </div>
-                              <Button
-                                className="my-2"
-                                size="small"
-                                color="primary"
-                                variant="contained"
-                                onClick={() => setEditValue({ fieldId: null, index: null })}
-                              >
-                                Save
-                              </Button>
-                            </>
-                          ) : (
-                            <div className="mb-2 d-flex align-items-start">
-                              <div className="w-100">
-                                <DisplayValue value={value} field={field} />
-                                {validateValue(submitState.validate, value, field).error && (
-                                  <FormHelperText className="text-danger">
-                                    {validateValue(submitState.validate, value, field).errorMessage}
-                                  </FormHelperText>
-                                )}
-                              </div>
-                              <IconButton
-                                onClick={() =>
-                                  setEditValue({ fieldId: field._id, index: valueIndex })
-                                }
-                                size="large"
-                              >
-                                <EditIcon />
-                              </IconButton>
-                              {!value?.options?.defaultWidget && (
-                                <IconButton
-                                  edge="end"
-                                  onClick={() => onRemoveOneValue(field._id, valueIndex)}
-                                  size="large"
+                                    onAddOneMoreValue(field);
+                                  }}
                                 >
-                                  <DeleteIcon />
-                                </IconButton>
+                                  <AddIcon fontSize="small" />
+                                  <Tooltip
+                                    title={`You can add multiple values for ${field?.label} field`}
+                                  >
+                                    <u>add more {field?.label}</u>
+                                    {/* <InfoOutlined className="ml-1" fontSize="small" /> */}
+                                  </Tooltip>
+                                </Typography>
+                              </div>
+                            )}
+                          </Typography>
+                          {formView !== 'oneField' &&
+                            (inlineEdit
+                              ? field?.options?.multipleValues
+                                ? editMode === 'editField'
+                                : false
+                              : false) && (
+                              <Grid item xs={12}>
+                                <InputGroup style={{ display: 'flex' }}>
+                                  {SubmitButtonComponent}
+                                  {CancelButton}
+                                </InputGroup>
+                              </Grid>
+                            )}
+                        </>
+                      )}
+                      {field?.options?.systemCalculatedAndView && (
+                        <div className="mb-2">
+                          <DisplayFormula formula={field?.options?.formula} fields={fields} />
+                        </div>
+                      )}
+                      {(!inlineEdit ||
+                        editMode === 'addValue' ||
+                        (inlineEdit
+                          ? !field?.options?.multipleValues
+                            ? editMode === 'editField' || editMode === 'editValue'
+                            : false
+                          : false)) && (
+                        <>
+                          <div className="w-100">
+                            <div data-testid="field">
+                              {state.hideField ? (
+                                <Skeleton height={200} />
+                              ) : (
+                                <Field
+                                  {...fieldProps}
+                                  rules={rules?.[field?._id]}
+                                  field={{
+                                    ...field,
+                                    label: `${field?.label} ${field?.options?.required ? '*' : ''}`,
+                                  }}
+                                  disabled={
+                                    edit && field.options.notEditable
+                                      ? submitState.loading || field.options.notEditable
+                                      : submitState.loading ||
+                                        field.options.systemCalculatedAndView ||
+                                        (field?.options?.disabled && !enabledFields?.[field?._id])
+                                  }
+                                  validate={submitState.validate}
+                                  onChangeValue={(changedValue) => {
+                                    if (!field?.options?.systemCalculatedAndView) {
+                                      onChange(
+                                        { ...changedValue, field: field._id },
+                                        filterValues(values, field)?.length - 1,
+                                      );
+                                    }
+                                  }}
+                                  value={
+                                    field.options.systemCalculatedAndView
+                                      ? {
+                                          valueNumber: evaluateFormula(
+                                            getFormula(
+                                              field?.options?.formula?.variables,
+                                              [],
+                                              values,
+                                            ),
+                                          ),
+                                        }
+                                      : filterValues(values, field)[
+                                          filterValues(values, field)?.length - 1
+                                        ]
+                                  }
+                                  inlineEdit={inlineEdit}
+                                />
                               )}
                             </div>
+                          </div>
+                          {((inlineEdit ? editMode === 'addValue' : false) ||
+                            (inlineEdit
+                              ? !field?.options?.multipleValues
+                                ? editMode === 'editField' || editMode === 'editValue'
+                                : false
+                              : false)) && (
+                            <Grid item xs={12}>
+                              <InputGroup style={{ display: 'flex' }}>
+                                {SubmitButtonComponent}
+                                {CancelButton}
+                              </InputGroup>
+                            </Grid>
                           )}
                         </>
                       )}
-                    </div>
-                  ))}
-                </InputGroup>
-              </div>
-            </Grid>
-          ))}
-        {fieldWiseView && fields?.length > 1 && (
-          <div className="w-100 d-flex justify-content-between">
-            <div data-testid="backButton">
-              {page !== 0 && (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                  startIcon={<ArrowBackIosRounded fontSize="small" />}
-                  onClick={() => {
-                    setPage(page - 1);
-                  }}
-                >
-                  Back
-                </Button>
-              )}
-            </div>
-            <div data-testid="nextButton">
-              {page !== fields?.length - 1 && (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                  endIcon={<ArrowForwardIosRounded fontSize="small" />}
-                  onClick={() => {
-                    setSubmitState({ ...submitState, loading: true });
-                    let validate = false;
-                    if (
-                      fields[page]?.options?.required &&
-                      values.filter((value) => value.field === fields[page]._id).length === 0
-                    )
-                      validate = true;
-                    else
-                      values
-                        .filter((value) => value.field === fields[page]._id)
-                        ?.forEach((tempValue) => {
-                          if (validateValue(true, tempValue, { ...fields[page] }).error)
-                            validate = true;
-                        });
-
-                    setSubmitState({ ...submitState, validate, loading: false });
-                    if (!validate) setPage(page + 1);
-                  }}
-                >
-                  Next
-                </Button>
-              )}
-            </div>
-          </div>
-        )}
-        {((!fieldWiseView && fields?.length > 0) || fields?.length === page + 1) && (
-          <Grid item xs={12}>
-            <InputGroup style={{ display: 'flex' }}>
-              <div data-testid="submitButton">
-                <LoadingButton
-                  disabled={
-                    validateResponse(fields?.filter(filterHiddenFields), values) ||
-                    unique ||
-                    uniqueLoading
-                  }
-                  loading={submitState.loading || loading}
-                  onClick={onSubmit}
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                >
-                  Submit
-                </LoadingButton>
-              </div>
-              {onCancel && (
-                <div data-testid="cancelButton">
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    className="ml-2"
-                    onClick={onCancel}
-                    disabled={submitState.loading || loading}
-                  >
-                    Cancel
-                  </Button>
+                      <DragDropContext onDragEnd={onDragEnd} isDropDisabled={false}>
+                        <Droppable droppableId={field._id}>
+                          {(provided) => (
+                            <div ref={provided.innerRef} {...provided.droppableProps}>
+                              {filterValues(values, field).map((value: any, valueIndex) => {
+                                return (
+                                  <>
+                                    <Draggable
+                                      key={value?._id}
+                                      draggableId={valueIndex?.toString()}
+                                      index={valueIndex}
+                                      isDragDisabled={
+                                        inlineEdit ? !(editMode === 'editField') : false
+                                      }
+                                    >
+                                      {(draggableProvided) => (
+                                        <div
+                                          ref={draggableProvided.innerRef}
+                                          {...draggableProvided.draggableProps}
+                                          {...draggableProvided.dragHandleProps}
+                                        >
+                                          <div className="mt-3" key={valueIndex}>
+                                            {valueIndex !==
+                                              filterValues(values, field)?.length - 1 && (
+                                              <div id={value?._id}>
+                                                {state.editValue?.fieldId === field._id &&
+                                                state.editValue?.index === valueIndex ? (
+                                                  <>
+                                                    <div className="w-100">
+                                                      {state.hideField ? (
+                                                        <Skeleton height={200} />
+                                                      ) : (
+                                                        <>
+                                                          <Field
+                                                            {...fieldProps}
+                                                            rules={rules?.[field?._id]}
+                                                            field={{
+                                                              ...field,
+                                                              label: field?.options?.required
+                                                                ? `${field?.label}*`
+                                                                : field?.label,
+                                                            }}
+                                                            disabled={submitState.loading}
+                                                            onChangeValue={(changedValue) =>
+                                                              onChange(
+                                                                {
+                                                                  ...changedValue,
+                                                                  field: field._id,
+                                                                },
+                                                                valueIndex,
+                                                              )
+                                                            }
+                                                            value={value}
+                                                            inlineEdit={inlineEdit}
+                                                          />
+                                                          {formView !== 'oneField' && inlineEdit && (
+                                                            <Grid item xs={12}>
+                                                              <InputGroup
+                                                                style={{ display: 'flex' }}
+                                                              >
+                                                                {SubmitButtonComponent}
+                                                                {CancelButton}
+                                                              </InputGroup>
+                                                            </Grid>
+                                                          )}
+                                                        </>
+                                                      )}
+                                                    </div>
+                                                    {!inlineEdit && (
+                                                      <Button
+                                                        className="my-2"
+                                                        size="small"
+                                                        color="primary"
+                                                        variant="contained"
+                                                        onClick={() =>
+                                                          setState((oldState) => ({
+                                                            ...oldState,
+                                                            editValue: {
+                                                              fieldId: null,
+                                                              index: null,
+                                                            },
+                                                          }))
+                                                        }
+                                                      >
+                                                        Save
+                                                      </Button>
+                                                    )}
+                                                  </>
+                                                ) : (
+                                                  <div className="mb-2 d-flex align-items-start">
+                                                    <div className="w-100">
+                                                      <DisplayValue value={value} field={field} />
+                                                      {validateValue(
+                                                        submitState.validate,
+                                                        value,
+                                                        field,
+                                                      ).error && (
+                                                        <FormHelperText className="text-danger">
+                                                          {
+                                                            validateValue(
+                                                              submitState.validate,
+                                                              value,
+                                                              field,
+                                                            ).errorMessage
+                                                          }
+                                                        </FormHelperText>
+                                                      )}
+                                                    </div>
+                                                    {state.showResponseDrawer ===
+                                                      `${field?._id}-${value?._id}` &&
+                                                      value?.response?._id && (
+                                                        <ResponseDrawer
+                                                          open
+                                                          onClose={() =>
+                                                            setState((oldState) => ({
+                                                              ...oldState,
+                                                              showResponseDrawer: '',
+                                                            }))
+                                                          }
+                                                          responseId={value?.response?._id}
+                                                        />
+                                                      )}
+                                                    {!inlineEdit && (
+                                                      <>
+                                                        <Tooltip title="Edit Value">
+                                                          <IconButton
+                                                            onClick={() => {
+                                                              if (
+                                                                field?.fieldType === 'response' &&
+                                                                !field?.options?.selectItem
+                                                              ) {
+                                                                setState((oldState) => ({
+                                                                  ...oldState,
+                                                                  showResponseDrawer: `${field?._id}-${value?._id}`,
+                                                                }));
+                                                              } else {
+                                                                setState((oldState) => ({
+                                                                  ...oldState,
+                                                                  editValue: {
+                                                                    fieldId: field._id,
+                                                                    index: valueIndex,
+                                                                  },
+                                                                }));
+                                                              }
+                                                            }}
+                                                          >
+                                                            <EditIcon />
+                                                          </IconButton>
+                                                        </Tooltip>
+                                                        {!value?.options?.defaultWidget && (
+                                                          <Tooltip title="Delete Value">
+                                                            <IconButton
+                                                              edge="end"
+                                                              onClick={() =>
+                                                                onRemoveOneValue(
+                                                                  field._id,
+                                                                  valueIndex,
+                                                                )
+                                                              }
+                                                            >
+                                                              <DeleteIcon />
+                                                            </IconButton>
+                                                          </Tooltip>
+                                                        )}
+                                                      </>
+                                                    )}
+                                                  </div>
+                                                )}
+                                              </div>
+                                            )}
+                                          </div>
+                                        </div>
+                                      )}
+                                    </Draggable>
+                                  </>
+                                );
+                              })}
+                              {provided.placeholder}
+                            </div>
+                          )}
+                        </Droppable>
+                      </DragDropContext>
+                      {/* add multiple value block here for bottom view */}
+                    </InputGroup>
+                  </div>
+                </Grid>
+              ))}
+            {formView === 'oneField' && (
+              <div className="w-100 d-flex justify-content-between my-2">
+                <div data-testid="backButton">
+                  {state.page > 0 && (
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      startIcon={<ArrowBackIosRounded fontSize="small" />}
+                      onClick={() => handlePageChange(state.page - 1)}
+                    >
+                      Back
+                    </Button>
+                  )}
                 </div>
-              )}
-            </InputGroup>
+                {state.page !== fields?.length - 1 ? (
+                  <div data-testid="nextButton">
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      disabled={
+                        uniqueBetweenMultipleValuesError?.length > 0 ||
+                        uniqueBetweenMultipleValuesLoading ||
+                        unique ||
+                        uniqueLoading
+                      }
+                      endIcon={<ArrowForwardIosRounded fontSize="small" />}
+                      onClick={() => {
+                        setSubmitState({ ...submitState, loading: true });
+                        let validate = false;
+                        values
+                          .filter((value) => value.field === fields[state.page]._id)
+                          ?.forEach((tempValue) => {
+                            if (validateValue(true, tempValue, { ...fields[state.page] }).error) {
+                              validate = true;
+                            }
+                          });
+                        setSubmitState({ ...submitState, validate, loading: false });
+                        if (!validate) {
+                          handlePageChange(state.page + 1);
+                        }
+                      }}
+                    >
+                      Next
+                    </Button>
+                  </div>
+                ) : (
+                  <>{SubmitButtonComponent}</>
+                )}
+              </div>
+            )}
+            {formView !== 'oneField' && !inlineEdit && (
+              <Grid item xs={12}>
+                <InputGroup style={{ display: 'flex' }}>
+                  {SubmitButtonComponent}
+                  {CancelButton}
+                </InputGroup>
+              </Grid>
+            )}
           </Grid>
-        )}
+        </Grid>
       </Grid>
     </div>
   );
@@ -931,7 +1391,6 @@ export function FormView({
 export const filterValues = (values, field) => {
   // const defaultFieldValue = field?.options?.defaultValue || {};
   let newValues = [{ ...defaultValue, field: field._id }];
-
   if (values.some((f) => f.field === field._id)) {
     if (field?.options?.multipleValues) {
       newValues = values.filter((f) => f.field === field._id);
@@ -949,4 +1408,21 @@ export const filterValues = (values, field) => {
     }
     return { ...value, options: newOptions };
   });
+};
+
+export const combineArrays = (values, newFields) => {
+  const finalValues = values;
+  let newFeildsArray = newFields;
+  values.forEach((value, index) => {
+    const newFeildElement = newFeildsArray[0];
+    if (value.field === newFeildElement?.field) {
+      if (value._id === newFeildElement._id) {
+        newFeildsArray = newFeildsArray.filter((item) => item._id !== newFeildElement._id);
+      } else {
+        finalValues[index] = newFeildElement;
+        newFeildsArray = newFeildsArray.filter((item) => item._id !== newFeildElement._id);
+      }
+    }
+  });
+  return finalValues;
 };

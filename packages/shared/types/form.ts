@@ -21,6 +21,8 @@ export interface IFieldOptions {
   showOptionCreatedOnTemplate: boolean;
   required: boolean;
   multipleValues: boolean;
+  uniqueBetweenMultipleValues: boolean;
+  uniqueSubField: any;
   unique: boolean;
   caseInsensitiveUnique: boolean;
   staticText: string;
@@ -41,9 +43,17 @@ export interface IFieldOptions {
   defaultValue: Partial<IValue>;
   tabField?: boolean;
   hidden?: boolean;
-  // hiddenCondition?: IHiddenCondition[];
   hiddenConditions?: ICondition[];
   addToAllForms?: boolean;
+  disabled: boolean;
+  disabledConditions: ICondition[];
+  showAsAddButton: boolean;
+  functionalityFlowDiagram?: boolean;
+  functionalityFlowDiagramConditions?: ICondition[];
+  selectOfFieldProps?: boolean;
+  conditionRightPart?: boolean;
+  engagementForms?: any[];
+  // settings?: any;
 }
 
 export interface IField {
@@ -62,32 +72,33 @@ export interface IFormula {
 
 export interface ICondition {
   operator: 'AND' | 'OR';
-  left: ConditionPart;
+  left: IConditionPart;
   conditionType: '==' | '!=' | '>' | '<';
   right: ConditionRightPart;
-  // formId: string;
-  // fieldId: string;
-  // subFieldId: string;
-  // value: string;
-  // constantValue: string;
-  // formValue?: any;
 }
 
-export interface ConditionPart {
+export const defaultConditionObject: ICondition = {
+  operator: null,
+  left: null,
+  conditionType: null,
+  right: null,
+};
+
+export interface IConditionPart {
   formId: string;
   fieldId: string;
-  subField: ConditionPart;
+  subField: IConditionPart;
   responseId?: string;
 }
 
-interface ConditionRightPart extends ConditionPart {
+interface ConditionRightPart extends IConditionPart {
   value: string;
   constantValue: string;
   responseId: string;
   subField: ConditionRightPartSubField;
 }
 
-export interface ConditionRightPartSubField extends ConditionPart {
+export interface ConditionRightPartSubField extends IConditionPart {
   subField: ConditionRightPartSubField;
   responseId: string;
 }

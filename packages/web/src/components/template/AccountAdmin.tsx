@@ -14,7 +14,6 @@ export default function AccountAdmin({ subdomain }: IProps) {
   // const accountNameFieldId =
   const { data: responseData, error: responseError } = useGetResponses({
     formId: formData?.getFormBySlug?._id,
-    appId: data?.getTemplateBySlug?._id,
     search: subdomain,
     // formField:
   });

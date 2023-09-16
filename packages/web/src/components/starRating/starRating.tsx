@@ -13,36 +13,36 @@ export default function StarRating({ parentId }: StarRatingProps) {
   const [rating, setRating] = useState<undefined | any>();
   const [value, setValue] = useState(data?.getRatingCounts?.averageStarRating);
   const { handleRating } = useStarRating(parentId);
+
   useEffect(() => {
     if (data?.getRatingCounts?.userStarRating) {
       setValue(data?.getRatingCounts?.userStarRating?.starRating);
       setRating(data?.getRatingCounts?.userStarRating);
     }
   }, [data]);
+
   return (
-    <>
-      <Box
-        component="fieldset"
-        mb={3}
-        className="flex flex-row"
-        borderColor="transparent"
-        style={{ display: 'flex', flexDirection: 'row', margin: '0.8rem 1rem' }}
-      >
-        <Rating
-          disabled={loading}
-          name="simple-controlled"
-          value={value}
-          className="w-1/2"
-          onChange={(event, newValue) => {
-            handleRating(newValue, value, rating?._id);
-            setValue(newValue);
-          }}
-        />
-        <div className="m-1">
-          {data?.getRatingCounts?.ratingCount}
-          {data?.getRatingCounts?.ratingCount === 1 ? ' review' : ' reviews'}
-        </div>
-      </Box>
-    </>
+    <Box
+      component="fieldset"
+      mb={3}
+      className="flex flex-row"
+      borderColor="transparent"
+      style={{ display: 'flex', flexDirection: 'row' }}
+    >
+      <Rating
+        disabled={loading}
+        name="simple-controlled"
+        value={value}
+        className="w-1/2"
+        onChange={(event, newValue) => {
+          handleRating(newValue, value, rating?._id);
+          setValue(newValue);
+        }}
+      />
+      <div className="m-1">
+        {data?.getRatingCounts?.ratingCount}
+        {data?.getRatingCounts?.ratingCount === 1 ? ' review' : ' reviews'}
+      </div>
+    </Box>
   );
 }

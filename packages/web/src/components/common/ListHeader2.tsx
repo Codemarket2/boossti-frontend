@@ -3,6 +3,9 @@ import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import TextField from '@mui/material/TextField';
 import CircularProgress from '@mui/material/CircularProgress';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import AddCircle from '@mui/icons-material/AddCircle';
 import LoadingButton from './LoadingButton';
 import Breadcrumbs from './Breadcrumbs';
 
@@ -15,6 +18,8 @@ interface IProps {
   addNewLoading?: boolean;
   buttons?: ReactNode;
   hideBreadcrumbs?: boolean;
+  addIconButton?: boolean;
+  addIconLabel?: string;
 }
 
 export default function ListHeader2({
@@ -26,6 +31,8 @@ export default function ListHeader2({
   children,
   buttons,
   hideBreadcrumbs = false,
+  addIconButton,
+  addIconLabel,
 }: IProps): any {
   return (
     <div className="d-sm-flex justify-content-between align-items-center">
@@ -46,19 +53,26 @@ export default function ListHeader2({
           value={search}
           onChange={({ target: { value } }) => onSearchChange(value)}
         />
-        {handleAddNew && (
-          <LoadingButton
-            loading={addNewLoading}
-            startIcon={<AddIcon />}
-            variant="contained"
-            size="small"
-            color="primary"
-            className="ml-2"
-            onClick={handleAddNew}
-          >
-            Add New
-          </LoadingButton>
-        )}
+        {handleAddNew &&
+          (addIconButton ? (
+            <Tooltip title={addIconLabel}>
+              <IconButton color="primary" onClick={handleAddNew}>
+                <AddCircle fontSize="large" />
+              </IconButton>
+            </Tooltip>
+          ) : (
+            <LoadingButton
+              loading={addNewLoading}
+              startIcon={<AddIcon />}
+              variant="contained"
+              size="small"
+              color="primary"
+              className="ml-2"
+              onClick={handleAddNew}
+            >
+              Add New
+            </LoadingButton>
+          ))}
         {buttons}
       </div>
     </div>

@@ -1,177 +1,214 @@
-import moment from 'moment';
-import React, { useState } from 'react';
-import { useGetAuditLogs } from '@frontend/shared/hooks/auditLog';
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import Collapse from '@mui/material/Collapse';
 import Typography from '@mui/material/Typography';
-import Timeline from '@mui/lab/Timeline';
-import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
-// import dynamic from 'next/dynamic';
-import TimelineItem from '@mui/lab/TimelineItem';
-import IconButton from '@mui/material/IconButton';
-import ArrowRight from '@mui/icons-material/ArrowRight';
-import ArrowDropDown from '@mui/icons-material/ArrowDropDown';
-import TimelineSeparator from '@mui/lab/TimelineSeparator';
-import { getUserName } from '@frontend/shared/hooks/user/getUserForm';
-import TimelineConnector from '@mui/lab/TimelineConnector';
 import { useSelector } from 'react-redux';
-import TimelineDot from '@mui/lab/TimelineDot';
+import { useGetResponses } from '@frontend/shared/hooks/response';
+import { systemForms } from '@frontend/shared/utils/systemForms';
+import { getForm, getFormBySlug } from '@frontend/shared/hooks/form';
+import { useAuditLogSub } from '@frontend/shared/hooks/response/auditLogSub';
+import Pagination from '@mui/material/Pagination';
+import Skeleton from '@mui/material/Skeleton';
+import { useEffect, useState } from 'react';
+import { IField, IForm, IResponse, IValue } from '@frontend/shared/types';
 import ErrorLoading from '../common/ErrorLoading';
-import DisplayResponseById from '../response/DisplayResponseById';
-
-// const ReactJson = dynamic(() => import('react-json-view'), { ssr: false });
+import AuditLogCard from './AuditLogCard';
 
 interface IProps {
-  documentId: string;
+  documentId?: string;
   formId?: string;
 }
 
 export default function AuditLog({ documentId, formId }: IProps) {
-  const { data, loading, error, hadNextPage } = useGetAuditLogs({ documentId, formId });
   const userForm = useSelector(({ setting }: any) => setting.userForm);
+  const [forms, setForms] = useState({
+    activityLogCard: null,
+    model: null,
+    userActionTypes: null,
+  });
+
+  const [formError, setFormError] = useState(null);
+
+  const getForms = async () => {
+    try {
+      const activityLogCard = await getFormBySlug(systemForms?.activityLogCard?.slug);
+      const model = await getFormBySlug(systemForms?.model?.slug);
+      const userActionTypes = await getFormBySlug(systemForms?.userActionTypes?.slug);
+      if (!activityLogCard?._id || !model?._id || !userActionTypes?._id) {
+        throw new Error('activityLogCard, model, userActionTypes form not found');
+      }
+      setForms({ activityLogCard, model, userActionTypes });
+    } catch (error) {
+      setFormError(error);
+    }
+  };
+
+  useEffect(() => {
+    getForms();
+  }, []);
+
+  const activityLogCardForm = forms?.activityLogCard;
+  const modelForm = forms?.model;
+  const userActionTypesForm = forms?.userActionTypes;
+
+  const documentIdField = getFieldByLabel(
+    systemForms?.activityLogCard?.fields?.documentId,
+    activityLogCardForm?.fields,
+  );
+  const differenceField = getFieldByLabel(
+    systemForms?.activityLogCard?.fields?.difference,
+    activityLogCardForm?.fields,
+  );
+
+  let valueFilter = {};
+  if (documentId && formId) {
+    valueFilter = {
+      $or: [
+        { 'values.field': documentIdField?._id, 'values.value': documentId },
+        { 'values.field': differenceField?._id, 'values.options.json.formId': formId },
+      ],
+    };
+  }
+  const {
+    data: responseData,
+    error: responseError,
+    state,
+    setState,
+    loading: responseLoading,
+    refetch,
+  } = useGetResponses({
+    formId: activityLogCardForm?._id,
+    valueFilter,
+  });
+
+  useAuditLogSub({ refetch });
+
+  if (
+    !activityLogCardForm?._id ||
+    !modelForm?._id ||
+    !userActionTypesForm?._id ||
+    formError ||
+    responseError ||
+    !responseData
+  ) {
+    return (
+      <ErrorLoading
+        error={formError || (activityLogCardForm?._id && !responseLoading ? responseError : null)}
+      >
+        <Skeleton height={150} />
+        <Skeleton height={150} />
+        <Skeleton height={150} />
+      </ErrorLoading>
+    );
+  }
 
   return (
-    <Card variant="outlined" className="p-2">
-      <Typography variant="h6">Activity Logs</Typography>
-      {(error || !data) && <ErrorLoading error={error} />}
-      <Timeline
-        sx={{
-          '& .MuiTimelineContent-root': {
-            flex: 0,
-          },
-        }}
-        position="left"
-      >
-        {data?.getAuditLogs?.data?.map((auditLog, index) => (
-          <Item key={auditLog._id} auditLog={auditLog} userForm={userForm} />
+    <div className="p-2">
+      {responseData?.getResponses?.data
+        ?.map((response) =>
+          getAuditLogObject({ response, activityLogCardForm, modelForm, userActionTypesForm }),
+        )
+        .map((auditLog, index) => (
+          <AuditLogCard
+            key={auditLog._id}
+            auditLog={auditLog}
+            userForm={userForm}
+            activityLogCardForm={activityLogCardForm}
+            modelForm={modelForm}
+            userActionTypesForm={userActionTypesForm}
+          />
         ))}
-      </Timeline>
-      {hadNextPage && (
+      {responseData?.getResponses?.count > 0 && (
         <div className="d-flex justify-content-center">
-          <Button>Load more</Button>
+          <div>
+            <Typography align="center">
+              Showing {(state?.page > 1 ? state?.limit * state?.page - state?.limit : 0) + 1}-
+              {state?.limit * state?.page} of {responseData?.getResponses?.count}
+            </Typography>
+            <Pagination
+              page={state?.page}
+              onChange={(event, page) => {
+                setState((oldInput) => ({ ...oldInput, page }));
+              }}
+              count={Math.ceil(responseData?.getResponses?.count / state?.limit)}
+            />
+          </div>
         </div>
       )}
-    </Card>
+    </div>
   );
 }
 
-interface IProps2 {
-  auditLog: any;
-  userForm: any;
+interface IGetAuditLogs {
+  response: IResponse;
+  activityLogCardForm: IForm;
+  modelForm: IForm;
+  userActionTypesForm: IForm;
 }
 
-const Item = ({ auditLog, userForm }: IProps2) => {
-  const [showChanges, setShowChanges] = useState(false);
+export const getAuditLogObject = ({
+  response,
+  activityLogCardForm,
+  modelForm,
+  userActionTypesForm,
+}: IGetAuditLogs) => {
+  const actionResponse = getFieldValueByLabel(
+    systemForms?.activityLogCard?.fields?.action,
+    activityLogCardForm?.fields,
+    response?.values,
+  )?.response;
+  const action = getFieldValueByLabel(
+    systemForms?.userActionTypes?.fields?.name,
+    userActionTypesForm?.fields,
+    actionResponse?.values,
+  )?.value;
 
-  const isCreateResponse = auditLog.action === 'CREATE' && auditLog.model === 'Response';
+  const modelResponse = getFieldValueByLabel(
+    systemForms?.activityLogCard?.fields?.model,
+    activityLogCardForm?.fields,
+    response?.values,
+  )?.response;
+  const model = getFieldValueByLabel(
+    systemForms?.model?.fields?.name,
+    modelForm?.fields,
+    modelResponse?.values,
+  )?.value;
 
-  return (
-    <TimelineItem>
-      <TimelineOppositeContent sx={{ pt: '8px', pb: 3, px: 2 }}>
-        <Typography>
-          {auditLog.action} {auditLog.model}
-        </Typography>
-        <Button className="ml-2" size="small" onClick={() => setShowChanges(!showChanges)}>
-          {showChanges ? 'Hide' : 'View'} {isCreateResponse ? 'Response' : 'Changes'}
-        </Button>
-        {showChanges && (
-          <Collapse in={showChanges}>
-            {isCreateResponse ? (
-              <DisplayResponseById responseId={JSON.parse(auditLog?.diff)?._id} hideBreadcrumbs />
-            ) : (
-              <>
-                {/* <DisplayDiff value={JSON.parse(auditLog?.diff)} initial level={1} /> */}
-                {Object.keys(JSON.parse(auditLog?.diff) || {})?.map((key, index) => (
-                  <DisplayDiff
-                    objectKey={key}
-                    value={JSON.parse(auditLog?.diff)[key]}
-                    key={index}
-                    level={1}
-                  />
-                ))}
-              </>
-            )}
-          </Collapse>
-        )}
-        <Typography className="mt-1">
-          by <span className="font-weight-bold">{getUserName(userForm, auditLog?.createdBy)}</span>
-          <Typography component="span">{` ${moment(auditLog.createdAt).format('lll')}`}</Typography>
-        </Typography>
-      </TimelineOppositeContent>
-      <TimelineSeparator>
-        <TimelineDot />
-        <TimelineConnector />
-      </TimelineSeparator>
-    </TimelineItem>
-  );
+  const documentId = getFieldValueByLabel(
+    systemForms?.activityLogCard?.fields?.documentId,
+    activityLogCardForm?.fields,
+    response?.values,
+  )?.value;
+  const differenceString = getFieldValueByLabel(
+    systemForms?.activityLogCard?.fields?.difference,
+    activityLogCardForm?.fields,
+    response?.values,
+  )?.value;
+  const difference = JSON.parse(differenceString);
+  const message = getFieldValueByLabel(
+    systemForms?.activityLogCard?.fields?.message,
+    activityLogCardForm?.fields,
+    response?.values,
+  )?.value;
+
+  return {
+    action,
+    model,
+    documentId,
+    difference,
+    message,
+    createdBy: response?.createdBy,
+    createdAt: response?.createdAt,
+    _id: response?._id,
+  };
 };
 
-const DisplayDiff = ({
-  objectKey,
-  value,
-  initial,
-  level,
-}: {
-  value: any;
-  objectKey?: string;
-  initial?: boolean;
-  level: number;
-}) => {
-  const [expand, setExpand] = useState(false);
-  if (objectKey === 'updatedAt') {
-    return null;
+const getFieldValueByLabel = (fieldLabel: string, fields: IField[], values: IValue[]) => {
+  let value: IValue = null;
+  const field = getFieldByLabel(fieldLabel, fields);
+  if (field?._id) {
+    value = values?.find((v) => v?.field === field?._id);
   }
-  if (typeof value === 'object') {
-    if (Array.isArray(value)) {
-      return (
-        <>
-          {objectKey && (
-            <Typography fontWeight="bold" className="mt-1">
-              {objectKey}
-              <IconButton size="small" edge="end" onClick={() => setExpand(!expand)}>
-                {expand ? <ArrowDropDown /> : <ArrowRight />}
-              </IconButton>
-            </Typography>
-          )}
-          {expand && (
-            <div className="ml-3">
-              {value?.map((v, i) => (
-                <DisplayDiff key={i} value={v} level={level + 1} objectKey={`${i + 1})`} />
-              ))}
-            </div>
-          )}
-        </>
-      );
-    }
-    return (
-      <>
-        {objectKey && (
-          <Typography fontWeight="bold" className="mt-1">
-            {objectKey}
-            <IconButton size="small" edge="end" onClick={() => setExpand(!expand)}>
-              {expand ? <ArrowDropDown /> : <ArrowRight />}
-            </IconButton>
-          </Typography>
-        )}
-        {expand && (
-          <div className={initial ? '' : 'ml-3'}>
-            {Object.keys(value || {})?.map((key, index) => (
-              <DisplayDiff objectKey={key} value={value[key]} key={index} level={level + 1} />
-            ))}
-          </div>
-        )}
-      </>
-    );
-  }
-  if (['string', 'number', 'boolean'].includes(typeof value)) {
-    return (
-      <div className="mt-1">
-        <Typography>
-          <b>{objectKey}</b> - {typeof value === 'string' ? value || '""' : `${value}`}
-        </Typography>
-      </div>
-    );
-  }
-  return <Typography>{objectKey} - NA</Typography>;
+  return value;
+};
+
+export const getFieldByLabel = (fieldLabel, fields) => {
+  return fields?.find((f) => f?.label?.toLowerCase() === fieldLabel?.toLowerCase());
 };

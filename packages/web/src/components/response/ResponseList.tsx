@@ -5,43 +5,51 @@ import { onAlert } from '../../utils/alert';
 import { DisplayResponse } from './DisplayResponse';
 import Table2 from './Table2';
 import Table from './Table';
+import { ResponseViewSelectInput } from '../form2/FormSetting';
+import Paper from '@mui/material/Paper';
+import { useState } from 'react';
 
-interface IProps {
+export interface IResponseList {
   form: any;
-  workFlowFormResponseParentId?: string;
+  workflowId?: string;
   showOnlyMyResponses?: boolean;
-  appId?: string;
-  installId?: string;
   isTemplateInstance?: string;
   valueFilter?: any;
   onClickResponse?: (response, form) => void;
+  parentResponseId?: string;
 }
 
 export default function ResponseList({
   form,
-  workFlowFormResponseParentId,
+  workflowId,
   showOnlyMyResponses,
-  appId,
   isTemplateInstance,
-  installId,
   valueFilter,
   onClickResponse,
-}: IProps): any {
+  parentResponseId,
+}: IResponseList): any {
   const { data, error, loading, state, setState, refetch } = useGetResponses({
     formId: form?._id,
     onlyMy: showOnlyMyResponses,
-    workFlowFormResponseParentId,
-    appId,
-    installId,
+    workflowId,
     valueFilter,
+    parentResponseId,
   });
+  const [responsesView, setResponsesView] = useState(form?.settings?.responsesView || 'table');
 
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
 
   return (
     <>
+      <Paper elevation={0} square className="px-2 pb-2">
+        <ResponseViewSelectInput
+          label="View"
+          value={responsesView}
+          onChange={(newValue) => setResponsesView(newValue)}
+        />
+      </Paper>
       <Backdrop open={deleteLoading} />
-      {form?.settings?.responsesView === 'table2' ? (
+      {responsesView === 'table2' ? (
         <>
           <Table2
             form={form}
@@ -49,7 +57,7 @@ export default function ResponseList({
             onRowChange={(resId, value) => {}}
           />
         </>
-      ) : form?.settings?.responsesView === 'vertical' ? (
+      ) : responsesView === 'vertical' ? (
         <>
           {data?.getResponses?.data?.map((response) => (
             <DisplayResponse

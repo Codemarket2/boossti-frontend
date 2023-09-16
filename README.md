@@ -1,6 +1,6 @@
 # Vijaa Frontend Monorepo
 
-# Next.js + React Native
+# Next.js + React + React Native
 
 ## You have to only use Yarn don't use npm
 

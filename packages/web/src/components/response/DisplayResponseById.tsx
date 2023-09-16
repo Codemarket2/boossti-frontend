@@ -13,6 +13,9 @@ interface DisplayResponseByIdProps {
   hideWorkflow?: boolean;
   deleteCallBack?: () => void;
   hideDelete?: boolean;
+  previewMode?: boolean;
+  viewLess?: boolean;
+  handleViewLess?: (vieMore: boolean) => void;
 }
 
 export default function DisplayResponseById({
@@ -23,6 +26,9 @@ export default function DisplayResponseById({
   hideWorkflow,
   hideDelete,
   deleteCallBack,
+  previewMode,
+  viewLess,
+  handleViewLess,
 }: DisplayResponseByIdProps) {
   const { data, error } = useGetResponse(responseId);
 
@@ -44,6 +50,9 @@ export default function DisplayResponseById({
       hideWorkflow={hideWorkflow}
       deleteCallBack={deleteCallBack}
       hideDelete={hideDelete}
+      previewMode={previewMode}
+      viewLess={viewLess}
+      handleViewLess={handleViewLess}
     />
   );
 }
@@ -55,9 +64,11 @@ interface DisplayResponseWithFormIdProps {
   hideNavigation?: boolean;
   hideAuthor?: boolean;
   hideWorkflow?: boolean;
-  isAuthorized?: boolean;
   deleteCallBack?: () => void;
   hideDelete?: boolean;
+  previewMode?: boolean;
+  viewLess?: boolean;
+  handleViewLess?: (vieMore: boolean) => void;
 }
 
 export function DisplayResponseWithFormId({
@@ -67,9 +78,11 @@ export function DisplayResponseWithFormId({
   hideNavigation,
   hideAuthor,
   hideWorkflow,
-  isAuthorized,
   deleteCallBack,
   hideDelete,
+  previewMode,
+  viewLess,
+  handleViewLess,
 }: DisplayResponseWithFormIdProps) {
   const { data, error, loading } = useGetForm(formId);
 
@@ -89,9 +102,11 @@ export function DisplayResponseWithFormId({
       hideNavigation={hideNavigation}
       hideAuthor={hideAuthor}
       hideWorkflow={hideWorkflow}
-      isAuthorized={isAuthorized}
       deleteCallBack={deleteCallBack}
       hideDelete={hideDelete}
+      previewMode={previewMode}
+      viewLess={viewLess}
+      handleViewLess={handleViewLess}
     />
   );
 }

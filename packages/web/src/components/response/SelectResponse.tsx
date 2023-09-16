@@ -1,17 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { useGetResponses } from '@frontend/shared/hooks/response';
 import CircularProgress from '@mui/material/CircularProgress';
 import ErrorLoading from '../common/ErrorLoading';
 import CreateResponseDrawer from './CreateResponseDrawer';
+import DisplayRichText from '../common/DisplayRichText';
 
 export interface IProps {
   formId: string;
   value: any;
   onChange: (response) => void;
   label?: string;
-  installId?: string;
   error?: boolean;
   helperText?: string;
   disabled?: boolean;
@@ -21,6 +21,7 @@ export interface IProps {
   onlyMyResponses?: boolean;
   onChangeFullResponse?: (response: any) => void;
   floatingLabel?: boolean;
+  noAppIdFilter?: boolean;
 }
 
 const filter = createFilterOptions();
@@ -28,7 +29,6 @@ const filter = createFilterOptions();
 export default function SelectResponse({
   label = 'Select Response',
   formId,
-  installId,
   value = null,
   onChange,
   onChangeFullResponse,
@@ -40,11 +40,13 @@ export default function SelectResponse({
   allowCreate,
   onlyMyResponses,
   floatingLabel,
+  noAppIdFilter,
 }: IProps) {
   const { data, error: queryError, loading, state, setState } = useGetResponses({
     formId,
     formField,
     onlyMy: onlyMyResponses,
+    noAppIdFilter,
   });
 
   const [addOption, setAddOption] = useState({ showDrawer: false });
@@ -54,6 +56,12 @@ export default function SelectResponse({
       onChange(getLabels(formField, [value])?.pop());
     }
   }, [value]);
+
+  const options =
+    useMemo(() => getLabels(formField, data?.getResponses?.data), [
+      formField,
+      data?.getResponses?.data,
+    ]) || [];
 
   if (queryError) {
     return <ErrorLoading error={queryError} />;
@@ -86,17 +94,22 @@ export default function SelectResponse({
               onChange(newValue);
             }
           }}
-          options={getLabels(formField, data?.getResponses?.data) || []}
+          options={options}
+          inputValue={state.search?.replace(/(<([^>]+)>)/gi, '')}
           getOptionLabel={(option) => option?.label}
-          inputValue={state.search}
+          renderOption={(props, option, { selected }) => (
+            <li {...props}>
+              <DisplayRichText value={option.label} />
+            </li>
+          )}
           onInputChange={(event, newInputValue) => {
             setState({ ...state, search: newInputValue });
           }}
-          filterOptions={(options, params) => {
-            let filtered = filter(options, params);
-            filtered = filtered.map((option: any) => {
-              return { ...option, label: option?.label?.split('{{}}')?.[0] };
-            });
+          filterOptions={(tempOptions, params) => {
+            const filtered = filter(tempOptions, params);
+            // filtered = filtered.map((option: any) => {
+            //   return { ...option, label: option?.label?.split('{{}}')?.[0] };
+            // });
             if (params.inputValue !== '' && !loading && allowCreate) {
               filtered.push({
                 inputValue: params.inputValue,
@@ -128,7 +141,6 @@ export default function SelectResponse({
             </div>
           )}
         />
-
         {addOption?.showDrawer && (
           <div data-testid="CreateResponseDrawer">
             <CreateResponseDrawer
@@ -136,7 +148,6 @@ export default function SelectResponse({
               onClose={() => setAddOption({ ...addOption, showDrawer: false })}
               title={label}
               formId={formId}
-              installId={installId}
               createCallback={(newResponse) => {
                 onChange(getLabels(formField, [newResponse])?.pop());
                 setAddOption({ ...addOption, showDrawer: false });
@@ -159,7 +170,8 @@ const getLabels = (formField: string, responses: any[]) => {
         if (value?.field?.toString() === formField) {
           label = fieldValue + label;
         } else {
-          label += `{{}} ${fieldValue}`;
+          label += ` ${fieldValue}`;
+          // label += `{{}} ${fieldValue}`;
         }
       }
     });
@@ -186,5 +198,6 @@ export const getLabel = (formField: string, response: any): string => {
         label += i > 0 ? ` ${fieldValue}` : fieldValue;
       }
     });
+
   return label || response?.label;
 };

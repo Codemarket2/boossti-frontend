@@ -16,6 +16,7 @@ import ErrorLoading from '../components/common/ErrorLoading';
 import FormView from '../components/form2/FormView';
 import NotFound from '../components/common/NotFound';
 import { DisplayForm } from '../components/form2/DisplayForm';
+import CloudHosting from '../components/CloudHosting';
 
 const PREFIX = 'FormPage';
 const classes = {
@@ -98,18 +99,10 @@ export default function Album() {
   return (
     <>
       <AppBar />
-      <main>
+      {/* <main>
         <div className={classes.heroContent}>
           <Container className={classes.cardGrid} maxWidth="md">
             <Grid container spacing={1}>
-              <Grid item xs={12} sm={12} md={12} lg={12}>
-                <div className="text-center">
-                  <Button variant="contained" color="primary" className="m-2">
-                    Create Your website performance report
-                  </Button>
-                  <DisplayForm slug="website-performance-report" />
-                </div>
-              </Grid>
               <Grid xs={12} sm={12} md={6} lg={6}>
                 <Grid container className="mt-5">
                   {cards2.map((card, i) => (
@@ -137,21 +130,12 @@ export default function Album() {
                   ))}
                 </Grid>
               </Grid>
-
-              <Grid item xs={12} sm={12} md={6} lg={6}>
-                <div className="text-center">
-                  <Button variant="contained" color="primary" className="m-2">
-                    Tell Us About Your Project
-                  </Button>
-                  <DisplayForm slug="boossti-interest-form" />
-                </div>
-              </Grid>
             </Grid>
           </Container>
         </div>
-
-        {/* End hero unit */}
-      </main>
+      </main> */}
+      {/* End hero unit */}
+      <CloudHosting />
       {/* Footer */}
       <footer className={classes.footer}>
         <Typography variant="h6" align="center" gutterBottom>

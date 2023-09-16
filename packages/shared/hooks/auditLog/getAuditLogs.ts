@@ -10,7 +10,7 @@ interface IProps {
 }
 
 export const useGetAuditLogs = ({ documentId, formId }: IProps) => {
-  const [input, setInput] = useState({ page: 1, limit: 30 });
+  const [input, setInput] = useState({ page: 1, limit: 20 });
   const { data, error, loading, refetch } = useQuery(GET_AUDIT_LOGS, {
     variables: { ...input, documentId, formId },
     fetchPolicy: 'cache-and-network',
@@ -24,9 +24,5 @@ export const useGetAuditLogs = ({ documentId, formId }: IProps) => {
     }
   }, [responseSubData, formSubData]);
 
-  let hadNextPage = false;
-  if (data?.getAuditLogs?.count > input.page * input.limit) {
-    hadNextPage = true;
-  }
-  return { data, error, loading, hadNextPage };
+  return { data, error, loading, input, setInput };
 };

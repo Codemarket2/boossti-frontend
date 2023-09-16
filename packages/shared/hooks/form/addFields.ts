@@ -46,6 +46,8 @@ export const defaultOptions: IFieldOptions = {
   showOptionCreatedOnTemplate: false,
   required: false,
   multipleValues: false,
+  uniqueBetweenMultipleValues: false,
+  uniqueSubField: null,
   unique: false,
   caseInsensitiveUnique: false,
   staticText: '',
@@ -64,14 +66,20 @@ export const defaultOptions: IFieldOptions = {
   defaultValue: null,
   hidden: false,
   hiddenConditions: null,
+  disabled: false,
+  disabledConditions: null,
+  showAsAddButton: false,
+  selectOfFieldProps: false,
+  conditionRightPart: false,
+  engagementForms: null,
 };
 
-interface IValues extends IField {
-  isWidget: false;
-}
+// interface IValues extends IField {
+//   isWidget: false;
+// }
 
-const defaultFieldValue: IValues = {
-  isWidget: false,
+const defaultFieldValue: IField = {
+  // isWidget: false,
   _id: '',
   label: '',
   fieldType: '',
@@ -89,11 +97,11 @@ export function useAddFields({ onAlert, onSave }: ICRUDProps) {
   const formik = useFormik({
     initialValues: defaultFieldValue,
     validationSchema,
-    onSubmit: async (payload: IValues) => {
+    onSubmit: async (payload: IField) => {
       try {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         // eslint-disable-next-line prefer-const
-        let { isWidget, ...newPayload } = payload;
+        let { ...newPayload } = payload;
         newPayload = {
           ...payload,
           _id: edit ? payload._id : generateObjectId(),
@@ -112,7 +120,7 @@ export function useAddFields({ onAlert, onSave }: ICRUDProps) {
 
   const setFormValues = (oldField) => {
     setEdit(true);
-    const newValues: IValues = { ...defaultFieldValue };
+    const newValues: IField = { ...defaultFieldValue };
     Object.keys(defaultFieldValue).forEach((key) => {
       if (oldField[key] !== undefined) {
         newValues[key] = oldField[key];

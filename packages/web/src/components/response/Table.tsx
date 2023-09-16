@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import moment from 'moment';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -9,14 +8,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Tooltip from '@mui/material/Tooltip';
 import TablePagination from '@mui/material/TablePagination';
-import IconButton from '@mui/material/IconButton';
-import EditIcon from '@mui/icons-material/Edit';
 import { getUserName } from '@frontend/shared/hooks/user/getUserForm';
 import ErrorLoading from '../common/ErrorLoading';
-import DisplayValue from '../form2/DisplayValue';
-import Authorization from '../common/Authorization';
-import DeleteButton from '../common/DeleteButton';
-import EditResponseDrawer from './EditResponseDrawer';
 import { useSelector } from 'react-redux';
 import TextField from '@mui/material/TextField';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -24,7 +17,9 @@ import Search from '@mui/icons-material/Search';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { IField } from '@frontend/shared/types/form';
-import DisplayFormulaValue from '../form2/field/formula/DisplayFormulaValue';
+import WorkflowButtons from './workflow/WorkflowButtons';
+import FieldValuesMap from './FieldValuesMap';
+import { useGetForm } from '@frontend/shared/hooks/form';
 
 interface IProps {
   search: string;
@@ -59,9 +54,9 @@ export default function ResponseTable({
   onLimitChange,
   onClickResponse,
 }: IProps) {
-  const [selectedResponse, setSelectedResponse] = useState(null);
   const userForm = useSelector(({ setting }: any) => setting.userForm);
   const router = useRouter();
+
   return (
     <div>
       <TableContainer component={Paper} variant="outlined">
@@ -100,8 +95,9 @@ export default function ResponseTable({
           >
             <TableHead>
               <TableRow>
-                <TableCell>Action</TableCell>
+                <TableCell>CreatedBy</TableCell>
                 <TableCell>ID</TableCell>
+                <TableCell>Workflow</TableCell>
                 {form?.fields?.map((field, i) => (
                   <TableCell key={i}>{field.label}</TableCell>
                 ))}
@@ -111,95 +107,53 @@ export default function ResponseTable({
               {responses?.map((response) => (
                 <TableRow key={response._id} hover>
                   <TableCell>
-                    <div className="d-flex align-items-center">
-                      <div className="d-flex">
-                        <Authorization _id={[response?.createdBy?._id]} allowAdmin returnNull>
-                          <DeleteButton
-                            tooltip="Delete Response"
-                            onClick={async () => onDelete(response._id)}
-                            edge="start"
-                          />
-                          <Tooltip title="Edit Response">
-                            <IconButton onClick={() => setSelectedResponse(response)} edge="start">
-                              <EditIcon />
-                            </IconButton>
-                          </Tooltip>
-                          {selectedResponse?._id === response?._id && (
-                            <>
-                              <EditResponseDrawer
-                                overlay
-                                open
-                                form={form}
-                                response={selectedResponse}
-                                onClose={() => setSelectedResponse(null)}
-                              />
-                            </>
-                          )}
-                        </Authorization>
-                      </div>
-                      <span>
-                        <Link href={`/forms/users/response/${response?.createdBy?.count}`}>
-                          <a>
-                            <u>{getUserName(userForm, response?.createdBy)}</u>
-                          </a>
-                        </Link>
-                        <br />
-                        <span>{`${moment(response.createdAt).format('l')} ${moment(
-                          response.createdAt,
-                        ).format('LT')}`}</span>
-                      </span>
-                    </div>
+                    <span>
+                      <Link href={`/form/users/response/${response?.createdBy?.count}`}>
+                        <a>
+                          <u>{getUserName(userForm, response?.createdBy)}</u>
+                        </a>
+                      </Link>
+                      <br />
+                      <span>{`${moment(response.createdAt).format('l')} ${moment(
+                        response.createdAt,
+                      ).format('LT')}`}</span>
+                    </span>
                   </TableCell>
                   <TableCell>
                     <Tooltip title="Open Response">
-                      <span
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => {
-                          if (onClickResponse) {
-                            onClickResponse(response, form);
-                          } else {
-                            router.push(`/forms/${form.slug}/response/${response.count}`);
-                          }
-                        }}
-                      >
-                        <u>{response?.count}</u>
+                      <span>
+                        {onClickResponse ? (
+                          <span
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => {
+                              if (onClickResponse) {
+                                onClickResponse(response, form);
+                              } else {
+                                router.push(`/form/${form.slug}/response/${response.count}`);
+                              }
+                            }}
+                          >
+                            <u>{response?.count}</u>
+                          </span>
+                        ) : (
+                          <Link href={`/form/${form.slug}/response/${response.count}`}>
+                            <a>{response?.count}</a>
+                          </Link>
+                        )}
                       </span>
                     </Tooltip>
-                    {/* <Link
-                      href={
-                        isTemplateInstance
-                          ? `/${isTemplateInstance}/${response.count}`
-                          : `/forms/${form.slug}/response/${response.count}`
-                      }
-                    >
-                      <a>
-                       
-                      </a>
-                    </Link> */}
+                  </TableCell>
+                  <TableCell>
+                    <DisplayWorkflowName workflowId={response?.workflowId} />
                   </TableCell>
                   {form?.fields?.map((field: IField, i) => (
                     <TableCell key={i}>
-                      {field?.options?.systemCalculatedAndView ? (
-                        <>
-                          <DisplayFormulaValue
-                            formula={field?.options?.formula}
-                            field={field}
-                            values={response?.values}
-                          />
-                        </>
-                      ) : (
-                        <>
-                          {response?.values
-                            ?.filter((v) => v.field === field._id)
-                            ?.map((value) => (
-                              <div key={value?._id}>
-                                <DisplayValue field={field} value={value} />
-                              </div>
-                            ))}
-                        </>
-                      )}
+                      <FieldValuesMap field={field} response={response} />
                     </TableCell>
                   ))}
+                  {response?.workflowId && !response?.parentResponseId && (
+                    <WorkflowButtons response={response} tableCellView />
+                  )}
                 </TableRow>
               ))}
             </TableBody>
@@ -209,3 +163,15 @@ export default function ResponseTable({
     </div>
   );
 }
+
+const DisplayWorkflowName = ({ workflowId }: { workflowId: string }) => {
+  const { data } = useGetForm(workflowId);
+  if (data?.getForm?.name) {
+    return (
+      <>
+        <Link href={`/workflow/${data?.getForm?.slug}`}>{data?.getForm?.name}</Link>
+      </>
+    );
+  }
+  return null;
+};

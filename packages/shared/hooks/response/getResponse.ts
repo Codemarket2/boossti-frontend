@@ -1,5 +1,6 @@
 import { useQuery, useSubscription } from '@apollo/client';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { GET_RESPONSE_BY_COUNT, GET_RESPONSES, GET_RESPONSE } from '../../graphql/query/response';
 import {
   DELETED_RESPONSE,
@@ -17,8 +18,7 @@ export const defaultQueryVariables = {
   formField: null,
   onlyMy: false,
   appId: null,
-  installId: null,
-  workFlowFormResponseParentId: null,
+  workflowId: null,
   valueFilter: '',
 };
 
@@ -26,28 +26,35 @@ interface IProps {
   formId: string;
   formField?: string;
   onlyMy?: boolean;
-  workFlowFormResponseParentId?: string;
-  appId?: string;
-  installId?: string;
+  workflowId?: string;
+  parentResponseId?: string;
   search?: string;
   valueFilter?: any;
+  noAppIdFilter?: boolean;
+  limit?: number;
+  page?: number;
 }
 
 export function useGetResponses({
   formId,
   formField = null,
   onlyMy = false,
-  workFlowFormResponseParentId = null,
-  appId,
-  installId,
+  workflowId = null,
+  parentResponseId,
   search = null,
   valueFilter,
+  noAppIdFilter,
+  limit = defaultQueryVariables.limit,
+  page = defaultQueryVariables.page,
 }: IProps) {
+  const setting = useSelector((state: any) => state?.setting);
   const [subscribed, setSubscribed] = useState(false);
   const [state, setState] = useState({
     ...defaultQueryVariables,
     showSearch: false,
     formField,
+    limit,
+    page,
   });
 
   let filter;
@@ -66,6 +73,11 @@ export function useGetResponses({
     filter = JSON.stringify(valueFilter);
   }
 
+  let appId;
+  if (setting?.appResponse?._id && !noAppIdFilter) {
+    appId = setting?.appResponse?._id;
+  }
+
   const { data, error, loading, subscribeToMore, refetch } = useQuery<
     {
       getResponses: { data: IResponse[]; count: number };
@@ -73,8 +85,8 @@ export function useGetResponses({
     {
       formId: string;
       appId: string;
-      installId: string;
-      workFlowFormResponseParentId: string;
+      parentResponseId: string;
+      workflowId: string;
       page: number;
       limit: number;
       search: string;
@@ -86,10 +98,10 @@ export function useGetResponses({
     variables: {
       ...state,
       formId,
-      workFlowFormResponseParentId,
+      parentResponseId,
+      workflowId,
       onlyMy,
       appId,
-      installId,
       valueFilter: filter,
     },
     fetchPolicy: 'cache-and-network',
@@ -139,6 +151,7 @@ export async function getResponses({
   valueFilter,
   page = 1,
   limit = 10,
+  useGuestClient,
 }: {
   formId: string;
   formField?: string;
@@ -146,24 +159,28 @@ export async function getResponses({
   valueFilter?: string;
   page?: number;
   limit?: number;
+  useGuestClient?: boolean;
 }) {
-  const { data } = await apolloClient.query<{ getResponses: { data: IResponse[]; count: number } }>(
-    {
-      query: GET_RESPONSES,
-      variables: { formId, page, limit, valueFilter },
-    },
-  );
+  let client = apolloClient;
+  if (useGuestClient) {
+    client = guestClient;
+  }
+  const { data } = await client.query<{ getResponses: { data: IResponse[]; count: number } }>({
+    query: GET_RESPONSES,
+    variables: { formId, page, limit, valueFilter },
+  });
   return data?.getResponses;
 }
 
-export function useGetResponse(_id: string): any {
-  const { data, error, loading } = useQuery<{ getResponse: IResponse }, { _id: string }>(
-    GET_RESPONSE,
-    {
-      variables: { _id },
-      fetchPolicy: 'cache-and-network',
-    },
-  );
+export function useGetResponse(_id: string) {
+  const setting = useSelector((state: any) => state?.setting);
+  const { data, error, loading } = useQuery<
+    { getResponse: IResponse },
+    { _id: string; appId: string }
+  >(GET_RESPONSE, {
+    variables: { _id, appId: setting?.appResponse?._id },
+    fetchPolicy: 'cache-and-network',
+  });
 
   useSubscription(UPDATE_RESPONSE_SUB, {
     variables: { _id: data?.getResponse?._id },
@@ -172,12 +189,17 @@ export function useGetResponse(_id: string): any {
   return { data, error, loading };
 }
 
-export function useGetResponseByCount(formId: string, count: number): any {
+export function useGetResponseByCount(formId: string, count: number) {
+  const setting = useSelector((state: any) => state?.setting);
   const { data, error, loading, refetch } = useQuery<
     { getResponseByCount: IResponse },
-    { formId: string; count: number }
+    { formId: string; count: number; appId: string }
   >(GET_RESPONSE_BY_COUNT, {
-    variables: { formId, count },
+    variables: {
+      formId,
+      count,
+      appId: setting?.appResponse?._id,
+    },
     fetchPolicy: 'cache-and-network',
   });
 

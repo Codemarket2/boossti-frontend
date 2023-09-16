@@ -30,7 +30,7 @@
     "amazon-cognito-identity-js": "5.0.3",
     "graphql": "15.5.0",
     "react": "18.0.0",
-    "react-native": "0.64.1",
+    "react-native": "0.64.4",
     "react-native-emoji-board": "^1.2.1",
     "react-native-fbsdk-next": "^4.3.0",
     "react-native-gesture-handler": "1.10.3",

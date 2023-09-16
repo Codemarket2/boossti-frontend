@@ -1,10 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import moment from 'moment';
 import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
+import Edit from '@mui/icons-material/Edit';
+import Delete from '@mui/icons-material/Delete';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
-import Button from '@mui/material/Button';
+import { useGetFormBySlug } from '@frontend/shared/hooks/form';
+// import Button from '@mui/material/Button';
 import AdapterMoment from '@mui/lab/AdapterMoment';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import DatePicker from '@mui/lab/DatePicker';
@@ -15,6 +20,10 @@ import { validateValue } from '@frontend/shared/utils/validate';
 import { IField } from '@frontend/shared/types/form';
 import { IValue } from '@frontend/shared/types/response';
 import { generateObjectId } from '@frontend/shared/utils/objectId';
+import { fieldProps } from '@frontend/shared/utils/fieldProps';
+import Add from '@mui/icons-material/Add';
+import Tooltip from '@mui/material/Tooltip';
+import ReactFlow from '../react-flow/ReactFlow';
 import RichTextarea from '../common/RichTextarea2';
 import DisplayRichText from '../common/DisplayRichText';
 import SelectResponse from '../response/SelectResponse';
@@ -28,17 +37,21 @@ import CreateResponseDrawer from '../response/CreateResponseDrawer';
 import FileUpload from '../fileLibrary/FileUpload';
 import DisplayFiles from '../fileLibrary/DisplayFiles';
 import { onAlert } from '../../utils/alert';
-import DisplayResponseById from '../response/DisplayResponseById';
 import UnitQuantityInput from './UnitQuantityInput';
 import Board from './board/Board';
 import { defaultBoard } from './board/defaultBoard';
 import Diagram from '../syncfusion-diagram/Diagram';
 import { defaultDiagram } from '../syncfusion-diagram/defaultDiagram';
-import ReactFlow from '../react-flow/ReactFlow';
-import FieldConditionForm from './field/field-condition/FieldConditionForm';
+import FieldConditionForm, { SelectSubField } from './field/field-condition/FieldConditionForm';
 import 'react-phone-input-2/lib/style.css';
-import Grapesjs from '../../../pages/grapesjs';
 import Webpage from '../grapesjs/grapesOverlay';
+import DisplayValue from './DisplayValue';
+import ResponseDrawer from '../response/ResponseDrawer';
+import Signature from '../signature/Signature';
+import Card from '../card/Card';
+import CraftJSField from '../craftJS/craftJSField';
+import ConditionPart from './field/field-condition/ConditionPart';
+import ActionVariables from './actions/ActionVariables';
 
 export interface FieldProps {
   field: IField;
@@ -52,9 +65,21 @@ export interface FieldProps {
   setUnique?: any;
   responseId?: string;
   setUniqueLoading?: (args: boolean) => void;
+  onCancel?: () => void;
+  rules?: any;
+  inlineEdit?: boolean;
+  setValues?: () => void;
 }
 
 const objectId = generateObjectId();
+
+const getDefaultOptions = () => {
+  const options = {};
+  fieldProps?.forEach((fieldProp) => {
+    options[fieldProp] = null;
+  });
+  return options;
+};
 
 export default function Field({
   field,
@@ -66,16 +91,57 @@ export default function Field({
   setUnique,
   responseId,
   setUniqueLoading,
+  onCancel,
+  rules,
+  inlineEdit,
 }: FieldProps): any {
+  const [options, setOptions] = useState<any>(getDefaultOptions());
+
+  // variables for the template
+  const router = useRouter();
+  const { slug } = router.query;
+  const { data, error } = useGetFormBySlug(slug?.toString());
+  const [variables, setVariables] = useState([{ name: '', field: '', formId: null }]);
+
   useCheckUnique({
     formId,
     value,
-    options: field?.options,
+    field,
     setUnique,
     onAlert,
     responseId,
     setUniqueLoading,
   });
+
+  useEffect(() => {
+    if (rules && Object.keys(rules)?.length > 0) {
+      getRuleValues();
+    }
+  }, [rules]);
+
+  const getRuleValues = () => {
+    Object.keys(rules)?.forEach((key) => {
+      const rule = rules[key];
+      let ruleValue = options?.[key] || null;
+      if (rule?.ruleType === 'If') {
+        //
+      } else {
+        if (rule?.value?.value === 'true') {
+          ruleValue = true;
+        }
+        if (rule?.value?.value === 'false') {
+          ruleValue = false;
+        }
+        if (rule?.value?.value === 'null') {
+          ruleValue = null;
+        }
+        if (rule?.value?.value === 'constantValue' && rule?.value?.constantValue) {
+          ruleValue = rule?.value?.constantValue;
+        }
+      }
+      setOptions((oldOptions) => ({ ...oldOptions, [key]: ruleValue }));
+    });
+  };
 
   const onChange = (payload) => {
     onChangeValue({ ...value, field: field?._id, ...payload });
@@ -86,6 +152,7 @@ export default function Field({
   };
 
   const [addOption, setAddOption] = useState({ showDrawer: false });
+  const [state, setState] = useState({ showResponseDrawer: false });
 
   const onChangeCheckbox = ({ target }) => {
     let newValues = [];
@@ -116,6 +183,7 @@ export default function Field({
             helperText={validation.errorMessage}
             allowCreate={field?.options?.selectAllowCreate}
             onlyMyResponses={field?.options?.showOptionCreatedByUser}
+            noAppIdFilter={field?.form?.name?.toLowerCase() === 'users'}
           />
         ) : field?.options?.showAsCheckbox ? (
           <>
@@ -140,7 +208,9 @@ export default function Field({
         ) : (
           <Select
             label={field?.label}
-            options={field?.options?.selectOptions}
+            options={
+              field?.options?.selectOfFieldProps ? fieldProps : field?.options?.selectOptions
+            }
             value={value?.value || value?.valueNumber?.toString() || ''}
             onChange={(newValue) => {
               let valueObject: any = {};
@@ -169,7 +239,6 @@ export default function Field({
         <div data-testid="date">
           <LocalizationProvider
             dateAdapter={AdapterMoment}
-
             //  libInstance={moment} utils={MomentUtils}
           >
             <div data-testid="date-picker">
@@ -242,15 +311,35 @@ export default function Field({
     }
     case 'richTextarea': {
       return (
-        <div data-testid="richTextarea">
-          <RichTextarea
-            value={value?.value || ''}
-            onChange={(newValue) => onChange({ value: newValue })}
-          />
-          {validation.error && (
-            <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
+        <>
+          {!inlineEdit && field?.label === 'Template *' && (
+            <>
+              {/* <ActionVariables
+                variables={value?.variables || [{ name: '', field: '', formId: null }]}
+                onVariablesChange={(newVariables) => {
+                  onChange({ ...value, variables: newVariables });
+                }}
+                formId={data?.getFormBySlug?._id}
+              /> */}
+              <ActionVariables
+                variables={variables}
+                onVariablesChange={(newVariables) => {
+                  setVariables(newVariables);
+                }}
+                formId={data?.getFormBySlug?._id}
+              />
+            </>
           )}
-        </div>
+          <div data-testid="richTextarea">
+            <RichTextarea
+              value={value?.value || ''}
+              onChange={(newValue) => onChange({ value: newValue })}
+            />
+            {validation.error && (
+              <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
+            )}
+          </div>
+        </>
       );
     }
     case 'webpage': {
@@ -261,6 +350,23 @@ export default function Field({
             value={value?.value || ''}
             onChange={(html) => onChange({ value: html })}
           />
+        </>
+      );
+    }
+    case 'signature': {
+      return (
+        <>
+          <Signature
+            value={value?.value || ''}
+            onChange={(dataUrl) => onChange({ value: dataUrl })}
+          />
+        </>
+      );
+    }
+    case 'card': {
+      return (
+        <>
+          <Card value={value?.value || ''} onChange={(card: string) => onChange({ value: card })} />
         </>
       );
     }
@@ -457,13 +563,30 @@ export default function Field({
         <>
           <div data-testid="response">
             {value?.response?._id ? (
-              <div data-testid="responseId">
-                <DisplayResponseById
-                  hideAuthor
-                  responseId={value?.response?._id}
-                  hideBreadcrumbs
-                  deleteCallBack={() => onChange({ field: field?._id, response: null })}
-                />
+              <div
+                data-testid="responseId"
+                className="mb-2 d-flex align-items-center justify-content-between"
+              >
+                <DisplayValue field={field} value={value} />
+                <div>
+                  <IconButton
+                    onClick={() =>
+                      setState((oldState) => ({ ...oldState, showResponseDrawer: true }))
+                    }
+                  >
+                    <Edit />
+                  </IconButton>
+                  <IconButton edge="end" onClick={() => onChange({ response: null })}>
+                    <Delete />
+                  </IconButton>
+                  <ResponseDrawer
+                    open={state.showResponseDrawer}
+                    onClose={() =>
+                      setState((oldState) => ({ ...oldState, showResponseDrawer: false }))
+                    }
+                    responseId={value?.response?._id}
+                  />
+                </div>
               </div>
             ) : (
               <>
@@ -475,21 +598,37 @@ export default function Field({
                       title={field?.label}
                       formId={field?.form?._id}
                       createCallback={(newResponse) => {
-                        onChange({ field: field?._id, response: newResponse });
-                        setAddOption({ ...addOption, showDrawer: false });
+                        if (field?.options?.dependentRelationship) {
+                          onCancel();
+                        } else {
+                          onChange({ field: field?._id, response: newResponse });
+                          setAddOption({ ...addOption, showDrawer: false });
+                        }
                       }}
                     />
                   )}
                 </div>
-                <Button
+                {/* <Button
+                  disabled={disabled}
                   data-testid="response-button"
                   variant="contained"
                   size="small"
                   className="mt-2"
                   onClick={() => setAddOption({ ...addOption, showDrawer: true })}
                 >
-                  Add
-                </Button>
+                  Add Response
+                </Button> */}
+                <Tooltip title="Add Response">
+                  <IconButton
+                    data-testid="response-button"
+                    onClick={() => setAddOption({ ...addOption, showDrawer: true })}
+                    size="small"
+                    color="primary"
+                    sx={{ border: '1px solid' }}
+                  >
+                    <Add />
+                  </IconButton>
+                </Tooltip>
               </>
             )}
           </div>
@@ -512,6 +651,32 @@ export default function Field({
               helperText={validation.errorMessage}
             />
           </div>
+        </>
+      );
+    }
+    case 'formField': {
+      return (
+        <>
+          <SelectForm
+            placeholder={`${field?.label} form`}
+            label={null}
+            value={value?.form}
+            onChange={(newValue) => {
+              const payload: any = { form: newValue };
+              if (value?.form?._id !== newValue?._id) {
+                payload.options = { ...value?.options, subField: null };
+              }
+              onChange(payload);
+            }}
+            error={validation.error}
+            helperText={validation.errorMessage}
+          />
+          {value?.form && (
+            <SelectSubField
+              subField={{ ...value?.options?.subField, formId: value?.form?._id }}
+              onChange={(subField) => onChange({ options: { ...value?.options, subField } })}
+            />
+          )}
         </>
       );
     }
@@ -554,7 +719,16 @@ export default function Field({
               _id={value?._id || objectId}
               editMode
               flow={value?.options?.flowDiagram}
-              onFlowChange={(flowDiagram) => onChange({ options: { flowDiagram } })}
+              onFlowChange={(flowDiagram) => {
+                onChange({ options: { flowDiagram } });
+              }}
+              noOverlay
+              diagramType={options?.diagramType}
+              // responseId={responseId}
+              // functionalityFlowDiagram={Boolean(field?.options?.functionalityFlowDiagram)}
+              // functionalityFlowDiagramConditions={
+              //   field?.options?.functionalityFlowDiagramConditions
+              // }
             />
             {validation.error && (
               <FormHelperText className="text-danger">{validation.errorMessage}</FormHelperText>
@@ -563,7 +737,18 @@ export default function Field({
         </>
       );
     }
+
     case 'condition': {
+      if (field?.options?.conditionRightPart) {
+        return (
+          <ConditionPart
+            conditionPart={value?.options?.conditions?.[0]?.right}
+            onConditionPartChange={(newConditionPart) =>
+              onChange({ options: { conditions: [{ right: newConditionPart }] } })
+            }
+          />
+        );
+      }
       return (
         <>
           <div data-testid="condition">
@@ -575,6 +760,18 @@ export default function Field({
         </>
       );
     }
+
+    case 'craftjs': {
+      return (
+        <>
+          <CraftJSField
+            EncodedPageContent={value?.value}
+            onChange={(PageContentJSON) => onChange({ field: field?._id, value: PageContentJSON })}
+          />
+        </>
+      );
+    }
+
     default: {
       const textValidation = validateValue(validate, value, {
         ...field,

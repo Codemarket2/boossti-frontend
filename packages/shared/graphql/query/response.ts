@@ -1,14 +1,14 @@
 import { gql } from '@apollo/client';
 
 export const GET_RESPONSE = gql`
-  query getResponse($_id: ID!) {
-    getResponse(_id: $_id) {
+  query getResponse($_id: ID!, $appId: ID) {
+    getResponse(_id: $_id, appId: $appId) {
       _id
       formId
       count
       appId
-      installId
-      workFlowFormResponseParentId
+      workflowId
+      parentResponseId
       values {
         _id
         field
@@ -40,7 +40,7 @@ export const GET_RESPONSE = gql`
           values {
             field
             value
-            valueNumber
+            # valueNumber
           }
         }
         options
@@ -60,14 +60,14 @@ export const GET_RESPONSE = gql`
 `;
 
 export const GET_RESPONSE_BY_COUNT = gql`
-  query getResponseByCount($formId: ID!, $count: Int!) {
-    getResponseByCount(formId: $formId, count: $count) {
+  query getResponseByCount($formId: ID!, $count: Int!, $appId: ID) {
+    getResponseByCount(formId: $formId, count: $count, appId: $appId) {
       _id
       formId
       count
       appId
-      installId
-      workFlowFormResponseParentId
+      workflowId
+      parentResponseId
       values {
         _id
         field
@@ -99,7 +99,7 @@ export const GET_RESPONSE_BY_COUNT = gql`
           values {
             field
             value
-            valueNumber
+            # valueNumber
           }
         }
         options
@@ -122,8 +122,8 @@ export const GET_RESPONSES = gql`
   query getResponses(
     $formId: ID!
     $appId: ID
-    $installId: ID
-    $workFlowFormResponseParentId: ID
+    $parentResponseId: ID
+    $workflowId: ID
     $page: Int
     $limit: Int
     $search: String
@@ -134,8 +134,8 @@ export const GET_RESPONSES = gql`
     getResponses(
       formId: $formId
       appId: $appId
-      installId: $installId
-      workFlowFormResponseParentId: $workFlowFormResponseParentId
+      parentResponseId: $parentResponseId
+      workflowId: $workflowId
       page: $page
       limit: $limit
       search: $search
@@ -149,8 +149,8 @@ export const GET_RESPONSES = gql`
         formId
         count
         appId
-        installId
-        workFlowFormResponseParentId
+        workflowId
+        parentResponseId
         values {
           _id
           field
@@ -180,9 +180,10 @@ export const GET_RESPONSES = gql`
           response {
             _id
             values {
+              # _id
               field
               value
-              valueNumber
+              # valueNumber
             }
           }
           options
@@ -214,8 +215,8 @@ export const GET_MY_RESPONSES = gql`
         }
         count
         appId
-        installId
-        workFlowFormResponseParentId
+        workflowId
+        parentResponseId
         values {
           _id
           field
@@ -247,7 +248,7 @@ export const GET_MY_RESPONSES = gql`
             values {
               field
               value
-              valueNumber
+              # valueNumber
             }
           }
           options

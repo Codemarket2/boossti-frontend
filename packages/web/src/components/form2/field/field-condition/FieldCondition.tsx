@@ -1,5 +1,6 @@
 import { ICondition, IField } from '@frontend/shared/types/form';
 import Add from '@mui/icons-material/Add';
+import Delete from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
@@ -40,6 +41,9 @@ export default function FieldCondition({
                 Condition
                 <IconButton size="small" onClick={() => setState({ ...state, showForm: true })}>
                   <Edit fontSize="small" />
+                </IconButton>
+                <IconButton color="error" size="small" onClick={() => onConditionsChange(null)}>
+                  <Delete fontSize="small" />
                 </IconButton>
               </Typography>
               <DisplayFieldCondition

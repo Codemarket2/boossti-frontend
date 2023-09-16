@@ -1,12 +1,14 @@
 // import Link from 'next/link';
-import { Fragment } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import moment from 'moment';
 import Avatar from '@mui/material/Avatar';
-import { Box, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import { IField } from '@frontend/shared/types/form';
 import slugify from 'slugify';
+import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUp';
 import DisplayRichText from '../common/DisplayRichText';
-import { ShowResponseLabel } from '../response/ResponseDrawer';
+// import { ShowResponseLabel } from '../response/ResponseDrawer';
 // import PageDrawer from '../template/PageDrawer';
 import ImageList from '../post/ImageList';
 import DisplayFiles from '../fileLibrary/DisplayFiles';
@@ -17,12 +19,17 @@ import ReactFlow from '../react-flow/ReactFlow';
 // import DisplayFormulaValue from './formula/DisplayFormulaValue';
 import DisplayFieldCondition from './field/field-condition/DisplayFieldCondition';
 import GrapesOverlay from '../grapesjs/grapesOverlay';
+import DisplaySignature from '../signature/DisplaySignature';
+import { PageViewerOverlayBtn as CraftsJSPageViewer } from '../craftJS/craftJSPageViewer';
+import DisplayResponseById from '../response/DisplayResponseById';
+import DisplayCard from '../card/DisplayCard';
 
 interface IProps {
   field: Partial<IField>;
   value: any;
   imageAvatar?: boolean;
   verticalView?: boolean;
+  onClickResponse?: (vieMore: boolean) => void;
 }
 
 export default function DisplayValue({
@@ -30,9 +37,12 @@ export default function DisplayValue({
   value: tempValue,
   imageAvatar,
   verticalView,
+  onClickResponse,
 }: IProps) {
   const value: any = { ...tempValue };
-
+  const [state, setState] = useState({
+    viewMoreResponse: false,
+  });
   if (typeof value?.options === 'string') {
     value.options = JSON.parse(value?.options);
   }
@@ -56,21 +66,59 @@ export default function DisplayValue({
   //   return <DisplayFormulaValue formula={field?.options?.formula} />;
   // }
 
-  switch (field.fieldType) {
+  const ViewMoreButton = (
+    <Button
+      size="small"
+      endIcon={state.viewMoreResponse ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+      onClick={() =>
+        setState((oldState) => ({ ...oldState, viewMoreResponse: !state.viewMoreResponse }))
+      }
+      className="mb-2"
+    >
+      {/* View {state.viewMoreResponse ? 'Less' : 'More'} */}
+    </Button>
+  );
+
+  switch (field?.fieldType) {
     case 'text':
     case 'textarea':
     case 'url':
     case 'email':
     case 'password':
       return <span data-testid="text-output">{value?.value}</span>;
-    case 'response':
-      return <ShowResponseLabel formField={field.options?.formField} response={value?.response} />;
+    case 'response': {
+      return (
+        <>
+          <div style={state.viewMoreResponse ? {} : { maxHeight: '158px', overflow: 'hidden' }}>
+            <DisplayResponseById
+              hideAuthor
+              hideDelete
+              hideBreadcrumbs
+              responseId={value?.response?._id}
+              viewLess={!state.viewMoreResponse}
+              handleViewLess={(viewMore: boolean) => {
+                setState({ ...state, viewMoreResponse: viewMore });
+              }}
+            />
+          </div>
+          {ViewMoreButton}
+        </>
+      );
+      // return (
+      //   <ShowResponseLabel
+      //     formId={field?.form?._id}
+      //     formField={field.options?.formField}
+      //     response={value?.response}
+      //     onClickResponse={onClickResponse}
+      //   />
+      // );
+    }
     case 'form':
       return value?.form?.name ? (
         <a
           target="_blank"
           rel="noreferrer"
-          href={`/forms/${slugify(value?.form?.name, { lower: true })}`}
+          href={`/form/${slugify(value?.form?.name, { lower: true })}`}
         >
           <Typography color="primary">{value?.form?.name}</Typography>
         </a>
@@ -80,7 +128,22 @@ export default function DisplayValue({
     case 'link':
       return <a href={value?.value}>{value?.value}</a>;
     case 'richTextarea':
-      return <DisplayRichText value={value?.value} />;
+      return (
+        <>
+          <div
+            style={
+              verticalView
+                ? {}
+                : state.viewMoreResponse
+                ? {}
+                : { maxHeight: '158px', overflow: 'hidden' }
+            }
+          >
+            <DisplayRichText value={value?.value} />
+          </div>
+          {!verticalView && <>{ViewMoreButton}</>}
+        </>
+      );
     case 'date':
       return (
         <span data-testid="date-output">
@@ -154,7 +217,9 @@ export default function DisplayValue({
     case 'diagram':
       return <DisplayDiagram diagram={value?.options?.diagram} />;
     case 'flowDiagram':
-      return <ReactFlow _id={value?._id} flow={value?.options?.flowDiagram} />;
+      return (
+        <ReactFlow _id={value?._id} flow={value?.options?.flowDiagram} noOverlay={verticalView} />
+      );
     case 'condition':
       return <DisplayFieldCondition conditions={value?.options?.conditions} />;
     case 'webpage':
@@ -163,6 +228,22 @@ export default function DisplayValue({
           <GrapesOverlay value={value?.value} />
         </div>
       );
+    case 'signature':
+      return <DisplaySignature value={value?.value} />;
+    case 'card':
+      return <DisplayCard value={value?.value} />;
+    case 'formField':
+      return (
+        <div>
+          <DisplayFieldCondition
+            conditions={[
+              { left: value?.options?.subField, operator: null, right: null, conditionType: null },
+            ]}
+          />
+        </div>
+      );
+    case 'craftjs':
+      return <CraftsJSPageViewer PageContent={value?.value} />;
     default:
       return <>{value?.value}</>;
   }

@@ -8,17 +8,12 @@ import { stringifyValues } from '../section/updateSection';
 import { calculateSystemValues } from './calculateSystemValues';
 
 interface IProps extends IHooksProps {
-  workFlowFormResponseParentId?: string;
-  appId?: string;
-  installId?: string;
+  parentResponseId?: string;
+  workflowId?: string;
 }
 
-export function useCreateUpdateResponse({
-  onAlert,
-  appId,
-  installId,
-  workFlowFormResponseParentId,
-}: IProps) {
+export function useCreateUpdateResponse({ onAlert, workflowId, parentResponseId }: IProps) {
+  const setting = useSelector((state: any) => state?.setting);
   const [createMutation, { loading: createLoading }] = useMutation<
     { createResponse: IResponse },
     IResponse
@@ -49,9 +44,9 @@ export function useCreateUpdateResponse({
         values: stringifyValues(payload.values, true).map((m) =>
           JSON.parse(JSON.stringify(m), omitTypename),
         ),
-        appId,
-        installId,
-        workFlowFormResponseParentId,
+        appId: setting?.appResponse?._id,
+        workflowId,
+        parentResponseId,
       };
       let response;
       if (edit) {

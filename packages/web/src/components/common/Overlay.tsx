@@ -3,7 +3,7 @@ import Drawer from '@mui/material/Drawer';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
-import { ReactNode } from 'react';
+import { CSSProperties, ReactNode } from 'react';
 import Close from '@mui/icons-material/Close';
 
 interface IProps {
@@ -14,7 +14,9 @@ interface IProps {
   secondButton?: ReactNode;
   minWidth?: string;
   maxWidth?: string;
+  style?: CSSProperties;
   hideAppBar?: boolean;
+  anchor?: any;
 }
 
 export default function Overlay({
@@ -26,10 +28,12 @@ export default function Overlay({
   minWidth = '60vw',
   maxWidth = '85vw',
   hideAppBar = false,
+  style = {},
+  anchor = 'right', // defalut open from right side.
 }: IProps) {
   return (
-    <Drawer anchor="right" open={open}>
-      <div style={{ minWidth, maxWidth }}>
+    <Drawer anchor={anchor} open={open}>
+      <div style={{ minWidth, maxWidth, ...style }}>
         {!hideAppBar && (
           <AppBar color="transparent" position="static" elevation={1}>
             <Toolbar variant="dense">

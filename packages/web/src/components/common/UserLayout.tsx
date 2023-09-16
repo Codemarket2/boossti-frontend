@@ -4,10 +4,12 @@ import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import AuthRequired from './AuthRequired';
 import AppBar from './AppBar';
-import BottomBar from './BottomBar';
+// import BottomBar from './BottomBar';
 import Container from './Container';
+import NotFound from './NotFound';
+import FeedLayout from '../form2/feed/FeedLayout';
 
-const StyledPaper = styled(Paper)(({ theme }) => ({
+const StyledPaper = styled(Paper)(() => ({
   backgroundColor: `#F0F2F5 !important`,
   minHeight: '100vh !important',
 }));
@@ -17,6 +19,7 @@ interface IProps {
   authRequired?: boolean;
   mustAdmin?: boolean;
   container?: boolean;
+  feedLayout?: boolean;
 }
 
 const UserLayout = ({
@@ -24,15 +27,28 @@ const UserLayout = ({
   authRequired = false,
   mustAdmin = false,
   container = true,
+  feedLayout,
 }: IProps): any => {
-  const authenticated = useSelector(({ auth }: any) => auth.authenticated);
+  const { setting } = useSelector((state: any) => state);
+  // const { authenticated } = auth;
+
+  if (setting?.isApp) {
+    return <NotFound />;
+  }
+
+  const ChildComponent = feedLayout ? <FeedLayout>{children}</FeedLayout> : children;
+
   return (
     <StyledPaper elevation={0}>
       <AppBar />
       <Container maxWidth={container ? 'lg' : false}>
-        {authRequired ? <AuthRequired mustAdmin={mustAdmin}>{children}</AuthRequired> : children}
+        {authRequired ? (
+          <AuthRequired mustAdmin={mustAdmin}>{ChildComponent}</AuthRequired>
+        ) : (
+          ChildComponent
+        )}
       </Container>
-      {authenticated && <BottomBar />}
+      {/* {authenticated && <BottomBar />} */}
     </StyledPaper>
   );
 };

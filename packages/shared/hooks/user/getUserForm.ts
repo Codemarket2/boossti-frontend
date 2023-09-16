@@ -6,7 +6,7 @@ import { getFormBySlug } from '../form';
 export const useGetUserForm = () => {
   const dispatch = useDispatch();
   const getForm = async () => {
-    let userForm = await getFormBySlug(process.env.NEXT_PUBLIC_USER_FORM_SLUG);
+    let userForm: any = await getFormBySlug('users');
     const emailFieldId = getFieldByLabel('email', userForm?.fields)?._id;
     const firstNameFieldId = getFieldByLabel('First name', userForm?.fields)?._id;
     const lastNameFieldId = getFieldByLabel('Last name', userForm?.fields)?._id;
@@ -37,7 +37,7 @@ export const getUserAttributes = (userForm, userResponse) => {
 export const getUserName = (userForm, userResponse) => {
   let fullName = '';
   if (!userResponse?._id) {
-    fullName = 'Unauthorized';
+    fullName = 'Unauthenticated';
   } else {
     const user = getUserAttributes(userForm, userResponse);
     if (user?.firstName) {

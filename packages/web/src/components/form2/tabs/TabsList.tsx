@@ -45,7 +45,7 @@ export default function TabsList({
           </IconButton>
         </Tooltip>
       </div>
-      <FormFields title="Tabs" isWidget fields={tabs} setFields={onTabsChange} isTab />
+      <FormFields title="Tabs" isWorkflow fields={tabs} setFields={onTabsChange} isTab />
       {formAllTabs?.length > 0 && (
         <Paper variant="outlined" className="mt-2">
           <Typography variant="h5" className="p-2">
@@ -55,12 +55,12 @@ export default function TabsList({
           <List dense disablePadding>
             {formAllTabs?.map((tab) => (
               <ListItem key={tab?._id}>
-                <a target="_blank" rel="noreferrer" href={`/forms/${tab?.form?.slug}`}>
+                <a target="_blank" rel="noreferrer" href={`/form/${tab?.form?.slug}`}>
                   {tab?.label}
                 </a>
                 <ListItemSecondaryAction>
                   {/* @ts-ignore */}
-                  <a target="_blank" rel="noreferrer" href={`/forms/${tab?.parentForm?.slug}`}>
+                  <a target="_blank" rel="noreferrer" href={`/form/${tab?.parentForm?.slug}`}>
                     {/* @ts-ignore */}
                     <Tooltip title={`To edit this tab goto ${tab?.parentForm?.name} form`}>
                       <IconButton size="small">
@@ -88,7 +88,7 @@ export default function TabsList({
             <List dense disablePadding>
               {data?.getFormTabRelations?.map((form) => (
                 <ListItem key={form?._id}>
-                  <a target="_blank" rel="noreferrer" href={`/forms/${form?.slug}`}>
+                  <a target="_blank" rel="noreferrer" href={`/form/${form?.slug}`}>
                     {form?.name}
                   </a>
                 </ListItem>

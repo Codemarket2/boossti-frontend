@@ -162,29 +162,36 @@ export const GET_FORM_BY_SLUG = gql`
         }
       }
       settings
+      createdBy {
+        _id
+        values {
+          field
+          value
+        }
+      }
     }
   }
 `;
 
 export const GET_FORMS = gql`
-  query MyQuery($page: Int, $limit: Int, $search: String) {
-    getForms(page: $page, limit: $limit, search: $search) {
+  query MyQuery($page: Int, $limit: Int, $search: String, $isWorkflow: Boolean) {
+    getForms(page: $page, limit: $limit, search: $search, isWorkflow: $isWorkflow) {
       count
       data {
         _id
         name
         slug
-        # fields {
-        #   _id
-        #   label
-        #   fieldType
-        #   options
-        #   template {
-        #     _id
-        #     title
-        #     slug
-        #   }
-        # }
+        fields {
+          _id
+          # label
+          # fieldType
+          # options
+          # template {
+          #   _id
+          #   title
+          #   slug
+          # }
+        }
         # settings
         # published
         createdBy {

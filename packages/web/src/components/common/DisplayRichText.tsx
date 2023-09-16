@@ -9,6 +9,8 @@ type IProps = {
 };
 
 const StyledDiv = styled('div')(({ theme }) => ({
+  inlineSize: '100%',
+  overflowWrap: 'break-word',
   '& .iframe-container': {
     position: 'relative',
     paddingBottom: '56.25%',
@@ -21,6 +23,9 @@ const StyledDiv = styled('div')(({ theme }) => ({
     left: 0,
     width: '100%',
     height: '100%',
+  },
+  '& img': {
+    maxWidth: '100%',
   },
 }));
 

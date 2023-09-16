@@ -2,6 +2,7 @@ import { useState } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { IHooksProps } from '../../types/common';
+import { IConditionPart } from '../../types';
 
 const validationSchema = yup.object({
   active: yup.boolean(),
@@ -20,10 +21,10 @@ const validationSchema = yup.object({
     otherwise: yup.string(),
   }),
   receiverType: yup.string().label('Receiver').required(),
-  emailFieldId: yup.string().when('receiverType', {
+  emailFieldId: yup.object().when('receiverType', {
     is: (value) => value === 'emailField',
-    then: yup.string().label('Email field').required(),
-    otherwise: yup.string(),
+    then: yup.object().label('Email field').required(),
+    otherwise: yup.object().nullable(),
   }),
   receiverEmails: yup.array().when('actionType', {
     is: (value) => value === 'sendEmail',
@@ -128,7 +129,8 @@ type TActionType =
   | 'createSeoReport'
   | 'createSubDomainRoute53'
   | 'updateSubDomainRoute53'
-  | 'deleteSubDomainRoute53';
+  | 'deleteSubDomainRoute53'
+  | 'emailScrappingFromGoogleSeachAPI';
 
 type TFormValues = {
   active: boolean;
@@ -140,7 +142,7 @@ type TFormValues = {
   phoneFieldId: string;
   senderEmail: string;
   receiverType: string;
-  emailFieldId: string;
+  emailFieldId: IConditionPart;
   nameFieldId: string;
   receiverEmails: string[];
   variables: TVariables[];
@@ -166,6 +168,16 @@ type TFormValues = {
   noOfInvites: number;
   keyword: string;
   tag: string;
+  phoneNumber: string;
+  productid: string;
+  phoneID: number;
+  apiToken: string;
+  groupName: string;
+  whatsappMessage: string;
+  searchkeyword: string;
+  googleApiKey: string;
+  searchEngineId: string;
+  exactTerm: string;
 };
 
 const defaultFormValues: TFormValues = {
@@ -178,7 +190,7 @@ const defaultFormValues: TFormValues = {
   phoneFieldId: '',
   senderEmail: '',
   receiverType: 'formOwner',
-  emailFieldId: '',
+  emailFieldId: null,
   nameFieldId: '',
   receiverEmails: [],
   variables: [{ name: '', field: '', formId: null }],
@@ -204,6 +216,16 @@ const defaultFormValues: TFormValues = {
   noOfInvites: 0,
   keyword: '',
   tag: '',
+  phoneNumber: '',
+  productid: '',
+  phoneID: null,
+  apiToken: '',
+  groupName: '',
+  whatsappMessage: '',
+  searchkeyword: '',
+  googleApiKey: '',
+  searchEngineId: '',
+  exactTerm: '',
 };
 
 interface IProps extends IHooksProps {

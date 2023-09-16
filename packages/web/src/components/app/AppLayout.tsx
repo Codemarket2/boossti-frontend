@@ -8,8 +8,9 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { useSelector } from 'react-redux';
 import AppMenu from './AppMenu';
-import ErrorLoading from '../common/ErrorLoading';
 import AuthRequired from '../common/AuthRequired';
+import AppWrapper from './AppWrapper';
+import LogoutButton from '../common/LogoutButton';
 
 const drawerWidth = 200;
 
@@ -20,31 +21,21 @@ interface Props {
    */
   window?: () => Window;
   children: ReactNode;
-  isInstance?: boolean;
-  isAdmin?: boolean;
+  // isInstance?: boolean;
+  // isAdmin?: boolean;
 }
 
-export default function AppLayoutWrapper({
-  children,
-  isInstance,
-  isAdmin,
-}: {
-  children: ReactNode;
-  isInstance?: boolean;
-  isAdmin?: boolean;
-}) {
+export default function AppLayoutWrapper({ children }: { children: ReactNode }) {
   return (
     <AuthRequired>
-      <AppLayout isInstance={isInstance} isAdmin={isAdmin}>
-        {children}
-      </AppLayout>
+      <AppLayout>{children}</AppLayout>
     </AuthRequired>
   );
 }
 
 function AppLayout(props: Props) {
   const setting = useSelector((state: any) => state.setting);
-  const { window, children, isInstance, isAdmin } = props;
+  const { window, children } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = () => {
@@ -53,77 +44,73 @@ function AppLayout(props: Props) {
 
   const container = window !== undefined ? () => window().document.body : undefined;
 
-  if (!setting?.appResponse?._id || setting?.appError) {
-    return (
-      <ErrorLoading
-        error={setting?.appError && { message: 'App not found, go back to www.boossti.com' }}
-      />
-    );
-  }
-
   return (
-    <Box sx={{ display: 'flex' }}>
-      <AppBar
-        position="fixed"
-        sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-        }}
-      >
-        <Toolbar variant="dense">
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
+    <AppWrapper>
+      <Box sx={{ display: 'flex' }}>
+        <AppBar
+          position="fixed"
+          sx={{
+            width: { sm: `calc(100% - ${drawerWidth}px)` },
+            ml: { sm: `${drawerWidth}px` },
+          }}
+        >
+          <Toolbar variant="dense">
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { sm: 'none' } }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <div className="w-100 d-flex align-items-center justify-content-between">
+              <Typography variant="h6" noWrap component="div">
+                {setting?.appName}
+              </Typography>
+              <LogoutButton />
+            </div>
+          </Toolbar>
+        </AppBar>
+        <Box
+          component="nav"
+          sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+          aria-label="mailbox folders"
+        >
+          <Drawer
+            container={container}
+            variant="temporary"
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            ModalProps={{
+              keepMounted: true, // Better open performance on mobile.
+            }}
+            sx={{
+              display: { xs: 'block', sm: 'none' },
+              '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            }}
           >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            {setting?.appName}
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
-      >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-        <Drawer
-          container={container}
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-          sx={{
-            display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-          }}
+            <AppMenu />
+          </Drawer>
+          <Drawer
+            variant="permanent"
+            sx={{
+              display: { xs: 'none', sm: 'block' },
+              '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            }}
+            open
+          >
+            <AppMenu />
+          </Drawer>
+        </Box>
+        <Box
+          component="main"
+          sx={{ flexGrow: 1, p: 1, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
         >
-          <AppMenu isAdmin={isAdmin} isInstance={isInstance} />
-        </Drawer>
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-          }}
-          open
-        >
-          <AppMenu isAdmin={isAdmin} isInstance={isInstance} />
-        </Drawer>
+          <Toolbar variant="dense" />
+          {children}
+        </Box>
       </Box>
-      <Box
-        component="main"
-        sx={{ flexGrow: 1, p: 1, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
-      >
-        <Toolbar variant="dense" />
-        {children}
-      </Box>
-    </Box>
+    </AppWrapper>
   );
 }

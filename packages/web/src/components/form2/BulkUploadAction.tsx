@@ -1,14 +1,13 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useCreateBulkResponse } from '@frontend/shared/hooks/response';
 import { useState } from 'react';
-import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
-import IconButton from '@mui/material/IconButton';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 import { Button } from '@mui/material';
 import * as XLSX from 'xlsx';
 import BulkUploadForm from './BulkUploadForm';
 import { fileUpload } from '../../../../shared/utils/fileUpload';
+import Overlay from '../common/Overlay';
 
 interface IProps {
   form: any;
@@ -76,6 +75,7 @@ export default function BulkUploadAction({ form }: IProps) {
       setState({ ...state, fileData: files });
     } else setState(initialState);
   };
+
   const handleSubmit = async () => {
     try {
       const url = await fileUpload(selectedFile, '/csvDataFile');
@@ -102,67 +102,72 @@ export default function BulkUploadAction({ form }: IProps) {
 
   return (
     <>
-      <Typography variant="h6" className="d-flex align-items-center pl-2">
-        Bulk upload responses from file ( .xlsx, .csv, .xls)
-        {!state.showForm && (
-          <Tooltip title="bulk upload responses">
-            <IconButton
-              color="primary"
-              onClick={() => setState({ ...state, showForm: true })}
-              size="large"
-            >
-              <AddCircleIcon />
-            </IconButton>
-          </Tooltip>
-        )}
-      </Typography>
+      <Tooltip title="Bulk upload responses from file ( .xlsx, .csv, .xls)">
+        <Button
+          size="small"
+          // variant="outlined"
+          startIcon={<UploadFileIcon />}
+          onClick={() => setState({ ...state, showForm: true })}
+        >
+          Bulk upload
+        </Button>
+      </Tooltip>
       {state.showForm && (
-        <div className="p-4">
-          <input
-            accept=".csv,.xlsx,.xls"
-            style={{ display: 'none' }}
-            id="raised-button-file"
-            type="file"
-            name="file"
-            onChange={changeHandler}
-          />
-          <label htmlFor="raised-button-file">
-            <Button variant="outlined" component="span">
-              Select File
-            </Button>
-          </label>
-          <Button color="error" onClick={() => setState({ ...state, showForm: false })}>
-            Cancel
-          </Button>
-          {isFilePicked ? (
-            selectedFile?.map((File, i) => (
-              <div key={i} style={{ padding: '25px' }}>
-                <h3>File {i + 1}</h3>
-                <p>Filename: {File?.name}</p>
-                <p>Filetype: {File?.type}</p>
-                <p>Size in bytes: {File?.size}</p>
-                <p>lastModifiedDate: {File?.lastModifiedDate.toLocaleDateString()}</p>
-              </div>
-            ))
-          ) : (
-            <p>Select a file to show details</p>
+        <Overlay title="Bulk Upload" open={state.showForm} onClose={resetStates}>
+          {state.showForm && (
+            <div className="p-4">
+              <input
+                accept=".csv,.xlsx,.xls"
+                style={{ display: 'none' }}
+                id="raised-button-file"
+                type="file"
+                name="file"
+                onChange={changeHandler}
+              />
+              <label htmlFor="raised-button-file">
+                <Button variant="outlined" component="span">
+                  Select File
+                </Button>
+              </label>
+              <Button color="error" onClick={() => setState({ ...state, showForm: false })}>
+                Cancel
+              </Button>
+              {isFilePicked ? (
+                selectedFile?.map((File, i) => (
+                  <div key={i} style={{ padding: '25px' }}>
+                    <h3>File {i + 1}</h3>
+                    <p>Filename: {File?.name}</p>
+                    <p>Filetype: {File?.type}</p>
+                    <p>Size in bytes: {File?.size}</p>
+                    <p>lastModifiedDate: {File?.lastModifiedDate.toLocaleDateString()}</p>
+                  </div>
+                ))
+              ) : (
+                <p>Select a file to show details</p>
+              )}
+              {isFilePicked && selectedFile && (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  component="span"
+                  onClick={mapDataToField}
+                >
+                  {selectedFile.length > 1 ? 'Upload Files' : 'Map Fields'}
+                </Button>
+              )}
+            </div>
           )}
-          {isFilePicked && selectedFile && (
-            <Button variant="contained" color="primary" component="span" onClick={mapDataToField}>
-              {selectedFile.length > 1 ? 'Upload Files' : 'Map Fields'}
-            </Button>
+          {state?.fileData?.length > 0 && (
+            <BulkUploadForm
+              fields={form?.fields}
+              fileData={state.fileData}
+              handleSubmit={handleSubmit}
+              map={map}
+              setMap={setMap}
+              createLoading={createLoading}
+            />
           )}
-        </div>
-      )}
-      {state?.fileData?.length > 0 && (
-        <BulkUploadForm
-          fields={form?.fields}
-          fileData={state.fileData}
-          handleSubmit={handleSubmit}
-          map={map}
-          setMap={setMap}
-          createLoading={createLoading}
-        />
+        </Overlay>
       )}
     </>
   );

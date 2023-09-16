@@ -6,10 +6,11 @@ import { systemForms } from '../../utils/systemForms';
 import { getFormBySlug } from '../form';
 import { getResponses } from '../response/getResponse';
 
-export const useGetApp = (routerQuery) => {
+export const useGetApp = () => {
   const [isApp, setIsApp] = useState(false);
   const [loading, setLoading] = useState(true);
-  const { authenticated } = useSelector(({ auth }: any) => auth);
+  const authState = useSelector(({ auth }: any) => auth);
+  const { authenticated } = authState;
   const dispatch = useDispatch();
 
   const getApp = async (domain) => {
@@ -25,9 +26,11 @@ export const useGetApp = (routerQuery) => {
           'values.field': subdomainField?._id,
           'values.value': domain,
         }),
-        limit: 2,
+        limit: 1,
+        useGuestClient: !authenticated,
       });
       const appDetailsResponse = appDetailsResponses?.data?.[0];
+      if (!appDetailsResponse?._id) throw new Error('app details not found');
       const appForm = await getFormBySlug(systemForms.apps.slug);
       const appDetailsField = appForm?.fields?.find(
         (field) => field?.label?.toLowerCase() === systemForms?.apps?.fields?.appDetails,
@@ -40,6 +43,7 @@ export const useGetApp = (routerQuery) => {
           'values.response': appDetailsResponse?._id,
         }),
         limit: 1,
+        useGuestClient: !authenticated,
       });
       const appResponse = appsResponses?.data?.[0];
       if (!appResponse?._id) throw new Error('App not found');
@@ -49,7 +53,11 @@ export const useGetApp = (routerQuery) => {
       const appName = appDetailsResponse?.values?.find(
         (value) => value?.field === appNameField?._id,
       )?.value;
-      const appMenuItems = await getMenu({ appForm, appResponse });
+      // debugger;
+      let appMenuItems = [];
+      if (authenticated) {
+        appMenuItems = await getMenu({ appForm, appResponse });
+      }
       dispatch(
         updateSettingAction({
           isApp: true,
@@ -58,10 +66,13 @@ export const useGetApp = (routerQuery) => {
           appError: false,
           appName,
           appMenuItems,
+          isInstalled: true,
         }),
       );
     } catch (error) {
-      dispatch(updateSettingAction({ isApp: true, appError: true }));
+      // eslint-disable-next-line no-console
+      console.log({ error });
+      dispatch(updateSettingAction({ isApp: true, appError: error?.message }));
     }
   };
 
@@ -89,6 +100,7 @@ export const useGetApp = (routerQuery) => {
         _id: { $in: responseIds },
       }),
       limit: responseIds?.length,
+      useGuestClient: !authenticated,
     });
     const items = [];
     menuResponses?.data?.forEach((menuResponse) => {
@@ -96,44 +108,59 @@ export const useGetApp = (routerQuery) => {
       const form = menuResponse?.values?.find((value) => value?.field === menuFormField?._id);
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      items.push({ label: label?.value, formSlug: slugify(form?.form?.name, { lower: true }) });
+      items.push({
+        label: label?.value,
+        formSlug: slugify(form?.form?.name || '', { lower: true }),
+      });
     });
     return items;
   };
 
   useEffect(() => {
     let domain = window.location.host;
-    if (!['localhost:3000', 'www.boossti.com'].includes(domain)) {
+
+    if (
+      (!['www.boossti.com', 'localhost:3000'].includes(domain) &&
+        !domain?.includes('.cloudfront.net')) ||
+      process.env.NEXT_PUBLIC_APP_IsApp === 'true'
+    ) {
       setIsApp(true);
-      dispatch(updateSettingAction({ isApp: true, appError: false }));
+      dispatch(updateSettingAction({ isApp: true, appError: null }));
       if (domain?.includes('localhost')) {
-        domain = 'lab.boossti.com';
+        domain = process.env.NEXT_PUBLIC_APP_DOMAIN;
       }
       getApp(domain);
     }
+
     setLoading(false);
   }, [authenticated]);
 
-  const getInstance = async () => {
-    const appUsersForm = await getFormBySlug(systemForms?.appUsers?.slug);
-    const appUsersResponses = await getResponses({
-      formId: appUsersForm?._id,
-      valueFilter: JSON.stringify({ count: routerQuery?.instanceCount }),
-      limit: 10,
-    });
-    const appInstanceResponse = appUsersResponses?.data?.[0];
-    dispatch(
-      updateSettingAction({
-        appInstanceResponse,
-      }),
-    );
-  };
+  // const checkIfAppIsInstalled = async () => {
+  //   const appUsersForm = await getFormBySlug(systemForms?.appUsers?.slug);
+  //   if (!appUsersForm?._id) throw new Error('App User form not found.');
+  //   const userField = appUsersForm?.fields?.find(
+  //     (field) => field?.label?.toLowerCase() === systemForms?.appUsers?.fields?.user,
+  //   );
+  //   const appUsersResponses = await getResponses({
+  //     formId: appUsersForm?._id,
+  //     valueFilter: JSON.stringify({
+  //       'values.field': userField?._id,
+  //       'values.response': authState?.attributes?.['custom:_id'],
+  //     }),
+  //     limit: 10,
+  //   });
+  //   const appInstanceResponse = appUsersResponses?.data?.[0];
+  //   if (appInstanceResponse?._id) {
+  //     return true;
+  //   }
+  //   return false;
+  // };
 
-  useEffect(() => {
-    if (routerQuery?.instanceCount) {
-      getInstance();
-    }
-  }, [routerQuery?.instanceCount]);
+  // useEffect(() => {
+  //   if (routerQuery?.instanceCount) {
+  //     getInstance();
+  //   }
+  // }, [routerQuery?.instanceCount]);
 
   return { isApp, loading };
 };
