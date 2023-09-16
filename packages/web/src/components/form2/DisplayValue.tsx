@@ -226,7 +226,6 @@ export default function DisplayValue({
       return (
         <div>
           <GrapesOverlay value={value?.value} />
-          
         </div>
       );
     case 'signature':
