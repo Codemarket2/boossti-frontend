@@ -17,13 +17,18 @@ export const fileUpload = async (files: any, path = '/common', compressedFile?: 
       const type = mimeType.split('/').shift();
       const extension = mimeType.split('/').pop();
       const key = `media${path}/${type}-${uuid()}${+new Date()}name-${name}.${extension}`;
-      const url = `https://${bucket}.s3.${region}.amazonaws.com/public/${key}`;
+      let url = `https://${bucket}.s3.${region}.amazonaws.com/public/${key}`;
       if (compressedFile) {
         file = await compressedFile(file);
+      }
+      // check for svg
+      if(url.includes(".svg+xml")){
+        url = url.replace(/(svg)\+(xml)/g, '$1%2B$2');
       }
       await Storage.put(key, file, {
         contentType: mimeType,
       });
+      
       urls.push(url);
     }
     return urls;
