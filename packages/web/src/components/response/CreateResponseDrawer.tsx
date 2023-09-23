@@ -19,7 +19,17 @@ export default function CreateResponseDrawer({
   parentResponseId,
 }: IProps): any {
   return (
-    <Overlay open={open} onClose={onClose} title={`Add ${title}`}>
+    <>
+      {/* <Overlay open={open} onClose={onClose} title={`Add ${title}`}>
+        <div className="p-2">
+          <DisplayForm
+            _id={formId}
+            createCallback={createCallback}
+            settings={{ widgetType: 'form' }}
+            parentResponseId={parentResponseId}
+          />
+        </div>
+      </Overlay> */}
       <div className="p-2">
         <DisplayForm
           _id={formId}
@@ -28,6 +38,6 @@ export default function CreateResponseDrawer({
           parentResponseId={parentResponseId}
         />
       </div>
-    </Overlay>
+    </>
   );
 }
