@@ -14,12 +14,12 @@ import ForgetPasswordForm from './ForgetPasswordForm';
 export default function SignInForm() {
   const { state, setState, formik } = useSignIn({ onAlert });
 
-  if (state.showForgetPasswordForm) {
+  if (!state.showForgetPasswordForm) {
     return (
       <>
-        <ForgetPasswordForm
+        {/* <ForgetPasswordForm
           handleShowSignInForm={() => setState({ ...state, showForgetPasswordForm: false })}
-        />
+        /> */}
       </>
     );
   } else if (state.verify) {
