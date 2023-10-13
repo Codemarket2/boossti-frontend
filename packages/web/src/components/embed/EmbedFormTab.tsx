@@ -26,6 +26,7 @@ interface EditEmbeddedSettingsProps {
 
 export const EmbedFormTab = ({ form, onChange, oldSettings }: EditEmbeddedSettingsProps) => {
   const [formSettings, setFormSettings] = useState<DisplayFormSettings>(oldSettings || {});
+  const [viewTab, setViewTab] = useState<boolean>(false);
   const [tabSettings, setTabSettings] = useState({
     iframeTag: getEmbedLink({
       FormSettings: formSettings,
@@ -82,13 +83,9 @@ export const EmbedFormTab = ({ form, onChange, oldSettings }: EditEmbeddedSettin
             >
               Copy
             </Button>
-            <Button
-              variant="contained"
-              onClick={() =>
-                setTabSettings((prev) => ({ ...prev, showFormSettings: !prev.showFormSettings }))
-              }
-            >
-              {tabSettings.showFormSettings ? 'Hide' : 'Show'} Form Settings
+            <Button variant="contained" onClick={() => setViewTab(!viewTab)}>
+              {viewTab ? 'Hide ' : 'Show '}
+              Customize
             </Button>
 
             <Button
@@ -102,14 +99,32 @@ export const EmbedFormTab = ({ form, onChange, oldSettings }: EditEmbeddedSettin
           </Stack>
         </Paper>
 
-        {tabSettings.showFormSettings && (
-          <Paper variant="outlined" className="p-2">
-            <PreviewFormSetting
-              formId={form?._id}
-              settings={formSettings}
-              state={form}
-              onChange={(newSettings) => setFormSettings({ ...formSettings, ...newSettings })}
-            />
+        {viewTab && (
+          <Paper>
+            <Stack direction="row" spacing={3}>
+              <Button
+                variant="contained"
+                onClick={() =>
+                  setTabSettings((prev) => ({ ...prev, showFormSettings: !prev.showFormSettings }))
+                }
+              >
+                {' '}
+                {tabSettings.showFormSettings ? 'Hide' : 'Show'} Settings
+              </Button>
+
+              <Button variant="contained">Fields</Button>
+            </Stack>
+
+            {tabSettings.showFormSettings && (
+              <Paper variant="outlined" className="p-2">
+                <PreviewFormSetting
+                  formId={form?._id}
+                  settings={formSettings}
+                  state={form}
+                  onChange={(newSettings) => setFormSettings({ ...formSettings, ...newSettings })}
+                />
+              </Paper>
+            )}
           </Paper>
         )}
 

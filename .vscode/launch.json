@@ -6,7 +6,11 @@
       "type": "chrome",
       "webRoot": "${workspaceFolder}/packages/web",
       "request": "launch",
-      "url": "http://localhost:3000"
+      "url": "http://localhost:3000",
+      "skipFiles": [
+        "${workspaceFolder}/node_modules/**/*.js",
+        "<node_internals>/**/*.js"
+      ]
     },
     {
       "name": "Next.js: debug full stack",
