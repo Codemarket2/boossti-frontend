@@ -7,6 +7,9 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Paper from '@mui/material/Paper';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
 
 // SHARED
 import { IForm } from '@frontend/shared/types';
@@ -14,9 +17,12 @@ import { IForm } from '@frontend/shared/types';
 // WEB
 import { DisplayForm, DisplayFormSettings } from '../form2/DisplayForm';
 import PreviewFormSetting from '../form2/FormSetting';
+import FormFields from '../form2/FormFields';
 
 // EMBED SPECIFIC LIBS
 import { CopytoClipboard, getEmbedLink } from './embedLibs';
+import { FormField } from '../../stories/Field.stories';
+import { TabPanel } from '../common/ImagePicker2';
 
 interface EditEmbeddedSettingsProps {
   form: IForm;
@@ -27,6 +33,7 @@ interface EditEmbeddedSettingsProps {
 export const EmbedFormTab = ({ form, onChange, oldSettings }: EditEmbeddedSettingsProps) => {
   const [formSettings, setFormSettings] = useState<DisplayFormSettings>(oldSettings || {});
   const [viewTab, setViewTab] = useState<boolean>(false);
+  const [viewField, setViewField] = useState<boolean>(false);
   const [tabSettings, setTabSettings] = useState({
     iframeTag: getEmbedLink({
       FormSettings: formSettings,
@@ -97,37 +104,61 @@ export const EmbedFormTab = ({ form, onChange, oldSettings }: EditEmbeddedSettin
               {tabSettings.showFormPreview ? 'Hide' : 'Show'} Form Preview
             </Button>
           </Stack>
+          {viewTab && (
+            <TabContext value="1">
+              <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                <Tabs>
+                  <Tab
+                    onClick={() =>
+                      setTabSettings((prev) => ({
+                        ...prev,
+                        showFormSettings: !prev.showFormSettings,
+                      }))
+                    }
+                    label={tabSettings.showFormSettings ? 'Hide Settings' : 'Show Settings'}
+                    value="1"
+                  />
+                  <Tab
+                    onClick={() => setViewField(!viewField)}
+                    label={viewField ? 'Hide Fields' : 'Show Fields'}
+                    value="2"
+                  />
+                </Tabs>
+              </Box>
+            </TabContext>
+          )}
         </Paper>
-
-        {viewTab && (
-          <Paper>
-            <Stack direction="row" spacing={3}>
-              <Button
-                variant="contained"
-                onClick={() =>
-                  setTabSettings((prev) => ({ ...prev, showFormSettings: !prev.showFormSettings }))
-                }
-              >
-                {' '}
-                {tabSettings.showFormSettings ? 'Hide' : 'Show'} Settings
-              </Button>
-
-              <Button variant="contained">Fields</Button>
-            </Stack>
-
-            {tabSettings.showFormSettings && (
-              <Paper variant="outlined" className="p-2">
+        <Paper>
+          {viewTab && (
+            <>
+              {tabSettings.showFormSettings && (
                 <PreviewFormSetting
                   formId={form?._id}
                   settings={formSettings}
                   state={form}
                   onChange={(newSettings) => setFormSettings({ ...formSettings, ...newSettings })}
                 />
-              </Paper>
-            )}
-          </Paper>
-        )}
+              )}
 
+              {viewField && (
+                <FormFields
+                  title="Fields"
+                  fields={form.fields}
+                  setFields={(newFields) => ({ fields: newFields })}
+                  parentFields={form.fields?.map((f) => ({
+                    ...f,
+                    formId: form._id,
+                    label: f?.label,
+                    formName: form?.name,
+                  }))}
+                  formId={form?._id}
+                  isWorkflow
+                  showSystemFields
+                />
+              )}
+            </>
+          )}
+        </Paper>
         {tabSettings.showFormPreview && (
           <Paper variant="outlined" className="p-2">
             <Box>
