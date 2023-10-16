@@ -21,8 +21,6 @@ import FormFields from '../form2/FormFields';
 
 // EMBED SPECIFIC LIBS
 import { CopytoClipboard, getEmbedLink } from './embedLibs';
-import { FormField } from '../../stories/Field.stories';
-import { TabPanel } from '../common/ImagePicker2';
 
 interface EditEmbeddedSettingsProps {
   form: IForm;
@@ -32,8 +30,11 @@ interface EditEmbeddedSettingsProps {
 
 export const EmbedFormTab = ({ form, onChange, oldSettings }: EditEmbeddedSettingsProps) => {
   const [formSettings, setFormSettings] = useState<DisplayFormSettings>(oldSettings || {});
+
   const [viewTab, setViewTab] = useState<boolean>(false);
+  const [viewSettings, setViewSettings] = useState<boolean>(false);
   const [viewField, setViewField] = useState<boolean>(false);
+
   const [tabSettings, setTabSettings] = useState({
     iframeTag: getEmbedLink({
       FormSettings: formSettings,
@@ -91,10 +92,8 @@ export const EmbedFormTab = ({ form, onChange, oldSettings }: EditEmbeddedSettin
               Copy
             </Button>
             <Button variant="contained" onClick={() => setViewTab(!viewTab)}>
-              {viewTab ? 'Hide ' : 'Show '}
               Customize
             </Button>
-
             <Button
               variant="contained"
               onClick={() =>
@@ -104,34 +103,42 @@ export const EmbedFormTab = ({ form, onChange, oldSettings }: EditEmbeddedSettin
               {tabSettings.showFormPreview ? 'Hide' : 'Show'} Form Preview
             </Button>
           </Stack>
+
           {viewTab && (
             <TabContext value="1">
               <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs>
                   <Tab
-                    onClick={() =>
+                    onClick={() => {
                       setTabSettings((prev) => ({
                         ...prev,
                         showFormSettings: !prev.showFormSettings,
-                      }))
-                    }
-                    label={tabSettings.showFormSettings ? 'Hide Settings' : 'Show Settings'}
-                    value="1"
+                      }));
+                      if (viewField) {
+                        setViewField(false);
+                      }
+                      setViewSettings(!viewSettings); // Onclick Event to decide which setting to show when tabs are clicked
+                    }}
+                    label="Settings"
                   />
+
                   <Tab
-                    onClick={() => setViewField(!viewField)}
-                    label={viewField ? 'Hide Fields' : 'Show Fields'}
-                    value="2"
+                    onClick={() => {
+                      if (viewSettings) {
+                        setViewSettings(false);
+                      }
+                      setViewField(!viewField); // Onclick Event to decide which setting to show when tabs are clicked
+                    }}
+                    label="Fields"
                   />
                 </Tabs>
               </Box>
             </TabContext>
           )}
-        </Paper>
-        <Paper>
+
           {viewTab && (
             <>
-              {tabSettings.showFormSettings && (
+              {viewSettings && (
                 <PreviewFormSetting
                   formId={form?._id}
                   settings={formSettings}
@@ -139,7 +146,6 @@ export const EmbedFormTab = ({ form, onChange, oldSettings }: EditEmbeddedSettin
                   onChange={(newSettings) => setFormSettings({ ...formSettings, ...newSettings })}
                 />
               )}
-
               {viewField && (
                 <FormFields
                   title="Fields"
@@ -159,6 +165,7 @@ export const EmbedFormTab = ({ form, onChange, oldSettings }: EditEmbeddedSettin
             </>
           )}
         </Paper>
+
         {tabSettings.showFormPreview && (
           <Paper variant="outlined" className="p-2">
             <Box>
