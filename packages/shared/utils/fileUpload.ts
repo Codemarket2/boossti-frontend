@@ -22,13 +22,13 @@ export const fileUpload = async (files: any, path = '/common', compressedFile?: 
         file = await compressedFile(file);
       }
       // check for svg
-      if(url.includes(".svg+xml")){
+      if (url.includes('.svg+xml')) {
         url = url.replace(/(svg)\+(xml)/g, '$1%2B$2');
       }
       await Storage.put(key, file, {
         contentType: mimeType,
       });
-      
+
       urls.push(url);
     }
     return urls;
