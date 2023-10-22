@@ -66,6 +66,7 @@ export default function FlowDiagramTab({ form }: FlowDiagramTabProps) {
           nodes: getNodes(),
           edges: getEdges(),
         }}
+        // onFlowChange = {(flow) => {console.log(flow)}}
       />
     </div>
   );
