@@ -1,5 +1,5 @@
 import { useGetFormBySlug } from '@frontend/shared/hooks/form';
-import { useGetResponses, useDeleteResponse } from '@frontend/shared/hooks/response';
+import { useGetResponses, useGetResponse } from '@frontend/shared/hooks/response';
 import Form from '../src/components/form2/Form';
 import ResponseList, { IResponseList } from '../src/components/response/ResponseList';
 
@@ -9,10 +9,11 @@ export default function view() {
 }
 
 export function GetResponseValue({ formData }: any) {
-  const { data, error } = use;
+  const { data, error } = useGetResponses({ formId: formData?._id });
   return (
     <>
       <ResponseList form={formData} />
+      <p>{JSON.stringify(data?.getResponses?.data[1].values[1].value)}</p>
     </>
   );
 }
