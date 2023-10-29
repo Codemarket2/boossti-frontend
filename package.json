@@ -40,6 +40,7 @@
   },
   "dependencies": {
     "caniuse-lite": "^1.0.30001415",
+    "destack": "^2.1.4",
     "dotenv": "^16.3.1",
     "flag": "^5.0.1",
     "react-native": "0.64.1",
