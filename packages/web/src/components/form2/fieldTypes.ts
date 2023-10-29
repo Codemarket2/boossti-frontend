@@ -122,6 +122,10 @@ type CraftJs = {
   label: 'CraftJS';
   value: 'craftjs';
 };
+type ReactGridLayout = {
+  label: 'ReactGridLayout';
+  value: 'reactgridlayout';
+};
 
 export type TFieldType =
   | FormFieldType
@@ -152,7 +156,8 @@ export type TFieldType =
   | SignatureType
   | Webpage
   | CardType
-  | CraftJs;
+  | CraftJs
+  | ReactGridLayout;
 
 export const getFormFieldTypes = (isWidget: boolean): TFieldType[] => {
   if (isWidget) {
@@ -197,4 +202,5 @@ export const fieldTypes: TFieldType[] = [
   { label: 'Signature', value: 'signature' },
   { label: 'Card', value: 'card' },
   { label: 'CraftJS', value: 'craftjs' },
+  { label: 'ReactGridLayout', value: 'reactgridlayout' },
 ];

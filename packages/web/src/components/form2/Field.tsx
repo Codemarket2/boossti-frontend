@@ -23,6 +23,7 @@ import { generateObjectId } from '@frontend/shared/utils/objectId';
 import { fieldProps } from '@frontend/shared/utils/fieldProps';
 import Add from '@mui/icons-material/Add';
 import Tooltip from '@mui/material/Tooltip';
+import ResponsiveGridLayout, { WidthProvider, Responsive } from 'react-grid-layout';
 import ReactFlow from '../react-flow/ReactFlow';
 import RichTextarea from '../common/RichTextarea2';
 import DisplayRichText from '../common/DisplayRichText';
@@ -52,6 +53,19 @@ import Card from '../card/Card';
 import CraftJSField from '../craftJS/craftJSField';
 import ConditionPart from './field/field-condition/ConditionPart';
 import ActionVariables from './actions/ActionVariables';
+// import GridLayout from "react-grid-layout";
+
+import DesignTab from './design/DesignTab';
+import FormList from './FormList';
+
+const initialState = {
+  layouts: {},
+  styles: {},
+  selectedField: null,
+  selectedElement: null,
+  layoutEdit: true,
+  editMode: false,
+};
 
 export interface FieldProps {
   field: IField;
@@ -70,7 +84,7 @@ export interface FieldProps {
   inlineEdit?: boolean;
   setValues?: () => void;
 }
-
+const ResponsiveReactGridLayout = WidthProvider(Responsive);
 const objectId = generateObjectId();
 
 const getDefaultOptions = () => {
@@ -102,7 +116,11 @@ export default function Field({
   const { slug } = router.query;
   const { data, error } = useGetFormBySlug(slug?.toString());
   const [variables, setVariables] = useState([{ name: '', field: '', formId: null }]);
-
+  const layout = [
+    { i: 'a', x: 0, y: 0, w: 1, h: 2, static: true },
+    { i: 'b', x: 1, y: 0, w: 3, h: 2, minW: 2, maxW: 4 },
+    { i: 'c', x: 4, y: 0, w: 1, h: 2 },
+  ];
   useCheckUnique({
     formId,
     value,
@@ -768,6 +786,29 @@ export default function Field({
             EncodedPageContent={value?.value}
             onChange={(PageContentJSON) => onChange({ field: field?._id, value: PageContentJSON })}
           />
+        </>
+      );
+    }
+
+    case 'reactgridlayout': {
+      const layouts = [
+        { i: 'a', x: 0, y: 500, w: 100, h: 5, static: true },
+        { i: 'b', x: 1, y: 500, w: 300, h: 2, minW: 2, maxW: 4 },
+        { i: 'c', x: 4, y: 500, w: 100, h: 2 },
+      ];
+      return (
+        <>
+          <ResponsiveGridLayout
+            className="layout"
+            layout={layout}
+            cols={12}
+            rowHeight={30}
+            width={1200}
+          >
+            <div key="b" style={{ backgroundColor: 'violet' }}>
+              <FormList hideHeader />
+            </div>
+          </ResponsiveGridLayout>
         </>
       );
     }
