@@ -72,7 +72,6 @@ function App({ Component, pageProps, emotionCache = clientSideEmotionCache }: My
   const dispatch = useDispatch();
   const router = useRouter();
   // useInitializeSystem();
-
   // useOneSignal();
   // useLogoHook();
   const { loading } = useGetApp();

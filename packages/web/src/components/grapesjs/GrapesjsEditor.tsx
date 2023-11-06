@@ -25,6 +25,7 @@ import FileLibraryWrapper from '../fileLibrary/FileLibraryWrapper';
 import FileLibrary from '../fileLibrary/FileLibrary';
 import { addTagToLink } from './addTagToLink';
 import footer2Plugin from './plugins/footer2plugin';
+import userFormPlugin from './plugins/userFormPlugin';
 
 export default function GrapesjsEditor({
   value,
@@ -357,6 +358,7 @@ export default function GrapesjsEditor({
         footer2Plugin,
         landingPagePlugin1,
         landingPagePlugin2,
+        userFormPlugin,
       ],
       pluginsOpts: {
         'gjs-blocks-basic': { flexGrid: true },
