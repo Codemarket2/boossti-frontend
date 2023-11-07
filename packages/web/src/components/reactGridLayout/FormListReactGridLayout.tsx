@@ -57,17 +57,18 @@ export default function FormListReactGridLayout({
         ) : (
           <List dense disablePadding>
             {data.getForms.data.map((form, i) => (
-              <Fragment key={form._id}>
-                {i > 0 && <Divider />}
-                <ResponsiveGridLayout
-                  className="layout"
-                  layout={layouts}
-                  cols={12}
-                  rowHeight={30}
-                  width={1200}
-                  isDraggable
-                  isResizable
-                >
+              <ResponsiveGridLayout
+                className="layout"
+                layout={layouts}
+                cols={12}
+                rowHeight={30}
+                width={1200}
+                isDraggable
+                isResizable
+              >
+                <Fragment key={form._id}>
+                  {i > 0 && <Divider />}
+
                   <Link href={customLink ? customLink(form) : `/form/${form.slug}`}>
                     <ListItem button selected={form?.slug === selectedForm}>
                       <ListItemText
@@ -78,8 +79,8 @@ export default function FormListReactGridLayout({
                       />
                     </ListItem>
                   </Link>
-                </ResponsiveGridLayout>
-              </Fragment>
+                </Fragment>
+              </ResponsiveGridLayout>
             ))}
           </List>
         )}
