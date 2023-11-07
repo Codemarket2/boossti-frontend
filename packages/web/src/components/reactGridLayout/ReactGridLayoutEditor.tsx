@@ -2,6 +2,7 @@ import React from 'react';
 import ResponsiveGridLayout, { WidthProvider, Responsive } from 'react-grid-layout';
 import FormList from '../form2/FormList';
 import { DisplayForm } from '../form2/DisplayForm';
+import FormListReactGridLayout from './FormListReactGridLayout';
 
 const ReactGridLayoutEditor = () => {
   const layout = [
@@ -22,22 +23,9 @@ const ReactGridLayoutEditor = () => {
           <FormList hideHeader />
         </div>
         <div key="b" style={{ backgroundColor: 'violet' }}>
-          <DisplayForm
-            slug="users"
-            settings={{ widgetType: 'form', whoCanSubmit: 'all' }}
-            modifyForm={(form) => {
-              const newForm = { ...form };
-              newForm.fields = newForm?.fields?.map((field) => {
-                const newField = { ...field };
-                if (newField?.label?.toLowerCase() === 'roles') {
-                  newField.options.hidden = true;
-                }
-                return newField;
-              });
-              return newForm;
-            }}
-          />
+          <FormListReactGridLayout hideHeader />
         </div>
+
         <div key="a" style={{ backgroundColor: 'violet' }}>
           <DisplayForm
             slug="address"
