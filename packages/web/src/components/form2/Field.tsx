@@ -57,6 +57,7 @@ import ActionVariables from './actions/ActionVariables';
 
 import DesignTab from './design/DesignTab';
 import FormList from './FormList';
+import ReactGridLayoutEditor from '../reactGridLayout/ReactGridLayoutEditor';
 
 const initialState = {
   layouts: {},
@@ -791,28 +792,8 @@ export default function Field({
     }
 
     case 'reactgridlayout': {
-      const layouts = [
-        { i: 'a', x: 0, y: 500, w: 100, h: 5, static: true },
-        { i: 'b', x: 1, y: 500, w: 300, h: 2, minW: 2, maxW: 4 },
-        { i: 'c', x: 4, y: 500, w: 100, h: 2 },
-      ];
-      return (
-        <>
-          <ResponsiveGridLayout
-            className="layout"
-            layout={layout}
-            cols={12}
-            rowHeight={30}
-            width={1200}
-          >
-            <div key="b" style={{ backgroundColor: 'violet' }}>
-              <FormList hideHeader />
-            </div>
-          </ResponsiveGridLayout>
-        </>
-      );
+      return <ReactGridLayoutEditor />;
     }
-
     default: {
       const textValidation = validateValue(validate, value, {
         ...field,
