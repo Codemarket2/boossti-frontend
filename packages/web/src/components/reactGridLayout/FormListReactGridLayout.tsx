@@ -56,17 +56,20 @@ export default function FormListReactGridLayout({
           <ErrorLoading error={error} />
         ) : (
           <List dense disablePadding>
-            {data.getForms.data.map((form, i) => (
-              <ResponsiveGridLayout
-                className="layout"
-                layout={layouts}
-                cols={12}
-                rowHeight={30}
-                width={1200}
-                isDraggable
-                isResizable
-              >
-                <div key="b" style={{ backgroundColor: 'violet' }}>
+            <ResponsiveGridLayout
+              className="layout"
+              cols={12}
+              rowHeight={30}
+              width={1200}
+              isDraggable
+              isResizable
+            >
+              {data.getForms.data.map((form, i) => (
+                <div
+                  key={i}
+                  style={{ backgroundColor: 'violet' }}
+                  data-grid={{ x: i * 10, y: i * 10 + 500, w: 300, h: 2, minW: 2, maxW: 4 }}
+                >
                   <Fragment key={form._id}>
                     {i > 0 && <Divider />}
 
@@ -82,8 +85,8 @@ export default function FormListReactGridLayout({
                     {/*   </Link> */}
                   </Fragment>
                 </div>
-              </ResponsiveGridLayout>
-            ))}
+              ))}
+            </ResponsiveGridLayout>
           </List>
         )}
       </Paper>
