@@ -57,7 +57,9 @@ import ActionVariables from './actions/ActionVariables';
 
 import DesignTab from './design/DesignTab';
 import FormList from './FormList';
+import { DisplayForm } from './DisplayForm';
 import ReactGridLayoutEditor from '../reactGridLayout/ReactGridLayoutEditor';
+import FormListReactGridLayout from '../reactGridLayout/FormListReactGridLayout';
 
 const initialState = {
   layouts: {},
@@ -792,8 +794,56 @@ export default function Field({
     }
 
     case 'reactgridlayout': {
-      return <ReactGridLayoutEditor />;
+      /* replace this art with the new componenet ReactGridLayoutEditor */
+
+      const layouts = [
+        { i: 'a', x: 0, y: 500, w: 100, h: 5, static: true },
+        { i: 'b', x: 1, y: 500, w: 300, h: 2, minW: 2, maxW: 4 },
+        { i: 'c', x: 500, y: 1000, w: 100, h: 2 },
+      ];
+      return (
+        <>
+          <div key="b" style={{ backgroundColor: 'violet' }}>
+            <FormListReactGridLayout hideHeader />
+          </div>
+          {/* <ResponsiveGridLayout
+            className="layout"
+            layout={layouts}
+            cols={12}
+            rowHeight={30}
+            width={1200}
+            isDraggable
+            isResizable
+           >
+            <div key="b" style={{ backgroundColor: 'violet' }}>
+            <DisplayForm
+          slug="users"
+          settings={{ widgetType: 'form', whoCanSubmit: 'all' }}
+          modifyForm={(form) => {
+            const newForm = { ...form };
+            newForm.fields = newForm?.fields?.map((field) => {
+              const newField = { ...field };
+              if (newField?.label?.toLowerCase() === 'roles') {
+                newField.options.hidden = true;
+              }
+              return newField;
+            });
+            return newForm;
+          }}
+        />
+        </div>
+            <div key="c" style={{ backgroundColor: 'violet' }}>
+              <FormList hideHeader />
+            </div>
+            <div key="a" style={{ backgroundColor: 'yellow' }}>
+              <FormListReactGridLayout hideHeader />
+            </div>
+          
+          </ResponsiveGridLayout> */}
+        </>
+      );
     }
+
     default: {
       const textValidation = validateValue(validate, value, {
         ...field,
