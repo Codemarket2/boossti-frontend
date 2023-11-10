@@ -3,6 +3,7 @@ import ResponsiveGridLayout, { WidthProvider, Responsive } from 'react-grid-layo
 import FormList from '../form2/FormList';
 import { DisplayForm } from '../form2/DisplayForm';
 import FormListReactGridLayout from './FormListReactGridLayout';
+import SidePanelToolBox from '../craftJS/SidePanelToolBox';
 
 const ReactGridLayoutEditor = () => {
   const layout = [
@@ -12,7 +13,19 @@ const ReactGridLayoutEditor = () => {
   ];
   return (
     <>
-      <ResponsiveGridLayout
+      <div key="b" style={{ backgroundColor: 'violet' }}>
+        <FormListReactGridLayout hideHeader />
+      </div>
+      {/* <div
+              style={{
+                display: 'flex',
+                flexFlow: 'row nowrap',
+                backgroundColor: 'gray',
+              }}
+            >
+    <SidePanelToolBox /> */}
+      {/* </div> */}
+      {/* <ResponsiveGridLayout
         className="layout"
         layout={layout}
         cols={12}
@@ -20,7 +33,7 @@ const ReactGridLayoutEditor = () => {
         width={1200}
       >
         <div key="c" style={{ backgroundColor: 'violet' }}>
-          <FormList hideHeader />
+        <SidePanelToolBox />
         </div>
         <div key="b" style={{ backgroundColor: 'violet' }}>
           <FormListReactGridLayout hideHeader />
@@ -43,7 +56,7 @@ const ReactGridLayoutEditor = () => {
             }}
           />
         </div>
-      </ResponsiveGridLayout>
+      </ResponsiveGridLayout> */}
     </>
   );
 };

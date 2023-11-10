@@ -4,7 +4,7 @@ import FormList from '../form2/FormList';
 import { DisplayForm } from '../form2/DisplayForm';
 import FormListReactGridLayout from './FormListReactGridLayout';
 
-const ReactGridLayoutEditor = () => {
+const ReactGridLayoutEditor2 = () => {
   const layout = [
     { i: 'a', x: 0, y: 0, w: 2, h: 5, static: true },
     { i: 'b', x: 3, y: 0, w: 3, h: 2, minW: 2, maxW: 4 },
@@ -12,7 +12,7 @@ const ReactGridLayoutEditor = () => {
   ];
   return (
     <>
-      <ResponsiveGridLayout
+      {/* <ResponsiveGridLayout
         className="layout"
         layout={layout}
         cols={12}
@@ -43,9 +43,9 @@ const ReactGridLayoutEditor = () => {
             }}
           />
         </div>
-      </ResponsiveGridLayout>
+      </ResponsiveGridLayout> */}
     </>
   );
 };
 
-export default ReactGridLayoutEditor;
+export default ReactGridLayoutEditor2;
