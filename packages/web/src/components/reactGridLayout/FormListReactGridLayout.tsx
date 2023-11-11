@@ -14,8 +14,17 @@ import { getCreatedAtDate } from '@frontend/shared/utils/date';
 import { getUserAttributes } from '@frontend/shared/hooks/user/getUserForm';
 import { useSelector } from 'react-redux';
 import ResponsiveGridLayout, { WidthProvider, Responsive } from 'react-grid-layout';
+import Popover from '@mui/material/Popover';
+import Button from '@mui/material/Button';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import GridOnIcon from '@mui/icons-material/GridOn';
+// import Typography from '@mui/material/Typography';
 import ErrorLoading from '../common/ErrorLoading';
 import ListHeader2 from '../common/ListHeader2';
+import FormFields from '../form2/FormFields';
+import Form from '../form2/Form';
 
 interface IProps {
   hideHeader?: boolean;
@@ -35,7 +44,7 @@ export default function FormListReactGridLayout({
   isWorkflow,
 }: IProps): any {
   const { data, error, loading, state, setState } = useGetForms({ isWorkflow });
-  // console.log(data);
+
   const router = useRouter();
   // eslint-disable-next-line @typescript-eslint/ban-types
   const [newitems, setNewitems] = useState([]);
@@ -58,7 +67,6 @@ export default function FormListReactGridLayout({
     // Add the new item to the layout
     setLayout((currentLayout) => [...currentLayout, newItem]);
     setNewitems((prev) => [...prev, itemData]);
-    console.log(newitems);
   };
 
   useEffect(() => {
@@ -70,6 +78,17 @@ export default function FormListReactGridLayout({
 
     setListToPopulate(matchingresult);
   }, [newitems]);
+
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const open = Boolean(anchorEl);
 
   return (
     <>
@@ -131,22 +150,110 @@ export default function FormListReactGridLayout({
               form && (
                 <div
                   key={i}
-                  style={{ backgroundColor: 'violet' }}
+                  style={{ backgroundColor: 'violet', display: 'flex' }}
                   draggable
-                  data-grid={{ x: 1, y: 10 + i, w: 100, h: 2, minW: 2, maxW: 4, resizable: false }}
+                  data-grid={{
+                    x: 1,
+                    y: 10 + i,
+                    w: 100,
+                    h: 2,
+                    minW: 2,
+                    maxW: 4,
+                    resizable: false,
+                  }}
                 >
                   <ListItemText
                     primary={form?.name}
                     secondary={`${getUserAttributes(userForm, form?.createdBy)?.firstName} ${
                       getUserAttributes(userForm, form?.createdBy)?.lastName
-                    } ${getCreatedAtDate(form?.createdAt)}`}
+                    } ${getCreatedAtDate(form?.createdAt)}
+                    
+                    
+                    `}
                   />
+                  <div style={{ height: '25px' }} onClick={handleClick}>
+                    <MoreVertIcon />
+                  </div>
                 </div>
               )
             );
           })}
         </ResponsiveGridLayout>
       </Paper>
+      <Popover
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        // style={{ height: '190px', width: '87px', backgroundColor: 'red' }}
+      >
+        <div
+          style={{
+            // height: '190px',
+
+            width: '120px',
+            display: 'flex',
+            flexDirection: 'column',
+            backgroundColor: '#e6dbdb',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              cursor: 'pointer',
+            }}
+          >
+            <EditIcon />
+            <p style={{ marginLeft: '5px', width: '89px', textAlign: 'center' }}>Edit</p>
+          </div>
+          <div
+            style={{
+              borderTop: '1px solid black ',
+
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              cursor: 'pointer',
+            }}
+          >
+            <DeleteIcon />
+            <p style={{ marginLeft: '5px', width: '89px', textAlign: 'center' }}>Delete</p>
+          </div>
+
+          <div
+            style={{
+              borderTop: '1px solid black ',
+
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              cursor: 'pointer',
+            }}
+          >
+            <EditIcon />
+            <p style={{ marginLeft: '5px', width: '89px', textAlign: 'center' }}>Edit Style</p>
+          </div>
+
+          <div
+            style={{
+              borderTop: '1px solid black ',
+
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              cursor: 'pointer',
+            }}
+          >
+            <GridOnIcon />
+            <p style={{ marginLeft: '5px', width: '89px', textAlign: 'center' }}>Grid</p>
+          </div>
+        </div>
+      </Popover>
     </>
   );
 }

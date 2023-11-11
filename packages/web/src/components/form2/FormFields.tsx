@@ -449,6 +449,7 @@ export default function FormFields({
               </>
             )}
           </List>
+
           <CRUDMenu
             hideDelete={state.field?.options?.default}
             show={state.showMenu}
