@@ -1,7 +1,8 @@
+/* eslint-disable no-console */
 /* eslint-disable react/jsx-wrap-multilines */
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useGetForms } from '@frontend/shared/hooks/form';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
@@ -34,9 +35,41 @@ export default function FormListReactGridLayout({
   isWorkflow,
 }: IProps): any {
   const { data, error, loading, state, setState } = useGetForms({ isWorkflow });
+  // console.log(data);
   const router = useRouter();
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  const [newitems, setNewitems] = useState([]);
+  const [listToPopulate, setListToPopulate] = useState([]);
 
   const userForm = useSelector(({ setting }: any) => setting.userForm);
+  const [layout, setLayout] = useState([]);
+
+  const onDrop = (layout, layoutItem, event) => {
+    // Retrieve the data from the event
+    const itemData = event.dataTransfer.getData('text/plain');
+    // eslint-disable-next-line no-console
+
+    // Replace the placeholder identifier with the actual data
+    const newItem = {
+      ...layoutItem,
+      i: itemData, // Replace '__dropping-elem__' with actual item data
+    };
+
+    // Add the new item to the layout
+    setLayout((currentLayout) => [...currentLayout, newItem]);
+    setNewitems((prev) => [...prev, itemData]);
+    console.log(newitems);
+  };
+
+  useEffect(() => {
+    const matchingresult = data?.getForms?.data?.map((form, i) => {
+      if (newitems.some((items2) => items2 === form._id)) {
+        return form;
+      }
+    });
+
+    setListToPopulate(matchingresult);
+  }, [newitems]);
 
   return (
     <>
@@ -51,44 +84,68 @@ export default function FormListReactGridLayout({
       >
         <Typography color="textPrimary">Forms</Typography>
       </ListHeader2>
-      <Paper variant="outlined">
+      <Paper variant="outlined" sx={{ display: 'flex' }}>
         {error || !data || !data.getForms ? (
           <ErrorLoading error={error} />
         ) : (
           <List dense disablePadding>
-            <ResponsiveGridLayout
-              className="layout"
-              cols={12}
-              rowHeight={30}
-              width={1200}
-              isDraggable
-              isResizable
-            >
-              {data.getForms.data.map((form, i) => (
+            {data.getForms.data.map((form, i) => (
+              <Fragment key={form._id}>
+                {i > 0 && <Divider />}
+
+                {/* <Link href={customLink ? customLink(form) : `/form/${form.slug}`}> */}
+                <ListItem button selected={form?.slug === selectedForm}>
+                  <div
+                    key={i}
+                    style={{ backgroundColor: 'violet' }}
+                    draggable
+                    onDragStart={(e) => e.dataTransfer.setData('text/plain', form._id)}
+                  >
+                    <ListItemText
+                      primary={form.name}
+                      secondary={`${getUserAttributes(userForm, form.createdBy)?.firstName} ${
+                        getUserAttributes(userForm, form.createdBy)?.lastName
+                      } ${getCreatedAtDate(form.createdAt)}`}
+                    />
+                  </div>
+                </ListItem>
+                {/*   </Link> */}
+              </Fragment>
+            ))}
+          </List>
+        )}
+
+        <ResponsiveGridLayout
+          className="layout"
+          cols={12}
+          rowHeight={30}
+          width={800}
+          isDraggable
+          isDroppable
+          onDrop={onDrop}
+          style={{ border: '1px solid', width: '50vw', height: '100vh' }}
+          onLayoutChange={(newLayout) => setLayout(newLayout)}
+        >
+          {listToPopulate.map((form, i) => {
+            return (
+              form && (
                 <div
                   key={i}
                   style={{ backgroundColor: 'violet' }}
-                  data-grid={{ x: i * 10, y: i * 10 + 500, w: 300, h: 2, minW: 2, maxW: 4 }}
+                  draggable
+                  data-grid={{ x: 1, y: 10 + i, w: 100, h: 2, minW: 2, maxW: 4, resizable: false }}
                 >
-                  <Fragment key={form._id}>
-                    {i > 0 && <Divider />}
-
-                    {/* <Link href={customLink ? customLink(form) : `/form/${form.slug}`}> */}
-                    <ListItem button selected={form?.slug === selectedForm}>
-                      <ListItemText
-                        primary={form.name}
-                        secondary={`${getUserAttributes(userForm, form.createdBy)?.firstName} ${
-                          getUserAttributes(userForm, form.createdBy)?.lastName
-                        } ${getCreatedAtDate(form.createdAt)}`}
-                      />
-                    </ListItem>
-                    {/*   </Link> */}
-                  </Fragment>
+                  <ListItemText
+                    primary={form?.name}
+                    secondary={`${getUserAttributes(userForm, form?.createdBy)?.firstName} ${
+                      getUserAttributes(userForm, form?.createdBy)?.lastName
+                    } ${getCreatedAtDate(form?.createdAt)}`}
+                  />
                 </div>
-              ))}
-            </ResponsiveGridLayout>
-          </List>
-        )}
+              )
+            );
+          })}
+        </ResponsiveGridLayout>
       </Paper>
     </>
   );
