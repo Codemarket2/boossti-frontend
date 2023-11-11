@@ -58,9 +58,9 @@ export default function FormListReactGridLayout({
           <List dense disablePadding>
             <ResponsiveGridLayout
               className="layout"
-              cols={12}
+              cols={2}
               rowHeight={30}
-              width={1200}
+              width={200}
               isDraggable
               isResizable
             >

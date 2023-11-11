@@ -13,6 +13,8 @@ import FormDisplay from './components/Form/FormDisplay';
 import useGetFormList, { TFormListData } from './libs/hooks/useGetFormList';
 import ComponentPropEditor from './ComponentPropEditor';
 import PanelSection from './PanelSection';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 
 interface TBOptionProps {
   text: string;
@@ -93,23 +95,43 @@ const EditCompPropSection = () => {
   );
 };
 
-const ToolBox = () => {
+const ReactGridLayoutLeftPanel = () => {
   // useEffect(() => {
   //   console.log(data);
   //   // debugger;
   // }, [data]);
 
   return (
-    <Paper sx={{ minWidth: '14rem' }}>
-      <div>Toolbox!</div>
+    <Box style={{ width: '100%' }}>
+      <Grid container spacing={2} className={classes.container}>
+        <Grid item md={6} xs={12}>
+          <Box className={classes.centerElement}>
+            <Typography variant="h2" component="h2" gutterBottom>
+              Choose Microsoft Edge for AI-powered
+            </Typography>
 
-      <Stack spacing={1}>
-        <ComponentsSection />
-        <FormSection />
-        <EditCompPropSection />
-      </Stack>
-    </Paper>
+            <Button variant="outlined" className={classes.button}>
+              Try Edge
+            </Button>
+          </Box>
+        </Grid>
+        <Grid item md={6} xs={12}>
+          <img
+            style={{
+              width: '80%',
+              height: '50%',
+              marginTop: '20vh',
+
+              marginLeft: '5vw',
+              marginRight: '5vw',
+            }}
+            src="https://edgestatic.azureedge.net/shared/cms/lrs1c69a1j/section-images/e2258d06158940118ce733c03dbf26cf.jpg"
+            alt="somthing"
+          />
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 
-export default ToolBox;
+export default ReactGridLayoutLeftPanel;

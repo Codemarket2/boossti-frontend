@@ -1,21 +1,35 @@
 import React from 'react';
 import ResponsiveGridLayout, { WidthProvider, Responsive } from 'react-grid-layout';
+import Grid from '@mui/material/Grid';
 import FormList from '../form2/FormList';
 import { DisplayForm } from '../form2/DisplayForm';
 import FormListReactGridLayout from './FormListReactGridLayout';
 import SidePanelToolBox from '../craftJS/SidePanelToolBox';
 
 const ReactGridLayoutEditor = () => {
-  const layout = [
-    { i: 'a', x: 0, y: 0, w: 2, h: 5, static: true },
-    { i: 'b', x: 3, y: 0, w: 3, h: 2, minW: 2, maxW: 4 },
-    { i: 'c', x: 6, y: 0, w: 3, h: 2 },
-  ];
   return (
     <>
-      <div key="b" style={{ backgroundColor: 'violet' }}>
+      {/*   <Grid container spacing={2}>
+    <Grid item xs={4}>
+      <div style={{ backgroundColor: 'violet' }}>
         <FormListReactGridLayout hideHeader />
       </div>
+      </Grid>
+      <Grid item xs={8}>
+      <div style={{ backgroundColor: 'yellow' }}>
+        <FormListReactGridLayout hideHeader />
+      </div>
+      </Grid>
+      </Grid> */}
+
+      {/* <div style={{ backgroundColor: 'violet' }}>
+        <FormListReactGridLayout hideHeader />
+      </div> */}
+
+      <div style={{ backgroundColor: 'yellow' }}>
+        <FormListReactGridLayout hideHeader />
+      </div>
+
       {/* <div
               style={{
                 display: 'flex',
