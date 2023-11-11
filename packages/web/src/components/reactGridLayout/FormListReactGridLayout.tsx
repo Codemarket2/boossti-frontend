@@ -21,17 +21,15 @@ interface IProps {
   customLink?: (form: any) => string;
   selectedForm?: string;
   isWorkflow?: boolean;
+  width?: number;
 }
-const layouts = [
-  { i: 'a', x: 0, y: 500, w: 100, h: 5, static: true },
-  { i: 'b', x: 1, y: 500, w: 300, h: 2, minW: 2, maxW: 4 },
-  { i: 'c', x: 500, y: 1000, w: 100, h: 2 },
-];
+
 export default function FormListReactGridLayout({
   hideHeader,
   customLink,
   selectedForm,
   isWorkflow,
+  width,
 }: IProps): any {
   const { data, error, loading, state, setState } = useGetForms({ isWorkflow });
   const router = useRouter();
