@@ -25,6 +25,9 @@ import ErrorLoading from '../common/ErrorLoading';
 import ListHeader2 from '../common/ListHeader2';
 import FormFields from '../form2/FormFields';
 import Form from '../form2/Form';
+import { ExpandLess, ExpandMore } from '@mui/icons-material';
+import { Collapse } from '@material-ui/core';
+import ResponseList from '../response/ResponseList';
 
 interface IProps {
   hideHeader?: boolean;
@@ -90,6 +93,27 @@ export default function FormListReactGridLayout({
   };
   const open = Boolean(anchorEl);
 
+  const [ListOpen, setListOpen] = useState([]);
+
+  useEffect(() => {
+    data?.getForms.data.forEach((form, index) => {
+      const neww = {
+        id: index,
+        value: false,
+      };
+      setListOpen((prev) => [...prev, neww]);
+    });
+  }, [data]);
+
+  const toggleListNested = (i) => {
+    setListOpen((currentStates) =>
+      currentStates.map((button) => ({
+        ...button,
+        value: button.id === i ? !button.value : false,
+      })),
+    );
+    console.log(ListOpen);
+  };
   return (
     <>
       <ListHeader2
@@ -116,7 +140,7 @@ export default function FormListReactGridLayout({
                 <ListItem button selected={form?.slug === selectedForm}>
                   <div
                     key={i}
-                    style={{ backgroundColor: 'violet' }}
+                    style={{ backgroundColor: 'violet', display: 'flex' }}
                     draggable
                     onDragStart={(e) => e.dataTransfer.setData('text/plain', form._id)}
                   >
@@ -126,6 +150,21 @@ export default function FormListReactGridLayout({
                         getUserAttributes(userForm, form.createdBy)?.lastName
                       } ${getCreatedAtDate(form.createdAt)}`}
                     />
+                    <div onClick={() => toggleListNested(i)}>
+                      {!ListOpen[i].value ? <ExpandMore /> : <ExpandLess />}
+                    </div>
+
+                    <Collapse in={ListOpen[i].value} timeout="auto" unmountOnExit>
+                      <List component="div" disablePadding>
+                        {/* <ListItemButton sx={{ pl: 4 }}>
+                          <ListItemIcon>
+                            <StarBorder />
+                          </ListItemIcon>
+                          <ListItemText primary="Starred" />
+                        </ListItemButton> */}
+                        <ResponseList form={form} showOnlyMyResponses />
+                      </List>
+                    </Collapse>
                   </div>
                 </ListItem>
                 {/*   </Link> */}
@@ -145,7 +184,7 @@ export default function FormListReactGridLayout({
           style={{ border: '1px solid', width: '50vw', height: '100vh' }}
           onLayoutChange={(newLayout) => setLayout(newLayout)}
         >
-          {listToPopulate.map((form, i) => {
+          {listToPopulate?.map((form, i) => {
             return (
               form && (
                 <div
