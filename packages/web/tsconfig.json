@@ -15,6 +15,12 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "../shared/utils/fieldProps.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "../shared/utils/fieldProps.ts",
+    "src/components/thinkinglogs/thinking_logs.jsx"
+  ],
   "exclude": ["node_modules"]
 }

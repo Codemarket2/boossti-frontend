@@ -107,6 +107,8 @@
     "redux": "4.1.0",
     "slugify": "^1.6.5",
     "swiper": "^8.4.5",
+    "prop-types": "^15.8.1",
+    "react-resizable": "^3.0.5",
     "validate.js": "^0.13.1",
     "xlsx": "^0.17.4"
   },

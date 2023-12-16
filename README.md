@@ -114,3 +114,6 @@ Open project in xcode:
 ```sh
 $ yarn xcode
 ```
+$ yarn add react-resizable
+
+$ yarn add prop-types

@@ -16,18 +16,7 @@ export default function ActivityList() {
 
   return (
     <>
-      <Typography variant="h4">Activity Log</Typography>
-      {loading ? (
-        <>
-          <Typography variant="h6">Loading...</Typography>
-        </>
-      ) : (
-        <>
-          {data?.getMyResponses?.data?.map((d, i) => (
-            <ActivityAccordion data={d} key={i} />
-          ))}
-        </>
-      )}
+      <Typography variant="h4">HEHEfdgfdgfd</Typography>
     </>
   );
 }

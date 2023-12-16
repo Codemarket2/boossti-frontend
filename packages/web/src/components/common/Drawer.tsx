@@ -19,6 +19,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Link from 'next/link';
 import AnalyticsIcon from '@mui/icons-material/Announcement';
 import BuildIcon from '@mui/icons-material/Build';
+import PropTypes from 'prop-types';
 import DarkModeToggle from './DarkModeToggle';
 
 interface IProps {
@@ -140,6 +141,14 @@ export default function DrawerContent({ showDrawer, toggleDrawer, admin }: IProp
             <Divider />
           </>
         )}
+        <Link href="/thinking">
+          <ListItem button selected={checkActiveRoute(activeRoute, '/thinking')}>
+            <ListItemIcon>
+              <AnalyticsIcon />
+            </ListItemIcon>
+            <ListItemText primary="Thinking in React" />
+          </ListItem>
+        </Link>
       </List>
     </Drawer>
   );
