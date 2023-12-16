@@ -20,6 +20,7 @@ import Link from 'next/link';
 import AnalyticsIcon from '@mui/icons-material/Announcement';
 import BuildIcon from '@mui/icons-material/Build';
 import DarkModeToggle from './DarkModeToggle';
+import Thinking from '../../../pages/thinking/Thinking';
 
 interface IProps {
   showDrawer: boolean;
@@ -115,6 +116,7 @@ export default function DrawerContent({ showDrawer, toggleDrawer, admin }: IProp
             <ListItemText primary="Customize UI" />
           </ListItem>
         </Link>
+
         {data?.getMenuListTypes?.map((t) => (
           <Link href={`/${t.slug}`} key={t._id}>
             <ListItem button selected={checkActiveRoute(activeRoute, '/log')}>
@@ -137,6 +139,15 @@ export default function DrawerContent({ showDrawer, toggleDrawer, admin }: IProp
                 <ListItemText primary="Users" />
               </ListItem>
             </Link>
+            <Link href="/thinking">
+              <ListItem button selected={checkActiveRoute(activeRoute, '/thinking')}>
+                <ListItemIcon>
+                  <AnalyticsIcon />
+                </ListItemIcon>
+                <ListItemText primary="ThinkingInReact" />
+              </ListItem>
+            </Link>
+
             <Divider />
           </>
         )}

@@ -6,9 +6,10 @@
  * @flow strict-local
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'react-native-gesture-handler';
 import { Linking, Alert, Platform, View, Text } from 'react-native';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import {
   NavigationContainer,
@@ -24,8 +25,8 @@ import {
 // vivek
 import { Provider as ReduxProvider, useSelector, useDispatch } from 'react-redux';
 import Amplify, { Auth } from 'aws-amplify';
-import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth/lib/types';
-import awsconfig from '@frontend/shared/aws-exports';
+//import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth/lib/types';
+//import awsconfig from '@frontend/shared/aws-exports';
 import { ApolloProvider } from '@apollo/client/react';
 import { useCurrentAuthenticatedUser } from '@frontend/shared/hooks/auth';
 import { toggleAuthLoading } from '@frontend/shared/redux/actions/auth';
@@ -41,7 +42,7 @@ import { useOneSignal } from './src/utils/onesignal';
 
 // Amplify.configure(config);
 
-async function urlOpener(url: any, redirectUrl: any) {
+/*async function urlOpener(url: any, redirectUrl: any) {
   try {
     await InAppBrowser.isAvailable();
     const { type, url: newUrl } = await InAppBrowser.openAuth(url, redirectUrl, {
@@ -93,15 +94,135 @@ const CombinedDarkTheme = {
     ...NavigationDarkTheme.colors,
     ...PaperDarkTheme.colors,
   },
-};
+}; */
+const PRODUCTS = [
+  { category: 'Fruits', price: '$1', stocked: true, name: 'Apple' },
+  { category: 'Fruits', price: '$1', stocked: true, name: 'Dragonfruit' },
+  { category: 'Fruits', price: '$2', stocked: false, name: 'Passionfruit' },
+  { category: 'Vegetables', price: '$2', stocked: true, name: 'Spinach' },
+  { category: 'Vegetables', price: '$4', stocked: false, name: 'Pumpkin' },
+  { category: 'Vegetables', price: '$1', stocked: true, name: 'Peas' },
+];
+
+function FilterableProductTable({ product }) {
+  const [filterText, setFilterText] = useState('');
+  const [inStockOnly, setInStockOnly] = useState(false);
+  const router = Router;
+
+  return (
+    <div>
+      <SearchBar
+        filterText={filterText}
+        inStockOnly={inStockOnly}
+        onFilterTextChange={setFilterText}
+        onInStockOnlyChange={setInStockOnly}
+      />
+      <ProductTable product={product} filterText={filterText} inStockOnly={inStockOnly} />
+    </div>
+  );
+}
+
+function ProductCategoryRow({ category }) {
+  return (
+    <tr>
+      <th>{category}</th>
+    </tr>
+  );
+}
+
+function ProductRow({ product }) {
+  const name = product.stocked ? (
+    product.name
+  ) : (
+    <span style={{ color: 'red' }}>{product.name}</span>
+  );
+
+  return (
+    <tr>
+      <td>{name}</td>
+      <td>{product.price}</td>
+    </tr>
+  );
+}
+
+function ProductTable({ product, filterText, inStockOnly }) {
+  const rows = [];
+  let lastCategory = null;
+
+  product.forEach((product) => {
+    if (product.name.toLowerCase().indexOf(filterText.toLowerCase()) === -1) {
+      return;
+    }
+    if (inStockOnly && !product.stocked) {
+      return;
+    }
+    if (product.category !== lastCategory) {
+      rows.push(<ProductCategoryRow category={product.category} key={product.category} />);
+    }
+    rows.push(<ProductRow product={product} key={product.name} />);
+    lastCategory = product.category;
+  });
+
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>{rows}</tbody>
+    </table>
+  );
+}
+
+function SearchBar({ filterText, inStockOnly, onFilterTextChange, onInStockOnlyChange }) {
+  return (
+    <form>
+      <input
+        type="text"
+        value={filterText}
+        placeholder="Search..."
+        onChange={(e) => onFilterTextChange(e.target.value)}
+      />
+      <label>
+        <input
+          type="checkbox"
+          checked={inStockOnly}
+          onChange={(e) => onInStockOnlyChange(e.target.checked)}
+        />{' '}
+        Only show products in stock
+      </label>
+    </form>
+  );
+}
 
 const App = () => {
-  // return (
-  //   <View>
-  //     <Text>Users</Text>
-  //   </View>
-  // );
+  /*interface product {
+    name: string;
+  category: string;
+    price: string;
+    stocked: boolean;
+  }*/
+
   return (
+    <View>
+      <Text>Users</Text>
+    </View>
+  );
+};
+
+// export default function App() {
+//   return (
+//     <Router>
+//       <Route path="/test">
+//         <FilterableProductTable products={PRODUCTS} />;
+//       </Route>
+//     </Router>
+//   );
+// }
+
+/*  return (
     <ReduxProvider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <ApolloProvider client={client}>
@@ -112,9 +233,11 @@ const App = () => {
         </ApolloProvider>
       </PersistGate>
     </ReduxProvider>
-  );
-};
+  );*/
 
+// {  return <FilterableProductTable product={PRODUCTS} />; }
+
+/*
 // InitialData - This Component is created because the useCurrentAuthenticatedUser hook need to be call inside redux provider
 const Wrapper = ({ children }: { children: React.ReactNode }) => {
   const { getUser } = useCurrentAuthenticatedUser();
@@ -172,7 +295,7 @@ const Wrapper = ({ children }: { children: React.ReactNode }) => {
     </NavigationContainer>
   );
 };
-
+*/
 // const startStorybook = false;
 // export default startStorybook ? StorybookUI : App;
 export default App;

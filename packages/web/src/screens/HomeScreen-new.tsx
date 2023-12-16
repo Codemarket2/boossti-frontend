@@ -11,6 +11,7 @@ import Link from '@mui/material/Link';
 // import StarIcon from '@mui/icons-material/Star';
 // import CardHeader from '@mui/material/CardHeader';
 import { useGetFormBySlug } from '@frontend/shared/hooks/form';
+import { useState } from 'react';
 import AppBar from '../components/common/AppBar';
 import ErrorLoading from '../components/common/ErrorLoading';
 import FormView from '../components/form2/FormView';
@@ -128,6 +129,7 @@ export default function Album() {
                       </Card>
                     </Grid>
                   ))}
+                  {'hijkjjhjhj '}
                 </Grid>
               </Grid>
             </Grid>
