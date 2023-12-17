@@ -15,7 +15,7 @@ const initialState = {
   editMode: false,
 };
 
-const layout = [{ i: 'b', x: 1, y: 500, w: 300, h: 2, minW: 2, maxW: 4 }];
+const layout = [{ i: 'c', x: 1, y: 500, w: 300, h: 2, minW: 2, maxW: 4 }];
 
 function FilterableProductTable({ products }) {
   const [filterText, setFilterText] = useState('');
@@ -28,6 +28,7 @@ function FilterableProductTable({ products }) {
       cols={12}
       rowHeight={30}
       width={1200}
+      allowOverlap={false}
     >
       <div key="b" style={{ backgroundColor: 'green' }}>
         <SearchBar
