@@ -15,6 +15,15 @@ function FilterableProductTable({ products }) {
   const [inStockOnly, setInStockOnly] = React.useState(false);
 
   return (
+    // <ResponsiveGridLayout
+    //   className="layout"
+    //   layout={layout}
+    //   cols={12}
+    //   rowHeight={30}
+    //   width={1200}
+    //   isDraggable={true}
+    //   allowOverlap={true}
+    // >
     <div>
       <SearchBar
         filterText={filterText}
@@ -22,8 +31,10 @@ function FilterableProductTable({ products }) {
         onFilterTextChange={setFilterText}
         onInStockOnlyChange={setInStockOnly}
       />
+
       <ProductTable products={products} filterText={filterText} inStockOnly={inStockOnly} />
     </div>
+    // </ResponsiveGridLayout>
   );
 }
 
@@ -40,13 +51,21 @@ FilterableProductTable.propTypes = {
 
 function ProductCategoryRow({ category }) {
   return (
-    <ResponsiveGridLayout className="layout" layout={layout} cols={12} rowHeight={30} width={1200}>
-      <div key="b" style={{ backgroundColor: 'red' }}>
-        <tr>
-          <th colSpan={2}>{category}</th>
-        </tr>
-      </div>
-    </ResponsiveGridLayout>
+    // <ResponsiveGridLayout
+    //   className="layout"
+    //   layout={layout}
+    //   cols={12}
+    //   rowHeight={30}
+    //   width={1200}
+    //   isDraggable={true}
+    //   allowOverlap={true}
+    // >
+    <div key="b" style={{ backgroundColor: 'red' }}>
+      <tr>
+        <th colSpan={2}>{category}</th>
+      </tr>
+    </div>
+    // </ResponsiveGridLayout>
   );
 }
 
@@ -62,14 +81,22 @@ function ProductRow({ product }) {
   );
 
   return (
-    <ResponsiveGridLayout className="layout" layout={layout} cols={12} rowHeight={30} width={1200}>
-      <div key="b" style={{ backgroundColor: 'white' }}>
-        <tr>
-          <td>{name}</td>
-          <td>{product.price}</td>
-        </tr>
-      </div>
-    </ResponsiveGridLayout>
+    // <ResponsiveGridLayout
+    //   className="layout"
+    //   layout={layout}
+    //   cols={12}
+    //   rowHeight={30}
+    //   width={1200}
+    //   isDraggable={true}
+    //   allowOverlap={true}
+    // >
+    // <div key="b" style={{ backgroundColor: 'white' }}>
+    <tr>
+      <td>{name}</td>
+      <td>{product.price}</td>
+    </tr>
+    // </div>
+    // // </ResponsiveGridLayout>
   );
 }
 
@@ -100,15 +127,27 @@ function ProductTable({ products, filterText, inStockOnly }) {
   });
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Name &nbsp; &nbsp; &nbsp;</th>
-          <th>Price</th>
-        </tr>
-      </thead>
-      <tbody>{rows}</tbody>
-    </table>
+    <ResponsiveGridLayout
+      className="layout"
+      layout={layout}
+      cols={12}
+      rowHeight={30}
+      width={1200}
+      isDraggable
+      allowOverlap
+    >
+      <div key="b" style={{ backgroundColor: 'white' }}>
+        <table>
+          <thead>
+            <tr>
+              <th>Name &nbsp; &nbsp; &nbsp;</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody>{rows}</tbody>
+        </table>
+      </div>
+    </ResponsiveGridLayout>
   );
 }
 
@@ -127,7 +166,15 @@ ProductTable.propTypes = {
 
 function SearchBar({ filterText, inStockOnly, onFilterTextChange, onInStockOnlyChange }) {
   return (
-    <ResponsiveGridLayout className="layout" layout={layout} cols={12} rowHeight={30} width={1200}>
+    <ResponsiveGridLayout
+      className="layout"
+      layout={layout}
+      cols={12}
+      rowHeight={30}
+      width={1200}
+      isDraggable
+      allowOverlap
+    >
       <div key="b" style={{ backgroundColor: 'blue' }}>
         <form>
           <input
