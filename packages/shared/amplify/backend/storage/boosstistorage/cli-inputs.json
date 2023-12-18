@@ -1,0 +1,16 @@
+{
+  "resourceName": "boosstistorage",
+  "policyUUID": "19a5bd5a",
+  "bucketName": "boossti-bucket",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "READ"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {}
+}
