@@ -1,29 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import ResponsiveGridLayout, { WidthProvider } from 'react-grid-layout';
+import 'react-grid-layout/css/styles.css';
+import 'react-resizable/css/styles.css';
 
-const PRODUCTS = [
-  { category: 'Fruits', price: '$1', stocked: true, name: 'Apple' },
-  { category: 'Fruits', price: '$1', stocked: true, name: 'Dragonfruit' },
-  { category: 'Fruits', price: '$2', stocked: false, name: 'Passionfruit' },
-  { category: 'Vegetables', price: '$2', stocked: true, name: 'Spinach' },
-  { category: 'Vegetables', price: '$4', stocked: false, name: 'Pumpkin' },
-  { category: 'Vegetables', price: '$1', stocked: true, name: 'Peas' },
+const WidthResponsiveGridLayout = WidthProvider(ResponsiveGridLayout);
+
+const layout = [
+  { i: 'a', x: 0, y: 0, w: 1, h: 2, static: true },
+  { i: 'b', x: 1, y: 0, w: 3, h: 2, minW: 2, maxW: 4 },
+  { i: 'c', x: 4, y: 0, w: 1, h: 2 },
 ];
 
 function FilterableProductTable({ products }) {
-  const [filterText, setFilterText] = React.useState('');
-  const [inStockOnly, setInStockOnly] = React.useState(false);
+  const [filterText, setFilterText] = useState('');
+  const [inStockOnly, setInStockOnly] = useState(false);
 
   return (
-    <div>
-      <SearchBar
-        filterText={filterText}
-        inStockOnly={inStockOnly}
-        onFilterTextChange={setFilterText}
-        onInStockOnlyChange={setInStockOnly}
-      />
-      <ProductTable products={products} filterText={filterText} inStockOnly={inStockOnly} />
-    </div>
+    <WidthResponsiveGridLayout
+      className="layout"
+      layout={layout}
+      cols={12}
+      autoSize="true"
+      rowHeight={30}
+      width={1200}
+      allowOverlap={false}
+    >
+      <div key="1" style={{ backgroundColor: '#65cfe0' }}>
+        <SearchBar
+          filterText={filterText}
+          inStockOnly={inStockOnly}
+          onFilterTextChange={setFilterText}
+          onInStockOnlyChange={setInStockOnly}
+        />
+      </div>
+      <div key="2" style={{ backgroundColor: '#659fe0' }}>
+        <ProductTable products={products} filterText={filterText} inStockOnly={inStockOnly} />
+      </div>
+    </WidthResponsiveGridLayout>
   );
 }
 
@@ -41,7 +55,7 @@ FilterableProductTable.propTypes = {
 function ProductCategoryRow({ category }) {
   return (
     <tr>
-      <th colSpan="2">{category}</th>
+      <th colSpan={2}>{category}</th>
     </tr>
   );
 }
@@ -120,16 +134,20 @@ ProductTable.propTypes = {
 function SearchBar({ filterText, inStockOnly, onFilterTextChange, onInStockOnlyChange }) {
   return (
     <form>
-      <input
-        type="text"
-        value={filterText}
-        placeholder="Search..."
-        onChange={(e) => onFilterTextChange(e.target.value)}
-      />
-      <label htmlFor="inStockOnly">
+      <label htmlFor="filterTextInput">
+        Search:
+        <input
+          type="text"
+          id="filterTextInput"
+          value={filterText}
+          placeholder="Search..."
+          onChange={(e) => onFilterTextChange(e.target.value)}
+        />
+      </label>
+      <label htmlFor="filterTextInput">
         <input
           type="checkbox"
-          id="inStockOnly"
+          id="inStockOnlyInput"
           checked={inStockOnly}
           onChange={(e) => onInStockOnlyChange(e.target.checked)}
         />{' '}
@@ -146,6 +164,15 @@ SearchBar.propTypes = {
   onInStockOnlyChange: PropTypes.func.isRequired,
 };
 
-export default function ThinkinInReact() {
+const PRODUCTS = [
+  { category: 'Fruits', price: '$1', stocked: true, name: 'Apple' },
+  { category: 'Fruits', price: '$1', stocked: true, name: 'Dragonfruit' },
+  { category: 'Fruits', price: '$2', stocked: false, name: 'Passionfruit' },
+  { category: 'Vegetables', price: '$2', stocked: true, name: 'Spinach' },
+  { category: 'Vegetables', price: '$4', stocked: false, name: 'Pumpkin' },
+  { category: 'Vegetables', price: '$1', stocked: true, name: 'Peas' },
+];
+
+export default function ThinkingR() {
   return <FilterableProductTable products={PRODUCTS} />;
 }
