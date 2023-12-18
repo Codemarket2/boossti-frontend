@@ -1,3 +1,6 @@
+import { Responsive, WidthProvider } from 'react-grid-layout';
+
+const ResponsiveGridLayout = WidthProvider(Responsive);
 import moment from 'moment';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -20,6 +23,12 @@ import { IField } from '@frontend/shared/types/form';
 import WorkflowButtons from './workflow/WorkflowButtons';
 import FieldValuesMap from './FieldValuesMap';
 import { useGetForm } from '@frontend/shared/hooks/form';
+
+// const layout = [
+//   { i: 'a', x: 0, y: 0, w: 1, h: 2, static: true },
+//   { i: 'b', x: 1, y: 0, w: 3, h: 2, minW: 2, maxW: 4 },
+//   { i: 'c', x: 4, y: 0, w: 1, h: 2 },
+// ];
 
 interface IProps {
   search: string;
@@ -104,58 +113,69 @@ export default function ResponseTable({
               </TableRow>
             </TableHead>
             <TableBody>
-              {responses?.map((response) => (
-                <TableRow key={response._id} hover>
-                  <TableCell>
-                    <span>
-                      <Link href={`/form/users/response/${response?.createdBy?.count}`}>
-                        <a>
-                          <u>{getUserName(userForm, response?.createdBy)}</u>
-                        </a>
-                      </Link>
-                      <br />
-                      <span>{`${moment(response.createdAt).format('l')} ${moment(
-                        response.createdAt,
-                      ).format('LT')}`}</span>
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <Tooltip title="Open Response">
+              <ResponsiveGridLayout
+                breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 1 }}
+                cols={{ lg: 12, md: 50, sm: 6, xs: 8, xxs: 2 }}
+                rowHeight={50}
+                width={800}
+                allowoverlap={true}
+                isDraggable={true}
+                isResizable={true}
+                preventCollision={false}
+              >
+                {responses?.map((response) => (
+                  <TableRow key={response._id} hover>
+                    <TableCell>
                       <span>
-                        {onClickResponse ? (
-                          <span
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => {
-                              if (onClickResponse) {
-                                onClickResponse(response, form);
-                              } else {
-                                router.push(`/form/${form.slug}/response/${response.count}`);
-                              }
-                            }}
-                          >
-                            <u>{response?.count}</u>
-                          </span>
-                        ) : (
-                          <Link href={`/form/${form.slug}/response/${response.count}`}>
-                            <a>{response?.count}</a>
-                          </Link>
-                        )}
+                        <Link href={`/form/users/response/${response?.createdBy?.count}`}>
+                          <a>
+                            <u>{getUserName(userForm, response?.createdBy)}</u>
+                          </a>
+                        </Link>
+                        <br />
+                        <span>{`${moment(response.createdAt).format('l')} ${moment(
+                          response.createdAt,
+                        ).format('LT')}`}</span>
                       </span>
-                    </Tooltip>
-                  </TableCell>
-                  <TableCell>
-                    <DisplayWorkflowName workflowId={response?.workflowId} />
-                  </TableCell>
-                  {form?.fields?.map((field: IField, i) => (
-                    <TableCell key={i}>
-                      <FieldValuesMap field={field} response={response} />
                     </TableCell>
-                  ))}
-                  {response?.workflowId && !response?.parentResponseId && (
-                    <WorkflowButtons response={response} tableCellView />
-                  )}
-                </TableRow>
-              ))}
+                    <TableCell>
+                      <Tooltip title="Open Response">
+                        <span>
+                          {onClickResponse ? (
+                            <span
+                              style={{ cursor: 'pointer' }}
+                              onClick={() => {
+                                if (onClickResponse) {
+                                  onClickResponse(response, form);
+                                } else {
+                                  router.push(`/form/${form.slug}/response/${response.count}`);
+                                }
+                              }}
+                            >
+                              <u>{response?.count}</u>
+                            </span>
+                          ) : (
+                            <Link href={`/form/${form.slug}/response/${response.count}`}>
+                              <a>{response?.count}</a>
+                            </Link>
+                          )}
+                        </span>
+                      </Tooltip>
+                    </TableCell>
+                    <TableCell>
+                      <DisplayWorkflowName workflowId={response?.workflowId} />
+                    </TableCell>
+                    {form?.fields?.map((field: IField, i) => (
+                      <TableCell key={i}>
+                        <FieldValuesMap field={field} response={response} />
+                      </TableCell>
+                    ))}
+                    {response?.workflowId && !response?.parentResponseId && (
+                      <WorkflowButtons response={response} tableCellView />
+                    )}
+                  </TableRow>
+                ))}
+              </ResponsiveGridLayout>
             </TableBody>
           </Table>
         )}

@@ -1,3 +1,6 @@
+// import { Responsive, WidthProvider } from 'react-grid-layout';
+
+// const ResponsiveGridLayout = WidthProvider(Responsive);
 import { IField, IResponse } from '@frontend/shared/types';
 // import Box from '@mui/material/Box';
 import React, { Fragment, useState } from 'react';
@@ -31,6 +34,11 @@ interface IFieldValuesMap {
   onClickEditField?: (fieldId: string, valueId: string, editMode: string) => void;
   inlineEdit?: boolean;
 }
+const layout = [
+  { i: 'a', x: 0, y: 0, w: 1, h: 2, static: true },
+  { i: 'b', x: 1, y: 0, w: 3, h: 2, minW: 2, maxW: 4 },
+  { i: 'c', x: 4, y: 0, w: 1, h: 2 },
+];
 
 export default function FieldValuesMap({
   field,
@@ -93,6 +101,7 @@ export default function FieldValuesMap({
           )}
         </>
       )}
+
       <div data-testid="value">
         {/* isDependantRelationship ? (
           <DependantResponses disabled={disabled} parentResponseId={response?._id} field={field} />
