@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import moment from 'moment';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -17,9 +18,14 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { IField } from '@frontend/shared/types/form';
 import { useGetForm } from '@frontend/shared/hooks/form';
+<<<<<<< HEAD
 import WorkflowButtons from './workflow/WorkflowButtons';
 import ErrorLoading from '../common/ErrorLoading';
 import FieldValuesMap from './FieldValuesMap';
+=======
+import RGL, { WidthProvider } from 'react-grid-layout';
+const ResponsiveGridLayout = WidthProvider(RGL);
+>>>>>>> ad3e803b99b9bab64f12476ee31fc190ed27a54e
 
 interface IProps {
   search: string;
@@ -38,7 +44,7 @@ interface IProps {
   onClickResponse?: (response, form) => void;
 }
 
-export default function ResponseTable({
+const ResponseTable = ({
   loading,
   search,
   form,
@@ -53,9 +59,32 @@ export default function ResponseTable({
   onPageChange,
   onLimitChange,
   onClickResponse,
-}: IProps) {
+}: IProps) => {
   const userForm = useSelector(({ setting }: any) => setting.userForm);
   const router = useRouter();
+
+  // Manage layout using state
+  const [layout, setLayout] = useState([
+    { i: 'b', x: 0, y: 0, w: 1, h: 1 },
+    // ... other initial layout items
+  ]);
+
+  // Make rows draggable
+  const makeRowDraggable = (rowIndex) => {
+    const newLayout = layout.map((item, i) => {
+      if (i === rowIndex) {
+        return { ...item, static: false };
+      }
+      return item;
+    });
+    setLayout(newLayout);
+  };
+
+  // Handle drag-and-drop
+  const handleDrop = (layout, layoutItem, _event) => {
+    alert(`Dropped element props:\n${JSON.stringify(layoutItem, ['x', 'y', 'w', 'h'], 2)}`);
+    // Handle layout changes here if needed
+  };
 
   return (
     <div>
@@ -104,6 +133,7 @@ export default function ResponseTable({
               </TableRow>
             </TableHead>
             <TableBody>
+<<<<<<< HEAD
               {responses?.map((response) => (
                 <TableRow key={response._id} hover>
                   <TableCell>
@@ -150,6 +180,81 @@ export default function ResponseTable({
                     <TableCell key={i}>
                       <FieldValuesMap field={field} response={response} />
                     </TableCell>
+=======
+              <>
+                <ResponsiveGridLayout
+                  className="layout"
+                  layout={layout}
+                  cols={12}
+                  rowHeight={30}
+                  width={1200}
+                  onDrop={handleDrop} // Attach the drop handler
+                >
+                  <div
+                    key="b"
+                    style={{ backgroundColor: 'violet' }}
+                    onClick={() => makeRowDraggable(0)}
+                  >
+                    {/* <FormList hideHeader /> */}
+                  </div>
+                  {responses?.map((response, rowIndex) => (
+                    <div
+                      key={response._id}
+                      style={{ backgroundColor: 'lightblue' }}
+                      onClick={() => makeRowDraggable(rowIndex + 1)}
+                    >
+                      <TableRow hover>
+                        <TableCell>
+                          <span>
+                            <Link href={`/form/users/response/${response?.createdBy?.count}`}>
+                              <a>
+                                <u>{getUserName(userForm, response?.createdBy)}</u>
+                              </a>
+                            </Link>
+                            <br />
+                            <span>{`${moment(response.createdAt).format('l')} ${moment(
+                              response.createdAt,
+                            ).format('LT')}`}</span>
+                          </span>
+                        </TableCell>
+                        <TableCell>
+                          <Tooltip title="Open Response">
+                            <span>
+                              {onClickResponse ? (
+                                <span
+                                  style={{ cursor: 'pointer' }}
+                                  onClick={() => {
+                                    if (onClickResponse) {
+                                      onClickResponse(response, form);
+                                    } else {
+                                      router.push(`/form/${form.slug}/response/${response.count}`);
+                                    }
+                                  }}
+                                >
+                                  <u>{response?.count}</u>
+                                </span>
+                              ) : (
+                                <Link href={`/form/${form.slug}/response/${response.count}`}>
+                                  <a>{response?.count}</a>
+                                </Link>
+                              )}
+                            </span>
+                          </Tooltip>
+                        </TableCell>
+                        <TableCell>
+                          {/* <DisplayWorkflowName workflowId={response?.workflowId} /> */}
+                        </TableCell>
+                        {form?.fields?.map((field: IField, i) => (
+                          <TableCell key={i}>
+                            <FieldValuesMap field={field} response={response} />
+                          </TableCell>
+                        ))}
+                        {response?.workflowId && !response?.parentResponseId && (
+                          <WorkflowButtons response={response} tableCellView />
+                        )}
+                      </TableRow>
+                    </div>
+>>>>>>> ad3e803b99b9bab64f12476ee31fc190ed27a54e
                   ))}
                   {response?.workflowId && !response?.parentResponseId && (
                     <WorkflowButtons response={response} tableCellView />
@@ -162,16 +267,6 @@ export default function ResponseTable({
       </TableContainer>
     </div>
   );
-}
-
-const DisplayWorkflowName = ({ workflowId }: { workflowId: string }) => {
-  const { data } = useGetForm(workflowId);
-  if (data?.getForm?.name) {
-    return (
-      <>
-        <Link href={`/workflow/${data?.getForm?.slug}`}>{data?.getForm?.name}</Link>
-      </>
-    );
-  }
-  return null;
 };
+
+export default ResponseTable;

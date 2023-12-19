@@ -20,6 +20,7 @@ import Tooltip from '@mui/material/Tooltip';
 import KeyboardDoubleArrowRight from '@mui/icons-material/KeyboardDoubleArrowRight';
 import { useGetForm } from '@frontend/shared/hooks/form';
 import { useRouter } from 'next/router';
+import RGL, { WidthProvider } from 'react-grid-layout';
 import EditResponse from './EditResponse';
 import Breadcrumbs from '../common/Breadcrumbs';
 import { QRButton } from '../qrcode/QRButton';
@@ -34,6 +35,7 @@ import WorkflowButtons from './workflow/WorkflowButtons';
 import FormFields from '../form2/FormFields';
 import InlineEdit from './InlineEdit';
 
+const ReactGridLayout = WidthProvider(RGL);
 // inlineEdit  related imports
 
 export interface DisplayResponseProps {
