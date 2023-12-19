@@ -19,6 +19,7 @@
   "dependencies": {
     "@apollo/client": "3.3.21",
     "@ckeditor/ckeditor5-react": "^3.0.2",
+    "prop-types": "^15.8.1",
     "@craftjs/core": "^0.2.0-beta.8",
     "@date-io/moment": "1.x",
     "@emotion/cache": "^11.7.1",
@@ -100,6 +101,7 @@
     "react-redux": "7.2.4",
     "react-share": "4.3.1",
     "react-signature-canvas": "^1.0.6",
+    "react-resizable": "^3.0.5",
     "react-swipeable-views": "^0.14.0",
     "react-typed": "^1.2.0",
     "react-visibility-sensor": "^5.1.1",
