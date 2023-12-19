@@ -1,10 +1,26 @@
 import { useGetForm } from '@frontend/shared/hooks/form';
 import { useGetResponse } from '@frontend/shared/hooks/response';
 import { IResponse } from '@frontend/shared/types/response';
+import ResponsiveGridLayout, { WidthProvider, Responsive } from 'react-grid-layout';
 import NotFound from '../common/NotFound';
 import ErrorLoading from '../common/ErrorLoading';
 import { DisplayResponse } from './DisplayResponse';
 
+const initialState = {
+  layouts: {},
+  styles: {},
+  selectedField: null,
+  selectedElement: null,
+  layoutEdit: true,
+  editMode: false,
+};
+
+const layout = [
+  { i: 'a', x: 0, y: 0, w: 1, h: 2, static: true },
+  { i: 'b', x: 1, y: 0, w: 3, h: 2, minW: 2, maxW: 4 },
+  { i: 'c', x: 4, y: 0, w: 1, h: 2 },
+];
+const ResponsiveReactGridLayout = WidthProvider(Responsive);
 interface DisplayResponseByIdProps {
   responseId: string;
   hideBreadcrumbs?: boolean;
