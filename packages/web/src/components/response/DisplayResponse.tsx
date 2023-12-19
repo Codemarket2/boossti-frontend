@@ -20,7 +20,6 @@ import Tooltip from '@mui/material/Tooltip';
 import KeyboardDoubleArrowRight from '@mui/icons-material/KeyboardDoubleArrowRight';
 import { useGetForm } from '@frontend/shared/hooks/form';
 import { useRouter } from 'next/router';
-
 import EditResponse from './EditResponse';
 import Breadcrumbs from '../common/Breadcrumbs';
 import { QRButton } from '../qrcode/QRButton';
