@@ -137,7 +137,8 @@ const ResponseTable = ({
                   cols={12}
                   rowHeight={30}
                   width={1200}
-                  onDrop={handleDrop} // Attach the drop handler
+                  onDrop={handleDrop}
+                  isDroppable={false}
                 >
                   <div
                     key="b"
