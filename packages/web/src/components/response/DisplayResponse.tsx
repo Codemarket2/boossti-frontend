@@ -1,4 +1,6 @@
-import { Responsive, WidthProvider } from 'react-grid-layout';
+// import { Responsive, WidthProvider } from 'react-grid-layout';
+
+// const ResponsiveGridLayout = WidthProvider(Responsive);
 import { useCheckPermission } from '@frontend/shared/hooks/permission';
 import { useSelector } from 'react-redux';
 import { useEffect, useMemo, useState } from 'react';
@@ -35,8 +37,6 @@ import ErrorLoading from '../common/ErrorLoading';
 import WorkflowButtons from './workflow/WorkflowButtons';
 import FormFields from '../form2/FormFields';
 import InlineEdit from './InlineEdit';
-
-const ResponsiveGridLayout = WidthProvider(Responsive);
 
 // inlineEdit  related imports
 
