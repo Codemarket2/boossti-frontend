@@ -1,0 +1,22 @@
+.grid-item {
+    background-color: #3498db;
+    color: white;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #2980b9;
+    margin: 4px;
+    font-size: 14px;
+  }
+  
+  .grid-item.static {
+    background-color: #e74c3c;
+  }
+  
+  .text {
+    display: block;
+  }
+  
+  .static-text {
+    font-weight: bold;
+  }
+  
