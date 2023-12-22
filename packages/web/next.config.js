@@ -21,7 +21,8 @@ module.exports = withPlugins([withTM, withImages], {
     emotion: true,
   },
   eslint: {
-    ignoreDuringBuild: true,
+    dirs: ['pages', 'utils'],
+    // ignoreDuringBuild: true,
   },
   // swcMinify: true,
 });
