@@ -147,6 +147,14 @@ export default function DrawerContent({ showDrawer, toggleDrawer, admin }: IProp
                 <ListItemText primary="ThinkingInReact" />
               </ListItem>
             </Link>
+            <Link href="/reactgriddemo">
+              <ListItem button selected={checkActiveRoute(activeRoute, '/reactgriddemo')}>
+                <ListItemIcon>
+                  <AnalyticsIcon />
+                </ListItemIcon>
+                <ListItemText primary="ReactGridLayout" />
+              </ListItem>
+            </Link>
 
             <Divider />
           </>
