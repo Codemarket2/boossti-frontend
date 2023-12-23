@@ -4,12 +4,6 @@ import { Responsive, WidthProvider } from 'react-grid-layout';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
-const defaultProps = {
-  className: 'layout',
-  rowHeight: 30,
-  cols: { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 },
-};
-
 interface YourComponentState {
   compactType: string;
   mounted: boolean;
@@ -21,6 +15,8 @@ export default class DragFromOutsideLayout extends React.Component<
   Record<string, unknown>,
   YourComponentState
 > {
+  dropData: { targetLayout: string; sourceItem: any } | null = null;
+
   constructor(props: Record<string, unknown>) {
     super(props);
 
@@ -40,23 +36,6 @@ export default class DragFromOutsideLayout extends React.Component<
     event.dataTransfer.setData('text/plain', JSON.stringify({ ...item, layoutKey: layoutKey1 }));
   };
 
-  onDragOver = (event, targetLayout) => {
-    event.preventDefault();
-
-    const mouseX = event.clientX;
-    const mouseY = event.clientY;
-
-    const targetElement = document.elementFromPoint(mouseX, mouseY);
-
-    const isOverGridItem = targetElement && targetElement.classList.contains('grid-item');
-
-    if (isOverGridItem) {
-      targetElement.classList.add('valid-drop-area');
-    } else {
-      this.removeValidDropAreaIndicator();
-    }
-  };
-
   onDragLeave = () => {
     this.removeValidDropAreaIndicator();
   };
@@ -69,15 +48,28 @@ export default class DragFromOutsideLayout extends React.Component<
   };
 
   onDrop = (targetLayout: string, event: React.DragEvent) => {
+    console.log('onDrop triggered');
     event.preventDefault();
     this.removeValidDropAreaIndicator();
 
     const sourceItem = JSON.parse(event.dataTransfer.getData('text/plain'));
     console.log(sourceItem);
+
     if (sourceItem) {
+      this.dropData = { targetLayout, sourceItem };
+
+      setTimeout(() => {
+        this.setState({}); // Trigger a re-render
+      }, 0);
+    }
+  };
+
+  componentDidUpdate() {
+    const { dropData } = this;
+    if (dropData) {
+      const { targetLayout, sourceItem } = dropData;
       this.setState((prevState) => {
         const updatedSourceLayout = prevState[sourceItem.layoutKey].lg;
-
         const newItem = {
           i: sourceItem.i,
           x: 0,
@@ -91,14 +83,14 @@ export default class DragFromOutsideLayout extends React.Component<
         let updatedTargetLayout = prevState[targetLayout].lg;
 
         if (sourceItem.layoutKey !== targetLayout) {
-          updatedTargetLayout = prevState[targetLayout].lg.concat(newItem);
+          updatedTargetLayout = updatedTargetLayout.concat(newItem);
         }
 
-        // Check if the state needs to be updated
         if (
           !_.isEqual(updatedSourceLayout, prevState[sourceItem.layoutKey].lg) ||
           !_.isEqual(updatedTargetLayout, prevState[targetLayout].lg)
         ) {
+          this.dropData = null;
           return {
             ...prevState,
             [sourceItem.layoutKey]: { lg: updatedSourceLayout },
@@ -106,23 +98,22 @@ export default class DragFromOutsideLayout extends React.Component<
           };
         }
 
-        // If no update is needed, return null
         return null;
       });
     }
-  };
+  }
 
   generateDOM(layout, layoutKey) {
+    console.log(layout);
     return _.map(layout.lg, (l, i) => {
       const itemStyles = {
         backgroundColor: l.i === '0' ? 'red' : 'blue',
-        padding: '10px',
+        padding: '20px',
         borderRadius: '5px',
         cursor: 'move',
         height: '50px',
         width: '100px',
         display: 'flex',
-        // flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
         color: 'white',
@@ -158,26 +149,16 @@ export default class DragFromOutsideLayout extends React.Component<
           border: '5px solid #ddd',
           height: '100%',
           width: '100%',
-          // display:'flex'
+          marginBottom: '20px',
           borderRadius: '5px',
-          borderColor: 'green',
         }}
       >
-        <div>Compaction type: {_.capitalize(compactType) || 'No Compaction'}</div>
-        <button onClick={() => this.setState({ layouts1: { lg: generateLayout() } })} type="button">
-          Generate New Layout 1
-        </button>
-        <button onClick={() => this.setState({ layouts2: { lg: [] } })} type="button">
-          Generate New Layout 2
-        </button>
         <div
           style={{
             border: '5px solid #ddd',
             borderRadius: '5px',
             marginBottom: '20px',
-            // borderColor: 'black',
             display: 'flex',
-            // height: "200px"
             height: '100%',
             width: '100%',
           }}
@@ -187,7 +168,6 @@ export default class DragFromOutsideLayout extends React.Component<
               border: '5px solid #ddd',
               borderRadius: '5px',
               marginBottom: '20px',
-              // borderColor: 'black'
             }}
           >
             {this.generateDOM(layouts1, 'layouts1')}
@@ -198,18 +178,19 @@ export default class DragFromOutsideLayout extends React.Component<
               borderRadius: '5px',
               marginBottom: '20px',
               borderColor: 'black',
-              // height: "200px"
+              height: '100%',
               width: '100%',
             }}
             onDragOver={(e) => e.preventDefault()}
             onDrop={(e) => this.onDrop('layouts2', e)}
           >
             <ResponsiveReactGridLayout
-              {...defaultProps}
-              layouts={layouts2}
-              // onBreakpointChange={() => {}}
-              measureBeforeMount={false}
-              useCSSTransforms={mounted}
+              // className="layout"
+              // rowHeight={30}
+              // cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
+              // layouts={layouts2}
+              // measureBeforeMount={false}
+              // useCSSTransforms={mounted}
               compactType={compactType}
             >
               {this.generateDOM(layouts2, 'layouts2')}
@@ -222,9 +203,9 @@ export default class DragFromOutsideLayout extends React.Component<
 }
 
 function generateLayout() {
-  return _.map(_.range(0, 2), (item, i) => {
+  const layout = _.map(_.range(0, 2), (item, i) => {
     const y = Math.ceil(Math.random() * 4) + 1;
-    return {
+    const layoutItem = {
       x: Math.round(Math.random() * 5) * 2,
       y: Math.floor(i / 6) * y,
       w: 2,
@@ -233,5 +214,10 @@ function generateLayout() {
       static: false,
       text: `Text - ${i}`,
     };
+    console.log('Generated Layout Item:', layoutItem);
+    return layoutItem;
   });
+
+  console.log('Generated Layout:', layout);
+  return layout;
 }

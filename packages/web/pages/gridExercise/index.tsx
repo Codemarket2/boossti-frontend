@@ -15,10 +15,12 @@ export default function Thinking1234() {
         }}
       >
         <GridExercise
-          style={{
-            border: 'none',
-            flex: '1', // Take up remaining vertical space
-          }}
+          style={
+            {
+              // border: 'none',
+              // flex: '1', // Take up remaining vertical space
+            }
+          }
         />
       </div>
     </UserLayout>
