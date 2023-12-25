@@ -1,7 +1,8 @@
 import UserLayout from '../../src/components/common/UserLayout';
-import GridExercise from '../../src/components/formExercise/gridExercise';
+import GridExercise2 from '../../src/components/FormExercise2/FormExercise';
 import FeedLayout from '../../src/components/form2/feed/FeedLayout';
-
+// packages\web\src\components\formExercise2\formExercise.tsx
+// packages\web\src\components\FormExercise2\FormExercise.tsx
 export default function Thinking1234() {
   return (
     <UserLayout authRequired>
@@ -15,8 +16,8 @@ export default function Thinking1234() {
           borderColor: 'green',
         }}
       >
-        <p>Just Checking</p>
-        <GridExercise />
+        <p>Just Checking Again</p>
+        <GridExercise2 />
         {/* <FeedLayout/> */}
       </div>
     </UserLayout>

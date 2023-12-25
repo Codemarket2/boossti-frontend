@@ -9,6 +9,7 @@ export default function view() {
 }
 
 export function GetResponseValue({ formData }: any) {
+  // console.log(formData,"HEHEHEEH")
   const { data, error } = useGetResponses({ formId: formData?._id });
   return (
     <>

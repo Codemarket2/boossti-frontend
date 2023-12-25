@@ -27,7 +27,9 @@ import { getUserAttributes } from '@frontend/shared/hooks/user/getUserForm';
 import { useSelector } from 'react-redux';
 import ErrorLoading from '../common/ErrorLoading';
 import ListHeader2 from '../common/ListHeader2';
-
+import ResponseList from '../response/ResponseListcopy';
+// import { useGetForm } from '@frontend/shared/hooks/form';
+import moment from 'moment';
 interface YourComponentState {
   compactType: string;
   mounted: boolean;
@@ -77,8 +79,14 @@ export default class DragFromOutsideLayout extends React.Component<
     event.preventDefault();
     this.removeValidDropAreaIndicator();
     const sourceItem = JSON.parse(event.dataTransfer.getData('text/plain'));
-    console.log(sourceItem.slug, 'From here');
-    console.log(sourceItem.createdBy.values[0].value);
+    console.log(sourceItem, 'From here');
+    console.log(
+      sourceItem.createdBy.values[1].value,
+      sourceItem.createdBy.values[2].value,
+      sourceItem.createdBy?.count,
+      'Created',
+    );
+    // console.log(sourceItem.createdBy.values[0].value);
     // console.log(sourceItem.createdAt)
     if (sourceItem) {
       this.dropData = { targetLayout, sourceItem };
@@ -130,15 +138,15 @@ export default class DragFromOutsideLayout extends React.Component<
   generateDOM(layout, layoutKey) {
     // let ans = Func({form : '6324e600fe046781e9d33d6f'});
     // console.log(ans)
-    return _.map(layout.lg, (form, i) => {
+    return _.map(layout.lg, (response, i) => {
+      // console.log(form)
       const itemStyles = {
-        // backgroundColor: 'blue',
         padding: '20px',
         borderRadius: '5px',
         marginBottom: '20px',
         cursor: 'move',
         height: '50px',
-        width: '100px',
+        width: '200px',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -147,27 +155,29 @@ export default class DragFromOutsideLayout extends React.Component<
       return (
         <div
           key={i}
-          className={`grid-item ${form.static ? 'static' : ''}`}
+          className={`grid-item ${response.static ? 'static' : ''}`}
           style={itemStyles}
-          draggable={!form.static}
+          draggable={!response.static}
           // onDragStart={(e) => this.onDragStart(e, form, layoutKey)}
         >
-          <Fragment key={form._id}>
-            {/* {i > 0 && <Divider />} */}
-            <Link href={`/form/${form.slug}`}>
+          <div>
+            <span>
               <div>
-                <p>{form.name}</p>
-                <p>
-                  {form.createdBy.values[0].value} {form.createdBy.values[1].value}{' '}
-                  {getCreatedAtDate(form.createdAt)}
-                </p>
-                {/* <p>
-                {`
-                ${getCreatedAtDate(form.createdAt)}`}
-              </p> */}
+                <Link href={`/form/users/response/${response?.createdBy?.count}`}>
+                  <a>
+                    <u>
+                      {response.createdBy.values[1].value}
+                      {response.createdBy.values[2].value}
+                    </u>
+                  </a>
+                </Link>
+                <br />
+                <span>{`${moment(response.createdAt).format('l')} ${moment(
+                  response.createdAt,
+                ).format('LT')}`}</span>
               </div>
-            </Link>
-          </Fragment>
+            </span>
+          </div>
         </div>
       );
     });
@@ -186,6 +196,7 @@ export default class DragFromOutsideLayout extends React.Component<
         }}
       >
         {/* <FormList/> */}
+        <p>Just Checking Again</p>
         <div
           style={{
             border: '5px solid #ddd',
@@ -205,7 +216,10 @@ export default class DragFromOutsideLayout extends React.Component<
           >
             {/* {this.generateDOM(layouts1, 'layouts1')}
             //  */}
-            <FormList />
+            {/* <FormList /> */}
+            <ResponseList
+              form={{ _id: '6324e600fe046781e9d33d6f', name: 'Pages', slug: 'pages' }}
+            />
           </div>
           <div
             style={{

@@ -134,6 +134,8 @@ export function FormChild({
   const { handleDelete } = useDeleteForm({
     onAlert,
   });
+
+  console.log(form, 'Fosfdsmfdslsd');
   const { formAllTabs } = useGetFormTabs(form?._id);
   const [state, setState] = useState(initialState);
 
