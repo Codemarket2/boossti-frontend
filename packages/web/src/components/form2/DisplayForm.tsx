@@ -145,6 +145,7 @@ export const DisplayForm = (props: IDisplayFormProps) => {
       </div>
     );
   }
+
   return (
     <div data-testid="FormPage">
       <FormPage {...props} overrideValues={overrideValues} slug={props.slug} />

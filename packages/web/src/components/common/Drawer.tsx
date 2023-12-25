@@ -157,6 +157,15 @@ export default function DrawerContent({ showDrawer, toggleDrawer, admin }: IProp
             <ListItemText primary="Grid Exercise" />
           </ListItem>
         </Link>
+        <Link href="/formExercise">
+          <ListItem button selected={checkActiveRoute(activeRoute, '/fromExercise')}>
+            <ListItemIcon>
+              <AnalyticsIcon />
+            </ListItemIcon>
+            <ListItemText primary="Forms Exercise" />
+          </ListItem>
+        </Link>
+        {/* </List> */}
       </List>
     </Drawer>
   );

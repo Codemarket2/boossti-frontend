@@ -52,19 +52,28 @@ export default function FormList({
         ) : (
           <List dense disablePadding>
             {data.getForms.data.map((form, i) => (
-              <Fragment key={form._id}>
-                {i > 0 && <Divider />}
-                <Link href={customLink ? customLink(form) : `/form/${form.slug}`}>
-                  <ListItem button selected={form?.slug === selectedForm}>
-                    <ListItemText
-                      primary={form.name}
-                      secondary={`${getUserAttributes(userForm, form.createdBy)?.firstName} ${
-                        getUserAttributes(userForm, form.createdBy)?.lastName
-                      } ${getCreatedAtDate(form.createdAt)}`}
-                    />
-                  </ListItem>
-                </Link>
-              </Fragment>
+              <div
+                key={i}
+                className="draggable-form-item"
+                draggable
+                onDragStart={(e) => {
+                  e.dataTransfer.setData('text/plain', JSON.stringify(form));
+                }}
+              >
+                <Fragment key={form._id}>
+                  {i > 0 && <Divider />}
+                  <Link href={customLink ? customLink(form) : `/form/${form.slug}`}>
+                    <ListItem button selected={form?.slug === selectedForm}>
+                      <ListItemText
+                        primary={form.name}
+                        secondary={`${getUserAttributes(userForm, form.createdBy)?.firstName} ${
+                          getUserAttributes(userForm, form.createdBy)?.lastName
+                        } ${getCreatedAtDate(form.createdAt)}`}
+                      />
+                    </ListItem>
+                  </Link>
+                </Fragment>
+              </div>
             ))}
           </List>
         )}

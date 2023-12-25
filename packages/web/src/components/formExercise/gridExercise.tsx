@@ -1,8 +1,32 @@
 import React from 'react';
 import _ from 'lodash';
 import { Responsive, WidthProvider } from 'react-grid-layout';
-
+import { useGetForm } from '@frontend/shared/hooks/form';
+import { getUserName } from '@frontend/shared/hooks/user/getUserForm';
+import { useGetResponses, useDeleteResponse } from '@frontend/shared/hooks/response';
+import Func from '../response/GettingListResopnse';
+// import FeedLayout from "./form2/feed/FeedLayout"
+import FeedLayout from '../form2/feed/FeedLayout';
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
+import FormList from '../form2/FormList';
+// packages\web\src\components\form2\FormList.tsx
+// import { use\GetForms } from '@frontend/shared/hooks/form';
+/* eslint-disable react/jsx-wrap-multilines */
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { Fragment } from 'react';
+// import { useGetForms } from '@frontend/shared/hooks/form';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Paper from '@mui/material/Paper';
+import ListItemText from '@mui/material/ListItemText';
+import { getCreatedAtDate } from '@frontend/shared/utils/date';
+import { getUserAttributes } from '@frontend/shared/hooks/user/getUserForm';
+import { useSelector } from 'react-redux';
+import ErrorLoading from '../common/ErrorLoading';
+import ListHeader2 from '../common/ListHeader2';
 
 interface YourComponentState {
   compactType: string;
@@ -19,7 +43,7 @@ export default class DragFromOutsideLayout extends React.Component<
 
   constructor(props: Record<string, unknown>) {
     super(props);
-
+    // const { data, error, loading, state, setState } = useGetForms({ true });
     this.state = {
       compactType: 'No Compaction',
       mounted: false,
@@ -28,9 +52,10 @@ export default class DragFromOutsideLayout extends React.Component<
     };
   }
 
-  componentDidMount() {
-    this.setState({ mounted: true });
-  }
+  // componentDidMount() {
+  //   this.setState({ mounted: true });
+  // }
+  // let userForm = useSelector(({ setting }: any) => setting.userForm);
 
   onDragStart = (event, item, layoutKey1) => {
     event.dataTransfer.setData('text/plain', JSON.stringify({ ...item, layoutKey: layoutKey1 }));
@@ -51,10 +76,10 @@ export default class DragFromOutsideLayout extends React.Component<
     console.log('onDrop triggered');
     event.preventDefault();
     this.removeValidDropAreaIndicator();
-
     const sourceItem = JSON.parse(event.dataTransfer.getData('text/plain'));
-    console.log(sourceItem);
-
+    console.log(sourceItem.slug, 'From here');
+    console.log(sourceItem.createdBy.values[0].value);
+    // console.log(sourceItem.createdAt)
     if (sourceItem) {
       this.dropData = { targetLayout, sourceItem };
 
@@ -63,37 +88,36 @@ export default class DragFromOutsideLayout extends React.Component<
       }, 0);
     }
   };
+  componentDidMount() {
+    // const fetchData = async () => {
+    //   const { data } = await useGetResponses({
+    //     formId: "6324e600fe046781e9d33d6f",
+    //   });
+    //   console.log(data, "dfdfdgdg");
+    // };
+
+    // fetchData();
+
+    this.setState({ mounted: true });
+  }
 
   componentDidUpdate() {
     const { dropData } = this;
     if (dropData) {
       const { targetLayout, sourceItem } = dropData;
       this.setState((prevState) => {
-        const updatedSourceLayout = prevState[sourceItem.layoutKey].lg;
-        const newItem = {
-          i: sourceItem.i,
-          x: 0,
-          y: 0,
-          w: sourceItem.w,
-          h: sourceItem.h,
-          static: false,
-          text: sourceItem.text,
-        };
+        // const updatedSourceLayout = prevState[sourceItem.layoutKey].lg;
+        const newItem = { ...sourceItem, x: 0, y: 0 }; // Include full form data
 
-        let updatedTargetLayout = prevState[targetLayout].lg;
-
-        if (sourceItem.layoutKey !== targetLayout) {
-          updatedTargetLayout = updatedTargetLayout.concat(newItem);
-        }
-
+        const updatedTargetLayout = prevState[targetLayout].lg.concat(newItem);
         if (
-          !_.isEqual(updatedSourceLayout, prevState[sourceItem.layoutKey].lg) ||
+          // !_.isEqual(updatedSourceLayout, prevState[sourceItem.layoutKey].lg) ||
           !_.isEqual(updatedTargetLayout, prevState[targetLayout].lg)
         ) {
           this.dropData = null;
           return {
             ...prevState,
-            [sourceItem.layoutKey]: { lg: updatedSourceLayout },
+            // [sourceItem.layoutKey]: { lg: updatedSourceLayout },
             [targetLayout]: { lg: updatedTargetLayout },
           };
         }
@@ -104,39 +128,46 @@ export default class DragFromOutsideLayout extends React.Component<
   }
 
   generateDOM(layout, layoutKey) {
-    console.log(layout);
-    return _.map(layout.lg, (l, i) => {
+    // let ans = Func({form : '6324e600fe046781e9d33d6f'});
+    // console.log(ans)
+    return _.map(layout.lg, (form, i) => {
       const itemStyles = {
-        backgroundColor: l.i === '0' ? 'red' : 'blue',
+        // backgroundColor: 'blue',
         padding: '20px',
         borderRadius: '5px',
         marginBottom: '20px',
         cursor: 'move',
         height: '50px',
-        width: '100px',
+        width: '200px',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        color: 'white',
+        color: 'black',
       };
       return (
         <div
           key={i}
-          className={`grid-item ${l.static ? 'static' : ''}`}
+          className={`grid-item ${form.static ? 'static' : ''}`}
           style={itemStyles}
-          draggable={!l.static}
-          onDragStart={(e) => this.onDragStart(e, l, layoutKey)}
+          draggable={!form.static}
+          // onDragStart={(e) => this.onDragStart(e, form, layoutKey)}
         >
-          {l.static ? (
-            <span
-              className="text static-text"
-              title="This item is static and cannot be removed or resized."
-            >
-              {l.text}
-            </span>
-          ) : (
-            <span className="text">{l.text}</span>
-          )}
+          <Fragment key={form._id}>
+            {/* {i > 0 && <Divider />} */}
+            {/* <Link href={`/form/${form.slug}`}> */}
+            <div>
+              <p>{form.name}</p>
+              <p>
+                {form.createdBy.values[0].value} {form.createdBy.values[1].value}{' '}
+                {getCreatedAtDate(form.createdAt)}
+              </p>
+              {/* <p>
+                {`
+                ${getCreatedAtDate(form.createdAt)}`}
+              </p> */}
+            </div>
+            {/* </Link> */}
+          </Fragment>
         </div>
       );
     });
@@ -154,6 +185,7 @@ export default class DragFromOutsideLayout extends React.Component<
           borderRadius: '5px',
         }}
       >
+        {/* <FormList/> */}
         <div
           style={{
             border: '5px solid #ddd',
@@ -171,7 +203,9 @@ export default class DragFromOutsideLayout extends React.Component<
               marginBottom: '20px',
             }}
           >
-            {this.generateDOM(layouts1, 'layouts1')}
+            {/* {this.generateDOM(layouts1, 'layouts1')}
+            //  */}
+            <FormList />
           </div>
           <div
             style={{
@@ -192,7 +226,7 @@ export default class DragFromOutsideLayout extends React.Component<
               // layouts={layouts2}
               // measureBeforeMount={false}
               // useCSSTransforms={mounted}
-              compactType={compactType}
+              compactType={'No Compaction'}
             >
               {this.generateDOM(layouts2, 'layouts2')}
             </ResponsiveReactGridLayout>
