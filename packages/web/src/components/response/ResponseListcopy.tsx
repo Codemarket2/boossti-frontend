@@ -35,8 +35,8 @@ export default function ResponseList({
     valueFilter,
     parentResponseId,
   });
-  console.log(form?._id, showOnlyMyResponses, workflowId, valueFilter, parentResponseId, 'HEHE');
-  console.log(data, 'gdfgf');
+  // console.log(form?._id, showOnlyMyResponses, workflowId, valueFilter, parentResponseId, 'HEHE');
+  // console.log(data, 'gdfgf');
   const [responsesView, setResponsesView] = useState(form?.settings?.responsesView || 'table');
 
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });

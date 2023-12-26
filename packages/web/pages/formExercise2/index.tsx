@@ -16,7 +16,7 @@ export default function Thinking1234() {
           borderColor: 'green',
         }}
       >
-        <p>Just Checking Again</p>
+        {/* <p>Just Checking Again</p> */}
         <GridExercise2 />
         {/* <FeedLayout/> */}
       </div>

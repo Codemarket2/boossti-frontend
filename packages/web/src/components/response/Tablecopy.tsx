@@ -56,21 +56,22 @@ export default function ResponseTable({
 }: IProps) {
   const userForm = useSelector(({ setting }: any) => setting.userForm);
   const router = useRouter();
-  // console.log(responses,"Responses")
+  // console.log(form,"Responses")
+  // form?.fields?.map((field: IField, i) => (
+  //   console.log(field)))
   return (
     <div>
       {responses?.map((response) => (
         <div
           key={response._id}
-          // key={i}
           className="draggable-form-item"
           draggable
           onDragStart={(e) => {
-            e.dataTransfer.setData('text/plain', JSON.stringify(response));
+            e.dataTransfer.setData('text/plain', JSON.stringify(['Check', form, response]));
           }}
         >
           <div>
-            <span>
+            {/* <span>
               <Link href={`/form/users/response/${response?.createdBy?.count}`}>
                 <a>
                   <u>{getUserName(userForm, response?.createdBy)}</u>
@@ -80,7 +81,16 @@ export default function ResponseTable({
               <span>{`${moment(response.createdAt).format('l')} ${moment(response.createdAt).format(
                 'LT',
               )}`}</span>
-            </span>
+            </span> */}
+            <div>
+              {form?.fields
+                ?.filter((field: IField) => field.label === 'Title')
+                .map((filteredField: IField, i) => (
+                  <TableCell key={i}>
+                    <FieldValuesMap field={filteredField} response={response} />
+                  </TableCell>
+                ))}
+            </div>
           </div>
         </div>
       ))}
