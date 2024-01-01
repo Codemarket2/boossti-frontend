@@ -36,7 +36,7 @@ export default function ResponseList({
     parentResponseId,
   });
   // console.log(form?._id, showOnlyMyResponses, workflowId, valueFilter, parentResponseId, 'HEHE');
-  // console.log(data, 'gdfgf');
+  // console.log(data, 'Form Data');
   const [responsesView, setResponsesView] = useState(form?.settings?.responsesView || 'table');
 
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
@@ -77,7 +77,7 @@ export default function ResponseList({
             rowsPerPage={state.limit}
             page={state.page - 1}
             onPageChange={(e, newPage) => setState({ ...state, page: newPage + 1 })}
-            onRowsPerPageChange={(e) => setState({ ...state, limit: parseInt(e.target.value) })}
+            // onRowsPerPageChange={(e) => setState({ ...state, limit: parseInt(e.target.value) })}
           />
         </>
       ) : ( */}

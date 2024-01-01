@@ -144,6 +144,7 @@ export default function FormView({
   const [selectState, setSelectState] = useState(initialSelectState);
 
   const handleSubmit = async (values) => {
+    console.log(form, 'In handle submit');
     let payload: any = { formId: form?._id, values };
     let options = {};
     if (form?.settings?.customResponseLayout && form?.settings?.customSectionId) {
@@ -154,16 +155,19 @@ export default function FormView({
       form?.settings?.actions?.length > 0 &&
       form?.settings?.actions?.find((e) => e?.actionType === 'createSeoReport')
     ) {
+      console.log('Final Check1');
       const actionforSeoReport = form?.settings?.actions?.find(
         (e) => e?.actionType === 'createSeoReport',
       );
       const valueOfSeoReport = values?.find((v) => v?.field === actionforSeoReport?.websiteUrl);
       const url = valueOfSeoReport?.value;
       if (url) {
+        console.log('Final Check2');
         const seoReportResponse = await axios.get(
           'https://us-central1-boossti.cloudfunctions.net/lightHouseHTTP',
           { params: { url, id: 2 } },
         );
+        console.log('Final Check3');
         values.push({
           value: JSON.stringify(seoReportResponse?.data, null, 2),
           field: actionforSeoReport?.report,
@@ -688,11 +692,14 @@ export function FormViewChild({
   };
 
   const onSubmit = async () => {
+    console.log(authRequired, 'Auth Required');
+    console.log(authenticated, 'Authencation');
     setSubmitState((oldSubmitState) => ({ ...oldSubmitState, loading: true }));
     const validate = validateResponse(
       fields?.filter(filterHiddenFields).filter(filterDisabledFields),
       values,
     );
+    console.log(validate, 'Validation Data');
     if (validate) {
       setSubmitState((oldSubmitState) => ({ ...oldSubmitState, validate, loading: false }));
       return;
@@ -702,6 +709,8 @@ export function FormViewChild({
       return setState((oldState) => ({ ...oldState, showAuthModal: true }));
     }
     const response = await onSave();
+    console.log(response, 'Response');
+    // console.log(authenticated, "Authencation")
     if (response) {
       setSubmitState(initialSubmitState);
       setValues([]);
@@ -715,6 +724,7 @@ export function FormViewChild({
 
   const onSave = async () => {
     let newValues = Array.from(values);
+    console.log(values, fields, 'Values');
     fields.forEach((field) => {
       if (field?.options?.multipleValues) {
         const newValue = { ...defaultValue, field: field._id, value: '' };
@@ -768,6 +778,7 @@ export function FormViewChild({
     result.splice(endIndex, 0, removed);
     return result;
   };
+
   function onDragEnd(result) {
     const field = fields.find((item) => item._id === result.source.droppableId);
     if (!result.destination) {
@@ -797,7 +808,6 @@ export function FormViewChild({
   const filterHiddenFields = (field) => {
     if (field?.options?.hidden && field?.options?.hiddenConditions?.length > 0) {
       if (edit) return true;
-      // debugger;
       const result = resolveCondition({
         conditions: field?.options?.hiddenConditions,
         leftPartResponse: { formId, values },
@@ -877,7 +887,7 @@ export function FormViewChild({
           color="primary"
           size="small"
         >
-          Save
+          Save & Sumbit
         </LoadingButton>
       </div>
     </Tooltip>

@@ -1,5 +1,5 @@
 import UserLayout from '../../src/components/common/UserLayout';
-import GridExercise2 from '../../src/components/FormExercise2/FormExercise';
+import GridExercise2 from '../../src/components/ReactGridLayoutEditor/ReactGridLayoutEditor';
 import FeedLayout from '../../src/components/form2/feed/FeedLayout';
 // packages\web\src\components\formExercise2\formExercise.tsx
 // packages\web\src\components\FormExercise2\FormExercise.tsx

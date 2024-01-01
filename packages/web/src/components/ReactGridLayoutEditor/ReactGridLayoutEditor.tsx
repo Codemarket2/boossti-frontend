@@ -4,18 +4,24 @@ import { Responsive, WidthProvider } from 'react-grid-layout';
 import Link from 'next/link';
 import ResponseList from '../response/ResponseListcopy';
 import moment from 'moment';
-import { useGetFormBySlug, getForm } from '@frontend/shared/hooks/form';
+import { useGetFormBySlug, getForm, getFormBySlug } from '@frontend/shared/hooks/form';
 import DisplayFormDashboardBySlug from '../form2/FormDashboardcopy';
 import FieldValuesMap from '../response/FieldValuesMap';
+
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
+
 const DragFromOutsideLayout = () => {
   const [compactType, setCompactType] = useState('No Compaction');
   const [layouts2, setLayouts2] = useState({ lg: [] });
   const [dropData, setDropData] = useState({ targetLayout: '', sourceItem: null });
   const [formData, setFormData] = useState(null);
-
+  // console.log(formData,"Form in the layout")
   const onDragStart = (event, item, layoutKey1) => {
     event.dataTransfer.setData('text/plain', JSON.stringify({ ...item, layoutKey: layoutKey1 }));
+  };
+
+  const MyHTMLComponent = ({ htmlContent }) => {
+    return <div dangerouslySetInnerHTML={{ __html: htmlContent }} />;
   };
 
   const onDragLeave = () => {
@@ -41,7 +47,7 @@ const DragFromOutsideLayout = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getForm('6324e600fe046781e9d33d6f');
+      const data = await getFormBySlug('canva_demo');
       setFormData(data);
     };
 
@@ -97,13 +103,15 @@ const DragFromOutsideLayout = () => {
           </div> */}
           {/* <p>HEHE</p> */}
 
-          {form?.fields
-            ?.filter((field) => field.label === 'Title')
+          {/* {form?.fields
+            ?.filter((field) => field.label === 'Webpage')
             .map((filteredField, i) => (
               <div key={i}>
                 <FieldValuesMap field={filteredField} response={response} />
               </div>
-            ))}
+            ))} */}
+          {/* <p>{response.values[0].value}</p> */}
+          <MyHTMLComponent htmlContent={response.values[0].value} />
         </div>
       );
     });
@@ -148,7 +156,7 @@ const DragFromOutsideLayout = () => {
             width: '100%',
           }}
           onDragOver={(e) => e.preventDefault()}
-          onDrop={(e) => onDrop('layouts2', e)}
+          onDrop={(e) => onDrop('layouts2' || 'layouts1', e)}
         >
           <ResponsiveReactGridLayout compactType={compactType}>
             {generateDOM()}

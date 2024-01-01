@@ -135,7 +135,7 @@ export function FormChild({
     onAlert,
   });
 
-  console.log(form, 'Fosfdsmfdslsd');
+  console.log(form, 'Initial Form');
   const { formAllTabs } = useGetFormTabs(form?._id);
   const [state, setState] = useState(initialState);
 
@@ -172,7 +172,6 @@ export function FormChild({
   };
 
   const onDelete = () => {
-    // eslint-disable-next-line no-restricted-globals
     const anwser = confirm('Are you sure you want to delete this form?');
     if (anwser) {
       setState({
@@ -188,7 +187,6 @@ export function FormChild({
   if (!form) {
     return <ErrorLoading />;
   }
-
   if (authorized || (settings?.published && authenticated)) {
     return (
       <>

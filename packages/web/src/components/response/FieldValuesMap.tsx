@@ -62,9 +62,6 @@ export default function FieldValuesMap({
     value: response,
   });
 
-  // const isDependantRelationship =
-  //   !field?.options?.selectItem && field?.options?.dependentRelationship;
-
   return (
     <>
       {displayFieldLabel && (
@@ -195,10 +192,3 @@ export default function FieldValuesMap({
     </>
   );
 }
-
-// const StyledBox = styled(Box)(({ theme }) => ({
-//   flexDirection: 'column',
-//   [theme.breakpoints.up('md')]: {
-//     flexDirection: 'row !important',
-//   },
-// }));

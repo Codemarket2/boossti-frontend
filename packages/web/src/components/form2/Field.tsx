@@ -57,7 +57,8 @@ import ActionVariables from './actions/ActionVariables';
 
 import DesignTab from './design/DesignTab';
 import FormList from './FormList';
-
+import ReactGridLayoutEditor from '../ReactGridLayoutEditor/ReactGridLayoutEditor';
+// packages\web\src\components\FormExercise2\FormExercise.tsx
 const initialState = {
   layouts: {},
   styles: {},
@@ -809,6 +810,29 @@ export default function Field({
               <FormList hideHeader />
             </div>
           </ResponsiveGridLayout>
+        </>
+      );
+    }
+    case 'ReactGridLayoutEditor': {
+      // const layouts = [
+      //   { i: 'a', x: 0, y: 500, w: 100, h: 5, static: true },
+      //   { i: 'b', x: 1, y: 500, w: 300, h: 2, minW: 2, maxW: 4 },
+      //   { i: 'c', x: 4, y: 500, w: 100, h: 2 },
+      // ];
+      return (
+        <>
+          {/* <ResponsiveGridLayout
+            className="layout"
+            layout={layout}
+            cols={12}
+            rowHeight={30}
+            width={1200}
+          >
+            <div key="b" style={{ backgroundColor: 'violet' }}>
+              <FormList hideHeader />
+            </div>
+          </ResponsiveGridLayout> */}
+          <ReactGridLayoutEditor />
         </>
       );
     }
