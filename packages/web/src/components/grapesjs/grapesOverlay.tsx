@@ -40,7 +40,7 @@ export default function Webpage({ editMode, value, onChange }: Iprops) {
           toggleEditor();
         }}
       >
-        {editMode ? 'Edit' : 'View'} Html Page
+        {editMode ? 'Edit' : 'View'} Html Page Duh!
       </Button>
       <br />
       {editMode && (

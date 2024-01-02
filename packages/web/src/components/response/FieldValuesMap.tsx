@@ -56,23 +56,31 @@ export default function FieldValuesMap({
       setDisabled(!result);
     }
   };
-
+  // console.log(field,response,field.fieldType,"Final")
   useDebounce({
     callback: checkDisabledCondition,
     value: response,
   });
 
+  const targetFieldId = '659019322dada2edbc40307f';
+
+  // Find the value with the specified field ID
+  const targetValue = response.values.find((value) => value.field === targetFieldId);
+  // console.log(targetValue.value,"targetValue Chilc")
+  // const parsedObject = JSON.parse(targetValue.value)
+  // console.log(parsedObject,"Target Chilc")
   return (
     <>
       {displayFieldLabel && (
         <>
-          {field.fieldType !== 'label' && (
+          {field.fieldType !== 'ReactGridLayoutEditor' && (
             <Typography
               fontWeight="bold"
               className="d-flex align-items-center"
               data-testid="fields-display"
             >
               <div data-testid="label">{field?.label}</div>
+              {/* <div>Checking Bro</div> */}
               {authorized && !disabled && (
                 <>
                   {(field?.options?.multipleValues || fieldValues?.length === 0) && !inlineEdit && (
@@ -94,8 +102,13 @@ export default function FieldValuesMap({
         {/* isDependantRelationship ? (
           <DependantResponses disabled={disabled} parentResponseId={response?._id} field={field} />
         ) : */}
-        {field.fieldType === 'label' ? (
-          <DisplayRichText value={field?.options?.staticText} />
+        {field.fieldType === 'ReactGridLayoutEditor' ? (
+          <div>
+            <p>ReactGridLayoutEditor</p>
+            <p>{targetValue.value}</p>
+            {/* {targetValue.value} */}
+            <DisplayRichText value={field?.options?.staticText} />
+          </div>
         ) : field?.options?.systemCalculatedAndView ? (
           <DisplayFormulaValue
             formula={field?.options?.formula}

@@ -57,7 +57,7 @@ import ActionVariables from './actions/ActionVariables';
 
 import DesignTab from './design/DesignTab';
 import FormList from './FormList';
-import ReactGridLayoutEditor from '../ReactGridLayoutEditor/ReactGridLayoutEditor';
+import DragFromOutsideLayout from '../ReactGridLayoutEditor/ReactGridLayoutEditor';
 // packages\web\src\components\FormExercise2\FormExercise.tsx
 const initialState = {
   layouts: {},
@@ -85,7 +85,7 @@ export interface FieldProps {
   inlineEdit?: boolean;
   setValues?: () => void;
 }
-const ResponsiveReactGridLayout = WidthProvider(Responsive);
+// const ResponsiveReactGridLayout = WidthProvider(Responsive);
 const objectId = generateObjectId();
 
 const getDefaultOptions = () => {
@@ -112,16 +112,11 @@ export default function Field({
 }: FieldProps): any {
   const [options, setOptions] = useState<any>(getDefaultOptions());
 
-  // variables for the template
   const router = useRouter();
   const { slug } = router.query;
   const { data, error } = useGetFormBySlug(slug?.toString());
   const [variables, setVariables] = useState([{ name: '', field: '', formId: null }]);
-  const layout = [
-    { i: 'a', x: 0, y: 0, w: 1, h: 2, static: true },
-    { i: 'b', x: 1, y: 0, w: 3, h: 2, minW: 2, maxW: 4 },
-    { i: 'c', x: 4, y: 0, w: 1, h: 2 },
-  ];
+
   useCheckUnique({
     formId,
     value,
@@ -164,10 +159,20 @@ export default function Field({
 
   const onChange = (payload) => {
     onChangeValue({ ...value, field: field?._id, ...payload });
+    console.log(value, field, payload, 'Values in the endfoemf');
     if (field?.options?.unique) {
       setUnique(false);
       setUniqueLoading(true);
     }
+    // console.log(field,value, "Values in the end1sa");
+  };
+  // const [layouts2, setLayouts2] = useState([]);
+
+  const handleLayoutChange = (newLayouts) => {
+    // onChangeValue({ ...value, field: field?._id, ...newLayouts });
+    // setLayouts2(newLayouts);
+    // value.value = newLayouts
+    // console.log(value, "Values in the end1");
   };
 
   const [addOption, setAddOption] = useState({ showDrawer: false });
@@ -801,7 +806,7 @@ export default function Field({
         <>
           <ResponsiveGridLayout
             className="layout"
-            layout={layout}
+            layout={layouts}
             cols={12}
             rowHeight={30}
             width={1200}
@@ -814,25 +819,13 @@ export default function Field({
       );
     }
     case 'ReactGridLayoutEditor': {
-      // const layouts = [
-      //   { i: 'a', x: 0, y: 500, w: 100, h: 5, static: true },
-      //   { i: 'b', x: 1, y: 500, w: 300, h: 2, minW: 2, maxW: 4 },
-      //   { i: 'c', x: 4, y: 500, w: 100, h: 2 },
-      // ];
       return (
         <>
-          {/* <ResponsiveGridLayout
-            className="layout"
-            layout={layout}
-            cols={12}
-            rowHeight={30}
-            width={1200}
-          >
-            <div key="b" style={{ backgroundColor: 'violet' }}>
-              <FormList hideHeader />
-            </div>
-          </ResponsiveGridLayout> */}
-          <ReactGridLayoutEditor />
+          <DragFromOutsideLayout
+            value={value?.value || []}
+            onLayoutChange={handleLayoutChange}
+            onChange={(data) => onChange({ value: data })}
+          />
         </>
       );
     }

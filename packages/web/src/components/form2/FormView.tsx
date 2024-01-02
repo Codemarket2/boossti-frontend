@@ -144,7 +144,7 @@ export default function FormView({
   const [selectState, setSelectState] = useState(initialSelectState);
 
   const handleSubmit = async (values) => {
-    console.log(form, 'In handle submit');
+    console.log(values, 'In handle submit');
     let payload: any = { formId: form?._id, values };
     let options = {};
     if (form?.settings?.customResponseLayout && form?.settings?.customSectionId) {
@@ -202,6 +202,7 @@ export default function FormView({
       }
       // setState({ ...initialState, submitted: true, messages, response });
     }
+    console.log(response, 'Response');
     return response;
   };
 
@@ -545,7 +546,6 @@ export function FormViewChild({
     responses: {},
   });
 
-  // ONLY SHOW & VALIDATE REQUIRED FIELDS
   const fields = useMemo(
     () =>
       tempFields?.filter((field: IField) => {
@@ -724,7 +724,7 @@ export function FormViewChild({
 
   const onSave = async () => {
     let newValues = Array.from(values);
-    console.log(values, fields, 'Values');
+    console.log(values, newValues, 'Values dsfdsfsaaa');
     fields.forEach((field) => {
       if (field?.options?.multipleValues) {
         const newValue = { ...defaultValue, field: field._id, value: '' };
@@ -989,7 +989,7 @@ export function FormViewChild({
                   loading={!disableSubmitButton && (submitState.loading || loading)}
                   onClick={onSubmit}
                 >
-                  Publish
+                  Publish & Save
                 </LoadingButton>
               </div>
             )}
@@ -1005,6 +1005,7 @@ export function FormViewChild({
                   xl={field?.options?.grid?.xl}
                   key={field._id}
                 >
+                  {/* <p>Checking</p> */}
                   <div style={field?.options?.style || {}}>
                     <InputGroup key={field._id} id={field?._id}>
                       {!['label'].includes(field.fieldType) && (
@@ -1104,6 +1105,7 @@ export function FormViewChild({
                                   }
                                   validate={submitState.validate}
                                   onChangeValue={(changedValue) => {
+                                    // console.log("Did I find it?")
                                     if (!field?.options?.systemCalculatedAndView) {
                                       onChange(
                                         { ...changedValue, field: field._id },
@@ -1147,6 +1149,7 @@ export function FormViewChild({
                         </>
                       )}
                       <DragDropContext onDragEnd={onDragEnd} isDropDisabled={false}>
+                        {/* <p>jusfsdfsdfdsf</p> */}
                         <Droppable droppableId={field._id}>
                           {(provided) => (
                             <div ref={provided.innerRef} {...provided.droppableProps}>
@@ -1189,15 +1192,15 @@ export function FormViewChild({
                                                                 : field?.label,
                                                             }}
                                                             disabled={submitState.loading}
-                                                            onChangeValue={(changedValue) =>
+                                                            onChangeValue={(changedValue) => {
                                                               onChange(
                                                                 {
                                                                   ...changedValue,
                                                                   field: field._id,
                                                                 },
                                                                 valueIndex,
-                                                              )
-                                                            }
+                                                              );
+                                                            }}
                                                             value={value}
                                                             inlineEdit={inlineEdit}
                                                           />
