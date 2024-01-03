@@ -17,6 +17,7 @@ import DisplayFormulaValue from '../form2/field/formula/DisplayFormulaValue';
 import StarRating from '../starRating/starRating';
 import AddResponseButton from './AddResponseButton';
 import InlineEditMenu from './InlineEditMenu';
+import DragFromOutsideLayout from '../ReactGridLayoutEditor/ReactGridLayoutEditor';
 // import DependantResponses from './DependantResponses';
 import { onAlert } from '../../utils/alert';
 
@@ -46,7 +47,10 @@ export default function FieldValuesMap({
   const [disabled, setDisabled] = useState(false || field?.options?.disabled);
   const { handleResolveCondition } = useResolveCondition();
   const [state, setState] = useState({ inlineEditViewMore: false });
-
+  const handleLayoutChange = (newLayouts) => {
+    // console.log(layouts2,"New Check")
+    // setLayouts2(newLayouts);
+  };
   const checkDisabledCondition = async () => {
     if (field?.options?.disabled && field?.options?.disabledConditions?.length > 0) {
       const result = await handleResolveCondition({
@@ -62,13 +66,20 @@ export default function FieldValuesMap({
     value: response,
   });
 
-  const targetFieldId = '659019322dada2edbc40307f';
+  const targetFieldId = '6595c231d12c8793a1af725e';
 
   // Find the value with the specified field ID
-  const targetValue = response.values.find((value) => value.field === targetFieldId);
-  // console.log(targetValue.value,"targetValue Chilc")
-  // const parsedObject = JSON.parse(targetValue.value)
-  // console.log(parsedObject,"Target Chilc")
+  const targetValue = response?.values?.find((value) => value.field === targetFieldId);
+  console.log(targetValue, 'targetValue Chilc');
+  let parsedObject = targetValue?.value || [];
+  if (targetValue !== undefined) {
+    while (typeof parsedObject === 'string') {
+      parsedObject = JSON.parse(parsedObject);
+    }
+  }
+  // parsedObject = []
+  console.log(parsedObject, 'Target Chilfgfdcc');
+
   return (
     <>
       {displayFieldLabel && (
@@ -104,8 +115,16 @@ export default function FieldValuesMap({
         ) : */}
         {field.fieldType === 'ReactGridLayoutEditor' ? (
           <div>
-            <p>ReactGridLayoutEditor</p>
-            <p>{targetValue.value}</p>
+            <p>
+              <b>ReactGridLayoutEditor</b>
+            </p>
+            {/* <p>hiyfhfghi</p> */}
+            <DragFromOutsideLayout
+              value={parsedObject}
+              onLayoutChange={handleLayoutChange}
+              onChange={handleLayoutChange}
+              render={false}
+            />
             {/* {targetValue.value} */}
             <DisplayRichText value={field?.options?.staticText} />
           </div>
@@ -205,3 +224,205 @@ export default function FieldValuesMap({
     </>
   );
 }
+
+// import { IField, IResponse } from '@frontend/shared/types';
+// // import Box from '@mui/material/Box';
+// import React, { Fragment, useState } from 'react';
+// import { useCreateUpdateResponse, useResolveCondition } from '@frontend/shared/hooks/response';
+// import { useDebounce } from '@frontend/shared/hooks/condition/debounce';
+// // import { styled } from '@mui/material/styles';
+// import Typography from '@mui/material/Typography';
+// import Tooltip from '@mui/material/Tooltip';
+// import IconButton from '@mui/material/IconButton';
+// import EditIcon from '@mui/icons-material/Edit';
+// import AddIcon from '@mui/icons-material/Add';
+// import DeleteIcon from '@mui/icons-material/Delete';
+// import CommentLikeShare from '../comment/CommentLikeShare';
+// import DisplayRichText from '../common/DisplayRichText';
+// import DisplayValue from '../form2/DisplayValue';
+// import DisplayFormulaValue from '../form2/field/formula/DisplayFormulaValue';
+// import StarRating from '../starRating/starRating';
+// import AddResponseButton from './AddResponseButton';
+// import InlineEditMenu from './InlineEditMenu';
+// // import DependantResponses from './DependantResponses';
+// import { onAlert } from '../../utils/alert';
+
+// // changes for the inlineEdit
+
+// interface IFieldValuesMap {
+//   field: IField;
+//   response: IResponse;
+//   verticalView?: boolean;
+//   authorized?: boolean;
+//   displayFieldLabel?: boolean;
+//   onClickEditField?: (fieldId: string, valueId: string, editMode: string) => void;
+//   inlineEdit?: boolean;
+// }
+
+// export default function FieldValuesMap({
+//   field,
+//   response,
+//   verticalView,
+//   authorized,
+//   displayFieldLabel,
+//   onClickEditField,
+//   inlineEdit = false,
+// }: IFieldValuesMap) {
+//   const { handleCreateUpdateResponse } = useCreateUpdateResponse({ onAlert });
+//   const fieldValues = response?.values?.filter((v) => v.field === field._id);
+//   const [disabled, setDisabled] = useState(false || field?.options?.disabled);
+//   const { handleResolveCondition } = useResolveCondition();
+//   const [state, setState] = useState({ inlineEditViewMore: false });
+
+//   const checkDisabledCondition = async () => {
+//     if (field?.options?.disabled && field?.options?.disabledConditions?.length > 0) {
+//       const result = await handleResolveCondition({
+//         conditions: field?.options?.disabledConditions,
+//         responseId: response?._id,
+//       });
+//       setDisabled(!result);
+//     }
+//   };
+
+//   useDebounce({
+//     callback: checkDisabledCondition,
+//     value: response,
+//   });
+
+//   return (
+//     <>
+//       {displayFieldLabel && (
+//         <>
+//           {field.fieldType !== 'label' && (
+//             <Typography
+//               fontWeight="bold"
+//               className="d-flex align-items-center"
+//               data-testid="fields-display"
+//             >
+//               <div data-testid="label">{field?.label}</div>
+//               {authorized && !disabled && (
+//                 <>
+//                   {(field?.options?.multipleValues || fieldValues?.length === 0) && !inlineEdit && (
+//                     <InlineEditMenu
+//                       item="field"
+//                       field={field}
+//                       valueId={null}
+//                       fieldId={field?._id}
+//                       onClickEditField={onClickEditField}
+//                     />
+//                   )}
+//                 </>
+//               )}
+//             </Typography>
+//           )}
+//         </>
+//       )}
+//       <div data-testid="value">
+//         {/* isDependantRelationship ? (
+//           <DependantResponses disabled={disabled} parentResponseId={response?._id} field={field} />
+//         ) : */}
+//         {field.fieldType === 'label' ? (
+//           <DisplayRichText value={field?.options?.staticText} />
+//         ) : field?.options?.systemCalculatedAndView ? (
+//           <DisplayFormulaValue
+//             formula={field?.options?.formula}
+//             field={field}
+//             values={response?.values}
+//           />
+//         ) : fieldValues?.length > 0 ? (
+//           <>
+//             {fieldValues.map((value, index) => (
+//               <>
+//                 {field?.options?.multipleValues ? (
+//                   <>
+//                     {index !== fieldValues?.length - 1 && (
+//                       <div>
+//                         <Fragment key={value?._id}>
+//                           {authorized && !disabled && !inlineEdit && (
+//                             <>
+//                               <InlineEditMenu
+//                                 item="value"
+//                                 field={field}
+//                                 valueId={value?._id}
+//                                 fieldId={field?._id}
+//                                 onClickEditField={onClickEditField}
+//                               />
+//                             </>
+//                           )}
+//                           <DisplayValue field={field} value={value} verticalView={verticalView} />
+//                           {verticalView && (
+//                             <>
+//                               {field?.options?.showCommentBox && (
+//                                 <CommentLikeShare threadId={value?._id} />
+//                               )}
+//                               {field?.options?.showStarRating && (
+//                                 <StarRating parentId={value?._id} />
+//                               )}
+//                             </>
+//                           )}
+//                         </Fragment>
+//                       </div>
+//                     )}
+//                   </>
+//                 ) : (
+//                   <>
+//                     <Fragment key={value?._id}>
+//                       {/* <StyledBox style={{ display: 'flex', alignContent: 'center' }}>
+//                 </StyledBox> */}
+//                       {authorized && !disabled && !inlineEdit && (
+//                         <div>
+//                           <InlineEditMenu
+//                             item="value"
+//                             field={field}
+//                             valueId={value?._id}
+//                             fieldId={field?._id}
+//                             onClickEditField={onClickEditField}
+//                           />
+//                         </div>
+//                       )}
+//                       <DisplayValue field={field} value={value} verticalView={verticalView} />
+//                       {verticalView && (
+//                         <>
+//                           {field?.options?.showCommentBox && (
+//                             <CommentLikeShare threadId={value?._id} />
+//                           )}
+//                           {field?.options?.showStarRating && <StarRating parentId={value?._id} />}
+//                         </>
+//                       )}
+//                     </Fragment>
+//                   </>
+//                 )}
+//               </>
+//             ))}
+//           </>
+//         ) : (
+//           field?.options?.showAsAddButton && (
+//             <AddResponseButton
+//               createCallback={async (newResponse) => {
+//                 await handleCreateUpdateResponse({
+//                   payload: {
+//                     ...response,
+//                     values: [
+//                       ...response?.values,
+//                       { value: '', field: field?._id, response: newResponse },
+//                     ],
+//                   },
+//                   edit: true,
+//                 });
+//               }}
+//               disabled={disabled}
+//               field={field}
+//             />
+//           )
+//         )}
+//       </div>
+//     </>
+//   );
+// }
+
+// // const StyledBox = styled(Box)(({ theme }) => ({
+// //   flexDirection: 'column',
+// //   [theme.breakpoints.up('md')]: {
+// //     flexDirection: 'row !important',
+// //   },
+// // }));

@@ -155,19 +155,19 @@ export default function FormView({
       form?.settings?.actions?.length > 0 &&
       form?.settings?.actions?.find((e) => e?.actionType === 'createSeoReport')
     ) {
-      console.log('Final Check1');
+      // console.log('Final Check1');
       const actionforSeoReport = form?.settings?.actions?.find(
         (e) => e?.actionType === 'createSeoReport',
       );
       const valueOfSeoReport = values?.find((v) => v?.field === actionforSeoReport?.websiteUrl);
       const url = valueOfSeoReport?.value;
       if (url) {
-        console.log('Final Check2');
+        // console.log('Final Check2');
         const seoReportResponse = await axios.get(
           'https://us-central1-boossti.cloudfunctions.net/lightHouseHTTP',
           { params: { url, id: 2 } },
         );
-        console.log('Final Check3');
+        // console.log('Final Check3');
         values.push({
           value: JSON.stringify(seoReportResponse?.data, null, 2),
           field: actionforSeoReport?.report,
@@ -188,7 +188,7 @@ export default function FormView({
       fields: form?.fields,
       edit: !!responseId,
     });
-
+    console.log(response, 'Before Sending It');
     if (response) {
       if (!responseId) {
         setResponseId(response?._id);
@@ -202,7 +202,7 @@ export default function FormView({
       }
       // setState({ ...initialState, submitted: true, messages, response });
     }
-    console.log(response, 'Response');
+    console.log(payload, response, 'Response payload');
     return response;
   };
 
@@ -709,8 +709,7 @@ export function FormViewChild({
       return setState((oldState) => ({ ...oldState, showAuthModal: true }));
     }
     const response = await onSave();
-    console.log(response, 'Response');
-    // console.log(authenticated, "Authencation")
+    console.log(response, 'Response in the on Submit');
     if (response) {
       setSubmitState(initialSubmitState);
       setValues([]);
@@ -739,10 +738,18 @@ export function FormViewChild({
         }
       }
     });
-    const payload =
-      overrideValues?.length > 0 && !edit ? [...overrideValues, ...newValues] : [...newValues];
+    type PayloadItem = { value?: any };
+
+    let payload: PayloadItem[] = (overrideValues?.length > 0 && !edit
+      ? [...overrideValues, ...newValues]
+      : [...newValues]) as PayloadItem[];
+
+    if (payload[1]?.value !== undefined) {
+      payload[1].value = JSON.stringify(payload[1].value);
+    }
     const response = await handleSubmit(payload);
     window?.localStorage?.removeItem(localStorageKey);
+    console.log(response, 'Newest response');
     return response;
     // setValues(response?.values);
     // setSubmitState((oldSubmitState) => ({ ...oldSubmitState, loading: false }));
@@ -1149,7 +1156,6 @@ export function FormViewChild({
                         </>
                       )}
                       <DragDropContext onDragEnd={onDragEnd} isDropDisabled={false}>
-                        {/* <p>jusfsdfsdfdsf</p> */}
                         <Droppable droppableId={field._id}>
                           {(provided) => (
                             <div ref={provided.innerRef} {...provided.droppableProps}>
@@ -1193,6 +1199,10 @@ export function FormViewChild({
                                                             }}
                                                             disabled={submitState.loading}
                                                             onChangeValue={(changedValue) => {
+                                                              console.log(
+                                                                changedValue,
+                                                                'Did I find',
+                                                              );
                                                               onChange(
                                                                 {
                                                                   ...changedValue,

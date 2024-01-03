@@ -1,5 +1,3 @@
-// DragFromOutsideLayout.jsx
-
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
@@ -9,14 +7,14 @@ import { useGetFormBySlug, getFormBySlug } from '@frontend/shared/hooks/form';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
-const DragFromOutsideLayout = ({ value, onLayoutChange, onChange }) => {
+const DragFromOutsideLayout = ({ value, onLayoutChange, onChange, render = true }) => {
   const [compactType, setCompactType] = useState('No Compaction');
-  const [layouts2, setLayouts2] = useState({ lg: value });
+  const [layouts2, setLayouts2] = useState(value);
   const [dropData, setDropData] = useState({ targetLayout: '', sourceItem: null });
   const [formData, setFormData] = useState(null);
 
   const fetchData = async () => {
-    const data = await getFormBySlug('canva_demo');
+    const data = await getFormBySlug('canva_demo_2');
     setFormData(data);
   };
 
@@ -28,15 +26,11 @@ const DragFromOutsideLayout = ({ value, onLayoutChange, onChange }) => {
     const { targetLayout, sourceItem } = dropData;
     if (targetLayout && sourceItem) {
       setDropData({ targetLayout: '', sourceItem: null });
-      setLayouts2((prevLayouts) => {
-        const newItem = { sourceItem };
-        return { lg: [...prevLayouts.lg, newItem] };
-      });
+      setLayouts2((prevLayouts) => [...prevLayouts, { sourceItem }]);
     }
   }, [dropData]);
 
   useEffect(() => {
-    // Notify the parent component about changes in layouts2
     onLayoutChange(layouts2);
   }, [layouts2, onLayoutChange]);
 
@@ -62,15 +56,17 @@ const DragFromOutsideLayout = ({ value, onLayoutChange, onChange }) => {
     if (sourceItem) {
       setDropData({ targetLayout, sourceItem });
     }
-    onChange(layouts2);
+    const newThing = [...layouts2, { sourceItem }];
+    onChange(newThing);
   };
 
   const generateDOM = () => {
-    return _.map(layouts2.lg, (res, i) => {
+    return _.map(layouts2, (res, i) => {
       const [h, form, response] = res.sourceItem;
+      const parsedThing = JSON.parse(response.values[1].value);
       return (
         <div key={i} className={`grid-item`} style={gridItemStyle} draggable={true}>
-          <div>{response.values[0].value}</div>
+          <div dangerouslySetInnerHTML={{ __html: parsedThing }} />
         </div>
       );
     });
@@ -124,10 +120,7 @@ const DragFromOutsideLayout = ({ value, onLayoutChange, onChange }) => {
   return (
     <div style={containerStyle}>
       <div style={gridContainerStyle}>
-        <div style={responseListContainerStyle}>
-          {/* Replace this with your actual content */}
-          <ResponseList form={formData} />
-        </div>
+        <div style={responseListContainerStyle}>{render && <ResponseList form={formData} />}</div>
         <div
           style={dragAreaStyle}
           onDragOver={(e) => e.preventDefault()}
