@@ -7,6 +7,7 @@ const validationSchema = yup.object({
   name: yup.string().label('Constraint name').required(),
   constraintType: yup.string().label('Constraint Type').required(),
   fields: yup.array(yup.string().required()).min(1, 'At least one field is required'),
+  reactGridLayoutEditor: yup.string().label('ReactGridLayoutEditor').required(),
 });
 
 interface IValues {
@@ -19,6 +20,7 @@ const defaultValues = {
   name: '',
   constraintType: '',
   fields: [''],
+  reactGridLayoutEditor: '',
 };
 
 interface IProps extends IHooksProps {

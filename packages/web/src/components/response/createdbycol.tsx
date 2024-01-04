@@ -55,7 +55,7 @@ export default function CreatedbyCol({
 }: IProps) {
   const userForm = useSelector(({ setting }: any) => setting.userForm);
   const router = useRouter();
-
+  // console.log(form, 'form data');
   const onDragStart = (e, response) => {
     e.dataTransfer.setData('text/plain', JSON.stringify(response));
   };
@@ -112,8 +112,8 @@ export default function CreatedbyCol({
                   <TableCell key="1">
                     <FieldTitlemap
                       field={{
-                        _id: '6324e5ffa24b17c1222249c0',
-                        label: 'HTML Content',
+                        _id: '6593d4dcd464f3401e28fdf4',
+                        label: 'Webpage',
                         fieldType: 'webpage',
                         options: {
                           physicalQuantity: '',

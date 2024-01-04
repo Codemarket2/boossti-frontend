@@ -56,8 +56,7 @@ export default function ResponseTable({
 }: IProps) {
   const userForm = useSelector(({ setting }: any) => setting.userForm);
   const router = useRouter();
-  console.log(form, 'asassa');
-  console.log(responses, 'onj');
+  // console.log(responses, 'xhckssd');
   return (
     <div>
       <TableContainer component={Paper} variant="outlined">
@@ -146,9 +145,12 @@ export default function ResponseTable({
                   </TableCell>
                   <TableCell>
                     <DisplayWorkflowName workflowId={response?.workflowId} />
+                    {/* <p>HEHE</p> */}
                   </TableCell>
                   {form?.fields?.map((field: IField, i) => (
+                    // console.log(form,fields)
                     <TableCell key={i}>
+                      {/* console.log("HEHE") */}
                       <FieldValuesMap field={field} response={response} />
                     </TableCell>
                   ))}

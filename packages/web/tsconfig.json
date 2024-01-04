@@ -20,7 +20,7 @@
     "**/*.ts",
     "**/*.tsx",
     "../shared/utils/fieldProps.ts",
-    "jest/test-utils.js"
+    "src/components/response/Table.js"
   ],
   "exclude": ["node_modules"]
 }

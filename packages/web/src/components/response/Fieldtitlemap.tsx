@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { IField, IResponse } from '@frontend/shared/types';
+import { IField, IResponse, IFieldOptions } from '@frontend/shared/types';
 import CommentLikeShare from '../comment/CommentLikeShare';
 import DisplayRichText from '../common/DisplayRichText';
 import DisplayValue from '../form2/DisplayValue';
@@ -40,7 +40,7 @@ export default function FieldTitleMap({
   const [disabled, setDisabled] = useState(false || field?.options?.disabled);
   const { handleResolveCondition } = useResolveCondition();
   const [state, setState] = useState({ inlineEditViewMore: false });
-
+  // console.log(field, 'field vallues');
   const checkDisabledCondition = async () => {
     if (field?.options?.disabled && field?.options?.disabledConditions?.length > 0) {
       const result = await handleResolveCondition({

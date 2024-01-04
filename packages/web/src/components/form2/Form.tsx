@@ -47,6 +47,8 @@ import TabView from './tabs/TabView';
 import { DisplayForm } from './DisplayForm';
 import WorkflowView from './Work_flowView';
 import EmbedFormTab from '../embed/EmbedFormTab';
+import Field from './Field';
+import { fieldTypes } from './fieldTypes';
 
 const tabs = [
   'Fields',
@@ -140,7 +142,9 @@ export function FormChild({
   const router = useRouter();
   const authorized = useAuthorization([form?.createdBy?._id], true);
   const authenticated = useSelector((globalState: any) => globalState?.auth?.authenticated);
-
+  // console.log(form, 'formdata');
+  // console.log(authorized, 'sdsds');
+  // console.log(fieldTypes, 'hi');
   useEffect(() => {
     let { currentTab } = initialState;
     if (router?.query?.tab) {

@@ -155,12 +155,12 @@ export default function DrawerContent({ showDrawer, toggleDrawer, admin }: IProp
                 <ListItemText primary="ReactGridLayout" />
               </ListItem>
             </Link>
-            <Link href="/formgrid">
-              <ListItem button selected={checkActiveRoute(activeRoute, '/formgrid')}>
+            <Link href="/ReactGridLayout">
+              <ListItem button selected={checkActiveRoute(activeRoute, '/ReactGridLayout')}>
                 <ListItemIcon>
                   <AnalyticsIcon />
                 </ListItemIcon>
-                <ListItemText primary="Formgrid" />
+                <ListItemText primary="ReactGridLayout" />
               </ListItem>
             </Link>
 

@@ -127,6 +127,11 @@ type ReactGridLayout = {
   value: 'reactgridlayout';
 };
 
+type ReactGridLayoutEditor = {
+  label: 'ReactGridLayoutEditor';
+  value: 'reactgridlayouteditor';
+};
+
 export type TFieldType =
   | FormFieldType
   | FormFieldFieldType
@@ -157,7 +162,8 @@ export type TFieldType =
   | Webpage
   | CardType
   | CraftJs
-  | ReactGridLayout;
+  | ReactGridLayout
+  | ReactGridLayoutEditor;
 
 export const getFormFieldTypes = (isWidget: boolean): TFieldType[] => {
   if (isWidget) {
@@ -203,4 +209,5 @@ export const fieldTypes: TFieldType[] = [
   { label: 'Card', value: 'card' },
   { label: 'CraftJS', value: 'craftjs' },
   { label: 'ReactGridLayout', value: 'reactgridlayout' },
+  { label: 'ReactGridLayoutEditor', value: 'reactgridlayouteditor' },
 ];

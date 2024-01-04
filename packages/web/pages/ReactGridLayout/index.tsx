@@ -1,7 +1,7 @@
 import ResponsiveGridLayout, { WidthProvider, Responsive } from 'react-grid-layout';
 import UserLayout from '../../src/components/common/UserLayout';
 import EmailTab from '../../src/components/email/EmailTab';
-import FormGrid from './formgrid';
+import FormGrid from './ReactGridLayout';
 
 export default function Form(): any {
   // case 'reactgridlayout':
@@ -9,7 +9,7 @@ export default function Form(): any {
   return (
     <UserLayout authRequired>
       {/* <DragFromOutsideLayout /> */}
-      <FormGrid />
+      hi
     </UserLayout>
   );
 

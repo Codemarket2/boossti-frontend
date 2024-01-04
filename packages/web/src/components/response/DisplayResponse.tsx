@@ -88,7 +88,7 @@ export function DisplayResponse({
   const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
 
   const response = useMemo(() => parseResponse(tempResponse), [tempResponse]);
-
+  // console.log(form, response, 'FInal rendering');
   const { hasPermission: editPerm } = useCheckPermission({
     actionType: 'EDIT',
     formId: form?._id,
@@ -305,6 +305,7 @@ export function DisplayResponse({
                   </>
                 ) : (
                   <div>
+                    <p>Hii</p>
                     <FieldValuesMap
                       authorized={hasEditPermission}
                       displayFieldLabel
@@ -410,6 +411,7 @@ export function DisplayResponse({
         </div>
       )}
       {DetailComponent}
+
       {/* {state?.field && hasEditPermission ? (
         <Paper variant="outlined" className="p-2">
           <EditResponse

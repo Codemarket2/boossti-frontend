@@ -57,6 +57,7 @@ import ActionVariables from './actions/ActionVariables';
 
 import DesignTab from './design/DesignTab';
 import FormList from './FormList';
+import FormGrid from '../../../pages/ReactGridLayout/ReactGridLayout';
 
 const initialState = {
   layouts: {},
@@ -162,6 +163,7 @@ export default function Field({
   };
 
   const onChange = (payload) => {
+    // console.log(payload, 'In rhe field');
     onChangeValue({ ...value, field: field?._id, ...payload });
     if (field?.options?.unique) {
       setUnique(false);
@@ -813,11 +815,32 @@ export default function Field({
       );
     }
 
+    case 'reactgridlayouteditor': {
+      const handleLayoutChange = (newLayout) => {
+        // Do something with the new layout
+        // console.log('Layout changed:', newLayout);
+        // Update your state or perform any other necessary actions
+        // Example: updateFormLayout(newLayout);
+      };
+      // console.log(value.value, 'val reactdemo');
+
+      return (
+        <>
+          <FormGrid
+            value={value?.value}
+            onChange={(newdata) => onChange({ value: newdata })}
+            onLayoutChange={handleLayoutChange}
+          />
+        </>
+      );
+    }
+
     default: {
       const textValidation = validateValue(validate, value, {
         ...field,
         fieldType: ['email'].includes(field?.fieldType) ? field?.fieldType : 'text',
       });
+
       return (
         <TextField
           multiline={field?.fieldType === 'textarea'}

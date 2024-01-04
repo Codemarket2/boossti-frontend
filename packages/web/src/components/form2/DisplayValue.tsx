@@ -23,6 +23,7 @@ import DisplaySignature from '../signature/DisplaySignature';
 import { PageViewerOverlayBtn as CraftsJSPageViewer } from '../craftJS/craftJSPageViewer';
 import DisplayResponseById from '../response/DisplayResponseById';
 import DisplayCard from '../card/DisplayCard';
+import FormGrid from '../../../pages/ReactGridLayout/ReactGridLayout';
 
 interface IProps {
   field: Partial<IField>;
@@ -39,7 +40,11 @@ export default function DisplayValue({
   verticalView,
   onClickResponse,
 }: IProps) {
+  // console.log(field, 'Dispalyvalue field');
   const value: any = { ...tempValue };
+  // console.log(value, 'displayvalue val');
+  // // const formDataString = {value?.value}; // Replace this with your actual GraphQL query response string
+  // const parsedobject = JSON.parse(value?.value);
   const [state, setState] = useState({
     viewMoreResponse: false,
   });
@@ -244,7 +249,8 @@ export default function DisplayValue({
       );
     case 'craftjs':
       return <CraftsJSPageViewer PageContent={value?.value} />;
+
     default:
-      return <>{value?.value}</>;
+      return <> {value?.value}</>;
   }
 }

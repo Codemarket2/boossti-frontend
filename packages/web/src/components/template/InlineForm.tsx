@@ -3,6 +3,7 @@ import TextField from '@mui/material/TextField';
 import InputGroup from '../common/InputGroup';
 import LoadingButton from '../common/LoadingButton';
 import RichTextarea from '../common/RichTextarea2';
+import FormGrid from '../../../pages/ReactGridLayout/ReactGridLayout';
 
 interface IProps {
   label: string;
@@ -21,6 +22,8 @@ export default function InlineForm({
   fieldName,
   formLoading = false,
 }: IProps) {
+  const isReactGridLayoutEditor = fieldName === 'reactgridlayouteditor';
+
   return (
     <div>
       <form onSubmit={formik.handleSubmit}>
@@ -31,20 +34,24 @@ export default function InlineForm({
               onChange={(value) => formik.setFieldValue(fieldName, value)}
             />
           ) : (
-            <TextField
-              fullWidth
-              variant="outlined"
-              size="small"
-              name={fieldName}
-              label={label}
-              multiline={multiline}
-              rows={multiline ? 4 : null}
-              disabled={formik.isSubmitting}
-              value={formik?.values[fieldName]?.includes('-n-e-w') ? '' : formik?.values[fieldName]}
-              onChange={formik?.handleChange}
-              error={formik?.touched[fieldName] && Boolean(formik?.errors[fieldName])}
-              helperText={formik?.touched[fieldName] && formik?.errors[fieldName]}
-            />
+            <>
+              <TextField
+                fullWidth
+                variant="outlined"
+                size="small"
+                name={fieldName}
+                label={label}
+                multiline={multiline}
+                rows={multiline ? 4 : null}
+                disabled={formik.isSubmitting}
+                value={
+                  formik?.values[fieldName]?.includes('-n-e-w') ? '' : formik?.values[fieldName]
+                }
+                onChange={formik?.handleChange}
+                error={formik?.touched[fieldName] && Boolean(formik?.errors[fieldName])}
+                helperText={formik?.touched[fieldName] && formik?.errors[fieldName]}
+              />
+            </>
           )}
         </InputGroup>
         <InputGroup>

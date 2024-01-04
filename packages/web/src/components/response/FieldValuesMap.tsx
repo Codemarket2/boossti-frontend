@@ -1,26 +1,17 @@
-import { IField, IResponse } from '@frontend/shared/types';
-// import Box from '@mui/material/Box';
 import React, { Fragment, useState } from 'react';
+import Typography from '@mui/material/Typography';
 import { useCreateUpdateResponse, useResolveCondition } from '@frontend/shared/hooks/response';
 import { useDebounce } from '@frontend/shared/hooks/condition/debounce';
-// import { styled } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
-import Tooltip from '@mui/material/Tooltip';
-import IconButton from '@mui/material/IconButton';
-import EditIcon from '@mui/icons-material/Edit';
-import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CommentLikeShare from '../comment/CommentLikeShare';
-import DisplayRichText from '../common/DisplayRichText';
+import { IField, IResponse } from '@frontend/shared/types';
+import InlineEditMenu from './InlineEditMenu';
 import DisplayValue from '../form2/DisplayValue';
-import DisplayFormulaValue from '../form2/field/formula/DisplayFormulaValue';
+import CommentLikeShare from '../comment/CommentLikeShare';
 import StarRating from '../starRating/starRating';
 import AddResponseButton from './AddResponseButton';
-import InlineEditMenu from './InlineEditMenu';
-// import DependantResponses from './DependantResponses';
+import DisplayRichText from '../common/DisplayRichText';
+import DisplayFormulaValue from '../form2/field/formula/DisplayFormulaValue';
+import FormGrid from '../../../pages/ReactGridLayout/ReactGridLayout';
 import { onAlert } from '../../utils/alert';
-
-// changes for the inlineEdit
 
 interface IFieldValuesMap {
   field: IField;
@@ -42,9 +33,9 @@ export default function FieldValuesMap({
   inlineEdit = false,
 }: IFieldValuesMap) {
   const { handleCreateUpdateResponse } = useCreateUpdateResponse({ onAlert });
+  const { handleResolveCondition } = useResolveCondition();
   const fieldValues = response?.values?.filter((v) => v.field === field._id);
   const [disabled, setDisabled] = useState(false || field?.options?.disabled);
-  const { handleResolveCondition } = useResolveCondition();
   const [state, setState] = useState({ inlineEditViewMore: false });
 
   const checkDisabledCondition = async () => {
@@ -62,14 +53,28 @@ export default function FieldValuesMap({
     value: response,
   });
 
-  // const isDependantRelationship =
-  //   !field?.options?.selectItem && field?.options?.dependentRelationship;
+  // const targetFieldId = '659492a4bd709f686705cd37';
+  const targetFieldId = '659645e5beda496d723f780a';
+  // console.log(response, 'resres');
 
+  const targetValue = response?.values?.find((value) => value.field === targetFieldId);
+
+  // console.log(targetValue.value, 'targetValue Chilc');
+  const Object = targetValue?.value;
+  // parsedObject = parsedObject.substring(1,parsedObject.length - 1)
+  // if (targetValue !== undefined) {
+  //   while (typeof parsedObject !== 'object') {
+  // parsedObject = JSON.parse(parsedObject);
+  //   }
+  // }
+  // console.log(Object, 'Target Chilfgfdcc');
+  const parsedObject = JSON.parse(Object);
+  // console.log(parsedObject);
   return (
     <>
       {displayFieldLabel && (
         <>
-          {field.fieldType !== 'label' && (
+          {field.fieldType !== 'reactgridlayouteditor' && (
             <Typography
               fontWeight="bold"
               className="d-flex align-items-center"
@@ -94,11 +99,13 @@ export default function FieldValuesMap({
         </>
       )}
       <div data-testid="value">
-        {/* isDependantRelationship ? (
-          <DependantResponses disabled={disabled} parentResponseId={response?._id} field={field} />
-        ) : */}
-        {field.fieldType === 'label' ? (
-          <DisplayRichText value={field?.options?.staticText} />
+        {field.fieldType === 'reactgridlayouteditor' ? (
+          <div>
+            <p>ReactGridLayoutEditor</p>
+            {/* <p>hiyfhfghi</p> */}
+            <FormGrid value={parsedObject.lg} onChange={null} />
+            <DisplayRichText value={field?.options?.staticText} />
+          </div>
         ) : field?.options?.systemCalculatedAndView ? (
           <DisplayFormulaValue
             formula={field?.options?.formula}
@@ -112,18 +119,16 @@ export default function FieldValuesMap({
                 {field?.options?.multipleValues ? (
                   <>
                     {index !== fieldValues?.length - 1 && (
-                      <div>
-                        <Fragment key={value?._id}>
+                      <div key={value?._id}>
+                        <>
                           {authorized && !disabled && !inlineEdit && (
-                            <>
-                              <InlineEditMenu
-                                item="value"
-                                field={field}
-                                valueId={value?._id}
-                                fieldId={field?._id}
-                                onClickEditField={onClickEditField}
-                              />
-                            </>
+                            <InlineEditMenu
+                              item="value"
+                              field={field}
+                              valueId={value?._id}
+                              fieldId={field?._id}
+                              onClickEditField={onClickEditField}
+                            />
                           )}
                           <DisplayValue field={field} value={value} verticalView={verticalView} />
                           {verticalView && (
@@ -136,25 +141,21 @@ export default function FieldValuesMap({
                               )}
                             </>
                           )}
-                        </Fragment>
+                        </>
                       </div>
                     )}
                   </>
                 ) : (
-                  <>
-                    <Fragment key={value?._id}>
-                      {/* <StyledBox style={{ display: 'flex', alignContent: 'center' }}>
-                </StyledBox> */}
+                  <div key={value?._id}>
+                    <>
                       {authorized && !disabled && !inlineEdit && (
-                        <div>
-                          <InlineEditMenu
-                            item="value"
-                            field={field}
-                            valueId={value?._id}
-                            fieldId={field?._id}
-                            onClickEditField={onClickEditField}
-                          />
-                        </div>
+                        <InlineEditMenu
+                          item="value"
+                          field={field}
+                          valueId={value?._id}
+                          fieldId={field?._id}
+                          onClickEditField={onClickEditField}
+                        />
                       )}
                       <DisplayValue field={field} value={value} verticalView={verticalView} />
                       {verticalView && (
@@ -165,8 +166,8 @@ export default function FieldValuesMap({
                           {field?.options?.showStarRating && <StarRating parentId={value?._id} />}
                         </>
                       )}
-                    </Fragment>
-                  </>
+                    </>
+                  </div>
                 )}
               </>
             ))}
@@ -195,10 +196,3 @@ export default function FieldValuesMap({
     </>
   );
 }
-
-// const StyledBox = styled(Box)(({ theme }) => ({
-//   flexDirection: 'column',
-//   [theme.breakpoints.up('md')]: {
-//     flexDirection: 'row !important',
-//   },
-// }));

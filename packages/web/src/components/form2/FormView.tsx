@@ -144,6 +144,7 @@ export default function FormView({
   const [selectState, setSelectState] = useState(initialSelectState);
 
   const handleSubmit = async (values) => {
+    // console.log(values, 'In handle submit');
     let payload: any = { formId: form?._id, values };
     let options = {};
     if (form?.settings?.customResponseLayout && form?.settings?.customSectionId) {
@@ -160,10 +161,12 @@ export default function FormView({
       const valueOfSeoReport = values?.find((v) => v?.field === actionforSeoReport?.websiteUrl);
       const url = valueOfSeoReport?.value;
       if (url) {
+        // console.log('Final Check2');
         const seoReportResponse = await axios.get(
           'https://us-central1-boossti.cloudfunctions.net/lightHouseHTTP',
           { params: { url, id: 2 } },
         );
+        // console.log('Final Check3');
         values.push({
           value: JSON.stringify(seoReportResponse?.data, null, 2),
           field: actionforSeoReport?.report,
@@ -198,6 +201,7 @@ export default function FormView({
       }
       // setState({ ...initialState, submitted: true, messages, response });
     }
+    // console.log(response, 'Response');
     return response;
   };
 
@@ -541,7 +545,6 @@ export function FormViewChild({
     responses: {},
   });
 
-  // ONLY SHOW & VALIDATE REQUIRED FIELDS
   const fields = useMemo(
     () =>
       tempFields?.filter((field: IField) => {
@@ -688,11 +691,14 @@ export function FormViewChild({
   };
 
   const onSubmit = async () => {
+    // console.log(authRequired, 'Auth Required');
+    // console.log(authenticated, 'Authencation');
     setSubmitState((oldSubmitState) => ({ ...oldSubmitState, loading: true }));
     const validate = validateResponse(
       fields?.filter(filterHiddenFields).filter(filterDisabledFields),
       values,
     );
+    // console.log(validate, 'Validation Data');
     if (validate) {
       setSubmitState((oldSubmitState) => ({ ...oldSubmitState, validate, loading: false }));
       return;
@@ -702,6 +708,8 @@ export function FormViewChild({
       return setState((oldState) => ({ ...oldState, showAuthModal: true }));
     }
     const response = await onSave();
+    // console.log(response, 'Response');
+    // console.log(authenticated, "Authencation")
     if (response) {
       setSubmitState(initialSubmitState);
       setValues([]);
@@ -715,6 +723,7 @@ export function FormViewChild({
 
   const onSave = async () => {
     let newValues = Array.from(values);
+    // console.log(values, newValues, 'Values dsfdsfsaaa');
     fields.forEach((field) => {
       if (field?.options?.multipleValues) {
         const newValue = { ...defaultValue, field: field._id, value: '' };
@@ -731,6 +740,10 @@ export function FormViewChild({
     });
     const payload =
       overrideValues?.length > 0 && !edit ? [...overrideValues, ...newValues] : [...newValues];
+
+    (payload[1] as { value: any }).value = JSON.stringify((payload[1] as { value: any }).value);
+    (payload[0] as { value: any }).value = JSON.stringify((payload[0] as { value: any }).value);
+    // console.log(payload, 'payload');
     const response = await handleSubmit(payload);
     window?.localStorage?.removeItem(localStorageKey);
     return response;
@@ -768,6 +781,7 @@ export function FormViewChild({
     result.splice(endIndex, 0, removed);
     return result;
   };
+
   function onDragEnd(result) {
     const field = fields.find((item) => item._id === result.source.droppableId);
     if (!result.destination) {
@@ -797,7 +811,6 @@ export function FormViewChild({
   const filterHiddenFields = (field) => {
     if (field?.options?.hidden && field?.options?.hiddenConditions?.length > 0) {
       if (edit) return true;
-      // debugger;
       const result = resolveCondition({
         conditions: field?.options?.hiddenConditions,
         leftPartResponse: { formId, values },
@@ -877,7 +890,7 @@ export function FormViewChild({
           color="primary"
           size="small"
         >
-          Save
+          Save & Sumbit
         </LoadingButton>
       </div>
     </Tooltip>
@@ -979,7 +992,7 @@ export function FormViewChild({
                   loading={!disableSubmitButton && (submitState.loading || loading)}
                   onClick={onSubmit}
                 >
-                  Publish
+                  Publish & Save
                 </LoadingButton>
               </div>
             )}
@@ -995,6 +1008,7 @@ export function FormViewChild({
                   xl={field?.options?.grid?.xl}
                   key={field._id}
                 >
+                  {/* <p>Checking</p> */}
                   <div style={field?.options?.style || {}}>
                     <InputGroup key={field._id} id={field?._id}>
                       {!['label'].includes(field.fieldType) && (
@@ -1094,6 +1108,7 @@ export function FormViewChild({
                                   }
                                   validate={submitState.validate}
                                   onChangeValue={(changedValue) => {
+                                    // console.log("Did I find it?")
                                     if (!field?.options?.systemCalculatedAndView) {
                                       onChange(
                                         { ...changedValue, field: field._id },
@@ -1137,6 +1152,7 @@ export function FormViewChild({
                         </>
                       )}
                       <DragDropContext onDragEnd={onDragEnd} isDropDisabled={false}>
+                        {/* <p>jusfsdfsdfdsf</p> */}
                         <Droppable droppableId={field._id}>
                           {(provided) => (
                             <div ref={provided.innerRef} {...provided.droppableProps}>
@@ -1179,15 +1195,15 @@ export function FormViewChild({
                                                                 : field?.label,
                                                             }}
                                                             disabled={submitState.loading}
-                                                            onChangeValue={(changedValue) =>
+                                                            onChangeValue={(changedValue) => {
                                                               onChange(
                                                                 {
                                                                   ...changedValue,
                                                                   field: field._id,
                                                                 },
                                                                 valueIndex,
-                                                              )
-                                                            }
+                                                              );
+                                                            }}
                                                             value={value}
                                                             inlineEdit={inlineEdit}
                                                           />
