@@ -738,14 +738,17 @@ export function FormViewChild({
         }
       }
     });
-    type PayloadItem = { value?: any };
+    type PayloadItem = { value?: any; field?: any };
 
     let payload: PayloadItem[] = (overrideValues?.length > 0 && !edit
       ? [...overrideValues, ...newValues]
       : [...newValues]) as PayloadItem[];
-
-    if (payload[1]?.value !== undefined) {
+    console.log(payload, 'Payyyloaddd');
+    if (payload[1]?.field == '6597253d3c818638cc578ba8' && payload[1]?.value !== undefined) {
       payload[1].value = JSON.stringify(payload[1].value);
+    }
+    if (payload[0]?.field == '6597253d3c818638cc578ba8' && payload[0]?.value !== undefined) {
+      payload[0].value = JSON.stringify(payload[0].value);
     }
     const response = await handleSubmit(payload);
     window?.localStorage?.removeItem(localStorageKey);

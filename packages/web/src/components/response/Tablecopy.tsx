@@ -20,7 +20,7 @@ import { IField } from '@frontend/shared/types/form';
 import WorkflowButtons from './workflow/WorkflowButtons';
 import FieldValuesMap from './FieldValuesMap';
 import { useGetForm } from '@frontend/shared/hooks/form';
-
+import Spotify from '../Spotify/Spotify';
 interface IProps {
   search: string;
   onSearchChange: (search: string) => void;
@@ -56,9 +56,6 @@ export default function ResponseTable({
 }: IProps) {
   const userForm = useSelector(({ setting }: any) => setting.userForm);
   const router = useRouter();
-  // console.log(form,"Responses")
-  // form?.fields?.map((field: IField, i) => (
-  //   console.log(field)))
   return (
     <div>
       {responses?.map((response) => (
