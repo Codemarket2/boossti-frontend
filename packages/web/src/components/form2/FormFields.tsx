@@ -112,6 +112,7 @@ export default function FormFields({
 }: IProps): any {
   const [state, setState] = useState<IState>(initialValues);
   const [isExpanded, setIsExpanded] = useState<boolean[]>([]);
+  // console.log(initialValues, 'initialvalues');
 
   function onDragEnd(result) {
     if (!result.destination) {
@@ -449,6 +450,7 @@ export default function FormFields({
               </>
             )}
           </List>
+
           <CRUDMenu
             hideDelete={state.field?.options?.default}
             show={state.showMenu}
@@ -481,6 +483,7 @@ export default function FormFields({
             </MenuItem>
             {state.field?.fieldType === 'form' && (
               <>
+                hi
                 {state.field?.form?._id && (
                   <>
                     <MenuItem

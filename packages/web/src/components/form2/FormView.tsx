@@ -544,7 +544,6 @@ export function FormViewChild({
     forms: {},
     responses: {},
   });
-
   const fields = useMemo(
     () =>
       tempFields?.filter((field: IField) => {
@@ -555,6 +554,8 @@ export function FormViewChild({
       }),
     [tempFields, overrideValues],
   );
+  // console.log(fields, 'fields');
+
   const {
     uniqueBetweenMultipleValuesLoading,
     uniqueBetweenMultipleValuesError,
@@ -740,9 +741,12 @@ export function FormViewChild({
     });
     const payload =
       overrideValues?.length > 0 && !edit ? [...overrideValues, ...newValues] : [...newValues];
-
-    (payload[1] as { value: any }).value = JSON.stringify((payload[1] as { value: any }).value);
-    (payload[0] as { value: any }).value = JSON.stringify((payload[0] as { value: any }).value);
+    fields.forEach((field) => {
+      if (field.fieldType === 'reactgridlayouteditor') {
+        (payload[1] as { value: any }).value = JSON.stringify((payload[1] as { value: any }).value);
+        (payload[0] as { value: any }).value = JSON.stringify((payload[0] as { value: any }).value);
+      }
+    });
     // console.log(payload, 'payload');
     const response = await handleSubmit(payload);
     window?.localStorage?.removeItem(localStorageKey);

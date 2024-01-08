@@ -823,6 +823,7 @@ export default function Field({
         // Example: updateFormLayout(newLayout);
       };
       // console.log(value.value, 'val reactdemo');
+      // console.log(field, 'field');
 
       return (
         <>

@@ -37,7 +37,7 @@ export default function FieldValuesMap({
   const fieldValues = response?.values?.filter((v) => v.field === field._id);
   const [disabled, setDisabled] = useState(false || field?.options?.disabled);
   const [state, setState] = useState({ inlineEditViewMore: false });
-
+  let parsedObject;
   const checkDisabledCondition = async () => {
     if (field?.options?.disabled && field?.options?.disabledConditions?.length > 0) {
       const result = await handleResolveCondition({
@@ -52,24 +52,29 @@ export default function FieldValuesMap({
     callback: checkDisabledCondition,
     value: response,
   });
+  // console.log(response, 'rr');
+  // console.log(field._id, 'ff');
+  if (field.fieldType === 'reactgridlayouteditor') {
+    // const targetFieldId = '659492a4bd709f686705cd37';
+    // const targetFieldId = '659645e5beda496d723f780a';
+    // const targetFieldId = '65966fb4c6d011032775daf9';
+    const targetFieldId = field._id;
+    // console.log(response, 'resres');
+    // console.log(field._id, 'ff');
+    const targetValue = response?.values?.find((value) => value.field === targetFieldId);
 
-  // const targetFieldId = '659492a4bd709f686705cd37';
-  const targetFieldId = '659645e5beda496d723f780a';
-  // console.log(response, 'resres');
-
-  const targetValue = response?.values?.find((value) => value.field === targetFieldId);
-
-  // console.log(targetValue.value, 'targetValue Chilc');
-  const Object = targetValue?.value;
-  // parsedObject = parsedObject.substring(1,parsedObject.length - 1)
-  // if (targetValue !== undefined) {
-  //   while (typeof parsedObject !== 'object') {
-  // parsedObject = JSON.parse(parsedObject);
-  //   }
-  // }
-  // console.log(Object, 'Target Chilfgfdcc');
-  const parsedObject = JSON.parse(Object);
-  // console.log(parsedObject);
+    // console.log(targetValue.value, 'targetValue Check');
+    const Object = targetValue?.value;
+    // // parsedObject = parsedObject.substring(1,parsedObject.length - 1)
+    // if (targetValue !== undefined) {
+    //   while (typeof parsedObject !== 'object') {
+    // parsedObject = JSON.parse(parsedObject);
+    //   }
+    // }
+    // console.log(Object, 'Target Chilfgfdcc');
+    parsedObject = JSON.parse(Object);
+    // console.log(parsedObject, 'parsedObject');
+  }
   return (
     <>
       {displayFieldLabel && (
@@ -104,6 +109,8 @@ export default function FieldValuesMap({
             <p>ReactGridLayoutEditor</p>
             {/* <p>hiyfhfghi</p> */}
             <FormGrid value={parsedObject.lg} onChange={null} />
+            {/* <FormGrid value={null} onChange={null} /> */}
+
             <DisplayRichText value={field?.options?.staticText} />
           </div>
         ) : field?.options?.systemCalculatedAndView ? (
