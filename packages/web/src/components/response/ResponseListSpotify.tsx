@@ -45,7 +45,7 @@ export default function ResponseList({
     <div>
       <div>
         {data?.getResponses?.data?.map((response) => (
-          // console.log(response.values[0].values)
+          // {console.log(response.values[0].values)}
           <div
             key={response._id}
             className="draggable-form-item"
@@ -54,7 +54,7 @@ export default function ResponseList({
               e.dataTransfer.setData('text/plain', JSON.stringify([response]));
             }}
           >
-            <div>
+            <div style={{ width: '200px' }}>
               <CardComponent
                 imageSource={response.values[0].value}
                 title={response.values[1].value}

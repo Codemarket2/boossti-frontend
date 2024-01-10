@@ -4,13 +4,16 @@ interface CardProps {
   imageSource: string;
   title: string;
   description: string;
+  // width : number;
+  // height : number;
 }
 
 const CardComponent: React.FC<CardProps> = (props) => {
   const { imageSource, title, description } = props;
 
   const cardStyle: React.CSSProperties = {
-    width: '100px',
+    width: '100%',
+    height: '100%',
     borderRadius: '10px',
     overflow: 'hidden',
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
@@ -32,6 +35,7 @@ const CardComponent: React.FC<CardProps> = (props) => {
     padding: '10px',
     color: 'white',
     textAlign: 'center',
+    fontSize: '1em', // or '1rem' - adjust as needed
   };
 
   return (

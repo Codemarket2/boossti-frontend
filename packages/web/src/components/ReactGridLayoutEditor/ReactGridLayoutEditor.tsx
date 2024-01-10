@@ -12,7 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from '@mui/icons-material/Delete';
-
+import EditIcon from '@mui/icons-material/Edit';
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 interface DragFromOutsideLayoutProps {
@@ -80,6 +80,7 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
     if (sourceItem) {
       setDropData({ targetLayout, sourceItem });
     }
+    console.log(sourceItem, 'This is the sourceItem');
     const newThing = [...layouts2, sourceItem];
     onChange(newThing);
   };
@@ -98,7 +99,7 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
   const generateDOM = () => {
     return _.map(layouts2, (res, i) => {
       const response = res;
-
+      console.log(res, res.w, 'This is the response');
       const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
       };
@@ -117,13 +118,14 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
         borderRadius: '5px',
         marginBottom: '20px',
         cursor: 'move',
-        height: '400px',
-        width: '600px',
+        height: '100%', // Set height to 100%
+        width: '100%', // Set width to 100%
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         color: 'black',
         position: 'relative',
+        overflow: 'hidden', // Add overflow property
       };
 
       const deleteButtonStyle: React.CSSProperties = {
@@ -145,6 +147,7 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
           draggable={true}
           data-grid={{ x: 0, y: 0, w: 2, h: 2 }}
         >
+          {/* hii */}
           {/* <button onClick={handleDelete} className="delete-button" style={deleteButtonStyle}>
           &#x2715;
           </button> */}
@@ -170,13 +173,38 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
                 </ListItemIcon>
                 <ListItemText primary="Delete" />
               </MenuItem>
+              <MenuItem onClick={handleDeleteMenuItemClick}>
+                <ListItemIcon>
+                  <EditIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText primary="Edit text" />
+              </MenuItem>
+              <MenuItem onClick={handleDeleteMenuItemClick}>
+                <ListItemIcon>
+                  <EditIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText primary="Edit Styles" />
+              </MenuItem>
+              <MenuItem onClick={handleDeleteMenuItemClick}>
+                <ListItemIcon>
+                  <EditIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText primary="Lock position" />
+              </MenuItem>
+              <MenuItem onClick={handleDeleteMenuItemClick}>
+                <ListItemIcon>
+                  <EditIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText primary="Resize" />
+              </MenuItem>
             </Menu>
           </div>
-          {/* fdgdgdfg */}
           <CardComponent
             imageSource={response[0].values[0].value}
             title={response[0].values[1].value}
             description={response[0].values[2].value}
+            // width = {res.w}
+            // height = {res.h}
           />
         </div>
       );
