@@ -6,14 +6,15 @@ interface CardProps {
   imageSource: string;
   title: string;
   description: string;
+  // width: number;
+  height: number;
 }
 
 const CardComponent: React.FC<CardProps> = (props) => {
-  const { imageSource, title, description } = props;
-
+  const { imageSource, title, description, height } = props;
   const cardStyle: React.CSSProperties = {
-    width: '100px',
-    // height: '100px',
+    width: `100%`, // Use percentage for width
+    height: `60%`,
     borderRadius: '10px',
     overflow: 'hidden',
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
@@ -27,8 +28,9 @@ const CardComponent: React.FC<CardProps> = (props) => {
 
   const imageStyle: React.CSSProperties = {
     width: '100%',
-    height: 'auto',
+    height: '60%',
     borderBottom: '1px solid #ddd',
+    // objectFit: 'cover',
   };
 
   const cardContentStyle: React.CSSProperties = {
@@ -39,14 +41,18 @@ const CardComponent: React.FC<CardProps> = (props) => {
 
   return (
     <div
-      style={{ ...cardStyle, ...cardHoverStyle }}
-      //   onMouseOver={() => console.log('Mouse over')}
-      //   onFocus={() => console.log('Focus')}
+      style={{
+        ...cardStyle,
+        ...cardHoverStyle,
+      }}
     >
+      {/* onMouseOver={() => console.log('Mouse over')}
+         onFocus={() => console.log('Focus')} */}
+
       <img src={imageSource} alt="Card " style={imageStyle} />
       <div style={cardContentStyle}>
-        <h2>{title}</h2>
-        <p>{description}</p>
+        <h2 style={{ fontSize: `2rem` }}>{title}</h2>
+        <p style={{ fontSize: `2rem` }}>{description}</p>
       </div>
     </div>
   );
@@ -56,5 +62,7 @@ CardComponent.propTypes = {
   imageSource: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
+  // width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
 };
 export default CardComponent;

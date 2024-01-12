@@ -73,7 +73,7 @@ export default function FieldValuesMap({
     // }
     // console.log(Object, 'Target Chilfgfdcc');
     parsedObject = JSON.parse(Object);
-    // console.log(parsedObject, 'parsedObject');
+    // console.log(parsedObject.lg, 'parsedObject');
   }
   return (
     <>

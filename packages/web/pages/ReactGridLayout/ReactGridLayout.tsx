@@ -33,96 +33,49 @@ interface IState {
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 const FormGrid = ({ onChange, onLayoutChange, value }) => {
-  // const initialValues: IState = {
-  //   editRules: null,
-  //   showMenu: null,
-  //   field: {
-  //     _id: '6597a371db8332f135a5c4e4',
-  //     label: 'ReactGridLayoutEditor',
-  //     fieldType: 'reactgridlayouteditor',
-  //     options: {
-  //       physicalQuantity: '',
-  //       unit: '',
-  //       default: false,
-  //       selectItem: false,
-  //       dependentRelationship: false,
-  //       twoWayRelationship: false,
-  //       relationLabel: '',
-  //       relationFieldId: '',
-  //       showOptionCreatedByUser: false,
-  //       showOptionCreatedOnTemplate: false,
-  //       required: false,
-  //       multipleValues: false,
-  //       uniqueBetweenMultipleValues: false,
-  //       uniqueSubField: null,
-  //       unique: false,
-  //       caseInsensitiveUnique: false,
-  //       staticText: '',
-  //       formField: '',
-  //       showCommentBox: false,
-  //       showStarRating: false,
-  //       notEditable: false,
-  //       systemCalculatedAndSaved: false,
-  //       systemValue: null,
-  //       systemCalculatedAndView: false,
-  //       formula: null,
-  //       showAsCheckbox: false,
-  //       selectAllowCreate: false,
-  //       selectOptions: [''],
-  //       conditions: [],
-  //       defaultValue: null,
-  //       hidden: false,
-  //       hiddenConditions: null,
-  //       disabled: false,
-  //       disabledConditions: null,
-  //       showAsAddButton: false,
-  //       selectOfFieldProps: false,
-  //       conditionRightPart: false,
-  //       engagementForms: null,
-  //     },
-  //     template: null,
-  //     form: null,
-  //   },
-  //   showForm: false,
-  //   editStyle: false,
-  //   editGrid: false,
-  //   editForm: false,
-  //   showFormSettings: false,
-  //   showSystemFields: false,
-  // };
-
   const [compactType, setCompactType] = useState('No Compaction');
   const [layouts2, setLayouts2] = useState({ lg: value });
   const [dropData, setDropData] = useState({ targetLayout: '', sourceItem: [] });
   const [anchorEl, setAnchorEl] = useState(null);
 
   const [formData, setFormData] = useState(null);
+  const [sizes, setSizes] = useState<{ [key: string]: { w: number; h: number } }>({});
+
   // console.log(value, 'val in reactgridlayout');
 
-  const fetchData = async () => {
-    const data = await getFormBySlug('santhanamnew');
-    setFormData(data);
-  };
   // const fetchData = async () => {
-  //   const data = await getFormBySlug('spotifycardinfo');
+  //   const data = await getFormBySlug('santhanamnew');
   //   setFormData(data);
   // };
+  const [isResizeEnabled, setIsResizeEnabled] = useState(false);
+
+  const fetchData = async () => {
+    const data = await getFormBySlug('spotifycardinfo');
+    setFormData(data);
+  };
   useEffect(() => {
     fetchData();
   }, []);
   // console.log(formData, 'formdata');
 
-  useEffect(() => {
-    const { targetLayout, sourceItem } = dropData;
-    if (targetLayout && sourceItem) {
-      setDropData({ targetLayout: '', sourceItem: null });
-      setLayouts2((prevLayouts) => {
-        const newItem = { sourceItem };
-        return { lg: [...prevLayouts.lg, newItem] };
-      });
-      // console.log(layouts2, 'layouts2');
-    }
-  }, [dropData]);
+  // useEffect(() => {
+  //   const { targetLayout, sourceItem } = dropData;
+  //   console.log(dropData, 'ondrop layouts');
+  //   if (targetLayout && sourceItem) {
+  //     setDropData({ targetLayout: '', sourceItem: null });
+  //     // setLayouts2((prevLayouts) => {
+  //     //   const newItem = { sourceItem };
+  //     //   return { lg: [...prevLayouts.lg, newItem] };
+  //     // });
+  //     setLayouts2((prevLayouts) => {
+  //       const newItem = {
+  //         sourceItem,
+  //       };
+  //       return { lg: [...prevLayouts.lg, newItem] };
+  //     });
+  //     // console.log(layouts2, 'layouts2');
+  //   }
+  // }, [dropData]);
 
   // useEffect(() => {S
   //   // Notify the parent component about changes in layouts2
@@ -148,13 +101,50 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
     event.preventDefault();
     removeValidDropAreaIndicator();
     const sourceItem = JSON.parse(event.dataTransfer.getData('text/plain'));
+    // if (sourceItem) {
+    //   setDropData({ targetLayout, sourceItem });
+    // }
     if (sourceItem) {
-      setDropData({ targetLayout, sourceItem });
-    }
+      // Update the layouts state
+      setLayouts2((prevLayouts) => {
+        const newItem = { sourceItem };
+        const updatedLayouts = [...prevLayouts.lg, newItem];
+        return { lg: updatedLayouts };
+      });
 
-    // console.log(layouts2, 'ondrop layouts');
+      onChange(layouts2);
+    }
+  };
+  const onResize = (layout, oldItem, newItem) => {
+    const updatedLayouts = layouts2.lg.map((item, index) =>
+      index.toString() === oldItem.i
+        ? {
+            ...item,
+            x: newItem.x,
+            y: newItem.y,
+            w: newItem.w,
+            h: newItem.h,
+          }
+        : item,
+    );
+
+    // console.log(item, 'item');
+    // Return other items unchanged
+
+    // console.log(updatedLayouts, 'updated layouts');
+    // });
+    setSizes((prevSizes) => ({
+      ...prevSizes,
+      [oldItem.i]: { w: newItem.w, h: newItem.h },
+    }));
+    // console.log(sizes, 'sizes');
+    // console.log(oldItem, newItem, layout, 'Resize Old Item');
+    setLayouts2({ lg: updatedLayouts });
+    // console.log(layouts2, 'layouts after resize');
+    onLayoutChange(layouts2);
     onChange(layouts2);
   };
+
   // const onDrop = (targetLayout, event) => {
   //   event.preventDefault();
   //   removeValidDropAreaIndicator();
@@ -174,6 +164,7 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
   //     );
   //   }
   // };
+
   const deleteButtonWrapperStyle: CSSProperties = {
     position: 'absolute',
     top: '5px',
@@ -183,7 +174,8 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
   const generateDOM = () => {
     return _.map(layouts2.lg, (res, i) => {
       const response = res.sourceItem;
-      // console.log(res, 'resd');
+
+      // console.log(res, 'response');
       const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
       };
@@ -196,8 +188,19 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
         handleDelete(i);
         handleClose();
       };
+      const width = res.w || 2;
+      const height = res.h || 2;
+      const xcor = res.x || 0;
+      const ycor = res.y || 0;
+
       return (
-        <div key={i} className="grid-item" style={gridItemStyle} draggable>
+        <div
+          key={i}
+          className="grid-item"
+          style={gridItemStyle}
+          data-grid={{ x: xcor, y: ycor, w: width, h: height }}
+          draggable
+        >
           {/* <button
             className="delete-button"
             style={deleteButtonWrapperStyle}
@@ -228,16 +231,37 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
                 <ListItemText primary="Delete" />
               </MenuItem>
               {/* Add more menu items as needed */}
+              <MenuItem onClick={() => []}>
+                <ListItemIcon>
+                  <EditIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText primary="Edit" />
+              </MenuItem>
+              {/* <MenuItem onClick={() => console.log('button clicked')}>
+                <ListItemIcon>
+                  <EditIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText primary="Lock" />
+              </MenuItem> */}
+              {/* <MenuItem onClick={() => console.log('button clicked')}>
+                <ListItemIcon>
+                  <EditIcon fontSize="small" />
+                </ListItemIcon>
+
+                <ListItemText primary=" Enable Resize" />
+              </MenuItem> */}
             </Menu>
           </div>
 
           {/* <div dangerouslySetInnerHTML={{ __html: JSON.parse(response.values[0].value) }} /> */}
-          <div dangerouslySetInnerHTML={{ __html: response.values[0].value }} />
-          {/* <CardComponent
+          {/* <div dangerouslySetInnerHTML={{ __html: response.values[0].value }} /> */}
+
+          <CardComponent
             imageSource={response[0].values[0].value}
             title={response[0].values[1].value}
             description={response[0].values[2].value}
-          /> */}
+            height={height}
+          />
         </div>
       );
     });
@@ -250,9 +274,8 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
       // const updatedLayouts = [...prevLayouts.lg];
 
       // updatedLayouts.filter((_, i) => index !== i);
-      /* eslint-disable no-shadow */
-      const updatedLayouts = prevLayouts.lg.filter((i) => i !== index);
-      /* eslint-enable no-shadow */
+
+      const updatedLayouts = prevLayouts.lg.filter((random, i) => i !== index);
 
       // console.log({ lg: updatedLayouts }, 'updatedlayouts');
       return { lg: updatedLayouts };
@@ -260,18 +283,28 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
     // console.log(layouts2, 'layouts2 after delete');
     onChange(layouts2);
   };
+  // const onResize = (layout, oldItem, newItem) => {
+  //   setSizes((prevSizes) => ({
+  //     ...prevSizes,
+  //     [oldItem.i]: { w: newItem.w, h: newItem.h },
+  //   }));
+  //   console.log(oldItem,newItem,layout,"Resize Old Item")
+  //   onLayoutChange(layouts2);
+  // };
 
-  const gridItemStyle = {
+  const gridItemStyle: React.CSSProperties = {
     padding: '20px',
     borderRadius: '5px',
     marginBottom: '20px',
     cursor: 'move',
-    height: '200px',
-    width: '200px',
+    height: '100%',
+    width: '100%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     color: 'black',
+    position: 'relative',
+    overflow: 'hidden',
   };
 
   const containerStyle = {
@@ -305,38 +338,12 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
   //   height: '100%',
   //   width: '100%',
   // };
-  // const Spotifydata = [
-  //   {
-  //     imageSource: 'https://upload.wikimedia.org/wikipedia/en/7/70/Graduation_%28album%29.jpg',
-  //     title: 'Title 1',
-  //     description: 'Description 1',
-  //   },
-  //   {
-  //     imageSource: 'https://upload.wikimedia.org/wikipedia/en/7/70/Graduation_%28album%29.jpg',
-  //     title: 'Title 2',
-  //     description: 'Description 2',
-  //   },
-  //   {
-  //     imageSource: 'https://upload.wikimedia.org/wikipedia/en/7/70/Graduation_%28album%29.jpg',
-  //     title: 'Title 3',
-  //     description: 'Description 3',
-  //   },
-  //   {
-  //     imageSource: 'https://upload.wikimedia.org/wikipedia/en/7/70/Graduation_%28album%29.jpg',
-  //     title: 'Title 4',
-  //     description: 'Description 4',
-  //   },
-  //   {
-  //     imageSource: 'https://upload.wikimedia.org/wikipedia/en/7/70/Graduation_%28album%29.jpg',
-  //     title: 'Title 5',
-  //     description: 'Description 5',
-  //   },
-  // ];
+
   const dragAreaStyle = {
     border: '5px solid #ddd',
     borderRadius: '5px',
     marginBottom: '20px',
-    borderColor: 'black',
+    borderColor: isResizeEnabled ? 'black' : 'gray',
     height: '500px', // Set your desired initial height
     width: '80%', // Set your desired initial width
     margin: 'auto', // Center the container horizontally
@@ -346,15 +353,19 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
     <div style={containerStyle}>
       <div style={gridContainerStyle}>
         <div style={responseListContainerStyle}>
-          <Column form={formData} />
-          {/* <Spotify form={formData} /> */}
+          {/* <Column form={formData} /> */}
+          <Spotify form={formData} />
         </div>
         <div
           style={dragAreaStyle}
           onDragOver={(e) => e.preventDefault()}
           onDrop={(e) => onDrop('layouts2' || 'layouts1', e)}
         >
-          <ResponsiveReactGridLayout compactType={compactType}>
+          <ResponsiveReactGridLayout
+            compactType={compactType}
+            onResize={onResize}
+            onDragStart={onResize}
+          >
             {generateDOM()}
           </ResponsiveReactGridLayout>
         </div>

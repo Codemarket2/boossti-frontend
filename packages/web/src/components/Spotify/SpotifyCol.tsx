@@ -23,6 +23,8 @@ function Spotify({
     valueFilter,
     parentResponseId,
   });
+  const width = 100;
+  const height = 100;
   // console.log(data, 'data');
   // console.log(data?.getResponses?.data, 'getresponses');
   return (
@@ -37,11 +39,12 @@ function Spotify({
               e.dataTransfer.setData('text/plain', JSON.stringify([response]));
             }}
           >
-            <div>
+            <div style={{ width: '100px', height: '100px' }}>
               <CardComponent
                 imageSource={response.values[0].value}
                 title={response.values[1].value}
                 description={response.values[2].value}
+                height={2}
               />
             </div>
           </div>
