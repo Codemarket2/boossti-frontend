@@ -54,11 +54,13 @@ export default function ResponseList({
               e.dataTransfer.setData('text/plain', JSON.stringify([response]));
             }}
           >
-            <div style={{ width: '200px' }}>
+            <div style={{ width: '200px', height: '300px' }}>
               <CardComponent
                 imageSource={response.values[0].value}
                 title={response.values[1].value}
                 description={response.values[2].value}
+                width={2}
+                height={1.5}
               />
             </div>
           </div>

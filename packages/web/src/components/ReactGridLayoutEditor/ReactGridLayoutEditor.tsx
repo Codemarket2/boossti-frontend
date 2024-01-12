@@ -13,6 +13,7 @@ import Menu from '@mui/material/Menu';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import { to } from 'mathjs';
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 interface DragFromOutsideLayoutProps {
@@ -36,6 +37,7 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
   });
   const [formData, setFormData] = useState<any>(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [sizes, setSizes] = useState<{ [key: string]: { w: number; h: number } }>({});
 
   const fetchData = async () => {
     const data = await getFormBySlug('spotify-card-details');
@@ -80,15 +82,17 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
     if (sourceItem) {
       setDropData({ targetLayout, sourceItem });
     }
-    console.log(sourceItem, 'This is the sourceItem');
     const newThing = [...layouts2, sourceItem];
     onChange(newThing);
   };
+
   const deleteButtonWrapperStyle: React.CSSProperties = {
     position: 'absolute',
     top: '5px',
     right: '5px',
+    zIndex: 2,
   };
+
   const handleDelete = (i) => {
     console.log('Is this the delete operation');
     const updatedLayouts = layouts2.filter((item, index) => index !== i);
@@ -96,10 +100,31 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
     onLayoutChange(updatedLayouts);
     onChange(updatedLayouts);
   };
+
+  const onResize = (layout, oldItem, newItem) => {
+    console.log(oldItem, 'newItem layout');
+
+    const updatedLayout = layouts2.map((item, index) =>
+      // console.log(item,oldItem.i,"This is item")
+      index.toString() === oldItem.i
+        ? { ...item, x: newItem.x, y: newItem.y, w: newItem.w, h: newItem.h }
+        : item,
+    );
+    console.log(updatedLayout, 'Updated layout');
+    setSizes((prevSizes) => ({
+      ...prevSizes,
+      [oldItem.i]: { w: newItem.w, h: newItem.h },
+    }));
+
+    setLayouts2(updatedLayout);
+    onLayoutChange(updatedLayout);
+    onChange(updatedLayout);
+  };
+
   const generateDOM = () => {
     return _.map(layouts2, (res, i) => {
       const response = res;
-      console.log(res, res.w, 'This is the response');
+      console.log(response, 'This is the response');
       const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
       };
@@ -108,8 +133,9 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
         setAnchorEl(null);
       };
 
-      const handleDeleteMenuItemClick = () => {
-        handleDelete(i);
+      const handleDeleteMenuItemClick = (layoutKey) => {
+        console.log(layoutKey, 'This is in delete');
+        handleDelete(layoutKey.i);
         handleClose();
       };
 
@@ -118,14 +144,14 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
         borderRadius: '5px',
         marginBottom: '20px',
         cursor: 'move',
-        height: '100%', // Set height to 100%
-        width: '100%', // Set width to 100%
+        height: '100%',
+        width: '100%',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         color: 'black',
         position: 'relative',
-        overflow: 'hidden', // Add overflow property
+        overflow: 'hidden',
       };
 
       const deleteButtonStyle: React.CSSProperties = {
@@ -145,12 +171,13 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
           className={`grid-item`}
           style={gridItemStyle}
           draggable={true}
-          data-grid={{ x: 0, y: 0, w: 2, h: 2 }}
+          data-grid={{
+            x: response.x || 0,
+            y: response.y || 0,
+            w: response.w || 2,
+            h: response.h || 2,
+          }}
         >
-          {/* hii */}
-          {/* <button onClick={handleDelete} className="delete-button" style={deleteButtonStyle}>
-          &#x2715;
-          </button> */}
           <div style={deleteButtonWrapperStyle}>
             <IconButton
               aria-label="more"
@@ -167,29 +194,11 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              <MenuItem onClick={handleDeleteMenuItemClick}>
+              <MenuItem onClick={() => handleDeleteMenuItemClick({ i })}>
                 <ListItemIcon>
                   <DeleteIcon fontSize="small" />
                 </ListItemIcon>
                 <ListItemText primary="Delete" />
-              </MenuItem>
-              <MenuItem onClick={handleDeleteMenuItemClick}>
-                <ListItemIcon>
-                  <EditIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText primary="Edit text" />
-              </MenuItem>
-              <MenuItem onClick={handleDeleteMenuItemClick}>
-                <ListItemIcon>
-                  <EditIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText primary="Edit Styles" />
-              </MenuItem>
-              <MenuItem onClick={handleDeleteMenuItemClick}>
-                <ListItemIcon>
-                  <EditIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText primary="Lock position" />
               </MenuItem>
               <MenuItem onClick={handleDeleteMenuItemClick}>
                 <ListItemIcon>
@@ -203,8 +212,8 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
             imageSource={response[0].values[0].value}
             title={response[0].values[1].value}
             description={response[0].values[2].value}
-            // width = {res.w}
-            // height = {res.h}
+            width={response.w}
+            height={response.h}
           />
         </div>
       );
@@ -251,7 +260,11 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
           onDragOver={(e) => e.preventDefault()}
           onDrop={(e) => onDrop('layouts2' || 'layouts1', e)}
         >
-          <ResponsiveReactGridLayout compactType={compactType}>
+          <ResponsiveReactGridLayout
+            compactType={compactType}
+            onResize={onResize}
+            onDragStart={onResize}
+          >
             {generateDOM()}
           </ResponsiveReactGridLayout>
         </div>

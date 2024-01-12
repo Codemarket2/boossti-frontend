@@ -1,16 +1,27 @@
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 
 interface CardProps {
   imageSource: string;
   title: string;
   description: string;
-  // width : number;
-  // height : number;
+  width: number;
+  height: number;
 }
 
 const CardComponent: React.FC<CardProps> = (props) => {
-  const { imageSource, title, description } = props;
+  const { imageSource, title, description, height, width } = props;
 
+  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      const { width, height } = containerRef.current.getBoundingClientRect();
+      setContainerSize({ width, height });
+    }
+  }, [containerSize.width, containerSize.height]);
+
+  console.log(containerSize, containerSize, 'This is in the size thing');
   const cardStyle: React.CSSProperties = {
     width: '100%',
     height: '100%',
@@ -18,32 +29,31 @@ const CardComponent: React.FC<CardProps> = (props) => {
     overflow: 'hidden',
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
     transition: 'transform 0.3s ease-in-out, background-color 0.3s ease-in-out',
-  };
-
-  const cardHoverStyle: React.CSSProperties = {
-    transform: 'scale(1.05)',
-    backgroundColor: 'black',
+    // backgroundColor: 'black',
   };
 
   const imageStyle: React.CSSProperties = {
     width: '100%',
-    height: 'auto',
+    height: '70%',
     borderBottom: '1px solid #ddd',
   };
 
   const cardContentStyle: React.CSSProperties = {
     padding: '10px',
-    color: 'white',
+    color: 'black',
+    width: '100%',
+    height: '30%',
     textAlign: 'center',
-    fontSize: '1em', // or '1rem' - adjust as needed
+    fontSize: `${containerSize.width / 10}vw`, // Using vw unit based on container width
+    transition: 'font-size 0.3s ease-in-out', // Adding transition for smoother effect
   };
 
   return (
-    <div style={{ ...cardStyle, ...cardHoverStyle }} onMouseOver={() => console.log('Mouse over')}>
+    <div ref={containerRef} style={cardStyle}>
       <img src={imageSource} alt="Card Image" style={imageStyle} />
       <div style={cardContentStyle}>
-        <h2>{title}</h2>
-        <p>{description}</p>
+        <h2 style={{ fontSize: `${height}rem` }}>{title}</h2>
+        <p style={{ fontSize: `${height}rem` }}>{description}</p>
       </div>
     </div>
   );

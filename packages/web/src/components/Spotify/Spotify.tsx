@@ -21,6 +21,8 @@ function Spotify({ responses }) {
                 imageSource={response.imageSource}
                 title={response.title}
                 description={response.description}
+                height={2}
+                width={2}
               />
             </div>
           </div>
