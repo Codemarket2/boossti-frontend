@@ -10,18 +10,8 @@ interface CardProps {
 
 const CardComponent: React.FC<CardProps> = (props) => {
   const { imageSource, title, description, height, width } = props;
-
-  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (containerRef.current) {
-      const { width, height } = containerRef.current.getBoundingClientRect();
-      setContainerSize({ width, height });
-    }
-  }, [containerSize.width, containerSize.height]);
-
-  console.log(containerSize, containerSize, 'This is in the size thing');
   const cardStyle: React.CSSProperties = {
     width: '100%',
     height: '100%',
@@ -29,7 +19,6 @@ const CardComponent: React.FC<CardProps> = (props) => {
     overflow: 'hidden',
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
     transition: 'transform 0.3s ease-in-out, background-color 0.3s ease-in-out',
-    // backgroundColor: 'black',
   };
 
   const imageStyle: React.CSSProperties = {
@@ -44,8 +33,7 @@ const CardComponent: React.FC<CardProps> = (props) => {
     width: '100%',
     height: '30%',
     textAlign: 'center',
-    fontSize: `${containerSize.width / 10}vw`, // Using vw unit based on container width
-    transition: 'font-size 0.3s ease-in-out', // Adding transition for smoother effect
+    transition: 'font-size 0.3s ease-in-out',
   };
 
   return (

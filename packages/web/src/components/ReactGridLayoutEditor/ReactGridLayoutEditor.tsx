@@ -94,7 +94,7 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
   };
 
   const handleDelete = (i) => {
-    console.log('Is this the delete operation');
+    // console.log('Is this the delete operation');
     const updatedLayouts = layouts2.filter((item, index) => index !== i);
     setLayouts2(updatedLayouts);
     onLayoutChange(updatedLayouts);
@@ -124,7 +124,7 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
   const generateDOM = () => {
     return _.map(layouts2, (res, i) => {
       const response = res;
-      console.log(response, 'This is the response');
+      // console.log(response, 'This is the response');
       const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
       };
@@ -134,7 +134,7 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
       };
 
       const handleDeleteMenuItemClick = (layoutKey) => {
-        console.log(layoutKey, 'This is in delete');
+        // console.log(layoutKey, 'This is in delete');
         handleDelete(layoutKey.i);
         handleClose();
       };
