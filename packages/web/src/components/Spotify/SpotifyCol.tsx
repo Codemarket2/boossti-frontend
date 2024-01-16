@@ -39,12 +39,12 @@ function Spotify({
               e.dataTransfer.setData('text/plain', JSON.stringify([response]));
             }}
           >
-            <div style={{ width: '100px', height: '100px' }}>
+            <div style={{ width: '150px', height: '200px' }}>
               <CardComponent
                 imageSource={response.values[0].value}
                 title={response.values[1].value}
                 description={response.values[2].value}
-                height={2}
+                height={1}
               />
             </div>
           </div>

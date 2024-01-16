@@ -124,6 +124,8 @@ export default function FormFields({
     const newFields = reorder(fields, result.source.index, result.destination.index);
     setFields(newFields);
   }
+  // console.log(fields, 'fields from formview');
+  // console.log(fields?.filter((f) => f._id === state?.field?._id)?.pop()?.options?.style, 'styles');
 
   const onSave = (tempField, action) => {
     const field = { ...tempField };

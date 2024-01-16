@@ -19,6 +19,7 @@ interface IProps {
 }
 
 export default function StyleDrawer({ open, onClose, styles = {}, onStylesChange }: IProps) {
+  // console.log(open, styles, 'open,styles');
   const onStyleChange = (newStyle) => {
     onStylesChange({ ...styles, ...newStyle });
   };

@@ -13,11 +13,14 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ChevronRight from '@mui/icons-material/ChevronRight';
+import { style } from 'd3';
 import CRUDMenu from '../../src/components/common/CRUDMenu';
 import CardComponent from '../../src/components/Spotify/SpotifyCard';
 import Card from '../../src/components/card/Card';
 import Spotify from '../../src/components/Spotify/SpotifyCol';
 import Column from '../../src/components/response/Column';
+import StyleDrawer from '../../src/components/style/StyleDrawer';
 
 interface IState {
   editRules: boolean;
@@ -40,7 +43,9 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
 
   const [formData, setFormData] = useState(null);
   const [sizes, setSizes] = useState<{ [key: string]: { w: number; h: number } }>({});
-
+  // const [editStyle, seteditstyle] = useState(false);
+  const [selectedItemIndex, setSelectedItemIndex] = useState(null);
+  const [isStyleDrawerOpen, setIsStyleDrawerOpen] = useState(false);
   // console.log(value, 'val in reactgridlayout');
 
   // const fetchData = async () => {
@@ -48,6 +53,8 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
   //   setFormData(data);
   // };
   const [isResizeEnabled, setIsResizeEnabled] = useState(false);
+
+  const [gridItemStyles, setGridItemStyles] = useState({});
 
   const fetchData = async () => {
     const data = await getFormBySlug('spotifycardinfo');
@@ -169,6 +176,7 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
     position: 'absolute',
     top: '5px',
     right: '5px',
+    zIndex: 1,
   };
 
   const generateDOM = () => {
@@ -188,11 +196,19 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
         handleDelete(i);
         handleClose();
       };
+
+      // const handleEditStyle = (index: number, style: any) => {
+      //   field._id === fieldId ? { ...field, options: { ...field?.options, style } } : styles;
+      // };
+      // console.log(isStyleDrawerOpen, 'is styledrawer open?');
+
       const width = res.w || 2;
       const height = res.h || 2;
       const xcor = res.x || 0;
       const ycor = res.y || 0;
-
+      // console.log(gridItemStyles, 'styles');
+      const stylevalue = res.style;
+      // console.log(res.style, 'response style');
       return (
         <div
           key={i}
@@ -231,11 +247,11 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
                 <ListItemText primary="Delete" />
               </MenuItem>
               {/* Add more menu items as needed */}
-              <MenuItem onClick={() => []}>
+              <MenuItem onClick={null}>
                 <ListItemIcon>
                   <EditIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText primary="Edit" />
+                <ListItemText primary="Edit Style" />
               </MenuItem>
               {/* <MenuItem onClick={() => console.log('button clicked')}>
                 <ListItemIcon>
@@ -255,13 +271,25 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
 
           {/* <div dangerouslySetInnerHTML={{ __html: JSON.parse(response.values[0].value) }} /> */}
           {/* <div dangerouslySetInnerHTML={{ __html: response.values[0].value }} /> */}
-
-          <CardComponent
-            imageSource={response[0].values[0].value}
-            title={response[0].values[1].value}
-            description={response[0].values[2].value}
-            height={height}
-          />
+          <div onClick={() => handleToggleStyleDrawer(i)}>
+            <CardComponent
+              imageSource={response[0].values[0].value}
+              title={response[0].values[1].value}
+              description={response[0].values[2].value}
+              height={height}
+              descriptionStyles={stylevalue}
+            />
+          </div>
+          {/* <div>
+            {isStyleDrawerOpen && (
+              <StyleDrawer
+                onClose={() => setIsStyleDrawerOpen(false)}
+                open={isStyleDrawerOpen}
+                onStylesChange={() => null}
+                styles={styles}
+              />
+            )}
+          </div> */}
         </div>
       );
     });
@@ -283,15 +311,40 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
     // console.log(layouts2, 'layouts2 after delete');
     onChange(layouts2);
   };
-  // const onResize = (layout, oldItem, newItem) => {
-  //   setSizes((prevSizes) => ({
-  //     ...prevSizes,
-  //     [oldItem.i]: { w: newItem.w, h: newItem.h },
-  //   }));
-  //   console.log(oldItem,newItem,layout,"Resize Old Item")
-  //   onLayoutChange(layouts2);
-  // };
 
+  const handleToggleStyleDrawer = (index) => {
+    setSelectedItemIndex(index);
+    setIsStyleDrawerOpen(true);
+    // handleClose();
+    // setIsStyleDrawerOpen((prevIsStyleDrawerOpen) => !prevIsStyleDrawerOpen);
+    // if (!isStyleDrawerOpen) {
+    //   setSelectedItemIndex(index);
+    // }
+    setAnchorEl(null); // Close the menu
+  };
+  const handleEditStyle = (newstyle: any) => {
+    setGridItemStyles((prevStyles) => ({
+      ...prevStyles,
+      [selectedItemIndex]: { ...prevStyles[selectedItemIndex], ...newstyle },
+    }));
+    // console.log(gridItemStyles, 'inside handle edit style');
+    // Update the corresponding layout object
+    setLayouts2((prevLayouts) => {
+      const updatedLayouts = prevLayouts.lg.map((item, index) =>
+        index === selectedItemIndex
+          ? {
+              ...item,
+              style: { ...item.style, ...newstyle },
+            }
+          : item,
+      );
+      // console.log(updatedLayouts, 'after styles');
+      return { lg: updatedLayouts };
+    });
+    onLayoutChange(layouts2);
+
+    onChange(layouts2);
+  };
   const gridItemStyle: React.CSSProperties = {
     padding: '20px',
     borderRadius: '5px',
@@ -351,6 +404,17 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
 
   return (
     <div style={containerStyle}>
+      <div>
+        <IconButton onClick={handleToggleStyleDrawer} style={{ position: 'absolute', right: 0 }}>
+          <ChevronRight />
+        </IconButton>
+        <StyleDrawer
+          onClose={() => setIsStyleDrawerOpen(false)}
+          open={isStyleDrawerOpen}
+          onStylesChange={(newvalue) => handleEditStyle(newvalue)}
+          styles={gridItemStyles[selectedItemIndex]}
+        />
+      </div>
       <div style={gridContainerStyle}>
         <div style={responseListContainerStyle}>
           {/* <Column form={formData} /> */}
