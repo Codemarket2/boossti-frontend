@@ -14,6 +14,9 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { to } from 'mathjs';
+import StyleDrawer from '../style/StyleDrawer';
+import ChevronRight from '@mui/icons-material/ChevronRight';
+
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 interface DragFromOutsideLayoutProps {
@@ -38,6 +41,9 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
   const [formData, setFormData] = useState<any>(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const [sizes, setSizes] = useState<{ [key: string]: { w: number; h: number } }>({});
+  const [isStyleDrawerOpen, setisStyleDrawerOpen] = useState(null);
+  const [gridItemStyles, setGridItemStyles] = useState({});
+  const [selectedItemIndex, setSelectedItemIndex] = useState(null);
 
   const fetchData = async () => {
     const data = await getFormBySlug('spotify-card-details');
@@ -102,7 +108,7 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
   };
 
   const onResize = (layout, oldItem, newItem) => {
-    console.log(oldItem, 'newItem layout');
+    // console.log(oldItem, 'newItem layout');
 
     const updatedLayout = layouts2.map((item, index) =>
       // console.log(item,oldItem.i,"This is item")
@@ -110,7 +116,7 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
         ? { ...item, x: newItem.x, y: newItem.y, w: newItem.w, h: newItem.h }
         : item,
     );
-    console.log(updatedLayout, 'Updated layout');
+    // console.log(updatedLayout, 'Updated layout');
     setSizes((prevSizes) => ({
       ...prevSizes,
       [oldItem.i]: { w: newItem.w, h: newItem.h },
@@ -121,12 +127,29 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
     onChange(updatedLayout);
   };
 
+  const styles = {};
+
+  const handleStylesClose = () => {
+    setisStyleDrawerOpen(false);
+  };
+  // const handleStyleOnClick = () => {
+  //   setisStyleDrawerOpen(true)
+  //   setAnchorEl(null);
+  // }
+  const handleToggleStyleDrawer = (index) => {
+    setSelectedItemIndex(index);
+    setisStyleDrawerOpen(true);
+
+    setAnchorEl(null); // Close the menu
+  };
+
   const generateDOM = () => {
     return _.map(layouts2, (res, i) => {
       const response = res;
       // console.log(response, 'This is the response');
       const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
+        // setisStyleDrawerOpen(true);
       };
 
       const handleClose = () => {
@@ -200,21 +223,32 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
                 </ListItemIcon>
                 <ListItemText primary="Delete" />
               </MenuItem>
-              <MenuItem onClick={handleDeleteMenuItemClick}>
+              <MenuItem onClick={handleToggleStyleDrawer}>
                 <ListItemIcon>
                   <EditIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText primary="Resize" />
+                <ListItemText primary="Change Styles" />
               </MenuItem>
             </Menu>
           </div>
-          <CardComponent
-            imageSource={response[0].values[0].value}
-            title={response[0].values[1].value}
-            description={response[0].values[2].value}
-            width={response.w}
-            height={response.h}
-          />
+          <div onClick={() => handleToggleStyleDrawer(i)}>
+            <CardComponent
+              imageSource={response[0].values[0].value}
+              title={response[0].values[1].value}
+              description={response[0].values[2].value}
+              width={response.w}
+              height={response.h}
+              descriptionStyles={gridItemStyles[i]}
+            />
+          </div>
+          {isStyleDrawerOpen && (
+            <StyleDrawer
+              onClose={handleStylesClose}
+              open={isStyleDrawerOpen}
+              styles={styles}
+              onStylesChange={() => null}
+            />
+          )}
         </div>
       );
     });
@@ -251,8 +285,27 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
     flex: '1',
   };
 
+  const handleEditStyle = (style: any) => {
+    setGridItemStyles((prevStyles) => ({
+      ...prevStyles,
+      [selectedItemIndex]: { ...prevStyles[selectedItemIndex], ...style },
+    }));
+  };
+
   return (
     <div style={containerStyle}>
+      <div>
+        <IconButton onClick={handleToggleStyleDrawer} style={{ position: 'absolute', right: 0 }}>
+          <ChevronRight />
+        </IconButton>
+        <StyleDrawer
+          onClose={() => setisStyleDrawerOpen(false)}
+          open={isStyleDrawerOpen}
+          onStylesChange={(value) => handleEditStyle(value)}
+          styles={gridItemStyles[selectedItemIndex]}
+        />
+      </div>
+
       <div style={gridContainerStyle}>
         <div style={responseListContainerStyle}>{render && <ResponseList form={formData} />}</div>
         <div

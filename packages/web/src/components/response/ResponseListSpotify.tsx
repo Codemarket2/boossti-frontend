@@ -9,6 +9,8 @@ import { ResponseViewSelectInput } from '../form2/FormSetting';
 import Paper from '@mui/material/Paper';
 import { useState } from 'react';
 import CardComponent from '../Spotify/SpotifyCard';
+// import StyleDrawer from '../style/StyleDrawer';
+
 export interface IResponseList {
   form: any;
   workflowId?: string;
@@ -35,7 +37,7 @@ export default function ResponseList({
     valueFilter,
     parentResponseId,
   });
-  // console.log(form?._id, showOnlyMyResponses, workflowId, valueFilter, parentResponseId, 'HEHE');
+
   console.log(data, 'Form Data');
   const [responsesView, setResponsesView] = useState(form?.settings?.responsesView || 'table');
 

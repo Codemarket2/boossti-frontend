@@ -3,7 +3,7 @@ import CardComponent from './SpotifyCard';
 // import Card from '../card/Card'
 
 function Spotify({ responses }) {
-  // console.log(responses,"In the spotify respsonse")
+  console.log(responses, 'In the spotify respsonse');
   return (
     <div>
       <div>
