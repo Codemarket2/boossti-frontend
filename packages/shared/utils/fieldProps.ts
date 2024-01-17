@@ -1,0 +1,17 @@
+export const fieldProps = [
+  'required',
+  'hidden',
+  'disabled',
+  'multipleValues',
+  'unique',
+  'showCommentBox',
+  'showStarRating',
+  'responseNotEditable',
+  'systemCalculatedAndSaved',
+  'systemCalculatedAndView',
+  'selectItem',
+  'canCreateNewOption',
+  'showAsCheckBox',
+  'twoWayRelationShip',
+  'diagramType',
+];

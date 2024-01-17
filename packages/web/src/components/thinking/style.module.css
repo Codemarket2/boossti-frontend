@@ -1,0 +1,29 @@
+/* GridLayout.css */
+
+
+.styles.layout {
+    background: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin: 10px;
+  }
+  
+  /* .styles div {
+    border: 1px solid #ddd;
+    background: #f9f9f9;
+  } */
+  .styles.productCategoryRow{
+    background: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin: 10px;
+  }
+  .styles.productRow {
+    height: 5px; /* Set your desired height */
+  }
+  
+
+  /* style.module.css */
+

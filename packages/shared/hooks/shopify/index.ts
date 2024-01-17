@@ -1,0 +1,1 @@
+export { checkValidShop } from './checkValidShop';

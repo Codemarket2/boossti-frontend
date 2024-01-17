@@ -1,0 +1,41 @@
+{
+  "version": "0.2.0",
+  
+  "configurations": [
+    {
+      "name": "Next.js: debug client-side",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "skipFiles": [
+        "${workspaceFolder}/node_modules/**/*.js",
+        "<node_internals>/**/*.js"
+      ],
+      "webRoot": "${workspaceFolder}/packages/web",
+    },
+    {
+      "name": "Next.js: debug full stack",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "skipFiles": [
+        "${workspaceFolder}/node_modules/**/*.js",
+        "<node_internals>/**/*.js",
+        "${workspaceFolder}/packages/web/.next"
+      ],
+      "webRoot": "${workspaceFolder}/packages/web",
+      /* "windows": {
+        "command": "yarn web"
+      },
+      "linux": {
+        "command": "yarn web:unix"
+      }, */
+      // "console": "integratedTerminal",
+      "serverReadyAction": {
+        "pattern": "started server on .+, url: (https?://.+)",
+        "uriFormat": "%s",
+        "action": "debugWithChrome"
+      }
+    },
+  ]
+}
