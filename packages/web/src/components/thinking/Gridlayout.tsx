@@ -17,7 +17,7 @@ function GridLayout() {
     {category: "Vegetables", price: "$1", stocked: true, name: "Peas"}
   ];
 
- // const uniqueCategories = Array.from(new Set(PRODUCTS.map(product => product.category)));
+ 
 
 
   function FilterableProductTable({ products }) {
