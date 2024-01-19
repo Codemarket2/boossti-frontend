@@ -15,6 +15,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 import { style } from 'd3';
+import { TextField } from '@mui/material';
 import CRUDMenu from '../../src/components/common/CRUDMenu';
 import CardComponent from '../../src/components/Spotify/SpotifyCard';
 import Card from '../../src/components/card/Card';
@@ -33,6 +34,12 @@ interface IState {
   showFormSettings: boolean;
   showSystemFields: boolean;
 }
+interface ICardState {
+  isEditing: boolean;
+  editedTitle: string;
+  editedDescription: string;
+}
+
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 const FormGrid = ({ onChange, onLayoutChange, value }) => {
@@ -46,6 +53,13 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
   // const [editStyle, seteditstyle] = useState(false);
   const [selectedItemIndex, setSelectedItemIndex] = useState(null);
   const [isStyleDrawerOpen, setIsStyleDrawerOpen] = useState(false);
+  // const [editedTitle, setEditedTitle] = useState('');
+  // const [editedDescription, setEditedDescription] = useState('');
+  const [cardState, setCardState] = useState<ICardState>({
+    isEditing: false,
+    editedTitle: '',
+    editedDescription: '',
+  });
   // console.log(value, 'val in reactgridlayout');
 
   // const fetchData = async () => {
@@ -152,26 +166,6 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
     onChange(layouts2);
   };
 
-  // const onDrop = (targetLayout, event) => {
-  //   event.preventDefault();
-  //   removeValidDropAreaIndicator();
-  //   const sourceItem = JSON.parse(event.dataTransfer.getData('text/plain'));
-
-  //   if (sourceItem) {
-  //     setDropData({ targetLayout, sourceItem });
-  //     setLayouts2(
-  //       (prevLayouts) => {
-  //         const newItem = { sourceItem };
-  //         const updatedLayouts = [...prevLayouts.lg, newItem];
-  //         return { lg: updatedLayouts };
-  //       },
-  //       () => {
-  //         onChange(layouts2);
-  //       },
-  //     );
-  //   }
-  // };
-
   const deleteButtonWrapperStyle: CSSProperties = {
     position: 'absolute',
     top: '5px',
@@ -271,15 +265,21 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
 
           {/* <div dangerouslySetInnerHTML={{ __html: JSON.parse(response.values[0].value) }} /> */}
           {/* <div dangerouslySetInnerHTML={{ __html: response.values[0].value }} /> */}
-          <div onClick={() => handleToggleStyleDrawer(i)}>
+          <div
+            onClick={() => {
+              startEditing(i);
+              handleToggleStyleDrawer(i);
+            }}
+          >
             <CardComponent
               imageSource={response[0].values[0].value}
-              title={response[0].values[1].value}
-              description={response[0].values[2].value}
+              title={cardState.editedTitle || response[0].values[1].value}
+              description={cardState.editedDescription || response[0].values[2].value}
               height={height}
               descriptionStyles={stylevalue}
             />
           </div>
+
           {/* <div>
             {isStyleDrawerOpen && (
               <StyleDrawer
@@ -345,6 +345,43 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
 
     onChange(layouts2);
   };
+  // const startEditing = () => {
+  //   setCardState({
+  //     isEditing: true,
+  //     editedTitle: title,
+  //     editedDescription: description,
+  //   });
+  // };
+  // const finishEditing = () => {
+  //   setCardState((prevState) => ({
+  //     ...prevState,
+  //     isEditing: false,
+  //   }));
+  // };
+
+  const startEditing = (index) => {
+    if (index === selectedItemIndex) {
+      setCardState({
+        isEditing: true,
+        editedTitle: '',
+        editedDescription: '',
+      });
+    }
+  };
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCardState((prevState) => ({
+      ...prevState,
+      editedTitle: event.target.value,
+    }));
+  };
+
+  const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCardState((prevState) => ({
+      ...prevState,
+      editedDescription: event.target.value,
+    }));
+  };
+
   const gridItemStyle: React.CSSProperties = {
     padding: '20px',
     borderRadius: '5px',
@@ -381,6 +418,7 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
     border: '5px solid #ddd',
     borderRadius: '5px',
     marginBottom: '20px',
+    display: 'flex',
   };
 
   // const dragAreaStyle = {
@@ -397,9 +435,14 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
     borderRadius: '5px',
     marginBottom: '20px',
     borderColor: isResizeEnabled ? 'black' : 'gray',
-    height: '500px', // Set your desired initial height
+    height: '1200px', // Set your desired initial height
     width: '80%', // Set your desired initial width
     margin: 'auto', // Center the container horizontally
+  };
+  const textFieldsContainerStyle: React.CSSProperties = {
+    display: 'flex',
+    flexDirection: 'column',
+    margin: '10px',
   };
 
   return (
@@ -415,10 +458,24 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
           styles={gridItemStyles[selectedItemIndex]}
         />
       </div>
+
+      <div style={responseListContainerStyle}>
+        {/* <Column form={formData} /> */}
+        <Spotify form={formData} />
+      </div>
+
       <div style={gridContainerStyle}>
-        <div style={responseListContainerStyle}>
-          {/* <Column form={formData} /> */}
-          <Spotify form={formData} />
+        <div style={textFieldsContainerStyle}>
+          <TextField
+            label="Edit Title"
+            value={cardState.editedTitle}
+            onChange={handleTitleChange}
+          />
+          <TextField
+            label="Edit Description"
+            value={cardState.editedDescription}
+            onChange={handleDescriptionChange}
+          />
         </div>
         <div
           style={dragAreaStyle}

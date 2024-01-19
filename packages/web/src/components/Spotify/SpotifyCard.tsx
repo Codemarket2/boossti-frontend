@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+
+import { Drawer } from '@material-ui/core';
+import { TextField } from '@mui/material';
 import SpotifyCol from './SpotifyCol';
 
 interface CardProps {
@@ -11,9 +14,59 @@ interface CardProps {
   textStyles?: React.CSSProperties;
   descriptionStyles?: React.CSSProperties;
 }
+interface ICardState {
+  isEditing: boolean;
+  editedTitle: string;
+  editedDescription: string;
+}
 
 const CardComponent: React.FC<CardProps> = (props) => {
   const { imageSource, title, description, height, textStyles, descriptionStyles } = props;
+
+  // const [isEditing, setIsEditing] = useState(false);
+  const [cardState, setCardState] = useState<ICardState>({
+    isEditing: false,
+    editedTitle: title,
+    editedDescription: description,
+  });
+  // const handleDoubleClick = () => {
+  //   setIsEditing(true);
+  // };
+  // const handleBlur = () => {
+  //   setIsEditing(false);
+  // };
+  const startEditing = () => {
+    setCardState({
+      isEditing: true,
+      editedTitle: title,
+      editedDescription: description,
+    });
+  };
+  const finishEditing = () => {
+    setCardState((prevState) => ({
+      ...prevState,
+      isEditing: false,
+    }));
+  };
+
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCardState((prevState) => ({
+      ...prevState,
+      editedTitle: event.target.value,
+    }));
+  };
+
+  const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCardState((prevState) => ({
+      ...prevState,
+      editedDescription: event.target.value,
+    }));
+  };
+
+  const drawerStyle: React.CSSProperties = {
+    width: '200px',
+    flexShrink: 0, // Prevent shrinking when drawer is closed
+  };
   const cardStyle: React.CSSProperties = {
     width: `100%`, // Use percentage for width
     height: `100%`,
@@ -43,6 +96,7 @@ const CardComponent: React.FC<CardProps> = (props) => {
   const descriptionStyle: React.CSSProperties = {
     fontSize: `${height}rem`,
     ...descriptionStyles,
+    cursor: 'pointer',
   };
 
   return (
@@ -54,13 +108,58 @@ const CardComponent: React.FC<CardProps> = (props) => {
     >
       {/* onMouseOver={() => console.log('Mouse over')}
          onFocus={() => console.log('Focus')} */}
+      {/* <Drawer
+        variant="persistent"
+        anchor="left"
+        open={cardState.isEditing}
+        style={drawerStyle}
+        // onClose={closeDrawer}
+      >
+        <div>
+          <TextField
+            label="Edit Title"
+            value={cardState.editedTitle}
+            onChange={handleTitleChange}
+            onBlur={finishEditing}
+            fullWidth
+          />
+          <TextField
+            label="Edit Description"
+            value={cardState.editedDescription}
+            onChange={handleDescriptionChange}
+            onBlur={finishEditing}
+            fullWidth
+            multiline
+            rows={4}
+          />
+        </div>
+      </Drawer> */}
 
       <img src={imageSource} alt="Card " style={imageStyle} />
       <div style={cardContentStyle}>
         {/* <h2 style={{ fontSize: `${height}rem` }}>{title}</h2>
         <p style={{ fontSize: `${height}rem` }}>{description}</p> */}
-        <h2 style={descriptionStyle}>{title}</h2>
-        <p style={descriptionStyle}>{description}</p>
+        {cardState.isEditing ? (
+          <div>
+            <input
+              type="text"
+              value={cardState.editedTitle}
+              onChange={handleTitleChange}
+              onBlur={finishEditing}
+            />
+            <input
+              type="text"
+              value={cardState.editedDescription}
+              onChange={handleDescriptionChange}
+              onBlur={finishEditing}
+            />
+          </div>
+        ) : (
+          <div onClick={startEditing}>
+            <h2 style={descriptionStyle}>{title}</h2>
+            <p style={descriptionStyle}>{description}</p>
+          </div>
+        )}
       </div>
     </div>
   );

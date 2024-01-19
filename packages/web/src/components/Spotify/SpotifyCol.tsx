@@ -29,7 +29,7 @@ function Spotify({
   // console.log(data?.getResponses?.data, 'getresponses');
   return (
     <div>
-      <div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
         {data?.getResponses?.data?.map((response) => (
           <div
             key={response._id}
@@ -38,8 +38,9 @@ function Spotify({
             onDragStart={(e) => {
               e.dataTransfer.setData('text/plain', JSON.stringify([response]));
             }}
+            // style={{ marginRight: '100 px' }}
           >
-            <div style={{ width: '150px', height: '200px' }}>
+            <div style={{ width: '90px', height: '125px' }}>
               <CardComponent
                 imageSource={response.values[0].value}
                 title={response.values[1].value}
