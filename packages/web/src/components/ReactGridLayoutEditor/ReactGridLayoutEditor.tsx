@@ -14,7 +14,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { to } from 'mathjs';
-import StyleDrawer from '../style/StyleDrawer';
+import StyleDrawer from '../style/StyleDrawerCopy';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
@@ -44,6 +44,7 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
   const [isStyleDrawerOpen, setisStyleDrawerOpen] = useState(null);
   const [gridItemStyles, setGridItemStyles] = useState({});
   const [selectedItemIndex, setSelectedItemIndex] = useState(null);
+  const [isStatic, setIsStatic] = useState(false);
 
   const fetchData = async () => {
     const data = await getFormBySlug('spotify-card-details');
@@ -116,11 +117,10 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
         ? { ...item, x: newItem.x, y: newItem.y, w: newItem.w, h: newItem.h }
         : item,
     );
-    // console.log(updatedLayout, 'Updated layout');
-    setSizes((prevSizes) => ({
-      ...prevSizes,
-      [oldItem.i]: { w: newItem.w, h: newItem.h },
-    }));
+    // setSizes((prevSizes) => ({
+    //   ...prevSizes,
+    //   [oldItem.i]: { w: newItem.w, h: newItem.h },
+    // }));
 
     setLayouts2(updatedLayout);
     onLayoutChange(updatedLayout);
@@ -132,21 +132,20 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
   const handleStylesClose = () => {
     setisStyleDrawerOpen(false);
   };
-  // const handleStyleOnClick = () => {
-  //   setisStyleDrawerOpen(true)
-  //   setAnchorEl(null);
-  // }
+
   const handleToggleStyleDrawer = (index) => {
+    console.log(index, 'This is the index');
     setSelectedItemIndex(index);
     setisStyleDrawerOpen(true);
-
-    setAnchorEl(null); // Close the menu
+    setAnchorEl(null);
+    // setIsStatic(!isStatic);
+    // console.log(isStatic,"isStatic")
   };
 
   const generateDOM = () => {
     return _.map(layouts2, (res, i) => {
       const response = res;
-      // console.log(response, 'This is the response');
+      console.log(response, 'This is the response after changesss');
       const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
         // setisStyleDrawerOpen(true);
@@ -187,18 +186,18 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
         border: 'none',
         cursor: 'pointer',
       };
-
       return (
         <div
           key={i}
           className={`grid-item`}
           style={gridItemStyle}
-          draggable={true}
+          draggable={!isStatic}
           data-grid={{
             x: response.x || 0,
             y: response.y || 0,
             w: response.w || 2,
             h: response.h || 2,
+            static: !isStatic,
           }}
         >
           <div style={deleteButtonWrapperStyle}>
@@ -223,7 +222,7 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
                 </ListItemIcon>
                 <ListItemText primary="Delete" />
               </MenuItem>
-              <MenuItem onClick={handleToggleStyleDrawer}>
+              <MenuItem onClick={() => handleToggleStyleDrawer(i)}>
                 <ListItemIcon>
                   <EditIcon fontSize="small" />
                 </ListItemIcon>
@@ -238,15 +237,19 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
               description={response[0].values[2].value}
               width={response.w}
               height={response.h}
-              descriptionStyles={gridItemStyles[i]}
+              descriptionStyles={response.styles}
             />
           </div>
           {isStyleDrawerOpen && (
             <StyleDrawer
-              onClose={handleStylesClose}
+              onClose={() => setisStyleDrawerOpen(false)}
               open={isStyleDrawerOpen}
-              styles={styles}
-              onStylesChange={() => null}
+              onStylesChange={(value) => handleEditStyle(value)}
+              onTitleChange={(value) => handleTitleData(value)}
+              onDesChange={(value) => handleDesData(value)}
+              styles={gridItemStyles[selectedItemIndex]}
+              title={layouts2[selectedItemIndex][0].values[1].value}
+              description={layouts2[selectedItemIndex][0].values[2].value}
             />
           )}
         </div>
@@ -290,22 +293,63 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
       ...prevStyles,
       [selectedItemIndex]: { ...prevStyles[selectedItemIndex], ...style },
     }));
+
+    // const handleValueChange = (style: any) => {
+
+    const updatedLayout = layouts2.map((item, index) =>
+      // console.log(item,oldItem.i,"This is item")
+      index === selectedItemIndex ? { ...item, styles: { ...styles, ...style } } : item,
+    );
+
+    setLayouts2(updatedLayout);
+    onLayoutChange(updatedLayout);
+    onChange(updatedLayout);
+  };
+
+  const handleTitleData = (value) => {
+    console.log('dsf', layouts2[selectedItemIndex][0].values[1].value);
+    // layouts2[selectedItemIndex][0].values[1].value = value
+    // // let updatedObject = { ...layouts2, layouts2[selectedItemIndex][0].values[1].value : value }
+
+    const updatedLayouts2 = [...layouts2];
+
+    const selectedLayout = { ...updatedLayouts2[selectedItemIndex][0] };
+
+    selectedLayout.values = [...selectedLayout.values];
+    selectedLayout.values[1].value = value.value;
+    updatedLayouts2[selectedItemIndex][0] = selectedLayout;
+
+    setLayouts2(updatedLayouts2);
+    onLayoutChange(updatedLayouts2);
+    onChange(updatedLayouts2);
+    generateDOM();
+    console.log(updatedLayouts2, 'This is the new tihng');
+  };
+
+  const handleDesData = (value) => {
+    const updatedLayouts2 = [...layouts2];
+
+    const selectedLayout = { ...updatedLayouts2[selectedItemIndex][0] };
+
+    selectedLayout.values = [...selectedLayout.values];
+    selectedLayout.values[2].value = value.value;
+    updatedLayouts2[selectedItemIndex][0] = selectedLayout;
+    console.log(updatedLayouts2, 'This is the new desss');
+    setLayouts2(updatedLayouts2);
+    onLayoutChange(updatedLayouts2);
+    onChange(updatedLayouts2);
+    generateDOM();
+  };
+  const handleToggleStatic = () => {
+    setIsStatic(!isStatic);
+    console.log(isStatic, 'isStatic');
   };
 
   return (
     <div style={containerStyle}>
-      <div>
-        <IconButton onClick={handleToggleStyleDrawer} style={{ position: 'absolute', right: 0 }}>
-          <ChevronRight />
-        </IconButton>
-        <StyleDrawer
-          onClose={() => setisStyleDrawerOpen(false)}
-          open={isStyleDrawerOpen}
-          onStylesChange={(value) => handleEditStyle(value)}
-          styles={gridItemStyles[selectedItemIndex]}
-        />
+      <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '10px' }}>
+        <button onClick={handleToggleStatic}>Toggle Static: {isStatic ? 'On' : 'Off'}</button>
       </div>
-
       <div style={gridContainerStyle}>
         <div style={responseListContainerStyle}>{render && <ResponseList form={formData} />}</div>
         <div
@@ -317,6 +361,7 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
             compactType={compactType}
             onResize={onResize}
             onDragStart={onResize}
+            // static = {true}
           >
             {generateDOM()}
           </ResponsiveReactGridLayout>

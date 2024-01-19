@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 interface CardProps {
@@ -12,9 +12,21 @@ interface CardProps {
 }
 
 const CardComponent: React.FC<CardProps> = (props) => {
-  const { imageSource, title, description, height, descriptionStyles } = props;
+  const {
+    imageSource,
+    title: initialTitle,
+    description: initialDescription,
+    height,
+    descriptionStyles,
+  } = props;
   const containerRef = useRef<HTMLDivElement>(null);
-  console.log(descriptionStyles, 'descriptionStyles');
+
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [title, setTitle] = useState(initialTitle);
+
+  const [isEditingDescription, setIsEditingDescription] = useState(false);
+  const [description, setDescription] = useState(initialDescription);
+
   const cardStyle: React.CSSProperties = {
     width: '100%',
     height: '100%',
@@ -44,23 +56,72 @@ const CardComponent: React.FC<CardProps> = (props) => {
     ...descriptionStyles,
   };
 
+  const handleTitleClick = () => {
+    setIsEditingTitle(true);
+  };
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  };
+
+  const handleTitleBlur = () => {
+    setIsEditingTitle(false);
+  };
+
+  const handleDescriptionClick = () => {
+    setIsEditingDescription(true);
+  };
+
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDescription(e.target.value);
+  };
+
+  const handleDescriptionBlur = () => {
+    setIsEditingDescription(false);
+  };
+
   return (
     <div ref={containerRef} style={cardStyle}>
       <img src={imageSource} alt="Card Image" style={imageStyle} />
       <div style={cardContentStyle}>
-        <h2 style={descriptionStyle}>{title}</h2>
-        <p style={descriptionStyle}>{description}</p>
+        {isEditingTitle ? (
+          <input
+            type="text"
+            value={title}
+            onChange={handleTitleChange}
+            onBlur={handleTitleBlur}
+            style={descriptionStyle}
+          />
+        ) : (
+          <h2 style={descriptionStyle} onClick={handleTitleClick}>
+            {title}
+          </h2>
+        )}
+        {isEditingDescription ? (
+          <input
+            type="text"
+            value={description}
+            onChange={handleDescriptionChange}
+            onBlur={handleDescriptionBlur}
+            style={descriptionStyle}
+          />
+        ) : (
+          <p style={descriptionStyle} onClick={handleDescriptionClick}>
+            {description}
+          </p>
+        )}
       </div>
     </div>
   );
 };
+
 CardComponent.propTypes = {
   imageSource: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
-  // width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
-  textStyles: PropTypes.object, // PropTypes for text styles
+  textStyles: PropTypes.object,
   descriptionStyles: PropTypes.object,
 };
+
 export default CardComponent;
