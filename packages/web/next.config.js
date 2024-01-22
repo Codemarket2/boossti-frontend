@@ -23,6 +23,9 @@ module.exports = withPlugins([withTM, withImages], {
   eslint: {
     ignoreDuringBuild: true,
   },
+  // typescript: {
+  //   tsconfig: 'G:Boossti\boossti-frontendpackagesweb\tsconfig.json',
+  // },
   // swcMinify: true,
 });
 

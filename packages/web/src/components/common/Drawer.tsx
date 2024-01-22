@@ -163,6 +163,14 @@ export default function DrawerContent({ showDrawer, toggleDrawer, admin }: IProp
                 <ListItemText primary="ReactGridLayout" />
               </ListItem>
             </Link>
+            <Link href="/TicTacToe">
+              <ListItem button selected={checkActiveRoute(activeRoute, '/TicTacToe')}>
+                <ListItemIcon>
+                  <AnalyticsIcon />
+                </ListItemIcon>
+                <ListItemText primary="TicTacToe" />
+              </ListItem>
+            </Link>
 
             <Divider />
           </>
