@@ -26,6 +26,30 @@ const getFieldByLabel = (label, fields) => {
   return fields?.find((field) => field?.label?.toLowerCase() === label?.toLowerCase());
 };
 
+// export const getUserAttributes = (userForm, userResponse) => {
+//   const email = userResponse?.values?.find((v) => v?.field === userForm?.emailFieldId)?.value;
+//   const firstName = userResponse?.values?.find((v) => v?.field === userForm?.firstNameFieldId)
+//     ?.value;
+//   const lastName = userResponse?.values?.find((v) => v?.field === userForm?.lastNameFieldId)?.value;
+//   return { email, firstName, lastName, _id: userResponse?._id };
+// };
+
+// export const getUserName = (userForm, userResponse) => {
+//   let fullName = '';
+//   if (!userResponse?._id) {
+//     fullName = 'Unauthenticated';
+//   } else {
+//     const user = getUserAttributes(userForm, userResponse);
+//     if (user?.firstName) {
+//       fullName = user?.firstName;
+//       if (user?.lastName) {
+//         fullName += ` ${user?.lastName}`;
+//       }
+//     }
+//   }
+//   return fullName;
+// };
+
 export const getUserAttributes = (userForm, userResponse) => {
   const email = userResponse?.values?.find((v) => v?.field === userForm?.emailFieldId)?.value;
   const firstName = userResponse?.values?.find((v) => v?.field === userForm?.firstNameFieldId)
@@ -47,5 +71,7 @@ export const getUserName = (userForm, userResponse) => {
       }
     }
   }
+
+  // console.log('Full Name:', fullName); // Log fullName here
   return fullName;
 };

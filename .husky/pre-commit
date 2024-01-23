@@ -1,5 +1,6 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
+. "$(dirname "$0")/common.sh"
 
 yarn lint
 yarn web:build
@@ -7,3 +8,14 @@ yarn web:test
 yarn shared:test
 yarn format
 git add .
+
+#!/bin/sh
+# . "$(dirname "$0")/_/husky.sh"
+# . "$(dirname "$0")/common.sh"
+
+# yarn --non-interactive lint
+# yarn --non-interactive web:build
+# yarn --non-interactive web:test
+# yarn --non-interactive shared:test
+# yarn --non-interactive format
+# git add .

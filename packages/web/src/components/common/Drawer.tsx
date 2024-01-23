@@ -123,6 +123,14 @@ export default function DrawerContent({ showDrawer, toggleDrawer, admin }: IProp
             <ListItemText primary="Thinking" />
           </ListItem>
         </Link>
+        <Link href="/forms_1">
+          <ListItem button selected={checkActiveRoute(activeRoute, '/forms_1')}>
+            <ListItemIcon>
+              <BuildIcon />
+            </ListItemIcon>
+            <ListItemText primary="Forms_1" />
+          </ListItem>
+        </Link>
         {data?.getMenuListTypes?.map((t) => (
           <Link href={`/${t.slug}`} key={t._id}>
             <ListItem button selected={checkActiveRoute(activeRoute, '/log')}>
