@@ -54,11 +54,11 @@ const ParentComponent = () => {
         >
           <p>Just Checking Again</p>
           {/* <DragFromOutsideLayout layout_passed = {[]}/> */}
-          <DragFromOutsideLayout
+          {/* <DragFromOutsideLayout
             value={layouts2}
             onLayoutChange={handleLayoutChange}
             onChange={handleLayoutChange}
-          />
+          /> */}
         </div>
       </UserLayout>
     </div>

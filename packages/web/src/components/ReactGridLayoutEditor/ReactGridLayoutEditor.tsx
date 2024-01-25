@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { Responsive, WidthProvider, Layout } from 'react-grid-layout';
@@ -45,7 +45,19 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
   const [gridItemStyles, setGridItemStyles] = useState({});
   const [selectedItemIndex, setSelectedItemIndex] = useState(null);
   const [isStatic, setIsStatic] = useState(false);
+  const [isForceUpdate, setIsForceUpdate] = useState(false);
+  const forceUpdateRef = useRef(isForceUpdate);
 
+  useEffect(() => {
+    forceUpdateRef.current = isForceUpdate;
+  }, [isForceUpdate]);
+
+  useEffect(() => {
+    // Call forceUpdate on each state change
+    if (forceUpdateRef.current) {
+      setIsForceUpdate(false);
+    }
+  });
   const fetchData = async () => {
     const data = await getFormBySlug('spotify-card-details');
     setFormData(data);
@@ -145,7 +157,11 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
   const generateDOM = () => {
     return _.map(layouts2, (res, i) => {
       const response = res;
-      console.log(response, 'This is the response after changesss');
+      console.log(
+        response,
+        'This is the response after changgfdgdfgesss',
+        response[0].values[1].value,
+      );
       const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
         // setisStyleDrawerOpen(true);
@@ -308,8 +324,6 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
 
   const handleTitleData = (value) => {
     console.log('dsf', layouts2[selectedItemIndex][0].values[1].value);
-    // layouts2[selectedItemIndex][0].values[1].value = value
-    // // let updatedObject = { ...layouts2, layouts2[selectedItemIndex][0].values[1].value : value }
 
     const updatedLayouts2 = [...layouts2];
 
@@ -323,6 +337,7 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
     onLayoutChange(updatedLayouts2);
     onChange(updatedLayouts2);
     generateDOM();
+    setIsForceUpdate(true);
     console.log(updatedLayouts2, 'This is the new tihng');
   };
 
@@ -338,6 +353,7 @@ const DragFromOutsideLayout: React.FC<DragFromOutsideLayoutProps> = ({
     setLayouts2(updatedLayouts2);
     onLayoutChange(updatedLayouts2);
     onChange(updatedLayouts2);
+    setIsForceUpdate(true);
     generateDOM();
   };
   const handleToggleStatic = () => {

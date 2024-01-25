@@ -177,6 +177,72 @@ export default function DrawerContent({ showDrawer, toggleDrawer, admin }: IProp
         </Link>
         {/* </List> */}
       </List>
+      <Link href="/tic-tac-toe">
+        <ListItem button selected={checkActiveRoute(activeRoute, '/tic-tac-toe')}>
+          <ListItemIcon>
+            <AnalyticsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Tic-Tac-Toe" />
+        </ListItem>
+      </Link>
+      {/* </List> */}
+      {/* </List> */}
+      <Link href="/profile">
+        <ListItem button selected={checkActiveRoute(activeRoute, '/profile')}>
+          <ListItemIcon>
+            <AnalyticsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Profile" />
+        </ListItem>
+      </Link>
+      <Link href="/importExport">
+        <ListItem button selected={checkActiveRoute(activeRoute, '/importExport')}>
+          <ListItemIcon>
+            <AnalyticsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Import and Export" />
+        </ListItem>
+      </Link>
+      <Link href="/convert">
+        <ListItem button selected={checkActiveRoute(activeRoute, '/convert')}>
+          <ListItemIcon>
+            <AnalyticsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Convert to JSX" />
+        </ListItem>
+      </Link>
+      <Link href="/inJSX">
+        <ListItem button selected={checkActiveRoute(activeRoute, '/inJSX')}>
+          <ListItemIcon>
+            <AnalyticsIcon />
+          </ListItemIcon>
+          <ListItemText primary="JavaScript in JSX" />
+        </ListItem>
+      </Link>
+      <Link href="/passingProps">
+        <ListItem button selected={checkActiveRoute(activeRoute, '/passingProps')}>
+          <ListItemIcon>
+            <AnalyticsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Passing props in React" />
+        </ListItem>
+      </Link>
+      <Link href="/conditionalRendering">
+        <ListItem button selected={checkActiveRoute(activeRoute, '/conditionalRendering')}>
+          <ListItemIcon>
+            <AnalyticsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Conditional Rendering" />
+        </ListItem>
+      </Link>
+      <Link href="/renderingList">
+        <ListItem button selected={checkActiveRoute(activeRoute, '/renderingList')}>
+          <ListItemIcon>
+            <AnalyticsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Rendering a List" />
+        </ListItem>
+      </Link>
     </Drawer>
   );
 }
