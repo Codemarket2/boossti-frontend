@@ -171,7 +171,54 @@ export default function DrawerContent({ showDrawer, toggleDrawer, admin }: IProp
                 <ListItemText primary="TicTacToe" />
               </ListItem>
             </Link>
-
+            <Link href="/WritingMarkupwithjsx">
+              <ListItem button selected={checkActiveRoute(activeRoute, '/WritingMarkupwithjsx')}>
+                <ListItemIcon>
+                  <AnalyticsIcon />
+                </ListItemIcon>
+                <ListItemText primary="WritingMarkupwithjsx" />
+              </ListItem>
+            </Link>
+            <Link href="/ImportExport">
+              <ListItem button selected={checkActiveRoute(activeRoute, '/ImportExport')}>
+                <ListItemIcon>
+                  <AnalyticsIcon />
+                </ListItemIcon>
+                <ListItemText primary="ImportExport" />
+              </ListItem>
+            </Link>
+            <Link href="/RenderingLists">
+              <ListItem button selected={checkActiveRoute(activeRoute, '/RenderingLists')}>
+                <ListItemIcon>
+                  <AnalyticsIcon />
+                </ListItemIcon>
+                <ListItemText primary="RenderingLists" />
+              </ListItem>
+            </Link>
+            <Link href="/Conditionalrendering">
+              <ListItem button selected={checkActiveRoute(activeRoute, '/Conditionalrendering')}>
+                <ListItemIcon>
+                  <AnalyticsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Conditionalrendering" />
+              </ListItem>
+            </Link>
+            <Link href="/Componentspure">
+              <ListItem button selected={checkActiveRoute(activeRoute, '/Componentspure')}>
+                <ListItemIcon>
+                  <AnalyticsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Componentspure" />
+              </ListItem>
+            </Link>
+            <Link href="/Jsxwithcurly">
+              <ListItem button selected={checkActiveRoute(activeRoute, '/Jsxwithcurly')}>
+                <ListItemIcon>
+                  <AnalyticsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Jsxwithcurly" />
+              </ListItem>
+            </Link>
             <Divider />
           </>
         )}

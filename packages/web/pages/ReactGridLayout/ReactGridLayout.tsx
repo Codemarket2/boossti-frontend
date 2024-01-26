@@ -16,6 +16,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 import { style } from 'd3';
 import { TextField } from '@mui/material';
+import { Description } from '@mui/icons-material';
 import CRUDMenu from '../../src/components/common/CRUDMenu';
 import CardComponent from '../../src/components/Spotify/SpotifyCard';
 import Card from '../../src/components/card/Card';
@@ -53,6 +54,7 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
   // const [editStyle, seteditstyle] = useState(false);
   const [selectedItemIndex, setSelectedItemIndex] = useState(null);
   const [isStyleDrawerOpen, setIsStyleDrawerOpen] = useState(false);
+  const [history, setHistory] = useState([]);
   // const [editedTitle, setEditedTitle] = useState('');
   // const [editedDescription, setEditedDescription] = useState('');
   const [cardState, setCardState] = useState<ICardState>({
@@ -132,7 +134,7 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
         const updatedLayouts = [...prevLayouts.lg, newItem];
         return { lg: updatedLayouts };
       });
-
+      saveToHistory();
       onChange(layouts2);
     }
   };
@@ -164,6 +166,19 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
     // console.log(layouts2, 'layouts after resize');
     onLayoutChange(layouts2);
     onChange(layouts2);
+    saveToHistory();
+  };
+  const saveToHistory = () => {
+    setHistory((prevHistory) => [...prevHistory, layouts2.lg]);
+  };
+  const undoChanges = () => {
+    if (history.length > 0) {
+      const previousLayouts = history[history.length - 1];
+      setHistory(history.slice(0, -1)); // Remove the last item from history
+      setLayouts2({ lg: previousLayouts });
+      onLayoutChange(previousLayouts);
+      onChange(previousLayouts);
+    }
   };
 
   const deleteButtonWrapperStyle: CSSProperties = {
@@ -185,6 +200,10 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
       const handleClose = () => {
         setAnchorEl(null);
       };
+      const handleItemClick = (it) => {
+        setSelectedItemIndex(it);
+        startEditing(it);
+      };
 
       const handleDeleteMenuItemClick = () => {
         handleDelete(i);
@@ -202,11 +221,16 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
       const ycor = res.y || 0;
       // console.log(gridItemStyles, 'styles');
       const stylevalue = res.style;
+      const title = res.title || response[0].values[1].value;
+      const description = res.description || response[0].values[2].value;
       // console.log(res.style, 'response style');
+      // console.log(res, 'response');
+
+      // console.log(layouts2, 'layouts');
       return (
         <div
           key={i}
-          className="grid-item"
+          className={`grid-item ${selectedItemIndex === i ? 'selected' : ''}`}
           style={gridItemStyle}
           data-grid={{ x: xcor, y: ycor, w: width, h: height }}
           draggable
@@ -267,14 +291,16 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
           {/* <div dangerouslySetInnerHTML={{ __html: response.values[0].value }} /> */}
           <div
             onClick={() => {
-              startEditing(i);
+              handleItemClick(i);
               handleToggleStyleDrawer(i);
             }}
           >
             <CardComponent
               imageSource={response[0].values[0].value}
-              title={cardState.editedTitle || response[0].values[1].value}
-              description={cardState.editedDescription || response[0].values[2].value}
+              // title={cardState.editedTitle || response[0].values[1].value}
+              title={title}
+              description={description}
+              // description={cardState.editedDescription || response[0].values[2].value}
               height={height}
               descriptionStyles={stylevalue}
             />
@@ -373,6 +399,19 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
       ...prevState,
       editedTitle: event.target.value,
     }));
+    const updatedLayouts = layouts2.lg.map((item, index) =>
+      index === selectedItemIndex
+        ? {
+            ...item,
+            title: cardState.editedTitle,
+          }
+        : item,
+    );
+    // console.log(updatedLayouts, 'updated layouts');
+    setLayouts2({ lg: updatedLayouts });
+    // console.log(layouts2, 'layouts after resize');
+    onLayoutChange(layouts2);
+    onChange(layouts2);
   };
 
   const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -380,6 +419,19 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
       ...prevState,
       editedDescription: event.target.value,
     }));
+    const updatedLayouts = layouts2.lg.map((item, index) =>
+      index === selectedItemIndex
+        ? {
+            ...item,
+
+            description: cardState.editedDescription,
+          }
+        : item,
+    );
+    setLayouts2({ lg: updatedLayouts });
+    // console.log(layouts2, 'layouts after resize');
+    onLayoutChange(layouts2);
+    onChange(layouts2);
   };
 
   const gridItemStyle: React.CSSProperties = {
@@ -450,6 +502,9 @@ const FormGrid = ({ onChange, onLayoutChange, value }) => {
       <div>
         <IconButton onClick={handleToggleStyleDrawer} style={{ position: 'absolute', right: 0 }}>
           <ChevronRight />
+        </IconButton>
+        <IconButton onClick={undoChanges} style={{ position: 'absolute', right: 50 }}>
+          Undo
         </IconButton>
         <StyleDrawer
           onClose={() => setIsStyleDrawerOpen(false)}
