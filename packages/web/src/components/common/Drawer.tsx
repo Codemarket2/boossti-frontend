@@ -235,12 +235,60 @@ export default function DrawerContent({ showDrawer, toggleDrawer, admin }: IProp
           <ListItemText primary="Conditional Rendering" />
         </ListItem>
       </Link>
-      <Link href="/renderingList">
-        <ListItem button selected={checkActiveRoute(activeRoute, '/renderingList')}>
+      <Link href="/respondingToEvents">
+        <ListItem button selected={checkActiveRoute(activeRoute, '/respondingToEvents')}>
           <ListItemIcon>
             <AnalyticsIcon />
           </ListItemIcon>
-          <ListItemText primary="Rendering a List" />
+          <ListItemText primary="Responding To Events" />
+        </ListItem>
+      </Link>
+      <Link href="/state">
+        <ListItem button selected={checkActiveRoute(activeRoute, '/state')}>
+          <ListItemIcon>
+            <AnalyticsIcon />
+          </ListItemIcon>
+          <ListItemText primary="State : A components memory" />
+        </ListItem>
+      </Link>
+      <Link href="/renderAndCommit">
+        <ListItem button selected={checkActiveRoute(activeRoute, '/renderAndCommit')}>
+          <ListItemIcon>
+            <AnalyticsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Render And Commit" />
+        </ListItem>
+      </Link>
+      <Link href="/stateAsASnapshot">
+        <ListItem button selected={checkActiveRoute(activeRoute, '/stateAsASnapshot')}>
+          <ListItemIcon>
+            <AnalyticsIcon />
+          </ListItemIcon>
+          <ListItemText primary="State As A Snapshot" />
+        </ListItem>
+      </Link>
+      <Link href="/stateUpdates">
+        <ListItem button selected={checkActiveRoute(activeRoute, '/stateUpdates')}>
+          <ListItemIcon>
+            <AnalyticsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Queueing a Series of State Update" />
+        </ListItem>
+      </Link>
+      <Link href="/updatingObject">
+        <ListItem button selected={checkActiveRoute(activeRoute, '/updatingObject')}>
+          <ListItemIcon>
+            <AnalyticsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Updating objects in a state" />
+        </ListItem>
+      </Link>
+      <Link href="/updatingArrayInState">
+        <ListItem button selected={checkActiveRoute(activeRoute, '/updatingArrayInState')}>
+          <ListItemIcon>
+            <AnalyticsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Updating Array In State" />
         </ListItem>
       </Link>
     </Drawer>
