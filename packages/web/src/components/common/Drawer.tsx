@@ -220,6 +220,47 @@ export default function DrawerContent({ showDrawer, toggleDrawer, admin }: IProp
               </ListItem>
             </Link>
             <Divider />
+            <Link href="/Respondingtoevents">
+              <ListItem button selected={checkActiveRoute(activeRoute, '/Respondingtoevents')}>
+                <ListItemIcon>
+                  <AnalyticsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Respondingtoevents" />
+              </ListItem>
+            </Link>
+            <Link href="/StateExercise">
+              <ListItem button selected={checkActiveRoute(activeRoute, '/StateExercise')}>
+                <ListItemIcon>
+                  <AnalyticsIcon />
+                </ListItemIcon>
+                <ListItemText primary="StateExercise" />
+              </ListItem>
+            </Link>
+            <Link href="/Stateassnapshot">
+              <ListItem button selected={checkActiveRoute(activeRoute, '/Stateassnapshot')}>
+                <ListItemIcon>
+                  <AnalyticsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Stateassnapshot" />
+              </ListItem>
+            </Link>
+            <Link href="/Updatingstateobjects">
+              <ListItem button selected={checkActiveRoute(activeRoute, '/Updatingstateobjects')}>
+                <ListItemIcon>
+                  <AnalyticsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Updatingstateobjects" />
+              </ListItem>
+            </Link>
+            <Link href="/Updatingarraysinstate">
+              <ListItem button selected={checkActiveRoute(activeRoute, '/Updatingarraysinstate')}>
+                <ListItemIcon>
+                  <AnalyticsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Updatingarraysinstate" />
+              </ListItem>
+            </Link>
+            <Divider />
           </>
         )}
       </List>
