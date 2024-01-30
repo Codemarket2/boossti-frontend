@@ -131,6 +131,38 @@ export default function DrawerContent({ showDrawer, toggleDrawer, admin }: IProp
             <ListItemText primary="Forms_1" />
           </ListItem>
         </Link>
+        <Link href="/reactex1">
+          <ListItem button selected={checkActiveRoute(activeRoute, '/reactex1')}>
+            <ListItemIcon>
+              <BuildIcon />
+            </ListItemIcon>
+            <ListItemText primary="Import and export" />
+          </ListItem>
+        </Link>
+        <Link href="/reactex2">
+          <ListItem button selected={checkActiveRoute(activeRoute, '/reactex2')}>
+            <ListItemIcon>
+              <BuildIcon />
+            </ListItemIcon>
+            <ListItemText primary="Rendering" />
+          </ListItem>
+        </Link>
+        <Link href="/reactex3">
+          <ListItem button selected={checkActiveRoute(activeRoute, '/reactex3')}>
+            <ListItemIcon>
+              <BuildIcon />
+            </ListItemIcon>
+            <ListItemText primary="Passing props" />
+          </ListItem>
+        </Link>
+        <Link href="/reactex4">
+          <ListItem button selected={checkActiveRoute(activeRoute, '/reactex4')}>
+            <ListItemIcon>
+              <BuildIcon />
+            </ListItemIcon>
+            <ListItemText primary="Conditional rendering" />
+          </ListItem>
+        </Link>
         {data?.getMenuListTypes?.map((t) => (
           <Link href={`/${t.slug}`} key={t._id}>
             <ListItem button selected={checkActiveRoute(activeRoute, '/log')}>

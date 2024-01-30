@@ -39,29 +39,33 @@ export default function ResponseList({
     parentResponseId,
   });
 
-  function handleDelete(
-    responseId: string,
-    _refetch: (
-      variables?: Partial<{
-        formId: string;
-        appId: string;
-        parentResponseId: string;
-        workflowId: string;
-        page: number;
-        limit: number;
-        search: string;
-        formField: string;
-        onlyMy: boolean;
-        valueFilter: any;
-      }>,
-    ) => Promise<
-      import('@apollo/client').ApolloQueryResult<{
-        getResponses: { data: import('@frontend/shared/types').IResponse[]; count: number };
-      }>
-    >,
-  ): any {
-    throw new Error('Function not implemented.');
-  }
+  const [responsesView, setResponsesView] = useState(form?.settings?.responsesView || 'table');
+
+  const { handleDelete, deleteLoading } = useDeleteResponse({ onAlert });
+
+  // function handleDelete(
+  //   responseId: string,
+  //   _refetch: (
+  //     variables?: Partial<{
+  //       formId: string;
+  //       appId: string;
+  //       parentResponseId: string;
+  //       workflowId: string;
+  //       page: number;
+  //       limit: number;
+  //       search: string;
+  //       formField: string;
+  //       onlyMy: boolean;
+  //       valueFilter: any;
+  //     }>,
+  //   ) => Promise<
+  //     import('@apollo/client').ApolloQueryResult<{
+  //       getResponses: { data: import('@frontend/shared/types').IResponse[]; count: number };
+  //     }>
+  //   >,
+  // ): any {
+  //   throw new Error('Function not implemented.');
+  // }
 
   //   const handleDelete = async (responseId) => {
   //     try {
@@ -79,7 +83,7 @@ export default function ResponseList({
   //   };
 
   // const  responses={data?.getResponses?.data.filter(response => response.createdBy === 'Unauthenticated')}
-  //  console.log("data",data);
+  //   console.log('data', data);
 
   return (
     <>
@@ -110,5 +114,8 @@ export default function ResponseList({
         </div>
       </ResponsiveGridLayout>
     </>
+    // <div>
+    //   <p>hey hii</p>
+    // </div>
   );
 }

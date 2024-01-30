@@ -10,7 +10,7 @@ export default function Username() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getFormBySlug('pages');
+        const data = await getFormBySlug('spotify');
         setFormData(data);
       } catch (error) {
         // eslint-disable-next-line no-console
