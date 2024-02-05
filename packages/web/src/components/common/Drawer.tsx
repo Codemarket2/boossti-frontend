@@ -291,6 +291,62 @@ export default function DrawerContent({ showDrawer, toggleDrawer, admin }: IProp
           <ListItemText primary="Updating Array In State" />
         </ListItem>
       </Link>
+      <Link href="/managingState">
+        <ListItem button selected={checkActiveRoute(activeRoute, '/managingState')}>
+          <ListItemIcon>
+            <AnalyticsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Managing the state" />
+        </ListItem>
+      </Link>
+      <Link href="/stateStructure">
+        <ListItem button selected={checkActiveRoute(activeRoute, '/stateStructure')}>
+          <ListItemIcon>
+            <AnalyticsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Choosing the state structure" />
+        </ListItem>
+      </Link>
+      <Link href="/sharingState">
+        <ListItem button selected={checkActiveRoute(activeRoute, '/sharingState')}>
+          <ListItemIcon>
+            <AnalyticsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Sharing State between components" />
+        </ListItem>
+      </Link>
+      <Link href="/preservingResetting">
+        <ListItem button selected={checkActiveRoute(activeRoute, '/preservingResetting')}>
+          <ListItemIcon>
+            <AnalyticsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Preserving and Resetting state" />
+        </ListItem>
+      </Link>
+      <Link href="/extractingState">
+        <ListItem button selected={checkActiveRoute(activeRoute, '/extractingState')}>
+          <ListItemIcon>
+            <AnalyticsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Extracting State logic to a reducer" />
+        </ListItem>
+      </Link>
+      <Link href="/scalingUp">
+        <ListItem button selected={checkActiveRoute(activeRoute, '/scalingUp')}>
+          <ListItemIcon>
+            <AnalyticsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Scaling up with reducer and context" />
+        </ListItem>
+      </Link>
+      <Link href="/passingDataDeeply">
+        <ListItem button selected={checkActiveRoute(activeRoute, '/passingDataDeeply')}>
+          <ListItemIcon>
+            <AnalyticsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Passing data deeply with context" />
+        </ListItem>
+      </Link>
     </Drawer>
   );
 }
