@@ -252,12 +252,61 @@ export default function DrawerContent({ showDrawer, toggleDrawer, admin }: IProp
                 <ListItemText primary="Updatingstateobjects" />
               </ListItem>
             </Link>
-            <Link href="/Updatingarraysinstate">
-              <ListItem button selected={checkActiveRoute(activeRoute, '/Updatingarraysinstate')}>
+            <Link href="/Inputwithstate">
+              <ListItem button selected={checkActiveRoute(activeRoute, '/Inputwithstate')}>
                 <ListItemIcon>
                   <AnalyticsIcon />
                 </ListItemIcon>
-                <ListItemText primary="Updatingarraysinstate" />
+                <ListItemText primary="Inputwithstate" />
+              </ListItem>
+            </Link>
+            <Divider />
+            <Link href="/StateStructure">
+              <ListItem button selected={checkActiveRoute(activeRoute, '/StateStructure')}>
+                <ListItemIcon>
+                  <AnalyticsIcon />
+                </ListItemIcon>
+                <ListItemText primary="StateStructure" />
+              </ListItem>
+            </Link>
+            <Link href="/SharingStatebetweencomp">
+              <ListItem button selected={checkActiveRoute(activeRoute, '/SharingStatebetweencomp')}>
+                <ListItemIcon>
+                  <AnalyticsIcon />
+                </ListItemIcon>
+                <ListItemText primary="SharingStatebetweencomp" />
+              </ListItem>
+            </Link>
+            <Link href="/PreserveResetState">
+              <ListItem button selected={checkActiveRoute(activeRoute, '/PreserveResetState')}>
+                <ListItemIcon>
+                  <AnalyticsIcon />
+                </ListItemIcon>
+                <ListItemText primary="PreserveResetState" />
+              </ListItem>
+            </Link>
+            <Link href="/StatetoReducer">
+              <ListItem button selected={checkActiveRoute(activeRoute, '/StatetoReducer')}>
+                <ListItemIcon>
+                  <AnalyticsIcon />
+                </ListItemIcon>
+                <ListItemText primary="StatetoReducer" />
+              </ListItem>
+            </Link>
+            <Link href="/Passingdatawithcontext">
+              <ListItem button selected={checkActiveRoute(activeRoute, '/Passingdatawithcontext')}>
+                <ListItemIcon>
+                  <AnalyticsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Passingdatawithcontext" />
+              </ListItem>
+            </Link>
+            <Link href="/ReducerandContext">
+              <ListItem button selected={checkActiveRoute(activeRoute, '/ReducerandContext')}>
+                <ListItemIcon>
+                  <AnalyticsIcon />
+                </ListItemIcon>
+                <ListItemText primary="ReducerandContext" />
               </ListItem>
             </Link>
             <Divider />
