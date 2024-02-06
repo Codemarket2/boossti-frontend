@@ -22,13 +22,14 @@
     "**/*.ts",
     "**/*.tsx",
     "../shared/utils/fieldProps.ts",
-    "src/components/response/Table.js"
-    // "pages/ReducerandContext/Addtask.tsx",
-    // "pages/ReducerandContext/TasksContext.tsx",
-    // "pages/Passingdatawithcontext/Passingdatawithcontext.tsx",
+    "src/components/response/Table.js",
+    "pages/ReducerandContext/Addtask.tsx",
+    "pages/ReducerandContext/TasksContext.tsx",
+    "pages/ReducerandContext/ReducerandContext.tsx",
+    "pages/Passingdatawithcontext/Passingdatawithcontext.tsx",
 
-    //    "pages/Passingdatawithcontext/TaskContext.tsx",
-    // "pages/Passingdatawithcontext/AddTask.tsx"
+    "pages/Passingdatawithcontext/TaskContext.tsx",
+    "pages/Passingdatawithcontext/AddTask.tsx"
   ],
   "exclude": ["node_modules"]
 }
