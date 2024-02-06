@@ -1,7 +1,9 @@
-import { createContext, useReducer } from 'react';
+import { createContext, useContext, useReducer } from 'react';
+import PropTypes from 'prop-types';
 
-export const TasksContext = createContext(null);
-export const TasksDispatchContext = createContext(null);
+const TasksContext = createContext(null);
+
+const TasksDispatchContext = createContext(null);
 
 export default function TasksProvider({ children }) {
   const [tasks, dispatch] = useReducer(tasksReducer, initialTasks);
@@ -11,6 +13,16 @@ export default function TasksProvider({ children }) {
       <TasksDispatchContext.Provider value={dispatch}>{children}</TasksDispatchContext.Provider>
     </TasksContext.Provider>
   );
+}
+TasksProvider.propTypes = {
+  children: PropTypes.node.isRequired, // Ensure 'children' prop is required and of type 'node'
+};
+export function useTasks() {
+  return useContext(TasksContext);
+}
+
+export function useTasksDispatch() {
+  return useContext(TasksDispatchContext);
 }
 
 function tasksReducer(tasks, action) {
@@ -29,16 +41,15 @@ function tasksReducer(tasks, action) {
       return tasks.map((t) => {
         if (t.id === action.task.id) {
           return action.task;
-        } else {
-          return t;
         }
+        return t;
       });
     }
     case 'deleted': {
       return tasks.filter((t) => t.id !== action.id);
     }
     default: {
-      throw Error('Unknown action: ' + action.type);
+      throw Error(`Unknown action: ${action.type}`);
     }
   }
 }

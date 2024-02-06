@@ -23,10 +23,12 @@
     "**/*.tsx",
     "../shared/utils/fieldProps.ts",
     "src/components/response/Table.js",
-    "pages/ReducerandContext/Addtask.jsx",
+    "pages/ReducerandContext/Addtask.tsx",
     "pages/Passingdatawithcontext/Passingdatawithcontext.jsx",
-    "pages/ReducerandContext/TaskList.jsx",
-    "pages/ReducerandContext/TasksContext.jsx"
+    ,
+    "pages/ReducerandContext/TasksContext.tsx",
+    "pages/Passingdatawithcontext/TaskContext.tsx",
+    "pages/Passingdatawithcontext/AddTask.tsx"
   ],
   "exclude": ["node_modules"]
 }

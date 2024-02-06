@@ -21,7 +21,7 @@ module.exports = withPlugins([withTM, withImages], {
     emotion: true,
   },
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuild: true,
   },
   // typescript: {
   //   tsconfig: 'G:Boossti\boossti-frontendpackagesweb\tsconfig.json',
