@@ -27,7 +27,6 @@
     "pages/ReducerandContext/TasksContext.tsx",
     "pages/ReducerandContext/ReducerandContext.tsx",
     "pages/Passingdatawithcontext/Passingdatawithcontext.tsx",
-
     "pages/Passingdatawithcontext/TaskContext.tsx",
     "pages/Passingdatawithcontext/AddTask.tsx"
   ],
