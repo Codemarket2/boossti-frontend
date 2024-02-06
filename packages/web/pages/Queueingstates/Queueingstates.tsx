@@ -14,7 +14,7 @@ export default function Counter() {
           setNumber(42);
         }}
       >
-        Increase the number
+        increase the number
       </button>
     </>
   );
