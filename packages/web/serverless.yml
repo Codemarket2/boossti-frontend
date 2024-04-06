@@ -4,6 +4,10 @@ myNextApplication:
     timeout:
       defaultLambda: 30
       imageLambda: 30
+    runtime:
+      defaultLambda: 'nodejs16.x'
+      apiLambda: 'nodejs16.x'
+      imageLambda: 'nodejs16.x' 
     build:
       env:
         NEXT_PUBLIC_GRAPHQL_URL: https://example.cloudfront.net

@@ -17,3 +17,4 @@ packages/web/public
 packages/mobile
 packages/web/src/components/response/Table.tsx
 packages/web/src/stories
+packages/web/src/components/embed/embedLibs.tsx

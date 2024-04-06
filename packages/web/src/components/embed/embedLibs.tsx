@@ -158,7 +158,7 @@ export const updateBrowserURL = (formSettings: DisplayFormSettings, formSlug: st
 
 export type TSettingsPropOptions = {
   title: string;
-  value: any;
+  value: string | boolean;
 };
 
 export const SettingWidgetTypeOptions: TSettingsPropOptions[] = [

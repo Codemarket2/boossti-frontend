@@ -184,10 +184,16 @@ export async function getForm(_id: string) {
 
 export async function getFormBySlug(slug: string) {
   let form: IForm = null;
-  const response = await guestClient.query({
-    query: GET_FORM_BY_SLUG,
-    variables: { slug },
-  });
-  form = parseForm(response?.data?.getFormBySlug);
-  return form;
+
+  try {
+    const response = await guestClient.query({
+      query: GET_FORM_BY_SLUG,
+      variables: { slug },
+    });
+
+    form = parseForm(response?.data?.getFormBySlug);
+    return form;
+  } catch (error) {
+    // console.log('Unexpected error occured for getFormBySlug method.', { error });
+  }
 }
