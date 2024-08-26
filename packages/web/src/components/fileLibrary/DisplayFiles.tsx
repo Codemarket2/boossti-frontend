@@ -14,7 +14,7 @@ export default function DisplayFiles({ urls, onDelete }: IProps) {
     <div>
       {urls?.map((url) => (
         <div className="p-1 mt-2 d-flex align-items-center">
-          {url?.includes('/image-') ? (
+          {url?.includes('/image-') || url?.includes('.jpg') || url?.includes('.png') ? (
             <div style={{ width: '100px' }}>
               <img className="w-100" src={url} alt={getFileName(url)} />
             </div>
