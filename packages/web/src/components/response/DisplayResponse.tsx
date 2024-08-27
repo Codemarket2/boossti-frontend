@@ -34,6 +34,7 @@ import ErrorLoading from '../common/ErrorLoading';
 import WorkflowButtons from './workflow/WorkflowButtons';
 import FormFields from '../form2/FormFields';
 import InlineEdit from './InlineEdit';
+import AddToCartButton from '../cart/AddToCartButton';
 
 // inlineEdit  related imports
 
@@ -369,9 +370,15 @@ export function DisplayResponse({
             workflowId={response?._id}
           />
         )} */}
+
           {/* {response?.workflowId && (
           <WorkflowSteps parentResponseId={response?._id} workflowId={response?.workflowId} />
         )} */}
+          {form.name.toLowerCase().includes('products') && (
+            <>
+              <AddToCartButton productId={`${response._id}`} />
+            </>
+          )}
         </Grid>
       </Grid>
     </Paper>
