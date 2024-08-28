@@ -33,6 +33,6 @@ export enum ActionTypeEnum {
   CreateSubDomainRoute53 = 'createSubDomainRoute53',
   UpdateSubDomainRoute53 = 'updateSubDomainRoute53',
   DeleteSubDomainRoute53 = 'deleteSubDomainRoute53',
-  SaveDataToFormResponse = 'saveDataToFormResponse',
+  AddToCart = 'addToCart',
   None = '',
 }

@@ -47,6 +47,7 @@ import { SelectSubField } from './field/field-condition/FieldConditionForm';
 import ActionVariables from './actions/ActionVariables';
 import { formActionElementTypes, formActionTriggerTypes } from './actions/actionConfig';
 import SelectForm from './SelectForm';
+import SelectFormFields from './SelectFormFields';
 
 interface ICommonInputProps {
   formik: ReturnType<typeof useFormActions>['formik'];
@@ -306,7 +307,7 @@ export default function ActionForm({
                   {' '}
                   {formik.values.triggerType === FormActionTriggerTypeEnum.AddElementOnResponse &&
                     formik.values.elementType === FormActionElementTypeEnum.Button &&
-                    'On Click Button'}
+                    'On Click Button '}
                   Action Type*
                 </InputLabel>
                 <Select
@@ -318,7 +319,7 @@ export default function ActionForm({
                   label={`${
                     formik.values.triggerType === FormActionTriggerTypeEnum.AddElementOnResponse &&
                     formik.values.elementType === FormActionElementTypeEnum.Button &&
-                    'On Click Button'
+                    'On Click Button '
                   }Action Type*`}
                 >
                   <MenuItem value={ActionTypeEnum.ShowMessage}>Show Message</MenuItem>
@@ -379,9 +380,7 @@ export default function ActionForm({
                   <MenuItem value={ActionTypeEnum.DeleteSubDomainRoute53}>
                     Delete sub domain on AWS route53
                   </MenuItem>
-                  <MenuItem value={ActionTypeEnum.SaveDataToFormResponse}>
-                    Save Data To Form Response
-                  </MenuItem>
+                  <MenuItem value={ActionTypeEnum.AddToCart}>Add To Cart</MenuItem>
                 </Select>
                 {formik.touched.actionType && formik.errors.actionType ? (
                   <FormHelperText className="text-danger">
@@ -397,13 +396,97 @@ export default function ActionForm({
           </Card>
           <Card className="p-2 my-2" variant="outlined">
             <Typography fontWeight="bold">Inputs</Typography>
-            {formik.values.actionType === ActionTypeEnum.SaveDataToFormResponse && (
-              <InputGroup>
-                <SelectForm
-                  value={formik.values.formId || null}
-                  onChange={(newValue) => formik.setFieldValue('formId', newValue)}
-                />
-              </InputGroup>
+            {formik.values.actionType === ActionTypeEnum.AddToCart && (
+              <>
+                <Typography sx={{ mt: 2 }}>Cart Form Mapping</Typography>
+                <InputGroup>
+                  <SelectForm
+                    label="Select Cart Form"
+                    placeholder="Select Cart Form"
+                    value={formik.values.addToCartConfig?.cartForm || null}
+                    onChange={(newValue) =>
+                      formik.setFieldValue('addToCartConfig', {
+                        ...formik.values.addToCartConfig,
+                        cartForm: newValue,
+                      })
+                    }
+                  />
+                </InputGroup>
+                {formik.values.addToCartConfig?.cartForm?._id && (
+                  <>
+                    <InputGroup>
+                      <SelectFormFields
+                        label="Cart Form Items Field"
+                        formId={formik.values.addToCartConfig?.cartForm?._id}
+                        value={formik.values.addToCartConfig?.cartFormItemsFieldId}
+                        onChange={(fieldId) =>
+                          formik.setFieldValue('addToCartConfig', {
+                            ...formik.values.addToCartConfig,
+                            cartFormItemsFieldId: fieldId,
+                          })
+                        }
+                      />
+                    </InputGroup>
+                    <InputGroup>
+                      <SelectFormFields
+                        label="Cart Form Status Field"
+                        formId={formik.values.addToCartConfig?.cartForm?._id}
+                        value={formik.values.addToCartConfig?.cartFormStatusFieldId}
+                        onChange={(fieldId) =>
+                          formik.setFieldValue('addToCartConfig', {
+                            ...formik.values.addToCartConfig,
+                            cartFormStatusFieldId: fieldId,
+                          })
+                        }
+                      />
+                    </InputGroup>
+                  </>
+                )}
+                <Typography sx={{ mt: 4 }}>Cart Item Form Mapping</Typography>
+                <InputGroup>
+                  <SelectForm
+                    label="Select Cart Item Form"
+                    placeholder="Select Cart Item Form"
+                    value={formik.values?.addToCartConfig?.cartItemForm || null}
+                    onChange={(newValue) =>
+                      formik.setFieldValue('addToCartConfig', {
+                        ...formik.values.addToCartConfig,
+                        cartItemForm: newValue,
+                      })
+                    }
+                  />
+                </InputGroup>
+                {formik.values.addToCartConfig?.cartItemForm?._id && (
+                  <>
+                    <InputGroup>
+                      <SelectFormFields
+                        label="CartItem Product Field"
+                        formId={formik.values.addToCartConfig?.cartItemForm?._id}
+                        value={formik.values.addToCartConfig?.cartItemFormProductFieldId}
+                        onChange={(fieldId) =>
+                          formik.setFieldValue('addToCartConfig', {
+                            ...formik.values.addToCartConfig,
+                            cartItemFormProductFieldId: fieldId,
+                          })
+                        }
+                      />
+                    </InputGroup>
+                    <InputGroup>
+                      <SelectFormFields
+                        label="CartItem Quantity Field"
+                        formId={formik.values.addToCartConfig?.cartItemForm?._id}
+                        value={formik.values.addToCartConfig?.cartItemFormQuantityFieldId}
+                        onChange={(fieldId) =>
+                          formik.setFieldValue('addToCartConfig', {
+                            ...formik.values.addToCartConfig,
+                            cartItemFormQuantityFieldId: fieldId,
+                          })
+                        }
+                      />
+                    </InputGroup>
+                  </>
+                )}
+              </>
             )}
             {['createSeoReport']?.includes(formik.values.actionType) && (
               <>

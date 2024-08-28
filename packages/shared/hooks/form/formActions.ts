@@ -2,7 +2,7 @@ import { useState } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { IHooksProps } from '../../types/common';
-import { IConditionPart } from '../../types';
+import { IConditionPart, IForm } from '../../types';
 import {
   ActionTypeEnum,
   FormActionElementTypeEnum,
@@ -126,12 +126,21 @@ type TVariables = {
   formId?: any;
 };
 
+type AddToCartConfig = {
+  cartForm: IForm;
+  cartFormItemsFieldId: string;
+  cartFormStatusFieldId: string;
+  cartItemForm: IForm;
+  cartItemFormProductFieldId: string;
+  cartItemFormQuantityFieldId: string;
+};
+
 export type TFormAction = {
   active: boolean;
   triggerType: string;
   elementType: FormActionElementTypeEnum;
   elementButtonLabel: string;
-  formId: string;
+  addToCartConfig: AddToCartConfig;
   actionType: ActionTypeEnum;
   name: string;
   cognitoGroupName: string;
@@ -182,7 +191,14 @@ const defaultFormValues: TFormAction = {
   triggerType: FormActionTriggerTypeEnum.OnCreate,
   elementType: FormActionElementTypeEnum.Button,
   elementButtonLabel: '',
-  formId: '',
+  addToCartConfig: {
+    cartForm: null,
+    cartFormItemsFieldId: '',
+    cartFormStatusFieldId: '',
+    cartItemForm: null,
+    cartItemFormProductFieldId: '',
+    cartItemFormQuantityFieldId: '',
+  },
   actionType: ActionTypeEnum.None,
   name: '',
   cognitoGroupName: '',

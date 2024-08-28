@@ -53,3 +53,5 @@ cypress/videos/*
 next.config.original.*.js
 
 public/storybook
+
+.env.development
