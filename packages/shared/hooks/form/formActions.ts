@@ -3,10 +3,25 @@ import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { IHooksProps } from '../../types/common';
 import { IConditionPart } from '../../types';
+import {
+  ActionTypeEnum,
+  FormActionElementTypeEnum,
+  FormActionTriggerTypeEnum,
+} from '../../types/formActions';
 
 const validationSchema = yup.object({
   active: yup.boolean(),
   actionType: yup.string().label('Action type').required(),
+  elementType: yup.string().when('triggerType', {
+    is: (value) => value === FormActionTriggerTypeEnum.AddElementOnResponse,
+    then: yup.string().label('Element Type').required(),
+    otherwise: yup.string(),
+  }),
+  elementButtonLabel: yup.string().when('elementType', {
+    is: (value) => value === FormActionElementTypeEnum.Button,
+    then: yup.string().label('Button Label').required(),
+    otherwise: yup.string(),
+  }),
   triggerType: yup.string().label('Trigger Type').required(),
   name: yup.string().label('Action name').required(),
   phoneFieldId: yup.string().when('actionType', {
@@ -111,31 +126,13 @@ type TVariables = {
   formId?: any;
 };
 
-type TActionType =
-  | 'showMessage'
-  | 'sendEmail'
-  | 'sendSms'
-  | 'generateNewUser'
-  | 'updateFieldValue'
-  | 'sendInAppNotification'
-  | 'sendPushNotification'
-  | 'onPaletteChange'
-  | 'createCognitoGroup'
-  | 'updateCognitoGroup'
-  | 'deleteCognitoGroup'
-  | 'createCognitoUser'
-  | 'updateCognitoUser'
-  | 'deleteCognitoUser'
-  | 'createSeoReport'
-  | 'createSubDomainRoute53'
-  | 'updateSubDomainRoute53'
-  | 'deleteSubDomainRoute53'
-  | 'emailScrappingFromGoogleSeachAPI';
-
-type TFormValues = {
+export type TFormAction = {
   active: boolean;
   triggerType: string;
-  actionType: TActionType;
+  elementType: FormActionElementTypeEnum;
+  elementButtonLabel: string;
+  formId: string;
+  actionType: ActionTypeEnum;
   name: string;
   cognitoGroupName: string;
   cognitoGroupDesc: string;
@@ -180,10 +177,13 @@ type TFormValues = {
   exactTerm: string;
 };
 
-const defaultFormValues: TFormValues = {
+const defaultFormValues: TFormAction = {
   active: true,
-  triggerType: 'onCreate',
-  actionType: 'sendEmail',
+  triggerType: FormActionTriggerTypeEnum.OnCreate,
+  elementType: FormActionElementTypeEnum.Button,
+  elementButtonLabel: '',
+  formId: '',
+  actionType: ActionTypeEnum.None,
   name: '',
   cognitoGroupName: '',
   cognitoGroupDesc: '',
@@ -235,7 +235,7 @@ interface IProps extends IHooksProps {
 export function useFormActions({ onAlert, onSave }: IProps) {
   const [edit, setEdit] = useState(false);
 
-  const formik = useFormik<TFormValues>({
+  const formik = useFormik<TFormAction>({
     initialValues: defaultFormValues,
     validationSchema,
     onSubmit: async (payload) => {
@@ -252,7 +252,7 @@ export function useFormActions({ onAlert, onSave }: IProps) {
     },
   });
 
-  const setFormValues = (payload: TFormValues) => {
+  const setFormValues = (payload: TFormAction) => {
     setEdit(true);
     const newValues = { ...defaultFormValues };
     Object.keys(defaultFormValues).forEach((key) => {

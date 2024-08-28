@@ -27,6 +27,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 // import TabPanel from '@mui/lab/TabPanel';
 // import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
+import {
+  ActionTypeEnum,
+  FormActionElementTypeEnum,
+  FormActionTriggerTypeEnum,
+} from '@frontend/shared/types/formActions';
 
 // SHARED
 import { useFormActions } from '@frontend/shared/hooks/form';
@@ -40,6 +45,8 @@ import Field from './Field';
 import { defaultValue } from './FormView';
 import { SelectSubField } from './field/field-condition/FieldConditionForm';
 import ActionVariables from './actions/ActionVariables';
+import { formActionElementTypes, formActionTriggerTypes } from './actions/actionConfig';
+import SelectForm from './SelectForm';
 
 interface ICommonInputProps {
   formik: ReturnType<typeof useFormActions>['formik'];
@@ -227,10 +234,9 @@ export default function ActionForm({
                   onChange={formik.handleChange}
                   label="Trigger Type"
                 >
-                  <MenuItem value="onCreate">On Create</MenuItem>
-                  <MenuItem value="onUpdate">On Update</MenuItem>
-                  <MenuItem value="onDelete">On Delete</MenuItem>
-                  <MenuItem value="onView">On View</MenuItem>
+                  {formActionTriggerTypes.map((triggerType) => (
+                    <MenuItem value={triggerType?.value}>{triggerType?.label}</MenuItem>
+                  ))}
                 </Select>
                 {formik.touched.triggerType && formik.errors.triggerType && (
                   <FormHelperText className="text-danger">
@@ -240,6 +246,54 @@ export default function ActionForm({
               </FormControl>
             </InputGroup>
           </Card>
+          {formik.values.triggerType === FormActionTriggerTypeEnum.AddElementOnResponse && (
+            <Card className="p-2 my-2" variant="outlined">
+              <InputGroup>
+                <FormControl
+                  variant="outlined"
+                  fullWidth
+                  size="small"
+                  error={Boolean(formik.touched.elementType && formik.errors.elementType)}
+                >
+                  <InputLabel id="elementType">Element Type*</InputLabel>
+                  <Select
+                    inputProps={{ 'data-testid': 'element-type-input' }}
+                    labelId="elementType"
+                    name="elementType"
+                    value={formik.values.elementType}
+                    onChange={formik.handleChange}
+                    label="Element Type"
+                  >
+                    {formActionElementTypes.map((elementType) => (
+                      <MenuItem value={elementType?.value}>{elementType?.label}</MenuItem>
+                    ))}
+                  </Select>
+                  {formik.touched.elementType && formik.errors.elementType && (
+                    <FormHelperText className="text-danger">
+                      {formik.errors.elementType}
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              </InputGroup>
+              {formik.values.elementType === FormActionElementTypeEnum.Button && (
+                <TextField
+                  inputProps={{ 'data-testid': 'element-button-label-input' }}
+                  fullWidth
+                  label="Button Label*"
+                  variant="outlined"
+                  name="elementButtonLabel"
+                  size="small"
+                  disabled={formik.isSubmitting}
+                  value={formik.values.elementButtonLabel}
+                  onChange={formik.handleChange}
+                  error={
+                    formik.touched.elementButtonLabel && Boolean(formik.errors.elementButtonLabel)
+                  }
+                  helperText={formik.touched.elementButtonLabel && formik.errors.elementButtonLabel}
+                />
+              )}
+            </Card>
+          )}
           <Card className="p-2 my-2" variant="outlined">
             <InputGroup>
               <FormControl
@@ -248,17 +302,27 @@ export default function ActionForm({
                 size="small"
                 error={Boolean(formik.touched.actionType && formik.errors.actionType)}
               >
-                <InputLabel id="actionType">Action Type*</InputLabel>
+                <InputLabel id="actionType">
+                  {' '}
+                  {formik.values.triggerType === FormActionTriggerTypeEnum.AddElementOnResponse &&
+                    formik.values.elementType === FormActionElementTypeEnum.Button &&
+                    'On Click Button'}
+                  Action Type*
+                </InputLabel>
                 <Select
                   inputProps={{ 'data-testid': 'action-type-input' }}
                   labelId="actionType"
                   name="actionType"
                   value={formik.values.actionType}
                   onChange={formik.handleChange}
-                  label="Action Type*"
+                  label={`${
+                    formik.values.triggerType === FormActionTriggerTypeEnum.AddElementOnResponse &&
+                    formik.values.elementType === FormActionElementTypeEnum.Button &&
+                    'On Click Button'
+                  }Action Type*`}
                 >
-                  <MenuItem value="showMessage">Show Message</MenuItem>
-                  <MenuItem value="sendEmail">Send Email</MenuItem>
+                  <MenuItem value={ActionTypeEnum.ShowMessage}>Show Message</MenuItem>
+                  <MenuItem value={ActionTypeEnum.SendEmail}>Send Email</MenuItem>
                   <MenuItem
                     value="sendSms"
                     disabled={
@@ -267,19 +331,33 @@ export default function ActionForm({
                   >
                     Send SMS
                   </MenuItem>
-                  <MenuItem value="updateFieldValue">Update field value</MenuItem>
-                  <MenuItem value="sendInAppNotification">Send In-App Notification</MenuItem>
-                  <MenuItem value="sendPushNotification">Send Push Notification</MenuItem>
-                  <MenuItem value="onPaletteChange">On Palette Change</MenuItem>
-                  <MenuItem value="createCognitoGroup">Create Cognito Group</MenuItem>
-                  <MenuItem value="updateCognitoGroup">Update Cognito Group</MenuItem>
-                  <MenuItem value="deleteCognitoGroup">Delete Cognito Group</MenuItem>
-                  <MenuItem value="createCognitoUser">Create Cognito User</MenuItem>
-                  <MenuItem value="updateCognitoUser">Update Cognito User</MenuItem>
-                  <MenuItem value="deleteCognitoUser">Delete Cognito User</MenuItem>
-                  <MenuItem value="linkedinInviteAutomation">LinkedIn Invite Automation </MenuItem>
-                  <MenuItem value="createWhatsappGroup">Create Whatsapp group </MenuItem>
-                  <MenuItem value="emailScrappingFromGoogleSeachAPI">
+                  <MenuItem value={ActionTypeEnum.UpdateFieldValue}>Update field value</MenuItem>
+                  <MenuItem value={ActionTypeEnum.SendInAppNotification}>
+                    Send In-App Notification
+                  </MenuItem>
+                  <MenuItem value={ActionTypeEnum.SendPushNotification}>
+                    Send Push Notification
+                  </MenuItem>
+                  <MenuItem value={ActionTypeEnum.OnPaletteChange}>On Palette Change</MenuItem>
+                  <MenuItem value={ActionTypeEnum.CreateCognitoGroup}>
+                    Create Cognito Group
+                  </MenuItem>
+                  <MenuItem value={ActionTypeEnum.UpdateCognitoGroup}>
+                    Update Cognito Group
+                  </MenuItem>
+                  <MenuItem value={ActionTypeEnum.DeleteCognitoGroup}>
+                    Delete Cognito Group
+                  </MenuItem>
+                  <MenuItem value={ActionTypeEnum.CreateCognitoUser}>Create Cognito User</MenuItem>
+                  <MenuItem value={ActionTypeEnum.UpdateCognitoUser}>Update Cognito User</MenuItem>
+                  <MenuItem value={ActionTypeEnum.DeleteCognitoUser}>Delete Cognito User</MenuItem>
+                  <MenuItem value={ActionTypeEnum.LinkedinInviteAutomation}>
+                    LinkedIn Invite Automation{' '}
+                  </MenuItem>
+                  <MenuItem value={ActionTypeEnum.CreateWhatsappGroup}>
+                    Create Whatsapp group{' '}
+                  </MenuItem>
+                  <MenuItem value={ActionTypeEnum.EmailScrappingFromGoogleSeachAPI}>
                     Email Scrapping From Google Seach API
                   </MenuItem>
                   <MenuItem
@@ -288,18 +366,21 @@ export default function ActionForm({
                         (field) => field?.fieldType === 'link' && field?.options?.required,
                       )
                     }
-                    value="createSeoReport"
+                    value={ActionTypeEnum.CreateSeoReport}
                   >
                     Create Lighthouse SEO Audit Report
                   </MenuItem>
-                  <MenuItem value="createSubDomainRoute53">
+                  <MenuItem value={ActionTypeEnum.CreateSubDomainRoute53}>
                     Create sub domain on AWS route53
                   </MenuItem>
-                  <MenuItem value="updateSubDomainRoute53">
+                  <MenuItem value={ActionTypeEnum.UpdateSubDomainRoute53}>
                     Update sub domain on AWS route53
                   </MenuItem>
-                  <MenuItem value="deleteSubDomainRoute53">
+                  <MenuItem value={ActionTypeEnum.DeleteSubDomainRoute53}>
                     Delete sub domain on AWS route53
+                  </MenuItem>
+                  <MenuItem value={ActionTypeEnum.SaveDataToFormResponse}>
+                    Save Data To Form Response
                   </MenuItem>
                 </Select>
                 {formik.touched.actionType && formik.errors.actionType ? (
@@ -316,6 +397,14 @@ export default function ActionForm({
           </Card>
           <Card className="p-2 my-2" variant="outlined">
             <Typography fontWeight="bold">Inputs</Typography>
+            {formik.values.actionType === ActionTypeEnum.SaveDataToFormResponse && (
+              <InputGroup>
+                <SelectForm
+                  value={formik.values.formId || null}
+                  onChange={(newValue) => formik.setFieldValue('formId', newValue)}
+                />
+              </InputGroup>
+            )}
             {['createSeoReport']?.includes(formik.values.actionType) && (
               <>
                 <div className="d-flex align-items-center">
@@ -1548,25 +1637,3 @@ export default function ActionForm({
     </>
   );
 }
-
-const actionTypes = [
-  'showMessage',
-  'sendEmail',
-  'sendSms',
-  'generateNewUser',
-  'updateFieldValue',
-  'sendInAppNotification',
-  'sendPushNotification',
-  'onPaletteChange',
-  'createCognitoGroup',
-  'updateCognitoGroup',
-  'deleteCognitoGroup',
-  'createCognitoUser',
-  'updateCognitoUser',
-  'deleteCognitoUser',
-  'createSeoReport',
-  'createSubDomainRoute53',
-  'updateSubDomainRoute53',
-  'deleteSubDomainRoute53',
-  'linkedinInviteAutomation',
-];

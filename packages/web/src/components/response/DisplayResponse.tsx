@@ -35,6 +35,9 @@ import WorkflowButtons from './workflow/WorkflowButtons';
 import FormFields from '../form2/FormFields';
 import InlineEdit from './InlineEdit';
 import AddToCartButton from '../cart/AddToCartButton';
+import AddElementToResponse from './actions/AddElementToResponse';
+import { TFormAction } from '@frontend/shared/hooks/form/formActions';
+import { FormActionTriggerTypeEnum } from '@frontend/shared/types/formActions';
 
 // inlineEdit  related imports
 
@@ -374,11 +377,14 @@ export function DisplayResponse({
           {/* {response?.workflowId && (
           <WorkflowSteps parentResponseId={response?._id} workflowId={response?.workflowId} />
         )} */}
-          {form.name.toLowerCase().includes('products') && (
-            <>
-              <AddToCartButton productId={`${response._id}`} />
-            </>
-          )}
+          {form?.settings?.actions
+            ?.filter(
+              (action: TFormAction) =>
+                action.triggerType === FormActionTriggerTypeEnum.AddElementOnResponse,
+            )
+            ?.map((action: TFormAction, i) => (
+              <AddElementToResponse key={i} action={action} form={form} response={response} />
+            ))}
         </Grid>
       </Grid>
     </Paper>

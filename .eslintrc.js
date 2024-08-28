@@ -33,6 +33,7 @@ module.exports = {
     'prettier/prettier': 0,
     'no-console': 'error',
     'import/prefer-default-export': 'off',
+    'no-shadow': 'off',
     'no-underscore-dangle': 'off',
     'no-use-before-define': 'off',
     'no-named-as-default': 'off',
