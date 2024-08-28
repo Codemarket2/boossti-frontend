@@ -20,6 +20,8 @@ import Tooltip from '@mui/material/Tooltip';
 import KeyboardDoubleArrowRight from '@mui/icons-material/KeyboardDoubleArrowRight';
 import { useGetForm } from '@frontend/shared/hooks/form';
 import { useRouter } from 'next/router';
+import { TFormAction } from '@frontend/shared/hooks/form/formActions';
+import { FormActionTriggerTypeEnum } from '@frontend/shared/types/formActions';
 
 import EditResponse from './EditResponse';
 import Breadcrumbs from '../common/Breadcrumbs';
@@ -36,8 +38,6 @@ import FormFields from '../form2/FormFields';
 import InlineEdit from './InlineEdit';
 import AddToCartButton from '../cart/AddToCartButton';
 import AddElementToResponse from './actions/AddElementToResponse';
-import { TFormAction } from '@frontend/shared/hooks/form/formActions';
-import { FormActionTriggerTypeEnum } from '@frontend/shared/types/formActions';
 
 // inlineEdit  related imports
 
