@@ -108,37 +108,37 @@ export function useGetResponses({
   });
 
   useEffect(() => {
-    // if (!subscribed) {
-    //   setSubscribed(true);
-    //   subscribeToMore<{ responseSub: IResponse }, { formId: string }>({
-    //     document: RESPONSE_SUB,
-    //     variables: {
-    //       formId,
-    //     },
-    //     updateQuery: (prev, { subscriptionData }) => {
-    //       if (!subscriptionData.data) return prev;
-    //       const newItem = subscriptionData.data.responseSub;
-    //       let isNew = true;
-    //       let newData = prev?.getResponses?.data?.map((t) => {
-    //         if (t._id === newItem._id) {
-    //           isNew = false;
-    //           return newItem;
-    //         }
-    //         return t;
-    //       });
-    //       if (isNew) {
-    //         newData = [...prev?.getResponses?.data, newItem];
-    //       }
-    //       return {
-    //         ...prev,
-    //         getResponses: {
-    //           ...prev.getResponses,
-    //           data: newData,
-    //         },
-    //       };
-    //     },
-    //   });
-    // }
+    if (!subscribed) {
+      setSubscribed(true);
+      subscribeToMore<{ responseSub: IResponse }, { formId: string }>({
+        document: RESPONSE_SUB,
+        variables: {
+          formId,
+        },
+        updateQuery: (prev, { subscriptionData }) => {
+          if (!subscriptionData.data) return prev;
+          const newItem = subscriptionData.data.responseSub;
+          let isNew = true;
+          let newData = prev?.getResponses?.data?.map((t) => {
+            if (t._id === newItem._id) {
+              isNew = false;
+              return newItem;
+            }
+            return t;
+          });
+          if (isNew) {
+            newData = [...prev?.getResponses?.data, newItem];
+          }
+          return {
+            ...prev,
+            getResponses: {
+              ...prev.getResponses,
+              data: newData,
+            },
+          };
+        },
+      });
+    }
   }, []);
 
   return { data, error, loading, state, setState, refetch };

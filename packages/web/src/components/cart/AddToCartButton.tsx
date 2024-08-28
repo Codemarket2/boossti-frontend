@@ -6,7 +6,9 @@ export default function AddToCartButton({ productId }: { productId: string }) {
   const { addToCart } = useAddToCart(productId, 1);
   return (
     <div>
-      <Button onClick={addToCart}>Add to Cart</Button>
+      <Button variant="contained" onClick={addToCart}>
+        Add to Cart
+      </Button>
     </div>
   );
 }

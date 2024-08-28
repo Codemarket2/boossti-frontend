@@ -69,6 +69,7 @@ export const useAddToCart = (productId: string, quantity: number) => {
         fields: data?.getFormBySlug?.fields,
         edit: false,
       });
+      alert('Added to Cart');
     } catch (error) {
       console.log(`AddToCart Error, ${error?.message}`);
       alert(`AddToCart Error, ${error?.message}`);
