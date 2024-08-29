@@ -1,81 +1,127 @@
-import { useEffect } from 'react';
-import { useGetFormBySlug } from '../form';
+import { useEffect, useState } from 'react';
+import { useGetForm } from '../form';
 import { useCreateUpdateResponse, useGetResponses } from '../response';
+import { IForm, IResponse } from '../../types';
+import { TFormAction } from '../form/formActions';
 
-export const useAddToCart = (productId: string, quantity: number) => {
+const DEFAULT_QUANTITY = 0;
+const DEFAULT_CART_STATUS = 'PENDING';
+
+export const useAddToCart = (
+  productForm: IForm,
+  productResponse: IResponse,
+  action: TFormAction,
+) => {
   const { handleCreateUpdateResponse } = useCreateUpdateResponse({
     onAlert: () => {},
     workflowId: null,
     parentResponseId: null,
   });
 
-  const { data } = useGetFormBySlug('cartitems');
+  const [alreadyInCart, setAlreadyInCart] = useState(false);
 
-  const { data: getResponsesData, setState } = useGetResponses({
-    formId: data?.getFormBySlug?._id,
-    valueFilter: {},
+  const { data: cartFormData } = useGetForm(action.addToCartConfig.cartForm?._id);
+  const { data: cartItemFormData } = useGetForm(action.addToCartConfig.cartItemForm?._id);
+  const { data: cartFormResponses } = useGetResponses({
+    onlyMy: true,
+    formId: action.addToCartConfig.cartForm?._id,
+    valueFilter: {
+      'values.value': DEFAULT_CART_STATUS,
+      'values.field': action.addToCartConfig.cartFormStatusFieldId,
+    },
+    limit: 1,
   });
 
   useEffect(() => {
-    if (data?.getFormBySlug?._id) {
-      const productField = data?.getFormBySlug?.fields?.find(
-        (field) => field.label?.toLowerCase() === 'product',
+    if (cartFormResponses?.getResponses?.data?.[0]) {
+      // debugger;
+    }
+  }, [cartFormResponses]);
+
+  const getCartItemResponseObject = () => {
+    if (
+      !action.addToCartConfig?.cartItemFormProductFieldId ||
+      !action.addToCartConfig?.cartItemFormQuantityFieldId
+    ) {
+      throw new Error(
+        'cartItemFormProductFieldId, cartItemFormQuantityFieldId not found in action.addToCartConfig',
       );
-      const valueFilter = {
-        'values.field': productField?._id,
-        'values.response': productId,
-      };
-      setState((oldSTate) => ({ ...oldSTate, valueFilter: JSON.stringify(valueFilter) }));
-    }
-  }, [data]);
-
-  useEffect(() => {
-    if (getResponsesData) {
-      //   debugger;
-    }
-  }, [getResponsesData]);
-
-  const getResponseObject = () => {
-    if (!data?.getFormBySlug?._id) {
-      throw new Error('cartitems form not found');
-    }
-    const productField = data?.getFormBySlug?.fields?.find(
-      (field) => field.label?.toLowerCase() === 'product',
-    );
-    const quantityField = data?.getFormBySlug?.fields?.find(
-      (field) => field.label?.toLowerCase() === 'quantity',
-    );
-
-    if (!productField?._id || !quantityField?._id) {
-      throw new Error('product, quantity field not found in cartitems');
     }
 
-    const response = {
-      formId: data?.getFormBySlug?._id,
+    const newResponse = {
+      formId: action.addToCartConfig?.cartItemForm._id,
       values: [
-        { field: productField?._id, value: '', response: productId },
-        { field: quantityField?._id, value: '', valueNumber: quantity },
+        {
+          field: action.addToCartConfig?.cartItemFormProductFieldId,
+          value: '',
+          response: productResponse?._id,
+        },
+        {
+          field: action.addToCartConfig?.cartItemFormQuantityFieldId,
+          value: '',
+          valueNumber: DEFAULT_QUANTITY,
+        },
       ],
     };
 
-    return response;
+    return newResponse;
   };
 
-  const addToCart = async () => {
+  const handleOnClick = async () => {
     try {
-      const responseObj = getResponseObject();
-      const response = await handleCreateUpdateResponse({
+      const responseObj = getCartItemResponseObject();
+      const cartItemResponse = await handleCreateUpdateResponse({
         payload: responseObj,
-        fields: data?.getFormBySlug?.fields,
+        fields: cartItemFormData?.getForm?.fields,
         edit: false,
       });
+      if (!cartItemResponse?._id) {
+        throw new Error();
+      }
+      if (cartFormResponses?.getResponses?.data[0]?._id) {
+        const cartResponse = await handleCreateUpdateResponse({
+          payload: {
+            formId: action.addToCartConfig.cartForm?._id,
+            values: [
+              ...cartFormResponses?.getResponses?.data[0]?.values,
+
+              {
+                field: action.addToCartConfig.cartFormItemsFieldId,
+                value: '',
+                response: cartItemResponse?._id,
+              },
+            ],
+          },
+          fields: cartItemFormData?.getForm?.fields,
+          edit: true,
+        });
+      } else {
+        const cartResponse = await handleCreateUpdateResponse({
+          payload: {
+            formId: action.addToCartConfig.cartForm?._id,
+            values: [
+              {
+                field: action.addToCartConfig.cartFormItemsFieldId,
+                value: '',
+                response: cartItemResponse?._id,
+              },
+              {
+                field: action.addToCartConfig.cartFormStatusFieldId,
+                value: DEFAULT_CART_STATUS,
+              },
+            ],
+          },
+          fields: cartFormData?.getForm?.fields,
+          edit: false,
+        });
+      }
+
       alert('Added to Cart');
     } catch (error) {
-      console.log(`AddToCart Error, ${error?.message}`);
       alert(`AddToCart Error, ${error?.message}`);
     }
     //
   };
 
-  return { addToCart };
+  return { handleOnClick, alreadyInCart };
 };

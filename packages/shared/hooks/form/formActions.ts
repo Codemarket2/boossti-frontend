@@ -17,8 +17,10 @@ const validationSchema = yup.object({
     then: yup.string().label('Element Type').required(),
     otherwise: yup.string(),
   }),
-  elementButtonLabel: yup.string().when('elementType', {
-    is: (value) => value === FormActionElementTypeEnum.Button,
+  elementButtonLabel: yup.string().when(['elementType', 'triggerType'], {
+    is: (elementType, triggerType) =>
+      elementType === FormActionElementTypeEnum.Button &&
+      triggerType === FormActionTriggerTypeEnum.AddElementOnResponse,
     then: yup.string().label('Button Label').required(),
     otherwise: yup.string(),
   }),

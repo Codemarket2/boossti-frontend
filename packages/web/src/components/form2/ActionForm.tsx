@@ -48,6 +48,7 @@ import ActionVariables from './actions/ActionVariables';
 import { formActionElementTypes, formActionTriggerTypes } from './actions/actionConfig';
 import SelectForm from './SelectForm';
 import SelectFormFields from './SelectFormFields';
+import QueryBuilder from './queryBuilder/QueryBuilder';
 
 interface ICommonInputProps {
   formik: ReturnType<typeof useFormActions>['formik'];
@@ -486,6 +487,7 @@ export default function ActionForm({
                     </InputGroup>
                   </>
                 )}
+                <QueryBuilder />
               </>
             )}
             {['createSeoReport']?.includes(formik.values.actionType) && (
