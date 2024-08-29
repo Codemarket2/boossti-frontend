@@ -73,11 +73,6 @@ const QueryBuilder = () => {
 
     const query = {
       formId: selectedForm,
-      page,
-      limit,
-      search: search || undefined,
-      formField: formField || undefined,
-      onlyMy,
       valueFilter: Object.keys(valueFilter).length > 0 ? JSON.stringify(valueFilter) : undefined,
     };
 
@@ -86,7 +81,7 @@ const QueryBuilder = () => {
 
   useEffect(() => {
     updateQuery();
-  }, [selectedForm, page, limit, search, formField, onlyMy, conditions]);
+  }, [selectedForm, conditions]);
 
   return (
     <Box>
