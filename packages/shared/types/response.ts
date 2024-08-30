@@ -18,7 +18,7 @@ export interface IResponse extends ISchema {
 // }
 
 export interface IValue {
-  _id: string;
+  _id?: string;
   field: string;
   value: string;
   valueNumber: number;

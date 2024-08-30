@@ -23,6 +23,7 @@ import DisplaySignature from '../signature/DisplaySignature';
 import { PageViewerOverlayBtn as CraftsJSPageViewer } from '../craftJS/craftJSPageViewer';
 import DisplayResponseById from '../response/DisplayResponseById';
 import DisplayCard from '../card/DisplayCard';
+import { FieldTypeEnum } from './fieldTypes';
 
 interface IProps {
   field: Partial<IField>;
@@ -86,7 +87,8 @@ export default function DisplayValue({
     case 'email':
     case 'password':
       return <span data-testid="text-output">{value?.value}</span>;
-    case 'response': {
+    case FieldTypeEnum.FormResponse:
+    case FieldTypeEnum.FormResponseDisplay: {
       return (
         <>
           <div style={state.viewMoreResponse ? {} : { maxHeight: '158px', overflow: 'hidden' }}>

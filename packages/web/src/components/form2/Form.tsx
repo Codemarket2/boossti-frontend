@@ -47,6 +47,8 @@ import TabView from './tabs/TabView';
 import { DisplayForm } from './DisplayForm';
 import WorkflowView from './Work_flowView';
 import EmbedFormTab from '../embed/EmbedFormTab';
+import { FieldTypeEnum } from './fieldTypes';
+import ParentFormResponsesDisplay from './ParentFormResponsesDisplay/ParentFormResponsesDisplay';
 
 const tabs = [
   'Fields',
@@ -317,7 +319,11 @@ export function FormChild({
               </Paper>
               {state.currentTab === 'Form' && (
                 <>
-                  {isWorkflow ? (
+                  {form?.fields?.some(
+                    (field) => field?.fieldType === FieldTypeEnum.FormResponseDisplay,
+                  ) ? (
+                    <ParentFormResponsesDisplay form={form} />
+                  ) : isWorkflow ? (
                     <WorkflowView form={form} />
                   ) : (
                     <Paper variant="outlined" className="px-2">
@@ -338,20 +344,18 @@ export function FormChild({
               )}
               {state.currentTab === 'Results' && (
                 <>
-                  <>
-                    <Paper className="py-3 d-flex justify-content-end px-2">
-                      <BulkUploadAction form={form} />
-                    </Paper>
-                    {isWorkflow ? (
-                      <DisplayForm
-                        _id={form?.fields?.[0]?.form?._id}
-                        settings={{ widgetType: 'responses' }}
-                        workflowId={form?._id}
-                      />
-                    ) : (
-                      <ResponseList {...responseListProps} form={form} />
-                    )}
-                  </>
+                  <Paper className="py-3 d-flex justify-content-end px-2">
+                    <BulkUploadAction form={form} />
+                  </Paper>
+                  {isWorkflow ? (
+                    <DisplayForm
+                      _id={form?.fields?.[0]?.form?._id}
+                      settings={{ widgetType: 'responses' }}
+                      workflowId={form?._id}
+                    />
+                  ) : (
+                    <ResponseList {...responseListProps} form={form} />
+                  )}
                 </>
               )}
               {authorized && (

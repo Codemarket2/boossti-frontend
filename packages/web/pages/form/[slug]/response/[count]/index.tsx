@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router';
 import { useGetFormBySlug } from '@frontend/shared/hooks/form';
 import { useGetResponseByCount } from '@frontend/shared/hooks/response';
-import UserLayout from '../../../../src/components/common/UserLayout';
-import ResponseScreen from '../../../../src/screens/ResponseScreen';
-import HeadComponent from '../../../../src/components/common/Head';
+import UserLayout from '../../../../../src/components/common/UserLayout';
+import ResponseScreen from '../../../../../src/screens/ResponseScreen';
+import HeadComponent from '../../../../../src/components/common/Head';
 
 export default function Page() {
   const router = useRouter();
