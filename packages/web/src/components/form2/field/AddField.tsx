@@ -36,7 +36,7 @@ import { IField } from '@frontend/shared/types/form';
 import InputGroup from '../../common/InputGroup';
 import LoadingButton from '../../common/LoadingButton';
 import { onAlert } from '../../../utils/alert';
-import { getFormFieldTypes } from '../fieldTypes';
+import { FieldTypeEnum, getFormFieldTypes } from '../fieldTypes';
 import RichTextarea from '../../common/RichTextarea2';
 import SelectForm from '../SelectForm';
 // import SelectFormFields from '../SelectFormFields';
@@ -134,7 +134,7 @@ export default function AddField({
           )}
         </FormControl>
       </InputGroup>
-      {['response'].includes(formik.values.fieldType) && (
+      {[FieldTypeEnum.FormResponse, FieldTypeEnum.FormResponseDisplay].includes(formik.values.fieldType) && (
         <InputGroup>
           <SelectForm
             value={formik.values.form}
