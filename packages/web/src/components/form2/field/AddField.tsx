@@ -134,7 +134,7 @@ export default function AddField({
           )}
         </FormControl>
       </InputGroup>
-      {[FieldTypeEnum.FormResponse, FieldTypeEnum.FormResponseDisplay].includes(formik.values.fieldType) && (
+      {[FieldTypeEnum.FormResponse.valueOf(), FieldTypeEnum.FormResponseDisplay.valueOf()].includes(formik.values.fieldType) && (
         <InputGroup>
           <SelectForm
             value={formik.values.form}
