@@ -137,6 +137,12 @@ export default function Field({
     }
   }, [rules]);
 
+  useEffect(() => {
+    if (inlineEdit && field?.fieldType === 'response') {
+      setAddOption({ ...addOption, showDrawer: true });
+    }
+  }, []);
+
   const getRuleValues = () => {
     Object.keys(rules)?.forEach((key) => {
       const rule = rules[key];
@@ -636,17 +642,19 @@ export default function Field({
                 >
                   Add Response
                 </Button> */}
-                <Tooltip title="Add Response">
-                  <IconButton
-                    data-testid="response-button"
-                    onClick={() => setAddOption({ ...addOption, showDrawer: true })}
-                    size="small"
-                    color="primary"
-                    sx={{ border: '1px solid' }}
-                  >
-                    <Add />
-                  </IconButton>
-                </Tooltip>
+                {!addOption?.showDrawer && (
+                  <Tooltip title="Add Response">
+                    <IconButton
+                      data-testid="response-button"
+                      onClick={() => setAddOption({ ...addOption, showDrawer: true })}
+                      size="small"
+                      color="primary"
+                      sx={{ border: '1px solid' }}
+                    >
+                      <Add />
+                    </IconButton>
+                  </Tooltip>
+                )}
               </>
             )}
           </div>
