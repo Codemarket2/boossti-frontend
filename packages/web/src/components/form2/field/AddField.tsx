@@ -115,7 +115,7 @@ export default function AddField({
             labelId="fieldType-simple-select-outlined-label"
             id="fieldType-simple-select-outlined"
             name="fieldType"
-            value={formik.values.fieldType}
+            value={formik.values.fieldType in FieldTypeEnum ? formik.values.fieldType : undefined}
             onChange={formik.handleChange}
             label="Field Type*"
             inputProps={{ 'aria-describedby': 'fieldType-helperText' }}
