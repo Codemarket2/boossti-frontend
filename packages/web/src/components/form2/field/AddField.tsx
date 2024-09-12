@@ -120,6 +120,7 @@ export default function AddField({
             label="Field Type*"
             inputProps={{ 'aria-describedby': 'fieldType-helperText' }}
             MenuProps={{ id: 'fieldType-menu' }}
+            required={true}
           >
             {getFormFieldTypes(isWorkflow)?.map((option, index) => (
               <MenuItem value={option.value} key={index}>
