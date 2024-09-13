@@ -75,6 +75,10 @@ export default function AddField({
 
   useEffect(() => {
     if (field) {
+      console.log("Gagan2 = "+ field.fieldType)
+      if(!(Object.values(FieldTypeEnum).map((fieldType) => {return fieldType.valueOf()}).includes(field.fieldType))) {
+        field.fieldType = undefined
+      }
       setFormValues(field);
       window.scrollTo(0, 0);
     }
@@ -115,12 +119,11 @@ export default function AddField({
             labelId="fieldType-simple-select-outlined-label"
             id="fieldType-simple-select-outlined"
             name="fieldType"
-            value={formik.values.fieldType in FieldTypeEnum ? formik.values.fieldType : undefined}
+            value={formik.values.fieldType}
             onChange={formik.handleChange}
             label="Field Type*"
             inputProps={{ 'aria-describedby': 'fieldType-helperText' }}
             MenuProps={{ id: 'fieldType-menu' }}
-            required={true}
           >
             {getFormFieldTypes(isWorkflow)?.map((option, index) => (
               <MenuItem value={option.value} key={index}>
