@@ -12,3 +12,4 @@ src/components/customMUI
 public
 src/components/response/Table.tsx
 packages/web/src/stories
+src/*
