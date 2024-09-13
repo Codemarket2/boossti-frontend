@@ -75,7 +75,6 @@ export default function AddField({
 
   useEffect(() => {
     if (field) {
-      console.log("Gagan2 = "+ field.fieldType)
       if(!(Object.values(FieldTypeEnum).map((fieldType) => {return fieldType.valueOf()}).includes(field.fieldType))) {
         field.fieldType = undefined
       }
