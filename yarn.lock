@@ -3506,13 +3506,13 @@
     minimist "^1.2.0"
 
 "@craftjs/core@^0.2.0-beta.8":
-  version "0.2.0-beta.8"
-  resolved "https://registry.npmjs.org/@craftjs/core/-/core-0.2.0-beta.8.tgz"
-  integrity sha512-kAKOky6QT0tl4w9BLKaD0+4/o+ITuX3TNqLO7mnPbmb9JBZ5Ha6XvTPbJf9ko9UYMC3lRm+M5KuqJGaOptL3NA==
+  version "0.2.11"
+  resolved "https://registry.npmjs.org/@craftjs/core/-/core-0.2.11.tgz"
+  integrity sha512-WbaQgOWqFnfcSo9HwS7VJ71ITYVxW51Jb0QH7zJRqh1rjdwNZfyTm5+7rhB6Xm4hdZcp+QMoLhdWodNcEgwc1Q==
   dependencies:
-    "@craftjs/utils" "^0.2.0-beta.8"
+    "@craftjs/utils" "^0.2.4"
     debounce "^1.2.0"
-    lodash "^4.17.20"
+    lodash "^4.17.21"
     tiny-invariant "^1.0.6"
 
 "@craftjs/layers@^0.2.0-beta.8":
@@ -3523,21 +3523,10 @@
     "@craftjs/utils" "^0.2.1"
     react-contenteditable "^3.3.3"
 
-"@craftjs/utils@^0.2.0-beta.8":
-  version "0.2.0-beta.8"
-  resolved "https://registry.npmjs.org/@craftjs/utils/-/utils-0.2.0-beta.8.tgz"
-  integrity sha512-K45KwdevWTghYHJuUsvXNAXni7DCcI+Ts+lw7mchnVJzr8vvxHKeL+tldHDokxWZbDmQYNfsf3u22t+oViu9pA==
-  dependencies:
-    immer "^9.0.6"
-    lodash "^4.17.20"
-    nanoid "^3.1.23"
-    shallowequal "^1.1.0"
-    tiny-invariant "^1.0.6"
-
-"@craftjs/utils@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.npmjs.org/@craftjs/utils/-/utils-0.2.1.tgz"
-  integrity sha512-NNOdJO0KTG/+vh986WOhehtgwg1lr3mLwcIJHYymMuVAnzOrFgwHzZDuO/v7D0m9Xxbij7GE3VjzMLBHOxlWNA==
+"@craftjs/utils@^0.2.1", "@craftjs/utils@^0.2.4":
+  version "0.2.4"
+  resolved "https://registry.npmjs.org/@craftjs/utils/-/utils-0.2.4.tgz"
+  integrity sha512-TJ0mm7rTacQK/875E5+SzvL90RXMFFQYDLuriawDe7i85Ha9K2vy3ap1sUEqrPCotL1KuaOx+d3CjLFFR6PTmg==
   dependencies:
     immer "^9.0.6"
     lodash "^4.17.21"
@@ -4581,7 +4570,7 @@
 
 "@next/swc-win32-x64-msvc@12.1.4":
   version "12.1.4"
-  resolved "https://registry.npmjs.org/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-12.1.4.tgz"
+  resolved "https://registry.yarnpkg.com/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-12.1.4.tgz#a72ed44c9b1f850986a30fe36c59e01f8a79b5f3"
   integrity sha512-JtYuWzKXKLDMgE/xTcFtCm1MiCIRaAc5XYZfYX3n/ZWSI1SJS/GMm+Su0SAHJgRFavJh6U/p998YwO/iGTIgqQ==
 
 "@nodelib/fs.scandir@2.1.5":
@@ -13145,15 +13134,10 @@ immer@9.0.6:
   resolved "https://registry.npmjs.org/immer/-/immer-9.0.6.tgz"
   integrity sha512-G95ivKpy+EvVAnAab4fVa4YGYn24J1SpEktnJX7JJ45Bd7xqME/SCplFzYFmTbrkwZbQ4xJK1xMTUYBkN6pWsQ==
 
-immer@^9.0.5:
+immer@^9.0.5, immer@^9.0.6:
   version "9.0.12"
   resolved "https://registry.npmjs.org/immer/-/immer-9.0.12.tgz"
   integrity sha512-lk7UNmSbAukB5B6dh9fnh5D0bJTOFKxVg2cyJWTYrWRfhLrLMBquONcUs3aFq507hNoIZEDDh8lb8UtOizSMhA==
-
-immer@^9.0.6:
-  version "9.0.16"
-  resolved "https://registry.npmjs.org/immer/-/immer-9.0.16.tgz"
-  integrity sha512-qenGE7CstVm1NrHQbMh8YaSzTZTFNP3zPqr3YU0S0UY441j4bJTg4A2Hh5KAhwgaiU6ZZ1Ar6y/2f4TblnMReQ==
 
 import-fresh@^2.0.0:
   version "2.0.0"
@@ -16060,9 +16044,9 @@ multipipe@^1.0.2:
     object-assign "^4.1.0"
 
 nan@^2.12.1:
-  version "2.19.0"
-  resolved "https://registry.yarnpkg.com/nan/-/nan-2.19.0.tgz#bb58122ad55a6c5bc973303908d5b16cfdd5a8c0"
-  integrity sha512-nO1xXxfh/RWNxfd/XPfbIfFk5vgLsAxUR9y5O0cHMJu/AW9U95JLXqthYHjEp+8gQ5p96K9jUp8nbVOxCdRbtw==
+  version "2.22.0"
+  resolved "https://registry.yarnpkg.com/nan/-/nan-2.22.0.tgz#31bc433fc33213c97bad36404bb68063de604de3"
+  integrity sha512-nbajikzWTMwsW+eSsNm3QwlOs7het9gGJU5dDZzRTQGk03vyBOauxgI4VakDzE0PtsGTmXPsXTbbjVhRwR5mpw==
 
 nanoclone@^0.2.1:
   version "0.2.1"
