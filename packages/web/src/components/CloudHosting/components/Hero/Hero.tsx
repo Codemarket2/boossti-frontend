@@ -188,7 +188,7 @@ const Hero = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
           <svg ref={svgRef} />
         </div> */}
         <div className={classes.pieChartImage}>
-          <img src="/header-image.png" alt="Descriptive alt text" width="400" height="400" />
+          <img src="/header-image.png" alt="Descriptive alt text" width="700" height="600" />
         </div>
       </div>
     </div>
