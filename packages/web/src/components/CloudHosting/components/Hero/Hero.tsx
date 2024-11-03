@@ -45,9 +45,7 @@ const useStyles = makeStyles((theme) => ({
   textBlue: {
     color: 'rgb(13,4,72)',
   },
-  pieChart: {
-    // alignSelf: 'flex-start',
-    // maxWidth: 625,
+  pieChartImage: {
     transform: 'translateX(-50%)',
     height: 'auto',
     [theme.breakpoints.up('md')]: {
@@ -59,11 +57,29 @@ const useStyles = makeStyles((theme) => ({
     },
     [theme.breakpoints.down('md')]: {
       position: 'static',
-
       width: 'auto',
       transform: 'translateX(25%) !important',
     },
   },
+  // pieChart: {
+  //   // alignSelf: 'flex-start',
+  //   // maxWidth: 625,
+  //   transform: 'translateX(-50%)',
+  //   height: 'auto',
+  //   [theme.breakpoints.up('md')]: {
+  //     position: 'absolute',
+  //     top: '50%',
+  //     right: 0,
+  //     width: 'auto',
+  //     transform: 'translateY(-50%) !important',
+  //   },
+  //   [theme.breakpoints.down('md')]: {
+  //     position: 'static',
+
+  //     width: 'auto',
+  //     transform: 'translateX(25%) !important',
+  //   },
+  // },
 }));
 
 const Hero = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
@@ -150,7 +166,7 @@ const Hero = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
             </Typography> */}
               <SectionHeader
                 titleVariant="h4"
-                title={<span className={classes.textBlue}>Growth Marketing Agency</span>}
+                title={<span className={classes.textBlue}>Discover Local Heroes Discover Local Heros 🌟</span>}
                 subtitle={
                   <span className={classes.textBlue}>
                     ROI driven,Powered by AI/ML,Data Science,App Coding & Emotional design-Email
@@ -168,8 +184,11 @@ const Hero = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
             </div>
           </Section>
         )}
-        <div className={classes.pieChart}>
+        {/* <div className={classes.pieChart}>
           <svg ref={svgRef} />
+        </div> */}
+        <div className={classes.pieChartImage}>
+          <img src="/header-image.png" alt="Descriptive alt text" width="400" height="400" />
         </div>
       </div>
     </div>
