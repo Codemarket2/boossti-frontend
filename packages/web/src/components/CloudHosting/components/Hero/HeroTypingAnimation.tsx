@@ -78,9 +78,8 @@ const HeroTypingAnimation = () => {
         setBotMessage(botFullMessage.slice(0, botMessage.length + 1));
       }, 100);
       return () => clearTimeout(timeout);
-    } else {
-      setShowUserTyping(true);
     }
+    setShowUserTyping(true);
   }, [botMessage]);
 
   // User typing animation for the first message
@@ -90,7 +89,8 @@ const HeroTypingAnimation = () => {
         setUserMessage(userFullMessage.slice(0, userMessage.length + 1));
       }, 100);
       return () => clearTimeout(timeout);
-    } else if (userMessage.length === userFullMessage.length) {
+    }
+    if (userMessage.length === userFullMessage.length) {
       setBotMessage2('');
     }
   }, [userMessage, showUserTyping]);
@@ -105,7 +105,8 @@ const HeroTypingAnimation = () => {
         setBotMessage2(botFullMessage2.slice(0, botMessage2.length + 1));
       }, 100);
       return () => clearTimeout(timeout);
-    } else if (botMessage2.length === botFullMessage2.length) {
+    }
+    if (botMessage2.length === botFullMessage2.length) {
       setShowUserTyping2(true);
     }
   }, [botMessage2, userMessage]);
@@ -117,7 +118,8 @@ const HeroTypingAnimation = () => {
         setUserMessage2(userFullMessage2.slice(0, userMessage2.length + 1));
       }, 100);
       return () => clearTimeout(timeout);
-    } else if (userMessage2.length === userFullMessage2.length) {
+    }
+    if (userMessage2.length === userFullMessage2.length) {
       setBotMessage3('');
     }
   }, [userMessage2, showUserTyping2]);
@@ -132,7 +134,8 @@ const HeroTypingAnimation = () => {
         setBotMessage3(botFullMessage3.slice(0, botMessage3.length + 1));
       }, 100);
       return () => clearTimeout(timeout);
-    } else if (botMessage3.length === botFullMessage3.length) {
+    }
+    if (botMessage3.length === botFullMessage3.length) {
       setShowUserTyping3(true);
     }
   }, [botMessage3, userMessage2]);
