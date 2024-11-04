@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography, Button } from '@material-ui/core';
 import * as d3 from 'd3'; // This Library is used for displaying piechart
+import Image from 'next/image';
 import { SectionHeader } from '../../components2/molecules';
 import { Section } from '../../components2/organisms';
 import Boxes from '../Boxes/Boxes';
@@ -29,15 +30,35 @@ const useStyles = makeStyles((theme) => ({
   },
   section: {
     marginTop: '15vh',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: theme.spacing(2),
     paddingTop: 0,
     paddingBottom: 0,
+    [theme.breakpoints.up('md')]: {
+      flexDirection: 'row',
+    },
   },
   sectionHeader: {
     padding: theme.spacing(0, 2),
     [theme.breakpoints.up('md')]: {
-      maxWidth: '50%',
-      width: 'calc(100vw - 625px)',
+      width: '30%',
     },
+  },
+  imageSection: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    [theme.breakpoints.up('md')]: {
+      width: '70%',
+    },
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
   },
   textWhite: {
     color: 'white',
@@ -144,33 +165,51 @@ const Hero = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
           />
         ) : (
           <Section className={classes.section}>
-            <div className={classes.sectionHeader}>
-              {/* <Typography variant="h6" gutterBottom className={classes.textBlue}>
+            <>
+              <div className={classes.sectionHeader}>
+                {/* <Typography variant="h6" gutterBottom className={classes.textBlue}>
               Download Free for Mac, Windows and Linux OS
             </Typography> */}
-              <SectionHeader
-                titleVariant="h4"
-                title={<span className={classes.textBlue}>Growth Marketing Agency</span>}
-                subtitle={
-                  <span className={classes.textBlue}>
-                    ROI driven,Powered by AI/ML,Data Science,App Coding & Emotional design-Email
-                    marketing , Social Media Marketing and community building
-                  </span>
-                }
-                ctaGroup={[
-                  <Button variant="contained" size="large">
-                    Explore
-                  </Button>,
-                ]}
-                align="left"
-                data-aos="fade-up"
-              />
-            </div>
+                <SectionHeader
+                  titleVariant="h4"
+                  title={
+                    <span className={classes.textBlue}>
+                      Discover Local Heros
+                      <span role="img" aria-label="donut">
+                        🌟
+                      </span>
+                    </span>
+                  }
+                  subtitle={
+                    <span className={classes.textBlue}>
+                      ROI driven,Powered by AI/ML,Data Science,App Coding & Emotional design-Email
+                      marketing , Social Media Marketing and community building
+                    </span>
+                  }
+                  ctaGroup={[
+                    <Button variant="contained" size="large">
+                      Explore
+                    </Button>,
+                  ]}
+                  align="left"
+                  data-aos="fade-up"
+                />
+              </div>
+              <div className={classes.imageSection}>
+                <Image
+                  src="/header-image.webp"
+                  alt="header image"
+                  width={800}
+                  height={800}
+                  className={classes.image}
+                />
+              </div>
+            </>
           </Section>
         )}
-        <div className={classes.pieChart}>
+        {/* <div className={classes.pieChart}>
           <svg ref={svgRef} />
-        </div>
+        </div> */}
       </div>
     </div>
   );
