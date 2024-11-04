@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { SectionHeader } from '../../components2/molecules';
 import { Section } from '../../components2/organisms';
 import Boxes from '../Boxes/Boxes';
+import HeroTypingAnimation from './HeroTypingAnimation';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -196,6 +197,7 @@ const Hero = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
                 />
               </div>
               <div className={classes.imageSection}>
+                <HeroTypingAnimation />
                 <Image
                   src="/header-image.webp"
                   alt="header image"
