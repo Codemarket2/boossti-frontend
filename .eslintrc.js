@@ -34,6 +34,7 @@ module.exports = {
     'no-console': 'error',
     'import/prefer-default-export': 'off',
     'no-underscore-dangle': 'off',
+    'jsx-a11y/no-onchange': 'off',
     'no-use-before-define': 'off',
     'no-named-as-default': 'off',
     'no-nested-ternary': 'off',

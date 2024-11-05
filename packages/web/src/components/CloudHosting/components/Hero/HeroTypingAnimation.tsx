@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Image from 'next/image';
+import Message from './Message';
+import Select from './Select';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -11,210 +12,148 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 'md',
     margin: 'auto',
   },
-  innerSection: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: theme.spacing(2),
-  },
-  imgDiv: {
-    width: 48,
-    height: 48,
-    padding: 8,
-    borderRadius: '50%',
-  },
-  botImageDiv: {
-    backgroundColor: '#b3c3ff',
-  },
-  messageDiv: {
-    color: '#333',
-    marginBottom: 0,
-  },
-  personImgDiv: {
-    backgroundColor: '#f7f7f7',
-  },
-  botMessageContainer: {
-    backgroundColor: '#b3c3ff',
-    padding: `${theme.spacing(1)}px ${theme.spacing(2)}px`,
-    borderRadius: `20px 20px 20px 0`,
-  },
-  userMessageContainer: {
-    backgroundColor: '#f7f7f7',
-    padding: `${theme.spacing(1)}px ${theme.spacing(2)}px`,
-    borderRadius: `20px 20px 0 20px`,
-    marginLeft: 'auto',
-  },
 }));
 
 const HeroTypingAnimation = () => {
   const classes = useStyles();
 
-  // First message state
-  const [botMessage, setBotMessage] = useState('');
-  const [userMessage, setUserMessage] = useState('');
-  const [showUserTyping, setShowUserTyping] = useState(false);
+  const [botMessage1, setBotMessage1] = useState('');
+  const [personStartsTyping1, setPersonStartsTyping1] = useState(false);
+  const [personMessage1, setPersonMessage1] = useState('');
 
-  // Second message state
+  const [botStartsTyping2, setBotStartsTyping2] = useState(false);
   const [botMessage2, setBotMessage2] = useState('');
-  const [userMessage2, setUserMessage2] = useState('');
-  const [showUserTyping2, setShowUserTyping2] = useState(false);
+  const [showCitySelection, setShowCitySelection] = useState(false);
+  const [selectedCity, setSelectedCity] = useState('');
+  const [personMessage2, setPersonMessage2] = useState('');
 
-  // Third message state
+  const [botStartsTyping3, setBotStartsTyping3] = useState(false);
   const [botMessage3, setBotMessage3] = useState('');
-  const [userMessage3, setUserMessage3] = useState('');
-  const [showUserTyping3, setShowUserTyping3] = useState(false);
+  const [showBusinessSelection, setShowBusinessSelection] = useState(false);
+  const [selectedBusiness, setSelectedBusiness] = useState('');
+  const [personMessage3, setPersonMessage3] = useState('');
 
-  // Full messages
-  const botFullMessage = 'Do you want to grow your business?';
-  const userFullMessage = 'Yes.';
+  const botFullMessage1 = 'Do you want to grow your business?';
+  const personFullMessage1 = 'Yes.';
   const botFullMessage2 = 'Which city are you in?';
-  const userFullMessage2 = 'Beverly Hills.';
   const botFullMessage3 = 'What type of business is your business?';
-  const userFullMessage3 = 'Wellness Spa.';
 
-  // Bot typing animation for the first message
+  const handleSelection = (e: React.ChangeEvent<{ name?: string; value: string }>) => {
+    if (e.target.name === 'city') {
+      setSelectedCity(e.target.value);
+    } else if (e.target.name === 'business') {
+      setSelectedBusiness(e.target.value);
+    }
+  };
+
   useEffect(() => {
-    if (botMessage.length < botFullMessage.length) {
+    if (botMessage1.length < botFullMessage1.length) {
       const timeout = setTimeout(() => {
-        setBotMessage(botFullMessage.slice(0, botMessage.length + 1));
-      }, 100);
+        setBotMessage1(botFullMessage1.slice(0, botMessage1.length + 1));
+      }, 50);
       return () => clearTimeout(timeout);
     }
-    setShowUserTyping(true);
-  }, [botMessage]);
+    setPersonStartsTyping1(true);
+  }, [botMessage1]);
 
-  // User typing animation for the first message
   useEffect(() => {
-    if (showUserTyping && userMessage.length < userFullMessage.length) {
+    if (personStartsTyping1 && personMessage1.length < personFullMessage1.length) {
       const timeout = setTimeout(() => {
-        setUserMessage(userFullMessage.slice(0, userMessage.length + 1));
-      }, 100);
+        setPersonMessage1(personFullMessage1.slice(0, personMessage1.length + 1));
+      }, 50);
       return () => clearTimeout(timeout);
     }
-    if (userMessage.length === userFullMessage.length) {
-      setBotMessage2('');
+    if (personMessage1.length === personFullMessage1.length) {
+      setBotStartsTyping2(true);
     }
-  }, [userMessage, showUserTyping]);
+  }, [personStartsTyping1, personMessage1]);
 
-  // Bot typing animation for the second message
   useEffect(() => {
-    if (
-      userMessage.length === userFullMessage.length &&
-      botMessage2.length < botFullMessage2.length
-    ) {
+    if (botStartsTyping2 && botMessage2.length < botFullMessage2.length) {
       const timeout = setTimeout(() => {
         setBotMessage2(botFullMessage2.slice(0, botMessage2.length + 1));
-      }, 100);
+      }, 50);
       return () => clearTimeout(timeout);
     }
     if (botMessage2.length === botFullMessage2.length) {
-      setShowUserTyping2(true);
+      setShowCitySelection(true);
     }
-  }, [botMessage2, userMessage]);
+  }, [botStartsTyping2, botMessage2]);
 
-  // User typing animation for the second message
   useEffect(() => {
-    if (showUserTyping2 && userMessage2.length < userFullMessage2.length) {
+    if (selectedCity && personMessage2.length < selectedCity.length) {
       const timeout = setTimeout(() => {
-        setUserMessage2(userFullMessage2.slice(0, userMessage2.length + 1));
-      }, 100);
+        setPersonMessage2(selectedCity.slice(0, personMessage2.length + 1));
+      }, 50);
       return () => clearTimeout(timeout);
     }
-    if (userMessage2.length === userFullMessage2.length) {
-      setBotMessage3('');
+    if (selectedCity && personMessage2.length === selectedCity.length) {
+      setBotStartsTyping3(true);
     }
-  }, [userMessage2, showUserTyping2]);
+  }, [selectedCity, personMessage2]);
 
-  // Bot typing animation for the third message
   useEffect(() => {
-    if (
-      userMessage2.length === userFullMessage2.length &&
-      botMessage3.length < botFullMessage3.length
-    ) {
+    if (botStartsTyping3 && botMessage3.length < botFullMessage3.length) {
       const timeout = setTimeout(() => {
         setBotMessage3(botFullMessage3.slice(0, botMessage3.length + 1));
-      }, 100);
+      }, 50);
       return () => clearTimeout(timeout);
     }
     if (botMessage3.length === botFullMessage3.length) {
-      setShowUserTyping3(true);
+      setShowBusinessSelection(true);
     }
-  }, [botMessage3, userMessage2]);
+  }, [botStartsTyping3, botMessage3]);
 
-  // User typing animation for the third message
   useEffect(() => {
-    if (showUserTyping3 && userMessage3.length < userFullMessage3.length) {
+    if (selectedBusiness && personMessage3.length < selectedBusiness.length) {
       const timeout = setTimeout(() => {
-        setUserMessage3(userFullMessage3.slice(0, userMessage3.length + 1));
-      }, 100);
+        setPersonMessage3(selectedBusiness.slice(0, personMessage3.length + 1));
+      }, 50);
       return () => clearTimeout(timeout);
     }
-  }, [userMessage3, showUserTyping3]);
+  }, [selectedBusiness, personMessage3]);
 
   return (
     <div className={classes.root}>
-      <div className={classes.innerSection}>
-        <div className={`${classes.imgDiv} ${classes.botImageDiv}`}>
-          <Image src="/bot.png" alt="Bot" width={32} height={32} />
-        </div>
-        <div className={classes.botMessageContainer}>
-          <p className={classes.messageDiv}>{botMessage}</p>
-        </div>
-      </div>
-
-      {showUserTyping && (
-        <div className={classes.innerSection}>
-          <div className={classes.userMessageContainer}>
-            <p className={classes.messageDiv}>{userMessage}</p>
-          </div>
-          <div className={`${classes.imgDiv} ${classes.personImgDiv}`}>
-            <Image src="/person.png" alt="Person" width={32} height={32} />
-          </div>
-        </div>
+      <Message type="bot" message={botMessage1} />
+      {personStartsTyping1 && <Message type="person" message={personMessage1} />}
+      {botStartsTyping2 && botMessage2 && <Message type="bot" message={botMessage2} />}
+      {showCitySelection && !selectedCity && (
+        <Select
+          value={selectedCity}
+          name="city"
+          onChange={handleSelection}
+          options={[
+            'Beverly Hills',
+            'Santa Monica',
+            'Culver City',
+            'Torrance',
+            'Glendale',
+            'West Hollywood',
+            'West Los Angeles',
+            'Pacific Design center',
+          ]}
+        />
       )}
-
-      {botMessage2 && (
-        <div className={classes.innerSection}>
-          <div className={`${classes.imgDiv} ${classes.botImageDiv}`}>
-            <Image src="/bot.png" alt="Bot" width={32} height={32} />
-          </div>
-          <div className={classes.botMessageContainer}>
-            <p className={classes.messageDiv}>{botMessage2}</p>
-          </div>
-        </div>
+      {selectedCity && <Message type="person" message={personMessage2} />}
+      {botStartsTyping3 && <Message type="bot" message={botMessage3} />}
+      {showBusinessSelection && !selectedBusiness && (
+        <Select
+          value={selectedBusiness}
+          name="business"
+          onChange={handleSelection}
+          options={[
+            'Restaurant',
+            'Hotel',
+            'Medical Facility',
+            'Wellness Spa',
+            'Salon',
+            'Law Office',
+            'Realtor',
+          ]}
+        />
       )}
-
-      {showUserTyping2 && (
-        <div className={classes.innerSection}>
-          <div className={classes.userMessageContainer}>
-            <p className={classes.messageDiv}>{userMessage2}</p>
-          </div>
-          <div className={`${classes.imgDiv} ${classes.personImgDiv}`}>
-            <Image src="/person.png" alt="Person" width={32} height={32} />
-          </div>
-        </div>
-      )}
-
-      {botMessage3 && (
-        <div className={classes.innerSection}>
-          <div className={`${classes.imgDiv} ${classes.botImageDiv}`}>
-            <Image src="/bot.png" alt="Bot" width={32} height={32} />
-          </div>
-          <div className={classes.botMessageContainer}>
-            <p className={classes.messageDiv}>{botMessage3}</p>
-          </div>
-        </div>
-      )}
-
-      {showUserTyping3 && (
-        <div className={classes.innerSection}>
-          <div className={classes.userMessageContainer}>
-            <p className={classes.messageDiv}>{userMessage3}</p>
-          </div>
-          <div className={`${classes.imgDiv} ${classes.personImgDiv}`}>
-            <Image src="/person.png" alt="Person" width={32} height={32} />
-          </div>
-        </div>
-      )}
+      {selectedBusiness && <Message type="person" message={personMessage3} />}
     </div>
   );
 };
