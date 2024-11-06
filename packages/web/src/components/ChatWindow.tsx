@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Message from './Message';
-import Select from './Select';
+import ChatMessage from './ChatMessage';
+import ChatSelect from './ChatSelect';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -10,11 +10,14 @@ const useStyles = makeStyles((theme) => ({
     gap: theme.spacing(2),
     padding: theme.spacing(4),
     maxWidth: 'md',
-    margin: 'auto',
+    margin: '0 auto 2rem auto',
+    border: '1px solid #ddd',
+    borderRadius: '1rem',
+    boxShadow: theme.shadows[2],
   },
 }));
 
-const HeroTypingAnimation = () => {
+const ChatWindow = () => {
   const classes = useStyles();
 
   const [botMessage1, setBotMessage1] = useState('');
@@ -81,16 +84,10 @@ const HeroTypingAnimation = () => {
   }, [botStartsTyping2, botMessage2]);
 
   useEffect(() => {
-    if (selectedCity && personMessage2.length < selectedCity.length) {
-      const timeout = setTimeout(() => {
-        setPersonMessage2(selectedCity.slice(0, personMessage2.length + 1));
-      }, 50);
-      return () => clearTimeout(timeout);
-    }
-    if (selectedCity && personMessage2.length === selectedCity.length) {
+    if (selectedCity) {
       setBotStartsTyping3(true);
     }
-  }, [selectedCity, personMessage2]);
+  }, [selectedCity]);
 
   useEffect(() => {
     if (botStartsTyping3 && botMessage3.length < botFullMessage3.length) {
@@ -104,22 +101,14 @@ const HeroTypingAnimation = () => {
     }
   }, [botStartsTyping3, botMessage3]);
 
-  useEffect(() => {
-    if (selectedBusiness && personMessage3.length < selectedBusiness.length) {
-      const timeout = setTimeout(() => {
-        setPersonMessage3(selectedBusiness.slice(0, personMessage3.length + 1));
-      }, 50);
-      return () => clearTimeout(timeout);
-    }
-  }, [selectedBusiness, personMessage3]);
-
   return (
     <div className={classes.root}>
-      <Message type="bot" message={botMessage1} />
-      {personStartsTyping1 && <Message type="person" message={personMessage1} />}
-      {botStartsTyping2 && botMessage2 && <Message type="bot" message={botMessage2} />}
-      {showCitySelection && !selectedCity && (
-        <Select
+      <ChatMessage type="bot" message={botMessage1} />
+      {personStartsTyping1 && <ChatMessage type="person" message={personMessage1} />}
+      {botStartsTyping2 && botMessage2 && <ChatMessage type="bot" message={botMessage2} />}
+
+      {showCitySelection && (
+        <ChatSelect
           value={selectedCity}
           name="city"
           onChange={handleSelection}
@@ -135,10 +124,11 @@ const HeroTypingAnimation = () => {
           ]}
         />
       )}
-      {selectedCity && <Message type="person" message={personMessage2} />}
-      {botStartsTyping3 && <Message type="bot" message={botMessage3} />}
-      {showBusinessSelection && !selectedBusiness && (
-        <Select
+
+      {botStartsTyping3 && <ChatMessage type="bot" message={botMessage3} />}
+
+      {showBusinessSelection && (
+        <ChatSelect
           value={selectedBusiness}
           name="business"
           onChange={handleSelection}
@@ -153,9 +143,8 @@ const HeroTypingAnimation = () => {
           ]}
         />
       )}
-      {selectedBusiness && <Message type="person" message={personMessage3} />}
     </div>
   );
 };
 
-export default HeroTypingAnimation;
+export default ChatWindow;
