@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { SectionHeader } from '../../components2/molecules';
 import { Section } from '../../components2/organisms';
 import Boxes from '../Boxes/Boxes';
-import HeroTypingAnimation from './HeroTypingAnimation';
+import ChatWindow from '../../../ChatWindow';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -197,7 +197,7 @@ const Hero = ({ className, ...rest }: ViewComponentProps): JSX.Element => {
                 />
               </div>
               <div className={classes.imageSection}>
-                <HeroTypingAnimation />
+                <ChatWindow />
                 <Image
                   src="/header-image.webp"
                   alt="header image"

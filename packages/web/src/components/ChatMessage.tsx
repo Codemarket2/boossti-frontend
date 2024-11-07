@@ -44,12 +44,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-type MessageProps = {
+type ChatMessageProps = {
   type: 'bot' | 'person';
   message: string;
 };
 
-const Message = ({ type, message }: MessageProps) => {
+const ChatMessage = ({ type, message }: ChatMessageProps) => {
   const classes = useStyles();
 
   return (
@@ -85,4 +85,4 @@ const Message = ({ type, message }: MessageProps) => {
   );
 };
 
-export default Message;
+export default ChatMessage;

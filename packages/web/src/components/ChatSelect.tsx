@@ -26,14 +26,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-type SelectProps = {
+type ChatSelectProps = {
   value: string;
   name: string;
   onChange: (e: any) => void;
   options: string[];
 };
 
-const Select = ({ value, name, onChange, options }: SelectProps) => {
+const ChatSelect = ({ value, name, onChange, options }: ChatSelectProps) => {
   const classes = useStyles();
   return (
     <>
@@ -52,4 +52,4 @@ const Select = ({ value, name, onChange, options }: SelectProps) => {
   );
 };
 
-export default Select;
+export default ChatSelect;
